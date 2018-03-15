@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{83464ca3-e0d0-4486-82f4-f658f31ddc69}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)readme.txt" />
+    <Text Include="$(MSBuildThisFileDirectory)library.properties" />
+    <Text Include="$(MSBuildThisFileDirectory)knx_esp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- <ClInclude Include="$(MSBuildThisFileDirectory)knx_esp.h" /> -->
+    <ClInclude Include="$(MSBuildThisFileDirectory)address_table_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)apdu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)application_layer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)application_program_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)association_table_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)bau.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)bau57B0.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)bits.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)cemi_frame.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)datapoint_types.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)data_link_layer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)device_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)esp_platform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)group_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)group_object_table_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)interface_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)ip_parameter_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)knx_types.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)memory.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)network_layer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)npdu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)platform.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)property_types.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)save_restore.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)table_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)tpdu.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)transport_layer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)address_table_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)apdu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)application_layer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)application_program_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)association_table_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)bau.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)bau57B0.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)bits.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)cemi_frame.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)datapoint_types.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)data_link_layer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)device_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)esp_platform.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)group_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)group_object_table_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)ip_parameter_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)memory.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)network_layer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)npdu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)table_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)tpdu.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)transport_layer.cpp" />
+  </ItemGroup>
+</Project>
