@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
+
 using namespace std;
 
 Bau57B0::Bau57B0(Platform& platform): _memoryReference((uint8_t*)&_deviceObj), _memory(platform), _addrTable(_memoryReference), 
@@ -19,8 +20,6 @@ Bau57B0::Bau57B0(Platform& platform): _memoryReference((uint8_t*)&_deviceObj), _
     _memory.addSaveRestore(&_addrTable);
     _memory.addSaveRestore(&_assocTable);
     _memory.addSaveRestore(&_groupObjTable);
-    _memory.readMemory();
-    _dlLayer.enabled(true);
 }
 
 void Bau57B0::loop()
@@ -84,6 +83,11 @@ void Bau57B0::updateGroupObject(GroupObject & go, uint8_t * data, uint8_t length
         go.updateHandler(go);
 }
 
+void Bau57B0::readMemory()
+{
+    _memory.readMemory();
+}
+
 DeviceObject& Bau57B0::deviceObject()
 {
     return _deviceObj;
@@ -105,6 +109,16 @@ bool Bau57B0::configured()
         && _addrTable.loadState() == LS_LOADED
         && _assocTable.loadState() == LS_LOADED
         && _appProgram.loadState() == LS_LOADED;
+}
+
+bool Bau57B0::enabled()
+{
+    return _dlLayer.enabled();
+}
+
+void Bau57B0::enabled(bool value)
+{
+    _dlLayer.enabled(value);
 }
 
 void Bau57B0::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, 

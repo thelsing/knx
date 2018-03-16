@@ -24,6 +24,9 @@ public:
     GroupObjectTableObject& groupObjectTable();
     ApplicationProgramObject& parameters();
     bool configured();
+    bool enabled();
+    void enabled(bool value);
+    void readMemory();
 protected:
     void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
         uint16_t memoryAddress, uint8_t* data) override;

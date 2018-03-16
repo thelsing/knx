@@ -39,7 +39,7 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
         len -= 1;
     }
 
-    for (uint16_t i; i < entries; i++)
+    for (uint16_t i = 0; i < entries; i++)
     {
         uint16_t entry = _assocTable[i];
         if (highByte(entry) == tsap)

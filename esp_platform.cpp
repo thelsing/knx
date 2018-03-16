@@ -29,7 +29,7 @@ void EspPlatform::macAddress(uint8_t * addr)
 
 uint32_t EspPlatform::millis()
 {
-    return millis();
+    return ::millis();
 }
 
 void EspPlatform::mdelay(uint32_t millis)
@@ -39,6 +39,7 @@ void EspPlatform::mdelay(uint32_t millis)
 
 void EspPlatform::restart()
 {
+    Serial.println("restart");
     ESP.restart();
 }
 
@@ -58,7 +59,12 @@ void EspPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 {
     _mulitcastAddr = addr;
     _mulitcastPort = port;
-    _udp.beginMulticast(WiFi.localIP(), addr, port);
+    IPAddress mcastaddr(htonl(addr));
+    
+    Serial.printf("setup multicast addr: %s port: %d ip: %s\n", mcastaddr.toString().c_str(), port,
+        WiFi.localIP().toString().c_str());
+    uint8 result = _udp.beginMulticast(WiFi.localIP(), mcastaddr, port);
+    Serial.printf("result %d\n", result);
 }
 
 void EspPlatform::closeMultiCast()
@@ -66,11 +72,24 @@ void EspPlatform::closeMultiCast()
     _udp.stop();
 }
 
+void printHex(const char* suffix, uint8_t *data, uint8_t length)
+{
+    Serial.print(suffix);
+    for (int i = 0; i<length; i++) {
+        if (data[i]<0x10) { Serial.print("0"); }
+        Serial.print(data[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.print("\n");
+}
+
 bool EspPlatform::sendBytes(uint8_t * buffer, uint16_t len)
 {
-    _udp.beginPacketMulticast(_mulitcastAddr, _mulitcastPort, WiFi.localIP());
-    _udp.write(buffer, len);
-    _udp.endPacket();
+    printHex("-> ",buffer, len);
+    int result = 0;
+    result = _udp.beginPacketMulticast(_mulitcastAddr, _mulitcastPort, WiFi.localIP());
+    result = _udp.write(buffer, len);
+    result = _udp.endPacket();
     return true;
 }
 
@@ -82,11 +101,12 @@ int EspPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     
     if (len > maxLen)
     {
-        printf("udp buffer to small. was %d, needed %d\n", maxLen, len);
+        Serial.printf("udp buffer to small. was %d, needed %d\n", maxLen, len);
         fatalError();
     }
 
     _udp.read(buffer, len);
+    printHex("<- ", buffer, len);
     return len;
 }
 
