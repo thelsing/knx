@@ -47,11 +47,11 @@ uint8_t TableObject::propertySize(PropertyID id)
     switch (id)
     {
         case PID_LOAD_STATE_CONTROL:
-            return 10;
-
-            //case PID_MCB_TABLE:
-            //    TODO
-            //    break;
+            return 1;
+        case PID_TABLE_REFERENCE:
+            return 4;
+        case PID_ERROR_CODE:
+            return 1;
     }
     return 0;
 }

@@ -81,12 +81,25 @@ uint8_t DeviceObject::propertySize(PropertyID id)
 {
     switch (id)
     {
-        case PID_DEVICE_CONTROL:
-            return 1;
-        case PID_ROUTING_COUNT:
-            return 1;
-        case PID_PROG_MODE:
-            return 1;
+    case PID_OBJECT_TYPE:
+    case PID_DEVICE_CONTROL:
+    case PID_ROUTING_COUNT:
+    case PID_PROG_MODE:
+    case PID_MAX_APDU_LENGTH:
+    case PID_SUBNET_ADDR:
+    case PID_DEVICE_ADDR:
+        return 1;
+    case PID_MANUFACTURER_ID:
+    case PID_VERSION:
+    case PID_DEVICE_DESCRIPTOR:
+        return 2;
+    case PID_IO_LIST:
+        return 4;
+    case PID_SERIAL_NUMBER:
+    case PID_HARDWARE_TYPE:
+        return 6;
+    case PID_ORDER_INFO:
+        return 10;
     }
     return 0;
 }

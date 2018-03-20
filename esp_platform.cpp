@@ -57,9 +57,9 @@ void EspPlatform::fatalError()
 
 void EspPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 {
-    _mulitcastAddr = addr;
+    _mulitcastAddr = htonl(addr);
     _mulitcastPort = port;
-    IPAddress mcastaddr(htonl(addr));
+    IPAddress mcastaddr(_mulitcastAddr);
     
     Serial.printf("setup multicast addr: %s port: %d ip: %s\n", mcastaddr.toString().c_str(), port,
         WiFi.localIP().toString().c_str());
@@ -85,7 +85,7 @@ void printHex(const char* suffix, uint8_t *data, uint8_t length)
 
 bool EspPlatform::sendBytes(uint8_t * buffer, uint16_t len)
 {
-    printHex("-> ",buffer, len);
+    printHex("<- ",buffer, len);
     int result = 0;
     result = _udp.beginPacketMulticast(_mulitcastAddr, _mulitcastPort, WiFi.localIP());
     result = _udp.write(buffer, len);
@@ -106,7 +106,7 @@ int EspPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     }
 
     _udp.read(buffer, len);
-    printHex("<- ", buffer, len);
+    printHex("-> ", buffer, len);
     return len;
 }
 

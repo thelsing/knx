@@ -43,7 +43,10 @@ uint8_t ApplicationProgramObject::propertySize(PropertyID id)
 {
     switch (id)
     {
-        case PID_PROG_VERSION:
+        case PID_OBJECT_TYPE:
+        case PID_PEI_TYPE:
+            return 1;
+         case PID_PROG_VERSION:
             return 5;
     }
     return TableObject::propertySize(id);

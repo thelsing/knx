@@ -9,6 +9,7 @@ APDU::APDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
 ApduType APDU::type()
 {
     uint16_t apci;
+    apci = getWord(_data);
     popWord(apci, _data);
     apci &= 0x3ff;
     if ((apci >> 6) < 11) //short apci
@@ -18,6 +19,7 @@ ApduType APDU::type()
 
 void APDU::type(ApduType atype)
 {
+    // ApduType is in big endian so convert to host first, pushWord converts back
     pushWord((uint16_t)atype, _data);
 }
 

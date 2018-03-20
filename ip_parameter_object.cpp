@@ -118,24 +118,28 @@ uint8_t IpParameterObject::propertySize(PropertyID id)
 {
     switch (id)
     {
-        case PID_PROJECT_INSTALLATION_ID:
-            return 2;
-        case PID_KNX_INDIVIDUAL_ADDRESS:
-            return 2;
         case PID_IP_ASSIGNMENT_METHOD:
-            return 1;
-        case PID_IP_ADDRESS:
-            return 4;
-        case PID_SUBNET_MASK:
-            return 4;
-        case PID_DEFAULT_GATEWAY:
-            return 4;
-        case PID_ROUTING_MULTICAST_ADDRESS:
-            return 4;
+        case PID_LOAD_STATE_CONTROL:
+        case PID_IP_CAPABILITIES:
         case PID_TTL:
-            return 1;
+        case PID_KNXNETIP_DEVICE_CAPABILITIES:
         case PID_FRIENDLY_NAME:
             return 1;
+        case PID_OBJECT_TYPE:
+        case PID_PROJECT_INSTALLATION_ID:
+        case PID_KNX_INDIVIDUAL_ADDRESS:
+            return 2;
+        case PID_CURRENT_IP_ADDRESS:
+        case PID_CURRENT_SUBNET_MASK:
+        case PID_CURRENT_DEFAULT_GATEWAY:
+        case PID_IP_ADDRESS:
+        case PID_SUBNET_MASK:
+        case PID_DEFAULT_GATEWAY:
+        case PID_SYSTEM_SETUP_MULTICAST_ADDRESS:
+        case PID_ROUTING_MULTICAST_ADDRESS:
+            return 4;
+        case PID_MAC_ADDRESS:
+            return 6;
     }
     return 0;
 }

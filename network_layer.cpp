@@ -2,6 +2,7 @@
 #include "tpdu.h"
 #include "cemi_frame.h"
 #include "data_link_layer.h"
+#include "bits.h"
 
 NetworkLayer::NetworkLayer(TransportLayer& layer): _transportLayer(layer)
 {

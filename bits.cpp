@@ -50,7 +50,7 @@ uint8_t* pushInt(uint32_t i, uint8_t* data)
     data[0] = ((i >> 24) & 0xff);
     data[1] = ((i >> 16) & 0xff);
     data[2] = ((i >> 8) & 0xff);
-    data[3] = (i & 0xff); 
+    data[3] = (i & 0xff);
     data += 4;
     return data;
 }
@@ -66,10 +66,10 @@ uint8_t* pushByteArray(const uint8_t* src, uint32_t size, uint8_t* data)
 
 uint16_t getWord(uint8_t* data)
 {
-    return (data[0] << 8) + data[1];;
+    return (data[0] << 8) + data[1];
 }
 
 uint32_t getInt(uint8_t * data)
 {
-    return (data[0] << 24) + (data[1] << 16) + (data[2] << 8) + data[3];;
+    return (data[0] << 24) + (data[1] << 16) + (data[2] << 8) + data[3];
 }

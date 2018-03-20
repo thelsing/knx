@@ -27,7 +27,7 @@ uint16_t GroupObjectTableObject::entryCount()
     if (loadState() != LS_LOADED)
         return 0;
 
-    return _tableData[0];
+    return ntohs(_tableData[0]);
 }
 
 
@@ -91,10 +91,6 @@ void GroupObjectTableObject::beforeStateChange(LoadState& newState)
         return;
 
     _tableData = (uint16_t*)_data;
-    uint16_t goCount = reverseByteOrder(_tableData[0]);
-    // big endian -> little endian
-    for (size_t i = 0; i <= goCount; i++)
-        _tableData[i] = reverseByteOrder(_tableData[i]);
 
     if (!initGroupObjects())
     {
@@ -108,7 +104,7 @@ bool GroupObjectTableObject::initGroupObjects()
     if (!_tableData)
         return false;
 
-    uint16_t goCount = _tableData[0];
+    uint16_t goCount = ntohs(_tableData[0]);
     if (goCount != _groupObjectCount)
         return false;
 

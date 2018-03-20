@@ -28,7 +28,7 @@ uint16_t AddressTableObject::entryCount()
     if (loadState() != LS_LOADED)
         return 0;
 
-    return _groupAddresses[0];
+    return ntohs(_groupAddresses[0]);
 }
 
 uint16_t AddressTableObject::getGa(uint16_t tsap)
@@ -36,14 +36,14 @@ uint16_t AddressTableObject::getGa(uint16_t tsap)
     if (loadState() != LS_LOADED || tsap > entryCount() )
         return 0;
     
-    return _groupAddresses[tsap];
+    return ntohs(_groupAddresses[tsap]);
 }
 
 uint16_t AddressTableObject::getTsap(uint16_t addr)
 {
     uint16_t size = entryCount();
     for (uint16_t i = 1; i <= size; i++)
-        if (_groupAddresses[i] == addr)
+        if (ntohs(_groupAddresses[i]) == addr)
             return i;
     return 1;
 }
@@ -70,7 +70,7 @@ bool AddressTableObject::contains(uint16_t addr)
 {
     uint16_t size = entryCount();
     for (uint16_t i = 1; i <= size; i++)
-        if (_groupAddresses[i] == addr)
+        if (ntohs(_groupAddresses[i]) == addr)
             return true;
 
     return false;
@@ -82,9 +82,4 @@ void AddressTableObject::beforeStateChange(LoadState& newState)
         return;
 
     _groupAddresses = (uint16_t*)_data;
-
-    uint16_t count = reverseByteOrder(_groupAddresses[0]);
-    // big endian -> little endian
-    for (size_t i = 0; i <= count; i++)
-        _groupAddresses[i] = reverseByteOrder(_groupAddresses[i]);
 }

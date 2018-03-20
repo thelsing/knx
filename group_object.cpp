@@ -23,7 +23,7 @@ bool GroupObject::responseUpdateEnable()
     if (!_table)
         return false;
 
-    return bitRead(_table->_tableData[_asap], 15) > 0;
+    return bitRead(ntohs(_table->_tableData[_asap]), 15) > 0;
 }
 
 bool GroupObject::transmitEnable()
@@ -31,7 +31,7 @@ bool GroupObject::transmitEnable()
     if (!_table)
         return false;
 
-    return bitRead(_table->_tableData[_asap], 14) > 0;
+    return bitRead(ntohs(_table->_tableData[_asap]), 14) > 0 ;
 }
 
 bool GroupObject::valueReadOnInit()
@@ -39,7 +39,7 @@ bool GroupObject::valueReadOnInit()
     if (!_table)
         return false;
 
-    return bitRead(_table->_tableData[_asap], 13) > 0;
+    return bitRead(ntohs(_table->_tableData[_asap]), 13) > 0;
 }
 
 bool GroupObject::writeEnable()
@@ -47,7 +47,7 @@ bool GroupObject::writeEnable()
     if (!_table)
         return false;
 
-    return bitRead(_table->_tableData[_asap], 12) > 0;
+    return bitRead(ntohs(_table->_tableData[_asap]), 12) > 0 ;
 }
 
 bool GroupObject::readEnable()
@@ -55,7 +55,7 @@ bool GroupObject::readEnable()
     if (!_table)
         return false;
 
-    return bitRead(_table->_tableData[_asap], 11) > 0;
+    return bitRead(ntohs(_table->_tableData[_asap]), 11) > 0;
 }
 
 bool GroupObject::communicationEnable()
@@ -63,7 +63,7 @@ bool GroupObject::communicationEnable()
     if (!_table)
         return false;
 
-    return bitRead(_table->_tableData[_asap], 10) > 0;
+    return bitRead(ntohs(_table->_tableData[_asap]), 10) > 0;
 }
 
 
@@ -72,7 +72,7 @@ Priority GroupObject::priority()
     if (!_table)
         return LowPriority;
 
-    return (Priority)((_table->_tableData[_asap] >> 6) & (3 << 2)) ;
+    return (Priority)((ntohs(_table->_tableData[_asap]) >> 6) & (3 << 2)) ;
 }
 
 uint8_t* GroupObject::valueRef()
@@ -144,7 +144,7 @@ void GroupObject::commFlag(ComFlag value)
 
 int32_t GroupObject::objectReadFloat()
 {
-    uint16_t dptValue = makeWord(_data[0], _data[1]);
+    uint16_t dptValue = getWord(_data);
     return dptFromFloat(dptValue);
 }
 
@@ -186,6 +186,6 @@ size_t GroupObject::valueSize()
 
 size_t GroupObject::sizeInTelegram()
 {
-    uint8_t code = lowByte(_table->_tableData[_asap]);
+    uint8_t code = lowByte(ntohs(_table->_tableData[_asap]));
     return asapValueSize(code);
 }
