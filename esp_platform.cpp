@@ -40,7 +40,7 @@ void EspPlatform::mdelay(uint32_t millis)
 void EspPlatform::restart()
 {
     Serial.println("restart");
-    ESP.restart();
+    ESP.reset();
 }
 
 void EspPlatform::fatalError()

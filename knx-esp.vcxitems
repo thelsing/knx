@@ -14,7 +14,6 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="$(MSBuildThisFileDirectory)readme.txt" />
     <Text Include="$(MSBuildThisFileDirectory)library.properties" />
     <Text Include="$(MSBuildThisFileDirectory)knx_esp.h" />
   </ItemGroup>
@@ -37,6 +36,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)group_object_table_object.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)interface_object.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)ip_parameter_object.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)knx_facade.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)knx_types.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)memory.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)network_layer.h" />
@@ -65,6 +65,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)group_object.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)group_object_table_object.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)ip_parameter_object.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)knx_facade.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)memory.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)network_layer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)npdu.cpp" />
