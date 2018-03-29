@@ -4,6 +4,7 @@ KnxFacade knx;
 
 KnxFacade::KnxFacade() : _bau(_platform)
 {
+    manufacturerId(0xfa);
 }
 
 bool KnxFacade::enabled()
