@@ -1,3 +1,0 @@
-[submodule "knx"]
-	path = knx
-	url = https://github.com/thelsing/knx.git
