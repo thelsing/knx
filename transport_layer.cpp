@@ -563,6 +563,7 @@ void TransportLayer::A1(uint16_t source)
     _applicationLayer.connectIndication(source);
     _seqNoSend = 0;
     _seqNoRecv = 0;
+    enableConnectionTimeout();
 }
 
 void incSeqNr(uint8_t& seqNr)
