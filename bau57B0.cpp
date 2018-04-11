@@ -7,7 +7,7 @@ using namespace std;
 
 Bau57B0::Bau57B0(Platform& platform): _memoryReference((uint8_t*)&_deviceObj), _memory(platform), _addrTable(_memoryReference), 
     _assocTable(_memoryReference), _groupObjTable(_memoryReference), _appProgram(_memoryReference),
-    _ipParameters(_deviceObj, _platform), _platform(platform), _appLayer(_assocTable, *this),
+    _ipParameters(_deviceObj, platform), _platform(platform), _appLayer(_assocTable, *this),
     _transLayer(_appLayer, _addrTable, _platform), _netLayer(_transLayer), 
     _dlLayer(_deviceObj, _addrTable, _ipParameters, _netLayer, _platform)
 {
@@ -189,20 +189,30 @@ void Bau57B0::propertyDescriptionReadIndication(Priority priority, HopCountType 
 void Bau57B0::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, 
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
-    InterfaceObject& obj = getInterfaceObject(objectIndex);
-    obj.writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
+    InterfaceObject* obj = getInterfaceObject(objectIndex);
+    if(obj)
+        obj->writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
     propertyValueReadIndication(priority, hopType, asap, objectIndex, propertyId, numberOfElements, startIndex);
 }
 
 void Bau57B0::propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
 {
-    InterfaceObject& obj = getInterfaceObject(objectIndex);
-    uint8_t elementSize = obj.propertySize((PropertyID)propertyId);
-    uint8_t size = elementSize * numberOfElements;
+    uint8_t size = 0;
+    uint32_t elementCount = numberOfElements;
+    InterfaceObject* obj = getInterfaceObject(objectIndex);
+    if (obj)
+    {
+        uint8_t elementSize = obj->propertySize((PropertyID)propertyId);
+        size = elementSize * numberOfElements;
+    }
+    else
+        elementCount = 0;
+    
     uint8_t data[size];
-    obj.readProperty((PropertyID)propertyId, startIndex, numberOfElements, data);
-    _appLayer.propertyValueReadResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, numberOfElements,
+    if(obj)
+        obj->readProperty((PropertyID)propertyId, startIndex, elementCount, data);
+    _appLayer.propertyValueReadResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, elementCount,
         startIndex, data, size);
 }
 
@@ -264,23 +274,25 @@ void Bau57B0::groupValueWriteIndication(uint16_t asap, Priority priority, HopCou
     updateGroupObject(go, data, dataLength);
 }
 
-InterfaceObject& Bau57B0::getInterfaceObject(uint8_t idx)
+InterfaceObject* Bau57B0::getInterfaceObject(uint8_t idx)
 {
     switch (idx)
     {
     case 0:
-        return _deviceObj;
+        return &_deviceObj;
     case 1:
-        return _addrTable;
+        return &_addrTable;
     case 2:
-        return _assocTable;
+        return &_assocTable;
     case 3:
-        return _groupObjTable;
+        return &_groupObjTable;
     case 4:
-        return _appProgram;
-    case 5:
-        return _ipParameters;
+        return &_appProgram;
+    case 5: // would be app_program 2
+        return nullptr;
+    case 6:
+        return &_ipParameters;
     default:
-        return _deviceObj;
+        return nullptr;
     }
 }

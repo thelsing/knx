@@ -394,7 +394,7 @@ void ApplicationLayer::propertyDescriptionReadResponse(AckType ack, Priority pri
 {
     CemiFrame frame(8);
     APDU& apdu = frame.apdu();
-    apdu.type(PropertyDescriptionRead);
+    apdu.type(PropertyDescriptionResponse);
     uint8_t* data = apdu.data();
     data[1] = objectIndex;
     data[2] = propertyId;

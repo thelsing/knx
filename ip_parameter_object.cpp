@@ -10,7 +10,7 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
     _platform(platform)
 {}
 
-void IpParameterObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t count, uint8_t* data)
+void IpParameterObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t& count, uint8_t* data)
 {
     switch (propertyId)
     {
@@ -52,7 +52,7 @@ void IpParameterObject::readProperty(PropertyID propertyId, uint32_t start, uint
         break;
     case PID_MAC_ADDRESS:
     {
-        uint8_t macAddr[6];
+        uint8_t macAddr[6] = { 0, 0, 0, 0, 0, 0 };
         _platform.macAddress(macAddr);
         pushByteArray(macAddr, 6, data);
         break;
@@ -72,6 +72,9 @@ void IpParameterObject::readProperty(PropertyID propertyId, uint32_t start, uint
     case PID_FRIENDLY_NAME:
         for (uint8_t i = start; i < start + count; i++)
             data[i-start] = _friendlyName[i-1];
+        break;
+    default:
+        count = 0;
         break;
     }
 }

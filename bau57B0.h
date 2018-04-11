@@ -55,7 +55,7 @@ protected:
     void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType,
         uint8_t* data, uint8_t dataLength);
     
-    InterfaceObject& getInterfaceObject(uint8_t idx);
+    InterfaceObject* getInterfaceObject(uint8_t idx);
     void sendNextGroupTelegram();
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
 private:

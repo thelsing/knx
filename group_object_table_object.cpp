@@ -10,7 +10,7 @@ GroupObjectTableObject::GroupObjectTableObject(uint8_t* memoryReference): TableO
     _groupObjectCount = 0;
 }
 
-void GroupObjectTableObject::readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data)
+void GroupObjectTableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data)
 {
     switch (id)
     {

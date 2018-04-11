@@ -11,7 +11,7 @@ AssociationTableObject::AssociationTableObject(uint8_t* memoryReference): TableO
 
 }
 
-void AssociationTableObject::readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data)
+void AssociationTableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data)
 {
     switch (id)
     {

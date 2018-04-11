@@ -9,7 +9,7 @@ class GroupObjectTableObject: public TableObject
 
 public:
     GroupObjectTableObject(uint8_t* memoryReference);
-    void readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data);
+    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     uint16_t entryCount();
     GroupObject& get(uint16_t asap);
     GroupObject& nextUpdatedObject(bool& valid);

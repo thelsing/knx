@@ -6,7 +6,7 @@ class ApplicationProgramObject: public TableObject
 {
 public:
     ApplicationProgramObject(uint8_t* memoryReference);
-    void readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data);
+    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     uint8_t propertySize(PropertyID id);
     uint8_t* data(uint32_t addr);

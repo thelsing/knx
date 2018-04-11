@@ -6,7 +6,7 @@ class AssociationTableObject: public TableObject
 {
 public:
     AssociationTableObject(uint8_t* memoryReference);
-    void readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data);
+    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     uint16_t entryCount();
     uint16_t operator[](uint16_t idx);
     uint8_t* save(uint8_t* buffer);

@@ -2,7 +2,7 @@
 #include "device_object.h"
 #include "bits.h"
 
-void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t count, uint8_t* data)
+void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t& count, uint8_t* data)
 {
     switch (propertyId)
     {
@@ -35,7 +35,7 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t 
             *data = _prgMode;
             break;
         case PID_MAX_APDU_LENGTH:
-            *data = 15;
+            pushWord(15, data);
             break;
         case PID_SUBNET_ADDR:
             *data = ((_ownAddress >> 8) & 0xff);
@@ -58,6 +58,8 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t 
             data[0] = 0x57;
             data[1] = 0xB0;
             break;
+        default:
+            count = 0;
     }
 }
 
@@ -85,13 +87,13 @@ uint8_t DeviceObject::propertySize(PropertyID id)
     case PID_DEVICE_CONTROL:
     case PID_ROUTING_COUNT:
     case PID_PROG_MODE:
-    case PID_MAX_APDU_LENGTH:
     case PID_SUBNET_ADDR:
     case PID_DEVICE_ADDR:
         return 1;
     case PID_MANUFACTURER_ID:
     case PID_VERSION:
     case PID_DEVICE_DESCRIPTOR:
+    case PID_MAX_APDU_LENGTH:
         return 2;
     case PID_IO_LIST:
         return 4;

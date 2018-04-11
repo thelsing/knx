@@ -54,7 +54,7 @@ class InterfaceObject: public SaveRestore
 {
 public:
     virtual ~InterfaceObject() {}
-    virtual void readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data) = 0;
+    virtual void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data) = 0;
     virtual void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count) = 0;
     virtual uint8_t propertySize(PropertyID id) = 0;
 protected:

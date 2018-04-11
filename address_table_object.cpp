@@ -11,7 +11,7 @@ AddressTableObject::AddressTableObject(uint8_t* memoryReference): TableObject(me
 
 }
 
-void AddressTableObject::readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data)
+void AddressTableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data)
 {
     switch (id)
     {
