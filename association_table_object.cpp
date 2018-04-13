@@ -67,3 +67,17 @@ void AssociationTableObject::beforeStateChange(LoadState& newState)
 
     _tableData = (uint16_t*)_data;
 }
+
+static PropertyDescription _propertyDescriptions[] = { };
+static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+
+uint8_t AssociationTableObject::propertyCount()
+{
+    return _propertyCount;
+}
+
+
+PropertyDescription* AssociationTableObject::propertyDescriptions()
+{
+    return _propertyDescriptions;
+}

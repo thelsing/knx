@@ -253,3 +253,17 @@ void DeviceObject::version(uint16_t value)
 {
     _version = value;
 }
+
+static PropertyDescription _propertyDescriptions[] = {};
+static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+
+uint8_t DeviceObject::propertyCount()
+{
+    return _propertyCount;
+}
+
+
+PropertyDescription* DeviceObject::propertyDescriptions()
+{
+    return _propertyDescriptions;
+}

@@ -6,7 +6,10 @@ class AddressTableObject: public TableObject
 {
 public:
     AddressTableObject(uint8_t* memoryReference);
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Woverloaded-virtual"
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
+    #pragma GCC diagnostic pop
     uint16_t entryCount();
     uint16_t getGa(uint16_t tsap);
     uint16_t getTsap(uint16_t ga);
@@ -15,6 +18,8 @@ public:
     bool contains(uint16_t addr);
 protected:
     virtual void beforeStateChange(LoadState& newState);
+    uint8_t propertyCount();
+    PropertyDescription* propertyDescriptions();
 private:
     uint16_t* _groupAddresses;
 };

@@ -119,3 +119,17 @@ bool GroupObjectTableObject::initGroupObjects()
     
     return true;
 }
+
+static PropertyDescription _propertyDescriptions[] = { };
+static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+
+uint8_t GroupObjectTableObject::propertyCount()
+{
+    return _propertyCount;
+}
+
+
+PropertyDescription* GroupObjectTableObject::propertyDescriptions()
+{
+    return _propertyDescriptions;
+}

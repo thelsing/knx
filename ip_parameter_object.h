@@ -17,6 +17,9 @@ public:
 
     uint32_t multicastAddress() const;
     uint8_t ttl() const { return _ttl; }
+protected:
+    uint8_t propertyCount();
+    PropertyDescription* propertyDescriptions();
 private:
     uint16_t _projectInstallationId = 0;
     uint8_t _ipAssignmentMethod = 0;

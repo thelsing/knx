@@ -303,3 +303,17 @@ void IpParameterObject::additionalLoadControls(uint8_t* data)
     _errorCode = E_INVALID_OPCODE;
     return;
 }
+
+static PropertyDescription _propertyDescriptions[] = { };
+static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+
+uint8_t IpParameterObject::propertyCount()
+{
+    return _propertyCount;
+}
+
+
+PropertyDescription* IpParameterObject::propertyDescriptions()
+{
+    return _propertyDescriptions;
+}

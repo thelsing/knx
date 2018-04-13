@@ -9,6 +9,8 @@
  */
 #pragma once
 
+#include <stdint.h>
+
 enum PropertyDataType
 {
     PDT_CONTROL            = 0x00, //!< length: 1 read, 10 write
@@ -163,4 +165,26 @@ enum ErrorCode
     E_INVALID_CONNECTION_NUMBER = 16,
     E_INVALID_GO_NUMBER = 17,
     E_GO_TYPE_TOO_BIG = 18
+};
+
+enum AccessLevel
+{
+    ReadLv0 = 0x00,
+    ReadLv1 = 0x10,
+    ReadLv2 = 0x20,
+    ReadLv3 = 0x30,
+    WriteLv0 = 0x00,
+    WriteLv1 = 0x01,
+    WriteLv2 = 0x02,
+    WriteLv3 = 0x03,
+};
+
+class PropertyDescription
+{
+public:
+    PropertyID Id;
+    bool WriteEnable;
+    PropertyDataType Type;
+    uint16_t MaxElements;
+    uint8_t Access;
 };

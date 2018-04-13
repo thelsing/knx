@@ -85,3 +85,18 @@ uint8_t* ApplicationProgramObject::restore(uint8_t* buffer)
 
     return TableObject::restore(buffer);
 }
+
+static PropertyDescription _propertyDescriptions[] = {};
+static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+
+uint8_t ApplicationProgramObject::propertyCount()
+{
+    return _propertyCount;
+}
+
+
+PropertyDescription* ApplicationProgramObject::propertyDescriptions()
+{
+    return _propertyDescriptions;
+}
+
