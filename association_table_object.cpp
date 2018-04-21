@@ -68,7 +68,10 @@ void AssociationTableObject::beforeStateChange(LoadState& newState)
     _tableData = (uint16_t*)_data;
 }
 
-static PropertyDescription _propertyDescriptions[] = { };
+static PropertyDescription _propertyDescriptions[] = 
+{ 
+    { PID_TABLE, false, PDT_GENERIC_02, 254, ReadLv3 | WriteLv0 },        
+};
 static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
 uint8_t AssociationTableObject::propertyCount()

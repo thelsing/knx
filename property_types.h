@@ -80,6 +80,7 @@ enum PropertyID
     PID_ORDER_INFO = 15,
     PID_PEI_TYPE = 16,
     PID_PORT_CONFIGURATION = 17,
+    PID_TABLE = 23,
     PID_VERSION = 25,
     PID_MCB_TABLE = 27,
     PID_ERROR_CODE = 28,
