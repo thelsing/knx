@@ -43,10 +43,11 @@ uint8_t ApplicationProgramObject::propertySize(PropertyID id)
 {
     switch (id)
     {
-        case PID_OBJECT_TYPE:
         case PID_PEI_TYPE:
             return 1;
-         case PID_PROG_VERSION:
+	    case PID_OBJECT_TYPE:
+			return 2;
+        case PID_PROG_VERSION:
             return 5;
     }
     return TableObject::propertySize(id);
@@ -86,7 +87,9 @@ uint8_t* ApplicationProgramObject::restore(uint8_t* buffer)
     return TableObject::restore(buffer);
 }
 
-static PropertyDescription _propertyDescriptions[] = {};
+static PropertyDescription _propertyDescriptions[] = {
+	{ PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }, 		
+};
 static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
 uint8_t ApplicationProgramObject::propertyCount()

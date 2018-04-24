@@ -83,13 +83,13 @@ uint8_t DeviceObject::propertySize(PropertyID id)
 {
     switch (id)
     {
-    case PID_OBJECT_TYPE:
     case PID_DEVICE_CONTROL:
     case PID_ROUTING_COUNT:
     case PID_PROG_MODE:
     case PID_SUBNET_ADDR:
     case PID_DEVICE_ADDR:
         return 1;
+    case PID_OBJECT_TYPE:
     case PID_MANUFACTURER_ID:
     case PID_VERSION:
     case PID_DEVICE_DESCRIPTOR:
@@ -254,7 +254,10 @@ void DeviceObject::version(uint16_t value)
     _version = value;
 }
 
-static PropertyDescription _propertyDescriptions[] = {};
+static PropertyDescription _propertyDescriptions[] = {
+	{ PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }, 
+	{ PID_SERIAL_NUMBER, false, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 }, 
+};
 static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
 uint8_t DeviceObject::propertyCount()

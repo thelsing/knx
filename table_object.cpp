@@ -52,6 +52,8 @@ uint8_t TableObject::propertySize(PropertyID id)
             return 4;
         case PID_ERROR_CODE:
             return 1;
+	    case PID_OBJECT_TYPE:
+			return 2;
     }
     return 0;
 }
