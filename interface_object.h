@@ -57,7 +57,7 @@ public:
     virtual void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data) = 0;
     virtual void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count) = 0;
     virtual uint8_t propertySize(PropertyID id) = 0;
-    void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
+    void readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
 protected:
     virtual uint8_t propertyCount() = 0;
     virtual PropertyDescription* propertyDescriptions() = 0;

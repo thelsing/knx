@@ -181,15 +181,16 @@ void Bau57B0::userMemoryWriteIndication(Priority priority, HopCountType hopType,
 void Bau57B0::propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, 
     uint8_t propertyId, uint8_t propertyIndex)
 {
+	uint8_t pid = propertyId;
     bool writeEnable = false;
     uint8_t type = 0;
     uint16_t numberOfElements = 0;
     uint8_t access = 0;
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if (obj)
-        obj->readPropertyDescription(propertyId, propertyIndex, writeEnable, type, numberOfElements, access);
+        obj->readPropertyDescription(pid, propertyIndex, writeEnable, type, numberOfElements, access);
 
-    _appLayer.propertyDescriptionReadResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, propertyIndex,
+    _appLayer.propertyDescriptionReadResponse(AckRequested, priority, hopType, asap, objectIndex, pid, propertyIndex,
         writeEnable, type, numberOfElements, access);
 }
 

@@ -1,6 +1,6 @@
 #include "interface_object.h"
 
-void InterfaceObject::readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access)
+void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access)
 {
     PropertyDescription* descriptions = propertyDescriptions();
     uint8_t count = propertyCount();
@@ -22,7 +22,7 @@ void InterfaceObject::readPropertyDescription(uint8_t propertyId, uint8_t& prope
     }
     else
     {
-        if (propertyIndex > 0 && propertyIndex < count) 
+        if (propertyIndex >= 0 && propertyIndex < count) 
         {
             desc = &descriptions[propertyIndex];
         }
@@ -30,6 +30,7 @@ void InterfaceObject::readPropertyDescription(uint8_t propertyId, uint8_t& prope
     
     if (desc != nullptr)
     {
+	    propertyId = desc->Id;
         writeEnable = desc->WriteEnable;
         type = desc->Type;
         numberOfElements = desc->MaxElements;
