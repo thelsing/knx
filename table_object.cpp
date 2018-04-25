@@ -52,8 +52,8 @@ uint8_t TableObject::propertySize(PropertyID id)
             return 4;
         case PID_ERROR_CODE:
             return 1;
-	    case PID_OBJECT_TYPE:
-			return 2;
+        case PID_OBJECT_TYPE:
+            return 2;
     }
     return 0;
 }
@@ -84,7 +84,7 @@ uint8_t* TableObject::save(uint8_t* buffer)
     buffer = pushByte(_errorCode, buffer);
     buffer = pushInt(_size, buffer);
     buffer = pushByteArray(_data, _size, buffer);
-    
+
     return buffer;
 }
 

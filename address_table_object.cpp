@@ -35,7 +35,7 @@ uint16_t AddressTableObject::getGa(uint16_t tsap)
 {
     if (loadState() != LS_LOADED || tsap > entryCount() )
         return 0;
-    
+
     return ntohs(_groupAddresses[tsap]);
 }
 
@@ -58,9 +58,9 @@ uint8_t* AddressTableObject::save(uint8_t* buffer)
 uint8_t* AddressTableObject::restore(uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
-    
+
     _groupAddresses = (uint16_t*)_data;
-    
+
     return buffer;
 }
 
@@ -84,8 +84,9 @@ void AddressTableObject::beforeStateChange(LoadState& newState)
     _groupAddresses = (uint16_t*)_data;
 }
 
-static PropertyDescription _propertyDescriptions[] = {
-	{ PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }, 		
+static PropertyDescription _propertyDescriptions[] =
+{
+    { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }
 };
 static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 

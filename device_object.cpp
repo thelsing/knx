@@ -48,10 +48,10 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             uint32_t ifObjs[] = {
                 6, // length
                 OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG, OT_IP_PARAMETER};
-            
+
             for (uint32_t i = start; i < (ifObjs[0] + 1) && i < count; i++)
                 pushInt(ifObjs[i], data);
-            
+
             break;
         }
         case PID_DEVICE_DESCRIPTOR:
@@ -254,9 +254,10 @@ void DeviceObject::version(uint16_t value)
     _version = value;
 }
 
-static PropertyDescription _propertyDescriptions[] = {
-	{ PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }, 
-	{ PID_SERIAL_NUMBER, false, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 }, 
+static PropertyDescription _propertyDescriptions[] = 
+{
+    { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 },
+    { PID_SERIAL_NUMBER, false, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 }
 };
 static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 

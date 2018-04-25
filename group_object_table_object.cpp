@@ -47,10 +47,10 @@ uint8_t* GroupObjectTableObject::save(uint8_t* buffer)
 uint8_t* GroupObjectTableObject::restore(uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
-    
+
     _tableData = (uint16_t*)_data;
     initGroupObjects();
-    
+
     return buffer;
 }
 
@@ -116,12 +116,13 @@ bool GroupObjectTableObject::initGroupObjects()
         if (go._dataLength != go.goSize())
             return false;
     }
-    
+
     return true;
 }
 
-static PropertyDescription _propertyDescriptions[] = {
-	{ PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }, 				
+static PropertyDescription _propertyDescriptions[] = 
+{
+    { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }
 };
 static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 

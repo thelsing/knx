@@ -5,10 +5,10 @@
 
 using namespace std;
 
-Bau57B0::Bau57B0(Platform& platform): _memoryReference((uint8_t*)&_deviceObj), _memory(platform), _addrTable(_memoryReference), 
+Bau57B0::Bau57B0(Platform& platform): _memoryReference((uint8_t*)&_deviceObj), _memory(platform), _addrTable(_memoryReference),
     _assocTable(_memoryReference), _groupObjTable(_memoryReference), _appProgram(_memoryReference),
     _ipParameters(_deviceObj, platform), _platform(platform), _appLayer(_assocTable, *this),
-    _transLayer(_appLayer, _addrTable, _platform), _netLayer(_transLayer), 
+    _transLayer(_appLayer, _addrTable, _platform), _netLayer(_transLayer),
     _dlLayer(_deviceObj, _addrTable, _ipParameters, _netLayer, _platform)
 {
     _appLayer.transportLayer(_transLayer);
@@ -50,7 +50,7 @@ void Bau57B0::sendNextGroupTelegram()
         if (flag == WriteRequest)
         {
             uint8_t* data = go.valueRef();
-            _appLayer.groupValueWriteRequest(AckRequested, asap, go.priority(), NetworkLayerParameter, data, 
+            _appLayer.groupValueWriteRequest(AckRequested, asap, go.priority(), NetworkLayerParameter, data,
                 go.sizeInTelegram());
         }
         else
@@ -121,7 +121,7 @@ void Bau57B0::enabled(bool value)
     _dlLayer.enabled(value);
 }
 
-void Bau57B0::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, 
+void Bau57B0::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
     uint16_t memoryAddress, uint8_t * data)
 {
     memcpy(_memoryReference + memoryAddress, data, number);
@@ -131,7 +131,7 @@ void Bau57B0::memoryWriteIndication(Priority priority, HopCountType hopType, uin
         memoryReadIndication(priority, hopType, asap, number, memoryAddress);
 }
 
-void Bau57B0::memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, 
+void Bau57B0::memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
     uint16_t memoryAddress)
 {
     _appLayer.memoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
@@ -142,7 +142,7 @@ void Bau57B0::deviceDescriptorReadIndication(Priority priority, HopCountType hop
 {
     if (descriptorType != 0)
         descriptorType = 0x3f;
-    
+
     uint8_t descriptor[] = { 0x57, 0xb0 };
 
     _appLayer.deviceDescriptorReadResponse(AckRequested, priority, hopType, asap, descriptorType, descriptor);
@@ -178,10 +178,10 @@ void Bau57B0::userMemoryWriteIndication(Priority priority, HopCountType hopType,
         userMemoryReadIndication(priority, hopType, asap, number, memoryAddress);
 }
 
-void Bau57B0::propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, 
+void Bau57B0::propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
     uint8_t propertyId, uint8_t propertyIndex)
 {
-	uint8_t pid = propertyId;
+    uint8_t pid = propertyId;
     bool writeEnable = false;
     uint8_t type = 0;
     uint16_t numberOfElements = 0;
@@ -194,7 +194,7 @@ void Bau57B0::propertyDescriptionReadIndication(Priority priority, HopCountType 
         writeEnable, type, numberOfElements, access);
 }
 
-void Bau57B0::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, 
+void Bau57B0::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
     InterfaceObject* obj = getInterfaceObject(objectIndex);
@@ -216,7 +216,7 @@ void Bau57B0::propertyValueReadIndication(Priority priority, HopCountType hopTyp
     }
     else
         elementCount = 0;
-    
+
     uint8_t data[size];
     if(obj)
         obj->readProperty((PropertyID)propertyId, startIndex, elementCount, data);
@@ -261,11 +261,11 @@ void Bau57B0::groupValueReadIndication(uint16_t asap, Priority priority, HopCoun
     _appLayer.groupValueReadResponse(AckRequested, asap, priority, hopType, data, go.sizeInTelegram());
 }
 
-void Bau57B0::groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, uint8_t* data, 
+void Bau57B0::groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, uint8_t* data,
     uint8_t dataLength)
 {
     GroupObject& go = _groupObjTable.get(asap);
-    
+
     if (!go.communicationEnable() || !go.responseUpdateEnable())
         return;
 

@@ -181,7 +181,7 @@ uint32_t IpParameterObject::multicastAddress() const
 {
     if (_multicastAddress == 0)
         return DEFAULT_MULTICAST_ADDR;
-    
+
     return _multicastAddress;
 }
 
@@ -304,8 +304,9 @@ void IpParameterObject::additionalLoadControls(uint8_t* data)
     return;
 }
 
-static PropertyDescription _propertyDescriptions[] = {
-	{ PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }, 				
+static PropertyDescription _propertyDescriptions[] = 
+{
+    { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 }
 };
 static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
