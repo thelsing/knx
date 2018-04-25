@@ -40,8 +40,4 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
         numberOfElements = desc->MaxElements;
         access = desc->Access;
     }
-    else
-    {
-        numberOfElements = 0;
-    }
 }
