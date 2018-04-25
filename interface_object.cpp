@@ -26,7 +26,7 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
     {
         // If propertyId is zero, propertyIndex shall be used.
         // Response: propertyIndex of received A_PropertyDescription_Read
-        if (propertyIndex >= 0 && propertyIndex < count)
+        if (propertyIndex < count)
         {
             desc = &descriptions[propertyIndex];
         }
