@@ -6,19 +6,18 @@
 #include "association_table_object.h"
 #include "group_object_table_object.h"
 #include "application_program_object.h"
-#include "ip_parameter_object.h"
 #include "application_layer.h"
 #include "transport_layer.h"
 #include "network_layer.h"
-#include "ip_data_link_layer.h"
+#include "tpuart_data_link_layer.h"
 #include "platform.h"
 #include "memory.h"
 
-class Bau57B0: protected BusAccessUnit
+class Bau07B0: protected BusAccessUnit
 {
     using BusAccessUnit::memoryReadIndication;
 public:
-    Bau57B0(Platform& platform);
+    Bau07B0(Platform& platform);
     void loop();
     DeviceObject& deviceObject();
     GroupObjectTableObject& groupObjectTable();
@@ -67,11 +66,10 @@ private:
     AssociationTableObject _assocTable;
     GroupObjectTableObject _groupObjTable;
     ApplicationProgramObject _appProgram;
-    IpParameterObject _ipParameters;
     Platform& _platform;
     ApplicationLayer _appLayer;
     TransportLayer _transLayer;
     NetworkLayer _netLayer;
-    IpDataLinkLayer _dlLayer;
+    TpUartDataLinkLayer _dlLayer;
 
 };
