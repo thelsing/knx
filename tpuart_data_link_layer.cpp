@@ -17,10 +17,9 @@ TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObjec
 
 bool TpUartDataLinkLayer::sendFrame(CemiFrame& frame)
 {
-    uint16_t length = frame.totalLenght();
+    uint16_t length = frame.telegramLengthtTP();
     uint8_t* buffer = new uint8_t[length];
-
-    //TODO: Create TP standard frame or extended frame from cemi frame into buffer
+    frame.fillTelegramTP(buffer);
     
     bool success = sendBytes(buffer, length);
 

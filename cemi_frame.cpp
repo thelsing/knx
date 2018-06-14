@@ -60,6 +60,42 @@ uint16_t CemiFrame::totalLenght() const
     return tmp;
 }
 
+uint16_t CemiFrame::telegramLengthtTP() const
+{
+    if (frameType() == StandardFrame)
+        return totalLenght() - 2; /*-AddInfo -MsgCode - only one CTRL + CRC, */
+    else
+        return totalLenght() - 1; /*-AddInfo -MsgCode + CRC, */
+}
+
+void CemiFrame::fillTelegramTP(uint8_t* data)
+{
+    uint16_t len = telegramLengthtTP();
+    if (frameType() == StandardFrame)
+    {
+        uint8_t octet5 = (_ctrl1[1] & 0xF0) | (_ctrl1[6] & 0x0F);
+        data[0] = _ctrl1[0]; //CTRL
+        memcpy(data + 1, _ctrl1 + 2, 4); // SA, DA
+        data[5] = octet5; // LEN; Hopcount, ..
+        memcpy(data + 6, _ctrl1 + 8, len - 7); // APDU
+    }
+    else
+    {
+        memcpy(data, _ctrl1, len - 1);
+    }
+    data[len - 1] = calcCRC(data, len - 1);
+}
+
+uint8_t CemiFrame::calcCRC(uint8_t * buffer, uint16_t len)
+{
+    uint8_t crc = 0xFF;
+    
+    for (uint16_t i = 0; i < len; i++)
+        crc ^= buffer[i];
+    
+    return crc;
+}
+
 FrameFormat CemiFrame::frameType() const
 {
     return (FrameFormat)(_ctrl1[0] & StandardFrame);

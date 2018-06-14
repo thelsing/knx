@@ -24,6 +24,8 @@ public:
     MessageCode messageCode() const;
     void messageCode(MessageCode value);
     uint16_t totalLenght() const;
+    uint16_t telegramLengthtTP() const;
+    void fillTelegramTP(uint8_t* data);
     
     FrameFormat frameType() const;
     void frameType(FrameFormat value);
@@ -48,6 +50,7 @@ public:
     TPDU& tpdu();
     APDU& apdu();
     
+    uint8_t calcCRC(uint8_t* buffer, uint16_t len);
     bool valid() const;
 private:
     uint8_t buffer[0xff + NPDU_LPDU_DIFF]; //only valid of add info is zero
