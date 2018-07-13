@@ -24,7 +24,7 @@ void DataLinkLayer::systemBroadcastRequest(AckType ack, FrameFormat format, Prio
     _networkLayer.systemBroadcastConfirm(ack, format, priority, npdu.frame().sourceAddress(), npdu, success);
 }
 
-void DataLinkLayer::frameRecieved(CemiFrame & frame)
+void DataLinkLayer::frameRecieved(CemiFrame& frame)
 {
     AckType ack = frame.ack();
     AddressType addrType = frame.addressType();

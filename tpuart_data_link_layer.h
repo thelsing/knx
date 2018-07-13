@@ -15,6 +15,20 @@ public:
     bool enabled() const;
 private:
     bool _enabled = false;
+    uint8_t* _sendBuffer = 0;
+    bool _sendResult = false;
     bool sendFrame(CemiFrame& frame);
-    bool sendBytes(uint8_t* buffer, uint16_t length);
+    bool checkDataInd(uint8_t firstByte);
+    bool checkDataCon(uint8_t firstByte);
+    bool checkPollDataInd(uint8_t firstByte);
+    bool checkAckNackInd(uint8_t firstByte);
+    bool checkResetInd(uint8_t firstByte);
+    bool checkStateInd(uint8_t firstByte);
+    bool checkFrameStateInd(uint8_t firstByte);
+    bool checkConfigureInd(uint8_t firstByte);
+    bool checkFrameEndInd(uint8_t firstByte);
+    bool checkStopModeInd(uint8_t firstByte);
+    bool checkSystemStatInd(uint8_t firstByte);
+    void handleUnexpected(uint8_t firstByte);
+    void sendBytes(uint8_t* buffer, uint16_t length);
 };
