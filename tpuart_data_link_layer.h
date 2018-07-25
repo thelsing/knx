@@ -17,6 +17,7 @@ private:
     bool _enabled = false;
     uint8_t* _sendBuffer = 0;
     bool _sendResult = false;
+    uint16_t _sendBufferLength = 0;
     bool sendFrame(CemiFrame& frame);
     bool checkDataInd(uint8_t firstByte);
     bool checkDataCon(uint8_t firstByte);
@@ -31,4 +32,5 @@ private:
     bool checkSystemStatInd(uint8_t firstByte);
     void handleUnexpected(uint8_t firstByte);
     void sendBytes(uint8_t* buffer, uint16_t length);
+    void frameBytesReceived(uint8_t* buffer, uint16_t length);
 };

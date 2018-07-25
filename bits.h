@@ -16,8 +16,8 @@
                    ((x)>> 8 & 0x0000FF00UL) | \
                    ((x)>>24 & 0x000000FFUL) )
 #define ntohl(x) htonl(x)
-#define println SerialUSB.println
-#define print SerialUSB.print
+#define _print SerialUSB.print
+#define _println SerialUSB.println
 #else
 #include <Arduino.h>
 #include <user_interface.h>

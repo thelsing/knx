@@ -10,6 +10,7 @@
 #include <string.h>
 
 #define SerialKNX Serial1
+#define SerialDBG SerialUSB
 
 // NCN5120
 
@@ -135,7 +136,7 @@ bool TpUartDataLinkLayer::sendFrame(CemiFrame& frame)
 
     _sendBuffer = buffer;
     _sendResult = false;
-
+    _sendBufferLength = length;
     sendBytes(buffer, length);
 
     while (_sendBuffer != 0)
@@ -193,16 +194,98 @@ void TpUartDataLinkLayer::loop()
 
 bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
 {
+    const size_t bufferSize = 512;
+
     uint8_t tmp = firstByte & L_DATA_MASK;
     if (tmp != L_DATA_STANDARD_IND && tmp != L_DATA_EXTENDED_IND)
         return false;
 
-    uint8_t buffer[512];
     int len = 0;
-    // TODO: get rest of data, compare to sendbuffer 
-    CemiFrame frame(buffer, len);
-    frameRecieved(frame);
+    uint8_t buffer[bufferSize];
+    buffer[0] = firstByte;
+
+    uint8_t payloadLength = 0;
+    if (tmp == L_DATA_STANDARD_IND)
+    {
+        //convert to extended frame format
+        SerialKNX.readBytes(buffer + 2, 5);
+        payloadLength = buffer[6] & 0xF;
+        SerialKNX.readBytes(buffer + 6, payloadLength + 2); //+1 for TCPI +1 for CRC
+        len = payloadLength + 9;
+        buffer[1] = buffer[6] & 0xF0;
+        buffer[6] = payloadLength;
+    }
+    else
+    {
+        //extended frame
+        SerialKNX.readBytes(buffer + 1, 6);
+        payloadLength = buffer[6];
+        SerialKNX.readBytes(buffer + 7, payloadLength + 2); //+1 for TCPI +1 for CRC
+        len = payloadLength + 9;
+    }
+    len = payloadLength + 9;
+
+    const uint8_t queueLength = 5;
+    static uint8_t buffers[queueLength][bufferSize];
+    static uint16_t bufferLengths[queueLength];
+
+    if (_sendBuffer > 0)
+    {
+        // we are trying to send a telegram queue received telegrams until we get our sent telegram
+
+        if (len == _sendBufferLength && memcmp(_sendBuffer, buffer, len) == 0)
+        {
+            //we got the send telegramm back next byte is L_Data.con byte
+            uint8_t confirm = SerialKNX.read();
+            confirm &= L_DATA_CON_MASK;
+            _sendResult = (confirm > 0);
+            _sendBuffer = 0;
+            _sendBufferLength = 0;
+
+            return true;
+        }
+        
+        // queue telegram, if we get more the queueLength before send succeeds 
+        // ignore the telegram
+        for (int i = 0; i < queueLength; i++)
+        {
+            if (bufferLengths[i] != 0)
+                continue;
+
+            bufferLengths[i] = len;
+            memcpy(&buffers[i][0], buffer, len);
+            break;
+        }
+    }
+    else
+    {
+        // process all previously queued telegramms first
+        for (int i = 0; i < queueLength; i++)
+        {
+            if (bufferLengths[i] == 0)
+                break;
+
+            frameBytesReceived(&buffers[i][0], bufferLengths[i]);
+            bufferLengths[i] = 0;
+        }
+
+        frameBytesReceived(buffer, len);
+    }
+
     return true;
+}
+
+void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
+{
+    CemiFrame frame(buffer, length);
+
+    if (_deviceObject.induvidualAddress() == 0 && frame.destinationAddress() == 0)
+    {
+        //send ack. Otherwise we have autoacknowledge
+        SerialKNX.write(U_ACK_REQ + 1);
+    }
+
+    frameRecieved(frame);
 }
 
 bool TpUartDataLinkLayer::checkDataCon(uint8_t firstByte)
@@ -219,6 +302,7 @@ bool TpUartDataLinkLayer::checkDataCon(uint8_t firstByte)
 
     _sendResult = (firstByte & SUCCESS) > 0;
     _sendBuffer = 0;
+    _sendBufferLength = 0;
 
     return true;
 }
@@ -368,6 +452,10 @@ void TpUartDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 
     for (int i = 0; i < length; i++)
     {
+        uint8_t idx = length / 64;
+        cmd[0] = U_L_DATA_OFFSET_REQ | idx;
+        SerialKNX.write(cmd, 1);
+
         if (i != length - 1)
             cmd[0] = U_L_DATA_START_CONT_REQ | i;
         else
