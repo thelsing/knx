@@ -155,6 +155,8 @@ void TpUartDataLinkLayer::loop()
         return;
 
     uint8_t firstByte = SerialKNX.read();
+    SerialDBG.print("->");
+    SerialDBG.println(firstByte, HEX);
 
     if (checkDataInd(firstByte))
         return;
@@ -225,6 +227,14 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
     }
     len = payloadLength + 9;
 
+    SerialDBG.print("-> ");
+    for (int i = 0; i < len; i++)
+    {
+        SerialDBG.print(buffer[i], HEX);
+        SerialDBG.print(" ");
+    }
+    SerialDBG.println();
+
     const uint8_t queueLength = 5;
     static uint8_t buffers[queueLength][bufferSize];
     static uint16_t bufferLengths[queueLength];
@@ -244,7 +254,7 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
 
             return true;
         }
-        
+
         // queue telegram, if we get more the queueLength before send succeeds 
         // ignore the telegram
         for (int i = 0; i < queueLength; i++)
@@ -448,6 +458,14 @@ bool TpUartDataLinkLayer::enabled() const
 
 void TpUartDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 {
+    SerialDBG.print("<- ");
+    for (int i = 0; i < length; i++)
+    {
+        SerialDBG.print(bytes[i], HEX);
+        SerialDBG.print(" ");
+    }
+    SerialDBG.println();
+
     uint8_t cmd[2];
 
     for (int i = 0; i < length; i++)
