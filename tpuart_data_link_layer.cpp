@@ -9,9 +9,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define SerialKNX Serial1
-#define SerialDBG SerialUSB
-
 // NCN5120
 
 // services Host -> Controller :
@@ -75,31 +72,31 @@
 #define U_STOP_MODE_IND     0x2B
 #define U_SYSTEM_STAT_IND   0x4B
 
-void resetChip()
+void TpUartDataLinkLayer::resetChip()
 {
     uint8_t cmd = U_RESET_REQ;
-    SerialKNX.write(cmd);
+    _platform.writeUart(cmd);
     while (true)
     {
-        int resp = SerialKNX.read();
+        int resp = _platform.readUart();
         if (resp == U_RESET_IND)
             break;
     }
 }
 
-void stopChip()
+void TpUartDataLinkLayer::stopChip()
 {
     uint8_t cmd = U_STOP_MODE_REQ;
-    SerialKNX.write(cmd);
+    _platform.writeUart(cmd);
     while (true)
     {
-        int resp = SerialKNX.read();
+        int resp = _platform.readUart();
         if (resp == U_STOP_MODE_IND)
             break;
     }
 }
 
-void setAddress(uint16_t addr)
+void TpUartDataLinkLayer::setAddress(uint16_t addr)
 {
     if (addr == 0)
         return;
@@ -109,10 +106,10 @@ void setAddress(uint16_t addr)
     cmd[2] = (uint8_t)(addr & 0xff);
     //cmd[3] is don't care
 
-    SerialKNX.write(cmd, 4);
+    _platform.writeUart(cmd, 4);
     while (true)
     {
-        uint8_t resp = SerialKNX.read();
+        uint8_t resp = _platform.readUart();
         resp &= U_CONFIGURE_MASK;
         if (resp == U_CONFIGURE_IND)
             break;
@@ -151,12 +148,10 @@ void TpUartDataLinkLayer::loop()
     if (!_enabled)
         return;
 
-    if (SerialKNX.available() == 0)
+    if (_platform.uartAvailable() == 0)
         return;
 
-    uint8_t firstByte = SerialKNX.read();
-    SerialDBG.print("->");
-    SerialDBG.println(firstByte, HEX);
+    uint8_t firstByte = _platform.readUart();
 
     if (checkDataInd(firstByte))
         return;
@@ -210,9 +205,9 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
     if (tmp == L_DATA_STANDARD_IND)
     {
         //convert to extended frame format
-        SerialKNX.readBytes(buffer + 2, 5);
+        _platform.readBytesUart(buffer + 2, 5);
         payloadLength = buffer[6] & 0xF;
-        SerialKNX.readBytes(buffer + 6, payloadLength + 2); //+1 for TCPI +1 for CRC
+        _platform.readBytesUart(buffer + 6, payloadLength + 2); //+1 for TCPI +1 for CRC
         len = payloadLength + 9;
         buffer[1] = buffer[6] & 0xF0;
         buffer[6] = payloadLength;
@@ -220,33 +215,25 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
     else
     {
         //extended frame
-        SerialKNX.readBytes(buffer + 1, 6);
+        _platform.readBytesUart(buffer + 1, 6);
         payloadLength = buffer[6];
-        SerialKNX.readBytes(buffer + 7, payloadLength + 2); //+1 for TCPI +1 for CRC
+        _platform.readBytesUart(buffer + 7, payloadLength + 2); //+1 for TCPI +1 for CRC
         len = payloadLength + 9;
     }
     len = payloadLength + 9;
-
-    SerialDBG.print("-> ");
-    for (int i = 0; i < len; i++)
-    {
-        SerialDBG.print(buffer[i], HEX);
-        SerialDBG.print(" ");
-    }
-    SerialDBG.println();
 
     const uint8_t queueLength = 5;
     static uint8_t buffers[queueLength][bufferSize];
     static uint16_t bufferLengths[queueLength];
 
-    if (_sendBuffer > 0)
+    if (_sendBuffer != 0)
     {
         // we are trying to send a telegram queue received telegrams until we get our sent telegram
 
         if (len == _sendBufferLength && memcmp(_sendBuffer, buffer, len) == 0)
         {
             //we got the send telegramm back next byte is L_Data.con byte
-            uint8_t confirm = SerialKNX.read();
+            uint8_t confirm = _platform.readUart();
             confirm &= L_DATA_CON_MASK;
             _sendResult = (confirm > 0);
             _sendBuffer = 0;
@@ -292,7 +279,7 @@ void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
     if (_deviceObject.induvidualAddress() == 0 && frame.destinationAddress() == 0)
     {
         //send ack. Otherwise we have autoacknowledge
-        SerialKNX.write(U_ACK_REQ + 1);
+        _platform.writeUart(U_ACK_REQ + 1);
     }
 
     frameRecieved(frame);
@@ -306,7 +293,7 @@ bool TpUartDataLinkLayer::checkDataCon(uint8_t firstByte)
 
     if (_sendBuffer == 0)
     {
-        SerialDBG.println("got unexpected L_DATA_CON");
+        _println("got unexpected L_DATA_CON");
         return true;
     }
 
@@ -323,7 +310,7 @@ bool TpUartDataLinkLayer::checkPollDataInd(uint8_t firstByte)
         return false;
 
     // not sure if this can happen
-    SerialDBG.println("got L_POLL_DATA_IND");
+    _println("got L_POLL_DATA_IND");
     return true;
 }
 
@@ -334,7 +321,7 @@ bool TpUartDataLinkLayer::checkAckNackInd(uint8_t firstByte)
         return false;
 
     // this can only happen in bus monitor mode
-    SerialDBG.println("got L_ACKN_IND");
+    _println("got L_ACKN_IND");
     return true;
 }
 
@@ -343,7 +330,7 @@ bool TpUartDataLinkLayer::checkResetInd(uint8_t firstByte)
     if (firstByte != U_RESET_IND)
         return false;
 
-    SerialDBG.println("got U_RESET_IND");
+    _println("got U_RESET_IND");
     return true;
 }
 
@@ -353,9 +340,9 @@ bool TpUartDataLinkLayer::checkStateInd(uint8_t firstByte)
     if (tmp != U_STATE_IND)
         return false;
 
-    SerialDBG.print("got U_STATE_IND: 0x");
-    SerialDBG.print(firstByte, HEX);
-    SerialDBG.println();
+    _print("got U_STATE_IND: 0x");
+    _print(firstByte, HEX);
+    _println();
     return true;
 }
 
@@ -365,9 +352,9 @@ bool TpUartDataLinkLayer::checkFrameStateInd(uint8_t firstByte)
     if (tmp != U_FRAME_STATE_IND)
         return false;
 
-    SerialDBG.print("got U_FRAME_STATE_IND: 0x");
-    SerialDBG.print(firstByte, HEX);
-    SerialDBG.println();
+    _print("got U_FRAME_STATE_IND: 0x");
+    _print(firstByte, HEX);
+    _println();
     return true;
 }
 
@@ -377,9 +364,9 @@ bool TpUartDataLinkLayer::checkConfigureInd(uint8_t firstByte)
     if (tmp != U_CONFIGURE_IND)
         return false;
 
-    SerialDBG.print("got U_CONFIGURE_IND: 0x");
-    SerialDBG.print(firstByte, HEX);
-    SerialDBG.println();
+    _print("got U_CONFIGURE_IND: 0x");
+    _print(firstByte, HEX);
+    _println();
     return true;
 }
 
@@ -388,7 +375,7 @@ bool TpUartDataLinkLayer::checkFrameEndInd(uint8_t firstByte)
     if (firstByte != U_FRAME_END_IND)
         return false;
 
-    SerialDBG.println("got U_FRAME_END_IND");
+    _println("got U_FRAME_END_IND");
     return true;
 }
 
@@ -397,7 +384,7 @@ bool TpUartDataLinkLayer::checkStopModeInd(uint8_t firstByte)
     if (firstByte != U_STOP_MODE_IND)
         return false;
 
-    SerialDBG.println("got U_STOP_MODE_IND");
+    _println("got U_STOP_MODE_IND");
     return true;
 }
 
@@ -406,34 +393,32 @@ bool TpUartDataLinkLayer::checkSystemStatInd(uint8_t firstByte)
     if (firstByte != U_SYSTEM_STAT_IND)
         return false;
 
-    SerialDBG.print("got U_SYSTEM_STAT_IND: 0x");
+    _print("got U_SYSTEM_STAT_IND: 0x");
     while (true)
     {
-        int tmp = SerialKNX.read();
+        int tmp = _platform.readUart();
         if (tmp < 0)
             continue;
 
-        SerialDBG.print(tmp, HEX);
+        _print(tmp, HEX);
         break;
     }
-    SerialDBG.println();
+    _println();
     return true;
 }
 
 void TpUartDataLinkLayer::handleUnexpected(uint8_t firstByte)
 {
-    SerialDBG.print("got UNEXPECTED: 0x");
-    SerialDBG.print(firstByte, HEX);
-    SerialDBG.println();
+    _print("got UNEXPECTED: 0x");
+    _print(firstByte, HEX);
+    _println();
 }
 
 void TpUartDataLinkLayer::enabled(bool value)
 {
     if (value && !_enabled)
     {
-        SerialKNX.begin(19200, SERIAL_8E1);
-        while (!SerialKNX)
-            ;
+        _platform.setupUart();
 
         resetChip();
         setAddress(_deviceObject.induvidualAddress());
@@ -445,7 +430,7 @@ void TpUartDataLinkLayer::enabled(bool value)
     {
         _enabled = false;
         stopChip();
-        SerialKNX.end();
+        _platform.closeUart();
         return;
     }
 }
@@ -458,21 +443,13 @@ bool TpUartDataLinkLayer::enabled() const
 
 void TpUartDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 {
-    SerialDBG.print("<- ");
-    for (int i = 0; i < length; i++)
-    {
-        SerialDBG.print(bytes[i], HEX);
-        SerialDBG.print(" ");
-    }
-    SerialDBG.println();
-
     uint8_t cmd[2];
 
     for (int i = 0; i < length; i++)
     {
         uint8_t idx = length / 64;
         cmd[0] = U_L_DATA_OFFSET_REQ | idx;
-        SerialKNX.write(cmd, 1);
+        _platform.writeUart(cmd, 1);
 
         if (i != length - 1)
             cmd[0] = U_L_DATA_START_CONT_REQ | i;
@@ -481,6 +458,6 @@ void TpUartDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 
         cmd[1] = bytes[i];
 
-        SerialKNX.write(cmd, 2);
+        _platform.writeUart(cmd, 2);
     }
 }

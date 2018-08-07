@@ -6,6 +6,7 @@
 class TpUartDataLinkLayer: public DataLinkLayer
 {
     using DataLinkLayer::_deviceObject;
+    using DataLinkLayer::_platform;
 public:
     TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, NetworkLayer& layer,
         Platform& platform);
@@ -33,4 +34,7 @@ private:
     void handleUnexpected(uint8_t firstByte);
     void sendBytes(uint8_t* buffer, uint16_t length);
     void frameBytesReceived(uint8_t* buffer, uint16_t length);
+    void resetChip();
+    void stopChip();
+    void setAddress(uint16_t addr);
 };
