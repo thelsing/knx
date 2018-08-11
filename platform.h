@@ -24,7 +24,7 @@ public:
     
     virtual void setupUart();
     virtual void closeUart();
-    int uartAvailable();
+    virtual int uartAvailable();
     virtual size_t writeUart(const uint8_t data);
     virtual size_t writeUart(const uint8_t *buffer, size_t size);
     virtual int readUart();

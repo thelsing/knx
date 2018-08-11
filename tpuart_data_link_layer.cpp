@@ -37,7 +37,7 @@
 //serices to host controller
 
 // DLL services (device is transparent)
-#define L_DATA_STANDARD_IND 0x81
+#define L_DATA_STANDARD_IND 0x90
 #define L_DATA_EXTENDED_IND 0x10
 #define L_DATA_MASK         0xD3
 #define L_POLL_DATA_IND     0xF0
@@ -95,6 +95,9 @@ void TpUartDataLinkLayer::stopChip()
             break;
     }
 }
+
+void printHex(const char* suffix, const uint8_t *data, size_t length);
+
 
 void TpUartDataLinkLayer::setAddress(uint16_t addr)
 {
@@ -207,8 +210,10 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
         //convert to extended frame format
         _platform.readBytesUart(buffer + 2, 5);
         payloadLength = buffer[6] & 0xF;
-        _platform.readBytesUart(buffer + 6, payloadLength + 2); //+1 for TCPI +1 for CRC
-        len = payloadLength + 9;
+        _platform.readBytesUart(buffer + 7, payloadLength + 2); //+1 for TCPI +1 for CRC
+        printHex("->", buffer, 1);
+        printHex("->", buffer + 2, 5);
+        printHex("->", buffer + 7, payloadLength + 3);
         buffer[1] = buffer[6] & 0xF0;
         buffer[6] = payloadLength;
     }
@@ -218,10 +223,23 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
         _platform.readBytesUart(buffer + 1, 6);
         payloadLength = buffer[6];
         _platform.readBytesUart(buffer + 7, payloadLength + 2); //+1 for TCPI +1 for CRC
-        len = payloadLength + 9;
     }
     len = payloadLength + 9;
 
+    printHex("=>", buffer, len);
+    CemiFrame frame(buffer, len);
+    if (_deviceObject.induvidualAddress() == 0 && frame.destinationAddress() == 0)
+    {
+        //send ack. Otherwise we have autoacknowledge
+        _platform.writeUart(U_ACK_REQ + 1);
+    }
+    else
+    {
+        // send not addressed
+        _platform.writeUart(U_ACK_REQ);
+    }
+    
+    
     const uint8_t queueLength = 5;
     static uint8_t buffers[queueLength][bufferSize];
     static uint16_t bufferLengths[queueLength];
@@ -275,12 +293,6 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
 void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
 {
     CemiFrame frame(buffer, length);
-
-    if (_deviceObject.induvidualAddress() == 0 && frame.destinationAddress() == 0)
-    {
-        //send ack. Otherwise we have autoacknowledge
-        _platform.writeUart(U_ACK_REQ + 1);
-    }
 
     frameRecieved(frame);
 }
