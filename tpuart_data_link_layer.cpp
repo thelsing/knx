@@ -10,6 +10,7 @@
 #include <string.h>
 
 // NCN5120
+//#define NCN5120
 
 // services Host -> Controller :
 // internal commands, device specific
@@ -18,7 +19,7 @@
 #define U_SET_BUSY_REQ       0x03
 #define U_QUIT_BUSY_REQ      0x04
 #define U_BUSMON_REQ         0x05
-#define U_SET_ADDRESS_REQ    0xF1
+#define U_SET_ADDRESS_REQ    0xF1 // different on TP-UART
 #define U_SET_REPETITION_REQ 0xF2
 #define U_L_DATA_OFFSET_REQ  0x08 //-0x0C
 #define U_SYSTEM_STATE       0x0D
@@ -86,6 +87,7 @@ void TpUartDataLinkLayer::resetChip()
 
 void TpUartDataLinkLayer::stopChip()
 {
+#ifdef NCN5120
     uint8_t cmd = U_STOP_MODE_REQ;
     _platform.writeUart(cmd);
     while (true)
@@ -94,30 +96,11 @@ void TpUartDataLinkLayer::stopChip()
         if (resp == U_STOP_MODE_IND)
             break;
     }
+#endif
 }
 
 void printHex(const char* suffix, const uint8_t *data, size_t length);
 
-
-void TpUartDataLinkLayer::setAddress(uint16_t addr)
-{
-    if (addr == 0)
-        return;
-
-    uint8_t cmd[4];
-    cmd[1] = (uint8_t)(addr >> 8);
-    cmd[2] = (uint8_t)(addr & 0xff);
-    //cmd[3] is don't care
-
-    _platform.writeUart(cmd, 4);
-    while (true)
-    {
-        uint8_t resp = _platform.readUart();
-        resp &= U_CONFIGURE_MASK;
-        if (resp == U_CONFIGURE_IND)
-            break;
-    }
-}
 
 TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
     NetworkLayer& layer, Platform& platform) : DataLinkLayer(devObj, addrTab, layer, platform)
@@ -228,9 +211,11 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
 
     printHex("=>", buffer, len);
     CemiFrame frame(buffer, len);
-    if (_deviceObject.induvidualAddress() == 0 && frame.destinationAddress() == 0)
+    
+    if (frame.addressType() == InduvidualAddress &&  _deviceObject.induvidualAddress() == frame.destinationAddress()
+        || frame.addressType() == GroupAddress &&  _groupAddressTable.contains(frame.destinationAddress()))
     {
-        //send ack. Otherwise we have autoacknowledge
+        //send ack. 
         _platform.writeUart(U_ACK_REQ + 1);
     }
     else
@@ -433,7 +418,6 @@ void TpUartDataLinkLayer::enabled(bool value)
         _platform.setupUart();
 
         resetChip();
-        setAddress(_deviceObject.induvidualAddress());
         _enabled = true;
         return;
     }
