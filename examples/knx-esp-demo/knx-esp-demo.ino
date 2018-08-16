@@ -1,5 +1,5 @@
 #include <EEPROM.h>
-#include "knx_esp.h"
+#include <knx_esp.h>
 
 // declare array of all groupobjects with their sizes in byte
 GroupObject groupObjects[]

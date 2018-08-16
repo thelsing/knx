@@ -25,6 +25,15 @@ public:
     bool sendBytes(uint8_t* buffer, uint16_t len);
     int readBytes(uint8_t* buffer, uint16_t maxLen);
 
+    //uart
+    void setupUart();
+    void closeUart();
+    int uartAvailable();
+    size_t writeUart(const uint8_t data);
+    size_t writeUart(const uint8_t *buffer, size_t size);
+    int readUart();
+    size_t readBytesUart(uint8_t *buffer, size_t length);
+    
     //memory
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();

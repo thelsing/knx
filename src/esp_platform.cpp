@@ -3,6 +3,8 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 
+#include "knx/bits.h"
+
 EspPlatform::EspPlatform()
 {
 }
@@ -72,17 +74,6 @@ void EspPlatform::closeMultiCast()
     _udp.stop();
 }
 
-void printHex(const char* suffix, uint8_t *data, uint8_t length)
-{
-    Serial.print(suffix);
-    for (int i = 0; i<length; i++) {
-        if (data[i]<0x10) { Serial.print("0"); }
-        Serial.print(data[i], HEX);
-        Serial.print(" ");
-    }
-    Serial.print("\n");
-}
-
 bool EspPlatform::sendBytes(uint8_t * buffer, uint16_t len)
 {
     printHex("<- ",buffer, len);
@@ -119,4 +110,62 @@ uint8_t * EspPlatform::getEepromBuffer(uint16_t size)
 void EspPlatform::commitToEeprom()
 {
     EEPROM.commit();
+}
+
+void EspPlatform::setupUart()
+{
+    Serial.begin(19200, SERIAL_8E1);
+    while (!Serial) ;
+}
+
+
+void EspPlatform::closeUart()
+{
+    Serial.end();
+}
+
+
+int EspPlatform::uartAvailable()
+{
+    return Serial.available();
+}
+
+
+size_t EspPlatform::writeUart(const uint8_t data)
+{
+    printHex("<p", &data, 1);
+    return Serial.write(data);
+}
+
+
+size_t EspPlatform::writeUart(const uint8_t *buffer, size_t size)
+{
+    printHex("<p", buffer, size);
+    return Serial.write(buffer, size);
+}
+
+
+int EspPlatform::readUart()
+{
+    int val = Serial.read();
+    if (val > 0)
+        printHex("p>", (uint8_t*)&val, 1);
+    return val;
+}
+
+
+size_t EspPlatform::readBytesUart(uint8_t *buffer, size_t length)
+{
+    size_t toRead = length;
+    uint8_t* pos = buffer;
+    while (toRead > 0)
+    {
+        size_t val = Serial.readBytes(pos, toRead);
+        pos += val;
+        toRead -= val;
+    }
+    
+    
+    printHex("p>", buffer, length);
+    return length;
 }

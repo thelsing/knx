@@ -243,5 +243,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/CodeDB
-/VisualGDBCache
+**/CodeDB
+**/VisualGDBCache
