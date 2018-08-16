@@ -49,7 +49,8 @@ void println(void);
 #else
 #include <Arduino.h>
 #include <user_interface.h>
-#define printf Serial.printf
+#define _print Serial.print
+#define _println Serial.println
 #endif
 
 void printHex(const char* suffix, const uint8_t *data, size_t length);
