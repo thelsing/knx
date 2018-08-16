@@ -4,9 +4,37 @@
 
 #ifdef __linux__
 #include <arpa/inet.h>
+#include <cstdio>
+
 #define lowByte(val) ((val) & 255)
 #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
 #define bitRead(val, bitno) (((val) >> (bitno)) & 1)
+
+#define DEC 10
+#define HEX 16
+
+#define _print print
+#define _println println
+
+void print(const char[]);
+void print(char);
+void print(unsigned char, int = DEC);
+void print(int, int = DEC);
+void print(unsigned int, int = DEC);
+void print(long, int = DEC);
+void print(unsigned long, int = DEC);
+void print(double, int = 2);
+
+void println(const char[]);
+void println(char);
+void println(unsigned char, int = DEC);
+void println(int, int = DEC);
+void println(unsigned int, int = DEC);
+void println(long, int = DEC);
+void println(unsigned long, int = DEC);
+void println(double, int = 2);
+void println(void);
+
 #elif ARDUINO_ARCH_SAMD
 #include <Arduino.h>
 #define htons(x) ( ((x)<<8) | (((x)>>8)&0xFF) )
@@ -24,7 +52,7 @@
 #define printf Serial.printf
 #endif
 
-
+void printHex(const char* suffix, const uint8_t *data, size_t length);
 
 uint8_t* popByte(uint8_t& b, uint8_t* data);
 uint8_t* popWord(uint16_t& w, uint8_t* data);

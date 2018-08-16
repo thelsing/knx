@@ -212,8 +212,8 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
     printHex("=>", buffer, len);
     CemiFrame frame(buffer, len);
     
-    if (frame.addressType() == InduvidualAddress &&  _deviceObject.induvidualAddress() == frame.destinationAddress()
-        || frame.addressType() == GroupAddress &&  _groupAddressTable.contains(frame.destinationAddress()))
+    if ((frame.addressType() == InduvidualAddress &&  _deviceObject.induvidualAddress() == frame.destinationAddress())
+        || (frame.addressType() == GroupAddress &&  _groupAddressTable.contains(frame.destinationAddress())))
     {
         //send ack. 
         _platform.writeUart(U_ACK_REQ + 1);
