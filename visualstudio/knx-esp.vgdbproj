@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <VisualGDBProjectSettings2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ConfigurationName>Debug</ConfigurationName>
   <Project xsi:type="com.visualgdb.project.external.arduino">
     <CustomSourceDirectories>
       <Directories />
@@ -10,7 +11,7 @@
       <GroupSourcesByTypes>true</GroupSourcesByTypes>
       <GroupSourcesByPaths>true</GroupSourcesByPaths>
       <SketchSubdirectory>..\examples\knx-esp-demo</SketchSubdirectory>
-      <MainSketchFile>knx-esp-demo.ino</MainSketchFile>
+      <MainSketchFile>Sketch.ino</MainSketchFile>
       <RootSketchFolder>
         <Subfolders />
         <Files>
@@ -25,7 +26,7 @@
       <string>..\..</string>
     </AdditionalLibraryDirectories>
     <OutputSubdirectory>Output\$(PlatformName.defuse)\$(ConfigurationName.defuse)</OutputSubdirectory>
-    <EnableVerboseBuild>false</EnableVerboseBuild>
+    <EnableVerboseBuild>true</EnableVerboseBuild>
   </Build>
   <CustomBuild>
     <PreSyncActions />
@@ -40,6 +41,60 @@
     <DebugStopActions />
     <BreakMode>Default</BreakMode>
   </CustomDebug>
+  <DeviceTerminalSettings>
+    <Connection xsi:type="com.sysprogs.terminal.connection.serial">
+      <AdvancedSettings>
+        <BaudRate>115200</BaudRate>
+        <DataBits>8</DataBits>
+        <Parity>None</Parity>
+        <StopBits>One</StopBits>
+        <FlowControl>None</FlowControl>
+      </AdvancedSettings>
+    </Connection>
+    <LastConnectionTime>0</LastConnectionTime>
+    <EchoTypedCharacters>false</EchoTypedCharacters>
+    <ClearContentsWhenReconnecting>false</ClearContentsWhenReconnecting>
+    <ReconnectAutomatically>true</ReconnectAutomatically>
+    <DisplayMode>ASCII</DisplayMode>
+    <Colors>
+      <Background>
+        <Alpha>255</Alpha>
+        <Red>0</Red>
+        <Green>0</Green>
+        <Blue>0</Blue>
+      </Background>
+      <Disconnected>
+        <Alpha>255</Alpha>
+        <Red>169</Red>
+        <Green>169</Green>
+        <Blue>169</Blue>
+      </Disconnected>
+      <Text>
+        <Alpha>255</Alpha>
+        <Red>211</Red>
+        <Green>211</Green>
+        <Blue>211</Blue>
+      </Text>
+      <Echo>
+        <Alpha>255</Alpha>
+        <Red>144</Red>
+        <Green>238</Green>
+        <Blue>144</Blue>
+      </Echo>
+    </Colors>
+    <HexSettings>
+      <MaximumBytesPerLine>16</MaximumBytesPerLine>
+      <ShowTextView>true</ShowTextView>
+      <BreaksAroundEcho>true</BreaksAroundEcho>
+      <AutoSend>true</AutoSend>
+      <SendAsHex>true</SendAsHex>
+      <TimeoutForAutoBreak>0</TimeoutForAutoBreak>
+    </HexSettings>
+    <LineEnding>LF</LineEnding>
+    <TreatLFAsCRLF>false</TreatLFAsCRLF>
+    <KeepOpenAfterExit>true</KeepOpenAfterExit>
+    <ShowAfterProgramming>true</ShowAfterProgramming>
+  </DeviceTerminalSettings>
   <CustomShortcuts>
     <Shortcuts />
     <ShowMessageAfterExecuting>true</ShowMessageAfterExecuting>
@@ -47,22 +102,76 @@
   <UserDefinedVariables />
   <ImportedPropertySheets />
   <CodeSense>
-    <Enabled>Unknown</Enabled>
+    <Enabled>True</Enabled>
     <ExtraSettings>
       <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
       <SupportLightweightReferenceAnalysis>true</SupportLightweightReferenceAnalysis>
+      <DiscoverySettings>
+        <Mode>Enabled</Mode>
+        <SearchInProjectDir>true</SearchInProjectDir>
+        <SearchInSourceDirs>true</SearchInSourceDirs>
+        <SearchInIncludeSubdirs>true</SearchInIncludeSubdirs>
+      </DiscoverySettings>
       <CheckForClangFormatFiles>true</CheckForClangFormatFiles>
       <FormattingEngine xsi:nil="true" />
     </ExtraSettings>
     <CodeAnalyzerSettings>
       <Enabled>false</Enabled>
+      <SelectedAnalyzers>
+        <string>apiModeling.google.GTest</string>
+        <string>core.builtin.BuiltinFunctions</string>
+        <string>core.builtin.NoReturnFunctions</string>
+        <string>core.CallAndMessage</string>
+        <string>core.DivideZero</string>
+        <string>core.DynamicTypePropagation</string>
+        <string>core.NonnilStringConstants</string>
+        <string>core.NonNullParamChecker</string>
+        <string>core.NullDereference</string>
+        <string>core.StackAddressEscape</string>
+        <string>core.UndefinedBinaryOperatorResult</string>
+        <string>core.uninitialized.ArraySubscript</string>
+        <string>core.uninitialized.Assign</string>
+        <string>core.uninitialized.Branch</string>
+        <string>core.uninitialized.CapturedBlockVariable</string>
+        <string>core.uninitialized.UndefReturn</string>
+        <string>core.VLASize</string>
+        <string>cplusplus.NewDelete</string>
+        <string>cplusplus.NewDeleteLeaks</string>
+        <string>cplusplus.SelfAssignment</string>
+        <string>deadcode.DeadStores</string>
+        <string>nullability.NullPassedToNonnull</string>
+        <string>nullability.NullReturnedFromNonnull</string>
+        <string>security.insecureAPI.getpw</string>
+        <string>security.insecureAPI.gets</string>
+        <string>security.insecureAPI.mkstemp</string>
+        <string>security.insecureAPI.mktemp</string>
+        <string>security.insecureAPI.UncheckedReturn</string>
+        <string>security.insecureAPI.vfork</string>
+        <string>unix.API</string>
+        <string>unix.cstring.BadSizeArg</string>
+        <string>unix.cstring.NullArg</string>
+        <string>unix.Malloc</string>
+        <string>unix.MallocSizeof</string>
+        <string>unix.MismatchedDeallocator</string>
+        <string>unix.StdCLibraryFunctions</string>
+        <string>unix.Vfork</string>
+      </SelectedAnalyzers>
+      <ExtraArguments>
+        <string>-analyzer-store=region</string>
+        <string>-analyzer-opt-analyze-nested-blocks</string>
+        <string>-analyzer-eagerly-assume</string>
+      </ExtraArguments>
     </CodeAnalyzerSettings>
   </CodeSense>
   <Configurations>
     <VisualGDBConfiguration>
       <PlatformName>NodeMCU 1 0 (ESP-12E Module)</PlatformName>
       <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
-        <AdditionalStartupCommands />
+        <AdditionalStartupCommands>
+          <GDBPreStartupCommands />
+          <GDBStartupCommands />
+          <GDBFinalizationCommands />
+        </AdditionalStartupCommands>
         <AdditionalGDBSettings>
           <Features>
             <DisableAutoDetection>false</DisableAutoDetection>
@@ -110,7 +219,7 @@
           </Configuration>
         </DebugMethod>
         <AutoDetectRTOS>true</AutoDetectRTOS>
-        <SemihostingSupport>Auto</SemihostingSupport>
+        <SemihostingSupport>Disabled</SemihostingSupport>
         <SemihostingPollingDelay>0</SemihostingPollingDelay>
         <StepIntoEntryPoint>false</StepIntoEntryPoint>
         <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>

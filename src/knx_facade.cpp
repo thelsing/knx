@@ -145,3 +145,33 @@ uint32_t KnxFacade::paramInt(uint32_t addr)
 
     return _bau.parameters().getInt(addr);
 }
+
+
+void KnxFacade::setSaveCallback(saveRestoreCallback func)
+{
+    _saveCallback = func;
+}
+
+
+void KnxFacade::setRestoreCallback(saveRestoreCallback func)
+{
+    _restoreCallback = func;
+}
+
+
+uint8_t* KnxFacade::save(uint8_t* buffer)
+{
+    if (_saveCallback != 0)
+        return _saveCallback(buffer);
+    
+    return buffer;
+}
+
+
+uint8_t* KnxFacade::restore(uint8_t* buffer)
+{
+    if (_restoreCallback != 0)
+        return _restoreCallback(buffer);
+    
+    return buffer;
+}

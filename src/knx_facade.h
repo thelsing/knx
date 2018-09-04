@@ -5,7 +5,9 @@
 
 class RunningState;
 
-class KnxFacade
+typedef uint8_t* (*saveRestoreCallback)(uint8_t* buffer);
+
+class KnxFacade : private SaveRestore
 {
 public:
     KnxFacade();
@@ -28,6 +30,8 @@ public:
     void hardwareType(uint8_t* value);
     void version(uint16_t value);
     void start();
+    void setSaveCallback(saveRestoreCallback func);
+    void setRestoreCallback(saveRestoreCallback func);
     uint8_t* paramData(uint32_t addr);
     uint8_t paramByte(uint32_t addr);
     uint16_t paramWord(uint32_t addr);
@@ -38,6 +42,11 @@ private:
     uint32_t _ledPin = 16;
     uint32_t _buttonPin = 0;
     Ticker _ticker;
+    saveRestoreCallback _saveCallback = 0;
+    saveRestoreCallback _restoreCallback = 0;
+    
+    uint8_t* save(uint8_t* buffer);
+    uint8_t* restore(uint8_t* buffer);
 };
 
 extern KnxFacade knx;
