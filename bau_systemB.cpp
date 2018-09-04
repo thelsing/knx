@@ -2,9 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
-using namespace std;
-
 BauSystemB::BauSystemB(Platform& platform): _memoryReference((uint8_t*)&_deviceObj), _memory(platform), _addrTable(_memoryReference),
     _assocTable(_memoryReference), _groupObjTable(_memoryReference), _appProgram(_memoryReference),
     _platform(platform), _appLayer(_assocTable, *this),
@@ -275,4 +272,9 @@ void BauSystemB::groupValueWriteIndication(uint16_t asap, Priority priority, Hop
         return;
 
     updateGroupObject(go, data, dataLength);
+}
+
+void BauSystemB::addSaveRestore(SaveRestore* obj)
+{
+    _memory.addSaveRestore(obj);
 }

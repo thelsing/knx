@@ -25,6 +25,7 @@ public:
     bool enabled();
     void enabled(bool value);
     void readMemory();
+    void addSaveRestore(SaveRestore* obj);
 protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
     virtual uint8_t* descriptor() = 0;
@@ -61,6 +62,7 @@ protected:
 
     DeviceObject _deviceObj;
     // pointer to first private variable as reference to memory read/write commands
+    // addesses are to big for memory read/write calls on 64bit systems otherwise
     uint8_t* _memoryReference;
     Memory _memory;
     AddressTableObject _addrTable;
