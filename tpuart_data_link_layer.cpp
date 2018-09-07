@@ -33,7 +33,7 @@
 
 //knx transmit data commands
 #define U_L_DATA_START_CONT_REQ 0x80 //-0xBF
-#define U_L_DATA_END_REQ        0x47 //-0x7F
+#define U_L_DATA_END_REQ        0x40 //-0x7F
 
 //serices to host controller
 
@@ -98,8 +98,6 @@ void TpUartDataLinkLayer::stopChip()
     }
 #endif
 }
-
-void printHex(const char* suffix, const uint8_t *data, size_t length);
 
 
 TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
@@ -184,7 +182,10 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
         return false;
 
     int len = 0;
-    uint8_t buffer[bufferSize];
+    uint8_t cemiBuffer[bufferSize + 2];
+    cemiBuffer[0] = 0x29;
+    cemiBuffer[1] = 0;
+    uint8_t* buffer = cemiBuffer + 2;
     buffer[0] = firstByte;
 
     uint8_t payloadLength = 0;
@@ -192,11 +193,9 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
     {
         //convert to extended frame format
         _platform.readBytesUart(buffer + 2, 5);
+        sendAck((AddressType)(buffer[6] & GroupAddress), getWord(buffer + 4));
         payloadLength = buffer[6] & 0xF;
         _platform.readBytesUart(buffer + 7, payloadLength + 2); //+1 for TCPI +1 for CRC
-        printHex("->", buffer, 1);
-        printHex("->", buffer + 2, 5);
-        printHex("->", buffer + 7, payloadLength + 3);
         buffer[1] = buffer[6] & 0xF0;
         buffer[6] = payloadLength;
     }
@@ -204,29 +203,15 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
     {
         //extended frame
         _platform.readBytesUart(buffer + 1, 6);
+        sendAck((AddressType)(buffer[1] & GroupAddress), getWord(buffer + 4));
         payloadLength = buffer[6];
         _platform.readBytesUart(buffer + 7, payloadLength + 2); //+1 for TCPI +1 for CRC
     }
     len = payloadLength + 9;
-
-    printHex("=>", buffer, len);
-    CemiFrame frame(buffer, len);
-    
-    if (frame.addressType() == InduvidualAddress &&  _deviceObject.induvidualAddress() == frame.destinationAddress()
-        || frame.addressType() == GroupAddress &&  _groupAddressTable.contains(frame.destinationAddress()))
-    {
-        //send ack. 
-        _platform.writeUart(U_ACK_REQ + 1);
-    }
-    else
-    {
-        // send not addressed
-        _platform.writeUart(U_ACK_REQ);
-    }
     
     
     const uint8_t queueLength = 5;
-    static uint8_t buffers[queueLength][bufferSize];
+    static uint8_t buffers[queueLength][bufferSize + 2];
     static uint16_t bufferLengths[queueLength];
 
     if (_sendBuffer != 0)
@@ -253,7 +238,7 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
                 continue;
 
             bufferLengths[i] = len;
-            memcpy(&buffers[i][0], buffer, len);
+            memcpy(&buffers[i][0], cemiBuffer, len + 2);
             break;
         }
     }
@@ -265,11 +250,11 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
             if (bufferLengths[i] == 0)
                 break;
 
-            frameBytesReceived(&buffers[i][0], bufferLengths[i]);
+            frameBytesReceived(&buffers[i][0], bufferLengths[i]+2);
             bufferLengths[i] = 0;
         }
 
-        frameBytesReceived(buffer, len);
+        frameBytesReceived(cemiBuffer, len+2);
     }
 
     return true;
@@ -277,6 +262,7 @@ bool TpUartDataLinkLayer::checkDataInd(uint8_t firstByte)
 
 void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
 {
+    //printHex("=>", buffer, length);
     CemiFrame frame(buffer, length);
 
     frameRecieved(frame);
@@ -416,7 +402,8 @@ void TpUartDataLinkLayer::enabled(bool value)
     if (value && !_enabled)
     {
         _platform.setupUart();
-
+        _print("ownaddr ");
+        _println(_deviceObject.induvidualAddress(), HEX);
         resetChip();
         _enabled = true;
         return;
@@ -439,21 +426,43 @@ bool TpUartDataLinkLayer::enabled() const
 
 void TpUartDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 {
+    //printHex("<=", bytes, length);
     uint8_t cmd[2];
 
+    uint8_t oldIdx = 0;
+        
     for (int i = 0; i < length; i++)
     {
         uint8_t idx = length / 64;
-        cmd[0] = U_L_DATA_OFFSET_REQ | idx;
-        _platform.writeUart(cmd, 1);
+        if (idx != oldIdx)
+        {
+            oldIdx = idx;
+            cmd[0] = U_L_DATA_OFFSET_REQ | idx;
+            _platform.writeUart(cmd, 1);
+        }
 
         if (i != length - 1)
             cmd[0] = U_L_DATA_START_CONT_REQ | i;
         else
-            cmd[0] = U_L_DATA_END_REQ;
+            cmd[0] = U_L_DATA_END_REQ | i;
 
         cmd[1] = bytes[i];
 
         _platform.writeUart(cmd, 2);
+    }
+}
+
+void TpUartDataLinkLayer::sendAck(AddressType type, uint16_t address)
+{
+    if ( (type == InduvidualAddress &&  _deviceObject.induvidualAddress() == address) 
+      || (type == GroupAddress &&  (_groupAddressTable.contains(address) || address == 0)))
+    {
+        //send ack. 
+        _platform.writeUart(U_ACK_REQ + 1);
+    }
+    else
+    {
+        // send not addressed
+        _platform.writeUart(U_ACK_REQ);
     }
 }

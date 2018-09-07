@@ -34,7 +34,7 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     Priority priority = frame.priority();
     NPDU& npdu = frame.npdu();
     uint16_t ownAddr = _deviceObject.induvidualAddress();
-
+    
     if (source == ownAddr)
         _deviceObject.induvidualAddressDuplication(true);
 
@@ -48,11 +48,11 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
         if (addrType == GroupAddress && !_groupAddressTable.contains(destination))
             return;
 
-        //if (frame.npdu().octetCount() > 0)
-        //{
-        //    print.print("<- DLL ");
-        //    frame.apdu().printPDU();
-        //}
+//        if (frame.npdu().octetCount() > 0)
+//        {
+//            _print("-> DLL ");
+//            frame.apdu().printPDU();
+//        }
 
         _networkLayer.dataIndication(ack, addrType, destination, type, npdu, priority, source);
     }
@@ -80,11 +80,11 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
         return false;
     }
 
-    //if (frame.npdu().octetCount() > 0)
-    //{
-    //    print.print("-> DLL ");
-    //    frame.apdu().printPDU();
-    //}
+//    if (frame.npdu().octetCount() > 0)
+//    {
+//        _print("<- DLL ");
+//        frame.apdu().printPDU();
+//    }
 
     return sendFrame(frame);
 }

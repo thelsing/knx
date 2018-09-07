@@ -71,13 +71,14 @@ uint16_t CemiFrame::telegramLengthtTP() const
 void CemiFrame::fillTelegramTP(uint8_t* data)
 {
     uint16_t len = telegramLengthtTP();
+    
     if (frameType() == StandardFrame)
     {
         uint8_t octet5 = (_ctrl1[1] & 0xF0) | (_ctrl1[6] & 0x0F);
         data[0] = _ctrl1[0]; //CTRL
         memcpy(data + 1, _ctrl1 + 2, 4); // SA, DA
         data[5] = octet5; // LEN; Hopcount, ..
-        memcpy(data + 6, _ctrl1 + 8, len - 7); // APDU
+        memcpy(data + 6, _ctrl1 + 7, len - 7); // APDU
     }
     else
     {

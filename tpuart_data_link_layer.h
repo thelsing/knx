@@ -37,4 +37,5 @@ private:
     void frameBytesReceived(uint8_t* buffer, uint16_t length);
     void resetChip();
     void stopChip();
+    void sendAck(AddressType type, uint16_t address);
 };

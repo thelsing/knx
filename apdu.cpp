@@ -40,14 +40,14 @@ uint8_t APDU::length() const
 
 void APDU::printPDU()
 {
-    //Print.print("APDU: ");
-    //print.print(type(), HEX, 4);
-    //print.print("  ");
-    //print.print(_data[0] & 0x3, HEX, 2);
-    //for (uint8_t i = 1; i < length() + 1; ++i)
-    //{
-    //    if (i) print.print(" ");
-    //    print.print(_data[i], HEX, 2);
-    //}
-    //print.println();
+    _print("APDU: ");
+    _print(type(), HEX);
+    _print("  ");
+    _print(_data[0] & 0x3, HEX);
+    for (uint8_t i = 1; i < length() + 1; ++i)
+    {
+        if (i) _print(" ");
+        _print(_data[i], HEX);
+    }
+    _println();
 }
