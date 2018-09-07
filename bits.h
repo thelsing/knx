@@ -37,7 +37,7 @@ void println(void);
 
 #elif ARDUINO_ARCH_SAMD
 #include <Arduino.h>
-#define htons(x) ( ((x)<<8) | (((x)>>8)&0xFF) )
+#define htons(x) ( (((x)<<8)&0xFF00) | (((x)>>8)&0xFF) )
 #define ntohs(x) htons(x)
 #define htonl(x) ( ((x)<<24 & 0xFF000000UL) | \
                    ((x)<< 8 & 0x00FF0000UL) | \
@@ -65,3 +65,4 @@ uint8_t* pushInt(uint32_t i, uint8_t* data);
 uint8_t* pushByteArray(const uint8_t* src, uint32_t size, uint8_t* data);
 uint16_t getWord(uint8_t* data);
 uint32_t getInt(uint8_t* data);
+void printHex(const char* suffix, const uint8_t *data, size_t length);

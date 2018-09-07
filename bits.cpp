@@ -7,6 +7,17 @@ uint8_t* popByte(uint8_t& b, uint8_t* data)
     return data;
 }
 
+void printHex(const char* suffix, const uint8_t *data, size_t length)
+{
+    _print(suffix);
+    for (int i = 0; i < length; i++) {
+        if (data[i] < 0x10) { _print("0"); }
+        _print(data[i], HEX);
+        _print(" ");
+    }
+    _println();
+}
+
 uint8_t* popWord(uint16_t& w, uint8_t* data)
 {
     w = getWord(data);
