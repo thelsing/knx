@@ -43,6 +43,7 @@
   </CustomDebug>
   <DeviceTerminalSettings>
     <Connection xsi:type="com.sysprogs.terminal.connection.serial">
+      <ComPortName>COM9</ComPortName>
       <AdvancedSettings>
         <BaudRate>115200</BaudRate>
         <DataBits>8</DataBits>
@@ -54,7 +55,7 @@
     <LastConnectionTime>0</LastConnectionTime>
     <EchoTypedCharacters>false</EchoTypedCharacters>
     <ClearContentsWhenReconnecting>false</ClearContentsWhenReconnecting>
-    <ReconnectAutomatically>true</ReconnectAutomatically>
+    <ReconnectAutomatically>false</ReconnectAutomatically>
     <DisplayMode>ASCII</DisplayMode>
     <Colors>
       <Background>
