@@ -34,18 +34,18 @@ void measureTemp()
     currentValue *= 100 * 100;
 
     // write new value to groupobject
-    goCurrent.objectWriteFloat(currentValue);
+    goCurrent.objectWriteFloatDpt9(currentValue);
 
     if (currentValue > maxValue)
     {
         maxValue = currentValue;
-        goMax.objectWriteFloat(maxValue);
+        goMax.objectWriteFloatDpt9(maxValue);
     }
 
     if (currentValue < minValue)
     {
         minValue = currentValue;
-        goMin.objectWriteFloat(minValue);
+        goMin.objectWriteFloatDpt9(minValue);
     }
 }
 

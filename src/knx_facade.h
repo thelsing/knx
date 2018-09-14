@@ -21,6 +21,7 @@ public:
     uint32_t buttonPin();
     void buttonPin(uint32_t value);
     void readMemory();
+    void writeMemory();
     void loop();
     void knxLoop();
     void registerGroupObjects(GroupObject* groupObjects, uint16_t count);

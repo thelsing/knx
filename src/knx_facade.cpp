@@ -9,6 +9,7 @@ KnxFacade knx;
 KnxFacade::KnxFacade() : _bau(_platform)
 {
     manufacturerId(0xfa);
+    _bau.addSaveRestore(this);
 }
 
 bool KnxFacade::enabled()
@@ -61,6 +62,11 @@ void KnxFacade::readMemory()
     _bau.readMemory();
 }
 
+void KnxFacade::writeMemory()
+{
+    _bau.writeMemory();
+}
+
 void KnxFacade::loop()
 {
     if (currentState)
@@ -108,7 +114,7 @@ void KnxFacade::start()
 
     pinMode(_buttonPin, INPUT);
     attachInterrupt(_buttonPin, buttonDown, FALLING);
-
+    
     switchToSate(noWifiState);
     checkStates();
     _ticker.attach_ms(100, doLed);
