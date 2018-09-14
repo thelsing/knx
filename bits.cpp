@@ -252,14 +252,3 @@ void println(void)
 }
 
 #endif
-
-void printHex(const char* suffix, const uint8_t *data, size_t length)
-{
-    _print(suffix);
-    for (size_t i = 0; i < length; i++) {
-        if (data[i] < 0x10) { _print("0"); }
-        _print(data[i], HEX);
-        _print(" ");
-    }
-    _print("\n");
-}

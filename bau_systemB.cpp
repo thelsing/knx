@@ -92,6 +92,11 @@ void BauSystemB::readMemory()
     _memory.readMemory();
 }
 
+void BauSystemB::writeMemory()
+{
+    _memory.writeMemory();
+}
+
 DeviceObject& BauSystemB::deviceObject()
 {
     return _deviceObj;

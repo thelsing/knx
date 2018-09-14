@@ -123,6 +123,9 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
         _size = 0;
     }
 
+    if (size == 0)
+        return true;
+    
     _data = (uint8_t*)malloc(size);
     if (!_data)
         return false;

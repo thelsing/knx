@@ -18,7 +18,7 @@ void Memory::readMemory()
 {
     _data = _platform.getEepromBuffer(512);
 
-    if (_data[0] != 0xDE || _data[1] != 0xAD || _data[2] != 0xAF || _data[3] != 0xFE)
+    if (_data[0] != 0x00 || _data[1] != 0xAD || _data[2] != 0xAF || _data[3] != 0xFE)
         return;
 
     uint8_t* buffer = _data + 4;
@@ -31,7 +31,7 @@ void Memory::readMemory()
 
 void Memory::writeMemory()
 {
-    _data[0] = 0xDE;
+    _data[0] = 0x00;
     _data[1] = 0xAD;
     _data[2] = 0xAF;
     _data[3] = 0xFE;

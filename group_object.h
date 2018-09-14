@@ -45,7 +45,7 @@ public:
     * @return The value of the com-object in 1/100. INVALID_DPT_FLOAT is returned
     *         for the DPT9 "invalid data" value.
     */
-    int32_t objectReadFloat();
+    int32_t objectReadFloatDpt9();
     bool objectReadBool();
     /**
     * Request the read of a communication object. Calling this function triggers the
@@ -79,7 +79,15 @@ public:
     * @param value - the new value of the communication object in 1/100.
     *                Use INVALID_DPT_FLOAT for the DPT9 "invalid data" value.
     */
-    void objectWriteFloat(int32_t value);
+    void objectWriteFloatDpt9(int32_t value);
+    void objectWrite(bool value);
+    void objectWrite(uint8_t value);
+    void objectWrite(uint16_t value);
+    void objectWrite(uint32_t value);
+    void objectWrite(int8_t value);
+    void objectWrite(int16_t value);
+    void objectWrite(int32_t value);
+    void objectWrite(float value);
 
     /**
     * Set the value of a communication object and mark the communication object
@@ -93,7 +101,7 @@ public:
     * @param value - the new value of the communication object in 1/100.
     *                Use INVALID_DPT_FLOAT for the DPT9 "invalid data" value.
     */
-    void objectUpdateFloat(int32_t value);
+    void objectUpdateFloatDpt9(int32_t value);
 
     size_t valueSize();
     size_t asapValueSize(uint8_t code);

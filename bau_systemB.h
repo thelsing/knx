@@ -25,6 +25,7 @@ public:
     bool enabled();
     void enabled(bool value);
     void readMemory();
+    void writeMemory();
     void addSaveRestore(SaveRestore* obj);
 protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
