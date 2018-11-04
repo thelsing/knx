@@ -40,7 +40,7 @@ void BauSystemB::sendNextGroupTelegram()
     GroupObjectTableObject& table = _groupObjTable;
     uint16_t objCount = table.entryCount();
 
-    for (uint16_t asap = startIdx; asap < objCount; asap++)
+    for (uint16_t asap = startIdx; asap <= objCount; asap++)
     {
         GroupObject& go = table.get(asap);
 
