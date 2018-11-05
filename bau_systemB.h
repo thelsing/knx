@@ -74,4 +74,5 @@ protected:
     ApplicationLayer _appLayer;
     TransportLayer _transLayer;
     NetworkLayer _netLayer;
+    bool _configured = true;
 };

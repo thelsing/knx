@@ -40,7 +40,7 @@ void BauSystemB::sendNextGroupTelegram()
     GroupObjectTableObject& table = _groupObjTable;
     uint16_t objCount = table.entryCount();
 
-    for (uint16_t asap = startIdx; asap < objCount; asap++)
+    for (uint16_t asap = startIdx; asap <= objCount; asap++)
     {
         GroupObject& go = table.get(asap);
 
@@ -114,10 +114,17 @@ ApplicationProgramObject& BauSystemB::parameters()
 
 bool BauSystemB::configured()
 {
-    return _groupObjTable.loadState() == LS_LOADED
+    // _configured is set to true initially, if the device was configured with ETS it will be set to true after restart
+    
+    if (!_configured)
+        return false;
+    
+    _configured = _groupObjTable.loadState() == LS_LOADED
         && _addrTable.loadState() == LS_LOADED
         && _assocTable.loadState() == LS_LOADED
         && _appProgram.loadState() == LS_LOADED;
+    
+    return _configured;
 }
 
 void BauSystemB::deviceDescriptorReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t descriptorType)
@@ -147,12 +154,14 @@ void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, u
 
 void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap)
 {
-    // for platforms that don't really restart
-    _deviceObj.progMode(false);
 
     // Flush the EEPROM before resetting
     _memory.writeMemory();
     _platform.restart();
+    
+    // for platforms that don't really restart
+    _deviceObj.progMode(false);
+    _configured = true;
 }
 
 void BauSystemB::authorizeIndication(Priority priority, HopCountType hopType, uint16_t asap, uint32_t key)
