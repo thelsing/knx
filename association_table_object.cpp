@@ -53,7 +53,7 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
     uint16_t entries = entryCount();
     for (uint16_t i = 0; i < entries; i++)
     {
-        uint16_t entry = ntohs(operator[](i));
+        uint16_t entry = operator[](i);
         if (lowByte(entry) == asap)
             return highByte(entry);
     }
