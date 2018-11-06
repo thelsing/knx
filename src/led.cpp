@@ -2,6 +2,7 @@
 #include "knx_facade.h"
 #include "state.h"
 
+#ifdef USE_STATES
 void doLed()
 {
     if (!currentState)
@@ -26,3 +27,4 @@ void doLed()
     else
         digitalWrite(knx.ledPin(), LOW);
 }
+#endif

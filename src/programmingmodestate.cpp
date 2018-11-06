@@ -2,6 +2,7 @@
 #include "runningstate.h"
 #include "knx_facade.h"
 
+#ifdef USE_STATES
 ProgramModeState programModeState = ProgramModeState();
 
 void ProgramModeState::enterState()
@@ -24,3 +25,4 @@ void ProgramModeState::loop()
     State::loop();
     knx.knxLoop();
 }
+#endif

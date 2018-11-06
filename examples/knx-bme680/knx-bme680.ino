@@ -90,7 +90,8 @@ void setup(void)
     if (knx.configured())
     {
         cyclSend = knx.paramInt(0);
-        Serial.printf("Zykl. send: %d\n", cyclSend);
+        Serial.print("Zykl. send:");
+        Serial.println(cyclSend);
     }
     
     // start the framework. Will get wifi first.

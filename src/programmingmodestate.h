@@ -2,6 +2,8 @@
 
 #include "state.h"
 
+#ifdef USE_STATES
+
 class ProgramModeState : public State
 {
 public:
@@ -15,3 +17,5 @@ public:
 };
 
 extern ProgramModeState programModeState;
+
+#endif

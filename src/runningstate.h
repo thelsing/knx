@@ -1,7 +1,7 @@
 #pragma once
 
 #include "state.h"
-
+#ifdef USE_STATES
 class RunningState : public State
 {
 public:
@@ -18,3 +18,4 @@ private:
 };
 
 extern RunningState runningState;
+#endif

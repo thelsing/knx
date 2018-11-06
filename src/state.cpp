@@ -1,6 +1,8 @@
 #include "state.h"
 #include "Arduino.h"
 
+#ifdef USE_STATES
+
 State* volatile currentState = 0;
 State* volatile nextState = 0;
 
@@ -51,3 +53,5 @@ void State::loop()
 {
     checkStates();
 }
+
+#endif

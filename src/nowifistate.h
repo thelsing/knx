@@ -2,6 +2,8 @@
 
 #include "state.h"
 
+#ifdef USE_STATES
+
 class NoWifiState : public State
 {
 public:
@@ -14,3 +16,5 @@ public:
 };
 
 extern NoWifiState noWifiState;
+
+#endif

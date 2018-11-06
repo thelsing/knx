@@ -1,16 +1,28 @@
 #pragma once
+
+#include "arch_config.h"
+
+#ifdef ARDUINO_ARCH_SAMD
+#include "samd_platform.h"
+#include "knx/bau07B0.h"
+#endif
+
+#ifdef ARDUINO_ARCH_ESP8266
 #include <Ticker.h>
 #include "esp_platform.h"
 #include "knx/bau57B0.h"
+#endif
 
+#ifdef USE_STATES
 class RunningState;
+#endif
 
 typedef uint8_t* (*saveRestoreCallback)(uint8_t* buffer);
 
 class KnxFacade : private SaveRestore
 {
 public:
-    KnxFacade();
+    KnxFacade(BauSystemB& bau);
     bool enabled();
     void enabled(bool value);
     bool progMode();
@@ -38,11 +50,12 @@ public:
     uint16_t paramWord(uint32_t addr);
     uint32_t paramInt(uint32_t addr);
 private:
-    EspPlatform _platform;
-    Bau57B0 _bau;
+    BauSystemB& _bau;
     uint32_t _ledPin = 16;
     uint32_t _buttonPin = 0;
+#ifdef USE_STATES
     Ticker _ticker;
+#endif
     saveRestoreCallback _saveCallback = 0;
     saveRestoreCallback _restoreCallback = 0;
     

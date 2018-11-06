@@ -1,3 +1,6 @@
+#include "arch_config.h"
+
+#ifdef USE_STATES
 #include <ESP8266WiFi.h>
 
 #include "wpsstate.h"
@@ -26,3 +29,5 @@ void WpsState::enterState()
         }
     }
 }
+
+#endif

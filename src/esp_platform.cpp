@@ -1,4 +1,6 @@
 #include "esp_platform.h"
+
+#ifdef ARDUINO_ARCH_ESP8266
 #include <user_interface.h>
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -169,3 +171,4 @@ size_t EspPlatform::readBytesUart(uint8_t *buffer, size_t length)
     printHex("p>", buffer, length);
     return length;
 }
+#endif

@@ -2,6 +2,7 @@
 
 #include "state.h"
 
+#ifdef USE_STATES
 class WpsState : public State
 {
 public:
@@ -12,3 +13,5 @@ public:
 };
 
 extern WpsState wpsState;
+
+#endif

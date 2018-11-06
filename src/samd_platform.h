@@ -1,14 +1,16 @@
-#ifdef ARDUINO_ARCH_ESP8266
 #include "knx/platform.h"
-#include <ESP8266WiFi.h>
-#include <WifiUDP.h>
 
-#define SerialDBG Serial
+#include "Arduino.h"
 
-class EspPlatform : public Platform
+#ifdef ARDUINO_ARCH_SAMD
+
+#define SerialDBG SerialUSB
+#define SerialKNX Serial1
+
+class SamdPlatform : public Platform
 {
 public:
-    EspPlatform();
+    SamdPlatform();
 
     // ip stuff
     uint32_t currentIpAddress();
@@ -27,23 +29,22 @@ public:
     void closeMultiCast();
     bool sendBytes(uint8_t* buffer, uint16_t len);
     int readBytes(uint8_t* buffer, uint16_t maxLen);
-
-    //uart
-    void setupUart();
-    void closeUart();
-    int uartAvailable();
-    size_t writeUart(const uint8_t data);
-    size_t writeUart(const uint8_t *buffer, size_t size);
-    int readUart();
-    size_t readBytesUart(uint8_t *buffer, size_t length);
     
+    //uart
+    virtual void setupUart();
+    virtual void closeUart();
+    virtual int uartAvailable();
+    virtual size_t writeUart(const uint8_t data);
+    virtual size_t writeUart(const uint8_t *buffer, size_t size);
+    virtual int readUart();
+    virtual size_t readBytesUart(uint8_t *buffer, size_t length);
+
     //memory
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();
 private:
     uint32_t _mulitcastAddr;
     uint16_t _mulitcastPort;
-    WiFiUDP _udp;
 };
 
 #endif

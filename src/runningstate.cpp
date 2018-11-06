@@ -3,6 +3,8 @@
 #include "wpsstate.h"
 #include "knx_facade.h"
 
+#ifdef USE_STATES
+
 RunningState runningState = RunningState();
 
 void RunningState::shortButtonPress()
@@ -38,3 +40,4 @@ void RunningState::loop()
     State::loop();
     knx.knxLoop();
 }
+#endif

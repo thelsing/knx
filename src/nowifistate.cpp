@@ -1,8 +1,10 @@
-#include <ESP8266WiFi.h>
-
 #include "nowifistate.h"
 #include "wpsstate.h"
 #include "runningstate.h"
+
+#ifdef USE_STATES
+
+#include <ESP8266WiFi.h>
 
 NoWifiState noWifiState = NoWifiState();
 
@@ -33,3 +35,5 @@ void NoWifiState::enterState()
         switchToSate(runningState);
     }
 }
+
+#endif

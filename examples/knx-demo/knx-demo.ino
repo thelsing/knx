@@ -1,4 +1,3 @@
-#include <EEPROM.h>
 #include <knx_esp.h>
 
 // declare array of all groupobjects with their sizes in byte
@@ -62,7 +61,6 @@ void resetCallback(GroupObject& go)
 void setup()
 {
     Serial.begin(115200);
-    Serial.setDebugOutput(true);
 
     randomSeed(millis());
 
@@ -77,11 +75,11 @@ void setup()
     // print values of parameters if device is already configured
     if (knx.configured())
     {
-        Serial.printf("Timeout: %d\n", knx.paramByte(0));
-        Serial.printf("Zykl. senden: %d\n", knx.paramByte(1));
-        Serial.printf("Min/Max senden: %d\n", knx.paramByte(2));
-        Serial.printf("Aenderung senden: %d\n", knx.paramByte(3));
-        Serial.printf("Abgleich %d\n", knx.paramByte(4));
+        SerialDBG.print("Timeout: "); SerialDBG.println(knx.paramByte(0));
+        SerialDBG.print("Zykl. senden: "); SerialDBG.println(knx.paramByte(1));
+        SerialDBG.print("Min/Max senden: "); SerialDBG.println(knx.paramByte(2));
+        SerialDBG.print("Aenderung senden: "); SerialDBG.println(knx.paramByte(3));
+        SerialDBG.print("Abgleich: "); SerialDBG.println(knx.paramByte(4));
     }
 
     // start the framework. Will get wifi first.

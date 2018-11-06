@@ -1,14 +1,13 @@
-#ifdef ARDUINO_ARCH_ESP8266
+#pragma once
+
+#ifdef __linux__
+
 #include "knx/platform.h"
-#include <ESP8266WiFi.h>
-#include <WifiUDP.h>
 
-#define SerialDBG Serial
-
-class EspPlatform : public Platform
+class LinuxPlatform: public Platform
 {
 public:
-    EspPlatform();
+    LinuxPlatform();
 
     // ip stuff
     uint32_t currentIpAddress();
@@ -27,7 +26,7 @@ public:
     void closeMultiCast();
     bool sendBytes(uint8_t* buffer, uint16_t len);
     int readBytes(uint8_t* buffer, uint16_t maxLen);
-
+    
     //uart
     void setupUart();
     void closeUart();
@@ -36,14 +35,17 @@ public:
     size_t writeUart(const uint8_t *buffer, size_t size);
     int readUart();
     size_t readBytesUart(uint8_t *buffer, size_t length);
-    
+
     //memory
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();
 private:
-    uint32_t _mulitcastAddr;
-    uint16_t _mulitcastPort;
-    WiFiUDP _udp;
+    uint32_t _multicastAddr;
+    uint16_t _port;
+    int _socketFd = -1;
+    void doMemoryMapping();
+    uint8_t* _mappedFile;
+    int _fd;
 };
 
 #endif

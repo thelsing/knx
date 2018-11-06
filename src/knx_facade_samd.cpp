@@ -1,23 +1,47 @@
 #include "knx_facade.h"
-#include "state.h"
-#include "button.h"
-#include "led.h"
-#include "nowifistate.h"
-
-#ifdef ARDUINO_ARCH_SAMD
-SamdPlatform platform;
-Bau07B0 bau(platform);
-#else
-EspPlatform platform;
-Bau57B0 bau(platform);
-#endif
-KnxFacade knx(bau);
+#if 0
+KnxFacade knx;
 
 
-KnxFacade::KnxFacade(BauSystemB& bau) : _bau(bau)
+#define SerialDBG SerialUSB
+
+void buttonUp();
+long buttonTimestamp = 0;
+void buttonDown()
+{
+    buttonTimestamp = millis();
+    attachInterrupt(knx.buttonPin(), buttonUp, RISING);
+}
+
+void buttonUp()
+{
+    // keep short/long for now 
+    if (millis() - buttonTimestamp > 1000)
+    {
+        SerialDBG.println("long button press");
+    }
+    else
+    {
+        SerialDBG.println("short button press");
+    }
+
+    if (knx.progMode())
+    {
+        digitalWrite(knx.ledPin(), LOW);
+        knx.progMode(false);
+    }
+    else
+    {
+        digitalWrite(knx.ledPin(), HIGH);
+        knx.progMode(true);
+    }
+
+    attachInterrupt(knx.buttonPin(), buttonDown, FALLING);
+}
+
+KnxFacade::KnxFacade() : _bau(_platform)
 {
     manufacturerId(0xfa);
-    _bau.addSaveRestore(this);
 }
 
 bool KnxFacade::enabled()
@@ -70,22 +94,7 @@ void KnxFacade::readMemory()
     _bau.readMemory();
 }
 
-void KnxFacade::writeMemory()
-{
-    _bau.writeMemory();
-}
-
 void KnxFacade::loop()
-{
-#ifdef USE_STATES
-    if (currentState)
-        currentState->loop();
-#else
-    knxLoop();
-#endif
-}
-
-void KnxFacade::knxLoop()
 {
     _bau.loop();
 }
@@ -125,16 +134,8 @@ void KnxFacade::start()
     pinMode(_ledPin, OUTPUT);
 
     pinMode(_buttonPin, INPUT_PULLUP);
-    
-#ifdef USE_STATES
     attachInterrupt(_buttonPin, buttonDown, FALLING);
-    switchToSate(noWifiState);
-    checkStates();
-    _ticker.attach_ms(100, doLed);
-#else
-    attachInterrupt(knx.buttonPin(), buttonUp, RISING);
     enabled(true);
-#endif
 }
 
 uint8_t* KnxFacade::paramData(uint32_t addr)
@@ -170,31 +171,4 @@ uint32_t KnxFacade::paramInt(uint32_t addr)
 }
 
 
-void KnxFacade::setSaveCallback(saveRestoreCallback func)
-{
-    _saveCallback = func;
-}
-
-
-void KnxFacade::setRestoreCallback(saveRestoreCallback func)
-{
-    _restoreCallback = func;
-}
-
-
-uint8_t* KnxFacade::save(uint8_t* buffer)
-{
-    if (_saveCallback != 0)
-        return _saveCallback(buffer);
-    
-    return buffer;
-}
-
-
-uint8_t* KnxFacade::restore(uint8_t* buffer)
-{
-    if (_restoreCallback != 0)
-        return _restoreCallback(buffer);
-    
-    return buffer;
-}
+#endif

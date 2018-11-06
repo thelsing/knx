@@ -1,4 +1,7 @@
 #pragma once
+#include "arch_config.h"
+
+#ifdef USE_STATES
 
 class State
 {
@@ -27,3 +30,5 @@ void checkStates();
 
 extern State* volatile currentState;
 extern State* volatile nextState;
+
+#endif
