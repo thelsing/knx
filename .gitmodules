@@ -1,4 +1,0 @@
-[submodule "src/knx"]
-	path = src/knx
-	url = https://github.com/thelsing/knx.git
-	branch = master
