@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AddressTableObject" Collapsed="true">
+    <Position X="2.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBAAAAAAQACAEAIAABAAAAgAAAAAAAAAAAAAAABAAEA=</HashCode>
+      <FileName>knx\address_table_object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ApplicationProgramObject" Collapsed="true">
+    <Position X="4" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAACAAAIAgCAAAAAgABAEAAAAAAAQQABAAAA=</HashCode>
+      <FileName>knx\application_program_object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AssociationTableObject" Collapsed="true">
+    <Position X="5.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAgIAABAAQAgAAAEAAAAAAAAAAABAAEA=</HashCode>
+      <FileName>knx\association_table_object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DeviceObject" Collapsed="true">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACACEAAAGCIAKAQCAgAACgCECAAEIgAEgAAgJAAAA=</HashCode>
+      <FileName>knx\device_object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GroupObjectTableObject" Collapsed="true">
+    <Position X="7.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAACACAAgIAAhAATAgACAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>knx\group_object_table_object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InterfaceObject" Collapsed="true">
+    <Position X="2" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAgAAAAAAAAAAAAABBAAAA=</HashCode>
+      <FileName>knx\interface_object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IpParameterObject" Collapsed="true">
+    <Position X="2.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIACIAAYACAAKIAAGAQCAAgWAIAAAAGAAAAAABgAIA=</HashCode>
+      <FileName>knx\ip_parameter_object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TableObject" Collapsed="true">
+    <Position X="4.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIACIACBACAAIIAAGAASAgwyAAAAAAAAgAAAAJgAAA=</HashCode>
+      <FileName>knx\table_object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BusAccessUnit" Collapsed="true">
+    <Position X="6.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>sKoIAAAAQIIxC4gUUEAIAAACiQEgAjQUFCCA5yEAIBw=</HashCode>
+      <FileName>knx\bau.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bau57B0" Collapsed="true">
+    <Position X="6.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABIAAFAgAgIwCoAAUiCCQIDAiEBgADQQACAAAAKQABw=</HashCode>
+      <FileName>knx\bau57B0.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinuxPlatform" Collapsed="true">
+    <Position X="9.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BACCIBAAICAAICgAAABAgAAQAAAAAAgAAADAEAAAAhA=</HashCode>
+      <FileName>linux_platform.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SaveRestore" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>knx\save_restore.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Platform" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIBAAICAAIAAAAABAgAAAAAAAAAgAAADAEAAAAhA=</HashCode>
+      <FileName>knx\platform.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

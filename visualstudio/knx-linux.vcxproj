@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|VisualGDB">
+      <Configuration>Debug</Configuration>
+      <Platform>VisualGDB</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|VisualGDB">
+      <Configuration>Release</Configuration>
+      <Platform>VisualGDB</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{819E55F9-05A8-454D-B771-4A99F775DD87}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|VisualGDB'">
+    <GNUToolchainPrefix />
+    <GNUCompilerType>GCC</GNUCompilerType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
+    <GNUToolchainPrefix />
+    <GNUCompilerType>GCC</GNUCompilerType>
+  </PropertyGroup>
+  <PropertyGroup Label="VisualGDBPackageDefinitions">
+    <ToolchainID>com.sysprogs.toolchain.default-gcc</ToolchainID>
+  </PropertyGroup>
+  <ImportGroup Label="VisualGDBFindComponents">
+    <Import Project="$(LOCALAPPDATA)\VisualGDB\FindComponents.props" />
+  </ImportGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|VisualGDB'">
+    <RemoteBuildHost>localhost-lxss</RemoteBuildHost>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
+    <RemoteBuildHost>localhost-lxss</RemoteBuildHost>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|VisualGDB'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>/usr/include/x86_64-linux-gnu;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <LinkerScript />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>/usr/include/x86_64-linux-gnu;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <LinkerScript />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="knx-linux-Debug.vgdbsettings" />
+    <None Include="knx-linux-Release.vgdbsettings" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\knx\address_table_object.h" />
+    <ClInclude Include="..\src\knx\apdu.h" />
+    <ClInclude Include="..\src\knx\application_layer.h" />
+    <ClInclude Include="..\src\knx\application_program_object.h" />
+    <ClInclude Include="..\src\knx\association_table_object.h" />
+    <ClInclude Include="..\src\knx\bau.h" />
+    <ClInclude Include="..\src\knx\bau07B0.h" />
+    <ClInclude Include="..\src\knx\bau57B0.h" />
+    <ClInclude Include="..\src\knx\bau_systemB.h" />
+    <ClInclude Include="..\src\knx\bits.h" />
+    <ClInclude Include="..\src\knx\cemi_frame.h" />
+    <ClInclude Include="..\src\knx\data_link_layer.h" />
+    <ClInclude Include="..\src\knx\datapoint_types.h" />
+    <ClInclude Include="..\src\knx\device_object.h" />
+    <ClInclude Include="..\src\knx\group_object.h" />
+    <ClInclude Include="..\src\knx\group_object_table_object.h" />
+    <ClInclude Include="..\src\knx\interface_object.h" />
+    <ClInclude Include="..\src\knx\ip_data_link_layer.h" />
+    <ClInclude Include="..\src\knx\ip_parameter_object.h" />
+    <ClInclude Include="..\src\knx\knx_types.h" />
+    <ClInclude Include="..\src\knx\memory.h" />
+    <ClInclude Include="..\src\knx\network_layer.h" />
+    <ClInclude Include="..\src\knx\npdu.h" />
+    <ClInclude Include="..\src\knx\platform.h" />
+    <ClInclude Include="..\src\knx\property_types.h" />
+    <ClInclude Include="..\src\knx\save_restore.h" />
+    <ClInclude Include="..\src\knx\table_object.h" />
+    <ClInclude Include="..\src\knx\tpdu.h" />
+    <ClInclude Include="..\src\knx\tpuart_data_link_layer.h" />
+    <ClInclude Include="..\src\knx\transport_layer.h" />
+    <ClInclude Include="..\src\linux_platform.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\knx\address_table_object.cpp" />
+    <ClCompile Include="..\src\knx\apdu.cpp" />
+    <ClCompile Include="..\src\knx\application_layer.cpp" />
+    <ClCompile Include="..\src\knx\application_program_object.cpp" />
+    <ClCompile Include="..\src\knx\association_table_object.cpp" />
+    <ClCompile Include="..\src\knx\bau.cpp" />
+    <ClCompile Include="..\src\knx\bau07B0.cpp" />
+    <ClCompile Include="..\src\knx\bau57B0.cpp" />
+    <ClCompile Include="..\src\knx\bau_systemB.cpp" />
+    <ClCompile Include="..\src\knx\bits.cpp" />
+    <ClCompile Include="..\src\knx\cemi_frame.cpp" />
+    <ClCompile Include="..\src\knx\data_link_layer.cpp" />
+    <ClCompile Include="..\src\knx\datapoint_types.cpp" />
+    <ClCompile Include="..\src\knx\device_object.cpp" />
+    <ClCompile Include="..\src\knx\group_object.cpp" />
+    <ClCompile Include="..\src\knx\group_object_table_object.cpp" />
+    <ClCompile Include="..\src\knx\interface_object.cpp" />
+    <ClCompile Include="..\src\knx\ip_data_link_layer.cpp" />
+    <ClCompile Include="..\src\knx\ip_parameter_object.cpp" />
+    <ClCompile Include="..\src\knx\memory.cpp" />
+    <ClCompile Include="..\src\knx\network_layer.cpp" />
+    <ClCompile Include="..\src\knx\npdu.cpp" />
+    <ClCompile Include="..\src\knx\table_object.cpp" />
+    <ClCompile Include="..\src\knx\tpdu.cpp" />
+    <ClCompile Include="..\src\knx\tpuart_data_link_layer.cpp" />
+    <ClCompile Include="..\src\knx\transport_layer.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\linux_platform.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

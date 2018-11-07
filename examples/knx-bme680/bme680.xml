@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<KNX xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" CreatedBy="KNX MT" ToolVersion="5.1.255.16695" xmlns="http://knx.org/xml/project/11">
+  <ManufacturerData>
+    <Manufacturer RefId="M-00FA">
+      <Catalog>
+        <CatalogSection Id="M-00FA_CS-1" Name="Geräte" Number="1" DefaultLanguage="de">
+          <CatalogItem Id="M-00FA_H-0-0_HP-0000-0A-0000_CI-0-1" Name="BME680 BSEC" Number="1" ProductRefId="M-00FA_H-0-0_P-0" Hardware2ProgramRefId="M-00FA_H-0-0_HP-0000-0A-0000" DefaultLanguage="de" />
+        </CatalogSection>
+      </Catalog>
+      <ApplicationPrograms>
+        <ApplicationProgram Id="M-00FA_A-0000-0A-0000" ApplicationNumber="0" ApplicationVersion="10" ProgramType="ApplicationProgram" MaskVersion="MV-57B0" Name="IP" LoadProcedureStyle="MergedProcedure" PeiType="0" DefaultLanguage="de" DynamicTableManagement="false" Linkable="false" MinEtsVersion="4.0">
+          <Static>
+            <Code>
+              <RelativeSegment Id="M-00FA_A-0000-0A-0000_RS-04-00000" Name="Parameters" Offset="0" Size="4" LoadStateMachine="4" />
+            </Code>
+            <ParameterTypes>
+              <ParameterType Id="M-00FA_A-0000-0A-0000_PT-Int" Name="Int">
+                <TypeNumber SizeInBit="32" Type="signedInt" minInclusive="0" maxInclusive="1000" />
+              </ParameterType>
+            </ParameterTypes>
+            <Parameters>
+              <Parameter Id="M-00FA_A-0000-0A-0000_P-1" Name="Zyklisch Senden" ParameterType="M-00FA_A-0000-0A-0000_PT-Int" Text="Sendeinterval (*3s)" Value="20">
+                <Memory CodeSegment="M-00FA_A-0000-0A-0000_RS-04-00000" Offset="0" BitOffset="0" />
+              </Parameter>
+            </Parameters>
+            <ParameterRefs>
+              <ParameterRef Id="M-00FA_A-0000-0A-0000_P-1_R-1" RefId="M-00FA_A-0000-0A-0000_P-1" />
+            </ParameterRefs>
+            <ComObjectTable>
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-1" Name="Temperatur (raw)" Text="Temperatur (raw)" Number="1" FunctionText="Temperaturwert lesen (raw)" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-2" Name="Luftdruck" Text="Luftdruck" Number="2" FunctionText="Luftdruck lesen" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-3" Name="Widerstand (Gas)" Text="Widerstand (Gas)" Number="3" FunctionText="Widerstand lesen" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-4" Name="Luftfeuchtigkeit (raw)" Text="Luftfeuchtigkeit (raw)" Number="4" FunctionText="Luftfeuchtigkeit lesen (raw)" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-5" Name="Luftqualität" Text="Luftqualität" Number="5" FunctionText="Luftqualität lesen" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-6" Name="Genauigkeit der Luftqualität" Text="Genauigkeit der Luftqualität" Number="6" FunctionText="Genauigkeit lesen" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-7" Name="Temperatur" Text="Temperatur" Number="7" FunctionText="Temperatur lesen" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-8" Name="Luftfeuchtigkeit" Text="Luftfeuchtigkeit" Number="8" FunctionText="Luftfeuchtigkeit lesen" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-9" Name="Trigger" Text="Trigger" Number="9" FunctionText="Messung auslösen" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-10" Name="CO2" Text="CO2" Number="10" FunctionText="CO2 Äquivalent" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+            </ComObjectTable>
+            <ComObjectRefs>
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-1_R-1" RefId="M-00FA_A-0000-0A-0000_O-1" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-2_R-2" RefId="M-00FA_A-0000-0A-0000_O-2" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-3_R-3" RefId="M-00FA_A-0000-0A-0000_O-3" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-4_R-4" RefId="M-00FA_A-0000-0A-0000_O-4" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-5_R-5" RefId="M-00FA_A-0000-0A-0000_O-5" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-6_R-6" RefId="M-00FA_A-0000-0A-0000_O-6" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-7_R-7" RefId="M-00FA_A-0000-0A-0000_O-7" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-8_R-8" RefId="M-00FA_A-0000-0A-0000_O-8" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-9_R-9" RefId="M-00FA_A-0000-0A-0000_O-9" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-10_R-10" RefId="M-00FA_A-0000-0A-0000_O-10" />
+            </ComObjectRefs>
+            <AddressTable MaxEntries="255" />
+            <AssociationTable MaxEntries="255" />
+            <LoadProcedures>
+              <LoadProcedure MergeId="2">
+                <LdCtrlRelSegment AppliesTo="full" LsmIdx="4" Size="4" Mode="0" Fill="0" />
+              </LoadProcedure>
+              <LoadProcedure MergeId="4">
+                <LdCtrlWriteRelMem ObjIdx="4" Offset="0" Size="4" Verify="true" />
+              </LoadProcedure>
+            </LoadProcedures>
+            <Options />
+          </Static>
+          <Dynamic>
+            <ChannelIndependentBlock>
+              <ParameterBlock Id="M-00FA_A-0000-0A-0000_PB-1" Name="ParameterPage" Text="Allgemeine Parameter">
+                <ParameterRefRef RefId="M-00FA_A-0000-0A-0000_P-1_R-1" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-1_R-1" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-2_R-2" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-3_R-3" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-4_R-4" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-5_R-5" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-6_R-6" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-7_R-7" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-8_R-8" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-9_R-9" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-10_R-10" />
+              </ParameterBlock>
+            </ChannelIndependentBlock>
+          </Dynamic>
+        </ApplicationProgram>
+      </ApplicationPrograms>
+      <Hardware>
+        <Hardware Id="M-00FA_H-0-0" Name="BME680 BSEC IP" SerialNumber="0" VersionNumber="0" HasIndividualAddress="true" HasApplicationProgram="true" IsIPEnabled="true">
+          <Products>
+            <Product Id="M-00FA_H-0-0_P-0" Text="BME680 BSEC" OrderNumber="0" IsRailMounted="false" DefaultLanguage="de" />
+          </Products>
+          <Hardware2Programs>
+            <Hardware2Program Id="M-00FA_H-0-0_HP-0000-0A-0000" MediumTypes="MT-5">
+              <ApplicationProgramRef RefId="M-00FA_A-0000-0A-0000" />
+            </Hardware2Program>
+          </Hardware2Programs>
+        </Hardware>
+      </Hardware>
+    </Manufacturer>
+  </ManufacturerData>
+</KNX>

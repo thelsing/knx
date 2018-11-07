@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{7612a532-0bb6-4a82-917a-48cfa6410e4f}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header files">
+      <UniqueIdentifier>{842f6d29-354f-47a8-bfd9-0fccf0ddf144}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{c46b2f8f-4105-4638-af5c-09a641257065}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="VisualGDB settings">
+      <UniqueIdentifier>{c818187b-4f9f-4ee9-86c3-d26e56e49bf9}</UniqueIdentifier>
+      <Extensions>*.vgdbsettings</Extensions>
+    </Filter>
+    <Filter Include="Header files\knx">
+      <UniqueIdentifier>{169b6f5b-b022-4422-ace2-819bf2f5e883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source files\knx">
+      <UniqueIdentifier>{4054619f-7b60-405c-96e8-311c464cf8de}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="knx-linux-Debug.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+    <None Include="knx-linux-Release.vgdbsettings">
+      <Filter>VisualGDB settings</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\knx\datapoint_types.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\property_types.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\interface_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\device_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\ip_parameter_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\table_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\address_table_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\association_table_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\group_object_table_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\application_program_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\group_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\linux_platform.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\data_link_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\knx_types.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\cemi_frame.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\npdu.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\network_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\transport_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\tpdu.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\apdu.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\application_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\bau.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\bau57B0.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\bits.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\platform.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\save_restore.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\memory.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\bau_systemB.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\bau07B0.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\ip_data_link_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\tpuart_data_link_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\knx\datapoint_types.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\device_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\ip_parameter_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\table_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\address_table_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\association_table_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\group_object_table_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\application_program_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\group_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\linux_platform.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\data_link_layer.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\cemi_frame.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\npdu.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\network_layer.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\transport_layer.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\tpdu.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\apdu.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\application_layer.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\bau.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\bau57B0.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\bits.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\memory.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\interface_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\bau_systemB.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\bau07B0.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\ip_data_link_layer.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\tpuart_data_link_layer.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

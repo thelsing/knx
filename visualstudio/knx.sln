@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "knx-linux", "knx-linux.vcxproj", "{819E55F9-05A8-454D-B771-4A99F775DD87}"
+EndProject
+Project("{803FD0C6-D64E-4E16-9DC3-1DAEC859A3D2}") = "knx-bme680", "knx-bme680.vgdbproj", "{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}"
+EndProject
+Project("{803FD0C6-D64E-4E16-9DC3-1DAEC859A3D2}") = "knx-demo", "knx-demo.vgdbproj", "{6165CD6A-91A4-49FA-977A-48F22086CA8E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Arduino Genuino Zero (Native USB Port) = Debug|Arduino Genuino Zero (Native USB Port)
+		Debug|NodeMCU 1 0 (ESP-12E Module) = Debug|NodeMCU 1 0 (ESP-12E Module)
+		Debug|VisualGDB = Debug|VisualGDB
+		Release|Arduino Genuino Zero (Native USB Port) = Release|Arduino Genuino Zero (Native USB Port)
+		Release|NodeMCU 1 0 (ESP-12E Module) = Release|NodeMCU 1 0 (ESP-12E Module)
+		Release|VisualGDB = Release|VisualGDB
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|NodeMCU 1 0 (ESP-12E Module).ActiveCfg = Debug|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|VisualGDB.ActiveCfg = Debug|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|VisualGDB.Build.0 = Debug|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|NodeMCU 1 0 (ESP-12E Module).ActiveCfg = Release|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|VisualGDB.ActiveCfg = Release|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|VisualGDB.Build.0 = Release|VisualGDB
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|Arduino Genuino Zero (Native USB Port).Build.0 = Debug|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|NodeMCU 1 0 (ESP-12E Module).ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|NodeMCU 1 0 (ESP-12E Module).Build.0 = Debug|NodeMCU 1 0 (ESP-12E Module)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|VisualGDB.ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|NodeMCU 1 0 (ESP-12E Module).ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|NodeMCU 1 0 (ESP-12E Module).Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|Arduino Genuino Zero (Native USB Port).Build.0 = Debug|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|NodeMCU 1 0 (ESP-12E Module).ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|NodeMCU 1 0 (ESP-12E Module).Build.0 = Debug|NodeMCU 1 0 (ESP-12E Module)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|VisualGDB.ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|NodeMCU 1 0 (ESP-12E Module).ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|NodeMCU 1 0 (ESP-12E Module).Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {721CAB98-83F8-4035-AC23-77AEA55B634D}
+	EndGlobalSection
+EndGlobal
