@@ -25,6 +25,7 @@
     <AdditionalLibraryDirectories>
       <string>..</string>
       <string>..\..</string>
+      <string>..\..\..\Documents\Arduino\libraries</string>
     </AdditionalLibraryDirectories>
     <OutputSubdirectory>Output\$(PlatformName.defuse)\$(ConfigurationName.defuse)</OutputSubdirectory>
     <EnableVerboseBuild>false</EnableVerboseBuild>

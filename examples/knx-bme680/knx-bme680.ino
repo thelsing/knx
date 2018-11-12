@@ -74,14 +74,15 @@ void setup(void)
     iaqSensor.setConfig(bsec_config_iaq);
     checkIaqSensorStatus();
 
-    bsec_virtual_sensor_t sensorList[7] = {
+    bsec_virtual_sensor_t sensorList[] = {
         BSEC_OUTPUT_RAW_TEMPERATURE,
         BSEC_OUTPUT_RAW_PRESSURE,
         BSEC_OUTPUT_RAW_HUMIDITY,
         BSEC_OUTPUT_RAW_GAS,
-        BSEC_OUTPUT_IAQ_ESTIMATE,
+        BSEC_OUTPUT_IAQ,
         BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
         BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
+        BSEC_OUTPUT_CO2_EQUIVALENT
     };
 
     knx.setSaveCallback(saveBme680State);
@@ -99,7 +100,7 @@ void setup(void)
     
     iaqSensor.updateSubscription(sensorList, 7, BSEC_SAMPLE_RATE_LP);
     checkIaqSensorStatus();
-    String output = "Timestamp [ms], raw temperature [°C], pressure [hPa], raw relative humidity [%], gas [Ohm], IAQ, IAQ accuracy, temperature [°C], relative humidity [%]";
+    String output = "Timestamp [ms], raw temperature [°C], pressure [hPa], raw relative humidity [%], gas [Ohm], IAQ, IAQ accuracy, temperature [°C], relative humidity [%], CO2";
     Serial.println(output);
 }
 
@@ -124,6 +125,8 @@ void loop(void)
         output += ", " + String(iaqSensor.iaqAccuracy);
         output += ", " + String(iaqSensor.temperature);
         output += ", " + String(iaqSensor.humidity);
+        output += ", " + String(iaqSensor.co2Equivalent);
+        output += ", " + String(iaqSensor.co2Accuracy);
         Serial.println(output);
         updateState();
         
@@ -140,6 +143,7 @@ void loop(void)
             goIaqAccurace.objectWrite(iaqSensor.iaqAccuracy);
             goTemperature.objectWrite(iaqSensor.temperature);
             goHumidity.objectWrite(iaqSensor.humidity);
+            goCo2Ppm.objectWrite(iaqSensor.co2Equivalent);
         }
     }
     else {
@@ -249,8 +253,8 @@ void triggerCallback(GroupObject& go)
      possible time slot
      */
     Serial.println("Triggering ULP plus.");
-    bsec_virtual_sensor_t sensorList[1] = {
-        BSEC_OUTPUT_IAQ_ESTIMATE,
+    bsec_virtual_sensor_t sensorList[] = {
+        BSEC_OUTPUT_IAQ, BSEC_OUTPUT_CO2_EQUIVALENT
     };
 
     iaqSensor.updateSubscription(sensorList, 1, BSEC_SAMPLE_RATE_ULP_MEASUREMENT_ON_DEMAND);
