@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{68FCB2F7-7A74-43A0-8CBE-36CB25020584}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="VisualGDBPackageDefinitions">
+    <ToolchainID>com.sysprogs.toolchain.default-gcc</ToolchainID>
+  </PropertyGroup>
+  <ImportGroup Label="VisualGDBFindComponents">
+    <Import Project="$(LOCALAPPDATA)\VisualGDB\FindComponents.props" />
+  </ImportGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeIncludeSearchPath>$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\python3.5m;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\c++\6;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\x86_64-linux-gnu\c++\6;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\c++\6\backward;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\lib\gcc\x86_64-linux-gnu\6\include;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\local\include;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\lib\gcc\x86_64-linux-gnu\6\include-fixed;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\x86_64-linux-gnu;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include;..\src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
+    <NMakeOutput>$(ProjectDir)knxPython-Debug.vgdbsettings</NMakeOutput>
+    <IncludePath />
+    <ReferencePath />
+    <LibraryPath />
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeIncludeSearchPath>$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\c++\6;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\x86_64-linux-gnu\c++\6;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\c++\6\backward;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\lib\gcc\x86_64-linux-gnu\6\include;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\local\include;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\lib\gcc\x86_64-linux-gnu\6\include-fixed;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\x86_64-linux-gnu;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include;$(LOCALAPPDATA)\Packages\TheDebianProject.DebianGNULinux_76v4gfsz19hv4\LocalState\rootfs\usr\include\python3.5m;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_Release;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
+    <NMakeOutput>$(ProjectDir)knxPython-Release.vgdbsettings</NMakeOutput>
+    <IncludePath />
+    <ReferencePath />
+    <LibraryPath />
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\knx\address_table_object.h" />
+    <ClInclude Include="..\src\knx\apdu.h" />
+    <ClInclude Include="..\src\knx\application_layer.h" />
+    <ClInclude Include="..\src\knx\application_program_object.h" />
+    <ClInclude Include="..\src\knx\association_table_object.h" />
+    <ClInclude Include="..\src\knx\bau.h" />
+    <ClInclude Include="..\src\knx\bau07B0.h" />
+    <ClInclude Include="..\src\knx\bau57B0.h" />
+    <ClInclude Include="..\src\knx\bau_systemB.h" />
+    <ClInclude Include="..\src\knx\bits.h" />
+    <ClInclude Include="..\src\knx\cemi_frame.h" />
+    <ClInclude Include="..\src\knx\datapoint_types.h" />
+    <ClInclude Include="..\src\knx\data_link_layer.h" />
+    <ClInclude Include="..\src\knx\device_object.h" />
+    <ClInclude Include="..\src\knx\group_object.h" />
+    <ClInclude Include="..\src\knx\group_object_table_object.h" />
+    <ClInclude Include="..\src\knx\interface_object.h" />
+    <ClInclude Include="..\src\knx\ip_data_link_layer.h" />
+    <ClInclude Include="..\src\knx\ip_parameter_object.h" />
+    <ClInclude Include="..\src\knx\knx_types.h" />
+    <ClInclude Include="..\src\knx\memory.h" />
+    <ClInclude Include="..\src\knx\network_layer.h" />
+    <ClInclude Include="..\src\knx\npdu.h" />
+    <ClInclude Include="..\src\knx\platform.h" />
+    <ClInclude Include="..\src\knx\property_types.h" />
+    <ClInclude Include="..\src\knx\save_restore.h" />
+    <ClInclude Include="..\src\knx\table_object.h" />
+    <ClInclude Include="..\src\knx\tpdu.h" />
+    <ClInclude Include="..\src\knx\tpuart_data_link_layer.h" />
+    <ClInclude Include="..\src\knx\transport_layer.h" />
+    <ClInclude Include="..\src\linux_platform.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\knx\address_table_object.cpp" />
+    <ClCompile Include="..\src\knx\apdu.cpp" />
+    <ClCompile Include="..\src\knx\application_layer.cpp" />
+    <ClCompile Include="..\src\knx\application_program_object.cpp" />
+    <ClCompile Include="..\src\knx\association_table_object.cpp" />
+    <ClCompile Include="..\src\knx\bau.cpp" />
+    <ClCompile Include="..\src\knx\bau07B0.cpp" />
+    <ClCompile Include="..\src\knx\bau57B0.cpp" />
+    <ClCompile Include="..\src\knx\bau_systemB.cpp" />
+    <ClCompile Include="..\src\knx\bits.cpp" />
+    <ClCompile Include="..\src\knx\cemi_frame.cpp" />
+    <ClCompile Include="..\src\knx\datapoint_types.cpp" />
+    <ClCompile Include="..\src\knx\data_link_layer.cpp" />
+    <ClCompile Include="..\src\knx\device_object.cpp" />
+    <ClCompile Include="..\src\knx\group_object.cpp" />
+    <ClCompile Include="..\src\knx\group_object_table_object.cpp" />
+    <ClCompile Include="..\src\knx\interface_object.cpp" />
+    <ClCompile Include="..\src\knx\ip_data_link_layer.cpp" />
+    <ClCompile Include="..\src\knx\ip_parameter_object.cpp" />
+    <ClCompile Include="..\src\knx\memory.cpp" />
+    <ClCompile Include="..\src\knx\network_layer.cpp" />
+    <ClCompile Include="..\src\knx\npdu.cpp" />
+    <ClCompile Include="..\src\knx\table_object.cpp" />
+    <ClCompile Include="..\src\knx\tpdu.cpp" />
+    <ClCompile Include="..\src\knx\tpuart_data_link_layer.cpp" />
+    <ClCompile Include="..\src\knx\transport_layer.cpp" />
+    <ClCompile Include="..\src\linux_platform.cpp" />
+    <ClCompile Include="knxmodule.cpp" />
+    <None Include="main.py" />
+    <None Include="CMakeLists.txt" />
+    <None Include="knxPython-Debug.vgdbsettings" />
+    <None Include="knxPython-Release.vgdbsettings" />
+  </ItemGroup>
+</Project>

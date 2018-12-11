@@ -60,7 +60,7 @@ void resetCallback(GroupObject& go)
 
 void setup()
 {
-    Serial.begin(115200);
+    SerialDBG.begin(115200);
 
     randomSeed(millis());
 
