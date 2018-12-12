@@ -213,5 +213,8 @@
     <ClCompile Include="..\src\knx\tpuart_data_link_layer.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\knx\platform.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
