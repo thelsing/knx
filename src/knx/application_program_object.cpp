@@ -1,7 +1,8 @@
 #include "application_program_object.h"
 #include "bits.h"
 
-ApplicationProgramObject::ApplicationProgramObject(uint8_t* memoryReference): TableObject(memoryReference)
+ApplicationProgramObject::ApplicationProgramObject(Platform& platform)
+    : TableObject(platform)
 {
 
 }

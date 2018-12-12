@@ -4,7 +4,8 @@
 #include "group_object.h"
 #include "bits.h"
 
-GroupObjectTableObject::GroupObjectTableObject(uint8_t* memoryReference): TableObject(memoryReference)
+GroupObjectTableObject::GroupObjectTableObject(Platform& platform)
+    : TableObject(platform)
 {
     _groupObjects = 0;
     _groupObjectCount = 0;

@@ -8,11 +8,8 @@ class GroupObjectTableObject: public TableObject
     friend class GroupObject;
 
 public:
-    GroupObjectTableObject(uint8_t* memoryReference);
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Woverloaded-virtual"
+    GroupObjectTableObject(Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    #pragma GCC diagnostic pop
     uint16_t entryCount();
     GroupObject& get(uint16_t asap);
     GroupObject& nextUpdatedObject(bool& valid);

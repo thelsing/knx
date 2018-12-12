@@ -6,7 +6,8 @@
 using namespace std;
 
 
-AddressTableObject::AddressTableObject(uint8_t* memoryReference): TableObject(memoryReference)
+AddressTableObject::AddressTableObject(Platform& platform)
+    : TableObject(platform)
 {
 
 }

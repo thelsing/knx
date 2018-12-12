@@ -122,6 +122,9 @@
     <ClCompile Include="..\src\knx\transport_layer.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\knx\platform.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\linux_platform.h">

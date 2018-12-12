@@ -62,9 +62,6 @@ protected:
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
 
     DeviceObject _deviceObj;
-    // pointer to first private variable as reference to memory read/write commands
-    // addesses are to big for memory read/write calls on 64bit systems otherwise
-    uint8_t* _memoryReference;
     Memory _memory;
     AddressTableObject _addrTable;
     AssociationTableObject _assocTable;

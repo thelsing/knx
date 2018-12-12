@@ -128,6 +128,7 @@
     <ClCompile Include="..\src\knx\memory.cpp" />
     <ClCompile Include="..\src\knx\network_layer.cpp" />
     <ClCompile Include="..\src\knx\npdu.cpp" />
+    <ClCompile Include="..\src\knx\platform.cpp" />
     <ClCompile Include="..\src\knx\table_object.cpp" />
     <ClCompile Include="..\src\knx\tpdu.cpp" />
     <ClCompile Include="..\src\knx\tpuart_data_link_layer.cpp" />

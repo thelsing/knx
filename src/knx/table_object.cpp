@@ -1,10 +1,9 @@
-#include <stdlib.h>
 #include <string.h>
 
 #include "table_object.h"
 #include "bits.h"
 
-TableObject::TableObject(uint8_t* memoryReference): _memoryReference(memoryReference)
+TableObject::TableObject(Platform& platform): _platform(platform)
 {
 
 }
@@ -61,7 +60,7 @@ uint8_t TableObject::propertySize(PropertyID id)
 TableObject::~TableObject()
 {
     if (_data != 0)
-        free(_data);
+        _platform.freeMemory(_data);
 }
 
 LoadState TableObject::loadState()
@@ -101,9 +100,9 @@ uint8_t* TableObject::restore(uint8_t* buffer)
     buffer = popInt(_size, buffer);
 
     if (_data)
-        free(_data);
+        _platform.freeMemory(_data);
 
-    _data = (uint8_t*) malloc(_size);
+    _data = _platform.allocMemory(_size);
 
     buffer = popByteArray(_data, _size, buffer);
 
@@ -112,21 +111,22 @@ uint8_t* TableObject::restore(uint8_t* buffer)
 
 uint32_t TableObject::tableReference()
 {
-    return (uint32_t)(_data - _memoryReference);
+    return (uint32_t)(_data - _platform.memoryReference());
 }
 
 bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
 {
     if (_data)
     {
-        free(_data);
+        _platform.freeMemory(_data);
+        _data = 0;
         _size = 0;
     }
 
     if (size == 0)
         return true;
     
-    _data = (uint8_t*)malloc(size);
+    _data = _platform.allocMemory(size);
     if (!_data)
         return false;
 

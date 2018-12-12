@@ -153,5 +153,4 @@ size_t SamdPlatform::readBytesUart(uint8_t *buffer, size_t length)
     //printHex("p>", buffer, length);
     return length;
 }
-
 #endif

@@ -1,11 +1,12 @@
 #pragma once
 
 #include "interface_object.h"
+#include "platform.h"
 
 class TableObject: public InterfaceObject
 {
 public:
-    TableObject(uint8_t* memoryReference);
+    TableObject(Platform& platform);
     virtual void readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data);
     virtual void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     virtual uint8_t propertySize(PropertyID id);
@@ -29,5 +30,5 @@ private:
     void additionalLoadControls(uint8_t* data);
     void loadState(LoadState newState);
     LoadState _state = LS_UNLOADED;
-    uint8_t* _memoryReference;
+    Platform& _platform;
 };

@@ -1,13 +1,16 @@
 #include "linux_platform.h"
 #ifdef __linux__
-#include <stdio.h>
+#include <cstdio>
 #include <string>
-#include <string.h>
+#include <cstring>
+#include <cstdlib>
+#include <stdexcept>
+#include <cmath>
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include <math.h>
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -23,9 +26,13 @@
 #include "knx/application_program_object.h"
 #include "knx/ip_parameter_object.h"
 
+#define MAX_MEM 4096
+
 LinuxPlatform::LinuxPlatform()
 {
     doMemoryMapping();
+    Platform::_memoryReference = (uint8_t*)malloc(MAX_MEM);
+    _currentMaxMem = Platform::_memoryReference;
 }
 
 uint32_t LinuxPlatform::currentIpAddress()
@@ -72,7 +79,13 @@ void LinuxPlatform::macAddress(uint8_t* data)
 
 void LinuxPlatform::restart()
 {
-    // do nothing
+    // clear alocated memory
+    if(_memoryReference != 0)
+    {
+        free(_memoryReference);
+        Platform::_memoryReference = (uint8_t*)malloc(MAX_MEM);
+        _currentMaxMem = Platform::_memoryReference;
+    }
 }
 
 void LinuxPlatform::fatalError()
@@ -276,4 +289,23 @@ void LinuxPlatform::closeUart()
 void LinuxPlatform::setupUart()
 {
 }
+
+/*
+ * On linux the memory addresses from malloc may be to big for usermermory_write.
+ * So we allocate some memory at the beginning and use it for address table, group object table etc.
+ *
+ **/
+uint8_t* LinuxPlatform::allocMemory(size_t size)
+{
+    uint8_t* addr = _currentMaxMem;
+    _currentMaxMem += size;
+    if ((_currentMaxMem - Platform::_memoryReference) > MAX_MEM)
+        throw std::overflow_error("MAX_MEM was to small");
+    return addr;
+}
 #endif
+
+void LinuxPlatform::freeMemory(uint8_t* ptr)
+{
+    /* do nothing. Memory is freed on restart()*/
+}

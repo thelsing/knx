@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdio.h>
 
-BauSystemB::BauSystemB(Platform& platform): _memoryReference((uint8_t*)&_deviceObj), _memory(platform), _addrTable(_memoryReference),
-    _assocTable(_memoryReference), _groupObjTable(_memoryReference), _appProgram(_memoryReference),
+BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platform),
+    _assocTable(platform), _groupObjTable(platform), _appProgram(platform),
     _platform(platform), _appLayer(_assocTable, *this),
     _transLayer(_appLayer, _addrTable, _platform), _netLayer(_transLayer)
 {
@@ -138,7 +138,7 @@ void BauSystemB::deviceDescriptorReadIndication(Priority priority, HopCountType 
 void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
     uint16_t memoryAddress, uint8_t * data)
 {
-    memcpy(_memoryReference + memoryAddress, data, number);
+    memcpy(_platform.memoryReference() + memoryAddress, data, number);
     _memory.memoryModified();
 
     if (_deviceObj.verifyMode())
@@ -149,7 +149,7 @@ void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, u
     uint16_t memoryAddress)
 {
     _appLayer.memoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
-        _memoryReference + memoryAddress);
+        _platform.memoryReference() + memoryAddress);
 }
 
 void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap)
@@ -160,6 +160,7 @@ void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopTyp
     _platform.restart();
     
     // for platforms that don't really restart
+    _memory.readMemory();
     _deviceObj.progMode(false);
     _configured = true;
 }
@@ -172,12 +173,12 @@ void BauSystemB::authorizeIndication(Priority priority, HopCountType hopType, ui
 void BauSystemB::userMemoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress)
 {
     _appLayer.userMemoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
-        _memoryReference + memoryAddress);
+        _platform.memoryReference() + memoryAddress);
 }
 
 void BauSystemB::userMemoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t* data)
 {
-    memcpy(_memoryReference + memoryAddress, data, number);
+    memcpy(_platform.memoryReference() + memoryAddress, data, number);
     _memory.memoryModified();
 
     if (_deviceObj.verifyMode())

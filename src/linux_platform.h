@@ -6,6 +6,7 @@
 
 class LinuxPlatform: public Platform
 {
+    using Platform::_memoryReference;
 public:
     LinuxPlatform();
 
@@ -39,6 +40,8 @@ public:
     //memory
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();
+    uint8_t* allocMemory(size_t size);
+    void freeMemory(uint8_t* ptr);
 private:
     uint32_t _multicastAddr;
     uint16_t _port;
@@ -46,6 +49,7 @@ private:
     void doMemoryMapping();
     uint8_t* _mappedFile;
     int _fd;
+    uint8_t* _currentMaxMem = 0;
 };
 
 #endif

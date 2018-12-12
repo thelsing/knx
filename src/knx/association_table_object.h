@@ -5,11 +5,8 @@
 class AssociationTableObject: public TableObject
 {
 public:
-    AssociationTableObject(uint8_t* memoryReference);
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Woverloaded-virtual"
+    AssociationTableObject(Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    #pragma GCC diagnostic pop
     uint16_t entryCount();
     uint16_t operator[](uint16_t idx);
     uint8_t* save(uint8_t* buffer);

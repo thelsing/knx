@@ -6,7 +6,8 @@
 using namespace std;
 
 
-AssociationTableObject::AssociationTableObject(uint8_t* memoryReference): TableObject(memoryReference)
+AssociationTableObject::AssociationTableObject(Platform& platform)
+    : TableObject(platform)
 {
 
 }

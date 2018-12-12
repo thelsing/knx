@@ -5,11 +5,8 @@
 class ApplicationProgramObject: public TableObject
 {
 public:
-    ApplicationProgramObject(uint8_t* memoryReference);
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Woverloaded-virtual"
+    ApplicationProgramObject(Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    #pragma GCC diagnostic pop
     void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     uint8_t propertySize(PropertyID id);
     uint8_t* data(uint32_t addr);
