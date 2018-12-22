@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "knx_types.h"
 
+
 class GroupObjectTableObject;
 
 enum ComFlag
@@ -17,7 +18,14 @@ enum ComFlag
 };
 
 class GroupObject;
-typedef void (*GroupObjectUpdatedHandler)(GroupObject& go);
+
+#ifdef __linux__
+#include <functional>
+typedef std::function<void(GroupObject&)> GroupObjectUpdatedHandler;
+#else
+typedef void(*GroupObjectUpdatedHandler)(GroupObject& go);
+#endif
+
 
 class GroupObject
 {
@@ -109,8 +117,10 @@ public:
     size_t sizeInTelegram();
     uint8_t* valueRef();
     uint16_t asap();
-    GroupObjectUpdatedHandler updateHandler;
+    void callback(GroupObjectUpdatedHandler hanlder);
+    GroupObjectUpdatedHandler callback();
 private:
+    GroupObjectUpdatedHandler _updateHandler;
     size_t goSize();
     uint16_t _asap;
     ComFlag _commFlag;

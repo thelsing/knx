@@ -75,18 +75,10 @@ void setup()
     srand((unsigned int)time(NULL));
     bau.readMemory();
     
-    uint8_t hwType[] = { 0x0, 0x0, 0x8, 0x0, 0x0, 0x2 };
     GroupObjectTableObject& got(bau.groupObjectTable());
     got.groupObjects(groupObjects, 4);
     
-    DeviceObject& devObj(bau.deviceObject());
-    devObj.manufacturerId(0xfa);
-    devObj.bauNumber(0xdeadbeef);
-    devObj.orderNumber("Coolstuff");
-    devObj.hardwareType(hwType);
-    devObj.version(0x0020);
-
-    RESET.updateHandler = resetCallback;
+    RESET.callback(resetCallback);
 
     if (bau.deviceObject().induvidualAddress() == 0)
         bau.deviceObject().progMode(true);

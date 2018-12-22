@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl_bind.h>
+#include <pybind11/functional.h>
     
 namespace py = pybind11;
 
@@ -15,96 +16,14 @@ namespace py = pybind11;
 #include "knx/bau57B0.h"
 #include "knx/group_object_table_object.h"
 
-
 LinuxPlatform platform;
 Bau57B0 bau(platform);
 
-#if 1 // this code will go to python later
-//float currentValue = 0;
-//float maxValue = 0;
-//float minValue = RAND_MAX;
-//long lastsend = 0;
-//
-//GroupObject groupObjects[]
-//{
-//    GroupObject(2),
-//    GroupObject(2),
-//    GroupObject(2),
-//    GroupObject(1)
-//}
-//;
-//#define CURR groupObjects[0]
-//#define MAX groupObjects[1]
-//#define MIN groupObjects[2]
-//#define RESET groupObjects[3]
-//
-//void measureTemp()
-//{
-//    long now = platform.millis();
-//    if ((now - lastsend) < 2000)
-//        return;
-//
-//    lastsend = now;
-//    int r = rand();
-//    currentValue = (r * 1.0) / (RAND_MAX * 1.0);
-//    currentValue *= 100 * 100;
-//    
-//    CURR.objectWrite(currentValue);
-//
-//    if (currentValue > maxValue)
-//    {
-//        maxValue = currentValue;
-//        MAX.objectWrite(maxValue);
-//    }
-//
-//    if (currentValue < minValue)
-//    {
-//        minValue = currentValue;
-//        MIN.objectWrite(minValue);
-//    }
-//}
-
-//void resetCallback(GroupObject& go)
-//{
-//    if (go.objectReadBool())
-//    {
-//        maxValue = 0;
-//        minValue = 10000;
-//    }
-//}
-
-//void appLoop()
-//{
-//    if (!bau.configured())
-//        return;
-//    
-//    measureTemp();
-//}
-
-void setup()
-{
-    srand((unsigned int)time(NULL));
-    bau.readMemory();
-    
-//    GroupObjectTableObject& got(bau.groupObjectTable());
-//    got.groupObjects(groupObjects, 4);
-    
-    DeviceObject& devObj(bau.deviceObject());
-    devObj.manufacturerId(0xfa);
-
-//    RESET.updateHandler = resetCallback;
-
-    bau.enabled(true);
-}
-#endif
-
-bool threadEnabled = false;
 static void loop()
 {
     while (1)
     {
         bau.loop();
-        //appLoop();
         platform.mdelay(100);
     }
 }
@@ -117,7 +36,10 @@ static void Start()
     if (started)
         return;
     
-    setup();
+    started = true;
+    
+    bau.readMemory();
+    bau.enabled(true);
 
     workerThread = std::thread(loop);
     workerThread.detach();
@@ -142,17 +64,32 @@ static void RegisterGroupObjects(std::vector<GroupObject>& gos)
 
 PYBIND11_MAKE_OPAQUE(std::vector<GroupObject>);
 
-PYBIND11_MODULE(knx, m) {
-    m.doc() = "wrapper for knx device lib";   // optional module docstring
+PYBIND11_MODULE(knx, m) 
+{
+    m.doc() = "wrapper for knx device lib";    // optional module docstring
 
     py::bind_vector<std::vector<GroupObject>>(m, "GroupObjectList");
     
     m.def("Start", &Start, "Start knx handling thread.");
-    m.def("ProgramMode", (bool (*)())&ProgramMode, "get programing mode active.");
+    m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
     m.def("RegisterGroupObjects", &RegisterGroupObjects);
     
-    py::class_<GroupObject>(m, "GroupObject")
+    py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
         .def(py::init<uint8_t>())
-        .def("objectWrite", (void(GroupObject::*)(float))&GroupObject::objectWrite);
+        .def("objectWrite", (void(GroupObject::*)(float))&GroupObject::objectWrite)
+        .def("asap", &GroupObject::asap)
+        .def("size", &GroupObject::valueSize)
+        .def_property("value",
+            [](GroupObject& go) { return py::bytes((const char*)go.valueRef(), go.valueSize()); },
+            [](GroupObject& go, py::bytes bytesValue) 
+            {
+                const auto value = static_cast<std::string>(bytesValue);
+                if (value.length() != go.valueSize())
+                    throw std::length_error("bytesValue");
+            
+                auto valueRef = go.valueRef();
+                memcpy(valueRef, value.c_str(), go.valueSize());
+            })
+        .def("callBack", (void(GroupObject::*)(GroupObjectUpdatedHandler))&GroupObject::callback);
 }

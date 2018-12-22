@@ -70,7 +70,7 @@ void setup()
     knx.readMemory();
 
     // register callback for reset GO
-    goReset.updateHandler = resetCallback;
+    goReset.callback(resetCallback);
 
     // print values of parameters if device is already configured
     if (knx.configured())

@@ -218,7 +218,7 @@ void LinuxPlatform::doMemoryMapping()
     _fd = open("flash.bin", O_RDWR | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
     if (_fd < 0)
     {
-        perror("Error in file opening");
+        puts("Error in file opening");
         //exit(-1);
     }
 
@@ -226,7 +226,7 @@ void LinuxPlatform::doMemoryMapping()
     uint32_t ret = fstat(_fd, &st);
     if (ret < 0)
     {
-        perror("Error in fstat");
+        puts("Error in fstat");
         //exit(-1);
     }
 
@@ -235,7 +235,7 @@ void LinuxPlatform::doMemoryMapping()
     {
         if (ftruncate(_fd, FLASHSIZE) != 0)
         {
-            perror("Error extending file");
+            puts("Error extending file");
             //exit(-1);
         }
         len_file = FLASHSIZE;
@@ -250,7 +250,7 @@ void LinuxPlatform::doMemoryMapping()
 
     if (addr == MAP_FAILED)
     {
-        perror("Error in mmap");
+        puts("Error in mmap");
         //exit(-1);
     }
     _mappedFile = addr;
@@ -308,9 +308,10 @@ uint8_t* LinuxPlatform::allocMemory(size_t size)
         throw std::overflow_error("MAX_MEM was to small");
     return addr;
 }
-#endif
 
 void LinuxPlatform::freeMemory(uint8_t* ptr)
 {
     /* do nothing. Memory is freed on restart()*/
 }
+#endif
+

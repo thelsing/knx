@@ -7,10 +7,11 @@
 GroupObject::GroupObject(uint8_t size)
 {
     _data = new uint8_t[size];
+    memset(_data, 0, size);
     _commFlag = Ok;
     _table = 0;
     _dataLength = size;
-    updateHandler = 0;
+    _updateHandler = 0;
 }
 
 GroupObject::GroupObject(const GroupObject& other)
@@ -20,7 +21,7 @@ GroupObject::GroupObject(const GroupObject& other)
     _table = other._table;
     _dataLength = other._dataLength;
     _asap = other._asap;
-    updateHandler = other.updateHandler;
+    _updateHandler = other._updateHandler;
     memcpy(_data, other._data, _dataLength);
 }
 
@@ -251,4 +252,16 @@ void GroupObject::objectWrite(float value)
 {
     uint32_t tmp = value * 100;
     objectWriteFloatDpt9(tmp);
+}
+
+
+void GroupObject::callback(GroupObjectUpdatedHandler handler)
+{
+    _updateHandler = handler;
+}
+
+
+GroupObjectUpdatedHandler GroupObject::callback()
+{
+    return _updateHandler;
 }

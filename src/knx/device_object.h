@@ -43,7 +43,7 @@ private:
     uint8_t _routingCount;
     uint8_t _prgMode;
     uint16_t _ownAddress;
-    uint16_t _manufacturerId;
+    uint16_t _manufacturerId = 0xfa; //Default to KNXA
     uint32_t _bauNumber;
     char _orderNumber[10];
     uint8_t _hardwareType[6];
