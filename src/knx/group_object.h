@@ -24,6 +24,7 @@ class GroupObject
     friend class GroupObjectTableObject;
 public:
     GroupObject(uint8_t size);
+    GroupObject(const GroupObject& other); 
     virtual ~GroupObject();
     // config flags from ETS
     bool responseUpdateEnable();

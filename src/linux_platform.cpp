@@ -25,6 +25,7 @@
 #include "knx/group_object_table_object.h"
 #include "knx/application_program_object.h"
 #include "knx/ip_parameter_object.h"
+#include "knx/bits.h"
 
 #define MAX_MEM 4096
 
@@ -129,8 +130,8 @@ void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
         fatalError();
     }
 
-    /* Broadcast auf dieser Maschine zulassen */
-    loop = 1;
+    /* loopback */
+    loop = 0;
     if (setsockopt(_socketFd, IPPROTO_IP, IP_MULTICAST_LOOP, &loop, sizeof(loop)) < 0)
     {
         perror("setsockopt:IP_MULTICAST_LOOP");
@@ -184,6 +185,7 @@ bool LinuxPlatform::sendBytes(uint8_t* buffer, uint16_t len)
                 return false;
         }
     } while (retVal == -1);
+//    printHex("<-", buffer, len);
     return true;
 }
 
@@ -194,6 +196,9 @@ int LinuxPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
 
     sin_len = sizeof(sin);
     ssize_t len = recvfrom(_socketFd, buffer, maxLen, 0, (struct sockaddr *) &sin, &sin_len);
+//    if (len > 0)
+//        printHex("->", buffer, len);
+    
     return len;
 }
 

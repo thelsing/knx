@@ -4,13 +4,41 @@
   <Project xsi:type="com.visualgdb.project.linux">
     <CustomSourceDirectories>
       <Directories />
-      <PathStyle>RemoteUnix</PathStyle>
+      <PathStyle>Win10LXSS</PathStyle>
     </CustomSourceDirectories>
     <BuildHost>
-      <HostName>localhost</HostName>
-      <Transport>LinuxSubsystem</Transport>
-      <UserName>Linux</UserName>
+      <HostName>Suzail</HostName>
+      <Transport>SSH</Transport>
+      <UserName>tkunze</UserName>
     </BuildHost>
+    <MainSourceTransferCommand>
+      <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <RemoteHost>
+        <HostName>Suzail</HostName>
+        <Transport>SSH</Transport>
+        <UserName>tkunze</UserName>
+      </RemoteHost>
+      <LocalDirectory>$(ProjectDir)\..</LocalDirectory>
+      <RemoteDirectory>/tmp/VisualGDB/$(ProjectDirUnixStyle)/..</RemoteDirectory>
+      <FileMasks>
+        <string>*.cpp</string>
+        <string>*.h</string>
+        <string>*.hpp</string>
+        <string>*.c</string>
+        <string>*.cc</string>
+        <string>*.cxx</string>
+        <string>*.mak</string>
+        <string>Makefile</string>
+        <string>*.txt</string>
+        <string>*.cmake</string>
+        <string>*.py</string>
+      </FileMasks>
+      <TransferNewFilesOnly>true</TransferNewFilesOnly>
+      <IncludeSubdirectories>true</IncludeSubdirectories>
+      <SelectedDirectories />
+      <DeleteDisappearedFiles>false</DeleteDisappearedFiles>
+      <ApplyGlobalExclusionList>true</ApplyGlobalExclusionList>
+    </MainSourceTransferCommand>
     <AllowChangingHostForMainCommands>false</AllowChangingHostForMainCommands>
     <SkipBuildIfNoSourceFilesChanged>false</SkipBuildIfNoSourceFilesChanged>
     <IgnoreFileTransferErrors>false</IgnoreFileTransferErrors>
@@ -25,18 +53,17 @@
         <Revision>0</Revision>
       </Version>
     </ToolchainID>
-    <RelativeSourceDirectory />
+    <RelativeSourceDirectory>knxPython</RelativeSourceDirectory>
     <ConfigurationType>DEBUG</ConfigurationType>
     <BinaryDirectory>Debug</BinaryDirectory>
-    <MainCMakeTarget>knx</MainCMakeTarget>
     <MakeCommandTemplate>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <RemoteHost>
         <HostName>BuildMachine</HostName>
         <Transport>BuiltinShortcut</Transport>
       </RemoteHost>
-      <Command>ninja</Command>
-      <Arguments />
+      <Command>$(ToolchainMake)</Command>
+      <Arguments>$(ToolchainMakeArgs)</Arguments>
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <BackgroundMode xsi:nil="true" />
     </MakeCommandTemplate>
@@ -49,10 +76,10 @@
       <Command>$(ToolchainCMake)</Command>
       <BackgroundMode xsi:nil="true" />
     </CMakeCommand>
-    <UpdateSourcesInCMakeFile>true</UpdateSourcesInCMakeFile>
+    <UpdateSourcesInCMakeFile>false</UpdateSourcesInCMakeFile>
+    <ExplicitDebugTarget>$(BuildDir)/main.py</ExplicitDebugTarget>
     <ExportCompileCommands>false</ExportCompileCommands>
     <DisableToolchainFile>false</DisableToolchainFile>
-    <CMakeMakefileType>Ninja</CMakeMakefileType>
     <DeployAsRoot>false</DeployAsRoot>
   </Build>
   <CustomBuild>
@@ -93,14 +120,14 @@
     <AdditionalGDBSettings>
       <Features>
         <DisableAutoDetection>false</DisableAutoDetection>
-        <UseFrameParameter>false</UseFrameParameter>
-        <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
-        <ListLocalsSupported>false</ListLocalsSupported>
-        <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
-        <ThreadInfoSupported>false</ThreadInfoSupported>
-        <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
-        <SupportTargetCommand>false</SupportTargetCommand>
-        <ReliableBreakpointNotifications>false</ReliableBreakpointNotifications>
+        <UseFrameParameter>true</UseFrameParameter>
+        <SimpleValuesFlagSupported>true</SimpleValuesFlagSupported>
+        <ListLocalsSupported>true</ListLocalsSupported>
+        <ByteLevelMemoryCommandsAvailable>true</ByteLevelMemoryCommandsAvailable>
+        <ThreadInfoSupported>true</ThreadInfoSupported>
+        <PendingBreakpointsSupported>true</PendingBreakpointsSupported>
+        <SupportTargetCommand>true</SupportTargetCommand>
+        <ReliableBreakpointNotifications>true</ReliableBreakpointNotifications>
       </Features>
       <EnableSmartStepping>false</EnableSmartStepping>
       <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
@@ -121,9 +148,10 @@
       <MaxBreakpointLimit>0</MaxBreakpointLimit>
     </AdditionalGDBSettings>
     <LaunchGDBSettings xsi:type="GDBLaunchParametersPython">
-      <DebuggedProgram>$(SourceDir)/main.py</DebuggedProgram>
+      <DebuggedProgram>$(TargetPath)</DebuggedProgram>
       <GDBServerPort>2000</GDBServerPort>
       <ProgramArguments />
+      <WorkingDirectory>$(BuildDir)/Debug</WorkingDirectory>
       <ProgramEnvironment>PYTHONPATH=%PYTHONPATH%:$(SourceDir)/$(ConfigurationName)</ProgramEnvironment>
       <PythonExecutable>python3</PythonExecutable>
       <StepAndBreakpointSupport>true</StepAndBreakpointSupport>
@@ -131,10 +159,12 @@
       <StopAtFirstPythonStatement>false</StopAtFirstPythonStatement>
     </LaunchGDBSettings>
     <GenerateCtrlBreakInsteadOfCtrlC>false</GenerateCtrlBreakInsteadOfCtrlC>
+    <DeploymentTargetPath />
     <X11WindowMode>Local</X11WindowMode>
     <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
     <RunGDBUnderSudo>false</RunGDBUnderSudo>
     <DeploymentMode>Auto</DeploymentMode>
+    <LdLibraryPath />
     <DeployWhenLaunchedWithoutDebugging>true</DeployWhenLaunchedWithoutDebugging>
     <SuppressTTYCreation>false</SuppressTTYCreation>
   </Debug>

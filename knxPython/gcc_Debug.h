@@ -862,7 +862,8 @@
 #endif
 
 // --- Include directories begin --- //
-///usr/include/python3.5m
+///usr/include/python3.5dm
+///usr/include/python3.5
 ///usr/include/c++/6
 ///usr/include/x86_64-linux-gnu/c++/6
 ///usr/include/c++/6/backward
@@ -871,6 +872,8 @@
 ///usr/lib/gcc/x86_64-linux-gnu/6/include-fixed
 ///usr/include/x86_64-linux-gnu
 ///usr/include
+//../src
+//pybind11\include
 // --- Include directories end --- //
 
 

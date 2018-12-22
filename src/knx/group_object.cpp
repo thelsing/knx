@@ -13,6 +13,17 @@ GroupObject::GroupObject(uint8_t size)
     updateHandler = 0;
 }
 
+GroupObject::GroupObject(const GroupObject& other)
+{
+    _data = new uint8_t[other._dataLength];
+    _commFlag = other._commFlag;
+    _table = other._table;
+    _dataLength = other._dataLength;
+    _asap = other._asap;
+    updateHandler = other.updateHandler;
+    memcpy(_data, other._data, _dataLength);
+}
+
 GroupObject::~GroupObject()
 {
     delete[] _data;
