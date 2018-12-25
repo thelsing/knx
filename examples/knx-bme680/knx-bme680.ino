@@ -64,7 +64,7 @@ void setup(void)
     knx.readMemory();
 
     // register callback for reset GO
-    goTriggerSample.updateHandler = triggerCallback;
+    goTriggerSample.callback(triggerCallback);
     
 
     iaqSensor.begin(BME680_I2C_ADDR_SECONDARY, Wire);
