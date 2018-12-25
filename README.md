@@ -11,6 +11,7 @@ The stack does the following on esp8266:
 2. Try to connecto to wifi with WPS. If successful goto 3 else goto 1 (Led blinks)
 3. App running. (Led off) On short button press goto 4. On long button press goto 2
 4. Programming mod. (Led blinks fast). On short button press goto 3.
+
 This behavior can be disabled in arch_config.h (remove the #define USE_STATES)
 
 Don't forget to reset ESP8266 manually (disconnect power) after flashing. The reboot doen't work during configuration with ETS otherwise.
