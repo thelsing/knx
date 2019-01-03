@@ -2,15 +2,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "knx-linux", "knx-linux.vcxproj", "{819E55F9-05A8-454D-B771-4A99F775DD87}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "knx-linux", "port/linux/visualstudio/knx-linux.vcxproj", "{819E55F9-05A8-454D-B771-4A99F775DD87}"
 EndProject
-Project("{803FD0C6-D64E-4E16-9DC3-1DAEC859A3D2}") = "knx-bme680", "knx-bme680.vgdbproj", "{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}"
+Project("{803FD0C6-D64E-4E16-9DC3-1DAEC859A3D2}") = "knx-bme680", "port/arduino/visualstudio/knx-bme680.vgdbproj", "{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}"
 EndProject
-Project("{803FD0C6-D64E-4E16-9DC3-1DAEC859A3D2}") = "knx-demo", "knx-demo.vgdbproj", "{6165CD6A-91A4-49FA-977A-48F22086CA8E}"
+Project("{803FD0C6-D64E-4E16-9DC3-1DAEC859A3D2}") = "knx-demo", "port/arduino/visualstudio/knx-demo.vgdbproj", "{6165CD6A-91A4-49FA-977A-48F22086CA8E}"
 EndProject
-Project("{803FD0C6-D64E-4E16-9DC3-1DAEC859A3D2}") = "knx-vito", "knx-vito.vgdbproj", "{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}"
+Project("{803FD0C6-D64E-4E16-9DC3-1DAEC859A3D2}") = "knx-vito", "port/arduino/visualstudio/knx-vito.vgdbproj", "{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "knxPython", "..\knxPython\knxPython.vcxproj", "{68FCB2F7-7A74-43A0-8CBE-36CB25020584}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "knxPython", "port/knxPython\visualstudio/knxPython.vcxproj", "{68FCB2F7-7A74-43A0-8CBE-36CB25020584}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
