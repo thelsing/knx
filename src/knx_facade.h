@@ -51,7 +51,7 @@ public:
     uint32_t paramInt(uint32_t addr);
 private:
     BauSystemB& _bau;
-    uint32_t _ledPin = 16;
+    uint32_t _ledPin = LED_BUILTIN;
     uint32_t _buttonPin = 0;
 #ifdef USE_STATES
     Ticker _ticker;
