@@ -22,6 +22,7 @@ PATHS += $(addprefix ${KNXSTACK_ROOT}/platform/arduino/, ${PLATFORM_FILES})
 PATHS += $(wildcard  ${KNXSTACK_ROOT}/platform/arduino/*.h)
 PATHS += ${KNXSTACK_ROOT}/port/arduino/examples
 PATHS += $(addprefix ${DIR}/, ${PORT_FILES})
+PATHS += ${KNXSTACK_ROOT}/library.properties
 
 ARDUINO_LIBS=~/Documents/arduino/libraries/knx
 
