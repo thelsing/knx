@@ -14,3 +14,11 @@ before_script:
   - cmake ..
 
 script: make
+
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file: "port/arduino/knx-arduino-1.0.0.zip"
+  skip_cleanup: true
+  on:
+    tags: true
