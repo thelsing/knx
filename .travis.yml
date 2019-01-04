@@ -1,0 +1,15 @@
+language: cpp
+
+compiler:
+  - gcc
+
+before_script:
+  - cd port/arduino
+  - make
+  - cd ../..
+  - cd port/linux
+  - mkdir build
+  - cd build
+  - cmake ..
+
+script: make && make test
