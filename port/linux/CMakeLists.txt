@@ -3,6 +3,8 @@
 cmake_minimum_required(VERSION 2.7)
 project(knx-linux)
 
+set (CMAKE_CXX_STANDARD 11)
+
 set(LIBRARIES_FROM_REFERENCES "")
 
 add_executable(knx-linux
