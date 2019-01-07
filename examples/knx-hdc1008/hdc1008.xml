@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<KNX xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" CreatedBy="KNX MT" ToolVersion="5.1.255.16695" xmlns="http://knx.org/xml/project/11">
+  <ManufacturerData>
+    <Manufacturer RefId="M-00FA">
+      <Catalog>
+        <CatalogSection Id="M-00FA_CS-1" Name="Geräte" Number="1" DefaultLanguage="de">
+          <CatalogItem Id="M-00FA_H-0-0_HP-0000-0A-0000_CI-0-1" Name="HDC1008 TPC" Number="1" ProductRefId="M-00FA_H-0-0_P-0" Hardware2ProgramRefId="M-00FA_H-0-0_HP-0000-0A-0000" DefaultLanguage="de" />
+        </CatalogSection>
+      </Catalog>
+      <ApplicationPrograms>
+        <ApplicationProgram Id="M-00FA_A-0000-0A-0000" ApplicationNumber="0" ApplicationVersion="10" ProgramType="ApplicationProgram" MaskVersion="MV-07B0" Name="TP" LoadProcedureStyle="MergedProcedure" PeiType="0" DefaultLanguage="de" DynamicTableManagement="false" Linkable="false" MinEtsVersion="4.0">
+          <Static>
+            <Code>
+              <RelativeSegment Id="M-00FA_A-0000-0A-0000_RS-04-00000" Name="Parameters" Offset="0" Size="4" LoadStateMachine="4" />
+            </Code>
+            <ParameterTypes>
+              <ParameterType Id="M-00FA_A-0000-0A-0000_PT-Int" Name="Int">
+                <TypeNumber SizeInBit="32" Type="signedInt" minInclusive="0" maxInclusive="1000" />
+              </ParameterType>
+            </ParameterTypes>
+            <Parameters>
+              <Parameter Id="M-00FA_A-0000-0A-0000_P-1" Name="Zyklisch Senden" ParameterType="M-00FA_A-0000-0A-0000_PT-Int" Text="Sendeinterval (*3s)" Value="20">
+                <Memory CodeSegment="M-00FA_A-0000-0A-0000_RS-04-00000" Offset="0" BitOffset="0" />
+              </Parameter>
+            </Parameters>
+            <ParameterRefs>
+              <ParameterRef Id="M-00FA_A-0000-0A-0000_P-1_R-1" RefId="M-00FA_A-0000-0A-0000_P-1" />
+            </ParameterRefs>
+            <ComObjectTable>
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-1" Name="Temperatur" Text="Temperatur" Number="1" FunctionText="Temperatur lesen" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-0000-0A-0000_O-2" Name="Luftfeuchtigkeit" Text="Luftfeuchtigkeit" Number="2" FunctionText="Luftfeuchtigkeit lesen" ObjectSize="2 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+            </ComObjectTable>
+            <ComObjectRefs>
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-1_R-1" RefId="M-00FA_A-0000-0A-0000_O-1" />
+              <ComObjectRef Id="M-00FA_A-0000-0A-0000_O-2_R-2" RefId="M-00FA_A-0000-0A-0000_O-2" />
+            </ComObjectRefs>
+            <AddressTable MaxEntries="255" />
+            <AssociationTable MaxEntries="255" />
+            <LoadProcedures>
+              <LoadProcedure MergeId="2">
+                <LdCtrlRelSegment AppliesTo="full" LsmIdx="4" Size="4" Mode="0" Fill="0" />
+              </LoadProcedure>
+              <LoadProcedure MergeId="4">
+                <LdCtrlWriteRelMem ObjIdx="4" Offset="0" Size="4" Verify="true" />
+              </LoadProcedure>
+            </LoadProcedures>
+            <Options />
+          </Static>
+          <Dynamic>
+            <ChannelIndependentBlock>
+              <ParameterBlock Id="M-00FA_A-0000-0A-0000_PB-1" Name="ParameterPage" Text="Allgemeine Parameter">
+                <ParameterRefRef RefId="M-00FA_A-0000-0A-0000_P-1_R-1" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-1_R-1" />
+                <ComObjectRefRef RefId="M-00FA_A-0000-0A-0000_O-2_R-2" />
+              </ParameterBlock>
+            </ChannelIndependentBlock>
+          </Dynamic>
+        </ApplicationProgram>
+      </ApplicationPrograms>
+      <Hardware>
+        <Hardware Id="M-00FA_H-0-0" Name="HDC1008 TP" SerialNumber="0" VersionNumber="0" BusCurrent="10" HasIndividualAddress="true" HasApplicationProgram="true">
+          <Products>
+            <Product Id="M-00FA_H-0-0_P-0" Text="HDC1008 TPC" OrderNumber="0" IsRailMounted="false" DefaultLanguage="de" />
+          </Products>
+          <Hardware2Programs>
+            <Hardware2Program Id="M-00FA_H-0-0_HP-0000-0A-0000" MediumTypes="MT-0">
+              <ApplicationProgramRef RefId="M-00FA_A-0000-0A-0000" />
+            </Hardware2Program>
+          </Hardware2Programs>
+        </Hardware>
+      </Hardware>
+    </Manufacturer>
+  </ManufacturerData>
+</KNX>
