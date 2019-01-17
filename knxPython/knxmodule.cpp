@@ -78,7 +78,7 @@ PYBIND11_MODULE(knx, m)
     m.def("Start", &Start, "Start knx handling thread.");
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
-    m.def("Configured", (bool(*)())&Configured(), "get configured status."); 
+    m.def("Configured", (bool(*)())&Configured, "get configured status."); 
     m.def("RegisterGroupObjects", &RegisterGroupObjects);
     
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
