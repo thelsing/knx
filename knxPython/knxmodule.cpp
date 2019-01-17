@@ -56,6 +56,11 @@ static bool ProgramMode()
     return bau.deviceObject().progMode();
 }
 
+static bool Configured()
+{
+    return bau.configured();
+}
+
 static void RegisterGroupObjects(std::vector<GroupObject>& gos)
 {
     GroupObjectTableObject& got(bau.groupObjectTable());
@@ -73,6 +78,7 @@ PYBIND11_MODULE(knx, m)
     m.def("Start", &Start, "Start knx handling thread.");
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
+    m.def("Configured", (bool(*)())&Configured(), "get configured status."); 
     m.def("RegisterGroupObjects", &RegisterGroupObjects);
     
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
@@ -90,6 +96,7 @@ PYBIND11_MODULE(knx, m)
             
                 auto valueRef = go.valueRef();
                 memcpy(valueRef, value.c_str(), go.valueSize());
+                go.objectWritten();
             })
         .def("callBack", (void(GroupObject::*)(GroupObjectUpdatedHandler))&GroupObject::callback);
 }
