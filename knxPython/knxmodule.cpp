@@ -19,9 +19,11 @@ namespace py = pybind11;
 LinuxPlatform platform;
 Bau57B0 bau(platform);
 
+bool running = false;
+
 static void loop()
 {
-    while (1)
+    while (running)
     {
         bau.loop();
         platform.mdelay(100);
@@ -30,19 +32,31 @@ static void loop()
 
 static std::thread workerThread;
 
-bool started = false;
+
 static void Start()
 {
-    if (started)
+    if (running)
         return;
     
-    started = true;
+    running = true;
     
     bau.readMemory();
     bau.enabled(true);
 
     workerThread = std::thread(loop);
     workerThread.detach();
+}
+
+static void Stop()
+{
+    if (!running)
+        return;
+    
+    running = false;
+    bau.writeMemory();
+    bau.enabled(false);
+    
+    workerThread.join();
 }
 
 static bool ProgramMode(bool value)
@@ -76,6 +90,7 @@ PYBIND11_MODULE(knx, m)
     py::bind_vector<std::vector<GroupObject>>(m, "GroupObjectList");
     
     m.def("Start", &Start, "Start knx handling thread.");
+    m.def("Stop", &Start, "Stop knx handling thread.");
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
     m.def("Configured", (bool(*)())&Configured, "get configured status."); 
