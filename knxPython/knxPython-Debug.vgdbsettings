@@ -7,14 +7,14 @@
       <PathStyle>Win10LXSS</PathStyle>
     </CustomSourceDirectories>
     <BuildHost>
-      <HostName>Suzail</HostName>
+      <HostName>Immerlund</HostName>
       <Transport>SSH</Transport>
       <UserName>tkunze</UserName>
     </BuildHost>
     <MainSourceTransferCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <RemoteHost>
-        <HostName>Suzail</HostName>
+        <HostName>Immerlund</HostName>
         <Transport>SSH</Transport>
         <UserName>tkunze</UserName>
       </RemoteHost>
@@ -55,7 +55,7 @@
     </ToolchainID>
     <RelativeSourceDirectory>knxPython</RelativeSourceDirectory>
     <ConfigurationType>DEBUG</ConfigurationType>
-    <BinaryDirectory>Debug</BinaryDirectory>
+    <BinaryDirectory />
     <MakeCommandTemplate>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <RemoteHost>
@@ -74,6 +74,8 @@
         <Transport>BuiltinShortcut</Transport>
       </RemoteHost>
       <Command>$(ToolchainCMake)</Command>
+      <Arguments>.</Arguments>
+      <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <BackgroundMode xsi:nil="true" />
     </CMakeCommand>
     <UpdateSourcesInCMakeFile>false</UpdateSourcesInCMakeFile>

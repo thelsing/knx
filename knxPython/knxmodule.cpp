@@ -80,6 +80,8 @@ PYBIND11_MODULE(knx, m)
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
     m.def("Configured", (bool(*)())&Configured, "get configured status."); 
     m.def("RegisterGroupObjects", &RegisterGroupObjects);
+    m.def("FlashFilePath", []() { return platform.flashFilePath(); });
+    m.def("FlashFilePath", [](std::string path) { platform.flashFilePath(path); });
     
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
         .def(py::init<uint8_t>())

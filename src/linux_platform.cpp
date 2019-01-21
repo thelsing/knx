@@ -31,7 +31,6 @@
 
 LinuxPlatform::LinuxPlatform()
 {
-    doMemoryMapping();
     Platform::_memoryReference = (uint8_t*)malloc(MAX_MEM);
     _currentMaxMem = Platform::_memoryReference;
 }
@@ -204,18 +203,24 @@ int LinuxPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
 
 uint8_t * LinuxPlatform::getEepromBuffer(uint16_t size)
 {
+    if (_fd < 0)
+        doMemoryMapping();
+    
     return _mappedFile + 2;
 }
 
 void LinuxPlatform::commitToEeprom()
 {
+    if (_fd < 0)
+        doMemoryMapping();
+    
     fsync(_fd);
 }
 
 #define FLASHSIZE 0x10000
 void LinuxPlatform::doMemoryMapping()
 {
-    _fd = open("flash.bin", O_RDWR | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
+    _fd = open(_flashFilePath.c_str(), O_RDWR | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
     if (_fd < 0)
     {
         puts("Error in file opening");
@@ -315,3 +320,15 @@ void LinuxPlatform::freeMemory(uint8_t* ptr)
 }
 #endif
 
+
+
+void LinuxPlatform::flashFilePath(const std::string path)
+{
+    _flashFilePath = path;
+}
+
+
+std::string LinuxPlatform::flashFilePath()
+{
+    return _flashFilePath;
+}

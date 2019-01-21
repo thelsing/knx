@@ -2,6 +2,7 @@
 
 #ifdef __linux__
 
+#include <string>
 #include "knx/platform.h"
 
 class LinuxPlatform: public Platform
@@ -9,6 +10,9 @@ class LinuxPlatform: public Platform
     using Platform::_memoryReference;
 public:
     LinuxPlatform();
+    
+    std::string flashFilePath();
+    void flashFilePath(const std::string path);
 
     // ip stuff
     uint32_t currentIpAddress() override;
@@ -48,8 +52,9 @@ private:
     int _socketFd = -1;
     void doMemoryMapping();
     uint8_t* _mappedFile;
-    int _fd;
+    int _fd = -1;
     uint8_t* _currentMaxMem = 0;
+    std::string _flashFilePath = "flash.bin";
 };
 
 #endif
