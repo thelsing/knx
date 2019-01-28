@@ -318,9 +318,6 @@ void LinuxPlatform::freeMemory(uint8_t* ptr)
 {
     /* do nothing. Memory is freed on restart()*/
 }
-#endif
-
-
 
 void LinuxPlatform::flashFilePath(const std::string path)
 {
@@ -332,3 +329,4 @@ std::string LinuxPlatform::flashFilePath()
 {
     return _flashFilePath;
 }
+#endif
