@@ -72,8 +72,8 @@ void IpDataLinkLayer::loop()
 
 void IpDataLinkLayer::enabled(bool value)
 {
-    _print("own address: ");
-    _println(_deviceObject.induvidualAddress());
+//    _print("own address: ");
+//    _println(_deviceObject.induvidualAddress());
     if (value && !_enabled)
     {
         _platform.setupMultiCast(_ipParameters.multicastAddress(), KNXIP_MULTICAST_PORT);
