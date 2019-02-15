@@ -116,6 +116,9 @@ bool GroupObjectTableObject::initGroupObjects()
         go._table = this;
         if (go._dataLength != go.goSize())
             return false;
+        
+        if (go.valueReadOnInit())
+            go.requestObjectRead();
     }
 
     return true;
