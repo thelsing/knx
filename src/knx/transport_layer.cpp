@@ -611,10 +611,10 @@ void TransportLayer::A6(uint16_t tsap)
 void TransportLayer::A7(Priority priority, APDU& apdu)
 {
     _savedPriority = priority;
-    _savedFrame = apdu.frame();
     TPDU& tpdu = apdu.frame().tpdu();
     tpdu.type(DataConnected);
     tpdu.sequenceNumber(_seqNoSend);
+    _savedFrame = apdu.frame();
     _networkLayer->dataIndividualRequest(AckRequested, _connectionAddress, NetworkLayerParameter, priority, tpdu);
     _repCount = 0;
     enableAckTimeout();
@@ -680,6 +680,8 @@ void TransportLayer::A14(uint16_t tsap, Priority priority)
     tpdu.sequenceNumber(0);
     _networkLayer->dataIndividualRequest(AckRequested, _connectionAddress, NetworkLayerParameter, SystemPriority, tpdu);
     _applicationLayer.disconnectConfirm(priority, tsap, true);
+    disableConnectionTimeout();
+    disableAckTimeout();
 }
 
 void TransportLayer::A15(Priority priority, uint16_t tsap)
