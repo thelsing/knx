@@ -235,7 +235,7 @@
       </BuildSettingsExtension>
     </VisualGDBConfiguration>
     <VisualGDBConfiguration>
-      <PlatformName>NodeMCU 1 0 (ESP-12E Module)</PlatformName>
+      <PlatformName>NodeMCU_1 0_(ESP-12E_Module)</PlatformName>
       <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
         <AdditionalStartupCommands />
         <AdditionalGDBSettings>
@@ -297,7 +297,7 @@
             </KeyValue>
             <KeyValue>
               <Key>exception</Key>
-              <Value>enabled</Value>
+              <Value>disabled</Value>
             </KeyValue>
             <KeyValue>
               <Key>eesz</Key>
@@ -321,121 +321,6 @@
             </KeyValue>
             <KeyValue>
               <Key>baud</Key>
-              <Value>115200</Value>
-            </KeyValue>
-          </Entries>
-        </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
-      </BuildSettingsExtension>
-    </VisualGDBConfiguration>
-    <VisualGDBConfiguration>
-      <PlatformName>Generic ESP8266 Module</PlatformName>
-      <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
-        <AdditionalStartupCommands />
-        <AdditionalGDBSettings>
-          <Features>
-            <DisableAutoDetection>false</DisableAutoDetection>
-            <UseFrameParameter>false</UseFrameParameter>
-            <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
-            <ListLocalsSupported>false</ListLocalsSupported>
-            <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
-            <ThreadInfoSupported>false</ThreadInfoSupported>
-            <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
-            <SupportTargetCommand>false</SupportTargetCommand>
-            <ReliableBreakpointNotifications>false</ReliableBreakpointNotifications>
-          </Features>
-          <EnableSmartStepping>false</EnableSmartStepping>
-          <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
-          <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
-          <UseAppleExtensions>false</UseAppleExtensions>
-          <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
-          <MakeLogFile>false</MakeLogFile>
-          <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
-          <UseRelativePathsOnly>false</UseRelativePathsOnly>
-          <ExitAction>None</ExitAction>
-          <DisableDisassembly>false</DisableDisassembly>
-          <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
-          <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
-          <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
-          <DisableSignals>false</DisableSignals>
-          <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
-          <EnableNonStopMode>false</EnableNonStopMode>
-          <MaxBreakpointLimit>0</MaxBreakpointLimit>
-        </AdditionalGDBSettings>
-        <DebugMethod>
-          <ID>gdbsim</ID>
-          <Configuration>
-            <Entries />
-          </Configuration>
-        </DebugMethod>
-        <AutoDetectRTOS>true</AutoDetectRTOS>
-        <SemihostingSupport>Auto</SemihostingSupport>
-        <SemihostingPollingDelay>0</SemihostingPollingDelay>
-        <StepIntoEntryPoint>false</StepIntoEntryPoint>
-        <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>
-        <ValidateEndOfStackAddress>true</ValidateEndOfStackAddress>
-        <StopAtEntryPoint>false</StopAtEntryPoint>
-        <EnableVirtualHalts>false</EnableVirtualHalts>
-        <DynamicAnalysisSettings />
-        <EndOfStackSymbol>_estack</EndOfStackSymbol>
-        <TimestampProviderTicksPerSecond>0</TimestampProviderTicksPerSecond>
-        <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
-        <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
-      </DebugSettingsOverride>
-      <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
-        <BoardID>esp8266:esp8266:generic</BoardID>
-        <Properties>
-          <Entries>
-            <KeyValue>
-              <Key>CpuFrequency</Key>
-              <Value>80</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>VTable</Key>
-              <Value>flash</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>ResetMethod</Key>
-              <Value>none</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>CrystalFreq</Key>
-              <Value>26</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>FlashFreq</Key>
-              <Value>40</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>FlashMode</Key>
-              <Value>dout</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>FlashSize</Key>
-              <Value>1M0</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>led</Key>
-              <Value>13</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>LwIPVariant</Key>
-              <Value>v2mss1460</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>Debug</Key>
-              <Value>Disabled</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>DebugLevel</Key>
-              <Value>None____</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>FlashErase</Key>
-              <Value>none</Value>
-            </KeyValue>
-            <KeyValue>
-              <Key>UploadSpeed</Key>
               <Value>115200</Value>
             </KeyValue>
           </Entries>

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "arch_config.h"
-
 #ifdef ARDUINO_ARCH_SAMD
 #include "samd_platform.h"
 #include "knx/bau07B0.h"
@@ -13,9 +11,6 @@
 #include "knx/bau57B0.h"
 #endif
 
-#ifdef USE_STATES
-class RunningState;
-#endif
 
 typedef uint8_t* (*saveRestoreCallback)(uint8_t* buffer);
 
@@ -35,7 +30,6 @@ public:
     void readMemory();
     void writeMemory();
     void loop();
-    void knxLoop();
     void registerGroupObjects(GroupObject* groupObjects, uint16_t count);
     void manufacturerId(uint16_t value);
     void bauNumber(uint32_t value);

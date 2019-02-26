@@ -1,8 +1,4 @@
 #include "knx_facade.h"
-#include "state.h"
-#include "button.h"
-#include "led.h"
-#include "nowifistate.h"
 
 #ifdef ARDUINO_ARCH_SAMD
 SamdPlatform platform;
@@ -13,6 +9,19 @@ Bau57B0 bau(platform);
 #endif
 KnxFacade knx(bau);
 
+void buttonUp()
+{
+    if (knx.progMode())
+    {
+        digitalWrite(knx.ledPin(), LOW);
+        knx.progMode(false);
+    }
+    else
+    {
+        digitalWrite(knx.ledPin(), HIGH);
+        knx.progMode(true);
+    }
+}
 
 KnxFacade::KnxFacade(BauSystemB& bau) : _bau(bau)
 {
@@ -77,16 +86,6 @@ void KnxFacade::writeMemory()
 
 void KnxFacade::loop()
 {
-#ifdef USE_STATES
-    if (currentState)
-        currentState->loop();
-#else
-    knxLoop();
-#endif
-}
-
-void KnxFacade::knxLoop()
-{
     _bau.loop();
 }
 
@@ -126,15 +125,8 @@ void KnxFacade::start()
 
     pinMode(_buttonPin, INPUT_PULLUP);
     
-#ifdef USE_STATES
-    attachInterrupt(_buttonPin, buttonDown, FALLING);
-    switchToSate(noWifiState);
-    checkStates();
-    _ticker.attach_ms(100, doLed);
-#else
-    attachInterrupt(knx.buttonPin(), buttonUp, RISING);
+    attachInterrupt(_buttonPin, buttonUp, RISING);
     enabled(true);
-#endif
 }
 
 uint8_t* KnxFacade::paramData(uint32_t addr)

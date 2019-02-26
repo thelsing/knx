@@ -1,4 +1,5 @@
 #include <knx.h>
+#include <WiFiManager.h>
 
 #define RELAYPIN 12
 
@@ -32,6 +33,9 @@ void setup()
 {
     SerialDBG.begin(115200);
 
+	WiFiManager wifiManager;    
+    wifiManager.autoConnect("knx-sonoffS20");
+	
     // register group objects
     knx.registerGroupObjects(groupObjects, 3);
     // read adress table, association table, groupobject table and parameters from eeprom

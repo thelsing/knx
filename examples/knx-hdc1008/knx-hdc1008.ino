@@ -1,5 +1,6 @@
 #include <HDC100X.h>
 #include <knx.h>
+#include <WiFiManager.h>
 
 #define SerialDBG SerialUSB
 
@@ -30,6 +31,9 @@ void setup(void)
     SerialDBG.begin(115200);
     delay(5000);
     SerialDBG.println("start");
+	
+	WiFiManager wifiManager;    
+    wifiManager.autoConnect("knx-hdc1008");
 
     // Programming LED on digital pin D5
     knx.ledPin(5);
