@@ -6,7 +6,6 @@
 #endif
 
 #ifdef ARDUINO_ARCH_ESP8266
-#include <Ticker.h>
 #include "esp_platform.h"
 #include "knx/bau57B0.h"
 #endif

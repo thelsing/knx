@@ -22,8 +22,12 @@
     </ProjectModeSettings>
   </Project>
   <Build xsi:type="com.visualgdb.build.external.arduino">
+    <AdditionalLibraryDirectories>
+      <string>..\..</string>
+    </AdditionalLibraryDirectories>
     <OutputSubdirectory>Output\$(PlatformName.defuse)\$(ConfigurationName.defuse)</OutputSubdirectory>
     <EnableVerboseBuild>false</EnableVerboseBuild>
+    <PreprocessorMacros />
   </Build>
   <CustomBuild>
     <PreSyncActions />
