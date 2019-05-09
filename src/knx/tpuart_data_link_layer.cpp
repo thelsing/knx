@@ -276,7 +276,7 @@ bool TpUartDataLinkLayer::checkDataCon(uint8_t firstByte)
 
     if (_sendBuffer == 0)
     {
-        _println("got unexpected L_DATA_CON");
+        println("got unexpected L_DATA_CON");
         return true;
     }
 
@@ -293,7 +293,7 @@ bool TpUartDataLinkLayer::checkPollDataInd(uint8_t firstByte)
         return false;
 
     // not sure if this can happen
-    _println("got L_POLL_DATA_IND");
+    println("got L_POLL_DATA_IND");
     return true;
 }
 
@@ -304,7 +304,7 @@ bool TpUartDataLinkLayer::checkAckNackInd(uint8_t firstByte)
         return false;
 
     // this can only happen in bus monitor mode
-    _println("got L_ACKN_IND");
+    println("got L_ACKN_IND");
     return true;
 }
 
@@ -313,7 +313,7 @@ bool TpUartDataLinkLayer::checkResetInd(uint8_t firstByte)
     if (firstByte != U_RESET_IND)
         return false;
 
-    _println("got U_RESET_IND");
+    println("got U_RESET_IND");
     return true;
 }
 
@@ -323,9 +323,9 @@ bool TpUartDataLinkLayer::checkStateInd(uint8_t firstByte)
     if (tmp != U_STATE_IND)
         return false;
 
-    _print("got U_STATE_IND: 0x");
-    _print(firstByte, HEX);
-    _println();
+    print("got U_STATE_IND: 0x");
+    print(firstByte, HEX);
+    println();
     return true;
 }
 
@@ -335,9 +335,9 @@ bool TpUartDataLinkLayer::checkFrameStateInd(uint8_t firstByte)
     if (tmp != U_FRAME_STATE_IND)
         return false;
 
-    _print("got U_FRAME_STATE_IND: 0x");
-    _print(firstByte, HEX);
-    _println();
+    print("got U_FRAME_STATE_IND: 0x");
+    print(firstByte, HEX);
+    println();
     return true;
 }
 
@@ -347,9 +347,9 @@ bool TpUartDataLinkLayer::checkConfigureInd(uint8_t firstByte)
     if (tmp != U_CONFIGURE_IND)
         return false;
 
-    _print("got U_CONFIGURE_IND: 0x");
-    _print(firstByte, HEX);
-    _println();
+    print("got U_CONFIGURE_IND: 0x");
+    print(firstByte, HEX);
+    println();
     return true;
 }
 
@@ -358,7 +358,7 @@ bool TpUartDataLinkLayer::checkFrameEndInd(uint8_t firstByte)
     if (firstByte != U_FRAME_END_IND)
         return false;
 
-    _println("got U_FRAME_END_IND");
+    println("got U_FRAME_END_IND");
     return true;
 }
 
@@ -367,7 +367,7 @@ bool TpUartDataLinkLayer::checkStopModeInd(uint8_t firstByte)
     if (firstByte != U_STOP_MODE_IND)
         return false;
 
-    _println("got U_STOP_MODE_IND");
+    println("got U_STOP_MODE_IND");
     return true;
 }
 
@@ -376,25 +376,25 @@ bool TpUartDataLinkLayer::checkSystemStatInd(uint8_t firstByte)
     if (firstByte != U_SYSTEM_STAT_IND)
         return false;
 
-    _print("got U_SYSTEM_STAT_IND: 0x");
+    print("got U_SYSTEM_STAT_IND: 0x");
     while (true)
     {
         int tmp = _platform.readUart();
         if (tmp < 0)
             continue;
 
-        _print(tmp, HEX);
+        print(tmp, HEX);
         break;
     }
-    _println();
+    println();
     return true;
 }
 
 void TpUartDataLinkLayer::handleUnexpected(uint8_t firstByte)
 {
-    _print("got UNEXPECTED: 0x");
-    _print(firstByte, HEX);
-    _println();
+    print("got UNEXPECTED: 0x");
+    print(firstByte, HEX);
+    println();
 }
 
 void TpUartDataLinkLayer::enabled(bool value)
@@ -402,8 +402,8 @@ void TpUartDataLinkLayer::enabled(bool value)
     if (value && !_enabled)
     {
         _platform.setupUart();
-        _print("ownaddr ");
-        _println(_deviceObject.induvidualAddress(), HEX);
+        print("ownaddr ");
+        println(_deviceObject.induvidualAddress(), HEX);
         resetChip();
         _enabled = true;
         return;

@@ -89,11 +89,6 @@ void KnxFacade::loop()
     _bau.loop();
 }
 
-void KnxFacade::registerGroupObjects(GroupObject* groupObjects, uint16_t count)
-{
-    _bau.groupObjectTable().groupObjects(groupObjects, count);
-}
-
 void KnxFacade::manufacturerId(uint16_t value)
 {
     _bau.deviceObject().manufacturerId(value);
@@ -189,4 +184,10 @@ uint8_t* KnxFacade::restore(uint8_t* buffer)
         return _restoreCallback(buffer);
     
     return buffer;
+}
+
+
+GroupObject& KnxFacade::getGroupObject(uint16_t goNr)
+{
+    return _bau.groupObjectTable().get(goNr);
 }

@@ -75,12 +75,6 @@ static bool Configured()
     return bau.configured();
 }
 
-static void RegisterGroupObjects(std::vector<GroupObject>& gos)
-{
-    GroupObjectTableObject& got(bau.groupObjectTable());
-    got.groupObjects(gos.data(), gos.size());
-}
-
 PYBIND11_MAKE_OPAQUE(std::vector<GroupObject>);
 
 PYBIND11_MODULE(knx, m) 
@@ -94,12 +88,12 @@ PYBIND11_MODULE(knx, m)
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
     m.def("Configured", (bool(*)())&Configured, "get configured status."); 
-    m.def("RegisterGroupObjects", &RegisterGroupObjects);
     m.def("FlashFilePath", []() { return platform.flashFilePath(); });
     m.def("FlashFilePath", [](std::string path) { platform.flashFilePath(path); });
+    m.def("GetGroupObject", [](uint16_t goNr) { return bau.groupObjectTable().get(goNr); });
     
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
-        .def(py::init<uint8_t>())
+        .def(py::init())
         .def("objectWrite", (void(GroupObject::*)(float))&GroupObject::objectWrite)
         .def("asap", &GroupObject::asap)
         .def("size", &GroupObject::valueSize)

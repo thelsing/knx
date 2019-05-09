@@ -7,19 +7,22 @@
 GroupObjectTableObject::GroupObjectTableObject(Platform& platform)
     : TableObject(platform)
 {
-    _groupObjects = 0;
-    _groupObjectCount = 0;
+}
+
+GroupObjectTableObject::~GroupObjectTableObject()
+{
+    freeGroupObjects();
 }
 
 void GroupObjectTableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data)
 {
     switch (id)
     {
-        case PID_OBJECT_TYPE:
-            pushWord(OT_GRP_OBJ_TABLE, data);
-            break;
-        default:
-            TableObject::readProperty(id, start, count, data);
+    case PID_OBJECT_TYPE:
+        pushWord(OT_GRP_OBJ_TABLE, data);
+        break;
+    default:
+        TableObject::readProperty(id, start, count, data);
     }
 }
 
@@ -81,6 +84,7 @@ GroupObject& GroupObjectTableObject::nextUpdatedObject(bool& valid)
 
 void GroupObjectTableObject::groupObjects(GroupObject * objs, uint16_t size)
 {
+    freeGroupObjects();
     _groupObjects = objs;
     _groupObjectCount = size;
     initGroupObjects();
@@ -104,18 +108,22 @@ bool GroupObjectTableObject::initGroupObjects()
 {
     if (!_tableData)
         return false;
+    
+    freeGroupObjects();
 
     uint16_t goCount = ntohs(_tableData[0]);
-    if (goCount != _groupObjectCount)
-        return false;
+    
+    _groupObjects = new GroupObject[goCount];
+    _groupObjectCount = goCount;
 
     for (uint16_t asap = 1; asap <= goCount; asap++)
     {
         GroupObject& go = _groupObjects[asap - 1];
         go._asap = asap;
         go._table = this;
-        if (go._dataLength != go.goSize())
-            return false;
+        
+        go._dataLength = go.goSize();
+        go._data = new uint8_t[go._dataLength];
         
         if (go.valueReadOnInit())
             go.requestObjectRead();
@@ -142,4 +150,13 @@ uint8_t GroupObjectTableObject::propertyCount()
 PropertyDescription* GroupObjectTableObject::propertyDescriptions()
 {
     return _propertyDescriptions;
+}
+
+void GroupObjectTableObject::freeGroupObjects()
+{
+    if (_groupObjects)
+        delete[] _groupObjects;
+    
+    _groupObjectCount = 0;
+    _groupObjects = 0;
 }

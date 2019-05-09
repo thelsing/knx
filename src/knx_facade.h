@@ -29,7 +29,6 @@ public:
     void readMemory();
     void writeMemory();
     void loop();
-    void registerGroupObjects(GroupObject* groupObjects, uint16_t count);
     void manufacturerId(uint16_t value);
     void bauNumber(uint32_t value);
     void orderNumber(const char* value);
@@ -42,6 +41,7 @@ public:
     uint8_t paramByte(uint32_t addr);
     uint16_t paramWord(uint32_t addr);
     uint32_t paramInt(uint32_t addr);
+    GroupObject& getGroupObject(uint16_t goNr);
 private:
     BauSystemB& _bau;
     uint32_t _ledPin = LED_BUILTIN;

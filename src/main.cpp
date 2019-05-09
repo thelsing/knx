@@ -15,17 +15,10 @@ float maxValue = 0;
 float minValue = RAND_MAX;
 long lastsend = 0;
 
-GroupObject groupObjects[]
-{
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(1)
-};
-#define CURR groupObjects[0]
-#define MAX groupObjects[1]
-#define MIN groupObjects[2]
-#define RESET groupObjects[3]
+#define CURR bau.groupObjectTable().get(0)
+#define MAX bau.groupObjectTable().get(1)
+#define MIN bau.groupObjectTable().get(2)
+#define RESET bau.groupObjectTable().get(3)
 
 void measureTemp()
 {
@@ -75,10 +68,8 @@ void setup()
     srand((unsigned int)time(NULL));
     bau.readMemory();
     
-    GroupObjectTableObject& got(bau.groupObjectTable());
-    got.groupObjects(groupObjects, 4);
-    
-    RESET.callback(resetCallback);
+    if (bau.configured())
+        RESET.callback(resetCallback);
 
     if (bau.deviceObject().induvidualAddress() == 0)
         bau.deviceObject().progMode(true);

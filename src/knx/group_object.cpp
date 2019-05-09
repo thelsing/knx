@@ -4,13 +4,12 @@
 #include "datapoint_types.h"
 #include "group_object_table_object.h"
 
-GroupObject::GroupObject(uint8_t size)
+GroupObject::GroupObject()
 {
-    _data = new uint8_t[size];
-    memset(_data, 0, size);
+    _data = 0;
     _commFlag = Ok;
     _table = 0;
-    _dataLength = size;
+    _dataLength = 0;
     _updateHandler = 0;
 }
 
@@ -27,7 +26,8 @@ GroupObject::GroupObject(const GroupObject& other)
 
 GroupObject::~GroupObject()
 {
-    delete[] _data;
+    if (_data)
+        delete[] _data;
 }
 
 bool GroupObject::responseUpdateEnable()

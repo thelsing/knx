@@ -17,21 +17,25 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Arduino Genuino Zero (Native USB Port) = Debug|Arduino Genuino Zero (Native USB Port)
+		Debug|Mixed = Debug|Mixed
 		Debug|NodeMCU_1 0_(ESP-12E_Module) = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		Debug|VisualGDB = Debug|VisualGDB
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		MinSizeRel|Arduino Genuino Zero (Native USB Port) = MinSizeRel|Arduino Genuino Zero (Native USB Port)
+		MinSizeRel|Mixed = MinSizeRel|Mixed
 		MinSizeRel|NodeMCU_1 0_(ESP-12E_Module) = MinSizeRel|NodeMCU_1 0_(ESP-12E_Module)
 		MinSizeRel|VisualGDB = MinSizeRel|VisualGDB
 		MinSizeRel|x64 = MinSizeRel|x64
 		MinSizeRel|x86 = MinSizeRel|x86
 		Release|Arduino Genuino Zero (Native USB Port) = Release|Arduino Genuino Zero (Native USB Port)
+		Release|Mixed = Release|Mixed
 		Release|NodeMCU_1 0_(ESP-12E_Module) = Release|NodeMCU_1 0_(ESP-12E_Module)
 		Release|VisualGDB = Release|VisualGDB
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 		RelWithDebInfo|Arduino Genuino Zero (Native USB Port) = RelWithDebInfo|Arduino Genuino Zero (Native USB Port)
+		RelWithDebInfo|Mixed = RelWithDebInfo|Mixed
 		RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module) = RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module)
 		RelWithDebInfo|VisualGDB = RelWithDebInfo|VisualGDB
 		RelWithDebInfo|x64 = RelWithDebInfo|x64
@@ -39,6 +43,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|Mixed.ActiveCfg = Debug|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Debug|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|VisualGDB.ActiveCfg = Debug|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|VisualGDB.Build.0 = Debug|VisualGDB
@@ -46,6 +51,8 @@ Global
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Debug|x86.ActiveCfg = Debug|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|Arduino Genuino Zero (Native USB Port).Build.0 = Release|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|Mixed.ActiveCfg = Release|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|Mixed.Build.0 = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|VisualGDB.ActiveCfg = Release|VisualGDB
@@ -55,6 +62,7 @@ Global
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|x86.ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.MinSizeRel|x86.Build.0 = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|Mixed.ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|VisualGDB.ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|VisualGDB.Build.0 = Release|VisualGDB
@@ -62,6 +70,8 @@ Global
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.Release|x86.ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).Build.0 = Release|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.RelWithDebInfo|Mixed.ActiveCfg = Release|VisualGDB
+		{819E55F9-05A8-454D-B771-4A99F775DD87}.RelWithDebInfo|Mixed.Build.0 = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|VisualGDB
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.RelWithDebInfo|VisualGDB.ActiveCfg = Release|VisualGDB
@@ -72,6 +82,8 @@ Global
 		{819E55F9-05A8-454D-B771-4A99F775DD87}.RelWithDebInfo|x86.Build.0 = Release|VisualGDB
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|Arduino Genuino Zero (Native USB Port).Build.0 = Debug|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|Mixed.ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|Mixed.Build.0 = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|VisualGDB.ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
@@ -79,6 +91,8 @@ Global
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|x86.ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|Mixed.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|Mixed.Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
@@ -89,12 +103,15 @@ Global
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|x86.Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|Mixed.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|x64.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Release|x86.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.RelWithDebInfo|Mixed.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.RelWithDebInfo|Mixed.Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.RelWithDebInfo|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
@@ -105,6 +122,8 @@ Global
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.RelWithDebInfo|x86.Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|Arduino Genuino Zero (Native USB Port).Build.0 = Debug|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|Mixed.ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|Mixed.Build.0 = Debug|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|VisualGDB.ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
@@ -112,6 +131,8 @@ Global
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|x86.ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.MinSizeRel|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.MinSizeRel|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.MinSizeRel|Mixed.ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.MinSizeRel|Mixed.Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.MinSizeRel|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
@@ -122,6 +143,8 @@ Global
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.MinSizeRel|x86.Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|Mixed.ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|Mixed.Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
@@ -129,6 +152,8 @@ Global
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Release|x86.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|Mixed.ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|Mixed.Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
@@ -138,12 +163,15 @@ Global
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|x86.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.RelWithDebInfo|x86.Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
+		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Debug|Mixed.ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Debug|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Debug|VisualGDB.ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Debug|x64.ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Debug|x86.ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.MinSizeRel|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.MinSizeRel|Arduino Genuino Zero (Native USB Port).Build.0 = Debug|Arduino Genuino Zero (Native USB Port)
+		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.MinSizeRel|Mixed.ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
+		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.MinSizeRel|Mixed.Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.MinSizeRel|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
@@ -154,12 +182,15 @@ Global
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.MinSizeRel|x86.Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Release|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Release|Mixed.ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Release|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Release|VisualGDB.ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Release|x64.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.Release|x86.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|Mixed.ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
+		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|Mixed.Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|VisualGDB.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
@@ -169,6 +200,8 @@ Global
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|x86.ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{527A0D25-BC8E-47B8-AA56-BD991BE6CC67}.RelWithDebInfo|x86.Build.0 = Release|Arduino Genuino Zero (Native USB Port)
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|Win32
+		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Debug|Mixed.ActiveCfg = Debug|Win32
+		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Debug|Mixed.Build.0 = Debug|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Debug|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Debug|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Debug|VisualGDB.ActiveCfg = Debug|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Debug|x64.ActiveCfg = Debug|Win32
@@ -176,6 +209,8 @@ Global
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Debug|x86.Build.0 = Debug|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Win32
+		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|Mixed.ActiveCfg = Release|Win32
+		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|Mixed.Build.0 = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|VisualGDB.ActiveCfg = Release|Win32
@@ -185,6 +220,7 @@ Global
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|x86.ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.MinSizeRel|x86.Build.0 = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Win32
+		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Release|Mixed.ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Release|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Release|VisualGDB.ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Release|x64.ActiveCfg = Release|Win32
@@ -192,6 +228,8 @@ Global
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.Release|x86.Build.0 = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Win32
+		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|Mixed.ActiveCfg = Release|Win32
+		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|Mixed.Build.0 = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|VisualGDB.ActiveCfg = Release|Win32
@@ -201,6 +239,8 @@ Global
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|x86.ActiveCfg = Release|Win32
 		{68FCB2F7-7A74-43A0-8CBE-36CB25020584}.RelWithDebInfo|x86.Build.0 = Release|Win32
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Debug|Arduino Genuino Zero (Native USB Port).ActiveCfg = Debug|Arduino Genuino Zero (Native USB Port)
+		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Debug|Mixed.ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
+		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Debug|Mixed.Build.0 = Debug|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Debug|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Debug|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Debug|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Debug|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Debug|VisualGDB.ActiveCfg = Debug|Generic ESP8266 Module
@@ -208,6 +248,8 @@ Global
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Debug|x86.ActiveCfg = Debug|Generic ESP8266 Module
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.MinSizeRel|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.MinSizeRel|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.MinSizeRel|Mixed.ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
+		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.MinSizeRel|Mixed.Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.MinSizeRel|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.MinSizeRel|VisualGDB.ActiveCfg = Release|Generic ESP8266 Module
@@ -218,12 +260,15 @@ Global
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.MinSizeRel|x86.Build.0 = Release|Generic ESP8266 Module
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Release|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Release|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Release|Mixed.ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Release|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Release|VisualGDB.ActiveCfg = Release|Generic ESP8266 Module
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Release|x64.ActiveCfg = Release|Generic ESP8266 Module
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.Release|x86.ActiveCfg = Release|Generic ESP8266 Module
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).ActiveCfg = Release|Arduino Genuino Zero (Native USB Port)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.RelWithDebInfo|Arduino Genuino Zero (Native USB Port).Build.0 = Release|Arduino Genuino Zero (Native USB Port)
+		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.RelWithDebInfo|Mixed.ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
+		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.RelWithDebInfo|Mixed.Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).ActiveCfg = Release|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.RelWithDebInfo|NodeMCU_1 0_(ESP-12E_Module).Build.0 = Release|NodeMCU 1 0 (ESP-12E Module)
 		{3DB3061B-09A3-4C8B-A197-CBEEB3336437}.RelWithDebInfo|VisualGDB.ActiveCfg = Release|Generic ESP8266 Module

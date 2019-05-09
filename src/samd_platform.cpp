@@ -45,7 +45,7 @@ void SamdPlatform::mdelay(uint32_t millis)
 
 void SamdPlatform::restart()
 {
-    SerialUSB.println("restart");
+    SerialDBG.println("restart");
     NVIC_SystemReset();
 }
 
@@ -152,5 +152,139 @@ size_t SamdPlatform::readBytesUart(uint8_t *buffer, size_t length)
     }
     //printHex("p>", buffer, length);
     return length;
+}
+
+void print(const char* s)
+{
+    SerialDBG.print(s);
+}
+void print(char c)
+{
+    SerialDBG.print(c);
+}
+
+void print(unsigned char num)
+{
+    SerialDBG.print(num);
+}
+
+void print(unsigned char num, int base)
+{
+    SerialDBG.print(num, base);
+}
+
+void print(int num)
+{
+    SerialDBG.print(num);
+}
+
+void print(int num, int base)
+{
+    SerialDBG.print(num, base);
+}
+
+void print(unsigned int num)
+{
+    SerialDBG.print(num);
+}
+
+void print(unsigned int num, int base)
+{
+    SerialDBG.print(num, base);
+}
+
+void print(long num)
+{
+    SerialDBG.print(num);
+}
+
+void print(long num, int base)
+{
+    SerialDBG.print(num, base);
+}
+
+void print(unsigned long num)
+{
+    SerialDBG.print(num);
+}
+
+void print(unsigned long num, int base)
+{
+    SerialDBG.print(num, base);
+}
+
+void print(double num)
+{
+    SerialDBG.print(num);
+}
+
+void println(const char* s)
+{
+    SerialDBG.println(s);
+}
+
+void println(char c)
+{
+    SerialDBG.println(c);
+}
+
+void println(unsigned char num)
+{
+    SerialDBG.println(num);
+}
+
+void println(unsigned char num, int base)
+{
+    SerialDBG.println(num, base);
+}
+
+void println(int num)
+{
+    SerialDBG.println(num);
+}
+
+void println(int num, int base)
+{
+    SerialDBG.println(num, base);
+}
+
+void println(unsigned int num)
+{
+    SerialDBG.println(num);
+}
+
+void println(unsigned int num, int base)
+{
+    SerialDBG.println(num, base);
+}
+
+void println(long num)
+{
+    SerialDBG.println(num);
+}
+
+void println(long num, int base)
+{
+    SerialDBG.println(num, base);
+}
+
+void println(unsigned long num)
+{
+    SerialDBG.println(num);
+}
+
+void println(unsigned long num, int base)
+{
+    SerialDBG.println(num, base);
+}
+
+void println(double num)
+{
+    SerialDBG.println(num);
+}
+
+void println(void)
+{
+    SerialDBG.println();
 }
 #endif

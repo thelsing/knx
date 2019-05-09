@@ -2,33 +2,18 @@
 #include <knx.h>
 #include <WiFiManager.h>
 
-// declare array of all groupobjects with their sizes in byte
-GroupObject groupObjects[]
-{
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(1),
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(1),
-    GroupObject(2)
-}
-;
 
 // create named references for easy access to group objects
-GroupObject& goRawTemperature = groupObjects[0];
-GroupObject& goPressure = groupObjects[1];
-GroupObject& goRawHumidity = groupObjects[2];
-GroupObject& goGasResistance = groupObjects[3];
-GroupObject& goIaqEstimate = groupObjects[4];
-GroupObject& goIaqAccurace = groupObjects[5];
-GroupObject& goTemperature = groupObjects[6];
-GroupObject& goHumidity = groupObjects[7];
-GroupObject& goTriggerSample = groupObjects[8];
-GroupObject& goCo2Ppm = groupObjects[9];
+#define goRawTemperature knx.getGroupObject(0)
+#define goPressure knx.getGroupObject(1)
+#define goRawHumidity knx.getGroupObject(2)
+#define goGasResistance knx.getGroupObject(3)
+#define goIaqEstimate knx.getGroupObject(4)
+#define goIaqAccurace knx.getGroupObject(5)
+#define goTemperature knx.getGroupObject(6)
+#define goHumidity knx.getGroupObject(7)
+#define goTriggerSample knx.getGroupObject(8)
+#define goCo2Ppm knx.getGroupObject(9)
 
 #define STATE_SAVE_PERIOD  UINT32_C(360 * 60 * 1000) // 360 minutes - 4 times a day
 
@@ -62,14 +47,12 @@ void setup(void)
     WiFiManager wifiManager;    
     wifiManager.autoConnect("knx-bme680");
 
-    // register group objects
-    knx.registerGroupObjects(groupObjects, 10);
-
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
 
     // register callback for reset GO
-    goTriggerSample.callback(triggerCallback);
+    if(knx.configured())
+        goTriggerSample.callback(triggerCallback);
     
 
     iaqSensor.begin(BME680_I2C_ADDR_SECONDARY, Wire);

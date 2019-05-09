@@ -9,6 +9,7 @@ class GroupObjectTableObject: public TableObject
 
 public:
     GroupObjectTableObject(Platform& platform);
+    virtual ~GroupObjectTableObject();
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     uint16_t entryCount();
     GroupObject& get(uint16_t asap);
@@ -22,8 +23,9 @@ protected:
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
 private:
+    void freeGroupObjects();
     bool initGroupObjects();
     uint16_t* _tableData = 0;
-    GroupObject* _groupObjects;
-    uint16_t _groupObjectCount;
+    GroupObject* _groupObjects = 0;
+    uint16_t _groupObjectCount = 0;
 };

@@ -1,20 +1,29 @@
 #pragma  once
 
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 
 #ifdef __linux__
 #include <arpa/inet.h>
-#include <cstdio>
+#elif ARDUINO_ARCH_SAMD
+#define htons(x) ( (((x)<<8)&0xFF00) | (((x)>>8)&0xFF) )
+#define ntohs(x) htons(x)
+#define htonl(x) ( ((x)<<24 & 0xFF000000UL) | \
+                   ((x)<< 8 & 0x00FF0000UL) | \
+                   ((x)>> 8 & 0x0000FF00UL) | \
+                   ((x)>>24 & 0x000000FFUL) )
+#define ntohl(x) htonl(x)
+#elif ARDUINO_ARCH_ESP8266
+#include <user_interface.h>
+#endif
 
 #define lowByte(val) ((val) & 255)
 #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
 #define bitRead(val, bitno) (((val) >> (bitno)) & 1)
-
+    
+// print functions are implemented in the platform files
 #define DEC 10
 #define HEX 16
-
-#define _print print
-#define _println println
 
 void print(const char[]);
 void print(char);
@@ -35,23 +44,7 @@ void println(unsigned long, int = DEC);
 void println(double, int = 2);
 void println(void);
 
-#elif ARDUINO_ARCH_SAMD
-#include <Arduino.h>
-#define htons(x) ( (((x)<<8)&0xFF00) | (((x)>>8)&0xFF) )
-#define ntohs(x) htons(x)
-#define htonl(x) ( ((x)<<24 & 0xFF000000UL) | \
-                   ((x)<< 8 & 0x00FF0000UL) | \
-                   ((x)>> 8 & 0x0000FF00UL) | \
-                   ((x)>>24 & 0x000000FFUL) )
-#define ntohl(x) htonl(x)
-#define _print SerialUSB.print
-#define _println SerialUSB.println
-#else
-#include <Arduino.h>
-#include <user_interface.h>
-#define _print Serial.print
-#define _println Serial.println
-#endif
+
 
 void printHex(const char* suffix, const uint8_t *data, size_t length);
 

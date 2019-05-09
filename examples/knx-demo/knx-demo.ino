@@ -1,19 +1,11 @@
 #include <knx.h>
 
-// declare array of all groupobjects with their sizes in byte
-GroupObject groupObjects[]
-{
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(2),
-    GroupObject(1)
-};
 
 // create named references for easy access to group objects
-GroupObject& goCurrent = groupObjects[0];
-GroupObject& goMax = groupObjects[1];
-GroupObject& goMin = groupObjects[2];
-GroupObject& goReset = groupObjects[3];
+#define goCurrent knx.getGroupObject(0)
+#define goMax knx.getGroupObject(1)
+#define goMin knx.getGroupObject(2)
+#define goReset knx.getGroupObject(3)
 
 float currentValue = 0;
 float maxValue = 0;
@@ -64,17 +56,15 @@ void setup()
 
     randomSeed(millis());
 
-    // register group objects
-    knx.registerGroupObjects(groupObjects, 4);
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
-
-    // register callback for reset GO
-    goReset.callback(resetCallback);
 
     // print values of parameters if device is already configured
     if (knx.configured())
     {
+        // register callback for reset GO
+        goReset.callback(resetCallback);
+        
         SerialDBG.print("Timeout: "); SerialDBG.println(knx.paramByte(0));
         SerialDBG.print("Zykl. senden: "); SerialDBG.println(knx.paramByte(1));
         SerialDBG.print("Min/Max senden: "); SerialDBG.println(knx.paramByte(2));
