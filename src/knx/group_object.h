@@ -106,7 +106,6 @@ public:
     * is in 1/100, so a value of 2101 would set a DPT9 float value of 21.01.
     * The possible range of the values is -671088.64 to 670760.96.
     *
-    * @param objno - the ID of the communication object.
     * @param value - the new value of the communication object in 1/100.
     *                Use INVALID_DPT_FLOAT for the DPT9 "invalid data" value.
     */
