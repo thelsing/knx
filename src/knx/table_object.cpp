@@ -102,7 +102,10 @@ uint8_t* TableObject::restore(uint8_t* buffer)
     if (_data)
         _platform.freeMemory(_data);
 
-    _data = _platform.allocMemory(_size);
+    if (_size > 0)
+        _data = _platform.allocMemory(_size);
+    else
+        _data = 0;
 
     buffer = popByteArray(_data, _size, buffer);
 

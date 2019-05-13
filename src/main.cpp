@@ -15,10 +15,10 @@ float maxValue = 0;
 float minValue = RAND_MAX;
 long lastsend = 0;
 
-#define CURR bau.groupObjectTable().get(0)
-#define MAX bau.groupObjectTable().get(1)
-#define MIN bau.groupObjectTable().get(2)
-#define RESET bau.groupObjectTable().get(3)
+#define CURR bau.groupObjectTable().get(1)
+#define MAX bau.groupObjectTable().get(2)
+#define MIN bau.groupObjectTable().get(3)
+#define RESET bau.groupObjectTable().get(4)
 
 void measureTemp()
 {
@@ -31,6 +31,7 @@ void measureTemp()
     currentValue = (r * 1.0) / (RAND_MAX * 1.0);
     currentValue *= 100 * 100;
     
+
     CURR.objectWrite(currentValue);
 
     if (currentValue > maxValue)

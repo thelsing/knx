@@ -8,6 +8,7 @@
 class LinuxPlatform: public Platform
 {
     using Platform::_memoryReference;
+    using Platform::memoryReference;
 public:
     LinuxPlatform();
     

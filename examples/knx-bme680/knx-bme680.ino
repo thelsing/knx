@@ -4,16 +4,16 @@
 
 
 // create named references for easy access to group objects
-#define goRawTemperature knx.getGroupObject(0)
-#define goPressure knx.getGroupObject(1)
-#define goRawHumidity knx.getGroupObject(2)
-#define goGasResistance knx.getGroupObject(3)
-#define goIaqEstimate knx.getGroupObject(4)
-#define goIaqAccurace knx.getGroupObject(5)
-#define goTemperature knx.getGroupObject(6)
-#define goHumidity knx.getGroupObject(7)
-#define goTriggerSample knx.getGroupObject(8)
-#define goCo2Ppm knx.getGroupObject(9)
+#define goRawTemperature knx.getGroupObject(1)
+#define goPressure knx.getGroupObject(2)
+#define goRawHumidity knx.getGroupObject(3)
+#define goGasResistance knx.getGroupObject(4)
+#define goIaqEstimate knx.getGroupObject(5)
+#define goIaqAccurace knx.getGroupObject(6)
+#define goTemperature knx.getGroupObject(7)
+#define goHumidity knx.getGroupObject(8)
+#define goTriggerSample knx.getGroupObject(9)
+#define goCo2Ppm knx.getGroupObject(10)
 
 #define STATE_SAVE_PERIOD  UINT32_C(360 * 60 * 1000) // 360 minutes - 4 times a day
 

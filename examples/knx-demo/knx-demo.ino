@@ -2,10 +2,10 @@
 
 
 // create named references for easy access to group objects
-#define goCurrent knx.getGroupObject(0)
-#define goMax knx.getGroupObject(1)
-#define goMin knx.getGroupObject(2)
-#define goReset knx.getGroupObject(3)
+#define goCurrent knx.getGroupObject(1)
+#define goMax knx.getGroupObject(2)
+#define goMin knx.getGroupObject(3)
+#define goReset knx.getGroupObject(4)
 
 float currentValue = 0;
 float maxValue = 0;

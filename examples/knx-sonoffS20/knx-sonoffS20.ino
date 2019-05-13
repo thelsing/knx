@@ -4,9 +4,9 @@
 #define RELAYPIN 12
 
 // create named references for easy access to group objects
-#define goSwitch knx.getGroupObject(0)
-#define goBlock knx.getGroupObject(1)
-#define goStatus knx.getGroupObject(2)
+#define goSwitch knx.getGroupObject(1)
+#define goBlock knx.getGroupObject(2)
+#define goStatus knx.getGroupObject(3)
 
 
 // callback from switch-GO
