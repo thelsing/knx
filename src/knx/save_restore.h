@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 /**
- *@brief Interface for classes that can save and restore data from a buffer. 
+ * @brief Interface for classes that can save and restore data from a buffer. 
  */
 class SaveRestore
 {

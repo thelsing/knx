@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 
+/** The data type of a property. */
 enum PropertyDataType
 {
     PDT_CONTROL            = 0x00, //!< length: 1 read, 10 write
@@ -168,6 +169,7 @@ enum ErrorCode
     E_GO_TYPE_TOO_BIG = 18
 };
 
+/** The access level necessary to read a property of an interface object. */
 enum AccessLevel
 {
     ReadLv0 = 0x00,
