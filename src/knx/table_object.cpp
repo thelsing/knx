@@ -8,7 +8,7 @@ TableObject::TableObject(Platform& platform): _platform(platform)
 
 }
 
-void TableObject::readProperty(PropertyID id, uint32_t start, uint32_t count, uint8_t* data)
+void TableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data)
 {
     switch (id)
     {

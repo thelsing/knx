@@ -10,7 +10,7 @@ uint8_t* popByte(uint8_t& b, uint8_t* data)
 void printHex(const char* suffix, const uint8_t *data, size_t length)
 {
     print(suffix);
-    for (int i = 0; i < length; i++) {
+    for (uint i = 0; i < length; i++) {
         if (data[i] < 0x10) { print("0"); }
         print(data[i], HEX);
         print(" ");
