@@ -6,16 +6,9 @@
 
 HDC100X HDC1(0x43);
 
-// declare array of all groupobjects with their sizes in byte
-GroupObject groupObjects[]
-{
-    GroupObject(2),
-    GroupObject(2)
-};
-
-// create named references for easy access to group objects
-GroupObject& goTemperature = groupObjects[0];
-GroupObject& goHumidity = groupObjects[1];
+// create macros easy access to group objects
+#define goTemperature knx.getGroupObject(1)
+#define goHumidity knx.getGroupObject(2)
 
 long lastsend = 0;
 
@@ -39,8 +32,6 @@ void setup(void)
     knx.ledPin(5);
     // Programming button on digital pin D7
     knx.buttonPin(7);    
-    // register group objects
-    knx.registerGroupObjects(groupObjects, 2);
 
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();

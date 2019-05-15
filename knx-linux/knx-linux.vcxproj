@@ -140,6 +140,6 @@
     <ClCompile Include="..\src\knx\tpuart_data_link_layer.cpp" />
     <ClCompile Include="..\src\knx\transport_layer.cpp" />
     <ClCompile Include="..\src\linux_platform.cpp" />
-    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
 </Project>
