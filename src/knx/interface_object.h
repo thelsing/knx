@@ -51,7 +51,7 @@ enum ObjectType
 };
 
 /**
- * @brief This class represents and interface object. See section 4 of 03_04_01 in the knx specification.
+ * @brief This class represents and interface object. See section 4 of @cite knx:3/4/1 03_04_01 in the knx specification.
  */
 class InterfaceObject: public SaveRestore
 {
