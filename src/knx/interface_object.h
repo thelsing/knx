@@ -4,7 +4,7 @@
 #include "property_types.h"
 #include "save_restore.h"
 
-/** Enum for the type of an interface object. See Section 2.2 at 03_07_03 of knx specification. */
+/** Enum for the type of an interface object. See Section 2.2 of knx:3/7/3 */
 enum ObjectType
 {
     /** Device object. */
@@ -51,7 +51,7 @@ enum ObjectType
 };
 
 /**
- * @brief This class represents and interface object. See section 4 of @cite knx:3/4/1 03_04_01 in the knx specification.
+ * @brief This class represents and interface object. See section 4 of @cite knx:3/4/1.
  */
 class InterfaceObject: public SaveRestore
 {
@@ -61,7 +61,7 @@ public:
      */
     virtual ~InterfaceObject() {}
     /**
-     * @brief Read a property of the interface object. See section 4.8.4.2 in 03_04_01 of the knx specification.
+     * @brief Read a property of the interface object. See section 4.8.4.2 of @cite knx:3/4/1.
      * 
      * @param id id of the property to read
      * 
@@ -75,7 +75,7 @@ public:
     virtual void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     /**
      * @brief Write property of the interface object. If the interface object does not have the property this 
-     * method does nothing. See section 4.8.4.4 in 03_04_01 of the knx specification.
+     * method does nothing. See section 4.8.4.4 of @cite knx:3/4/1.
      * 
      * @param id id of the property to write
      * 
