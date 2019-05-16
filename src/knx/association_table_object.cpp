@@ -45,7 +45,7 @@ uint8_t* AssociationTableObject::save(uint8_t* buffer)
 uint8_t* AssociationTableObject::restore(uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
-    _tableData = (uint16_t*)_data;
+    _tableData = (uint16_t*)data();
     return buffer;
 }
 
@@ -66,7 +66,7 @@ void AssociationTableObject::beforeStateChange(LoadState& newState)
     if (newState != LS_LOADED)
         return;
 
-    _tableData = (uint16_t*)_data;
+    _tableData = (uint16_t*)data();
 }
 
 static PropertyDescription _propertyDescriptions[] =

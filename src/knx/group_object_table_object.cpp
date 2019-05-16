@@ -52,7 +52,7 @@ uint8_t* GroupObjectTableObject::restore(uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
 
-    _tableData = (uint16_t*)_data;
+    _tableData = (uint16_t*)data();
     initGroupObjects();
 
     return buffer;
@@ -95,12 +95,12 @@ void GroupObjectTableObject::beforeStateChange(LoadState& newState)
     if (newState != LS_LOADED)
         return;
 
-    _tableData = (uint16_t*)_data;
+    _tableData = (uint16_t*)data();
 
     if (!initGroupObjects())
     {
         newState = LS_ERROR;
-        TableObject::_errorCode = E_SOFTWARE_FAULT;
+        TableObject::errorCode(E_SOFTWARE_FAULT);
     }
 }
 

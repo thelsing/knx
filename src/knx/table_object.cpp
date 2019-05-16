@@ -24,6 +24,8 @@ void TableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, u
         case PID_ERROR_CODE:
             data[0] = _errorCode;
             break;
+        default:
+            InterfaceObject::readProperty(id, start, count, data);
     }
 }
 
@@ -38,6 +40,8 @@ void TableObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, uin
         //case PID_MCB_TABLE:
         //    TODO
         //    break;
+        default:
+            InterfaceObject::writeProperty(id, start, data, count);
     }
 }
 
@@ -53,8 +57,9 @@ uint8_t TableObject::propertySize(PropertyID id)
             return 1;
         case PID_OBJECT_TYPE:
             return 2;
+        default:
+            return InterfaceObject::propertySize(id);
     }
-    return 0;
 }
 
 TableObject::~TableObject()
@@ -156,6 +161,9 @@ void TableObject::loadEvent(uint8_t* data)
             break;
         case LS_ERROR:
             loadEventError(data);
+            break;
+        default:
+            /* do nothing */
             break;
     }
 }
@@ -262,4 +270,19 @@ void TableObject::additionalLoadControls(uint8_t* data)
         loadState(LS_ERROR);
         _errorCode = E_MAX_TABLE_LENGTH_EXEEDED;
     }
+}
+
+uint8_t* TableObject::data()
+{
+    return _data;
+}
+
+uint32_t TableObject::size()
+{
+    return _size;
+}
+
+void TableObject::errorCode(ErrorCode errorCode)
+{
+    _errorCode = errorCode;
 }

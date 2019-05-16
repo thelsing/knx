@@ -32,7 +32,7 @@ uint16_t AddressTableObject::entryCount()
     return ntohs(_groupAddresses[0]);
 }
 
-uint16_t AddressTableObject::getGa(uint16_t tsap)
+uint16_t AddressTableObject::getGroupAddress(uint16_t tsap)
 {
     if (loadState() != LS_LOADED || tsap > entryCount() )
         return 0;
@@ -46,7 +46,7 @@ uint16_t AddressTableObject::getTsap(uint16_t addr)
     for (uint16_t i = 1; i <= size; i++)
         if (ntohs(_groupAddresses[i]) == addr)
             return i;
-    return 1;
+    return 0;
 }
 
 #pragma region SaveRestore
@@ -60,7 +60,7 @@ uint8_t* AddressTableObject::restore(uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
 
-    _groupAddresses = (uint16_t*)_data;
+    _groupAddresses = (uint16_t*)data();
 
     return buffer;
 }
@@ -82,7 +82,7 @@ void AddressTableObject::beforeStateChange(LoadState& newState)
     if (newState != LS_LOADED)
         return;
 
-    _groupAddresses = (uint16_t*)_data;
+    _groupAddresses = (uint16_t*)data();
 }
 
 static PropertyDescription _propertyDescriptions[] =

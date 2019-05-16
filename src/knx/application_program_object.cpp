@@ -56,22 +56,22 @@ uint8_t ApplicationProgramObject::propertySize(PropertyID id)
 
 uint8_t * ApplicationProgramObject::data(uint32_t addr)
 {
-    return _data + addr;
+    return TableObject::data() + addr;
 }
 
 uint8_t ApplicationProgramObject::getByte(uint32_t addr)
 {
-    return *(_data + addr);
+    return *(TableObject::data() + addr);
 }
 
 uint16_t ApplicationProgramObject::getWord(uint32_t addr)
 {
-    return ::getWord(_data + addr);
+    return ::getWord(TableObject::data() + addr);
 }
 
 uint32_t ApplicationProgramObject::getInt(uint32_t addr)
 {
-    return ::getInt(_data + addr);
+    return ::getInt(TableObject::data() + addr);
 }
 
 uint8_t* ApplicationProgramObject::save(uint8_t* buffer)

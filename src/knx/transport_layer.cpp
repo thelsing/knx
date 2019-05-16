@@ -356,6 +356,9 @@ void TransportLayer::dataIndividualConfirm(AckType ack, uint16_t destination, Ho
 void TransportLayer::dataGroupIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
 {
     uint16_t tsap = _groupAddressTable.getTsap(destination);
+    if (tsap == 0)
+        return;
+    
     _applicationLayer.dataGroupIndication(hopType, priority, tsap, tpdu.apdu());
 }
 
@@ -386,7 +389,7 @@ void TransportLayer::dataSystemBroadcastConfirm(AckType ack, HopCountType hopTyp
 
 void TransportLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
-    uint16_t groupAdress = _groupAddressTable.getGa(tsap);
+    uint16_t groupAdress = _groupAddressTable.getGroupAddress(tsap);
     TPDU& tpdu = apdu.frame().tpdu();
     _networkLayer->dataGroupRequest(ack, groupAdress, hopType, priority, tpdu);
 }
