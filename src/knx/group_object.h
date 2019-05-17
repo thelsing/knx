@@ -56,6 +56,7 @@ public:
     */
     int32_t objectReadFloatDpt9();
     bool objectReadBool();
+    uint8_t objectReadByte();
     /**
     * Request the read of a communication object. Calling this function triggers the
     * sending of a read-group-value telegram, to read the value of the communication
