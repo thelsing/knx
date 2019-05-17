@@ -46,6 +46,7 @@ bool KnxFacade::progMode()
 
 void KnxFacade::progMode(bool value)
 {
+    Serial.println("progmode");
     _bau.deviceObject().progMode(value);
 }
 
