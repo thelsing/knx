@@ -165,6 +165,12 @@ bool GroupObject::objectReadBool()
     return _data[0] > 0;
 }
 
+uint8_t GroupObject::objectReadByte()
+
+{
+  return _data[0];
+}
+
 void GroupObject::requestObjectRead()
 {
     _commFlag = ReadRequest;
