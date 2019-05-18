@@ -129,6 +129,12 @@
     <ClInclude Include="..\src\knx\transport_layer.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\knx_facade.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx.h">
+      <Filter>Header files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\knx\address_table_object.cpp">
@@ -216,6 +222,9 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx_facade.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>

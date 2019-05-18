@@ -1,12 +1,21 @@
 #include "knx_facade.h"
 
+#include "knx/bits.h"
+
 #ifdef ARDUINO_ARCH_SAMD
 SamdPlatform platform;
 Bau07B0 bau(platform);
-#else
+#elif ARDUINO_ARCH_ESP8266
 EspPlatform platform;
 Bau57B0 bau(platform);
+#elif __linux__ //linux
+// noops on linux
+#define digitalWrite(a, b)
+#define pinMode(a, b)
+#define attachInterrupt(a, b, c)
 #endif
+
+#ifndef __linux__
 KnxFacade knx(bau);
 
 void buttonUp()
@@ -22,6 +31,7 @@ void buttonUp()
         knx.progMode(true);
     }
 }
+#endif
 
 KnxFacade::KnxFacade(BauSystemB& bau) : _bau(bau)
 {
@@ -46,7 +56,12 @@ bool KnxFacade::progMode()
 
 void KnxFacade::progMode(bool value)
 {
-    Serial.println("progmode");
+    print("progmode ");
+    if (value)
+        println("on");
+    else
+        println("off");
+
     _bau.deviceObject().progMode(value);
 }
 
@@ -98,6 +113,11 @@ void KnxFacade::manufacturerId(uint16_t value)
 void KnxFacade::bauNumber(uint32_t value)
 {
     _bau.deviceObject().bauNumber(value);
+}
+
+uint16_t KnxFacade::induvidualAddress()
+{
+    return _bau.deviceObject().induvidualAddress();
 }
 
 void KnxFacade::orderNumber(const char* value)

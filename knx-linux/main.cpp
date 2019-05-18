@@ -1,4 +1,4 @@
-#include "linux_platform.h"
+#include "knx_facade.h"
 #include "knx/bau57B0.h"
 #include "knx/group_object_table_object.h"
 #include <time.h>
@@ -7,16 +7,17 @@
 
 LinuxPlatform platfrom;
 Bau57B0 bau(platfrom);
+KnxFacade knx(bau);
 
 float currentValue = 0;
 float maxValue = 0;
 float minValue = RAND_MAX;
 long lastsend = 0;
 
-#define CURR bau.groupObjectTable().get(1)
-#define MAX bau.groupObjectTable().get(2)
-#define MIN bau.groupObjectTable().get(3)
-#define RESET bau.groupObjectTable().get(4)
+#define CURR knx.getGroupObject(1)
+#define MAX knx.getGroupObject(2)
+#define MIN knx.getGroupObject(3)
+#define RESET knx.getGroupObject(4)
 
 void measureTemp()
 {
@@ -65,23 +66,21 @@ void appLoop()
 void setup()
 {
     srand((unsigned int)time(NULL));
-    bau.readMemory();
-    
-    if (bau.configured())
-        RESET.callback(resetCallback);
+    knx.readMemory();
 
-    if (bau.deviceObject().induvidualAddress() == 0)
-        bau.deviceObject().progMode(true);
+    if (knx.induvidualAddress() == 0)
+        knx.progMode(true);
 
-    if (bau.parameters().loadState() == LS_LOADED)
+    if (knx.configured())
     {
+        RESET.callback(resetCallback);
         printf("Timeout: %d\n", bau.parameters().getWord(0));
         printf("Zykl. senden: %d\n", bau.parameters().getByte(2));
         printf("Min/Max senden: %d\n", bau.parameters().getByte(3));
         printf("Aenderung senden: %d\n", bau.parameters().getByte(4));
         printf("Abgleich %d\n", bau.parameters().getByte(5));
     }
-    bau.enabled(true);
+    knx.start();
 }
 
 int main(int argc, char **argv)
@@ -90,8 +89,9 @@ int main(int argc, char **argv)
     
     while (1)
     {
-        bau.loop();
-        appLoop();
+        knx.loop();
+        if(knx.configured())
+            appLoop();
         platfrom.mdelay(100);
     }
 }

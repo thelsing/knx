@@ -58,6 +58,13 @@ protected:
     void loadEventLoaded(uint8_t* data);
     void loadEventError(uint8_t* data);
     void additionalLoadControls(uint8_t* data);
+    /**
+     * @brief set the ::LoadState of the interface object.
+     * 
+     * Calls beforeStateChange().
+     * 
+     * @param newState the new ::LoadState 
+     */
     void loadState(LoadState newState);
     LoadState _state = LS_UNLOADED;
     Platform& _platform;

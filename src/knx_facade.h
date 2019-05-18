@@ -3,12 +3,15 @@
 #ifdef ARDUINO_ARCH_SAMD
 #include "samd_platform.h"
 #include "knx/bau07B0.h"
-#endif
-
-#ifdef ARDUINO_ARCH_ESP8266
+#elif ARDUINO_ARCH_ESP8266
 #include "esp_platform.h"
 #include "knx/bau57B0.h"
+#else
+#include "linux_platform.h"
+#include "knx/bau57B0.h"
+#define LED_BUILTIN 0
 #endif
+
 
 
 typedef uint8_t* (*saveRestoreCallback)(uint8_t* buffer);
@@ -28,6 +31,7 @@ public:
     void buttonPin(uint32_t value);
     void readMemory();
     void writeMemory();
+    uint16_t induvidualAddress();
     void loop();
     void manufacturerId(uint16_t value);
     void bauNumber(uint32_t value);
@@ -56,4 +60,6 @@ private:
     uint8_t* restore(uint8_t* buffer);
 };
 
+#ifndef __linux__
 extern KnxFacade knx;
+#endif
