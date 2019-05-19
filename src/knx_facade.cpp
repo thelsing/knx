@@ -29,21 +29,21 @@ void buttonUp()
     if (knx.progMode())
     {
         #ifdef ESP8266_WEMOS_D1_R2
-		digitalWrite(knx.ledPin(), HIGH);
-		#endif
-		#ifdef ESP8266_NODE_MCU
+	digitalWrite(knx.ledPin(), HIGH);
+	#endif
+	#ifdef ESP8266_NODE_MCU
         digitalWrite(knx.ledPin(), LOW);
-		#endif
+	#endif
         knx.progMode(false);
     }
     else
     {
         #ifdef ESP8266_WEMOS_D1_R2
-		digitalWrite(knx.ledPin(), LOW);
-		#endif
-		#ifdef ESP8266_NODE_MCU
+	digitalWrite(knx.ledPin(), LOW);
+	#endif
+	#ifdef ESP8266_NODE_MCU
         digitalWrite(knx.ledPin(), HIGH);
-		#endif
+	#endif
         knx.progMode(true);
     }
 }
