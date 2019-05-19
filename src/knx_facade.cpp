@@ -1,6 +1,12 @@
 #include "knx_facade.h"
-
 #include "knx/bits.h"
+
+// definition for connecting the led of the different boards
+// for example the circuit on WeMos D1 R2 board --> GPIO--RESISTOR--LED--GND
+// for example the circuit on NODE MCU board    --> GPIO--LED--RESISTOR--VDD
+
+//#define ESP8266_WEMOS_D1_R2
+#define ESP8266_NODE_MCU
 
 #ifdef ARDUINO_ARCH_SAMD
 SamdPlatform platform;
@@ -22,12 +28,22 @@ void buttonUp()
 {
     if (knx.progMode())
     {
+        #ifdef ESP8266_WEMOS_D1_R2
+		digitalWrite(knx.ledPin(), HIGH);
+		#endif
+		#ifdef ESP8266_NODE_MCU
         digitalWrite(knx.ledPin(), LOW);
+		#endif
         knx.progMode(false);
     }
     else
     {
+        #ifdef ESP8266_WEMOS_D1_R2
+		digitalWrite(knx.ledPin(), LOW);
+		#endif
+		#ifdef ESP8266_NODE_MCU
         digitalWrite(knx.ledPin(), HIGH);
+		#endif
         knx.progMode(true);
     }
 }
