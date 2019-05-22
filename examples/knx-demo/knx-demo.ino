@@ -58,6 +58,11 @@ void setup()
     SerialDBG.begin(115200);
 
     randomSeed(millis());
+	
+    #ifdef ARDUINO_ARCH_ESP8266
+    WiFiManager wifiManager;    
+    wifiManager.autoConnect("knx-demo");
+    #endif
 
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
@@ -75,16 +80,16 @@ void setup()
         SerialDBG.print("Abgleich: "); SerialDBG.println(knx.paramByte(4));
     }
 	
-	#ifdef ARDUINO_ARCH_ESP8266
-	// GPIO (?) of the ESP8266, in which case this is determined by the board selection
-	knx.ledPin(LED_BUILTIN);
-	// GPIO (?) of the ESP8266, the value depends on the circuit used on the board of the led
-	//                          if "0" or "low" then the output switches to gnd, at "1" or "high" the output switches to vcc
-	//                          if the next line is commented out then the default is: output switches to gnd
-	//knx.ledPinActiveOn(HIGH);
-	// GPIO (14) of the ESP8266, in which case it is the connector pin D5 on WeMos D1 R2
-	knx.buttonPin(14);
-	#endif
+    #ifdef ARDUINO_ARCH_ESP8266
+    // GPIO (?) of the ESP8266, in which case this is determined by the board selection
+    knx.ledPin(LED_BUILTIN);
+    // GPIO (?) of the ESP8266, the value depends on the circuit used on the board of the led
+    //                          if "0" or "low" then the output switches to gnd, at "1" or "high" the output switches to vcc
+    //                          if the next line is commented out then the default is: output switches to gnd
+    //knx.ledPinActiveOn(HIGH);
+    // GPIO (14) of the ESP8266, in which case it is the connector pin D5 on WeMos D1 R2
+    knx.buttonPin(14);
+    #endif
 
     // start the framework. Will get wifi first.
     knx.start();
