@@ -1,6 +1,8 @@
 #include <knx.h>
 
+#ifdef ARDUINO_ARCH_ESP8266
 #include <WiFiManager.h>
+#endif
 
 // create named references for easy access to group objects
 #define goCurrent knx.getGroupObject(1)
@@ -73,6 +75,7 @@ void setup()
         SerialDBG.print("Abgleich: "); SerialDBG.println(knx.paramByte(4));
     }
 	
+	#ifdef ARDUINO_ARCH_ESP8266
 	// GPIO (?) of the ESP8266, in which case this is determined by the board selection
 	knx.ledPin(LED_BUILTIN);
 	// GPIO (?) of the ESP8266, the value depends on the circuit used on the board of the led
@@ -81,6 +84,7 @@ void setup()
 	//knx.ledPinActiveOn(HIGH);
 	// GPIO (14) of the ESP8266, in which case it is the connector pin D5 on WeMos D1 R2
 	knx.buttonPin(14);
+	#endif
 
     // start the framework. Will get wifi first.
     knx.start();
