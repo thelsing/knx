@@ -1,37 +1,43 @@
 #include "knx_facade.h"
 
-#include "knx/bits.h"
-
 #ifdef ARDUINO_ARCH_SAMD
 SamdPlatform platform;
 Bau07B0 bau(platform);
-#elif ARDUINO_ARCH_ESP8266
+#else
 EspPlatform platform;
 Bau57B0 bau(platform);
-#elif __linux__ //linux
-// noops on linux
-#define digitalWrite(a, b)
-#define pinMode(a, b)
-#define attachInterrupt(a, b, c)
 #endif
-
-#ifndef __linux__
 KnxFacade knx(bau);
+
+#include "knx/bits.h"
 
 void buttonUp()
 {
     if (knx.progMode())
     {
-        digitalWrite(knx.ledPin(), LOW);
+		if (knx.ledPinActiveOn())
+		{
+			digitalWrite(knx.ledPin(), HIGH);
+		}
+		else
+		{
+			digitalWrite(knx.ledPin(), LOW);
+		}
         knx.progMode(false);
     }
     else
     {
-        digitalWrite(knx.ledPin(), HIGH);
+		if (knx.ledPinActiveOn())
+		{
+			digitalWrite(knx.ledPin(), LOW);
+		}
+		else
+		{
+			digitalWrite(knx.ledPin(), HIGH);
+		}
         knx.progMode(true);
     }
 }
-#endif
 
 KnxFacade::KnxFacade(BauSystemB& bau) : _bau(bau)
 {
@@ -56,18 +62,30 @@ bool KnxFacade::progMode()
 
 void KnxFacade::progMode(bool value)
 {
-    print("progmode ");
-    if (value)
-        println("on");
-    else
-        println("off");
-
+	if (value)
+	{
+		println("progmode on");
+	}
+	else
+	{
+		println("progmode off");
+	}
     _bau.deviceObject().progMode(value);
 }
 
 bool KnxFacade::configured()
 {
     return _bau.configured();
+}
+
+bool KnxFacade::ledPinActiveOn()
+{
+    return _ledPinActiveOn;
+}
+
+void KnxFacade::ledPinActiveOn(bool value)
+{
+    _ledPinActiveOn = value;
 }
 
 uint32_t KnxFacade::ledPin()
@@ -115,11 +133,6 @@ void KnxFacade::bauNumber(uint32_t value)
     _bau.deviceObject().bauNumber(value);
 }
 
-uint16_t KnxFacade::induvidualAddress()
-{
-    return _bau.deviceObject().induvidualAddress();
-}
-
 void KnxFacade::orderNumber(const char* value)
 {
     _bau.deviceObject().orderNumber(value);
@@ -138,6 +151,15 @@ void KnxFacade::version(uint16_t value)
 void KnxFacade::start()
 {
     pinMode(_ledPin, OUTPUT);
+	
+	if (knx.ledPinActiveOn())
+	{
+		digitalWrite(_ledPin, HIGH);
+	}
+	else
+	{
+		digitalWrite(_ledPin, LOW);
+	}
 
     pinMode(_buttonPin, INPUT_PULLUP);
     
