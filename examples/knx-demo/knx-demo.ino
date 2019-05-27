@@ -17,7 +17,6 @@ long lastsend = 0;
 
 void measureTemp()
 {
-      
     long now = millis();
     if ((now - lastsend) < 2000)
         return;
@@ -58,11 +57,11 @@ void setup()
     SerialDBG.begin(115200);
 
     randomSeed(millis());
-	
-    #ifdef ARDUINO_ARCH_ESP8266
-    WiFiManager wifiManager;    
+
+#ifdef ARDUINO_ARCH_ESP8266
+    WiFiManager wifiManager;
     wifiManager.autoConnect("knx-demo");
-    #endif
+#endif
 
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
@@ -72,30 +71,31 @@ void setup()
     {
         // register callback for reset GO
         goReset.callback(resetCallback);
-        
-        SerialDBG.print("Timeout: "); SerialDBG.println(knx.paramByte(0));
-        SerialDBG.print("Zykl. senden: "); SerialDBG.println(knx.paramByte(1));
-        SerialDBG.print("Min/Max senden: "); SerialDBG.println(knx.paramByte(2));
-        SerialDBG.print("Aenderung senden: "); SerialDBG.println(knx.paramByte(3));
-        SerialDBG.print("Abgleich: "); SerialDBG.println(knx.paramByte(4));
-    }
-	
-    #ifdef ARDUINO_ARCH_ESP8266
-    // GPIO (?) of the ESP8266, in which case this is determined by the board selection
-    knx.ledPin(LED_BUILTIN);
-    // GPIO (?) of the ESP8266, the value depends on the circuit used on the board of the led
-    //                          if "0" or "low" then the output switches to gnd, at "1" or "high" the output switches to vcc
-    //                          if the next line is commented out then the default is: output switches to gnd
-    //knx.ledPinActiveOn(HIGH);
-    // GPIO (14) of the ESP8266, in which case it is the connector pin D5 on WeMos D1 R2
-    knx.buttonPin(14);
-    #endif
 
-    // start the framework. Will get wifi first.
+        SerialDBG.print("Timeout: ");
+        SerialDBG.println(knx.paramByte(0));
+        SerialDBG.print("Zykl. senden: ");
+        SerialDBG.println(knx.paramByte(1));
+        SerialDBG.print("Min/Max senden: ");
+        SerialDBG.println(knx.paramByte(2));
+        SerialDBG.print("Aenderung senden: ");
+        SerialDBG.println(knx.paramByte(3));
+        SerialDBG.print("Abgleich: ");
+        SerialDBG.println(knx.paramByte(4));
+    }
+
+    // pin or GPIO the programming led is connected to. Default is LED_BUILDIN
+    // knx.ledPin(LED_BUILTIN);
+    // is the led active on HIGH or low? Default is LOW
+    // knx.ledPinActiveOn(HIGH);
+    // pin or GPIO programming button is connected to. Default is 0
+    // knx.buttonPin(0);
+
+    // start the framework.
     knx.start();
 }
 
-void loop() 
+void loop()
 {
     // don't delay here to much. Otherwise you might lose packages or mess up the timing with ETS
     knx.loop();

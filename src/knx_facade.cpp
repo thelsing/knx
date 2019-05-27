@@ -1,45 +1,30 @@
 #include "knx_facade.h"
 
+#include "knx/bits.h"
+
 #ifdef ARDUINO_ARCH_SAMD
 SamdPlatform platform;
 Bau07B0 bau(platform);
-#else
+#elif ARDUINO_ARCH_ESP8266
 EspPlatform platform;
 Bau57B0 bau(platform);
+#elif __linux__ //linux
+// noops on linux
+#define digitalWrite(a, b)
+#define pinMode(a, b)
+#define attachInterrupt(a, b, c)
 #endif
-KnxFacade knx(bau);
 
-#include "knx/bits.h"
+#ifndef __linux__
+KnxFacade knx(bau);
 
 void buttonUp()
 {
-    if (knx.progMode())
-    {
-		if (knx.ledPinActiveOn())
-		{
-			digitalWrite(knx.ledPin(), HIGH);
-		}
-		else
-		{
-			digitalWrite(knx.ledPin(), LOW);
-		}
-        knx.progMode(false);
-    }
-    else
-    {
-		if (knx.ledPinActiveOn())
-		{
-			digitalWrite(knx.ledPin(), LOW);
-		}
-		else
-		{
-			digitalWrite(knx.ledPin(), HIGH);
-		}
-        knx.progMode(true);
-    }
+    knx.progMode(!knx.progMode());
 }
+#endif
 
-KnxFacade::KnxFacade(BauSystemB& bau) : _bau(bau)
+KnxFacade::KnxFacade(BauSystemB &bau) : _bau(bau)
 {
     manufacturerId(0xfa);
     _bau.addSaveRestore(this);
@@ -62,14 +47,17 @@ bool KnxFacade::progMode()
 
 void KnxFacade::progMode(bool value)
 {
-	if (value)
-	{
-		println("progmode on");
-	}
-	else
-	{
-		println("progmode off");
-	}
+    if (value)
+    {
+        println("progmode on");
+        digitalWrite(knx.ledPin(), _ledPinActiveOn);
+    }
+    else
+    {
+        println("progmode off");
+        digitalWrite(knx.ledPin(), HIGH - _ledPinActiveOn);
+    }
+
     _bau.deviceObject().progMode(value);
 }
 
@@ -78,12 +66,12 @@ bool KnxFacade::configured()
     return _bau.configured();
 }
 
-bool KnxFacade::ledPinActiveOn()
+uint32_t KnxFacade::ledPinActiveOn()
 {
     return _ledPinActiveOn;
 }
 
-void KnxFacade::ledPinActiveOn(bool value)
+void KnxFacade::ledPinActiveOn(uint32_t value)
 {
     _ledPinActiveOn = value;
 }
@@ -133,12 +121,17 @@ void KnxFacade::bauNumber(uint32_t value)
     _bau.deviceObject().bauNumber(value);
 }
 
-void KnxFacade::orderNumber(const char* value)
+uint16_t KnxFacade::induvidualAddress()
+{
+    return _bau.deviceObject().induvidualAddress();
+}
+
+void KnxFacade::orderNumber(const char *value)
 {
     _bau.deviceObject().orderNumber(value);
 }
 
-void KnxFacade::hardwareType(uint8_t* value)
+void KnxFacade::hardwareType(uint8_t *value)
 {
     _bau.deviceObject().hardwareType(value);
 }
@@ -151,27 +144,20 @@ void KnxFacade::version(uint16_t value)
 void KnxFacade::start()
 {
     pinMode(_ledPin, OUTPUT);
-	
-	if (knx.ledPinActiveOn())
-	{
-		digitalWrite(_ledPin, HIGH);
-	}
-	else
-	{
-		digitalWrite(_ledPin, LOW);
-	}
+    
+    digitalWrite(_ledPin, HIGH - _ledPinActiveOn);
 
     pinMode(_buttonPin, INPUT_PULLUP);
-    
+
     attachInterrupt(_buttonPin, buttonUp, RISING);
     enabled(true);
 }
 
-uint8_t* KnxFacade::paramData(uint32_t addr)
+uint8_t *KnxFacade::paramData(uint32_t addr)
 {
     if (!_bau.configured())
         return nullptr;
-    
+
     return _bau.parameters().data(addr);
 }
 
@@ -199,38 +185,33 @@ uint32_t KnxFacade::paramInt(uint32_t addr)
     return _bau.parameters().getInt(addr);
 }
 
-
 void KnxFacade::setSaveCallback(saveRestoreCallback func)
 {
     _saveCallback = func;
 }
-
 
 void KnxFacade::setRestoreCallback(saveRestoreCallback func)
 {
     _restoreCallback = func;
 }
 
-
-uint8_t* KnxFacade::save(uint8_t* buffer)
+uint8_t *KnxFacade::save(uint8_t *buffer)
 {
     if (_saveCallback != 0)
         return _saveCallback(buffer);
-    
+
     return buffer;
 }
 
-
-uint8_t* KnxFacade::restore(uint8_t* buffer)
+uint8_t *KnxFacade::restore(uint8_t *buffer)
 {
     if (_restoreCallback != 0)
         return _restoreCallback(buffer);
-    
+
     return buffer;
 }
 
-
-GroupObject& KnxFacade::getGroupObject(uint16_t goNr)
+GroupObject &KnxFacade::getGroupObject(uint16_t goNr)
 {
     return _bau.groupObjectTable().get(goNr);
 }
