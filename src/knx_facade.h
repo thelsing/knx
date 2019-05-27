@@ -30,11 +30,10 @@ public:
      * returns HIGH if led is active on HIGH, LOW otherwise
      */
     uint32_t ledPinActiveOn();
-	/**
-     * To adapt the output to hardware.
-	 *
-	 * @param ledPinActiveOn = "0" or "low"  --> GPIO--LED--RESISTOR--VDD (for example NODE MCU)
-	 * @param ledPinActiveOn = "1" or "high" --> GPIO--RESISTOR--LED--GND (for example WeMos D1 R2)
+    /**
+     * Sets if the programming led is active on HIGH or LOW. 
+     * 
+     * Set to HIGH for GPIO--RESISTOR--LED--GND or to LOW for GPIO--LED--RESISTOR--VDD
      */
     void ledPinActiveOn(uint32_t value);
     uint32_t ledPin();
@@ -63,9 +62,6 @@ private:
 	uint32_t _ledPinActiveOn = LOW;
     uint32_t _ledPin = LED_BUILTIN;
     uint32_t _buttonPin = 0;
-#ifdef USE_STATES
-    Ticker _ticker;
-#endif
     saveRestoreCallback _saveCallback = 0;
     saveRestoreCallback _restoreCallback = 0;
     

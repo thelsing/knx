@@ -29,7 +29,7 @@ public:
     virtual uint8_t* restore(uint8_t* buffer);
 protected:
     /**
-     * This method is called before the interface object enters a new ::Loadstate.
+     * This method is called before the interface object enters a new ::LoadState.
      * If there is a error changing the state newState should be set to ::LS_ERROR and errorCode() 
      * to a reason for the failure.
      */

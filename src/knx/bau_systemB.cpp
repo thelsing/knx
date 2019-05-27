@@ -48,16 +48,16 @@ void BauSystemB::sendNextGroupTelegram()
         if (flag != ReadRequest && flag != WriteRequest)
             continue;
 
-        if(!go.communicationEnable() || ! go.transmitEnable())
+        if (!go.communicationEnable())
             continue;
 
-        if (flag == WriteRequest)
+        if (flag == WriteRequest && go.transmitEnable())
         {
             uint8_t* data = go.valueRef();
             _appLayer.groupValueWriteRequest(AckRequested, asap, go.priority(), NetworkLayerParameter, data,
                 go.sizeInTelegram());
         }
-        else
+        else if (flag == ReadRequest)
         {
             _appLayer.groupValueReadRequest(AckRequested, asap, go.priority(), NetworkLayerParameter);
         }
@@ -265,6 +265,10 @@ void BauSystemB::groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority
 void BauSystemB::groupValueReadIndication(uint16_t asap, Priority priority, HopCountType hopType)
 {
     GroupObject& go = _groupObjTable.get(asap);
+
+    if (!go.communicationEnable() || !go.readEnable())
+        return;
+    
     uint8_t* data = go.valueRef();
     _appLayer.groupValueReadResponse(AckRequested, asap, priority, hopType, data, go.sizeInTelegram());
 }
