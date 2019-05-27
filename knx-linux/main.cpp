@@ -29,7 +29,6 @@ void measureTemp()
     int r = rand();
     currentValue = (r * 1.0) / (RAND_MAX * 1.0);
     currentValue *= 100 * 100;
-    
 
     CURR.objectWrite(currentValue);
 

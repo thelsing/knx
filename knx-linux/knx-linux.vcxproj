@@ -85,6 +85,7 @@
     <ClInclude Include="..\src\knx\datapoint_types.h" />
     <ClInclude Include="..\src\knx\data_link_layer.h" />
     <ClInclude Include="..\src\knx\device_object.h" />
+    <ClInclude Include="..\src\knx\dptconvert.h" />
     <ClInclude Include="..\src\knx\group_object.h" />
     <ClInclude Include="..\src\knx\group_object_table_object.h" />
     <ClInclude Include="..\src\knx\interface_object.h" />
@@ -128,6 +129,7 @@
     <ClCompile Include="..\src\knx\datapoint_types.cpp" />
     <ClCompile Include="..\src\knx\data_link_layer.cpp" />
     <ClCompile Include="..\src\knx\device_object.cpp" />
+    <ClCompile Include="..\src\knx\dptconvert.cpp" />
     <ClCompile Include="..\src\knx\group_object.cpp" />
     <ClCompile Include="..\src\knx\group_object_table_object.cpp" />
     <ClCompile Include="..\src\knx\interface_object.cpp" />

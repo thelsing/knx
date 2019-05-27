@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include "knx_types.h"
-
+#include "dptconvert.h"
 
 class GroupObjectTableObject;
 
@@ -117,9 +117,14 @@ public:
     size_t sizeInTelegram();
     uint8_t* valueRef();
     uint16_t asap();
-    void callback(GroupObjectUpdatedHandler hanlder);
+    void callback(GroupObjectUpdatedHandler handler);
     GroupObjectUpdatedHandler callback();
-private:
+
+    KNXValue value(const KNXDatatype& type);
+    void value(const KNXDatatype& type, KNXValue& value);
+    bool tryValue(const KNXDatatype& type, KNXValue& value);
+
+  private:
     GroupObjectUpdatedHandler _updateHandler;
     size_t goSize();
     uint16_t _asap;

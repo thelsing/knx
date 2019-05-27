@@ -271,3 +271,23 @@ GroupObjectUpdatedHandler GroupObject::callback()
 {
     return _updateHandler;
 }
+
+
+void GroupObject::value(const KNXDatatype& type, KNXValue& value)
+{
+    KNX_Encode_Value(value, _data, _dataLength, type);
+}
+
+
+KNXValue GroupObject::value(const KNXDatatype& type)
+{
+    KNXValue value;
+    KNX_Decode_Value(_data, _dataLength, type, value);
+    return value;
+}
+
+
+bool GroupObject::tryValue(const KNXDatatype& type, KNXValue& value)
+{
+    return KNX_Decode_Value(_data, _dataLength, type, value);
+}

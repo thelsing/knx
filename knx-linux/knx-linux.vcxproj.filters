@@ -135,6 +135,9 @@
     <ClInclude Include="..\src\knx.h">
       <Filter>Header files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\knx\dptconvert.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\knx\address_table_object.cpp">
@@ -226,6 +229,9 @@
     </ClCompile>
     <ClCompile Include="..\src\knx_facade.cpp">
       <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\dptconvert.cpp">
+      <Filter>Source files\knx</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
