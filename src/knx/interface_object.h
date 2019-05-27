@@ -51,17 +51,17 @@ enum ObjectType
 };
 
 /**
- * @brief This class represents and interface object. See section 4 of @cite knx:3/4/1.
+ * This class represents and interface object. See section 4 of @cite knx:3/4/1.
  */
 class InterfaceObject: public SaveRestore
 {
 public:
     /**
-     * @brief Destructor
+     * Destructor
      */
     virtual ~InterfaceObject() {}
     /**
-     * @brief Read a property of the interface object. See section 4.8.4.2 of @cite knx:3/4/1.
+     * Read a property of the interface object. See section 4.8.4.2 of @cite knx:3/4/1.
      * 
      * @param id id of the property to read
      * 
@@ -74,7 +74,7 @@ public:
      */
     virtual void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     /**
-     * @brief Write property of the interface object. If the interface object does not have the property this 
+     * Write property of the interface object. If the interface object does not have the property this 
      * method does nothing. See section 4.8.4.4 of @cite knx:3/4/1.
      * 
      * @param id id of the property to write
@@ -87,7 +87,7 @@ public:
      */
     virtual void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     /**
-     * @brief Gets the size of of property in bytes.
+     * Gets the size of of property in bytes.
      * 
      * @param id of the property to get the size of
      * 
@@ -95,7 +95,7 @@ public:
      */
     virtual uint8_t propertySize(PropertyID id);
     /**
-     * @brief Read the Description of a property of the interface object. The output parameters are only valid if nuberOfElements is not zero.
+     * Read the Description of a property of the interface object. The output parameters are only valid if nuberOfElements is not zero.
      * 
      * @param[in,out] propertyId The id of the property of which to read the description of. If this parameter is not zero
      *        propertyIndex paramter is ignored as input and the corrrect index of the property is written to it. If this 
@@ -116,11 +116,11 @@ public:
     void readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
 protected:
     /**
-     * @brief Returns the number of properties the interface object has.
+     * Returns the number of properties the interface object has.
      */
     virtual uint8_t propertyCount();
     /**
-     * @brief Returns a pointer to the first PropertyDescription of the interface object. 
+     * Returns a pointer to the first PropertyDescription of the interface object. 
      * This is used by readPropertyDescription() together with propertyCount().
      */
     virtual PropertyDescription* propertyDescriptions();

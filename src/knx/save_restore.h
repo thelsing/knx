@@ -2,13 +2,13 @@
 #include <stdint.h>
 
 /**
- * @brief Interface for classes that can save and restore data from a buffer. 
+ * Interface for classes that can save and restore data from a buffer. 
  */
 class SaveRestore
 {
 public:
     /**
-     * @brief This method is called when the object should save its state to the buffer.
+     * This method is called when the object should save its state to the buffer.
      *  
      * @param buffer The buffer the object should save its state to.
      * 
@@ -17,7 +17,7 @@ public:
      */
     virtual uint8_t* save(uint8_t* buffer) = 0;
     /**
-     * @brief This method is called when the object should restore its state from the buffer.
+     * This method is called when the object should restore its state from the buffer.
      *  
      * @param buffer The buffer the object should restore its state from.
      * 
