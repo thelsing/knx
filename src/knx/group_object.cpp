@@ -272,22 +272,51 @@ GroupObjectUpdatedHandler GroupObject::callback()
     return _updateHandler;
 }
 
-
-void GroupObject::value(const KNXDatatype& type, KNXValue& value)
+void GroupObject::value(const KNXValue& value, const Dpt& type)
 {
     KNX_Encode_Value(value, _data, _dataLength, type);
+    objectWritten();
 }
 
 
-KNXValue GroupObject::value(const KNXDatatype& type)
+KNXValue GroupObject::value(const Dpt& type)
 {
     KNXValue value;
     KNX_Decode_Value(_data, _dataLength, type, value);
     return value;
 }
 
-
-bool GroupObject::tryValue(const KNXDatatype& type, KNXValue& value)
+bool GroupObject::tryValue(KNXValue& value, const Dpt& type)
 {
     return KNX_Decode_Value(_data, _dataLength, type, value);
+}
+
+
+void GroupObject::dataPointType(Dpt value)
+{
+    _datapointType = value;
+}
+
+
+Dpt GroupObject::dataPointType()
+{
+    return _datapointType;
+}
+
+
+bool GroupObject::tryValue(KNXValue& value)
+{
+    return tryValue(value, _datapointType);
+}
+
+
+void GroupObject::value(const KNXValue& value)
+{
+    this->value(value, _datapointType);
+}
+
+
+KNXValue GroupObject::value()
+{
+    return value(_datapointType);
 }

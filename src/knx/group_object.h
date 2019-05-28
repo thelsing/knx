@@ -120,9 +120,14 @@ public:
     void callback(GroupObjectUpdatedHandler handler);
     GroupObjectUpdatedHandler callback();
 
-    KNXValue value(const KNXDatatype& type);
-    void value(const KNXDatatype& type, KNXValue& value);
-    bool tryValue(const KNXDatatype& type, KNXValue& value);
+    KNXValue value(const Dpt& type);
+    void value(const KNXValue& value, const Dpt& type);
+    bool tryValue(KNXValue& value, const Dpt& type);
+    KNXValue value();
+    void value(const KNXValue& value);
+    bool tryValue(KNXValue& value);
+    Dpt dataPointType();
+    void dataPointType(Dpt value);
 
   private:
     GroupObjectUpdatedHandler _updateHandler;
@@ -132,4 +137,5 @@ public:
     uint8_t* _data;
     uint8_t _dataLength;
     GroupObjectTableObject* _table;
+    Dpt _datapointType;
 };
