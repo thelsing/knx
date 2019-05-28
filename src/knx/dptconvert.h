@@ -84,21 +84,47 @@ class KNXValue
     operator double() const { return _value.doubleValue; }
     operator char*() const { return _value.stringValue; }
     operator struct tm() const { return _value.timeValue; }
+
+    bool boolValue() const { return _value.boolValue; }
+    uint8_t ucharValue() const { return _value.ucharValue; }
+    uint16_t ushortValue() const { return _value.ushortValue; }
+    uint32_t uintValue() const { return _value.uintValue; }
+    uint64_t ulongValue() const { return _value.ulongValue; }
+    int8_t charValue() const { return _value.charValue; }
+    int16_t shortValue() const { return _value.shortValue; }
+    int32_t intValue() const { return _value.intValue; }
+    int64_t longValue() const { return _value.longValue; }
+    double doubleValue() const { return _value.doubleValue; }
+    char* stringValue() const { return _value.stringValue; }
+    struct tm timeValue() const { return _value.timeValue; }
+
+    void boolValue(bool value) { _value.boolValue = value; }
+    void ucharValue(uint8_t value) { _value.ucharValue = value; }
+    void ushortValue(uint16_t value) { _value.ushortValue = value; }
+    void uintValue(uint32_t value) { _value.uintValue = value; }
+    void ulongValue(uint64_t value) { _value.ulongValue = value; }
+    void charValue(int8_t value) { _value.charValue = value; }
+    void shortValue(int16_t value) { _value.shortValue = value; }
+    void intValue(int32_t value) { _value.intValue = value; }
+    void longValue(int64_t value) { _value.longValue = value; }
+    void doubleValue(double value) { _value.doubleValue = value; }
+    void stringValue(char* value) { _value.stringValue = value; }
+    void timeValue(struct tm value) { _value.timeValue = value; }
   private:
     union Value
     {
-        struct tm timeValue;
-        char* stringValue;
-        int8_t charValue;
-        int16_t shortValue;
-        int32_t intValue;
-        int64_t longValue;
+        bool boolValue;
         uint8_t ucharValue;
         uint16_t ushortValue;
         uint32_t uintValue;
         uint64_t ulongValue;
+        int8_t charValue;
+        int16_t shortValue;
+        int32_t intValue;
+        int64_t longValue;
         double doubleValue;
-        bool boolValue;
+        char* stringValue;
+        struct tm timeValue;
     };
     Value _value;
 };
