@@ -274,7 +274,7 @@ GroupObjectUpdatedHandler GroupObject::callback()
 
 void GroupObject::value(const KNXValue& value, const Dpt& type)
 {
-    KNX_Encode_Value(value, _data, _dataLength, type);
+    valueNoSend(value, type);
     objectWritten();
 }
 
@@ -319,4 +319,16 @@ void GroupObject::value(const KNXValue& value)
 KNXValue GroupObject::value()
 {
     return value(_datapointType);
+}
+
+
+void GroupObject::valueNoSend(const KNXValue& value)
+{
+    valueNoSend(value, _datapointType);
+}
+
+
+void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
+{
+    KNX_Encode_Value(value, _data, _dataLength, type);
 }

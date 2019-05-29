@@ -121,11 +121,14 @@ public:
     GroupObjectUpdatedHandler callback();
 
     KNXValue value(const Dpt& type);
-    void value(const KNXValue& value, const Dpt& type);
-    bool tryValue(KNXValue& value, const Dpt& type);
     KNXValue value();
+    void value(const KNXValue& value, const Dpt& type);
     void value(const KNXValue& value);
+    void valueNoSend(const KNXValue& value, const Dpt& type);
+    void valueNoSend(const KNXValue& value);
+    bool tryValue(KNXValue& value, const Dpt& type);
     bool tryValue(KNXValue& value);
+
     Dpt dataPointType();
     void dataPointType(Dpt value);
 

@@ -35,7 +35,7 @@ class Dpt
 {
   public:
     Dpt() {}
-    Dpt(short mainGroup, short subGroup, short index) 
+    Dpt(short mainGroup, short subGroup, short index = 0) 
     {
         this->mainGroup = mainGroup;
         this->subGroup = subGroup;

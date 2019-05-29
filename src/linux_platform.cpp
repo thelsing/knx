@@ -488,6 +488,11 @@ void println(double num)
     printf("%f\n", num);
 }
 
+void println(double num, int places)
+{
+    printf("%f\n", num);
+}
+
 void println(void)
 {
     printf("\n");

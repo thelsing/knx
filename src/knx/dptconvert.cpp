@@ -6,9 +6,10 @@
 #define ASSERT_PAYLOAD(x)      \
     if (payload_length != (x)) \
     return false
-#define ENSURE_PAYLOAD(x)            \
-    for (int pi = 0; pi < (x); ++pi) \
-    payload[pi] = 0
+#define ENSURE_PAYLOAD(x) 
+//\
+//    for (int pi = 0; pi < (x); ++pi) \
+//    payload[pi] = 0
 
 int KNX_Decode_Value(uint8_t* payload, int payload_length, const Dpt& datatype, KNXValue& value)
 {
@@ -1116,82 +1117,48 @@ int valueToBusValueTimeDelta(const KNXValue& value, uint8_t* payload, int payloa
 int valueToBusValueFloat16(const KNXValue& value, uint8_t* payload, int payload_length, const Dpt& datatype)
 {
     double numValue = value;
+
+    // bigger values like 670760.0 result in 0x7FFF which denotes invalid data.
+    // I'm not sure if the GO shouldn't be updated to this value instead
+    if (numValue > 670433.28)
+        return false;
+
+    if (numValue < -671088.64)
+        return false;
+
     switch (datatype.subGroup)
     {
         case 1:
-            if (numValue < -273.0 || numValue > 670760.0)
+            if (numValue < -273.0)
                 return false;
             break;
-        case 4:
-        case 7:
-        case 8:
-            if (numValue < 0.0 || numValue > 670760.0)
-                return false;
-            break;
-        case 5:
-        {
-            if (numValue < 0.0 || numValue > 670760.0)
-                return false;
-            break;
-        }
-        case 6:
-        {
-            if (numValue < 0.0 || numValue > 670760.0)
-                return false;
-            break;
-        }
-        case 10:
-        {
-            if (numValue < -670760.0 || numValue > 670760.0)
-                return false;
-            break;
-        }
-        case 11:
-        {
-            if (numValue < -670760.0 || numValue > 670760.0)
-                return false;
-            break;
-        }
-        case 20:
-        {
-            if (numValue < -670760.0 || numValue > 670760.0)
-                return false;
-            break;
-        }
-        case 21:
-        {
-            if (numValue < -670760.0 || numValue > 670760.0)
-                return false;
-            break;
-        }
         case 2:
         case 3:
+        case 10:
+        case 11:
+        case 20:
+        case 21:
         case 22:
         case 23:
         case 24:
-            if (numValue < -670760.0 || numValue > 670760.0)
-                return false;
-            break;
         case 25:
-        {
-            if (numValue < -670760.0 || numValue > 670760.0)
+            if (numValue < -670760.0)
                 return false;
             break;
-        }
-        case 27:
-        {
-            if (numValue < -459.6)
-                return false;
-            break;
-        }
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
         case 28:
             if (numValue < 0.0)
                 return false;
             break;
+        case 27:
+            if (numValue < -459.6)
+                return false;
+            break;
     }
-
-    if (numValue < -671088.64 || numValue > 670760.96)
-        return false;
 
     float16ToPayload(payload, payload_length, 0, numValue, 0xFFFF);
     return true;
@@ -1819,9 +1786,20 @@ void signed32ToPayload(uint8_t* payload, int payload_length, int index, int32_t 
 
 void float16ToPayload(uint8_t* payload, int payload_length, int index, double value, uint16_t mask)
 {
+    bool wasNegative = false;
+    if (value < 0)
+    {
+        wasNegative = true;
+        value *= -1;
+    }
+
     value *= 100.0;
-    unsigned short exponent = ceil(log2(value) - 10.0);
+    unsigned short exponent = ceil(log2(value) - 11.0);
     short mantissa = roundf(value / (1 << exponent));
+
+    if (wasNegative)
+        mantissa *= -1;
+
     signed16ToPayload(payload, payload_length, index, mantissa, mask);
     unsigned8ToPayload(payload, payload_length, index, exponent << 3, 0x78 & (mask >> 8));
 }

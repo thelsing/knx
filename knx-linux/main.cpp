@@ -1,6 +1,7 @@
 #include "knx_facade.h"
 #include "knx/bau57B0.h"
 #include "knx/group_object_table_object.h"
+#include "knx/bits.h"
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,9 +10,6 @@ LinuxPlatform platfrom;
 Bau57B0 bau(platfrom);
 KnxFacade knx(bau);
 
-float currentValue = 0;
-float maxValue = 0;
-float minValue = RAND_MAX;
 long lastsend = 0;
 
 #define CURR knx.getGroupObject(1)
@@ -22,35 +20,32 @@ long lastsend = 0;
 void measureTemp()
 {
     long now = platfrom.millis();
-    if ((now - lastsend) < 2000)
+    if ((now - lastsend) < 10000)
         return;
 
     lastsend = now;
     int r = rand();
-    currentValue = (r * 1.0) / (RAND_MAX * 1.0);
-    currentValue *= 100 * 100;
+    float currentValue = (r * 1.0) / (RAND_MAX * 1.0);
+    currentValue *= (670433.28 + 273);
+    currentValue -= 273;
+    println(currentValue);
+    CURR.value(currentValue);
 
-    CURR.objectWrite(currentValue);
+    double max = MAX.value();
+    if (currentValue > max)
+        MAX.value(currentValue);
 
-    if (currentValue > maxValue)
-    {
-        maxValue = currentValue;
-        MAX.objectWrite(maxValue);
-    }
-
-    if (currentValue < minValue)
-    {
-        minValue = currentValue;
-        MIN.objectWrite(minValue);
-    }
+    double min = MIN.value();
+    if (currentValue < MIN.value().doubleValue())
+        MIN.value(currentValue);
 }
 
 void resetCallback(GroupObject& go)
 {
-    if (go.objectReadBool())
+    if (go.value().boolValue())
     {
-        maxValue = 0;
-        minValue = 10000;
+        MAX.valueNoSend(-273.0);
+        MIN.valueNoSend(670433.28);
     }
 }
 
@@ -72,6 +67,12 @@ void setup()
 
     if (knx.configured())
     {
+        CURR.dataPointType(Dpt(9, 1));
+        MIN.dataPointType(Dpt(9, 1));
+        MIN.value(670433.28);
+        MAX.dataPointType(Dpt(9, 1));
+        MAX.valueNoSend(-273.0);
+        RESET.dataPointType(Dpt(1, 15));
         RESET.callback(resetCallback);
         printf("Timeout: %d\n", bau.parameters().getWord(0));
         printf("Zykl. senden: %d\n", bau.parameters().getByte(2));
