@@ -155,15 +155,9 @@ void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, u
 
 void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap)
 {
-
     // Flush the EEPROM before resetting
     _memory.writeMemory();
     _platform.restart();
-    
-    // for platforms that don't really restart
-    _memory.readMemory();
-    _deviceObj.progMode(false);
-    _configured = true;
 }
 
 void BauSystemB::authorizeIndication(Priority priority, HopCountType hopType, uint16_t asap, uint32_t key)

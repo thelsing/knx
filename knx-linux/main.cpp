@@ -6,20 +6,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-LinuxPlatform platfrom;
-Bau57B0 bau(platfrom);
-KnxFacade knx(bau);
+KnxFacade* knx = 0;
+Platform* platform = 0;
 
 long lastsend = 0;
 
-#define CURR knx.getGroupObject(1)
-#define MAX knx.getGroupObject(2)
-#define MIN knx.getGroupObject(3)
-#define RESET knx.getGroupObject(4)
+#define CURR knx->getGroupObject(1)
+#define MAX knx->getGroupObject(2)
+#define MIN knx->getGroupObject(3)
+#define RESET knx->getGroupObject(4)
 
 void measureTemp()
 {
-    long now = platfrom.millis();
+    long now = platform->millis();
     if ((now - lastsend) < 10000)
         return;
 
@@ -51,7 +50,7 @@ void resetCallback(GroupObject& go)
 
 void appLoop()
 {
-    if (!bau.configured())
+    if (!knx->configured())
         return;
     
     measureTemp();
@@ -60,12 +59,12 @@ void appLoop()
 void setup()
 {
     srand((unsigned int)time(NULL));
-    knx.readMemory();
+    knx->readMemory();
 
-    if (knx.induvidualAddress() == 0)
-        knx.progMode(true);
+    if (knx->induvidualAddress() == 0)
+        knx->progMode(true);
 
-    if (knx.configured())
+    if (knx->configured())
     {
         CURR.dataPointType(Dpt(9, 1));
         MIN.dataPointType(Dpt(9, 1));
@@ -74,24 +73,28 @@ void setup()
         MAX.valueNoSend(-273.0);
         RESET.dataPointType(Dpt(1, 15));
         RESET.callback(resetCallback);
-        printf("Timeout: %d\n", bau.parameters().getWord(0));
-        printf("Zykl. senden: %d\n", bau.parameters().getByte(2));
-        printf("Min/Max senden: %d\n", bau.parameters().getByte(3));
-        printf("Aenderung senden: %d\n", bau.parameters().getByte(4));
-        printf("Abgleich %d\n", bau.parameters().getByte(5));
+        printf("Timeout: %d\n", knx->paramWord(0));
+        printf("Zykl. senden: %d\n", knx->paramByte(2));
+        printf("Min/Max senden: %d\n", knx->paramByte(3));
+        printf("Aenderung senden: %d\n", knx->paramByte(4));
+        printf("Abgleich %d\n", knx->paramByte(5));
     }
-    knx.start();
+    knx->start();
 }
 
 int main(int argc, char **argv)
 {
+    platform = new LinuxPlatform(argc, argv);
+    Bau57B0 bau(*platform);
+    knx = new KnxFacade(bau);
+    
     setup();
     
     while (1)
     {
-        knx.loop();
-        if(knx.configured())
+        knx->loop();
+        if(knx->configured())
             appLoop();
-        platfrom.mdelay(100);
+        platform->mdelay(100);
     }
 }

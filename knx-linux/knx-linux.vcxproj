@@ -82,7 +82,6 @@
     <ClInclude Include="..\src\knx\bau_systemB.h" />
     <ClInclude Include="..\src\knx\bits.h" />
     <ClInclude Include="..\src\knx\cemi_frame.h" />
-    <ClInclude Include="..\src\knx\datapoint_types.h" />
     <ClInclude Include="..\src\knx\data_link_layer.h" />
     <ClInclude Include="..\src\knx\device_object.h" />
     <ClInclude Include="..\src\knx\dptconvert.h" />
@@ -126,7 +125,6 @@
     <ClCompile Include="..\src\knx\bau_systemB.cpp" />
     <ClCompile Include="..\src\knx\bits.cpp" />
     <ClCompile Include="..\src\knx\cemi_frame.cpp" />
-    <ClCompile Include="..\src\knx\datapoint_types.cpp" />
     <ClCompile Include="..\src\knx\data_link_layer.cpp" />
     <ClCompile Include="..\src\knx\device_object.cpp" />
     <ClCompile Include="..\src\knx\dptconvert.cpp" />

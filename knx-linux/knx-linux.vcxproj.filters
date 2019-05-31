@@ -75,9 +75,6 @@
     <ClInclude Include="..\src\knx\data_link_layer.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\knx\datapoint_types.h">
-      <Filter>Header files\knx</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\knx\device_object.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
@@ -174,9 +171,6 @@
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\data_link_layer.cpp">
-      <Filter>Source files\knx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\knx\datapoint_types.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\device_object.cpp">
