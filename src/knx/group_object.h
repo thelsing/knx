@@ -47,24 +47,11 @@ public:
     void commFlag(ComFlag value);
 
     /**
-    * Get the float value from a communication object. Can be used for
-    * communication objects of type 2 uint8_t float (EIS5 / DPT9). The value is in
-    * 1/100 - a DPT9 value of 21.01 is returned as 2101.
-    *
-    * @return The value of the com-object in 1/100. INVALID_DPT_FLOAT is returned
-    *         for the DPT9 "invalid data" value.
-    */
-    int32_t objectReadFloatDpt9();
-    bool objectReadBool();
-    uint8_t objectReadByte();
-    /**
     * Request the read of a communication object. Calling this function triggers the
     * sending of a read-group-value telegram, to read the value of the communication
     * object from the bus.
     *
     * When the answer is received, the communication object's value will be updated.
-    * You can cycle through all updated communication objects with nextUpdatedObject().
-    *
     *
     * @see objectWritten()
     */
@@ -77,40 +64,6 @@ public:
     * @see requestObjectRead()
     */
     void objectWritten();
-
-    /**
-    * Set the value of a communication object. Calling this function triggers the
-    * sending of a write-group-value telegram.
-    *
-    * The communication object is a 2 uint8_t float (EIS5 / DPT9) object. The value is
-    * in 1/100, so a value of 2101 would set a DPT9 float value of 21.01. The valid
-    * range of the values is -671088.64 to 670760.96.
-    *
-    * @param value - the new value of the communication object in 1/100.
-    *                Use INVALID_DPT_FLOAT for the DPT9 "invalid data" value.
-    */
-    void objectWriteFloatDpt9(int32_t value);
-    void objectWrite(bool value);
-    void objectWrite(uint8_t value);
-    void objectWrite(uint16_t value);
-    void objectWrite(uint32_t value);
-    void objectWrite(int8_t value);
-    void objectWrite(int16_t value);
-    void objectWrite(int32_t value);
-    void objectWrite(float value);
-
-    /**
-    * Set the value of a communication object and mark the communication object
-    * as updated. This does not trigger a write-group-value telegram.
-    *
-    * The communication object is a 2 uint8_t float (EIS5 / DPT9) object. The value
-    * is in 1/100, so a value of 2101 would set a DPT9 float value of 21.01.
-    * The possible range of the values is -671088.64 to 670760.96.
-    *
-    * @param value - the new value of the communication object in 1/100.
-    *                Use INVALID_DPT_FLOAT for the DPT9 "invalid data" value.
-    */
-    void objectUpdateFloatDpt9(int32_t value);
 
     size_t valueSize();
     size_t asapValueSize(uint8_t code);
