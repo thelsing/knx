@@ -15,15 +15,17 @@ matrix:
           packages:
             - g++-7
       env:
-        - CC=gcc-7
-        - CXX=g++-7
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
         - MODE=LINUX
     - os: linux
       env:
         - MODE=ARDUINO
 
 before_install:
+    - if [ "$MODE" = "LINUX" ]; then eval "${MATRIX_EVAL}"; fi
     - if [ "$MODE" = "ARDUINO" ]; then source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh); fi
+install:
+  - if [ "$MODE" = "ARDUINO" ]; then arduino --install-library "WiFiManager"; fi
 script:
      - if [ "$MODE" = "LINUX" ]; then cd knx-linux; fi
      - if [ "$MODE" = "LINUX" ]; then mkdir -p build; fi
