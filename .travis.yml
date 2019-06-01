@@ -1,5 +1,10 @@
 language: cpp
 
+cache:
+  directories:
+    - ~/arduino_ide
+    - ~/.arduino15/packages/
+
 matrix:
   include:
     - os: linux
@@ -10,17 +15,19 @@ matrix:
           packages:
             - g++-7
       env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - CC=gcc-7
+        - CXX=g++-7
         - MODE=LINUX
     - os: linux
       env:
         - MODE=ARDUINO
 
 before_install:
-    - eval "${MATRIX_EVAL}"
+    - if [ "$MODE" = "ARDUINO" ]; then source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh); fi
 script:
      - if [ "$MODE" = "LINUX" ]; then cd knx-linux; fi
      - if [ "$MODE" = "LINUX" ]; then mkdir -p build; fi
      - if [ "$MODE" = "LINUX" ]; then cd build; fi
      - if [ "$MODE" = "LINUX" ]; then cmake ..; fi 
      - if [ "$MODE" = "LINUX" ]; then make; fi
+     - if [ "$MODE" = "ARDUINO" ]; then build_platform esp8266; fi
