@@ -2,40 +2,6 @@ language: cpp
 
 matrix:
   include:
-    # works on Precise and Trusty
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.9
-      env:
-         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
-
-    # works on Precise and Trusty
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-      env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
-
-    # works on Precise and Trusty
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-      env:
-        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-
-    # works on Precise and Trusty
     - os: linux
       addons:
         apt:
@@ -45,15 +11,16 @@ matrix:
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - MODE=LINUX
+    - os: linux
+      env:
+        - MODE=ARDUINO
 
 before_install:
     - eval "${MATRIX_EVAL}"
-
-
-
 script:
-     - cd knx-linux
-     - mkdir -p build
-     - cd build
-     - cmake .. 
-     - make
+     - if [ "$MODE" = "LINUX" ]; then cd knx-linux; fi
+     - if [ "$MODE" = "LINUX" ]; mkdir -p build; fi
+     - if [ "$MODE" = "LINUX" ]; cd build; fi
+     - if [ "$MODE" = "LINUX" ]; cmake ..; fi 
+     - if [ "$MODE" = "LINUX" ]; make; fi
