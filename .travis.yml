@@ -1,41 +1,12 @@
 language: cpp
 
+cache:
+  directories:
+    - ~/arduino_ide
+    - ~/.arduino15/packages/
+
 matrix:
   include:
-    # works on Precise and Trusty
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-4.9
-      env:
-         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
-
-    # works on Precise and Trusty
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-      env:
-         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
-
-    # works on Precise and Trusty
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-      env:
-        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-
-    # works on Precise and Trusty
     - os: linux
       addons:
         apt:
@@ -45,15 +16,20 @@ matrix:
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - MODE=LINUX
+    - os: linux
+      env:
+        - MODE=ARDUINO
 
 before_install:
-    - eval "${MATRIX_EVAL}"
-
-
-
+    - if [ "$MODE" = "LINUX" ]; then eval "${MATRIX_EVAL}"; fi
+    - if [ "$MODE" = "ARDUINO" ]; then source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh); fi
+install:
+  - if [ "$MODE" = "ARDUINO" ]; then arduino --install-library "WiFiManager"; fi
 script:
-     - cd knx-linux
-     - mkdir -p build
-     - cd build
-     - cmake .. 
-     - make
+     - if [ "$MODE" = "LINUX" ]; then cd knx-linux; fi
+     - if [ "$MODE" = "LINUX" ]; then mkdir -p build; fi
+     - if [ "$MODE" = "LINUX" ]; then cd build; fi
+     - if [ "$MODE" = "LINUX" ]; then cmake ..; fi 
+     - if [ "$MODE" = "LINUX" ]; then make; fi
+     - if [ "$MODE" = "ARDUINO" ]; then build_platform esp8266; fi
