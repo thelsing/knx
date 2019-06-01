@@ -1,3 +1,8 @@
+knx  [![Build Status](https://travis-ci.org/thelsing/knx.svg?branch=master)](https://travis-ci.org/thelsing/knx)
+===
+
+
+
 This projects provides a knx-device stack for arduino (ESP8266, SAMD21) and linux. (more are quite easy to add)
 It implements most of System-B specification and can be configured with ETS.
 The necessary knxprod-files can be generated with my [CreateKnxProd](https://github.com/thelsing/CreateKnxProd) tool.
