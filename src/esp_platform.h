@@ -1,7 +1,7 @@
 #ifdef ARDUINO_ARCH_ESP8266
 #include "knx/platform.h"
 #include <ESP8266WiFi.h>
-#include <WifiUDP.h>
+#include <WiFiUdp.h>
 
 #define SerialDBG Serial
 
