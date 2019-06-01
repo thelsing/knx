@@ -743,7 +743,7 @@ int busValueToDateTime(const uint8_t* payload, int payload_length, const Dpt& da
                 if (bitFromPayload(payload, 53))
                     return false;
 
-                value = (unsigned8FromPayload(payload, 3) >> 5) & 0x07;
+                value.ucharValue((unsigned8FromPayload(payload, 3) >> 5) & 0x07);
                 return true;
             }
             case 2:
@@ -837,10 +837,10 @@ int busValueToVersion(const uint8_t* payload, int payload_length, const Dpt& dat
     switch (datatype.index)
     {
         case 0:
-            value = (unsigned8FromPayload(payload, 0) >> 3) & 0x1F;
+            value.ucharValue((unsigned8FromPayload(payload, 0) >> 3) & 0x1F);
             return true;
         case 1:
-            value = (unsigned16FromPayload(payload, 0) >> 6) & 0x1F;
+            value.ushortValue((unsigned16FromPayload(payload, 0) >> 6) & 0x1F);
             return true;
         case 2:
             value.ucharValue(unsigned8FromPayload(payload, 1) & 0x3F);

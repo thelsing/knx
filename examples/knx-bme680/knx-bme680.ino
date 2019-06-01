@@ -1,6 +1,8 @@
 #include <bsec.h>
 #include <knx.h>
+#ifdef ARDUINO_ARCH_ESP8266
 #include <WiFiManager.h>
+#endif
 
 
 // create named references for easy access to group objects
@@ -44,8 +46,10 @@ void setup(void)
     delay(5000);
     Serial.println("start");
 
+    #ifdef ARDUINO_ARCH_ESP8266
     WiFiManager wifiManager;    
     wifiManager.autoConnect("knx-bme680");
+    #endif
 
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
