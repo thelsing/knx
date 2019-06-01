@@ -1,0 +1,8 @@
+language: cpp
+
+script:
+     - cd knx-linux
+     - mkdir -p build
+     - cd build
+     - cmake .. 
+     - make
