@@ -417,11 +417,11 @@ int busValueToUnsigned8(const uint8_t* payload, int payload_length, const Dpt& d
     switch (datatype.subGroup)
     {
         case 1:
-            value = unsigned8FromPayload(payload, 0) * 100.0 / 255.0;
+            value.ucharValue(unsigned8FromPayload(payload, 0) * 100.0 / 255.0);
             return true;
 
         case 3:
-            value = unsigned8FromPayload(payload, 0) * 360.0 / 255.0;
+            value.ucharValue(unsigned8FromPayload(payload, 0) * 360.0 / 255.0);
             return true;
 
         case 6:
@@ -434,14 +434,14 @@ int busValueToUnsigned8(const uint8_t* payload, int payload_length, const Dpt& d
         }
     }
 
-    value = unsigned8FromPayload(payload, 0);
+    value.ucharValue(unsigned8FromPayload(payload, 0));
     return true;
 }
 
 int busValueToSigned8(const uint8_t* payload, int payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
-    value = unsigned8FromPayload(payload, 0);
+    value.ucharValue(unsigned8FromPayload(payload, 0));
     return true;
 }
 
@@ -455,7 +455,7 @@ int busValueToStatusAndMode(const uint8_t* payload, int payload_length, const Dp
     }
     else if (datatype.index == 5)
     {
-        value = unsigned8FromPayload(payload, 0) & 0x07;
+        value.ucharValue(unsigned8FromPayload(payload, 0) & 0x07);
         return true;
     }
     return false;
@@ -514,7 +514,7 @@ int busValueToTime(const uint8_t* payload, int payload_length, const Dpt& dataty
     switch (datatype.index)
     {
         case 0:
-            value = (unsigned8FromPayload(payload, 0) >> 5) & 0x07;
+            value.ucharValue((unsigned8FromPayload(payload, 0) >> 5) & 0x07);
             return true;
         case 1:
         {
@@ -598,7 +598,7 @@ int busValueToAccess(const uint8_t* payload, int payload_length, const Dpt& data
                     return false;
                 digits += digit * factor;
             }
-            value = digits;
+            value.intValue(digits);
             return true;
         }
         case 1:
@@ -633,7 +633,7 @@ int busValueToString(const uint8_t* payload, int payload_length, const Dpt& data
 int busValueToScene(const uint8_t* payload, int payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
-    value = unsigned8FromPayload(payload, 0) & 0x3F;
+    value.ucharValue(unsigned8FromPayload(payload, 0) & 0x3F);
     return true;
 }
 
@@ -649,7 +649,7 @@ int busValueToSceneControl(const uint8_t* payload, int payload_length, const Dpt
         }
         case 1:
         {
-            value = unsigned8FromPayload(payload, 0) & 0x3F;
+            value.ucharValue(unsigned8FromPayload(payload, 0) & 0x3F);
             return true;
         }
     }
@@ -669,7 +669,7 @@ int busValueToSceneInfo(const uint8_t* payload, int payload_length, const Dpt& d
         }
         case 1:
         {
-            value = unsigned8FromPayload(payload, 0) & 0x3F;
+            value.ucharValue(unsigned8FromPayload(payload, 0) & 0x3F);
             return true;
         }
     }
@@ -684,7 +684,7 @@ int busValueToSceneConfig(const uint8_t* payload, int payload_length, const Dpt&
     {
         case 0:
         {
-            value = unsigned8FromPayload(payload, 0) & 0x3F;
+            value.ucharValue(unsigned8FromPayload(payload, 0) & 0x3F);
             return true;
         }
         case 1:
@@ -799,7 +799,7 @@ int busValueToAlarmInfo(const uint8_t* payload, int payload_length, const Dpt& d
         case 0:
         case 2:
         case 3:
-            value = unsigned8FromPayload(payload, datatype.index);
+            value.ucharValue(unsigned8FromPayload(payload, datatype.index));
             return true;
         case 4:
         case 5:
@@ -843,7 +843,7 @@ int busValueToVersion(const uint8_t* payload, int payload_length, const Dpt& dat
             value = (unsigned16FromPayload(payload, 0) >> 6) & 0x1F;
             return true;
         case 2:
-            value = unsigned8FromPayload(payload, 1) & 0x3F;
+            value.ucharValue(unsigned8FromPayload(payload, 1) & 0x3F);
             return true;
     }
 
@@ -859,7 +859,7 @@ int busValueToScaling(const uint8_t* payload, int payload_length, const Dpt& dat
             value = unsigned16FromPayload(payload, 0);
             return true;
         case 1:
-            value = unsigned8FromPayload(payload, 2) * 100.0 / 255.0;
+            value.ucharValue(unsigned8FromPayload(payload, 2) * 100.0 / 255.0);
             return true;
     }
 
@@ -917,7 +917,7 @@ int busValueToFlaggedScaling(const uint8_t* payload, int payload_length, const D
     switch (datatype.index)
     {
         case 0:
-            value = unsigned8FromPayload(payload, 0) * 100.0 / 255.0;
+            value.ucharValue(unsigned8FromPayload(payload, 0) * 100.0 / 255.0);
             return true;
         case 1:
             value = bitFromPayload(payload, 15);
@@ -935,7 +935,7 @@ int busValueToActiveEnergy(const uint8_t* payload, int payload_length, const Dpt
             value = signed32FromPayload(payload, 0);
             return true;
         case 1:
-            value = unsigned8FromPayload(payload, 4);
+            value.ucharValue(unsigned8FromPayload(payload, 4));
             return true;
         case 2:
         case 3:
