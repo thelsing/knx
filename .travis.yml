@@ -32,7 +32,7 @@ script:
      - if [ "$MODE" = "LINUX" ]; then cd build; fi
      - if [ "$MODE" = "LINUX" ]; then cmake ..; fi 
      - if [ "$MODE" = "LINUX" ]; then make; fi
-     - if [ "$MODE" = "ARDUINO" ]; then arduino --verify --board esp8266:esp8266:nodemcuv2 $PWD/examples/knx-demo/knx-demo.ino; fi
+     - if [ "$MODE" = "ARDUINO" ]; then arduino --verify --board arduino:samd:arduino_zero_native $PWD/examples/knx-demo/knx-demo.ino; fi
      
 notifications:
   email:
