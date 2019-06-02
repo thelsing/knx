@@ -24,6 +24,9 @@ matrix:
 before_install:
     - if [ "$MODE" = "LINUX" ]; then eval "${MATRIX_EVAL}"; fi
     - if [ "$MODE" = "ARDUINO" ]; then source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh); fi
+    - if [ "$MODE" = "ARDUINO" ]; then wget https://github.com/thelsing/FlashStorage/archive/master.zip; fi
+    - if [ "$MODE" = "ARDUINO" ]; then mkdir -p /usr/local/share/arduino/libraries/FlashStorage; fi
+    - if [ "$MODE" = "ARDUINO" ]; then unzip master.zip -d /usr/local/share/arduino/libraries/FlashStorage; fi
 install:
   - if [ "$MODE" = "ARDUINO" ]; then arduino --install-library "WiFiManager"; fi
 script:
