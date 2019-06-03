@@ -20,12 +20,16 @@ matrix:
     - os: linux
       env:
         - MODE=ARDUINO
+        - BOARD=arduino:samd:arduino_zero_native
 
 before_install:
     - if [ "$MODE" = "LINUX" ]; then eval "${MATRIX_EVAL}"; fi
     - if [ "$MODE" = "ARDUINO" ]; then source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh); fi
     - if [ "$MODE" = "ARDUINO" ]; then wget https://github.com/thelsing/FlashStorage/archive/master.zip; fi
-    - if [ "$MODE" = "ARDUINO" ]; then unzip master.zip -d /home/travis/arduino_ide/libraries; fi
+    - if [ "$MODE" = "ARDUINO" ]; then unzip master.zip -d $HOME/arduino_ide/libraries; fi
+    - if [ "$MODE" = "ARDUINO" ]; then wget https://ae-bst.resource.bosch.com/media/_tech/media/bsec/BSEC_1.4.7.3_Generic_Release_20190410.zip; fi
+    - buildExampleSketch() { arduino --verbose-build --verify --board $BOARD $PWD/examples/$1/$1.ino; }
+    
 install:
   - if [ "$MODE" = "ARDUINO" ]; then arduino --install-library "WiFiManager"; fi
 script:
@@ -34,7 +38,7 @@ script:
      - if [ "$MODE" = "LINUX" ]; then cd build; fi
      - if [ "$MODE" = "LINUX" ]; then cmake ..; fi 
      - if [ "$MODE" = "LINUX" ]; then make; fi
-     - if [ "$MODE" = "ARDUINO" ]; then arduino --verify --board arduino:samd:arduino_zero_native $PWD/examples/knx-demo/knx-demo.ino; fi
+     - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-demo; fi
      
 notifications:
   email:
