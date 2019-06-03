@@ -174,7 +174,7 @@
   </CodeSense>
   <Configurations>
     <VisualGDBConfiguration>
-      <PlatformName>Arduino Genuino Zero (Native USB Port)</PlatformName>
+      <PlatformName>NodeMCU_1 0_(ESP-12E_Module)</PlatformName>
       <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
         <AdditionalStartupCommands />
         <AdditionalGDBSettings>
@@ -223,9 +223,50 @@
         <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
       </DebugSettingsOverride>
       <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
-        <BoardID>arduino:samd:arduino_zero_native</BoardID>
+        <BoardID>esp8266:esp8266:nodemcuv2</BoardID>
         <Properties>
-          <Entries />
+          <Entries>
+            <KeyValue>
+              <Key>xtal</Key>
+              <Value>80</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>vt</Key>
+              <Value>flash</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>exception</Key>
+              <Value>disabled</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>ssl</Key>
+              <Value>all</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>eesz</Key>
+              <Value>4M</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>ip</Key>
+              <Value>lm2f</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>dbg</Key>
+              <Value>Disabled</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>lvl</Key>
+              <Value>None____</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>wipe</Key>
+              <Value>none</Value>
+            </KeyValue>
+            <KeyValue>
+              <Key>baud</Key>
+              <Value>115200</Value>
+            </KeyValue>
+          </Entries>
         </Properties>
         <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
       </BuildSettingsExtension>
