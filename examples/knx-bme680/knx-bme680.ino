@@ -118,16 +118,18 @@ void loop(void)
     if (iaqSensor.run()) 
     {
         String output = String(millis());
+        
         output += ", " + String(iaqSensor.rawTemperature);
         output += ", " + String(iaqSensor.pressure);
         output += ", " + String(iaqSensor.rawHumidity);
         output += ", " + String(iaqSensor.gasResistance);
-        output += ", " + String(iaqSensor.iaqEstimate);
+        output += ", " + String(iaqSensor.iaq);
         output += ", " + String(iaqSensor.iaqAccuracy);
         output += ", " + String(iaqSensor.temperature);
         output += ", " + String(iaqSensor.humidity);
         output += ", " + String(iaqSensor.co2Equivalent);
         output += ", " + String(iaqSensor.co2Accuracy);
+
         Serial.println(output);
         updateState();
         
@@ -140,7 +142,7 @@ void loop(void)
             goPressure.value(iaqSensor.pressure);
             goRawHumidity.value(iaqSensor.rawHumidity);
             goGasResistance.value(iaqSensor.gasResistance);
-            goIaqEstimate.value(iaqSensor.iaqEstimate);
+            goIaqEstimate.value(iaqSensor.iaq);
             goIaqAccurace.value(iaqSensor.iaqAccuracy);
             goTemperature.value(iaqSensor.temperature);
             goHumidity.value(iaqSensor.humidity);
