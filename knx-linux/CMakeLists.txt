@@ -31,7 +31,9 @@ add_executable(knx-linux
 	main.cpp 
 	../src/linux_platform.cpp 
 	../src/knx_facade.cpp 
-	../src/knx/dptconvert.cpp)
+	../src/knx/dptconvert.cpp
+	../src/knx/knx_value.cpp
+	../src/knx/dpt.cpp)
 target_link_libraries(knx-linux  "${LIBRARIES_FROM_REFERENCES}")
 include_directories(../src)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -Wno-switch -g -O0")
