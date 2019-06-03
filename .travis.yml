@@ -27,12 +27,13 @@ before_install:
     - if [ "$MODE" = "LINUX" ]; then eval "${MATRIX_EVAL}"; fi
     - if [ "$MODE" = "ARDUINO" ]; then source <(curl -SLs "https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh"); fi
     - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib FlashStorage "https://github.com/thelsing/FlashStorage/archive/master.zip"; fi
+    - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib BSEC "https://github.com/BoschSensortec/BSEC-Arduino-library/archive/master.zip"; fi
+
     # the HDC100X lib is not properly set up in githup so move things around a bit
     - if [ "$MODE" = "ARDUINO" ]; then wget -O HDC100X.zip "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"; fi
-    - if [ "$MODE" = "ARDUINO" ]; then unzip -d "$HOME/HDC100X" "HDC100X.zip" && f=("$HOME/HDC100X"/*) && mv "$HOME/HDC100X"/*/* "$HOME/HDC100X" && rmdir "${f[@]}" && mv "$HOME/HDC100X" $HOME/arduino_ide/libraries; fi
-    - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib BSEC "https://github.com/BoschSensortec/BSEC-Arduino-library/archive/master.zip"; fi
+    - if [ "$MODE" = "ARDUINO" ]; then unzip -d "$HOME/HDC100X-Master" "HDC100X.zip" && f=("$HOME/HDC100X-Master"/*) && mv "$HOME/HDC100X-Master"/*/* "$HOME/HDC100X-Master" && rmdir "${f[@]}" && mv "$HOME/HDC100X-Master" $HOME/arduino_ide/libraries; fi
+
     - buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
-    - if [ "$MODE" = "ARDUINO" ]; then ls -lR $HOME/arduino_ide/libraries; fi
     
 install:
   - if [ "$MODE" = "ARDUINO" ]; then arduino --install-library "WiFiManager"; fi
@@ -44,6 +45,9 @@ script:
      - if [ "$MODE" = "LINUX" ]; then cmake ..; fi 
      - if [ "$MODE" = "LINUX" ]; then make; fi
      - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-demo; fi
+     - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-sonoffS20; fi
+     - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-bme680; fi
+     - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-hdc1008; fi
      
 notifications:
   email:
