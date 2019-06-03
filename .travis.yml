@@ -27,12 +27,9 @@ before_install:
     - if [ "$MODE" = "LINUX" ]; then eval "${MATRIX_EVAL}"; fi
     - if [ "$MODE" = "ARDUINO" ]; then source <(curl -SLs "https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh"); fi
     - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib FlashStorage "https://github.com/thelsing/FlashStorage/archive/master.zip"; fi
-#    - if [ "$MODE" = "ARDUINO" ]; then wget https://github.com/thelsing/FlashStorage/archive/master.zip; fi
-#    - if [ "$MODE" = "ARDUINO" ]; then unzip -o master.zip -d $HOME/arduino_ide/libraries; fi
-    - if [ "$MODE" = "ARDUINO" ]; then wget "https://ae-bst.resource.bosch.com/media/_tech/media/bsec/BSEC_1.4.7.3_Generic_Release_20190410.zip"; fi
-    - if [ "$MODE" = "ARDUINO" ]; then unzip -o BSEC_1.4.7.3_Generic_Release_20190410.zip -d $HOME/arduino_ide/libraries/bsec; fi
-    - if [ "$MODE" = "ARDUINO" ]; then ls -l $HOME/arduino_ide/libraries/bsec; fi
-    - buildExampleSketch() { arduino --verbose-build --verify --board $BOARD $PWD/examples/$1/$1.ino; }
+    - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"; fi
+    - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib BSEC "https://github.com/BoschSensortec/BSEC-Arduino-library/archive/master.zip"; fi
+    - buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
     
 install:
   - if [ "$MODE" = "ARDUINO" ]; then arduino --install-library "WiFiManager"; fi
