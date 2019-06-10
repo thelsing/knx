@@ -68,7 +68,7 @@ GroupObject& GroupObjectTableObject::nextUpdatedObject(bool& valid)
     {
         GroupObject& go = get(asap);
 
-        if (go.commFlag() == cfUpdate)
+        if (go.commFlag() == Update)
         {
             go.commFlag(Ok);
             startIdx = asap + 1;
