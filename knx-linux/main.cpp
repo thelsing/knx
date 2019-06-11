@@ -24,7 +24,7 @@ void measureTemp()
 
     lastsend = now;
     int r = rand();
-    float currentValue = (r * 1.0) / (RAND_MAX * 1.0);
+    double currentValue = (r * 1.0) / (RAND_MAX * 1.0);
     currentValue *= (670433.28 + 273);
     currentValue -= 273;
     println(currentValue);
@@ -35,13 +35,13 @@ void measureTemp()
         MAX.value(currentValue);
 
     double min = MIN.value();
-    if (currentValue < MIN.value().doubleValue())
+    if (currentValue < (double)MIN.value())
         MIN.value(currentValue);
 }
 
 void resetCallback(GroupObject& go)
 {
-    if (go.value().boolValue())
+    if (go.value())
     {
         MAX.valueNoSend(-273.0);
         MIN.valueNoSend(670433.28);

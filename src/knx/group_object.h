@@ -9,7 +9,7 @@ class GroupObjectTableObject;
 
 enum ComFlag
 {
-    Update = 0,       //!< Group object was updated
+    Updated = 0,       //!< Group object was updated
     ReadRequest = 1,  //!< Read was requested but was not processed
     WriteRequest = 2, //!< Write was requested but was not processed
     Transmitting = 3, //!< Group Object is processed a the moment (read or write)

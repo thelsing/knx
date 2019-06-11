@@ -6,7 +6,6 @@
 class KNXValue
 {
   public:
-    KNXValue();
     KNXValue(bool value);
     KNXValue(uint8_t value);
     KNXValue(uint16_t value);
@@ -17,7 +16,7 @@ class KNXValue
     KNXValue(int32_t value);
     KNXValue(int64_t value);
     KNXValue(double value);
-    KNXValue(char* value);
+    KNXValue(const char* value);
     KNXValue(struct tm value);
 
     operator bool() const;
@@ -30,11 +29,24 @@ class KNXValue
     operator int32_t() const;
     operator int64_t() const;
     operator double() const;
-    operator char*() const;
+    operator const char*() const;
     operator struct tm() const;
 
     KNXValue& operator=(const bool value);
+    KNXValue& operator=(const uint8_t value);
+    KNXValue& operator=(const uint16_t value);
+    KNXValue& operator=(const uint32_t value);
+    KNXValue& operator=(const uint64_t value);
+    KNXValue& operator=(const int8_t value);
+    KNXValue& operator=(const int16_t value);
+    KNXValue& operator=(const int32_t value);
+    KNXValue& operator=(const int64_t value);
+    KNXValue& operator=(const double value);
+    KNXValue& operator=(const char* value);
+    KNXValue& operator=(const struct tm value);
 
+  private:
+    
     bool boolValue() const;
     uint8_t ucharValue() const;
     uint16_t ushortValue() const;
@@ -45,23 +57,10 @@ class KNXValue
     int32_t intValue() const;
     int64_t longValue() const;
     double doubleValue() const;
-    char* stringValue() const;
+    const char* stringValue() const;
     struct tm timeValue() const;
 
-    void boolValue(bool value);
-    void ucharValue(uint8_t value);
-    void ushortValue(uint16_t value);
-    void uintValue(uint32_t value);
-    void ulongValue(uint64_t value);
-    void charValue(int8_t value);
-    void shortValue(int16_t value);
-    void intValue(int32_t value);
-    void longValue(int64_t value);
-    void doubleValue(double value);
-    void stringValue(char* value);
-    void timeValue(struct tm value);
 
-  private:
     union Value
     {
         bool boolValue;
@@ -74,8 +73,25 @@ class KNXValue
         int32_t intValue;
         int64_t longValue;
         double doubleValue;
-        char* stringValue;
+        const char* stringValue;
         struct tm timeValue;
     };
+    enum ValueType
+    {
+        BoolType,
+        UCharType,
+        UShortType,
+        UIntType,
+        ULongType,
+        CharType,
+        ShortType,
+        IntType,
+        LongType,
+        DoubleType,
+        StringType,
+        TimeType
+    };
+
+    ValueType _type;
     Value _value;
 };

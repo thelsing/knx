@@ -195,7 +195,7 @@ void GroupObject::value(const KNXValue& value, const Dpt& type)
 
 KNXValue GroupObject::value(const Dpt& type)
 {
-    KNXValue value;
+    KNXValue value = 0;
     KNX_Decode_Value(_data, _dataLength, type, value);
     return value;
 }

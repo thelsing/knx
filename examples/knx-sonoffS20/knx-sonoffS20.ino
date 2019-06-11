@@ -14,7 +14,7 @@
 // callback from switch-GO
 void switchCallback(GroupObject& go)
 {
-    if (goBlock.value().boolValue())
+    if (goBlock.value())
         return;
     
     bool value = goSwitch.value();

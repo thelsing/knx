@@ -45,7 +45,7 @@ void measureTemp()
 // callback from reset-GO
 void resetCallback(GroupObject& go)
 {
-    if (go.value().boolValue())
+    if (go.value())
     {
         maxValue = 0;
         minValue = 10000;
