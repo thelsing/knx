@@ -57,6 +57,7 @@ script:
     # - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-bme680; fi
     # - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-hdc1008; fi
      - if [ "$MODE" = "ARDUINO" ]; then build_platform zero; fi
+     - if [ "$MODE" = "ARDUINO" ]; then build_platform esp8266; fi
      
      
 notifications:
