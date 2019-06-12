@@ -247,8 +247,8 @@ void updateState(void)
 void triggerCallback(GroupObject& go)
 {
     Serial.println("trigger");
-    Serial.println(go.value().boolValue());
-    if (!go.value().boolValue())
+    Serial.println((bool)go.value());
+    if (!go.value())
         return;
 
     trigger = true;

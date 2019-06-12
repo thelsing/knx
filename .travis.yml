@@ -54,7 +54,7 @@ script:
      - if [ "$MODE" = "LINUX" ]; then make; fi
      - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-demo; fi
      - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-sonoffS20; fi
-     #- if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-bme680; fi
+     - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-bme680; fi
      - if [ "$MODE" = "ARDUINO" ]; then buildExampleSketch knx-hdc1008; fi
      
 notifications:
