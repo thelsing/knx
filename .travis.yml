@@ -38,7 +38,6 @@ before_install:
     - if [ "$MODE" = "ARDUINO" ]; then rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
     - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"; fi
     - if [ "$MODE" = "ARDUINO" ]; then mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
-- if [ "$MODE" = "ARDUINO" ]; then mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
     - buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
     
 install:
