@@ -4,7 +4,10 @@ cache:
   directories:
     - ~/arduino_ide
     - ~/.arduino15/packages/
-
+git:
+  depth: false
+  quiet: true
+  
 matrix:
   include:
     - os: linux
@@ -28,12 +31,14 @@ before_install:
     - if [ "$MODE" = "ARDUINO" ]; then source <(curl -SLs "https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh"); fi
     - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib FlashStorage "https://github.com/thelsing/FlashStorage/archive/master.zip"; fi
     - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib BSEC "https://github.com/BoschSensortec/BSEC-Arduino-library/archive/master.zip"; fi
+    - if [ "$MODE" = "ARDUINO" ]; then sed -i s#compiler.warning_level=all#compiler.warning_level=default ~/.arduino15/preferences.txt; fi
+   # - if [ "$MODE" = "ARDUINO" ]; then sed -i s#compiler.warning_level=all#compiler.warning_level=default ~/.arduino15/preferences.txt; fi
 
     # the HDC100X lib is not properly set up in githup so move things around a bit
     - if [ "$MODE" = "ARDUINO" ]; then rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
     - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"; fi
     - if [ "$MODE" = "ARDUINO" ]; then mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
-
+- if [ "$MODE" = "ARDUINO" ]; then mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
     - buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
     
 install:
