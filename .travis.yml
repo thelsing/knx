@@ -23,7 +23,6 @@ matrix:
     - os: linux
       env:
         - MODE=ARDUINO
-        - BOARD=arduino:samd:arduino_zero_native
 
 before_install:
     - downloadArduinoLib() { wget -O $1.zip $2; unzip -o $1.zip -d $HOME/arduino_ide/libraries; }
@@ -43,13 +42,11 @@ before_install:
     - if [ "$MODE" = "ARDUINO" ]; then sed -i '/^.*libalgobsec.*$/d' ~/.arduino15/packages/esp8266/hardware/esp8266/2.5.2/tools/sdk/ld/eagle.app.v6.common.ld.h; fi
     - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(\*libwps\.a:\(\.literal\.\* \.text\.\*\))#\1\n    *libalgobsec.a:(.literal.* .text.*)#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.5.2/tools/sdk/ld/eagle.app.v6.common.ld.h; fi
 
-
-
     # the HDC100X lib is not properly set up in githup so move things around a bit
     - if [ "$MODE" = "ARDUINO" ]; then rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
     - if [ "$MODE" = "ARDUINO" ]; then downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"; fi
     - if [ "$MODE" = "ARDUINO" ]; then mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
-    - buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
+    #- buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
     
 install:
   - if [ "$MODE" = "ARDUINO" ]; then arduino --install-library "WiFiManager"; fi
