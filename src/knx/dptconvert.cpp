@@ -590,7 +590,7 @@ int busValueToAccess(const uint8_t* payload, int payload_length, const Dpt& data
     {
         case 0:
         {
-            int digits = 0;
+            int32_t digits = 0;
             for (int n = 0, factor = 100000; n < 6; ++n, factor /= 10)
             {
                 unsigned char digit = bcdFromPayload(payload, n);

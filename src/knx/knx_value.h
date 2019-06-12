@@ -44,7 +44,6 @@ class KNXValue
     KNXValue& operator=(const double value);
     KNXValue& operator=(const char* value);
     KNXValue& operator=(const struct tm value);
-
   private:
     
     bool boolValue() const;
