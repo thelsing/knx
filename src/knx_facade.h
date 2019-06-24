@@ -57,7 +57,9 @@ public:
     uint16_t paramWord(uint32_t addr);
     uint32_t paramInt(uint32_t addr);
     GroupObject& getGroupObject(uint16_t goNr);
-private:
+    void restart(uint16_t individualAddress);
+
+  private:
     BauSystemB& _bau;
 	uint32_t _ledPinActiveOn = LOW;
     uint32_t _ledPin = LED_BUILTIN;

@@ -27,6 +27,7 @@ public:
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
+    void restartRequest(uint16_t asap);
 protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
     virtual uint8_t* descriptor() = 0;
@@ -56,6 +57,7 @@ protected:
         uint8_t* data, uint8_t dataLength);
     void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType,
         uint8_t* data, uint8_t dataLength);
+
     
     virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
     void sendNextGroupTelegram();

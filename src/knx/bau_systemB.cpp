@@ -292,3 +292,9 @@ void BauSystemB::addSaveRestore(SaveRestore* obj)
 {
     _memory.addSaveRestore(obj);
 }
+
+
+void BauSystemB::restartRequest(uint16_t asap)
+{
+    _appLayer.restartRequest(AckRequested, LowPriority, NetworkLayerParameter, asap);
+}
