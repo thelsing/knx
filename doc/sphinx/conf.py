@@ -2,6 +2,8 @@ import subprocess, os
 
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
+breathe_projects = {}
+
 if read_the_docs_build:
 	subprocess.call('cd .. ; doxygen', shell=True)
 	breathe_projects['knx'] = '../build/xml'
