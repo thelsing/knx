@@ -7,5 +7,5 @@
 Docs
 ====
 
-.. doxygenstruct:: GroupObject
+.. doxygenclass:: GroupObject
    :members:
