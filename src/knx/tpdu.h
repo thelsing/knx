@@ -8,8 +8,8 @@ class APDU;
 class TPDU
 {
     friend class CemiFrame;
-public:
-    TPDU(uint8_t* data, CemiFrame& frame);
+
+  public:
     TpduType type() const;
     void type(TpduType type);
 
@@ -26,7 +26,11 @@ public:
 
     CemiFrame& frame();
     void printPDU();
-private:
+
+  protected:
+    TPDU(uint8_t* data, CemiFrame& frame);
+
+  private:
     uint8_t* _data;
     CemiFrame& _frame;
 };

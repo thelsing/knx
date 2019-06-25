@@ -83,7 +83,7 @@ public:
     ComFlag commFlag();
     /**
      * Set the current state of the group object. Application code should only use this to set the state to ::Ok after
-     * reading a ::Update to mark the changed group object as processed. This is optional.
+     * reading a ::Updated to mark the changed group object as processed. This is optional.
      */
     void commFlag(ComFlag value);
 

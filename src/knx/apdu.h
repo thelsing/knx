@@ -11,14 +11,8 @@ class CemiFrame;
 class APDU
 {
     friend class CemiFrame;
-public:
-    /**
-     * The constructor.
-     * @param data The data of the APDU. Encoding depends on the ::ApduType. The class doesn't
-     *             take possession of this pointer.
-     * @param frame The CemiFrame this APDU is part of. 
-     */
-    APDU(uint8_t* data, CemiFrame& frame);
+
+  public:
     /**
      * Get the type of the APDU.
      */
@@ -43,7 +37,17 @@ public:
      * Print the contents of the APDU to console.
      */
     void printPDU();
-private:
+
+  protected:
+    /**
+     * The constructor.
+     * @param data The data of the APDU. Encoding depends on the ::ApduType. The class doesn't
+     *             take possession of this pointer.
+     * @param frame The CemiFrame this APDU is part of. 
+     */
+    APDU(uint8_t* data, CemiFrame& frame);
+
+  private:
     uint8_t* _data;
     CemiFrame& _frame;
 };
