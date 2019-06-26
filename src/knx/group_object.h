@@ -52,7 +52,7 @@ public:
      */
     bool responseUpdateEnable();
     /**
-     * Check if the transmit flag (T) was set. (Ü-flag in german)
+     * Check if the transmit flag (T) was set. (UE-flag in german)
      */
     bool transmitEnable();
     /**
