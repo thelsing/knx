@@ -14,6 +14,9 @@ Contents:
    api/library_root
 
 
+`Doxgen documentation <index_doxygen.html>`_ is also available.
+
+
 Indices and tables
 ==================
 
