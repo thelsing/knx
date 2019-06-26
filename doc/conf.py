@@ -26,7 +26,7 @@ import subprocess, os
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 if read_the_docs_build:
-	subprocess.call('cd ..; wget https://sourceforge.net/projects/plantuml/files/plantuml.jar', shell=True)
+	subprocess.call('wget https://sourceforge.net/projects/plantuml/files/plantuml.jar', shell=True)
 
 subprocess.call('doxygen', shell=True)
 subprocess.call('mv ./doxyoutput/html/index.html ./doxyoutput/html/index_doxygen.html', shell=True)
