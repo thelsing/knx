@@ -32,6 +32,19 @@ static void loop()
 
 static std::thread workerThread;
 
+static void Prepare(int argc, char** argv)
+{
+	platform = new LinuxPlatform(argc, argv);
+	bau = new Bau57B0(*platform);
+}
+
+static void Destroy()
+{
+	delete platform;
+	delete bau;
+	platform = 0;
+	bau = 0;
+}
 
 static void Start()
 {
@@ -64,17 +77,26 @@ static void Stop()
 
 static bool ProgramMode(bool value)
 {
+	if (!bau)
+		return false;
+
     bau->deviceObject().progMode(value);
     return bau->deviceObject().progMode();
 }
 
 static bool ProgramMode()
 {
+	if (!bau)
+		return false;
+
     return bau->deviceObject().progMode();
 }
 
 static bool Configured()
 {
+	if (!bau)
+		return false;
+
     return bau->configured();
 }
 
@@ -91,9 +113,27 @@ PYBIND11_MODULE(knx, m)
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
     m.def("Configured", (bool(*)())&Configured, "get configured status."); 
-    m.def("FlashFilePath", []() { return platform->flashFilePath(); });
-    m.def("FlashFilePath", [](std::string path) { platform->flashFilePath(path); });
-    m.def("GetGroupObject", [](uint16_t goNr) { return bau->groupObjectTable().get(goNr); });
+    m.def("FlashFilePath", []() 
+	{
+		if(!platform)
+			return std::string("");
+
+		return platform->flashFilePath(); 
+	});
+    m.def("FlashFilePath", [](std::string path) 
+	{
+		if(!platform)
+			return;
+
+		platform->flashFilePath(path); 
+	});
+    m.def("GetGroupObject", [](uint16_t goNr) 
+	{
+		if(!bau)
+			return GroupObject();
+
+		return bau->groupObjectTable().get(goNr); 
+	});
     
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
         .def(py::init())
