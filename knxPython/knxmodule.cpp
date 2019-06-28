@@ -16,8 +16,8 @@ namespace py = pybind11;
 #include "knx/bau57B0.h"
 #include "knx/group_object_table_object.h"
 
-LinuxPlatform platform;
-Bau57B0 bau(platform);
+LinuxPlatform* platform = 0;
+Bau57B0* bau = 0;
 
 bool running = false;
 
@@ -25,8 +25,8 @@ static void loop()
 {
     while (running)
     {
-        bau.loop();
-        platform.mdelay(100);
+        bau->loop();
+        platform->mdelay(100);
     }
 }
 
@@ -38,10 +38,13 @@ static void Start()
     if (running)
         return;
     
+	if (!bau)
+		return;
+
     running = true;
     
-    bau.readMemory();
-    bau.enabled(true);
+    bau->readMemory();
+    bau->enabled(true);
 
     workerThread = std::thread(loop);
     workerThread.detach();
@@ -53,26 +56,26 @@ static void Stop()
         return;
     
     running = false;
-    bau.writeMemory();
-    bau.enabled(false);
+    bau->writeMemory();
+    bau->enabled(false);
     
     workerThread.join();
 }
 
 static bool ProgramMode(bool value)
 {
-    bau.deviceObject().progMode(value);
-    return bau.deviceObject().progMode();
+    bau->deviceObject().progMode(value);
+    return bau->deviceObject().progMode();
 }
 
 static bool ProgramMode()
 {
-    return bau.deviceObject().progMode();
+    return bau->deviceObject().progMode();
 }
 
 static bool Configured()
 {
-    return bau.configured();
+    return bau->configured();
 }
 
 PYBIND11_MAKE_OPAQUE(std::vector<GroupObject>);
@@ -88,13 +91,12 @@ PYBIND11_MODULE(knx, m)
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
     m.def("Configured", (bool(*)())&Configured, "get configured status."); 
-    m.def("FlashFilePath", []() { return platform.flashFilePath(); });
-    m.def("FlashFilePath", [](std::string path) { platform.flashFilePath(path); });
-    m.def("GetGroupObject", [](uint16_t goNr) { return bau.groupObjectTable().get(goNr); });
+    m.def("FlashFilePath", []() { return platform->flashFilePath(); });
+    m.def("FlashFilePath", [](std::string path) { platform->flashFilePath(path); });
+    m.def("GetGroupObject", [](uint16_t goNr) { return bau->groupObjectTable().get(goNr); });
     
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
         .def(py::init())
-        .def("objectWrite", (void(GroupObject::*)(float))&GroupObject::objectWrite)
         .def("asap", &GroupObject::asap)
         .def("size", &GroupObject::valueSize)
         .def_property("value",
