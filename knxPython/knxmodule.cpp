@@ -43,24 +43,32 @@ struct StdStringCStrFunctor
 
 static void Prepare(std::vector<std::string> args)
 {
-	// copy args so we control the livetime of the char*
-	argsVector = args;
-	//for(int i = 0; i < args.size(); i++)
-	//	printf("%s\n", args[i].c_str());
+    // copy args so we control the livetime of the char*
+    argsVector = args;
+    for(int i = 0; i < args.size(); i++)
+        printf("%s\n", args[i].c_str());
 
-	argv = std::vector<const char*>(argsVector.size());
-	std::transform(argsVector.begin(), argsVector.end(), argv.begin(), StdStringCStrFunctor());
+    argv = std::vector<const char*>(argsVector.size());
+    std::transform(argsVector.begin(), argsVector.end(), argv.begin(), StdStringCStrFunctor());
 
-	platform = new LinuxPlatform(argv.size(), const_cast<char**>(argv.data()));
-	bau = new Bau57B0(*platform);
+    platform = new LinuxPlatform(argv.size(), const_cast<char**>(argv.data()));
+    bau = new Bau57B0(*platform);
 }
 
 static void Destroy()
 {
-	delete platform;
-	delete bau;
-	platform = 0;
-	bau = 0;
+    delete platform;
+    delete bau;
+    platform = 0;
+    bau = 0;
+}
+
+static void ReadMemory()
+{
+    if (!bau)
+        return;
+
+    bau->readMemory();
 }
 
 static void Start()
@@ -68,12 +76,11 @@ static void Start()
     if (running)
         return;
     
-	if (!bau)
-		return;
+    if (!bau)
+        return;
 
     running = true;
     
-    bau->readMemory();
     bau->enabled(true);
 
     workerThread = std::thread(loop);
@@ -94,8 +101,8 @@ static void Stop()
 
 static bool ProgramMode(bool value)
 {
-	if (!bau)
-		return false;
+    if (!bau)
+        return false;
 
     bau->deviceObject().progMode(value);
     return bau->deviceObject().progMode();
@@ -103,21 +110,20 @@ static bool ProgramMode(bool value)
 
 static bool ProgramMode()
 {
-	if (!bau)
-		return false;
+    if (!bau)
+        return false;
 
     return bau->deviceObject().progMode();
 }
 
 static bool Configured()
 {
-	if (!bau)
-		return false;
+    if (!bau)
+        return false;
 
     return bau->configured();
 }
 
-PYBIND11_MAKE_OPAQUE(std::vector<GroupObject>);
 
 PYBIND11_MODULE(knx, m) 
 {
@@ -130,6 +136,7 @@ PYBIND11_MODULE(knx, m)
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
     m.def("Configured", (bool(*)())&Configured, "get configured status."); 
+    m.def("ReadMemory", &ReadMemory, "read memory from flash file");
     m.def("FlashFilePath", []() 
 	{
 		if(!platform)
@@ -147,10 +154,10 @@ PYBIND11_MODULE(knx, m)
     m.def("GetGroupObject", [](uint16_t goNr) 
 	{
 		if(!bau)
-			return GroupObject();
+			return (GroupObject*)nullptr;
 
-		return bau->groupObjectTable().get(goNr); 
-	});
+		return &bau->groupObjectTable().get(goNr); 
+	}, py::return_value_policy::reference);
     
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
         .def(py::init())
@@ -168,5 +175,15 @@ PYBIND11_MODULE(knx, m)
                 memcpy(valueRef, value.c_str(), go.valueSize());
                 go.objectWritten();
             })
+		.def_property("callback",
+			[](GroupObject& go) 
+			{
+				return go.callback();
+			},
+			[](GroupObject& go, GroupObjectUpdatedHandler handler)
+			{
+				go.callback(handler);
+			}
+			)
         .def("callBack", (void(GroupObject::*)(GroupObjectUpdatedHandler))&GroupObject::callback);
 }
