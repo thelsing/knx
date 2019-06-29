@@ -1,6 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl_bind.h>
 #include <pybind11/functional.h>
+#include <pybind11/stl.h>
     
 namespace py = pybind11;
 
@@ -11,6 +12,7 @@ namespace py = pybind11;
 #include <thread>
 #include <stdint.h>
 #include <vector>
+#include <algorithm>
 
 #include "linux_platform.h"
 #include "knx/bau57B0.h"
@@ -31,10 +33,22 @@ static void loop()
 }
 
 static std::thread workerThread;
+static std::vector<const char*> argv;
 
-static void Prepare(int argc, char** argv)
+struct StdStringCStrFunctor
 {
-	platform = new LinuxPlatform(argc, argv);
+	const char* operator() (const std::string& str) { return str.c_str(); }
+};
+
+static void Prepare(std::vector<std::string> args)
+{
+	//for(int i = 0; i < args.size(); i++)
+	//	printf("%s\n", args[i].c_str());
+
+	argv = std::vector<const char*>(args.size());
+	std::transform(args.begin(), args.end(), argv.begin(), StdStringCStrFunctor());
+
+	platform = new LinuxPlatform(argv.size(), const_cast<char**>(argv.data()));
 	bau = new Bau57B0(*platform);
 }
 
@@ -109,7 +123,9 @@ PYBIND11_MODULE(knx, m)
     py::bind_vector<std::vector<GroupObject>>(m, "GroupObjectList");
     
     m.def("Start", &Start, "Start knx handling thread.");
-    m.def("Stop", &Start, "Stop knx handling thread.");
+    m.def("Stop", &Stop, "Stop knx handling thread.");
+	m.def("Prepare", &Prepare, "Allocated needed objects.");
+	m.def("Destroy", &Destroy, "Free object allocated by Prepare.");
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
     m.def("Configured", (bool(*)())&Configured, "get configured status."); 
