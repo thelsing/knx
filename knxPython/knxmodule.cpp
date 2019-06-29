@@ -123,8 +123,6 @@ PYBIND11_MODULE(knx, m)
 {
     m.doc() = "wrapper for knx device lib";    // optional module docstring
 
-    py::bind_vector<std::vector<GroupObject>>(m, "GroupObjectList");
-    
     m.def("Start", &Start, "Start knx handling thread.");
     m.def("Stop", &Stop, "Stop knx handling thread.");
 	m.def("Prepare", &Prepare, "Allocated needed objects.");
