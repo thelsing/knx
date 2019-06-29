@@ -11,5 +11,4 @@ include README.md
 global-exclude .git
 
 graft pybind11/include
-graft 
 graft src
