@@ -153,7 +153,7 @@ PYBIND11_MODULE(knx, m)
 	});
     m.def("GetGroupObject", [](uint16_t goNr) 
 	{
-		if(!bau)
+		if(!bau || goNr > bau->groupObjectTable().entryCount())
 			return (GroupObject*)nullptr;
 
 		return &bau->groupObjectTable().get(goNr); 
