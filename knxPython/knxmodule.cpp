@@ -33,6 +33,7 @@ static void loop()
 }
 
 static std::thread workerThread;
+static std::vector<std::string> argsVector;
 static std::vector<const char*> argv;
 
 struct StdStringCStrFunctor
@@ -42,11 +43,13 @@ struct StdStringCStrFunctor
 
 static void Prepare(std::vector<std::string> args)
 {
+	// copy args so we control the livetime of the char*
+	argsVector = args;
 	//for(int i = 0; i < args.size(); i++)
 	//	printf("%s\n", args[i].c_str());
 
-	argv = std::vector<const char*>(args.size());
-	std::transform(args.begin(), args.end(), argv.begin(), StdStringCStrFunctor());
+	argv = std::vector<const char*>(argsVector.size());
+	std::transform(argsVector.begin(), argsVector.end(), argv.begin(), StdStringCStrFunctor());
 
 	platform = new LinuxPlatform(argv.size(), const_cast<char**>(argv.data()));
 	bau = new Bau57B0(*platform);
