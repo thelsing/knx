@@ -27,25 +27,25 @@ void measureTemp()
     currentValue *= 100 * 100;
 
     // write new value to groupobject
-    goCurrent.objectWriteFloatDpt9(currentValue);
+    goCurrent.value(currentValue);
 
     if (currentValue > maxValue)
     {
         maxValue = currentValue;
-        goMax.objectWriteFloatDpt9(maxValue);
+        goMax.value(maxValue);
     }
 
     if (currentValue < minValue)
     {
         minValue = currentValue;
-        goMin.objectWriteFloatDpt9(minValue);
+        goMin.value(minValue);
     }
 }
 
 // callback from reset-GO
 void resetCallback(GroupObject& go)
 {
-    if (go.objectReadBool())
+    if (go.value())
     {
         maxValue = 0;
         minValue = 10000;

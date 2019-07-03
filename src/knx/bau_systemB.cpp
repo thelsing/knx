@@ -82,7 +82,7 @@ void BauSystemB::updateGroupObject(GroupObject & go, uint8_t * data, uint8_t len
 
     memcpy(goData, data, length);
 
-    go.commFlag(cfUpdate);
+    go.commFlag(Updated);
     GroupObjectUpdatedHandler handler = go.callback();
     if (handler)
         handler(go);
@@ -155,15 +155,9 @@ void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, u
 
 void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap)
 {
-
     // Flush the EEPROM before resetting
     _memory.writeMemory();
     _platform.restart();
-    
-    // for platforms that don't really restart
-    _memory.readMemory();
-    _deviceObj.progMode(false);
-    _configured = true;
 }
 
 void BauSystemB::authorizeIndication(Priority priority, HopCountType hopType, uint16_t asap, uint32_t key)
@@ -297,4 +291,10 @@ void BauSystemB::groupValueWriteIndication(uint16_t asap, Priority priority, Hop
 void BauSystemB::addSaveRestore(SaveRestore* obj)
 {
     _memory.addSaveRestore(obj);
+}
+
+
+void BauSystemB::restartRequest(uint16_t asap)
+{
+    _appLayer.restartRequest(AckRequested, LowPriority, NetworkLayerParameter, asap);
 }

@@ -1,5 +1,7 @@
 #include <knx.h>
+#ifdef ARDUINO_ARCH_ESP8266
 #include <WiFiManager.h>
+#endif
 
 #define RELAYPIN 12
 
@@ -12,20 +14,22 @@
 // callback from switch-GO
 void switchCallback(GroupObject& go)
 {
-    if (goBlock.objectReadBool())
+    if (goBlock.value())
         return;
     
-    bool value = goSwitch.objectReadBool();
+    bool value = goSwitch.value();
     digitalWrite(RELAYPIN, value);
-    goStatus.objectWrite(value);
+    goStatus.value(value);
 }
 
 void setup()
 {
     SerialDBG.begin(115200);
 
+#ifdef ARDUINO_ARCH_ESP8266
     WiFiManager wifiManager;    
     wifiManager.autoConnect("knx-sonoffS20");
+#endif
 	
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
@@ -34,6 +38,9 @@ void setup()
     {
         // register callback for reset GO
         goSwitch.callback(switchCallback);
+        goSwitch.dataPointType(Dpt(1, 0));
+        goBlock.dataPointType(Dpt(1, 0));
+        goStatus.dataPointType(Dpt(1, 0));
     }
     
     // start the framework. Will get wifi first.

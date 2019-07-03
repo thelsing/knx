@@ -215,3 +215,9 @@ GroupObject &KnxFacade::getGroupObject(uint16_t goNr)
 {
     return _bau.groupObjectTable().get(goNr);
 }
+
+
+void KnxFacade::restart(uint16_t individualAddress)
+{
+    _bau.restartRequest(individualAddress);
+}

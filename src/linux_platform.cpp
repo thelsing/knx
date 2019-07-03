@@ -29,10 +29,18 @@
 
 #define MAX_MEM 4096
 
-LinuxPlatform::LinuxPlatform()
+LinuxPlatform::LinuxPlatform(int argc, char** argv)
 {
     Platform::_memoryReference = (uint8_t*)malloc(MAX_MEM);
     _currentMaxMem = Platform::_memoryReference;
+    _args = new char*[argc + 1];
+    memcpy(_args, argv, argc * sizeof(char*));
+    _args[argc] = 0;
+}
+
+LinuxPlatform::~LinuxPlatform()
+{
+    delete[] _args;
 }
 
 uint32_t LinuxPlatform::currentIpAddress()
@@ -79,13 +87,7 @@ void LinuxPlatform::macAddress(uint8_t* data)
 
 void LinuxPlatform::restart()
 {
-    // clear alocated memory
-    if(_memoryReference != 0)
-    {
-        free(_memoryReference);
-        Platform::_memoryReference = (uint8_t*)malloc(MAX_MEM);
-        _currentMaxMem = Platform::_memoryReference;
-    }
+    execv(_args[0], _args);
 }
 
 void LinuxPlatform::fatalError()
@@ -484,6 +486,11 @@ void println(unsigned long num, int base)
 }
 
 void println(double num)
+{
+    printf("%f\n", num);
+}
+
+void println(double num, int places)
 {
     printf("%f\n", num);
 }

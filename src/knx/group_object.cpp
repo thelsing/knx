@@ -154,23 +154,6 @@ void GroupObject::commFlag(ComFlag value)
     _commFlag = value;
 }
 
-int32_t GroupObject::objectReadFloatDpt9()
-{
-    uint16_t dptValue = getWord(_data);
-    return dptFromFloat(dptValue);
-}
-
-bool GroupObject::objectReadBool()
-{
-    return _data[0] > 0;
-}
-
-uint8_t GroupObject::objectReadByte()
-
-{
-  return _data[0];
-}
-
 void GroupObject::requestObjectRead()
 {
     _commFlag = ReadRequest;
@@ -179,22 +162,6 @@ void GroupObject::requestObjectRead()
 void GroupObject::objectWritten()
 {
     _commFlag = WriteRequest;
-}
-
-
-void GroupObject::objectWriteFloatDpt9(int32_t value)
-{
-    uint16_t dptValue = dptToFloat(value);
-    pushWord(dptValue, _data);
-    objectWritten();
-}
-
-
-void GroupObject::objectUpdateFloatDpt9(int32_t value)
-{
-    uint16_t dptValue = dptToFloat(value);
-    pushWord(dptValue, _data);
-    _commFlag = cfUpdate;
 }
 
 size_t GroupObject::valueSize()
@@ -208,59 +175,6 @@ size_t GroupObject::sizeInTelegram()
     return asapValueSize(code);
 }
 
-
-void GroupObject::objectWrite(bool value)
-{
-    objectWrite((uint8_t)value);
-}
-
-
-void GroupObject::objectWrite(uint8_t value)
-{
-    pushByte(value, _data);
-    objectWritten();
-}
-
-
-void GroupObject::objectWrite(uint16_t value)
-{
-    pushWord(value, _data);
-    objectWritten();
-}
-
-
-void GroupObject::objectWrite(uint32_t value)
-{
-    pushInt(value, _data);
-    objectWritten();
-}
-
-
-void GroupObject::objectWrite(int8_t value)
-{
-    objectWrite((uint8_t)value);
-}
-
-
-void GroupObject::objectWrite(int16_t value)
-{
-    objectWrite((uint16_t)value);
-}
-
-
-void GroupObject::objectWrite(int32_t value)
-{
-    objectWrite((uint32_t)value);
-}
-
-
-void GroupObject::objectWrite(float value)
-{
-    uint32_t tmp = value * 100;
-    objectWriteFloatDpt9(tmp);
-}
-
-
 void GroupObject::callback(GroupObjectUpdatedHandler handler)
 {
     _updateHandler = handler;
@@ -272,22 +186,63 @@ GroupObjectUpdatedHandler GroupObject::callback()
     return _updateHandler;
 }
 
-
-void GroupObject::value(const KNXDatatype& type, KNXValue& value)
+void GroupObject::value(const KNXValue& value, const Dpt& type)
 {
-    KNX_Encode_Value(value, _data, _dataLength, type);
+    valueNoSend(value, type);
+    objectWritten();
 }
 
 
-KNXValue GroupObject::value(const KNXDatatype& type)
+KNXValue GroupObject::value(const Dpt& type)
 {
-    KNXValue value;
+    KNXValue value = "";
     KNX_Decode_Value(_data, _dataLength, type, value);
     return value;
 }
 
-
-bool GroupObject::tryValue(const KNXDatatype& type, KNXValue& value)
+bool GroupObject::tryValue(KNXValue& value, const Dpt& type)
 {
     return KNX_Decode_Value(_data, _dataLength, type, value);
+}
+
+
+void GroupObject::dataPointType(Dpt value)
+{
+    _datapointType = value;
+}
+
+
+Dpt GroupObject::dataPointType()
+{
+    return _datapointType;
+}
+
+
+bool GroupObject::tryValue(KNXValue& value)
+{
+    return tryValue(value, _datapointType);
+}
+
+
+void GroupObject::value(const KNXValue& value)
+{
+    this->value(value, _datapointType);
+}
+
+
+KNXValue GroupObject::value()
+{
+    return value(_datapointType);
+}
+
+
+void GroupObject::valueNoSend(const KNXValue& value)
+{
+    valueNoSend(value, _datapointType);
+}
+
+
+void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
+{
+    KNX_Encode_Value(value, _data, _dataLength, type);
 }

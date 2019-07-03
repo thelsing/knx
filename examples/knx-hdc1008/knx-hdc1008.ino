@@ -1,8 +1,8 @@
 #include <HDC100X.h>
 #include <knx.h>
+#ifdef ARDUINO_ARCH_ESP8266
 #include <WiFiManager.h>
-
-#define SerialDBG SerialUSB
+#endif
 
 HDC100X HDC1(0x43);
 
@@ -24,9 +24,11 @@ void setup(void)
     SerialDBG.begin(115200);
     delay(5000);
     SerialDBG.println("start");
-	
+
+#ifdef ARDUINO_ARCH_ESP8266
 	WiFiManager wifiManager;    
     wifiManager.autoConnect("knx-hdc1008");
+#endif
 
     // Programming LED on digital pin D5
     knx.ledPin(5);
@@ -40,6 +42,7 @@ void setup(void)
     
     if (knx.configured())
     {
+		
         cyclSend = knx.paramInt(0);
         SerialDBG.print("Zykl. send:");
         SerialDBG.println(cyclSend);
@@ -80,8 +83,8 @@ void loop(void)
     {
         sendCounter = 0;
     
-        goTemperature.objectWrite(temp);
-        goHumidity.objectWrite(humi);
+        goTemperature.value(temp);
+        goHumidity.value(humi);
     }
 }
 

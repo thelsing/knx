@@ -75,9 +75,6 @@
     <ClInclude Include="..\src\knx\data_link_layer.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\knx\datapoint_types.h">
-      <Filter>Header files\knx</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\knx\device_object.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
@@ -138,6 +135,12 @@
     <ClInclude Include="..\src\knx\dptconvert.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\knx\dpt.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\knx_value.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\knx\address_table_object.cpp">
@@ -174,9 +177,6 @@
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\data_link_layer.cpp">
-      <Filter>Source files\knx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\knx\datapoint_types.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\device_object.cpp">
@@ -231,6 +231,12 @@
       <Filter>Source files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\dptconvert.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\dpt.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\knx_value.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
   </ItemGroup>

@@ -29,133 +29,98 @@
 #pragma once
 
 #include <cstdint>
-#include <ctime>
 
-class KNXDatatype
-{
-  public:
-    KNXDatatype(short mainGroup, short subGroup, short index) 
-    {
-        this->mainGroup = mainGroup;
-        this->subGroup = subGroup;
-        this->index = index;
-    }
-    unsigned short mainGroup;
-    unsigned short subGroup;
-    unsigned short index;
-};
-
-typedef struct
-{
-    uint8_t bValue;
-    uint8_t cValue;
-    uint16_t sValue;
-    uint32_t iValue;
-    uint64_t uiValue;
-    double dValue;
-    char *strValue;
-    struct tm tValue;
-} KNXValue;
-
-#define KNX_ASSUME_KNX_VALUE(x, y) \
-    x.bValue = (unsigned char)y;   \
-    x.iValue = (uint32_t)y;        \
-    x.cValue = (unsigned char)y;   \
-    x.sValue = (unsigned short)y;  \
-    x.uiValue = (uint64_t)y;       \
-    x.dValue = (double)y;
-#define KNX_ASSUME_STR_VALUE(value, y)          \
-    value.strValue = (char *)malloc(strlen(y)); \
-    strncpy(value.strValue, y, strlen(y));
+#include "dpt.h"
+#include "knx_value.h"
 
 /**
  * Converts the KNX Payload given by the specific DPT and puts the value in the KNXValue struc
  */
-int KNX_Decode_Value(uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
+int KNX_Decode_Value(uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
 
 /**
  * Converts the KNXValue struct to the KNX Payload as the specific DPT
  */
-int KNX_Encode_Value(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
+int KNX_Encode_Value(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
 
 //KNX to internal
-int busValueToBinary(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToBinaryControl(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToStepControl(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToCharacter(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToUnsigned8(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToSigned8(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToStatusAndMode(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToUnsigned16(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToTimePeriod(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToSigned16(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToTimeDelta(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToFloat16(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToTime(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToDate(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToUnsigned32(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToSigned32(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToLongTimePeriod(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToFloat32(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToAccess(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToString(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToScene(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToSceneControl(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToSceneInfo(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToSceneConfig(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToDateTime(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToUnicode(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToSigned64(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToAlarmInfo(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToSerialNumber(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToVersion(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToScaling(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToTariff(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToLocale(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToRGB(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToFlaggedScaling(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
-int busValueToActiveEnergy(const uint8_t *payload, int payload_length, const KNXDatatype& datatype, KNXValue& value);
+int busValueToBinary(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToBinaryControl(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToStepControl(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToCharacter(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToUnsigned8(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToSigned8(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToStatusAndMode(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToUnsigned16(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToTimePeriod(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToSigned16(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToTimeDelta(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToFloat16(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToTime(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToDate(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToUnsigned32(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToSigned32(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToLongTimePeriod(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToFloat32(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToAccess(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToString(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToScene(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToSceneControl(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToSceneInfo(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToSceneConfig(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToDateTime(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToUnicode(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToSigned64(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToAlarmInfo(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToSerialNumber(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToVersion(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToScaling(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToTariff(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToLocale(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToRGB(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToFlaggedScaling(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToActiveEnergy(const uint8_t *payload, int payload_length, const Dpt& datatype, KNXValue& value);
 
 //Internal to KNX
-int valueToBusValueBinary(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueBinaryControl(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueStepControl(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueCharacter(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueUnsigned8(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueSigned8(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueStatusAndMode(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueUnsigned16(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueTimePeriod(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueSigned16(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueTimeDelta(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueFloat16(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueTime(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueDate(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueUnsigned32(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueSigned32(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueLongTimePeriod(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueFloat32(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueAccess(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueString(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueScene(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueSceneControl(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueSceneInfo(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueSceneConfig(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueDateTime(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueUnicode(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueSigned64(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueAlarmInfo(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueSerialNumber(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueVersion(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueScaling(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueTariff(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueLocale(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueRGB(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueFlaggedScaling(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
-int valueToBusValueActiveEnergy(KNXValue& value, uint8_t *payload, int payload_length, const KNXDatatype& datatype);
+int valueToBusValueBinary(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueBinaryControl(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueStepControl(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueCharacter(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueUnsigned8(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueSigned8(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueStatusAndMode(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueUnsigned16(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueTimePeriod(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueSigned16(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueTimeDelta(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueFloat16(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueTime(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueDate(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueUnsigned32(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueSigned32(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueLongTimePeriod(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueFloat32(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueAccess(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueString(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueScene(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueSceneControl(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueSceneInfo(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueSceneConfig(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueDateTime(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueUnicode(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueSigned64(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueAlarmInfo(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueSerialNumber(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueVersion(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueScaling(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueTariff(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueLocale(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueRGB(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueFlaggedScaling(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
+int valueToBusValueActiveEnergy(const KNXValue& value, uint8_t *payload, int payload_length, const Dpt& datatype);
 
 //Payload manipulation
-int bitFromPayload(const uint8_t *payload, int index);
+bool bitFromPayload(const uint8_t *payload, int index);
 uint8_t unsigned8FromPayload(const uint8_t *payload, int index);
 int8_t signed8FromPayload(const uint8_t *payload, int index);
 uint16_t unsigned16FromPayload(const uint8_t *payload, int index);
@@ -167,7 +132,7 @@ float float32FromPayload(const uint8_t *payload, int index);
 int64_t signed64FromPayload(const uint8_t *payload, int index);
 uint8_t bcdFromPayload(const uint8_t *payload, int index);
 
-void bitToPayload(uint8_t *payload, int payload_length, int index, int value);
+void bitToPayload(uint8_t *payload, int payload_length, int index, bool value);
 void unsigned8ToPayload(uint8_t *payload, int payload_length, int index, uint8_t value, uint8_t mask);    //mask 0xFF
 void signed8ToPayload(uint8_t *payload, int payload_length, int index, int8_t value, uint8_t mask);       //mask 0xFF
 void unsigned16ToPayload(uint8_t *payload, int payload_length, int index, uint16_t value, uint16_t mask); //mask 0xFFFF

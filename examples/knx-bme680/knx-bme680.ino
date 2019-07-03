@@ -1,6 +1,9 @@
+// used version: BSEC_1.4.7.3_Generic_Release_20190410
 #include <bsec.h>
 #include <knx.h>
+#ifdef ARDUINO_ARCH_ESP8266
 #include <WiFiManager.h>
+#endif
 
 
 // create named references for easy access to group objects
@@ -26,9 +29,8 @@ void triggerCallback(GroupObject& go);
 void updateState();
 
 // from generic_33v_3s_28d
-const uint8_t bsec_config_iaq[454] = 
-     { 1, 7, 4, 1, 61, 0, 0, 0, 0, 0, 0, 0, 174, 1, 0, 0, 48, 0, 1, 0, 137, 65, 0, 63, 205, 204, 204, 62, 0, 0, 64, 63, 205, 204, 204, 62, 0, 0, 225, 68, 0, 168, 19, 73, 64, 49, 119, 76, 0, 0, 0, 0, 0, 80, 5, 95, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 2, 0, 0, 244, 1, 225, 0, 25, 0, 0, 128, 64, 0, 0, 32, 65, 144, 1, 0, 0, 112, 65, 0, 0, 0, 63, 16, 0, 3, 0, 10, 215, 163, 60, 10, 215, 35, 59, 10, 215, 35, 59, 9, 0, 5, 0, 0, 0, 0, 0, 1, 88, 0, 9, 0, 229, 208, 34, 62, 0, 0, 0, 0, 0, 0, 0, 0, 218, 27, 156, 62, 225, 11, 67, 64, 0, 0, 160, 64, 0, 0, 0, 0, 0, 0, 0, 0, 94, 75, 72, 189, 93, 254, 159, 64, 66, 62, 160, 191, 0, 0, 0, 0, 0, 0, 0, 0, 33, 31, 180, 190, 138, 176, 97, 64, 65, 241, 99, 190, 0, 0, 0, 0, 0, 0, 0, 0, 167, 121, 71, 61, 165, 189, 41, 192, 184, 30, 189, 64, 12, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 254, 0, 2, 1, 5, 48, 117, 100, 0, 44, 1, 112, 23, 151, 7, 132, 3, 197, 0, 92, 4, 144, 1, 64, 1, 64, 1, 144, 1, 48, 117, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 100, 0, 100, 0, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 255, 255, 255, 255, 255, 255, 255, 255, 220, 5, 220, 5, 220, 5, 255, 255, 255, 255, 255, 255, 220, 5, 220, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 44, 1, 0, 0, 0, 0, 50, 91, 0, 0 };
-
+const uint8_t bsec_config_iaq[454] =
+    {3, 7, 4, 1, 61, 0, 0, 0, 0, 0, 0, 0, 174, 1, 0, 0, 48, 0, 1, 0, 0, 168, 19, 73, 64, 49, 119, 76, 0, 0, 225, 68, 137, 65, 0, 63, 205, 204, 204, 62, 0, 0, 64, 63, 205, 204, 204, 62, 0, 0, 0, 0, 0, 80, 5, 95, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 2, 0, 0, 244, 1, 225, 0, 25, 0, 0, 128, 64, 0, 0, 32, 65, 144, 1, 0, 0, 112, 65, 0, 0, 0, 63, 16, 0, 3, 0, 10, 215, 163, 60, 10, 215, 35, 59, 10, 215, 35, 59, 9, 0, 5, 0, 0, 0, 0, 0, 1, 88, 0, 9, 0, 7, 240, 150, 61, 0, 0, 0, 0, 0, 0, 0, 0, 28, 124, 225, 61, 52, 128, 215, 63, 0, 0, 160, 64, 0, 0, 0, 0, 0, 0, 0, 0, 205, 204, 12, 62, 103, 213, 39, 62, 230, 63, 76, 192, 0, 0, 0, 0, 0, 0, 0, 0, 145, 237, 60, 191, 251, 58, 64, 63, 177, 80, 131, 64, 0, 0, 0, 0, 0, 0, 0, 0, 93, 254, 227, 62, 54, 60, 133, 191, 0, 0, 64, 64, 12, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 254, 0, 2, 1, 5, 48, 117, 100, 0, 44, 1, 112, 23, 151, 7, 132, 3, 197, 0, 92, 4, 144, 1, 64, 1, 64, 1, 144, 1, 48, 117, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 100, 0, 100, 0, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 255, 255, 255, 255, 255, 255, 255, 255, 220, 5, 220, 5, 220, 5, 255, 255, 255, 255, 255, 255, 220, 5, 220, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 44, 1, 0, 0, 0, 0, 96, 159, 0, 0};
 
 // Create an object of the class Bsec
 Bsec iaqSensor;
@@ -44,8 +46,10 @@ void setup(void)
     delay(5000);
     Serial.println("start");
 
+    #ifdef ARDUINO_ARCH_ESP8266
     WiFiManager wifiManager;    
     wifiManager.autoConnect("knx-bme680");
+    #endif
 
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
@@ -80,6 +84,16 @@ void setup(void)
         cyclSend = knx.paramInt(0);
         Serial.print("Zykl. send:");
         Serial.println(cyclSend);
+        goRawTemperature.dataPointType(Dpt(9, 0));
+        goPressure.dataPointType(Dpt(9, 0));
+        goRawHumidity.dataPointType(Dpt(9, 0));
+        goGasResistance.dataPointType(Dpt(9, 0));
+        goIaqEstimate.dataPointType(Dpt(9, 0));
+        goIaqAccurace.dataPointType(Dpt(9, 0));
+        goTemperature.dataPointType(Dpt(9, 0));
+        goHumidity.dataPointType(Dpt(9, 0));
+        goCo2Ppm.dataPointType(Dpt(9, 0));
+        goTriggerSample.dataPointType(Dpt(1, 0));
     }
     
     // start the framework. Will get wifi first.
@@ -104,16 +118,18 @@ void loop(void)
     if (iaqSensor.run()) 
     {
         String output = String(millis());
+        
         output += ", " + String(iaqSensor.rawTemperature);
         output += ", " + String(iaqSensor.pressure);
         output += ", " + String(iaqSensor.rawHumidity);
         output += ", " + String(iaqSensor.gasResistance);
-        output += ", " + String(iaqSensor.iaqEstimate);
+        output += ", " + String(iaqSensor.iaq);
         output += ", " + String(iaqSensor.iaqAccuracy);
         output += ", " + String(iaqSensor.temperature);
         output += ", " + String(iaqSensor.humidity);
         output += ", " + String(iaqSensor.co2Equivalent);
         output += ", " + String(iaqSensor.co2Accuracy);
+
         Serial.println(output);
         updateState();
         
@@ -122,15 +138,15 @@ void loop(void)
             sendCounter = 0;
             trigger = false;
         
-            goRawTemperature.objectWrite(iaqSensor.rawTemperature);
-            goPressure.objectWrite(iaqSensor.pressure);
-            goRawHumidity.objectWrite(iaqSensor.rawHumidity);
-            goGasResistance.objectWrite(iaqSensor.gasResistance);
-            goIaqEstimate.objectWrite(iaqSensor.iaqEstimate);
-            goIaqAccurace.objectWrite(iaqSensor.iaqAccuracy);
-            goTemperature.objectWrite(iaqSensor.temperature);
-            goHumidity.objectWrite(iaqSensor.humidity);
-            goCo2Ppm.objectWrite(iaqSensor.co2Equivalent);
+            goRawTemperature.value(iaqSensor.rawTemperature);
+            goPressure.value(iaqSensor.pressure);
+            goRawHumidity.value(iaqSensor.rawHumidity);
+            goGasResistance.value(iaqSensor.gasResistance);
+            goIaqEstimate.value(iaqSensor.iaq);
+            goIaqAccurace.value(iaqSensor.iaqAccuracy);
+            goTemperature.value(iaqSensor.temperature);
+            goHumidity.value(iaqSensor.humidity);
+            goCo2Ppm.value(iaqSensor.co2Equivalent);
         }
     }
     else {
@@ -231,8 +247,8 @@ void updateState(void)
 void triggerCallback(GroupObject& go)
 {
     Serial.println("trigger");
-    Serial.println(go.objectReadBool());
-    if (!go.objectReadBool())
+    Serial.println((bool)go.value());
+    if (!go.value())
         return;
 
     trigger = true;

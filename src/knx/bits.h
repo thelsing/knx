@@ -5,7 +5,17 @@
 
 #ifdef __linux__
 #include <arpa/inet.h>
+
+#define lowByte(val) ((val)&255)
+#define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
+#define bitRead(val, bitno) (((val) >> (bitno)) & 1)
+
+// print functions are implemented in the platform files
+#define DEC 10
+#define HEX 16
+
 #elif ARDUINO_ARCH_SAMD
+#include <Arduino.h>
 #define htons(x) ( (((x)<<8)&0xFF00) | (((x)>>8)&0xFF) )
 #define ntohs(x) htons(x)
 #define htonl(x) ( ((x)<<24 & 0xFF000000UL) | \
@@ -14,16 +24,9 @@
                    ((x)>>24 & 0x000000FFUL) )
 #define ntohl(x) htonl(x)
 #elif ARDUINO_ARCH_ESP8266
+#include <Arduino.h>
 #include <user_interface.h>
 #endif
-
-#define lowByte(val) ((val) & 255)
-#define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
-#define bitRead(val, bitno) (((val) >> (bitno)) & 1)
-    
-// print functions are implemented in the platform files
-#define DEC 10
-#define HEX 16
 
 void print(const char[]);
 void print(char);

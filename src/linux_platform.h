@@ -10,8 +10,9 @@ class LinuxPlatform: public Platform
     using Platform::_memoryReference;
     using Platform::memoryReference;
 public:
-    LinuxPlatform();
-    
+    LinuxPlatform(int argc, char** argv);
+    virtual ~LinuxPlatform();
+
     std::string flashFilePath();
     void flashFilePath(const std::string path);
 
@@ -47,7 +48,9 @@ public:
     void commitToEeprom() override;
     uint8_t* allocMemory(size_t size) override;
     void freeMemory(uint8_t* ptr) override;
-private:
+    void cmdlineArgs(int argc, char** argv);
+
+  private:
     uint32_t _multicastAddr;
     uint16_t _port;
     int _socketFd = -1;
@@ -56,6 +59,7 @@ private:
     int _fd = -1;
     uint8_t* _currentMaxMem = 0;
     std::string _flashFilePath = "flash.bin";
+    char** _args;
 };
 
 #endif

@@ -68,7 +68,7 @@ GroupObject& GroupObjectTableObject::nextUpdatedObject(bool& valid)
     {
         GroupObject& go = get(asap);
 
-        if (go.commFlag() == cfUpdate)
+        if (go.commFlag() == Updated)
         {
             go.commFlag(Ok);
             startIdx = asap + 1;
@@ -124,6 +124,7 @@ bool GroupObjectTableObject::initGroupObjects()
         
         go._dataLength = go.goSize();
         go._data = new uint8_t[go._dataLength];
+        memset(go._data, 0, go._dataLength);
         
         if (go.valueReadOnInit())
             go.requestObjectRead();
