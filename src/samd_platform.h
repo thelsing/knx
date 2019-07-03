@@ -5,7 +5,7 @@
 #ifdef ARDUINO_ARCH_SAMD
 
 #define SerialDBG SerialUSB
-#define SerialKNX Serial1
+#define SerialKNX Serial2
 
 class SamdPlatform : public Platform
 {
