@@ -19,7 +19,7 @@ public:
     TransportLayer(ApplicationLayer& layer, AddressTableObject& gat, Platform& platform);
     void networkLayer(NetworkLayer& layer);
 
-    // from network layer
+#pragma region from network layer
     void dataIndividualIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
     void dataIndividualConfirm(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu, bool status);
     void dataGroupIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
@@ -28,8 +28,25 @@ public:
     void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, bool status);
     void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
     void dataSystemBroadcastConfirm(AckType ack, HopCountType hopType, TPDU& tpdu, Priority priority, bool status);
-
-    // fromp application layer
+#pragma endregion
+    
+#pragma region from application layer
+    /**
+     * Request to send an APDU that via multicast. See 3.2 of @cite knx:3/3/4. 
+     * See also ApplicationLayer::dataGroupConfirm and ApplicationLayer::dataGroupIndication. 
+     * This method is called by the ApplicationLayer.
+     * 
+     * @param tsap used the find the correct GroupObject with the help of the AssociationTableObject. 
+     *        See 3.1.1 of @cite knx:3/3/7
+     *        
+     * @param apdu The submitted APDU.
+     * 
+     * @param priority The ::Priority of the request.
+     * 
+     * @param hopType Should routing be endless or should the NetworkLayer::hopCount be used? See also ::HopCountType.
+     * 
+     * @param ack Did we want a DataLinkLayer acknowledgement? See ::AckType.
+     */
     void dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
     void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu);
     void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu);
@@ -39,11 +56,14 @@ public:
     void disconnectRequest(uint16_t tsap, Priority priority);
     // apdu must be valid until it was confirmed
     void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu);
-        
-    // other
+#pragma endregion
+
+#pragma region other
     void connectionTimeoutIndication();
     void ackTimeoutIndication();
     void loop();
+#pragma endregion
+    
 private:
 #pragma region States
     Priority _savedPriority = LowPriority;

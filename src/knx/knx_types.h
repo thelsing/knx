@@ -8,16 +8,16 @@ enum FrameFormat
 
 enum Priority
 {
-    LowPriority = 0xC,
-    NormalPriority = 0x4,
-    UrgentPriority = 0x8,
-    SystemPriority = 0x0
+    LowPriority = 0xC,    //!< Normal priority of group communication.
+    NormalPriority = 0x4, //!< More important telegrams like central functions
+    UrgentPriority = 0x8, //!< Used for alarms.
+    SystemPriority = 0x0  //!< Mainly used by ETS for device programming.
 };
 
 enum AckType
 {
-    AckDontCare = 0,
-    AckRequested = 0x2,
+    AckDontCare = 0,    //!< We don't care about DataLinkLayer acknowledgement.
+    AckRequested = 0x2, //!< We want a DataLinkLayer acknowledgement.
 };
 
 enum AddressType
@@ -53,8 +53,8 @@ enum Confirm
 
 enum HopCountType
 {
-    UnlimitedRouting,
-    NetworkLayerParameter
+    UnlimitedRouting,     //!< NPDU::hopCount is set to 7. This means that the frame never expires. This could be a problem if your bus contains a circle.
+    NetworkLayerParameter //!< use NetworkLayer::hopCount as NPDU::hopCount
 };
 
 enum TpduType

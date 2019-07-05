@@ -14,6 +14,7 @@ class AddressTableObject: public TableObject
 public:
     /**
      * The contructor.
+     * 
      * @param platform This parameter is only passed to the custructor of TableObject an not used by this class.
      */
     AddressTableObject(Platform& platform);
