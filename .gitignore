@@ -27,6 +27,7 @@ build
 dist
 *.egg-info
 doxyoutput
+_build
 
 # Visual Studio 2015 cache/options directory
 .vs/
