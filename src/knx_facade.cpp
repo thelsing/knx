@@ -17,10 +17,10 @@ Bau57B0 bau(platform);
 
 #ifndef __linux__
 KnxFacade knx(bau);
-
-void buttonUp()
+bool _toogleProgMode = false;
+ICACHE_RAM_ATTR  void buttonUp()
 {
-    knx.progMode(!knx.progMode());
+	_toogleProgMode = true;
 }
 #endif
 
@@ -108,6 +108,11 @@ void KnxFacade::writeMemory()
 
 void KnxFacade::loop()
 {
+	if(_toogleProgMode)
+	{
+		knx.progMode(!knx.progMode());
+		_toogleProgMode = false;
+	}
     _bau.loop();
 }
 

@@ -28,9 +28,9 @@ uint8_t* loadBme680State(uint8_t* buffer);
 void triggerCallback(GroupObject& go);
 void updateState();
 
-// from generic_33v_3s_28d
+// from ulp plus example
 const uint8_t bsec_config_iaq[454] =
-    {3, 7, 4, 1, 61, 0, 0, 0, 0, 0, 0, 0, 174, 1, 0, 0, 48, 0, 1, 0, 0, 168, 19, 73, 64, 49, 119, 76, 0, 0, 225, 68, 137, 65, 0, 63, 205, 204, 204, 62, 0, 0, 64, 63, 205, 204, 204, 62, 0, 0, 0, 0, 0, 80, 5, 95, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 2, 0, 0, 244, 1, 225, 0, 25, 0, 0, 128, 64, 0, 0, 32, 65, 144, 1, 0, 0, 112, 65, 0, 0, 0, 63, 16, 0, 3, 0, 10, 215, 163, 60, 10, 215, 35, 59, 10, 215, 35, 59, 9, 0, 5, 0, 0, 0, 0, 0, 1, 88, 0, 9, 0, 7, 240, 150, 61, 0, 0, 0, 0, 0, 0, 0, 0, 28, 124, 225, 61, 52, 128, 215, 63, 0, 0, 160, 64, 0, 0, 0, 0, 0, 0, 0, 0, 205, 204, 12, 62, 103, 213, 39, 62, 230, 63, 76, 192, 0, 0, 0, 0, 0, 0, 0, 0, 145, 237, 60, 191, 251, 58, 64, 63, 177, 80, 131, 64, 0, 0, 0, 0, 0, 0, 0, 0, 93, 254, 227, 62, 54, 60, 133, 191, 0, 0, 64, 64, 12, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 254, 0, 2, 1, 5, 48, 117, 100, 0, 44, 1, 112, 23, 151, 7, 132, 3, 197, 0, 92, 4, 144, 1, 64, 1, 64, 1, 144, 1, 48, 117, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 100, 0, 100, 0, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 255, 255, 255, 255, 255, 255, 255, 255, 220, 5, 220, 5, 220, 5, 255, 255, 255, 255, 255, 255, 220, 5, 220, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 44, 1, 0, 0, 0, 0, 96, 159, 0, 0};
+    {3, 7, 4, 1, 61, 0, 0, 0, 0, 0, 0, 0, 174, 1, 0, 0, 48, 0, 1, 0, 0, 168, 19, 73, 64, 49, 119, 76, 0, 0, 225, 68, 137, 65, 0, 63, 205, 204, 204, 62, 0, 0, 64, 63, 205, 204, 204, 62, 0, 0, 0, 0, 0, 80, 5, 95, 0, 0, 0, 0, 0, 0, 0, 0, 28, 0, 2, 0, 0, 244, 1, 225, 0, 25, 0, 0, 128, 64, 0, 0, 32, 65, 144, 1, 0, 0, 112, 65, 0, 0, 0, 63, 16, 0, 3, 0, 10, 215, 163, 60, 10, 215, 35, 59, 10, 215, 35, 59, 9, 0, 5, 0, 0, 0, 0, 0, 1, 88, 0, 9, 0, 229, 208, 34, 62, 0, 0, 0, 0, 0, 0, 0, 0, 218, 27, 156, 62, 225, 11, 67, 64, 0, 0, 160, 64, 0, 0, 0, 0, 0, 0, 0, 0, 94, 75, 72, 189, 93, 254, 159, 64, 66, 62, 160, 191, 0, 0, 0, 0, 0, 0, 0, 0, 33, 31, 180, 190, 138, 176, 97, 64, 65, 241, 99, 190, 0, 0, 0, 0, 0, 0, 0, 0, 167, 121, 71, 61, 165, 189, 41, 192, 184, 30, 189, 64, 12, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 254, 0, 2, 1, 5, 48, 117, 100, 0, 44, 1, 112, 23, 151, 7, 132, 3, 197, 0, 92, 4, 144, 1, 64, 1, 64, 1, 144, 1, 48, 117, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 48, 117, 100, 0, 100, 0, 100, 0, 48, 117, 48, 117, 100, 0, 100, 0, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 44, 1, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 8, 7, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 112, 23, 255, 255, 255, 255, 255, 255, 255, 255, 220, 5, 220, 5, 220, 5, 255, 255, 255, 255, 255, 255, 220, 5, 220, 5, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 44, 1, 0, 0, 0, 0, 222, 38, 0, 0};
 
 // Create an object of the class Bsec
 Bsec iaqSensor;
@@ -57,23 +57,30 @@ void setup(void)
     // register callback for reset GO
     if(knx.configured())
         goTriggerSample.callback(triggerCallback);
-    
 
+    // depends on sensor board. Try BME680_I2C_ADDR_PRIMARY if it doen't work.
+    // Configure Wire pins before this call if needed.
     iaqSensor.begin(BME680_I2C_ADDR_SECONDARY, Wire);
     checkIaqSensorStatus();
 
-    iaqSensor.setConfig(bsec_config_iaq);
+    //iaqSensor.setConfig(bsec_config_iaq);
     checkIaqSensorStatus();
 
     bsec_virtual_sensor_t sensorList[] = {
+        BSEC_OUTPUT_IAQ,
+        BSEC_OUTPUT_STATIC_IAQ,
+        BSEC_OUTPUT_CO2_EQUIVALENT,
+        BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,
         BSEC_OUTPUT_RAW_TEMPERATURE,
         BSEC_OUTPUT_RAW_PRESSURE,
         BSEC_OUTPUT_RAW_HUMIDITY,
         BSEC_OUTPUT_RAW_GAS,
-        BSEC_OUTPUT_IAQ,
+        BSEC_OUTPUT_STABILIZATION_STATUS,
+        BSEC_OUTPUT_RUN_IN_STATUS,
         BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
         BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
-        BSEC_OUTPUT_CO2_EQUIVALENT
+        BSEC_OUTPUT_COMPENSATED_GAS,
+        BSEC_OUTPUT_GAS_PERCENTAGE
     };
 
     knx.setSaveCallback(saveBme680State);
@@ -96,10 +103,10 @@ void setup(void)
         goTriggerSample.dataPointType(Dpt(1, 0));
     }
     
-    // start the framework. Will get wifi first.
+    // start the framework.
     knx.start();
     
-    iaqSensor.updateSubscription(sensorList, 7, BSEC_SAMPLE_RATE_LP);
+    iaqSensor.updateSubscription(sensorList, sizeof(sensorList)/sizeof(bsec_virtual_sensor_t), BSEC_SAMPLE_RATE_LP);
     checkIaqSensorStatus();
     String output = "Timestamp [ms], raw temperature [°C], pressure [hPa], raw relative humidity [%], gas [Ohm], IAQ, IAQ accuracy, temperature [°C], relative humidity [%], CO2";
     Serial.println(output);
@@ -120,15 +127,25 @@ void loop(void)
         String output = String(millis());
         
         output += ", " + String(iaqSensor.rawTemperature);
+        output += ", " + String(iaqSensor.temperature);
         output += ", " + String(iaqSensor.pressure);
         output += ", " + String(iaqSensor.rawHumidity);
+        output += ", " + String(iaqSensor.humidity);
         output += ", " + String(iaqSensor.gasResistance);
         output += ", " + String(iaqSensor.iaq);
         output += ", " + String(iaqSensor.iaqAccuracy);
-        output += ", " + String(iaqSensor.temperature);
-        output += ", " + String(iaqSensor.humidity);
         output += ", " + String(iaqSensor.co2Equivalent);
         output += ", " + String(iaqSensor.co2Accuracy);
+        output += ", " + String(iaqSensor.breathVocEquivalent);
+        output += ", " + String(iaqSensor.breathVocAccuracy);
+        output += ", " + String(iaqSensor.compGasValue);
+        output += ", " + String(iaqSensor.compGasAccuracy);
+        output += ", " + String(iaqSensor.gasPercentageAcccuracy);
+        output += ", " + String(iaqSensor.gasPercentage);
+        output += ", " + String(iaqSensor.staticIaq);
+        output += ", " + String(iaqSensor.staticIaqAccuracy);
+        output += ", " + String(iaqSensor.runInStatus);
+        output += ", " + String(iaqSensor.stabStatus);
 
         Serial.println(output);
         updateState();
