@@ -174,11 +174,11 @@ size_t EspPlatform::readBytesUart(uint8_t *buffer, size_t length)
 
 void print(const char* s)
 {
-    printf("%s", s);
+    Serial.printf("%s", s);
 }
 void print(char c)
 {
-    printf("%c", c);
+    Serial.printf("%c", c);
 }
 
 void print(unsigned char num)
@@ -189,9 +189,9 @@ void print(unsigned char num)
 void print(unsigned char num, int base)
 {
     if (base == HEX)
-        printf("%X", num);
+        Serial.printf("%X", num);
     else
-        printf("%d", num);
+        Serial.printf("%d", num);
 }
 
 void print(int num)
@@ -202,9 +202,9 @@ void print(int num)
 void print(int num, int base)
 {
     if (base == HEX)
-        printf("%X", num);
+        Serial.printf("%X", num);
     else
-        printf("%d", num);
+        Serial.printf("%d", num);
 }
 
 void print(unsigned int num)
@@ -215,9 +215,9 @@ void print(unsigned int num)
 void print(unsigned int num, int base)
 {
     if (base == HEX)
-        printf("%X", num);
+        Serial.printf("%X", num);
     else
-        printf("%d", num);
+        Serial.printf("%d", num);
 }
 
 void print(long num)
@@ -228,9 +228,9 @@ void print(long num)
 void print(long num, int base)
 {
     if (base == HEX)
-        printf("%lX", num);
+        Serial.printf("%lX", num);
     else
-        printf("%ld", num);
+        Serial.printf("%ld", num);
 }
 
 void print(unsigned long num)
@@ -241,23 +241,23 @@ void print(unsigned long num)
 void print(unsigned long num, int base)
 {
     if (base == HEX)
-        printf("%lX", num);
+        Serial.printf("%lX", num);
     else
-        printf("%ld", num);
+        Serial.printf("%ld", num);
 }
 
 void print(double num)
 {
-    printf("%f", num);
+    Serial.printf("%f", num);
 }
 
 void println(const char* s)
 {
-    printf("%s\n", s);
+    Serial.printf("%s\n", s);
 }
 void println(char c)
 {
-    printf("%c\n", c);
+    Serial.printf("%c\n", c);
 }
 
 void println(unsigned char num)
@@ -268,9 +268,9 @@ void println(unsigned char num)
 void println(unsigned char num, int base)
 {
     if (base == HEX)
-        printf("%X\n", num);
+        Serial.printf("%X\n", num);
     else
-        printf("%d\n", num);
+        Serial.printf("%d\n", num);
 }
 
 void println(int num)
@@ -281,9 +281,9 @@ void println(int num)
 void println(int num, int base)
 {
     if (base == HEX)
-        printf("%X\n", num);
+        Serial.printf("%X\n", num);
     else
-        printf("%d\n", num);
+        Serial.printf("%d\n", num);
 }
 
 void println(unsigned int num)
@@ -294,9 +294,9 @@ void println(unsigned int num)
 void println(unsigned int num, int base)
 {
     if (base == HEX)
-        printf("%X\n", num);
+        Serial.printf("%X\n", num);
     else
-        printf("%d\n", num);
+        Serial.printf("%d\n", num);
 }
 
 void println(long num)
@@ -307,9 +307,9 @@ void println(long num)
 void println(long num, int base)
 {
     if (base == HEX)
-        printf("%lX\n", num);
+        Serial.printf("%lX\n", num);
     else
-        printf("%ld\n", num);
+        Serial.printf("%ld\n", num);
 }
 
 void println(unsigned long num)
@@ -320,18 +320,18 @@ void println(unsigned long num)
 void println(unsigned long num, int base)
 {
     if (base == HEX)
-        printf("%lX\n", num);
+        Serial.printf("%lX\n", num);
     else
-        printf("%ld\n", num);
+        Serial.printf("%ld\n", num);
 }
 
 void println(double num)
 {
-    printf("%f\n", num);
+    Serial.printf("%f\n", num);
 }
 
 void println(void)
 {
-    printf("\n");
+    Serial.printf("\n");
 }
 #endif

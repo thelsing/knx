@@ -5,6 +5,7 @@
 #ifdef ARDUINO_ARCH_SAMD
 SamdPlatform platform;
 Bau07B0 bau(platform);
+#define ICACHE_RAM_ATTR
 #elif ARDUINO_ARCH_ESP8266
 EspPlatform platform;
 Bau57B0 bau(platform);
@@ -15,9 +16,9 @@ Bau57B0 bau(platform);
 #define attachInterrupt(a, b, c)
 #endif
 
+bool _toogleProgMode = false;
 #ifndef __linux__
 KnxFacade knx(bau);
-bool _toogleProgMode = false;
 ICACHE_RAM_ATTR  void buttonUp()
 {
 	_toogleProgMode = true;
@@ -110,7 +111,7 @@ void KnxFacade::loop()
 {
 	if(_toogleProgMode)
 	{
-		knx.progMode(!knx.progMode());
+		progMode(!progMode());
 		_toogleProgMode = false;
 	}
     _bau.loop();

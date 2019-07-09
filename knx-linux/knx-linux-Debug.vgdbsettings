@@ -7,9 +7,9 @@
       <PathStyle>RemoteUnix</PathStyle>
     </CustomSourceDirectories>
     <BuildHost>
-      <HostName>Suzail</HostName>
-      <Transport>SSH</Transport>
-      <UserName>tkunze</UserName>
+      <HostName>localhost</HostName>
+      <Transport>LinuxSubsystem</Transport>
+      <UserName>Linux</UserName>
     </BuildHost>
     <MainSourceTransferCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
@@ -84,11 +84,11 @@
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <BackgroundMode xsi:nil="true" />
     </CMakeCommand>
-    <UpdateSourcesInCMakeFile>true</UpdateSourcesInCMakeFile>
+    <UpdateSourcesInCMakeFile>false</UpdateSourcesInCMakeFile>
     <ExportCompileCommands>false</ExportCompileCommands>
     <DisableToolchainFile>false</DisableToolchainFile>
     <DeployAsRoot>false</DeployAsRoot>
-    <CleanMode>b</CleanMode>
+    <CMakeCleanMode>RemoveBuildDirectory</CMakeCleanMode>
   </Build>
   <CustomBuild>
     <PreSyncActions />
