@@ -1714,10 +1714,10 @@ double float16FromPayload(const uint8_t* payload, int index)
     uint16_t mantissa = unsigned16FromPayload(payload, index) & 0x87FF;
     if (mantissa & 0x8000)
         //return ((~mantissa & 0x07FF) + 1.0) * -0.01 * (1 << ((payload[index] >> 3) & 0x0F));
-        return ((~mantissa & 0x07FF) + 1.0) * -0.01 * pow(2.0, ((payload[index] >> 3) & 0x0F)));
+        return ((~mantissa & 0x07FF) + 1.0) * -0.01 * pow(2.0, ((payload[index] >> 3) & 0x0F));
     
     //return mantissa * 0.01 * (1 << ((payload[index] >> 3) & 0x0F));
-    return mantissa * 0.01 * pow(2.0, ((payload[index] >> 3) & 0x0F)));
+    return mantissa * 0.01 * pow(2.0, ((payload[index] >> 3) & 0x0F));
 }
 float float32FromPayload(const uint8_t* payload, int index)
 {
