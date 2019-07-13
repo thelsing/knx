@@ -1809,7 +1809,7 @@ void float16ToPayload(uint8_t* payload, int payload_length, int index, double va
     int exponent = 0;
     for (; v < -2048.0f; v /= 2) exponent++;
     for (; v > 2047.0f; v /= 2) exponent++;
-    long m = round(v) & 0x7FF;
+    short m = roundf(v) & 0x7FF;
     short msb = (short) (exponent << 3 | m >> 8);
     if (value < 0.0f) msb |= 0x80;
     
