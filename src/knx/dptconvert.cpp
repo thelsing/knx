@@ -1805,16 +1805,16 @@ void float16ToPayload(uint8_t* payload, int payload_length, int index, double va
     signed16ToPayload(payload, payload_length, index, mantissa, mask);
     unsigned8ToPayload(payload, payload_length, index, exponent << 3, 0x78 & (mask >> 8));
     */
-    float v = value * 100.0f;
-    int exponent = 0;
-    for (; v < -2048.0f; v /= 2) exponent++;
-    for (; v > 2047.0f; v /= 2) exponent++;
-    short m = roundf(v) & 0x7FF;
-    short msb = (short) (exponent << 3 | m >> 8);
-    if (value < 0.0f) msb |= 0x80;
+    value *= 100.0;
+    int int_exponent = 0;
+    for (; value < -2048.0; value /= 2) int_exponent++;
+    for (; value > 2047.0; value /= 2) int_exponent++;
+    short mantissa = round(value) & 0x7FF;
+    unsigned short exponent = int_exponent << 3 | m >> 8;
+    if (value < 0.0) exponent |= 0x80;
     
-    signed16ToPayload(payload, payload_length, index, m, mask);
-    unsigned8ToPayload(payload, payload_length, index, msb, mask);
+    signed16ToPayload(payload, payload_length, index, mantissa, mask);
+    unsigned8ToPayload(payload, payload_length, index, exponent, mask);
 }
 void float32ToPayload(uint8_t* payload, int payload_length, int index, double value, uint32_t mask)
 {
