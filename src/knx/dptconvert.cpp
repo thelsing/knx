@@ -1785,9 +1785,9 @@ void signed32ToPayload(uint8_t* payload, int payload_length, int index, int32_t 
     payload[index + 2] = (payload[index + 2] & (~mask >> 8)) | ((value >> 8) & (mask >> 8));
     payload[index + 3] = (payload[index + 3] & ~mask) | (value & mask);
 }
+/*
 void float16ToPayload(uint8_t* payload, int payload_length, int index, double value, uint16_t mask)
 {
-    /*
     bool wasNegative = false;
     if (value < 0)
     {
@@ -1804,17 +1804,44 @@ void float16ToPayload(uint8_t* payload, int payload_length, int index, double va
 
     signed16ToPayload(payload, payload_length, index, mantissa, mask);
     unsigned8ToPayload(payload, payload_length, index, exponent << 3, 0x78 & (mask >> 8));
-    */
-    value *= 100.0;
-    int int_exponent = 0;
-    for (; value < -2048.0; value /= 2) int_exponent++;
-    for (; value > 2047.0; value /= 2) int_exponent++;
-    short mantissa = round(value) & 0x7FF;
-    unsigned short exponent = int_exponent << 3 | m >> 8;
-    if (value < 0.0) exponent |= 0x80;
-    
-    signed16ToPayload(payload, payload_length, index, mantissa, mask);
-    unsigned8ToPayload(payload, payload_length, index, exponent, mask);
+}
+*/
+void float16ToPayload(uint8_t* payload, int payload_length, int index, double value, uint16_t mask)
+{
+	uint8_t dpt_Value[2];
+	long longValuex100 = (long)(100.0 * value);
+	bool negativeSign = (longValuex100 & 0x80000000) ? true : false;
+	uint8_t exponent = 0;
+	uint8_t round = 0;
+	
+	if (negativeSign)
+	{
+		while (longValuex100 < (long)(-2048))
+		{
+			exponent++;
+			round = (uint8_t)(longValuex100) & 1;
+			longValuex100 >>= 1;
+			longValuex100 |= 0x80000000;
+		}
+	}
+	else
+	{
+		while (longValuex100 > (long)(2047))
+		{
+			exponent++;
+			round = (uint8_t)(longValuex100) & 1;
+			longValuex100 >>= 1;
+		}
+	}
+	if (round) longValuex100++;
+	dpt_Value[1] = (uint8_t)longValuex100;
+	dpt_Value[0] = (uint8_t)(longValuex100 >> 8) & 0x7;
+	dpt_Value[0] += exponent << 3;
+	if (negativeSign) dpt_Value[0] += 0x80;
+	
+	ENSURE_PAYLOAD(index + 2);
+    payload[index] = (payload[index] & (~mask >> 8)) | (dpt_Value[1] & (mask >> 8));
+    payload[index + 1] = (payload[index + 1] & ~mask) | (dpt_Value[0] & mask);
 }
 void float32ToPayload(uint8_t* payload, int payload_length, int index, double value, uint32_t mask)
 {
