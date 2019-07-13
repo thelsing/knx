@@ -1713,9 +1713,11 @@ double float16FromPayload(const uint8_t* payload, int index)
 {
     uint16_t mantissa = unsigned16FromPayload(payload, index) & 0x87FF;
     if (mantissa & 0x8000)
-        return ((~mantissa & 0x07FF) + 1.0) * -0.01 * (1 << ((payload[index] >> 3) & 0x0F));
-
-    return mantissa * 0.01 * (1 << ((payload[index] >> 3) & 0x0F));
+        //return ((~mantissa & 0x07FF) + 1.0) * -0.01 * (1 << ((payload[index] >> 3) & 0x0F));
+        return ((~mantissa & 0x07FF) + 1.0) * -0.01 * pow(2.0, ((payload[index] >> 3) & 0x0F)));
+    
+    //return mantissa * 0.01 * (1 << ((payload[index] >> 3) & 0x0F));
+    return mantissa * 0.01 * pow(2.0, ((payload[index] >> 3) & 0x0F)));
 }
 float float32FromPayload(const uint8_t* payload, int index)
 {
@@ -1783,9 +1785,9 @@ void signed32ToPayload(uint8_t* payload, int payload_length, int index, int32_t 
     payload[index + 2] = (payload[index + 2] & (~mask >> 8)) | ((value >> 8) & (mask >> 8));
     payload[index + 3] = (payload[index + 3] & ~mask) | (value & mask);
 }
-
 void float16ToPayload(uint8_t* payload, int payload_length, int index, double value, uint16_t mask)
 {
+    /*
     bool wasNegative = false;
     if (value < 0)
     {
@@ -1802,6 +1804,17 @@ void float16ToPayload(uint8_t* payload, int payload_length, int index, double va
 
     signed16ToPayload(payload, payload_length, index, mantissa, mask);
     unsigned8ToPayload(payload, payload_length, index, exponent << 3, 0x78 & (mask >> 8));
+    */
+    float v = value * 100.0f;
+    int exponent = 0;
+    for (; v < -2048.0f; v /= 2) exponent++;
+    for (; v > 2047.0f; v /= 2) exponent++;
+    long m = round(v) & 0x7FF;
+    short msb = (short) (exponent << 3 | m >> 8);
+    if (value < 0.0f) msb |= 0x80;
+    
+    signed16ToPayload(payload, payload_length, index, m, mask);
+    unsigned8ToPayload(payload, payload_length, index, msb, mask);
 }
 void float32ToPayload(uint8_t* payload, int payload_length, int index, double value, uint32_t mask)
 {
