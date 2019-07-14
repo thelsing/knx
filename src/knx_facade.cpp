@@ -17,10 +17,13 @@ Bau57B0 bau(platform);
 
 #ifndef __linux__
 KnxFacade knx(bau);
-
+uint32_t buttonTimestamp=0;
 void buttonUp()
 {
-    knx.progMode(!knx.progMode());
+	if (millis() - buttonTimestamp > 500){
+		knx.progMode(!knx.progMode());
+		buttonTimestamp = millis();
+	}
 }
 #endif
 
