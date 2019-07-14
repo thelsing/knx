@@ -3,6 +3,11 @@
 #include <stdint.h>
 #include "data_link_layer.h"
 
+#define MAX_KNX_TELEGRAM_SIZE          	263
+#define BYTE_TIMEOUT					3000			//micro seconds
+#define CONFIRM_TIMEOUT					500000
+
+
 class TpUartDataLinkLayer: public DataLinkLayer
 {
     using DataLinkLayer::_deviceObject;
@@ -17,25 +22,40 @@ public:
     bool enabled() const;
 private:
     bool _enabled = false;
+    bool _waitConfirm = false;
     uint8_t* _sendBuffer = 0;
-    bool _sendResult = false;
     uint16_t _sendBufferLength = 0;
+    uint8_t _receiveBuffer[MAX_KNX_TELEGRAM_SIZE];
+    uint8_t _loopState = 0;
+	uint16_t _RxByteCnt = 0;
+	uint16_t _TxByteCnt = 0;
+	uint8_t _oldIdx = 0;
+	bool _isEcho = false;
+	bool _isAddressed = false;
+	bool _convert = false;
+	uint8_t _xorSum=0;
+	uint32_t _lastByteRxTime;
+	uint32_t _waitConfirmStartTime;
+
+	struct _tx_queue_frame_t{
+		uint8_t *data;
+		uint16_t length;
+		_tx_queue_frame_t *next;
+	};
+
+	struct _tx_queue_t {
+	  _tx_queue_frame_t *front=NULL;
+	  _tx_queue_frame_t *back=NULL;
+	}_tx_queue;
+
+	void addFrameTxQueue(CemiFrame& frame);
+	bool isTxQueueEmpty();
+	void loadNextTxFrame();
+	bool sendSingleFrameByte();
     bool sendFrame(CemiFrame& frame);
-    bool checkDataInd(uint8_t firstByte);
-    bool checkDataCon(uint8_t firstByte);
-    bool checkPollDataInd(uint8_t firstByte);
-    bool checkAckNackInd(uint8_t firstByte);
-    bool checkResetInd(uint8_t firstByte);
-    bool checkStateInd(uint8_t firstByte);
-    bool checkFrameStateInd(uint8_t firstByte);
-    bool checkConfigureInd(uint8_t firstByte);
-    bool checkFrameEndInd(uint8_t firstByte);
-    bool checkStopModeInd(uint8_t firstByte);
-    bool checkSystemStatInd(uint8_t firstByte);
-    void handleUnexpected(uint8_t firstByte);
-    void sendBytes(uint8_t* buffer, uint16_t length);
     void frameBytesReceived(uint8_t* buffer, uint16_t length);
+    void dataConBytesReceived(uint8_t* buffer, uint16_t length, bool success);
     void resetChip();
     void stopChip();
-    void sendAck(AddressType type, uint16_t address);
 };
+
