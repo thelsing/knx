@@ -4,8 +4,8 @@
 #include "data_link_layer.h"
 
 #define MAX_KNX_TELEGRAM_SIZE            263
-#define BYTE_TIMEOUT                     3000            //micro seconds
-#define CONFIRM_TIMEOUT                  500000          //micro seconds
+#define BYTE_TIMEOUT                     3           //milli seconds
+#define CONFIRM_TIMEOUT                  500         //milli seconds
 
 
 class TpUartDataLinkLayer: public DataLinkLayer
