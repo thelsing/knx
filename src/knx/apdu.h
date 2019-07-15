@@ -48,6 +48,6 @@ class APDU
     APDU(uint8_t* data, CemiFrame& frame);
 
   private:
-    uint8_t* _data;
+    uint8_t* _data = 0;
     CemiFrame& _frame;
 };

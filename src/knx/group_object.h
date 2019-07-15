@@ -9,7 +9,7 @@ class GroupObjectTableObject;
 
 enum ComFlag
 {
-    Updated = 0,       //!< Group object was updated
+    Updated = 0,      //!< Group object was updated
     ReadRequest = 1,  //!< Read was requested but was not processed
     WriteRequest = 2, //!< Write was requested but was not processed
     Transmitting = 3, //!< Group Object is processed a the moment (read or write)
@@ -19,12 +19,11 @@ enum ComFlag
 
 class GroupObject;
 
-
 #ifdef __linux__
 #include <functional>
 typedef std::function<void(GroupObject&)> GroupObjectUpdatedHandler;
 #else
-typedef void(*GroupObjectUpdatedHandler)(GroupObject& go);
+typedef void (*GroupObjectUpdatedHandler)(GroupObject& go);
 #endif
 
 /**
@@ -33,7 +32,8 @@ typedef void(*GroupObjectUpdatedHandler)(GroupObject& go);
 class GroupObject
 {
     friend class GroupObjectTableObject;
-public:
+
+  public:
     /**
      * The constructor.
      */
@@ -41,7 +41,7 @@ public:
     /**
      * The copy constructor.
      */
-    GroupObject(const GroupObject& other); 
+    GroupObject(const GroupObject& other);
     /**
      * The destructor.
      */
@@ -71,12 +71,12 @@ public:
      * Check if the communication flag (C) was set. (K-flag in german)
      */
     bool communicationEnable();
-    
+
     /**
      * Get the priority of the group object.
      */
     Priority priority();
-    
+
     /**
      * Return the current state of the group object. See ::ComFlag
      */
@@ -206,10 +206,10 @@ public:
     size_t asapValueSize(uint8_t code);
     GroupObjectUpdatedHandler _updateHandler;
     size_t goSize();
-    uint16_t _asap;
-    ComFlag _commFlag;
-    uint8_t* _data;
-    uint8_t _dataLength;
-    GroupObjectTableObject* _table;
+    uint16_t _asap = 0;
+    ComFlag _commFlag = Ok;
+    uint8_t* _data = 0;
+    uint8_t _dataLength = 0;
+    GroupObjectTableObject* _table = 0;
     Dpt _datapointType;
 };

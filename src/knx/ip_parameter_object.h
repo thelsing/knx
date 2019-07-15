@@ -4,9 +4,9 @@
 #include "device_object.h"
 #include "platform.h"
 
-class IpParameterObject: public InterfaceObject
+class IpParameterObject : public InterfaceObject
 {
-public:
+  public:
     IpParameterObject(DeviceObject& deviceObject, Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
@@ -17,10 +17,12 @@ public:
 
     uint32_t multicastAddress() const;
     uint8_t ttl() const { return _ttl; }
-protected:
+
+  protected:
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
-private:
+
+  private:
     uint16_t _projectInstallationId = 0;
     uint8_t _ipAssignmentMethod = 0;
     uint8_t _ipCapabilities = 0;
@@ -29,7 +31,7 @@ private:
     uint32_t _defaultGateway = 0;
     uint32_t _multicastAddress = 0;
     uint8_t _ttl = 60;
-    char _friendlyName[30] = { 0 };
+    char _friendlyName[30] = {0};
     DeviceObject& _deviceObject;
     Platform& _platform;
 

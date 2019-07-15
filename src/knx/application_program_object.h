@@ -2,9 +2,9 @@
 
 #include "table_object.h"
 
-class ApplicationProgramObject: public TableObject
+class ApplicationProgramObject : public TableObject
 {
-public:
+  public:
     ApplicationProgramObject(Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
@@ -15,9 +15,11 @@ public:
     uint32_t getInt(uint32_t addr);
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);
-protected:
+
+  protected:
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
-private:
-    uint8_t _programVersion[5];
+
+  private:
+    uint8_t _programVersion[5] = {0, 0, 0, 0, 0};
 };

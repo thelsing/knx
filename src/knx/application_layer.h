@@ -146,6 +146,6 @@ class ApplicationLayer
     uint16_t _savedAsapResponse;
     AssociationTableObject& _assocTable;
     BusAccessUnit& _bau;
-    TransportLayer* _transportLayer;
+    TransportLayer* _transportLayer = 0;
     int32_t _connectedTsap;
 };

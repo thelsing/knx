@@ -9,18 +9,18 @@
  * See section 4.10 of @cite knx:3/5/1 for further details.
  * It implements realisation type 7 (see section 4.10.7 of @cite knx:3/5/1). 
  */
-class AddressTableObject: public TableObject
+class AddressTableObject : public TableObject
 {
-public:
+  public:
     /**
      * The contructor.
      * 
      * @param platform This parameter is only passed to the custructor of TableObject an not used by this class.
      */
     AddressTableObject(Platform& platform);
-    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t *data);
-    uint8_t *save(uint8_t *buffer);
-    uint8_t *restore(uint8_t *buffer);
+    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
+    uint8_t* save(uint8_t* buffer);
+    uint8_t* restore(uint8_t* buffer);
     /**
      * returns the number of group addresses of the object.
      */
@@ -49,10 +49,12 @@ public:
      * @return true if the address table contains the group address, false otherwise
      */
     bool contains(uint16_t groupAddress);
-protected:
+
+  protected:
     virtual void beforeStateChange(LoadState& newState);
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
-private:
-    uint16_t* _groupAddresses;
+
+  private:
+    uint16_t* _groupAddresses = 0;
 };
