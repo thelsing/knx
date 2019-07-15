@@ -36,6 +36,7 @@ bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
     bool success = sendBytes(buffer, length);
     // only send 50 packet per second: see KNX 3.2.6 p.6
     _platform.mdelay(20);
+    dataConReceived(frame, success);
     delete[] buffer;
     return success;
 }
