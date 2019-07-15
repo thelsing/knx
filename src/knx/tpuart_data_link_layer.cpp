@@ -100,7 +100,7 @@ void TpUartDataLinkLayer::loop(){
             if(!_waitConfirm && !isTxQueueEmpty()){
                 loadNextTxFrame();
                 _waitConfirm = true;
-                _waitConfirmStartTime = micros();
+                _waitConfirmStartTime = _platform.millis();
                 _loopState = TX_FRAME;
             }
         }
@@ -112,7 +112,7 @@ void TpUartDataLinkLayer::loop(){
         break;
     case RX_FIRST_BYTE:
         rxByte =_platform.readUart();
-        _lastByteRxTime = micros();
+        _lastByteRxTime = _platform.millis();
         _RxByteCnt = 0;
         _xorSum = 0;
         if ((rxByte & L_DATA_MASK) == L_DATA_STANDARD_IND){
@@ -186,14 +186,14 @@ void TpUartDataLinkLayer::loop(){
         _loopState = IDLE;
         break;
     case RX_L_DATA:
-        if (micros() - _lastByteRxTime > BYTE_TIMEOUT){
+        if (_platform.millis() - _lastByteRxTime > BYTE_TIMEOUT){
             _RxByteCnt = 0;
             _loopState = IDLE;
             println("Timeout during RX_L_DATA");
             break;
         }
         if(!_platform.uartAvailable()) break;
-        _lastByteRxTime = micros();
+        _lastByteRxTime = _platform.millis();
         rxByte =_platform.readUart();
 
         if(_RxByteCnt == MAX_KNX_TELEGRAM_SIZE){
@@ -265,7 +265,7 @@ void TpUartDataLinkLayer::loop(){
     case RX_WAIT_DATA_CON:
         if(!_platform.uartAvailable()) break;
         rxByte =_platform.readUart();
-        _lastByteRxTime = micros();
+        _lastByteRxTime = _platform.millis();
         if ((rxByte & L_DATA_CON_MASK) == L_DATA_CON){
             //println("L_DATA_CON received");
             dataConBytesReceived(_receiveBuffer, _RxByteCnt+2, ((rxByte & SUCCESS) > 0));
@@ -291,7 +291,7 @@ void TpUartDataLinkLayer::loop(){
     }
 
     if(_waitConfirm){
-        if (micros() - _waitConfirmStartTime > CONFIRM_TIMEOUT){
+        if (_platform.millis() - _waitConfirmStartTime > CONFIRM_TIMEOUT){
             println("L_DATA_CON not received within expected time");
             uint8_t cemiBuffer[MAX_KNX_TELEGRAM_SIZE];
             cemiBuffer[0] = 0x29;
