@@ -14,16 +14,31 @@ DataLinkLayer::DataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
 
 void DataLinkLayer::dataRequest(AckType ack, AddressType addrType, uint16_t destinationAddr, FrameFormat format, Priority priority, NPDU& npdu)
 {
-    bool success = sendTelegram(npdu, ack, destinationAddr, addrType, format, priority);
-    _networkLayer.dataConfirm(ack, addrType, destinationAddr, format, priority, npdu.frame().sourceAddress(), npdu, success);
+    sendTelegram(npdu, ack, destinationAddr, addrType, format, priority);
 }
 
 void DataLinkLayer::systemBroadcastRequest(AckType ack, FrameFormat format, Priority priority, NPDU& npdu)
 {
-    bool success = sendTelegram(npdu, ack, 0, GroupAddress, format, priority);
-    _networkLayer.systemBroadcastConfirm(ack, format, priority, npdu.frame().sourceAddress(), npdu, success);
+    sendTelegram(npdu, ack, 0, GroupAddress, format, priority);
 }
 
+void DataLinkLayer::dataConReceived(CemiFrame& frame,bool success)
+{
+    AckType ack = frame.ack();
+    AddressType addrType = frame.addressType();
+    uint16_t destination = frame.destinationAddress();
+    uint16_t source = frame.sourceAddress();
+    FrameFormat type = frame.frameType();
+    Priority priority = frame.priority();
+    NPDU& npdu = frame.npdu();
+
+    if (addrType == GroupAddress && destination == 0)
+        _networkLayer.systemBroadcastConfirm(ack, type, priority, source, npdu, success);
+    else
+        _networkLayer.dataConfirm(ack, addrType, destination, type, priority, source, npdu, success);
+
+
+}
 void DataLinkLayer::frameRecieved(CemiFrame& frame)
 {
     AckType ack = frame.ack();
@@ -93,3 +108,5 @@ uint8_t* DataLinkLayer::frameData(CemiFrame& frame)
 {
     return frame._data;
 }
+
+
