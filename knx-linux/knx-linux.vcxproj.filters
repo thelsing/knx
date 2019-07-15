@@ -30,9 +30,6 @@
     <None Include="knx-linux-Debug.vgdbsettings">
       <Filter>VisualGDB settings</Filter>
     </None>
-    <None Include="knx-linux-Release.vgdbsettings">
-      <Filter>VisualGDB settings</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\linux_platform.h">
