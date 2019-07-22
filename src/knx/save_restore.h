@@ -6,7 +6,7 @@
  */
 class SaveRestore
 {
-public:
+  public:
     /**
      * This method is called when the object should save its state to the buffer.
      *  

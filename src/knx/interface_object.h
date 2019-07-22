@@ -53,9 +53,9 @@ enum ObjectType
 /**
  * This class represents and interface object. See section 4 of @cite knx:3/4/1.
  */
-class InterfaceObject: public SaveRestore
+class InterfaceObject : public SaveRestore
 {
-public:
+  public:
     /**
      * Destructor
      */
@@ -112,9 +112,10 @@ public:
      * 
      * @param[out] access the ::AccessLevel necessary to read/write the property. 
      */
-    
+
     void readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
-protected:
+
+  protected:
     /**
      * Returns the number of properties the interface object has.
      */

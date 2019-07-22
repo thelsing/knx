@@ -3,11 +3,11 @@
 #include "table_object.h"
 #include "group_object.h"
 
-class GroupObjectTableObject: public TableObject
+class GroupObjectTableObject : public TableObject
 {
     friend class GroupObject;
 
-public:
+  public:
     GroupObjectTableObject(Platform& platform);
     virtual ~GroupObjectTableObject();
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
@@ -18,11 +18,13 @@ public:
 
     virtual uint8_t* save(uint8_t* buffer);
     virtual uint8_t* restore(uint8_t* buffer);
-protected:
+
+  protected:
     virtual void beforeStateChange(LoadState& newState);
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
-private:
+
+  private:
     void freeGroupObjects();
     bool initGroupObjects();
     uint16_t* _tableData = 0;

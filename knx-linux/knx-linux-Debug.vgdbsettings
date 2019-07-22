@@ -7,9 +7,9 @@
       <PathStyle>RemoteUnix</PathStyle>
     </CustomSourceDirectories>
     <BuildHost>
-      <HostName>localhost</HostName>
-      <Transport>LinuxSubsystem</Transport>
-      <UserName>Linux</UserName>
+      <HostName>Suzail</HostName>
+      <Transport>SSH</Transport>
+      <UserName>tkunze</UserName>
     </BuildHost>
     <MainSourceTransferCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
@@ -34,15 +34,14 @@
         <string>CMakeLists.txt</string>
         <string>*.cmake</string>
       </FileMasks>
-      <TransferNewFilesOnly>true</TransferNewFilesOnly>
+      <TransferNewFilesOnly>false</TransferNewFilesOnly>
       <IncludeSubdirectories>true</IncludeSubdirectories>
-      <SelectedDirectories />
       <DeleteDisappearedFiles>true</DeleteDisappearedFiles>
       <ApplyGlobalExclusionList>true</ApplyGlobalExclusionList>
       <Extension>
         <Direction>Outgoing</Direction>
         <SkipMountPoints>false</SkipMountPoints>
-        <OverwriteTrigger>LocalCache</OverwriteTrigger>
+        <OverwriteTrigger>Always</OverwriteTrigger>
       </Extension>
     </MainSourceTransferCommand>
     <AllowChangingHostForMainCommands>false</AllowChangingHostForMainCommands>
@@ -115,12 +114,13 @@
       <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
       <SupportLightweightReferenceAnalysis>true</SupportLightweightReferenceAnalysis>
       <DiscoverySettings>
-        <Mode>Disabled</Mode>
+        <Mode>Silent</Mode>
         <SearchInProjectDir>true</SearchInProjectDir>
         <SearchInSourceDirs>true</SearchInSourceDirs>
         <SearchInIncludeSubdirs>true</SearchInIncludeSubdirs>
       </DiscoverySettings>
       <CheckForClangFormatFiles>true</CheckForClangFormatFiles>
+      <ExplicitClangFormatFile>..\.clang-format</ExplicitClangFormatFile>
       <FormattingEngine>ClangFormat</FormattingEngine>
     </ExtraSettings>
     <CodeAnalyzerSettings>

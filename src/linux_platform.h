@@ -51,15 +51,15 @@ public:
     void cmdlineArgs(int argc, char** argv);
 
   private:
-    uint32_t _multicastAddr;
-    uint16_t _port;
+    uint32_t _multicastAddr = -1;
+    uint16_t _port = -1;
     int _socketFd = -1;
     void doMemoryMapping();
-    uint8_t* _mappedFile;
+    uint8_t* _mappedFile = 0;
     int _fd = -1;
     uint8_t* _currentMaxMem = 0;
     std::string _flashFilePath = "flash.bin";
-    char** _args;
+    char** _args = 0;
 };
 
 #endif

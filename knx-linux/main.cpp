@@ -25,8 +25,10 @@ void measureTemp()
     lastsend = now;
     int r = rand();
     double currentValue = (r * 1.0) / (RAND_MAX * 1.0);
-    currentValue *= (670433.28 + 273);
-    currentValue -= 273;
+    currentValue *= 100;
+    currentValue -= 50;
+    //    currentValue *= (670433.28 + 273);
+    //    currentValue -= 273;
     println(currentValue);
     CURR.value(currentValue);
 

@@ -31,9 +31,10 @@ void Platform::freeMemory(uint8_t* ptr)
 
 Platform::Platform()
 {
-    // allocate memory to have a memory reference, substract a bit 
-    _memoryReference = (uint8_t*)malloc(1)  - 1024;
+    // allocate memory to have a memory reference, substract a bit
+    _memoryReference = (uint8_t*)malloc(1);
     free(_memoryReference);
-	print("MemRef: ");
+    _memoryReference -= 1024;
+    print("MemRef: ");
 	println((long unsigned int)_memoryReference, HEX);
 }

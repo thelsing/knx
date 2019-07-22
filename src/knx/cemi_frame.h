@@ -15,18 +15,19 @@
 class CemiFrame
 {
     friend class DataLinkLayer;
-public:
+
+  public:
     CemiFrame(uint8_t* data, uint16_t length);
     CemiFrame(uint8_t apduLength);
     CemiFrame(const CemiFrame& other);
-    CemiFrame& operator= (CemiFrame other);
+    CemiFrame& operator=(CemiFrame other);
 
     MessageCode messageCode() const;
     void messageCode(MessageCode value);
     uint16_t totalLenght() const;
     uint16_t telegramLengthtTP() const;
     void fillTelegramTP(uint8_t* data);
-    
+
     FrameFormat frameType() const;
     void frameType(FrameFormat value);
     Repetition repetition() const;
@@ -49,15 +50,16 @@ public:
     NPDU& npdu();
     TPDU& tpdu();
     APDU& apdu();
-    
+
     uint8_t calcCRC(uint8_t* buffer, uint16_t len);
     bool valid() const;
-private:
-    uint8_t buffer[0xff + NPDU_LPDU_DIFF]; //only valid of add info is zero
-    uint8_t* _data;
-    uint8_t* _ctrl1;
+
+  private:
+    uint8_t buffer[0xff + NPDU_LPDU_DIFF] = {0}; //only valid of add info is zero
+    uint8_t* _data = 0;
+    uint8_t* _ctrl1 = 0;
     NPDU _npdu;
     TPDU _tpdu;
     APDU _apdu;
-    uint16_t _length; // only set if created from byte array
+    uint16_t _length = 0; // only set if created from byte array
 };

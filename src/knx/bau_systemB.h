@@ -13,9 +13,9 @@
 #include "platform.h"
 #include "memory.h"
 
-class BauSystemB: protected BusAccessUnit
+class BauSystemB : protected BusAccessUnit
 {
-public:
+  public:
     BauSystemB(Platform& platform);
     virtual void loop();
     DeviceObject& deviceObject();
@@ -28,13 +28,14 @@ public:
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
     void restartRequest(uint16_t asap);
-protected:
+
+  protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
     virtual uint8_t* descriptor() = 0;
     void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
-        uint16_t memoryAddress, uint8_t* data) override;
+                               uint16_t memoryAddress, uint8_t* data) override;
     void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
-        uint16_t memoryAddress) override;
+                              uint16_t memoryAddress) override;
     void deviceDescriptorReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t descriptorType) override;
     void restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap) override;
     void authorizeIndication(Priority priority, HopCountType hopType, uint16_t asap, uint32_t key) override;
@@ -58,7 +59,6 @@ protected:
     void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType,
                                    uint8_t* data, uint8_t dataLength) override;
 
-    
     virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
     void sendNextGroupTelegram();
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);

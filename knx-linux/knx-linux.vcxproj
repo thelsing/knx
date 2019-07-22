@@ -110,10 +110,8 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="CMakeLists.txt" />
     <None Include="knx-linux-Debug.vgdbsettings" />
-    <None Include="knx-linux-Release.vgdbsettings" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\knx\address_table_object.cpp" />
