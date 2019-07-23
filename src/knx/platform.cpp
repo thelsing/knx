@@ -35,6 +35,4 @@ Platform::Platform()
     _memoryReference = (uint8_t*)malloc(1);
     free(_memoryReference);
     _memoryReference -= 1024;
-    print("MemRef: ");
-	println((long unsigned int)_memoryReference, HEX);
 }
