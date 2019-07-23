@@ -40,6 +40,9 @@ public:
     void ledPin(uint32_t value);
     uint32_t buttonPin();
     void buttonPin(uint32_t value);
+    #ifndef __linux__
+    void setSerial(Uart* serial);
+    #endif
     void readMemory();
     void writeMemory();
     uint16_t induvidualAddress();

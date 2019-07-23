@@ -23,6 +23,10 @@ ICACHE_RAM_ATTR  void buttonUp()
 {
 	_toogleProgMode = true;
 }
+
+void KnxFacade::setSerial(Uart* serial){
+    platform.selectUart(serial);
+}
 #endif
 
 KnxFacade::KnxFacade(BauSystemB &bau) : _bau(bau)

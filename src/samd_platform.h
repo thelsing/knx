@@ -5,7 +5,6 @@
 #ifdef ARDUINO_ARCH_SAMD
 
 #define SerialDBG SerialUSB
-#define SerialKNX Serial1
 
 class SamdPlatform : public Platform
 {
@@ -31,6 +30,7 @@ public:
     int readBytes(uint8_t* buffer, uint16_t maxLen);
     
     //uart
+    void selectUart(Uart* serial);
     virtual void setupUart();
     virtual void closeUart();
     virtual int uartAvailable();
@@ -45,6 +45,7 @@ public:
 private:
     uint32_t _mulitcastAddr;
     uint16_t _mulitcastPort;
+    Uart* _serial = &Serial1;
 };
 
 #endif
