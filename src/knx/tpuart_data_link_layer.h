@@ -56,6 +56,6 @@ class TpUartDataLinkLayer : public DataLinkLayer
     bool sendFrame(CemiFrame& frame);
     void frameBytesReceived(uint8_t* buffer, uint16_t length);
     void dataConBytesReceived(uint8_t* buffer, uint16_t length, bool success);
-    void resetChip();
+    bool resetChip();
     void stopChip();
 };
