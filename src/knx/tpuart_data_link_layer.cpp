@@ -82,6 +82,7 @@
 
 #define BYTE_TIMEOUT          3   //milli seconds
 #define CONFIRM_TIMEOUT       500 //milli seconds
+#define RESET_TIMEOUT         100 //milli seconds
 
 void TpUartDataLinkLayer::loop()
 {
@@ -369,15 +370,18 @@ bool TpUartDataLinkLayer::sendFrame(CemiFrame& frame)
     return true;
 }
 
-void TpUartDataLinkLayer::resetChip()
+bool TpUartDataLinkLayer::resetChip()
 {
     uint8_t cmd = U_RESET_REQ;
     _platform.writeUart(cmd);
+    _waitConfirmStartTime = _platform.millis();
     while (true)
     {
         int resp = _platform.readUart();
         if (resp == U_RESET_IND)
-            break;
+            return true;
+        else if (_platform.millis() - _waitConfirmStartTime > RESET_TIMEOUT)
+            return false;
     }
 }
 
@@ -421,10 +425,16 @@ void TpUartDataLinkLayer::enabled(bool value)
     if (value && !_enabled)
     {
         _platform.setupUart();
-        print("ownaddr ");
-        println(_deviceObject.induvidualAddress(), HEX);
-        resetChip();
-        _enabled = true;
+
+        if (resetChip()){
+            _enabled = true;
+            print("ownaddr ");
+            println(_deviceObject.induvidualAddress(), HEX);
+        }
+        else{
+        	_enabled = false;
+        	println("ERROR, TPUART not responding");
+        }
         return;
     }
 
