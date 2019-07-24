@@ -224,6 +224,7 @@
       </DebugSettingsOverride>
       <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
         <BoardID>esp8266:esp8266:nodemcuv2</BoardID>
+        <COMPort>COM4</COMPort>
         <Properties>
           <Entries>
             <KeyValue>
@@ -240,7 +241,7 @@
             </KeyValue>
             <KeyValue>
               <Key>ssl</Key>
-              <Value>all</Value>
+              <Value>basic</Value>
             </KeyValue>
             <KeyValue>
               <Key>eesz</Key>
