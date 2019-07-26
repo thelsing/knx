@@ -38,7 +38,7 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
     }
 
     uint16_t startIdx = 0;
-    uint32_t asap = _assocTable.nextAsap(tsap, startIdx);
+    int32_t asap = _assocTable.nextAsap(tsap, startIdx);
     for (; asap != -1; asap = _assocTable.nextAsap(tsap, startIdx))
     {
         switch (apdu.type())
