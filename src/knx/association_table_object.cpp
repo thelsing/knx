@@ -49,6 +49,7 @@ uint8_t* AssociationTableObject::restore(uint8_t* buffer)
     return buffer;
 }
 
+// return type is int32 so that we can return uint16 and -1
 int32_t AssociationTableObject::translateAsap(uint16_t asap)
 {
     uint16_t entries = entryCount();
@@ -60,6 +61,8 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
     }
     return -1;
 }
+
+
 
 void AssociationTableObject::beforeStateChange(LoadState& newState)
 {
@@ -88,4 +91,18 @@ uint8_t AssociationTableObject::propertyCount()
 PropertyDescription* AssociationTableObject::propertyDescriptions()
 {
     return _propertyDescriptions;
+}
+
+int32_t AssociationTableObject::nextAsap(uint16_t tsap, uint16_t startIdx)
+{
+    uint16_t entries = entryCount();
+    for (uint16_t i = startIdx; i < entries; i++)
+    {
+        uint16_t entry = operator[](i);
+        if (highByte(entry) == tsap)
+        {
+            return lowByte(entry);
+        }
+    }
+    return -1;
 }

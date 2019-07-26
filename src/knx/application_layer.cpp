@@ -22,8 +22,6 @@ void ApplicationLayer::transportLayer(TransportLayer& layer)
 
 void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
-    uint16_t entries = _assocTable.entryCount();
-    
     uint8_t len = apdu.length();
     uint8_t dataArray[len];
     uint8_t* data = dataArray;
@@ -39,14 +37,12 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
         len -= 1;
     }
 
-    for (uint16_t i = 0; i < entries; i++)
+    uint16_t startIdx = 0;
+    uint32_t asap = _assocTable.nextAsap(tsap, startIdx);
+    for (; asap != -1; asap = _assocTable.nextAsap(tsap, startIdx))
     {
-        uint16_t entry = _assocTable[i];
-        if (highByte(entry) == tsap)
+        switch (apdu.type())
         {
-            uint16_t asap = lowByte(entry);
-            switch (apdu.type())
-            {
             case GroupValueRead:
                 _bau.groupValueReadIndication(asap, priority, hopType);
                 break;
@@ -55,7 +51,6 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
                 break;
             case GroupValueWrite:
                 _bau.groupValueWriteIndication(asap, priority, hopType, data, len);
-            }
         }
     }
 }
