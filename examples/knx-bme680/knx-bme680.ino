@@ -58,8 +58,10 @@ void setup(void)
     if(knx.configured())
         goTriggerSample.callback(triggerCallback);
 
-    // depends on sensor board. Try BME680_I2C_ADDR_PRIMARY if it doen't work.
+
     // Configure Wire pins before this call if needed.
+    Wire.begin();
+    // depends on sensor board. Try BME680_I2C_ADDR_PRIMARY if it doen't work.
     iaqSensor.begin(BME680_I2C_ADDR_SECONDARY, Wire);
     checkIaqSensorStatus();
 

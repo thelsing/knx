@@ -18,6 +18,7 @@ class KNXValue
     KNXValue(double value);
     KNXValue(const char* value);
     KNXValue(struct tm value);
+    KNXValue(float value);
 
     operator bool() const;
     operator uint8_t() const;
@@ -31,6 +32,7 @@ class KNXValue
     operator double() const;
     operator const char*() const;
     operator struct tm() const;
+    operator float() const;
 
     KNXValue& operator=(const bool value);
     KNXValue& operator=(const uint8_t value);
@@ -44,6 +46,8 @@ class KNXValue
     KNXValue& operator=(const double value);
     KNXValue& operator=(const char* value);
     KNXValue& operator=(const struct tm value);
+    KNXValue& operator=(const float value);
+
   private:
     
     bool boolValue() const;
@@ -88,7 +92,7 @@ class KNXValue
         LongType,
         DoubleType,
         StringType,
-        TimeType
+        TimeType,
     };
 
     ValueType _type;

@@ -529,3 +529,19 @@ struct tm KNXValue::timeValue() const
     struct tm tmp;
     return tmp;
 }
+
+KNXValue::KNXValue(float value)
+{
+}
+
+KNXValue& KNXValue::operator=(const float value)
+{
+    _value.doubleValue = value;
+    _type = DoubleType;
+    return *this;
+}
+
+KNXValue::operator float() const
+{
+    return doubleValue();
+}
