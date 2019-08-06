@@ -80,8 +80,8 @@
 #define RX_WAIT_DATA_CON    3
 #define TX_FRAME            4
 
-#define BYTE_TIMEOUT          3   //milli seconds
-#define CONFIRM_TIMEOUT       500 //milli seconds
+#define BYTE_TIMEOUT          10   //milli seconds
+#define CONFIRM_TIMEOUT       500  //milli seconds
 #define RESET_TIMEOUT         100 //milli seconds
 
 void TpUartDataLinkLayer::loop()
@@ -107,8 +107,6 @@ void TpUartDataLinkLayer::loop()
                 if (!_waitConfirm && !isTxQueueEmpty())
                 {
                     loadNextTxFrame();
-                    _waitConfirm = true;
-                    _waitConfirmStartTime = _platform.millis();
                     _loopState = TX_FRAME;
                 }
             }
@@ -116,6 +114,8 @@ void TpUartDataLinkLayer::loop()
         case TX_FRAME:
             if (sendSingleFrameByte() == false)
             {
+                _waitConfirm = true;
+                _waitConfirmStartTime = _platform.millis();
                 _loopState = IDLE;
             }
             break;
