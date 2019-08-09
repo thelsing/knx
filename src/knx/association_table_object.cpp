@@ -29,12 +29,20 @@ uint16_t AssociationTableObject::entryCount()
     return ntohs(_tableData[0]);
 }
 
-uint16_t AssociationTableObject::operator[](uint16_t idx)
+uint16_t AssociationTableObject::getTSAP(uint16_t idx)
 {
     if (idx < 0 || idx >= entryCount())
         return 0;
 
     return ntohs(_tableData[2 * idx + 1]);
+}
+
+uint16_t AssociationTableObject::getASAP(uint16_t idx)
+{
+    if (idx < 0 || idx >= entryCount())
+        return 0;
+
+    return ntohs(_tableData[2 * idx + 2]);
 }
 
 uint8_t* AssociationTableObject::save(uint8_t* buffer)
@@ -53,10 +61,10 @@ uint8_t* AssociationTableObject::restore(uint8_t* buffer)
 int32_t AssociationTableObject::translateAsap(uint16_t asap)
 {
     uint16_t entries = entryCount();
-    for (uint16_t i = 0; i < entries * 2; i+=2)
+    for (uint16_t i = 0; i < entries; i++)
     {
-        if (operator[](i + 1) == asap)
-            return operator[](i);
+        if (getASAP(i) == asap)
+            return getTSAP(i);
     }
     return -1;
 }
@@ -97,11 +105,11 @@ int32_t AssociationTableObject::nextAsap(uint16_t tsap, uint16_t& startIdx)
     uint16_t entries = entryCount();
     for (uint16_t i = startIdx; i < entries; i++)
     {
-        startIdx = i;
+        startIdx = i+1;
 
-        if (operator[](i) == tsap)
+        if (getTSAP(i) == tsap)
         {
-            return operator[](i+1);
+            return getASAP(i);
         }
     }
     return -1;
