@@ -21,6 +21,7 @@ class AssociationTableObject : public TableObject
 
   private:
     uint16_t entryCount();
-    uint16_t operator[](uint16_t idx);
+    uint16_t getTSAP(uint16_t idx);
+    uint16_t getASAP(uint16_t idx);
     uint16_t* _tableData = 0;
 };
