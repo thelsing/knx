@@ -235,7 +235,7 @@ void TpUartDataLinkLayer::loop()
                 //Destination Address + payload available
                 _xorSum ^= rxByte;
                 //check if echo
-                if (!((buffer[0] ^ _sendBuffer[0]) & ~0x20) && !memcmp(buffer + 2, _sendBuffer + 1, 5))
+                if (!((buffer[0] ^ _sendBuffer[0]) & ~0x20) && !memcmp(buffer + _convert + 1, _sendBuffer + 1, 5))
                 { //ignore repeated bit of control byte
                     _isEcho = true;
                 }
