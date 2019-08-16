@@ -532,6 +532,8 @@ struct tm KNXValue::timeValue() const
 
 KNXValue::KNXValue(float value)
 {
+    _value.doubleValue = value;
+    _type = DoubleType;
 }
 
 KNXValue& KNXValue::operator=(const float value)
