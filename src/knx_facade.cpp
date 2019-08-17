@@ -17,11 +17,13 @@ Bau57B0 bau(platform);
 #endif
 
 bool _toogleProgMode = false;
+bool _progLedState = false;
+
 #ifndef __linux__
 KnxFacade knx(bau);
 ICACHE_RAM_ATTR  void buttonUp()
 {
-	_toogleProgMode = true;
+    _toogleProgMode = true;
 }
 #endif
 
@@ -48,17 +50,6 @@ bool KnxFacade::progMode()
 
 void KnxFacade::progMode(bool value)
 {
-    if (value)
-    {
-        println("progmode on");
-        digitalWrite(knx.ledPin(), _ledPinActiveOn);
-    }
-    else
-    {
-        println("progmode off");
-        digitalWrite(knx.ledPin(), HIGH - _ledPinActiveOn);
-    }
-
     _bau.deviceObject().progMode(value);
 }
 
@@ -109,11 +100,25 @@ void KnxFacade::writeMemory()
 
 void KnxFacade::loop()
 {
-	if(_toogleProgMode)
-	{
-		progMode(!progMode());
-		_toogleProgMode = false;
-	}
+    if (progMode() != _progLedState)
+    {
+        _progLedState = progMode();
+        if (_progLedState)
+        {
+            println("progmode on");
+            digitalWrite(knx.ledPin(), _ledPinActiveOn);
+        }
+        else
+        {
+            println("progmode off");
+            digitalWrite(knx.ledPin(), HIGH - _ledPinActiveOn);
+        }
+    }
+    if (_toogleProgMode)
+    {
+        progMode(!progMode());
+        _toogleProgMode = false;
+    }
     _bau.loop();
 }
 
@@ -150,7 +155,7 @@ void KnxFacade::version(uint16_t value)
 void KnxFacade::start()
 {
     pinMode(_ledPin, OUTPUT);
-    
+
     digitalWrite(_ledPin, HIGH - _ledPinActiveOn);
 
     pinMode(_buttonPin, INPUT_PULLUP);
