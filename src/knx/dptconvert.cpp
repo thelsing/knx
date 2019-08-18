@@ -1275,8 +1275,13 @@ int valueToBusValueAccess(const KNXValue& value, uint8_t* payload, int payload_l
 
 int valueToBusValueString(const KNXValue& value, uint8_t* payload, int payload_length, const Dpt& datatype)
 {
-    //TODO
-    return false;
+    const char* strValue = value;
+    uint8_t val = strValue[0];
+    for (int n = 0; n < 14; n++) {
+        if (val) val = strValue[n]; //string terminator 0x00 will stop further assignments and init the remainig payload with zero
+        unsigned8ToPayload(payload, payload_length, n, val, 0xff);
+    }
+    return true;
 }
 
 int valueToBusValueScene(const KNXValue& value, uint8_t* payload, int payload_length, const Dpt& datatype)
