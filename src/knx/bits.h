@@ -14,8 +14,23 @@
 #define DEC 10
 #define HEX 16
 
+#define INPUT (0x0)
+#define OUTPUT (0x1)
+#define INPUT_PULLUP (0x2)
+#define INPUT_PULLDOWN (0x3)
+
+#define LOW (0x0)
+#define HIGH (0x1)
+#define CHANGE 2
+#define FALLING 3
+#define RISING 4
+
 void delay(uint32_t millis);
 uint32_t millis();
+void pinMode(uint32_t dwPin, uint32_t dwMode);
+void digitalWrite(uint32_t dwPin, uint32_t dwVal);
+typedef void (*voidFuncPtr)(void);
+void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 
 #elif ARDUINO_ARCH_SAMD
 #include <Arduino.h>

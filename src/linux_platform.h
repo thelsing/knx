@@ -10,8 +10,10 @@ class LinuxPlatform: public Platform
     using Platform::_memoryReference;
     using Platform::memoryReference;
 public:
-    LinuxPlatform(int argc, char** argv);
+    LinuxPlatform();
     virtual ~LinuxPlatform();
+
+    void cmdLineArgs(int argc, char** argv);
 
     std::string flashFilePath();
     void flashFilePath(const std::string path);
