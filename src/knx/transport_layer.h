@@ -16,7 +16,7 @@ enum StateType { Closed, OpenIdle, OpenWait, Connecting };
 class TransportLayer
 {
 public:
-    TransportLayer(ApplicationLayer& layer, AddressTableObject& gat, Platform& platform);
+    TransportLayer(ApplicationLayer& layer, AddressTableObject& gat);
     void networkLayer(NetworkLayer& layer);
 
 #pragma region from network layer
@@ -114,5 +114,4 @@ private:
     ApplicationLayer& _applicationLayer;
     AddressTableObject& _groupAddressTable;
     NetworkLayer* _networkLayer;
-    Platform& _platform;
 };

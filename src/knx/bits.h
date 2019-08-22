@@ -14,6 +14,9 @@
 #define DEC 10
 #define HEX 16
 
+void delay(uint32_t millis);
+uint32_t millis();
+
 #elif ARDUINO_ARCH_SAMD
 #include <Arduino.h>
 #define htons(x) ( (((x)<<8)&0xFF00) | (((x)>>8)&0xFF) )

@@ -115,13 +115,13 @@ void TpUartDataLinkLayer::loop()
             if (sendSingleFrameByte() == false)
             {
                 _waitConfirm = true;
-                _waitConfirmStartTime = _platform.millis();
+                _waitConfirmStartTime = millis();
                 _loopState = IDLE;
             }
             break;
         case RX_FIRST_BYTE:
             rxByte = _platform.readUart();
-            _lastByteRxTime = _platform.millis();
+            _lastByteRxTime = millis();
             _RxByteCnt = 0;
             _xorSum = 0;
             if ((rxByte & L_DATA_MASK) == L_DATA_STANDARD_IND)
@@ -208,7 +208,7 @@ void TpUartDataLinkLayer::loop()
             _loopState = IDLE;
             break;
         case RX_L_DATA:
-            if (_platform.millis() - _lastByteRxTime > BYTE_TIMEOUT)
+            if (millis() - _lastByteRxTime > BYTE_TIMEOUT)
             {
                 _RxByteCnt = 0;
                 _loopState = IDLE;
@@ -217,7 +217,7 @@ void TpUartDataLinkLayer::loop()
             }
             if (!_platform.uartAvailable())
                 break;
-            _lastByteRxTime = _platform.millis();
+            _lastByteRxTime = millis();
             rxByte = _platform.readUart();
 
             if (_RxByteCnt == MAX_KNX_TELEGRAM_SIZE)
@@ -314,7 +314,7 @@ void TpUartDataLinkLayer::loop()
             if (!_platform.uartAvailable())
                 break;
             rxByte = _platform.readUart();
-            _lastByteRxTime = _platform.millis();
+            _lastByteRxTime = millis();
             if ((rxByte & L_DATA_CON_MASK) == L_DATA_CON)
             {
                 //println("L_DATA_CON received");
@@ -343,7 +343,7 @@ void TpUartDataLinkLayer::loop()
 
     if (_waitConfirm)
     {
-        if (_platform.millis() - _waitConfirmStartTime > CONFIRM_TIMEOUT)
+        if (millis() - _waitConfirmStartTime > CONFIRM_TIMEOUT)
         {
             println("L_DATA_CON not received within expected time");
             uint8_t cemiBuffer[MAX_KNX_TELEGRAM_SIZE];
@@ -374,13 +374,13 @@ bool TpUartDataLinkLayer::resetChip()
 {
     uint8_t cmd = U_RESET_REQ;
     _platform.writeUart(cmd);
-    _waitConfirmStartTime = _platform.millis();
+    _waitConfirmStartTime = millis();
     while (true)
     {
         int resp = _platform.readUart();
         if (resp == U_RESET_IND)
             return true;
-        else if (_platform.millis() - _waitConfirmStartTime > RESET_TIMEOUT)
+        else if (millis() - _waitConfirmStartTime > RESET_TIMEOUT)
             return false;
     }
 }

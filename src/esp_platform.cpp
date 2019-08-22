@@ -31,16 +31,6 @@ void EspPlatform::macAddress(uint8_t * addr)
     wifi_get_macaddr(STATION_IF, addr);
 }
 
-uint32_t EspPlatform::millis()
-{
-    return ::millis();
-}
-
-void EspPlatform::mdelay(uint32_t millis)
-{
-    delay(millis);
-}
-
 void EspPlatform::restart()
 {
     Serial.println("restart");

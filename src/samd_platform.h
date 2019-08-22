@@ -19,8 +19,6 @@ public:
     void macAddress(uint8_t* addr);
 
     // basic stuff
-    uint32_t millis();
-    void mdelay(uint32_t millis);
     void restart();
     void fatalError();
 

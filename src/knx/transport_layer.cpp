@@ -4,10 +4,11 @@
 #include "network_layer.h"
 #include "application_layer.h"
 #include "platform.h"
+#include "bits.h"
 #include <stdio.h>
 
-TransportLayer::TransportLayer(ApplicationLayer& layer, AddressTableObject& gat, Platform& platform): _savedFrame(0), 
-    _savedFrameConnecting(0), _applicationLayer(layer), _groupAddressTable(gat), _platform(platform)
+TransportLayer::TransportLayer(ApplicationLayer& layer, AddressTableObject& gat): _savedFrame(0), 
+    _savedFrameConnecting(0), _applicationLayer(layer), _groupAddressTable(gat)
 {
     _currentState = Closed;
 }
@@ -528,13 +529,13 @@ void TransportLayer::ackTimeoutIndication()
 
 void TransportLayer::loop()
 {
-    uint32_t millis = _platform.millis();
-    if (_connectionTimeoutEnabled
-        && (millis - _connectionTimeoutStartMillis) > _connectionTimeoutMillis)
+    uint32_t milliseconds = millis();
+    if (_connectionTimeoutEnabled 
+        && (milliseconds - _connectionTimeoutStartMillis) > _connectionTimeoutMillis)
         connectionTimeoutIndication();
 
     if (_ackTimeoutEnabled
-        && (millis - _ackTimeoutStartMillis) > _ackTimeoutMillis)
+        && (milliseconds - _ackTimeoutStartMillis) > _ackTimeoutMillis)
         ackTimeoutIndication();
 
     if (_savedConnectingValid)
@@ -696,7 +697,7 @@ void TransportLayer::A15(Priority priority, uint16_t tsap)
 
 void TransportLayer::enableConnectionTimeout()
 {
-    _connectionTimeoutStartMillis = _platform.millis();
+    _connectionTimeoutStartMillis = millis();
     _connectionTimeoutEnabled = true;
 }
 
@@ -707,7 +708,7 @@ void TransportLayer::disableConnectionTimeout()
 
 void TransportLayer::enableAckTimeout()
 {
-    _ackTimeoutStartMillis = _platform.millis();
+    _ackTimeoutStartMillis = millis();
     _ackTimeoutEnabled = true;
 }
 

@@ -33,16 +33,6 @@ void SamdPlatform::macAddress(uint8_t * addr)
     // not needed
 }
 
-uint32_t SamdPlatform::millis()
-{
-    return::millis();
-}
-
-void SamdPlatform::mdelay(uint32_t millis)
-{
-    delay(millis);
-}
-
 void SamdPlatform::restart()
 {
     SerialDBG.println("restart");

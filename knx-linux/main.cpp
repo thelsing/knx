@@ -18,7 +18,7 @@ long lastsend = 0;
 
 void measureTemp()
 {
-    long now = platform->millis();
+    long now = millis();
     if ((now - lastsend) < 10000)
         return;
 
@@ -97,6 +97,6 @@ int main(int argc, char **argv)
         knx->loop();
         if(knx->configured())
             appLoop();
-        platform->mdelay(100);
+        delay(100);
     }
 }

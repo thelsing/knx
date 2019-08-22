@@ -23,8 +23,6 @@ public:
     void macAddress(uint8_t* addr) override;
 
     // basic stuff
-    uint32_t millis() override;
-    void mdelay(uint32_t millis) override;
     void restart() override;
     void fatalError() override;
 

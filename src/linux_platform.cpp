@@ -58,7 +58,7 @@ uint32_t LinuxPlatform::currentDefaultGateway()
     return 0;
 }
 
-uint32_t LinuxPlatform::millis()
+uint32_t millis()
 {
     struct timespec spec;
 
@@ -66,7 +66,7 @@ uint32_t LinuxPlatform::millis()
     return spec.tv_sec * 1000 + round(spec.tv_nsec / 1.0e6);
 }
 
-void LinuxPlatform::mdelay(uint32_t millis)
+void delay(uint32_t millis)
 {
     struct timespec ts;
     ts.tv_sec = millis / 1000;
