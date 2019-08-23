@@ -509,7 +509,6 @@ typedef void (*voidFuncPtr)(void);
 void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
 {
 }
-#endif
 
 void LinuxPlatform::cmdLineArgs(int argc, char** argv)
 {
@@ -520,3 +519,4 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
     memcpy(_args, argv, argc * sizeof(char*));
     _args[argc] = 0;
 }
+#endif
