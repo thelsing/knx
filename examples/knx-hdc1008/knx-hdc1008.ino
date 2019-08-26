@@ -22,6 +22,7 @@ uint32_t cyclSend = 0;
 void setup(void)
 {
     SerialDBG.begin(115200);
+    ArduinoPlatform::SerialDebug = SerialDBG;
     delay(5000);
     SerialDBG.println("start");
 

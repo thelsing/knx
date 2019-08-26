@@ -25,6 +25,7 @@ void switchCallback(GroupObject& go)
 void setup()
 {
     SerialDBG.begin(115200);
+    ArduinoPlatform::SerialDebug = SerialDBG;
 
 #ifdef ARDUINO_ARCH_ESP8266
     WiFiManager wifiManager;    
