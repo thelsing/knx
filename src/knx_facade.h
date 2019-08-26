@@ -8,6 +8,10 @@
 #elif ARDUINO_ARCH_ESP8266
 #include "esp_platform.h"
 #include "knx/bau57B0.h"
+#elif ARDUINO_ARCH_ESP32
+#define LED_BUILTIN 13
+#include "esp32_platform.h"
+#include "knx/bau57B0.h"
 #else
 #include "linux_platform.h"
 #include "knx/bau57B0.h"
@@ -274,6 +278,8 @@ template <class P, class B> class KnxFacade : private SaveRestore
 extern KnxFacade<SamdPlatform, Bau07B0> knx;
 #elif ARDUINO_ARCH_ESP8266
 extern KnxFacade<EspPlatform, Bau57B0> knx;
+#elif ARDUINO_ARCH_ESP32
+extern KnxFacade<Esp32Platform, Bau57B0> knx;
 #elif __linux__
 // no predefined global instance
 #endif

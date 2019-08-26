@@ -84,7 +84,7 @@ void setup()
         SerialDBG.println(knx.paramByte(4));
     }
 
-    // pin or GPIO the programming led is connected to. Default is LED_BUILDIN
+    // pin or GPIO the programming led is connected to. Default is LED_BUILTIN
     // knx.ledPin(LED_BUILTIN);
     // is the led active on HIGH or low? Default is LOW
     // knx.ledPinActiveOn(HIGH);

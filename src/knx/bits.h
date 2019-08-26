@@ -44,6 +44,9 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 #elif ARDUINO_ARCH_ESP8266
 #include <Arduino.h>
 #include <user_interface.h>
+#elif ARDUINO_ARCH_ESP32
+#include <Arduino.h>
+#include <esp_wifi.h>
 #endif
 
 void print(const char[]);
