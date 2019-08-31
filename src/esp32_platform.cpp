@@ -6,8 +6,11 @@
 
 #include "knx/bits.h"
 
-
 Esp32Platform::Esp32Platform() : ArduinoPlatform(Serial)
+{
+}
+
+Esp32Platform::Esp32Platform( HardwareSerial& s) : ArduinoPlatform(s)
 {
 }
 
