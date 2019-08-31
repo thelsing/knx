@@ -666,6 +666,7 @@ void TransportLayer::A12(uint16_t destination, Priority priority)
     CemiFrame frame(0);
     TPDU& tpdu = frame.tpdu();
     tpdu.type(Connect);
+    _networkLayer->dataIndividualRequest(AckRequested, destination, NetworkLayerParameter, priority, tpdu);
     _seqNoRecv = 0;
     _seqNoSend = 0;
     enableConnectionTimeout();
