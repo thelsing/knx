@@ -68,6 +68,16 @@ int ArduinoPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     return 0;
 }
 
+void ArduinoPlatform::setUart( HardwareSerial& serial )
+{
+    _knxSerial = serial;
+}
+
+HardwareSerial& ArduinoPlatform::getUart()
+{
+    return _knxSerial;
+}
+
 void ArduinoPlatform::setupUart()
 {
     _knxSerial.begin(19200, SERIAL_8E1);

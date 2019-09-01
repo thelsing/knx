@@ -10,6 +10,10 @@ SamdPlatform::SamdPlatform() : ArduinoPlatform(Serial1)
 {
 }
 
+SamdPlatform::SamdPlatform( HardwareSerial& s) : ArduinoPlatform(s)
+{
+}
+
 void SamdPlatform::restart()
 {
     SerialDBG.println("restart");
