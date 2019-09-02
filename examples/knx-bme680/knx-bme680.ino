@@ -94,16 +94,16 @@ void setup(void)
         cyclSend = knx.paramInt(0);
         SerialDBG.print("Zykl. send:");
         SerialDBG.println(cyclSend);
-        goRawTemperature.dataPointType(Dpt(9, 0));
-        goPressure.dataPointType(Dpt(9, 0));
-        goRawHumidity.dataPointType(Dpt(9, 0));
-        goGasResistance.dataPointType(Dpt(9, 0));
-        goIaqEstimate.dataPointType(Dpt(9, 0));
-        goIaqAccurace.dataPointType(Dpt(9, 0));
-        goTemperature.dataPointType(Dpt(9, 0));
-        goHumidity.dataPointType(Dpt(9, 0));
-        goCo2Ppm.dataPointType(Dpt(9, 0));
-        goTriggerSample.dataPointType(Dpt(1, 0));
+        goRawTemperature.dataPointType(Dpt(9, 1));
+        goPressure.dataPointType(Dpt(9, 1));
+        goRawHumidity.dataPointType(Dpt(9, 1));
+        goGasResistance.dataPointType(Dpt(9, 1));
+        goIaqEstimate.dataPointType(Dpt(9, 1));
+        goIaqAccurace.dataPointType(Dpt(9, 1));
+        goTemperature.dataPointType(Dpt(9, 1));
+        goHumidity.dataPointType(Dpt(9, 1));
+        goCo2Ppm.dataPointType(Dpt(9, 1));
+        goTriggerSample.dataPointType(Dpt(1, 1));
     }
     
     // start the framework.

@@ -56,7 +56,7 @@ void print(int, int = DEC);
 void print(unsigned int, int = DEC);
 void print(long, int = DEC);
 void print(unsigned long, int = DEC);
-void print(double, int = 2);
+void print(double);
 
 void println(const char[]);
 void println(char);
@@ -65,7 +65,7 @@ void println(int, int = DEC);
 void println(unsigned int, int = DEC);
 void println(long, int = DEC);
 void println(unsigned long, int = DEC);
-void println(double, int = 2);
+void println(double);
 void println(void);
 
 

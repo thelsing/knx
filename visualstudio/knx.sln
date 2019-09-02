@@ -46,6 +46,7 @@ Global
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|ESP32_Dev_Module.ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|Mixed.ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|VisualGDB.ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
+		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|VisualGDB.Build.0 = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|x64.ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.Debug|x86.ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{58AFEECD-06E2-4BB7-A13F-E1D5DBAED13F}.MinSizeRel|Arduino_Genuino_Zero_(Native_USB_Port).ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
@@ -84,8 +85,7 @@ Global
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|ESP32_Dev_Module.Build.0 = Debug|ESP32_Dev_Module
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|Mixed.ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|Mixed.Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
-		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|VisualGDB.ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
-		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|VisualGDB.Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
+		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|VisualGDB.ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|x64.ActiveCfg = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|x64.Build.0 = Release|NodeMCU_1 0_(ESP-12E_Module)
 		{6165CD6A-91A4-49FA-977A-48F22086CA8E}.Debug|x86.ActiveCfg = Debug|NodeMCU_1 0_(ESP-12E_Module)
