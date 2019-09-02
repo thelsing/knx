@@ -25,8 +25,8 @@ class ArduinoPlatform : public Platform
     int readBytes(uint8_t* buffer, uint16_t maxLen);
 
     //uart
-    virtual void setUart( HardwareSerial& serial );
-    virtual HardwareSerial& getUart();
+    virtual void knxUart( HardwareSerial& serial );
+    virtual HardwareSerial& knxUart();
     virtual void setupUart();
     virtual void closeUart();
     virtual int uartAvailable();
