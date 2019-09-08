@@ -29,13 +29,10 @@
 
 #define MAX_MEM 4096
 
-LinuxPlatform::LinuxPlatform(int argc, char** argv)
+LinuxPlatform::LinuxPlatform()
 {
     Platform::_memoryReference = (uint8_t*)malloc(MAX_MEM);
     _currentMaxMem = Platform::_memoryReference;
-    _args = new char*[argc + 1];
-    memcpy(_args, argv, argc * sizeof(char*));
-    _args[argc] = 0;
 }
 
 LinuxPlatform::~LinuxPlatform()
@@ -58,7 +55,7 @@ uint32_t LinuxPlatform::currentDefaultGateway()
     return 0;
 }
 
-uint32_t LinuxPlatform::millis()
+uint32_t millis()
 {
     struct timespec spec;
 
@@ -66,7 +63,7 @@ uint32_t LinuxPlatform::millis()
     return spec.tv_sec * 1000 + round(spec.tv_nsec / 1.0e6);
 }
 
-void LinuxPlatform::mdelay(uint32_t millis)
+void delay(uint32_t millis)
 {
     struct timespec ts;
     ts.tv_sec = millis / 1000;
@@ -500,4 +497,26 @@ void println(void)
     printf("\n");
 }
 
+void pinMode(uint32_t dwPin, uint32_t dwMode)
+{
+}
+
+void digitalWrite(uint32_t dwPin, uint32_t dwVal)
+{
+}
+
+typedef void (*voidFuncPtr)(void);
+void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
+{
+}
+
+void LinuxPlatform::cmdLineArgs(int argc, char** argv)
+{
+    if (_args)
+        delete[] _args;
+
+    _args = new char*[argc + 1];
+    memcpy(_args, argv, argc * sizeof(char*));
+    _args[argc] = 0;
+}
 #endif

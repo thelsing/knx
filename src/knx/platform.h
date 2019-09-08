@@ -13,10 +13,8 @@ class Platform
     virtual uint32_t currentDefaultGateway() = 0;
     virtual void macAddress(uint8_t* data) = 0;
 
-    virtual uint32_t millis() = 0;
     virtual void restart() = 0;
     virtual void fatalError() = 0;
-    virtual void mdelay(uint32_t millis) = 0;
 
     virtual void setupMultiCast(uint32_t addr, uint16_t port) = 0;
     virtual void closeMultiCast() = 0;

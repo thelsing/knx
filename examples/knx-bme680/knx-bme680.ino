@@ -42,9 +42,10 @@ bool trigger = false;
 // Entry point for the example
 void setup(void)
 {
-    Serial.begin(115200);
+    SerialDBG.begin(115200);
+    ArduinoPlatform::SerialDebug = SerialDBG;
     delay(5000);
-    Serial.println("start");
+    SerialDBG.println("start");
 
     #ifdef ARDUINO_ARCH_ESP8266
     WiFiManager wifiManager;    
@@ -91,18 +92,18 @@ void setup(void)
     if (knx.configured())
     {
         cyclSend = knx.paramInt(0);
-        Serial.print("Zykl. send:");
-        Serial.println(cyclSend);
-        goRawTemperature.dataPointType(Dpt(9, 0));
-        goPressure.dataPointType(Dpt(9, 0));
-        goRawHumidity.dataPointType(Dpt(9, 0));
-        goGasResistance.dataPointType(Dpt(9, 0));
-        goIaqEstimate.dataPointType(Dpt(9, 0));
-        goIaqAccurace.dataPointType(Dpt(9, 0));
-        goTemperature.dataPointType(Dpt(9, 0));
-        goHumidity.dataPointType(Dpt(9, 0));
-        goCo2Ppm.dataPointType(Dpt(9, 0));
-        goTriggerSample.dataPointType(Dpt(1, 0));
+        SerialDBG.print("Zykl. send:");
+        SerialDBG.println(cyclSend);
+        goRawTemperature.dataPointType(Dpt(9, 1));
+        goPressure.dataPointType(Dpt(9, 1));
+        goRawHumidity.dataPointType(Dpt(9, 1));
+        goGasResistance.dataPointType(Dpt(9, 1));
+        goIaqEstimate.dataPointType(Dpt(9, 1));
+        goIaqAccurace.dataPointType(Dpt(9, 1));
+        goTemperature.dataPointType(Dpt(9, 1));
+        goHumidity.dataPointType(Dpt(9, 1));
+        goCo2Ppm.dataPointType(Dpt(9, 1));
+        goTriggerSample.dataPointType(Dpt(1, 1));
     }
     
     // start the framework.
@@ -111,7 +112,7 @@ void setup(void)
     iaqSensor.updateSubscription(sensorList, sizeof(sensorList)/sizeof(bsec_virtual_sensor_t), BSEC_SAMPLE_RATE_LP);
     checkIaqSensorStatus();
     String output = "Timestamp [ms], raw temperature [°C], pressure [hPa], raw relative humidity [%], gas [Ohm], IAQ, IAQ accuracy, temperature [°C], relative humidity [%], CO2";
-    Serial.println(output);
+    SerialDBG.println(output);
 }
 
 // Function that is looped forever
@@ -149,7 +150,7 @@ void loop(void)
         output += ", " + String(iaqSensor.runInStatus);
         output += ", " + String(iaqSensor.stabStatus);
 
-        Serial.println(output);
+        SerialDBG.println(output);
         updateState();
         
         if (sendCounter++ == cyclSend || trigger)
@@ -179,26 +180,26 @@ void checkIaqSensorStatus(void)
     if (iaqSensor.status != BSEC_OK) {
         if (iaqSensor.status < BSEC_OK) {
             String output = "BSEC error code : " + String(iaqSensor.status);
-            Serial.println(output);
+            SerialDBG.println(output);
             for (;;)
                 errLeds(); /* Halt in case of failure */
         }
         else {
             String output = "BSEC warning code : " + String(iaqSensor.status);
-            Serial.println(output);
+            SerialDBG.println(output);
         }
     }
 
     if (iaqSensor.bme680Status != BME680_OK) {
         if (iaqSensor.bme680Status < BME680_OK) {
             String output = "BME680 error code : " + String(iaqSensor.bme680Status);
-            Serial.println(output);
+            SerialDBG.println(output);
             for (;;)
                 errLeds(); /* Halt in case of failure */
         }
         else {
             String output = "BME680 warning code : " + String(iaqSensor.bme680Status);
-            Serial.println(output);
+            SerialDBG.println(output);
         }
     }
 }
@@ -215,10 +216,10 @@ void errLeds(void)
 uint8_t* loadBme680State(uint8_t* buffer)
 {
     // Existing state in EEPROM
-    Serial.println("Reading state from EEPROM");
+    SerialDBG.println("Reading state from EEPROM");
 
     for (uint8_t i = 0; i < BSEC_MAX_STATE_BLOB_SIZE; i++) {
-        Serial.println(buffer[i], HEX);
+        SerialDBG.println(buffer[i], HEX);
     }
 
     iaqSensor.setState(buffer);
@@ -231,10 +232,10 @@ uint8_t* saveBme680State(uint8_t* buffer)
     iaqSensor.getState(buffer);
     checkIaqSensorStatus();
 
-    Serial.println("Writing state to EEPROM");
+    SerialDBG.println("Writing state to EEPROM");
 
     for (uint8_t i = 0; i < BSEC_MAX_STATE_BLOB_SIZE; i++) {
-        Serial.println(buffer[i], HEX);
+        SerialDBG.println(buffer[i], HEX);
     }
     return buffer + BSEC_MAX_STATE_BLOB_SIZE;
 }
@@ -265,8 +266,8 @@ void updateState(void)
 // callback from trigger-GO
 void triggerCallback(GroupObject& go)
 {
-    Serial.println("trigger");
-    Serial.println((bool)go.value());
+    SerialDBG.println("trigger");
+    SerialDBG.println((bool)go.value());
     if (!go.value())
         return;
 
@@ -274,7 +275,7 @@ void triggerCallback(GroupObject& go)
     /* We call bsec_update_subscription() in order to instruct BSEC to perform an extra measurement at the next
      possible time slot
      */
-    Serial.println("Triggering ULP plus.");
+    SerialDBG.println("Triggering ULP plus.");
     bsec_virtual_sensor_t sensorList[] = {
         BSEC_OUTPUT_IAQ, BSEC_OUTPUT_CO2_EQUIVALENT
     };

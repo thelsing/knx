@@ -1,18 +1,17 @@
-#ifdef ARDUINO_ARCH_ESP8266
+#ifdef ARDUINO_ARCH_ESP32
 #include "arduino_platform.h"
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
 #include <WiFiUdp.h>
 
 #define SerialDBG Serial
 
-class EspPlatform : public ArduinoPlatform
+class Esp32Platform : public ArduinoPlatform
 {
     using ArduinoPlatform::_mulitcastAddr;
     using ArduinoPlatform::_mulitcastPort;
-
-  public:
-    EspPlatform();
-    EspPlatform( HardwareSerial& s);
+public:
+    Esp32Platform();
+    Esp32Platform( HardwareSerial& s);
 
     // ip stuff
     uint32_t currentIpAddress() override;
@@ -28,7 +27,7 @@ class EspPlatform : public ArduinoPlatform
     void closeMultiCast() override;
     bool sendBytes(uint8_t* buffer, uint16_t len) override;
     int readBytes(uint8_t* buffer, uint16_t maxLen) override;
-   
+    
     //memory
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();

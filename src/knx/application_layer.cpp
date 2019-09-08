@@ -175,7 +175,10 @@ void ApplicationLayer::connectIndication(uint16_t tsap)
 
 void ApplicationLayer::connectConfirm(uint16_t destination, uint16_t tsap, bool status)
 {
-
+    if (status)
+        _connectedTsap = tsap;
+    else
+        _connectedTsap = -1;
 }
 
 void ApplicationLayer::disconnectIndication(uint16_t tsap)

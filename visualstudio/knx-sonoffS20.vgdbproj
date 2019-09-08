@@ -25,8 +25,10 @@
     <AdditionalLibraryDirectories>
       <string>..\..</string>
     </AdditionalLibraryDirectories>
+    <IgnoreNormalLibraryDirectories>false</IgnoreNormalLibraryDirectories>
     <OutputSubdirectory>Output\$(PlatformName.defuse)\$(ConfigurationName.defuse)</OutputSubdirectory>
     <EnableVerboseBuild>true</EnableVerboseBuild>
+    <PreprocessorMacros />
   </Build>
   <CustomBuild>
     <PreSyncActions />
@@ -171,69 +173,6 @@
     </CodeAnalyzerSettings>
   </CodeSense>
   <Configurations>
-    <VisualGDBConfiguration>
-      <PlatformName>Arduino Genuino Zero (Native USB Port)</PlatformName>
-      <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
-        <AdditionalStartupCommands />
-        <AdditionalGDBSettings>
-          <Features>
-            <DisableAutoDetection>false</DisableAutoDetection>
-            <UseFrameParameter>false</UseFrameParameter>
-            <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
-            <ListLocalsSupported>false</ListLocalsSupported>
-            <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
-            <ThreadInfoSupported>false</ThreadInfoSupported>
-            <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
-            <SupportTargetCommand>false</SupportTargetCommand>
-            <ReliableBreakpointNotifications>false</ReliableBreakpointNotifications>
-          </Features>
-          <EnableSmartStepping>false</EnableSmartStepping>
-          <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
-          <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
-          <UseAppleExtensions>false</UseAppleExtensions>
-          <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
-          <MakeLogFile>false</MakeLogFile>
-          <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
-          <UseRelativePathsOnly>false</UseRelativePathsOnly>
-          <ExitAction>None</ExitAction>
-          <DisableDisassembly>false</DisableDisassembly>
-          <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
-          <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
-          <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
-          <DisableSignals>false</DisableSignals>
-          <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
-          <EnableNonStopMode>false</EnableNonStopMode>
-          <MaxBreakpointLimit>0</MaxBreakpointLimit>
-        </AdditionalGDBSettings>
-        <DebugMethod>
-          <ID>gdbsim</ID>
-          <Configuration>
-            <Entries />
-          </Configuration>
-        </DebugMethod>
-        <AutoDetectRTOS>true</AutoDetectRTOS>
-        <SemihostingSupport>Disabled</SemihostingSupport>
-        <SemihostingPollingDelay>0</SemihostingPollingDelay>
-        <StepIntoEntryPoint>false</StepIntoEntryPoint>
-        <ReloadFirmwareOnReset>false</ReloadFirmwareOnReset>
-        <ValidateEndOfStackAddress>true</ValidateEndOfStackAddress>
-        <StopAtEntryPoint>false</StopAtEntryPoint>
-        <EnableVirtualHalts>false</EnableVirtualHalts>
-        <DynamicAnalysisSettings />
-        <EndOfStackSymbol>_estack</EndOfStackSymbol>
-        <TimestampProviderTicksPerSecond>0</TimestampProviderTicksPerSecond>
-        <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
-        <CheckInterfaceDrivers>true</CheckInterfaceDrivers>
-      </DebugSettingsOverride>
-      <BuildSettingsExtension xsi:type="com.visualgdb.build.external.arduino.extension">
-        <BoardID>arduino:samd:arduino_zero_native</BoardID>
-        <COMPort>COM11</COMPort>
-        <Properties>
-          <Entries />
-        </Properties>
-        <DebugUnoptimizedComponentTypes>Sketch</DebugUnoptimizedComponentTypes>
-      </BuildSettingsExtension>
-    </VisualGDBConfiguration>
     <VisualGDBConfiguration>
       <PlatformName>NodeMCU 1 0 (ESP-12E Module)</PlatformName>
       <DebugSettingsOverride xsi:type="com.visualgdb.debug.embedded">
