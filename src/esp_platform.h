@@ -3,7 +3,6 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
-#define SerialDBG Serial
 
 class EspPlatform : public ArduinoPlatform
 {

@@ -3,7 +3,6 @@
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
-#define SerialDBG Serial
 
 class Esp32Platform : public ArduinoPlatform
 {
