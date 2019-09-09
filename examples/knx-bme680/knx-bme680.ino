@@ -42,10 +42,10 @@ bool trigger = false;
 // Entry point for the example
 void setup(void)
 {
-    SerialDBG.begin(115200);
+    Serial.begin(115200);
     ArduinoPlatform::SerialDebug = Serial;
     delay(5000);
-    SerialDBG.println("start");
+    Serial.println("start");
 
     #ifdef ARDUINO_ARCH_ESP8266
     WiFiManager wifiManager;    
@@ -92,8 +92,8 @@ void setup(void)
     if (knx.configured())
     {
         cyclSend = knx.paramInt(0);
-        SerialDBG.print("Zykl. send:");
-        SerialDBG.println(cyclSend);
+        Serial.print("Zykl. send:");
+        Serial.println(cyclSend);
         goRawTemperature.dataPointType(Dpt(9, 1));
         goPressure.dataPointType(Dpt(9, 1));
         goRawHumidity.dataPointType(Dpt(9, 1));
@@ -112,7 +112,7 @@ void setup(void)
     iaqSensor.updateSubscription(sensorList, sizeof(sensorList)/sizeof(bsec_virtual_sensor_t), BSEC_SAMPLE_RATE_LP);
     checkIaqSensorStatus();
     String output = "Timestamp [ms], raw temperature [°C], pressure [hPa], raw relative humidity [%], gas [Ohm], IAQ, IAQ accuracy, temperature [°C], relative humidity [%], CO2";
-    SerialDBG.println(output);
+    Serial.println(output);
 }
 
 // Function that is looped forever
@@ -150,7 +150,7 @@ void loop(void)
         output += ", " + String(iaqSensor.runInStatus);
         output += ", " + String(iaqSensor.stabStatus);
 
-        SerialDBG.println(output);
+        Serial.println(output);
         updateState();
         
         if (sendCounter++ == cyclSend || trigger)
@@ -180,26 +180,26 @@ void checkIaqSensorStatus(void)
     if (iaqSensor.status != BSEC_OK) {
         if (iaqSensor.status < BSEC_OK) {
             String output = "BSEC error code : " + String(iaqSensor.status);
-            SerialDBG.println(output);
+            Serial.println(output);
             for (;;)
                 errLeds(); /* Halt in case of failure */
         }
         else {
             String output = "BSEC warning code : " + String(iaqSensor.status);
-            SerialDBG.println(output);
+            Serial.println(output);
         }
     }
 
     if (iaqSensor.bme680Status != BME680_OK) {
         if (iaqSensor.bme680Status < BME680_OK) {
             String output = "BME680 error code : " + String(iaqSensor.bme680Status);
-            SerialDBG.println(output);
+            Serial.println(output);
             for (;;)
                 errLeds(); /* Halt in case of failure */
         }
         else {
             String output = "BME680 warning code : " + String(iaqSensor.bme680Status);
-            SerialDBG.println(output);
+            Serial.println(output);
         }
     }
 }
@@ -216,10 +216,10 @@ void errLeds(void)
 uint8_t* loadBme680State(uint8_t* buffer)
 {
     // Existing state in EEPROM
-    SerialDBG.println("Reading state from EEPROM");
+    Serial.println("Reading state from EEPROM");
 
     for (uint8_t i = 0; i < BSEC_MAX_STATE_BLOB_SIZE; i++) {
-        SerialDBG.println(buffer[i], HEX);
+        Serial.println(buffer[i], HEX);
     }
 
     iaqSensor.setState(buffer);
@@ -232,10 +232,10 @@ uint8_t* saveBme680State(uint8_t* buffer)
     iaqSensor.getState(buffer);
     checkIaqSensorStatus();
 
-    SerialDBG.println("Writing state to EEPROM");
+    Serial.println("Writing state to EEPROM");
 
     for (uint8_t i = 0; i < BSEC_MAX_STATE_BLOB_SIZE; i++) {
-        SerialDBG.println(buffer[i], HEX);
+        Serial.println(buffer[i], HEX);
     }
     return buffer + BSEC_MAX_STATE_BLOB_SIZE;
 }
@@ -266,8 +266,8 @@ void updateState(void)
 // callback from trigger-GO
 void triggerCallback(GroupObject& go)
 {
-    SerialDBG.println("trigger");
-    SerialDBG.println((bool)go.value());
+    Serial.println("trigger");
+    Serial.println((bool)go.value());
     if (!go.value())
         return;
 
@@ -275,7 +275,7 @@ void triggerCallback(GroupObject& go)
     /* We call bsec_update_subscription() in order to instruct BSEC to perform an extra measurement at the next
      possible time slot
      */
-    SerialDBG.println("Triggering ULP plus.");
+    Serial.println("Triggering ULP plus.");
     bsec_virtual_sensor_t sensorList[] = {
         BSEC_OUTPUT_IAQ, BSEC_OUTPUT_CO2_EQUIVALENT
     };
