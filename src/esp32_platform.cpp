@@ -36,7 +36,7 @@ void Esp32Platform::macAddress(uint8_t * addr)
 
 void Esp32Platform::restart()
 {
-    ArduinoPlatform::SerialDebug.println("restart");
+    println("restart");
     ESP.restart();
 }
 
