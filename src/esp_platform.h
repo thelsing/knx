@@ -3,7 +3,6 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
-#define SerialDBG Serial
 
 class EspPlatform : public ArduinoPlatform
 {
@@ -12,7 +11,7 @@ class EspPlatform : public ArduinoPlatform
 
   public:
     EspPlatform();
-    EspPlatform( HardwareSerial& s);
+    EspPlatform( HardwareSerial* s);
 
     // ip stuff
     uint32_t currentIpAddress() override;

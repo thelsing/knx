@@ -7,7 +7,7 @@ extern Stream& _serialDBG;
 class ArduinoPlatform : public Platform
 {
   public:
-    ArduinoPlatform(HardwareSerial& knxSerial);
+    ArduinoPlatform(HardwareSerial* knxSerial);
 
     // ip stuff
     uint32_t currentIpAddress();
@@ -25,8 +25,8 @@ class ArduinoPlatform : public Platform
     int readBytes(uint8_t* buffer, uint16_t maxLen);
 
     //uart
-    virtual void knxUart( HardwareSerial& serial );
-    virtual HardwareSerial& knxUart();
+    virtual void knxUart( HardwareSerial* serial);
+    virtual HardwareSerial* knxUart();
     virtual void setupUart();
     virtual void closeUart();
     virtual int uartAvailable();
@@ -40,5 +40,5 @@ class ArduinoPlatform : public Platform
   protected:
     uint32_t _mulitcastAddr;
     uint16_t _mulitcastPort;
-    HardwareSerial& _knxSerial;
+    HardwareSerial* _knxSerial;
 };
