@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-Stream& ArduinoPlatform::SerialDebug = SerialUSB;
+Stream& ArduinoPlatform::SerialDebug = Serial;
 
 ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial) : _knxSerial(knxSerial)
 {
