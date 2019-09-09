@@ -21,10 +21,10 @@ uint32_t cyclSend = 0;
 // Entry point for the example
 void setup(void)
 {
-    SerialDBG.begin(115200);
-    ArduinoPlatform::SerialDebug = SerialDBG;
+    Serial.begin(115200);
+    ArduinoPlatform::SerialDebug = Serial;
     delay(5000);
-    SerialDBG.println("start");
+    Serial.println("start");
 
 #ifdef ARDUINO_ARCH_ESP8266
 	WiFiManager wifiManager;    
@@ -45,15 +45,15 @@ void setup(void)
     {
 		
         cyclSend = knx.paramInt(0);
-        SerialDBG.print("Zykl. send:");
-        SerialDBG.println(cyclSend);
+        Serial.print("Zykl. send:");
+        Serial.println(cyclSend);
     }
     
     // start the framework.
     knx.start();
 
     String output = "Timestamp [ms], temperature [°C], relative humidity [%]";
-    SerialDBG.println(output);
+    Serial.println(output);
 }
 
 
@@ -78,7 +78,7 @@ void loop(void)
     String output = String(millis());
     output += ", " + String(temp);
     output += ", " + String(humi);
-    SerialDBG.println(output);
+    Serial.println(output);
         
     if (sendCounter++ == cyclSend)
     {
