@@ -55,7 +55,7 @@ void resetCallback(GroupObject& go)
 void setup()
 {
     Serial.begin(115200);
-    ArduinoPlatform::SerialDebug = Serial;
+    ArduinoPlatform::SerialDebug = &Serial;
 
     randomSeed(millis());
 
