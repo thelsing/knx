@@ -43,7 +43,7 @@ bool trigger = false;
 void setup(void)
 {
     SerialDBG.begin(115200);
-    ArduinoPlatform::SerialDebug = SerialDBG;
+    ArduinoPlatform::SerialDebug = Serial;
     delay(5000);
     SerialDBG.println("start");
 
