@@ -5,7 +5,7 @@
 
 Stream& ArduinoPlatform::SerialDebug = Serial;
 
-ArduinoPlatform::ArduinoPlatform(HardwareSerial& knxSerial) : _knxSerial(knxSerial)
+ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial) : _knxSerial(knxSerial)
 {
 }
 
@@ -68,19 +68,21 @@ int ArduinoPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     return 0;
 }
 
-void ArduinoPlatform::knxUart( HardwareSerial& serial )
+void ArduinoPlatform::knxUart( HardwareSerial* serial )
 {
+    closeUart();
     _knxSerial = serial;
+    setupUart();
 }
 
-HardwareSerial& ArduinoPlatform::knxUart()
+HardwareSerial* ArduinoPlatform::knxUart()
 {
     return _knxSerial;
 }
 
 void ArduinoPlatform::setupUart()
 {
-    _knxSerial.begin(19200, SERIAL_8E1);
+    _knxSerial->begin(19200, SERIAL_8E1);
     while (!_knxSerial) 
         ;
 }
@@ -88,33 +90,33 @@ void ArduinoPlatform::setupUart()
 
 void ArduinoPlatform::closeUart()
 {
-    _knxSerial.end();
+    _knxSerial->end();
 }
 
 
 int ArduinoPlatform::uartAvailable()
 {
-    return _knxSerial.available();
+    return _knxSerial->available();
 }
 
 
 size_t ArduinoPlatform::writeUart(const uint8_t data)
 {
     //printHex("<p", &data, 1);
-    return _knxSerial.write(data);
+    return _knxSerial->write(data);
 }
 
 
 size_t ArduinoPlatform::writeUart(const uint8_t *buffer, size_t size)
 {
     //printHex("<p", buffer, size);
-    return _knxSerial.write(buffer, size);
+    return _knxSerial->write(buffer, size);
 }
 
 
 int ArduinoPlatform::readUart()
 {
-    int val = _knxSerial.read();
+    int val = _knxSerial->read();
     //if(val > 0)
     //    printHex("p>", (uint8_t*)&val, 1);
     return val;
@@ -127,7 +129,7 @@ size_t ArduinoPlatform::readBytesUart(uint8_t *buffer, size_t length)
     uint8_t* pos = buffer;
     while (toRead > 0)
     {
-        size_t val = _knxSerial.readBytes(pos, toRead);
+        size_t val = _knxSerial->readBytes(pos, toRead);
         pos += val;
         toRead -= val;
     }

@@ -7,11 +7,11 @@
 
 #include "knx/bits.h"
 
-EspPlatform::EspPlatform() : ArduinoPlatform(Serial)
+EspPlatform::EspPlatform() : ArduinoPlatform(&Serial)
 {
 }
 
-EspPlatform::EspPlatform( HardwareSerial& s) : ArduinoPlatform(s)
+EspPlatform::EspPlatform( HardwareSerial* s) : ArduinoPlatform(s)
 {
 }
 
@@ -37,7 +37,7 @@ void EspPlatform::macAddress(uint8_t * addr)
 
 void EspPlatform::restart()
 {
-    Serial.println("restart");
+    ArduinoPlatform::SerialDebug.println("restart");
     ESP.reset();
 }
 
