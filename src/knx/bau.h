@@ -5,6 +5,7 @@
 class BusAccessUnit
 {
   public:
+    virtual ~BusAccessUnit() {}
     virtual void groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, bool status);
     virtual void groupValueReadIndication(uint16_t asap, Priority priority, HopCountType hopType);
     virtual void groupValueReadResponseConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopTtype,

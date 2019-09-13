@@ -10,8 +10,10 @@ class LinuxPlatform: public Platform
     using Platform::_memoryReference;
     using Platform::memoryReference;
 public:
-    LinuxPlatform(int argc, char** argv);
+    LinuxPlatform();
     virtual ~LinuxPlatform();
+
+    void cmdLineArgs(int argc, char** argv);
 
     std::string flashFilePath();
     void flashFilePath(const std::string path);
@@ -23,8 +25,6 @@ public:
     void macAddress(uint8_t* addr) override;
 
     // basic stuff
-    uint32_t millis() override;
-    void mdelay(uint32_t millis) override;
     void restart() override;
     void fatalError() override;
 

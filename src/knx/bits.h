@@ -14,6 +14,24 @@
 #define DEC 10
 #define HEX 16
 
+#define INPUT (0x0)
+#define OUTPUT (0x1)
+#define INPUT_PULLUP (0x2)
+#define INPUT_PULLDOWN (0x3)
+
+#define LOW (0x0)
+#define HIGH (0x1)
+#define CHANGE 2
+#define FALLING 3
+#define RISING 4
+
+void delay(uint32_t millis);
+uint32_t millis();
+void pinMode(uint32_t dwPin, uint32_t dwMode);
+void digitalWrite(uint32_t dwPin, uint32_t dwVal);
+typedef void (*voidFuncPtr)(void);
+void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
+
 #elif ARDUINO_ARCH_SAMD
 #include <Arduino.h>
 #define htons(x) ( (((x)<<8)&0xFF00) | (((x)>>8)&0xFF) )
@@ -26,6 +44,9 @@
 #elif ARDUINO_ARCH_ESP8266
 #include <Arduino.h>
 #include <user_interface.h>
+#elif ARDUINO_ARCH_ESP32
+#include <Arduino.h>
+#include <esp_wifi.h>
 #endif
 
 void print(const char[]);
@@ -35,7 +56,7 @@ void print(int, int = DEC);
 void print(unsigned int, int = DEC);
 void print(long, int = DEC);
 void print(unsigned long, int = DEC);
-void print(double, int = 2);
+void print(double);
 
 void println(const char[]);
 void println(char);
@@ -44,7 +65,7 @@ void println(int, int = DEC);
 void println(unsigned int, int = DEC);
 void println(long, int = DEC);
 void println(unsigned long, int = DEC);
-void println(double, int = 2);
+void println(double);
 void println(void);
 
 

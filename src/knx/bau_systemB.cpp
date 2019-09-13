@@ -5,7 +5,7 @@
 BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platform),
     _assocTable(platform), _groupObjTable(platform), _appProgram(platform),
     _platform(platform), _appLayer(_assocTable, *this),
-    _transLayer(_appLayer, _addrTable, _platform), _netLayer(_transLayer)
+    _transLayer(_appLayer, _addrTable), _netLayer(_transLayer)
 {
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);

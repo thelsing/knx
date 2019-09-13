@@ -54,7 +54,8 @@ void resetCallback(GroupObject& go)
 
 void setup()
 {
-    SerialDBG.begin(115200);
+    Serial.begin(115200);
+    ArduinoPlatform::SerialDebug = &Serial;
 
     randomSeed(millis());
 
@@ -71,20 +72,24 @@ void setup()
     {
         // register callback for reset GO
         goReset.callback(resetCallback);
+        goReset.dataPointType(DPT_Trigger);
+        goCurrent.dataPointType(DPT_Value_Temp);
+        goMin.dataPointType(DPT_Value_Temp);
+        goMax.dataPointType(DPT_Value_Temp);
 
-        SerialDBG.print("Timeout: ");
-        SerialDBG.println(knx.paramByte(0));
-        SerialDBG.print("Zykl. senden: ");
-        SerialDBG.println(knx.paramByte(1));
-        SerialDBG.print("Min/Max senden: ");
-        SerialDBG.println(knx.paramByte(2));
-        SerialDBG.print("Aenderung senden: ");
-        SerialDBG.println(knx.paramByte(3));
-        SerialDBG.print("Abgleich: ");
-        SerialDBG.println(knx.paramByte(4));
+        Serial.print("Timeout: ");
+        Serial.println(knx.paramByte(0));
+        Serial.print("Zykl. senden: ");
+        Serial.println(knx.paramByte(1));
+        Serial.print("Min/Max senden: ");
+        Serial.println(knx.paramByte(2));
+        Serial.print("Aenderung senden: ");
+        Serial.println(knx.paramByte(3));
+        Serial.print("Abgleich: ");
+        Serial.println(knx.paramByte(4));
     }
 
-    // pin or GPIO the programming led is connected to. Default is LED_BUILDIN
+    // pin or GPIO the programming led is connected to. Default is LED_BUILTIN
     // knx.ledPin(LED_BUILTIN);
     // is the led active on HIGH or low? Default is LOW
     // knx.ledPinActiveOn(HIGH);
