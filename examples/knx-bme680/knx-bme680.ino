@@ -1,4 +1,5 @@
 // used version: BSEC_1.4.7.3_Generic_Release_20190410
+// 2 changes needed for version: BSEC_1.4.7.4_Generic_Release see below
 #include <bsec.h>
 #include <knx.h>
 #ifdef ARDUINO_ARCH_ESP8266
@@ -135,7 +136,7 @@ void loop(void)
         output += ", " + String(iaqSensor.rawHumidity);
         output += ", " + String(iaqSensor.humidity);
         output += ", " + String(iaqSensor.gasResistance);
-        output += ", " + String(iaqSensor.iaq);
+        output += ", " + String(iaqSensor.iaq); //.iaqEstimate for BSEC_1.4.7.4
         output += ", " + String(iaqSensor.iaqAccuracy);
         output += ", " + String(iaqSensor.co2Equivalent);
         output += ", " + String(iaqSensor.co2Accuracy);
@@ -162,7 +163,7 @@ void loop(void)
             goPressure.value(iaqSensor.pressure);
             goRawHumidity.value(iaqSensor.rawHumidity);
             goGasResistance.value(iaqSensor.gasResistance);
-            goIaqEstimate.value(iaqSensor.iaq);
+            goIaqEstimate.value(iaqSensor.iaq); //.iaqEstimate for BSEC_1.4.7.4
             goIaqAccurace.value(iaqSensor.iaqAccuracy);
             goTemperature.value(iaqSensor.temperature);
             goHumidity.value(iaqSensor.humidity);
