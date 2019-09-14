@@ -112,7 +112,7 @@ void setup(void)
     
     iaqSensor.updateSubscription(sensorList, sizeof(sensorList)/sizeof(bsec_virtual_sensor_t), BSEC_SAMPLE_RATE_LP);
     checkIaqSensorStatus();
-    String output = "Timestamp [ms], raw temperature [°C], pressure [hPa], raw relative humidity [%], gas [Ohm], IAQ, IAQ accuracy, temperature [°C], relative humidity [%], CO2";
+    String output = "Timestamp [ms], raw temperature [°C], temperature[°C], pressure [hPa], raw relative humidity [%], humidity [%], gas [Ohm], IAQ, IAQ accuracy, CO2, CO2 Accuracy, breathVocEquivalent, breathVocAccuracy, compGasValue, compGas Accuracy, gasPercentage, gasPercentage Accuracy, staticIAQ, staticIAQ Accuracy, runInStatus, stabStatus";
     Serial.println(output);
 }
 
@@ -144,8 +144,8 @@ void loop(void)
         output += ", " + String(iaqSensor.breathVocAccuracy);
         output += ", " + String(iaqSensor.compGasValue);
         output += ", " + String(iaqSensor.compGasAccuracy);
-        output += ", " + String(iaqSensor.gasPercentageAcccuracy);
         output += ", " + String(iaqSensor.gasPercentage);
+        output += ", " + String(iaqSensor.gasPercentageAcccuracy);
         output += ", " + String(iaqSensor.staticIaq);
         output += ", " + String(iaqSensor.staticIaqAccuracy);
         output += ", " + String(iaqSensor.runInStatus);
