@@ -16,7 +16,7 @@ SamdPlatform::SamdPlatform( HardwareSerial* s) : ArduinoPlatform(s)
 
 void SamdPlatform::restart()
 {
-    ArduinoPlatform::SerialDebug.println("restart");
+    println("restart");
     NVIC_SystemReset();
 }
 

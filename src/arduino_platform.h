@@ -35,7 +35,7 @@ class ArduinoPlatform : public Platform
     virtual int readUart();
     virtual size_t readBytesUart(uint8_t* buffer, size_t length);
 
-    static Stream& SerialDebug;
+    static Stream* SerialDebug;
 
   protected:
     uint32_t _mulitcastAddr;

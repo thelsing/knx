@@ -27,7 +27,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
   public:
     KnxFacade() : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
-    {}
+    {
+        manufacturerId(0xfa);
+        _bau.addSaveRestore(this);
+    }
     
     virtual ~KnxFacade()
     {
