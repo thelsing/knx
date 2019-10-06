@@ -236,3 +236,7 @@ void BusAccessUnit::keyWriteResponseConfirm(AckType ack, Priority priority, HopC
 void BusAccessUnit::keyWriteAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t level)
 {
 }
+
+void BusAccessUnit::connectConfirm(uint16_t destination)
+{
+}

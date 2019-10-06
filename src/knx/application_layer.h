@@ -95,7 +95,10 @@ class ApplicationLayer
                                      uint8_t descriptorType);
     void deviceDescriptorReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                       uint8_t descriptorType, uint8_t* deviceDescriptor);
-    void restartRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap);
+    void connectRequest(uint16_t destination, Priority priority);
+    void disconnectRequest(Priority priority);
+    bool isConnected();
+    void restartRequest(AckType ack, Priority priority, HopCountType hopType);
     void propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                   uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex);
     void propertyValueReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
@@ -147,5 +150,5 @@ class ApplicationLayer
     AssociationTableObject& _assocTable;
     BusAccessUnit& _bau;
     TransportLayer* _transportLayer = 0;
-    int32_t _connectedTsap;
+    int32_t _connectedTsap = -1;
 };
