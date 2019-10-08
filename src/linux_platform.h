@@ -44,8 +44,12 @@ public:
     size_t readBytesUart(uint8_t *buffer, size_t length) override;
 
     //memory
-    uint8_t* getEepromBuffer(uint16_t size) override;
-    void commitToEeprom() override;
+    bool writeNVMemory(uint32_t addr,uint8_t data);
+    uint8_t readNVMemory(uint32_t addr);
+    uint32_t allocNVMemory(uint32_t size,uint32_t ID);
+    uint32_t reloadNVMemory(uint32_t ID);
+    void finishNVMemory();
+    void freeNVMemory(uint32_t ID);
     uint8_t* allocMemory(size_t size) override;
     void freeMemory(uint8_t* ptr) override;
     void cmdlineArgs(int argc, char** argv);

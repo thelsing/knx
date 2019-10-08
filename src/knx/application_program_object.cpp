@@ -74,6 +74,35 @@ uint32_t ApplicationProgramObject::getInt(uint32_t addr)
     return ::getInt(TableObject::data() + addr);
 }
 
+uint32_t ApplicationProgramObject::size(){
+    return sizeof(_programVersion)+TableObject::size();
+}
+
+
+uint8_t* ApplicationProgramObject::save()
+{
+    if(TableObject::data() == NULL)
+        return NULL;
+
+    uint8_t* buffer;
+    uint32_t addr =(uint32_t)(TableObject::data() - sizeof(_programVersion) - TableObject::sizeMetadata());
+    if(TableObject::_platform.NVMemoryType() == internalFlash)
+        buffer = new uint8_t[sizeof(_programVersion)];
+    else
+        buffer = (uint8_t*)addr;
+
+    pushByteArray(_programVersion, sizeof(_programVersion), buffer);
+
+    if(TableObject::_platform.NVMemoryType() == internalFlash){
+        for(uint32_t i=0;i<sizeof(_programVersion);i++)
+            TableObject::_platform.writeNVMemory(addr+i, buffer[i]);
+
+        free (buffer);
+    }
+
+    return TableObject::save();
+}
+
 uint8_t* ApplicationProgramObject::save(uint8_t* buffer)
 {
     buffer = pushByteArray(_programVersion, 5, buffer);
@@ -83,8 +112,8 @@ uint8_t* ApplicationProgramObject::save(uint8_t* buffer)
 
 uint8_t* ApplicationProgramObject::restore(uint8_t* buffer)
 {
+    TableObject::_dataComplete = buffer;
     buffer = popByteArray(_programVersion, 5, buffer);
-
     return TableObject::restore(buffer);
 }
 

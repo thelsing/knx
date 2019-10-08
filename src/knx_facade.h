@@ -257,9 +257,16 @@ template <class P, class B> class KnxFacade : private SaveRestore
     uint32_t _buttonPin = 0;
     saveRestoreCallback _saveCallback = 0;
     saveRestoreCallback _restoreCallback = 0;
+    uint32_t (*_sizeCallback)() = 0;
     bool _toogleProgMode = false;
     bool _progLedState = false;
     
+    uint32_t size(){
+        if (_sizeCallback != 0)
+            return _sizeCallback();
+
+        return 0;
+    }
     uint8_t* save(uint8_t* buffer)
     {
         if (_saveCallback != 0)
@@ -268,6 +275,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return buffer;
     }
     
+    uint8_t* save(){};
     uint8_t* restore(uint8_t* buffer)
     {
         if (_restoreCallback != 0)

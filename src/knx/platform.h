@@ -4,6 +4,13 @@
 #include <stddef.h>
 #include "save_restore.h"
 
+typedef enum{
+    notDefined,
+    internalRam,
+    internalFlash,
+    external
+}NVMemory_t;
+
 class Platform
 {
   public:
@@ -29,13 +36,18 @@ class Platform
     virtual int readUart() = 0;
     virtual size_t readBytesUart(uint8_t* buffer, size_t length) = 0;
 
-    virtual uint8_t* getEepromBuffer(uint16_t size) = 0;
-    virtual void commitToEeprom() = 0;
+    virtual bool writeNVMemory(uint32_t addr,uint8_t data) = 0;
+    virtual uint8_t readNVMemory(uint32_t addr) = 0;
+    virtual uint32_t allocNVMemory(uint32_t size,uint32_t ID) = 0;
+    virtual uint32_t reloadNVMemory(uint32_t ID) = 0;
+    virtual void finishNVMemory() = 0;
+    virtual void freeNVMemory(uint32_t ID) = 0;
 
     virtual uint8_t* memoryReference();
     virtual uint8_t* allocMemory(size_t size);
     virtual void freeMemory(uint8_t* ptr);
-
+    NVMemory_t NVMemoryType(){return _NVMemoryType;}
   protected:
     uint8_t* _memoryReference = 0;
+    NVMemory_t _NVMemoryType = notDefined;
 };

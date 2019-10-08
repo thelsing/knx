@@ -3,6 +3,8 @@
 #include "table_object.h"
 #include "bits.h"
 
+#define METADATA_SIZE     (sizeof(_state)+sizeof(_errorCode)+sizeof(_size))
+
 TableObject::TableObject(Platform& platform): _platform(platform)
 {
 
@@ -92,11 +94,40 @@ uint8_t* TableObject::save(uint8_t* buffer)
     return buffer;
 }
 
+uint8_t* TableObject::save()
+{
+    if(_data == NULL)
+        return NULL;
+
+    uint32_t addr;
+    uint8_t* buffer;
+    addr =(uint32_t)(_data - METADATA_SIZE);
+    if(_platform.NVMemoryType() == internalFlash)
+        buffer = new uint8_t[METADATA_SIZE];
+    else
+        buffer = (uint8_t*)addr;
+
+    buffer = pushByte(_state, buffer);
+    buffer = pushByte(_errorCode, buffer);
+    buffer = pushInt(_size, buffer);
+    buffer -= METADATA_SIZE;
+
+    if(_platform.NVMemoryType() == internalFlash){
+        for(uint32_t i=0;i<METADATA_SIZE;i++)
+            _platform.writeNVMemory(addr+i, buffer[i]);
+
+        free (buffer);
+    }
+
+    return _dataComplete;
+}
 
 uint8_t* TableObject::restore(uint8_t* buffer)
 {
     uint8_t state = 0;
     uint8_t errorCode = 0;
+    if(_dataComplete == NULL)
+        _dataComplete = buffer;
     buffer = popByte(state, buffer);
     buffer = popByte(errorCode, buffer);
     _state = (LoadState)state;
@@ -104,15 +135,13 @@ uint8_t* TableObject::restore(uint8_t* buffer)
 
     buffer = popInt(_size, buffer);
 
-    if (_data)
-        _platform.freeMemory(_data);
-
     if (_size > 0)
-        _data = _platform.allocMemory(_size);
+        _data = buffer;
+
     else
         _data = 0;
 
-    buffer = popByteArray(_data, _size, buffer);
+    buffer += _size;
 
     return buffer;
 }
@@ -124,9 +153,13 @@ uint32_t TableObject::tableReference()
 
 bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
 {
-    if (_data)
+    if (_dataComplete)
     {
-        _platform.freeMemory(_data);
+        if(_platform.NVMemoryType() == internalFlash)
+            _platform.freeNVMemory(_ID);
+        else if(_platform.NVMemoryType() == external)
+            _platform.freeMemory(_dataComplete);
+        _dataComplete = 0;
         _data = 0;
         _size = 0;
     }
@@ -134,15 +167,24 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
     if (size == 0)
         return true;
     
-    _data = _platform.allocMemory(size);
-    if (!_data)
-        return false;
-
+    if(_platform.NVMemoryType() == internalFlash){
+        _dataComplete = (uint8_t*)_platform.allocNVMemory(size+this->size(), _ID);
+    }
+    else{
+        _dataComplete = _platform.allocMemory(size+this->size());
+    }
+    _data = _dataComplete + this->size();  //skip metadata
     _size = size;
-
-    if (doFill)
-        memset(_data, fillByte, size);
-
+    if (doFill){
+        if(_platform.NVMemoryType() == internalFlash){
+            uint32_t addr = (uint32_t)_data;
+            for(uint32_t i=0; i<_size;i++)
+                _platform.writeNVMemory(addr++, fillByte);
+        }
+        else{
+            memset(_data, fillByte, _size);
+        }
+    }
     return true;
 }
 
@@ -279,7 +321,12 @@ uint8_t* TableObject::data()
 
 uint32_t TableObject::size()
 {
-    return _size;
+    return _size + METADATA_SIZE;
+}
+
+uint32_t TableObject::sizeMetadata()
+{
+    return METADATA_SIZE;
 }
 
 void TableObject::errorCode(ErrorCode errorCode)
