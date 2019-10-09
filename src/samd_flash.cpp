@@ -1,3 +1,4 @@
+#ifdef ARDUINO_ARCH_SAMD
 #include <Arduino.h>
 #include "samd_flash.h"
 
@@ -414,3 +415,4 @@ uint8_t* SamdFlash::realloc(uint32_t size, uint32_t ID){
     copyAndFree(actualBlock, (block_meta_data_t*)newBlockFlashAddr);
     return (uint8_t*)(newBlockFlashAddr+sizeof(block_meta_data_t));
 }
+#endif /* ARDUINO_ARCH_SAMD */

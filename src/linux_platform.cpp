@@ -200,31 +200,31 @@ int LinuxPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     return len;
 }
 
-bool LinuxPlatform::writeNVMemory(uint32_t addr,uint8_t data)
+bool LinuxPlatform::writeNVMemory(uintptr_t addr,uint8_t data)
 {
     *((uint8_t*)addr) = data;
     return true;
 }
 
-uint8_t LinuxPlatform::readNVMemory(uint32_t addr)
+uint8_t LinuxPlatform::readNVMemory(uintptr_t addr)
 {
     return *((uint8_t*)addr);
 }
 
-uint32_t LinuxPlatform::allocNVMemory(uint32_t size,uint32_t ID)
+uintptr_t LinuxPlatform::allocNVMemory(size_t size,uint32_t ID)
 {
     if (_fd < 0)
         doMemoryMapping();
     
-    return (uint32_t)_mappedFile + 2;
+    return (uintptr_t)(_mappedFile + 2);
 }
 
-uint32_t LinuxPlatform::reloadNVMemory(uint32_t ID)
+uintptr_t LinuxPlatform::reloadNVMemory(uint32_t ID)
 {
     if (_fd < 0)
         doMemoryMapping();
     
-    return (uint32_t)_mappedFile + 2;
+    return (uintptr_t)(_mappedFile + 2);
 }
 
 void LinuxPlatform::finishNVMemory()

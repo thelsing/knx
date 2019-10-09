@@ -85,7 +85,7 @@ void Memory::readRamMemory()
     for (int i = 0; i < size; i++)
     {
         buffer = _saveRestores[i]->restore(buffer);
-        buffer = (uint8_t*)(((uint32_t)buffer + 3) / 4 * 4);  //allign to 32bit
+        buffer = (uint8_t*)(((uintptr_t)buffer + 3) / 4 * 4);  //allign to 32bit
     }
 }
 
@@ -109,7 +109,7 @@ void Memory::writeRamMemory()
     for (int i = 0; i < size; i++)
     {
         buffer = _saveRestores[i]->save(buffer);
-        buffer = (uint8_t*)(((uint32_t)buffer + 3) / 4 * 4);  //allign to 32bit
+        buffer = (uint8_t*)(((uintptr_t)buffer + 3) / 4 * 4);  //allign to 32bit
     }
     _platform.finishNVMemory();
     _modified = false;
@@ -122,7 +122,7 @@ void Memory::readExternalMemory()
 {
 
     int size = _saveCount;
-    volatile uint32_t addr = _platform.reloadNVMemory(BASE_ID);
+    volatile uintptr_t addr = _platform.reloadNVMemory(BASE_ID);
     volatile uint32_t bytesToRestore;
 
     if(addr == 0)
@@ -164,7 +164,7 @@ void Memory::writeExternalMemory()
         bytesToSave += _saveRestores[i]->size() + 4;
     }
 
-    uint32_t addr = _platform.allocNVMemory(bytesToSave,BASE_ID);
+    uintptr_t addr = _platform.allocNVMemory(bytesToSave,BASE_ID);
 
     //write valid mask
     _platform.writeNVMemory(addr++,0x00);

@@ -141,7 +141,7 @@ void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, 
 {
     if(_platform.NVMemoryType() == internalFlash){
         for(uint8_t i=0;i<number;i++)
-            _platform.writeNVMemory((uint32_t)_platform.memoryReference() + memoryAddress+i, data[i]);
+            _platform.writeNVMemory((uintptr_t)_platform.memoryReference() + memoryAddress+i, data[i]);
     }
     else
         memcpy(_platform.memoryReference() + memoryAddress, data, number);
@@ -158,9 +158,10 @@ void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, u
     if(_platform.NVMemoryType() == internalFlash){
         uint8_t* buffer = new uint8_t[number];
         for(uint8_t i=0;i<number;i++)
-            buffer[i] = _platform.readNVMemory((uint32_t)_platform.memoryReference() + memoryAddress+i);
+            buffer[i] = _platform.readNVMemory((uintptr_t)_platform.memoryReference() + memoryAddress+i);
 
         _appLayer.memoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,buffer);
+        delete[] buffer;
     }
     else{
     _appLayer.memoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
@@ -185,8 +186,9 @@ void BauSystemB::userMemoryReadIndication(Priority priority, HopCountType hopTyp
     if(_platform.NVMemoryType() == internalFlash){
         uint8_t* buffer = new uint8_t[number];
         for(uint8_t i=0;i<number;i++)
-            buffer[i] = _platform.readNVMemory((uint32_t)_platform.memoryReference() + memoryAddress+i);
+            buffer[i] = _platform.readNVMemory((uintptr_t)_platform.memoryReference() + memoryAddress+i);
         _appLayer.userMemoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,buffer);
+        delete[] buffer;
     }
     else{
         _appLayer.userMemoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
@@ -198,7 +200,7 @@ void BauSystemB::userMemoryWriteIndication(Priority priority, HopCountType hopTy
 {
     if(_platform.NVMemoryType() == internalFlash){
         for(uint8_t i=0;i<number;i++)
-            _platform.writeNVMemory((uint32_t)_platform.memoryReference() + memoryAddress+i, data[i]);
+            _platform.writeNVMemory((uintptr_t)_platform.memoryReference() + memoryAddress+i, data[i]);
     }
     else{
         memcpy(_platform.memoryReference() + memoryAddress, data, number);

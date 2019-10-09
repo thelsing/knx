@@ -85,7 +85,7 @@ uint8_t* ApplicationProgramObject::save()
         return NULL;
 
     uint8_t* buffer;
-    uint32_t addr =(uint32_t)(TableObject::data() - sizeof(_programVersion) - TableObject::sizeMetadata());
+    uintptr_t addr =(uintptr_t)(TableObject::data() - sizeof(_programVersion) - TableObject::sizeMetadata());
     if(TableObject::_platform.NVMemoryType() == internalFlash)
         buffer = new uint8_t[sizeof(_programVersion)];
     else
@@ -97,7 +97,7 @@ uint8_t* ApplicationProgramObject::save()
         for(uint32_t i=0;i<sizeof(_programVersion);i++)
             TableObject::_platform.writeNVMemory(addr+i, buffer[i]);
 
-        free (buffer);
+        delete[] buffer;
     }
 
     return TableObject::save();

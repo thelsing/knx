@@ -85,28 +85,26 @@ int EspPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     return len;
 }
 
-bool EspPlatform::writeNVMemory(uint32_t addr,uint8_t data)
+bool EspPlatform::writeNVMemory(uintptr_t addr,uint8_t data)
 {
     *((uint8_t*)addr) = data;
     return true;
 }
 
-uint8_t EspPlatform::readNVMemory(uint32_t addr)
+uint8_t EspPlatform::readNVMemory(uintptr_t addr)
 {
     return *((uint8_t*)addr);
 }
 
-uint32_t EspPlatform::allocNVMemory(uint32_t size,uint32_t ID)
+uintptr_t EspPlatform::allocNVMemory(size_t size,uint32_t ID)
 {
-    if(size > EEPROM_EMULATION_SIZE)
-        fatalError();
-    return (uint32_t)EEPROM.getDataPtr();
+    return (uintptr_t)EEPROM.getDataPtr();
 }
 
-uint32_t EspPlatform::reloadNVMemory(uint32_t ID)
+uintptr_t EspPlatform::reloadNVMemory(uint32_t ID)
 {
     EEPROM.begin(1024);
-    return (uint32_t)EEPROM.getDataPtr();
+    return (uintptr_t)EEPROM.getDataPtr();
 }
 
 void EspPlatform::finishNVMemory()

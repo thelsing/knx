@@ -36,10 +36,10 @@ class Platform
     virtual int readUart() = 0;
     virtual size_t readBytesUart(uint8_t* buffer, size_t length) = 0;
 
-    virtual bool writeNVMemory(uint32_t addr,uint8_t data) = 0;
-    virtual uint8_t readNVMemory(uint32_t addr) = 0;
-    virtual uint32_t allocNVMemory(uint32_t size,uint32_t ID) = 0;
-    virtual uint32_t reloadNVMemory(uint32_t ID) = 0;
+    virtual bool writeNVMemory(uintptr_t addr,uint8_t data) = 0;
+    virtual uint8_t readNVMemory(uintptr_t addr) = 0;
+    virtual uintptr_t allocNVMemory(size_t size,uint32_t ID) = 0;
+    virtual uintptr_t reloadNVMemory(uint32_t ID) = 0;
     virtual void finishNVMemory() = 0;
     virtual void freeNVMemory(uint32_t ID) = 0;
 

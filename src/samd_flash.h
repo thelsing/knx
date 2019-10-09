@@ -1,6 +1,7 @@
 #ifndef SAMD_FLASH_H
 #define SAMD_FLASH_H
 
+#ifdef ARDUINO_ARCH_SAMD
 #include <Arduino.h>
 
 #define PAGES_PER_ROW	4
@@ -56,4 +57,5 @@ private:
     uint32_t _rowBufferAddr;
     volatile info_data_t* _info;
 };
+#endif /* ARDUINO_ARCH_SAMD */
 #endif /* SAMD_FLASH_H */

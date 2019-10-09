@@ -176,12 +176,12 @@ uint8_t* IpParameterObject::save()
 
     if(_platform.NVMemoryType() == internalFlash){
         _platform.freeNVMemory(_ID);
-        uint32_t addr = _platform.allocNVMemory(METADATA_SIZE, _ID);
+        uintptr_t addr = _platform.allocNVMemory(METADATA_SIZE, _ID);
 
-        for(uint32_t i=0;i<METADATA_SIZE;i++)
+        for(size_t i=0;i<METADATA_SIZE;i++)
             _platform.writeNVMemory(addr+i, buffer[i]);
 
-        free (buffer);
+        delete[] buffer;
         return (uint8_t*)addr;
     }
 

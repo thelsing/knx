@@ -28,10 +28,10 @@ public:
     int readBytes(uint8_t* buffer, uint16_t maxLen) override;
     
     //memory
-    bool writeNVMemory(uint32_t addr,uint8_t data);
-    uint8_t readNVMemory(uint32_t addr);
-    uint32_t allocNVMemory(uint32_t size,uint32_t ID);
-    uint32_t reloadNVMemory(uint32_t ID);
+    bool writeNVMemory(uintptr_t addr,uint8_t data);
+    uint8_t readNVMemory(uintptr_t addr);
+    uintptr_t allocNVMemory(size_t size,uint32_t ID);
+    uintptr_t reloadNVMemory(uint32_t ID);
     void finishNVMemory();
     void freeNVMemory(uint32_t ID);
 private:

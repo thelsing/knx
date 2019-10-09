@@ -25,30 +25,30 @@ void SamdPlatform::restart()
 }
 
 
-bool SamdPlatform::writeNVMemory(uint32_t addr,uint8_t data)
+bool SamdPlatform::writeNVMemory(uintptr_t addr,uint8_t data)
 {
     if(Flash.write((uint8_t*)addr, data)==false)
         fatalError();
     return true;
 }
 
-uint8_t SamdPlatform::readNVMemory(uint32_t addr)
+uint8_t SamdPlatform::readNVMemory(uintptr_t addr)
 {
     return Flash.read((uint8_t*)addr);
 }
 
-uint32_t SamdPlatform::allocNVMemory(uint32_t size,uint32_t ID)
+uintptr_t SamdPlatform::allocNVMemory(size_t size,uint32_t ID)
 {
-    uint32_t addr = (uint32_t)Flash.malloc(size, ID);
+    uintptr_t addr = (uintptr_t)Flash.malloc(size, ID);
     if(addr == 0)
         fatalError();
     return addr;
 }
 
-uint32_t SamdPlatform::reloadNVMemory(uint32_t ID)
+uintptr_t SamdPlatform::reloadNVMemory(uint32_t ID)
 {
  //  Flash.erase();
-   return (uint32_t)Flash.loadBlock(ID);
+   return (uintptr_t)Flash.loadBlock(ID);
 }
 
 void SamdPlatform::finishNVMemory()
@@ -71,27 +71,27 @@ uint8_t* SamdPlatform::memoryReference()
 
 /*************_NVMemoryType = internalRam*************************
 
-bool SamdPlatform::writeNVMemory(uint32_t addr,uint8_t data)
+bool SamdPlatform::writeNVMemory(uintptr_t addr,uint8_t data)
 {
     *((uint8_t*)addr) = data;
     return true;
 }
 
-uint8_t SamdPlatform::readNVMemory(uint32_t addr)
+uint8_t SamdPlatform::readNVMemory(uintptr_t addr)
 {
     return *((uint8_t*)addr);
 }
 
-uint32_t SamdPlatform::allocNVMemory(uint32_t size,uint32_t ID)
+uintptr_t SamdPlatform::allocNVMemory(size_t size,uint32_t ID)
 {
     if(size > EEPROM_EMULATION_SIZE)
         fatalError();
-    return (uint32_t)EEPROM.getDataPtr();
+    return (uintptr_t)EEPROM.getDataPtr();
 }
 
-uint32_t SamdPlatform::reloadNVMemory(uint32_t ID)
+uintptr_t SamdPlatform::reloadNVMemory(uint32_t ID)
 {
-    return (uint32_t)EEPROM.getDataPtr();
+    return (uintptr_t)EEPROM.getDataPtr();
 }
 
 void SamdPlatform::finishNVMemory()
@@ -105,25 +105,25 @@ void SamdPlatform::freeNVMemory(uint32_t ID)
 /*
 
 /*************_NVMemoryType = external*************************
-bool SamdPlatform::writeNVMemory(uint32_t addr,uint8_t data)
+bool SamdPlatform::writeNVMemory(uintptr_t addr,uint8_t data)
 {
     EEPROM.write(addr-1, data);
     return true;
 }
 
-uint8_t SamdPlatform::readNVMemory(uint32_t addr)
+uint8_t SamdPlatform::readNVMemory(uintptr_t addr)
 {
     return EEPROM.read(addr-1);
 }
 
-uint32_t SamdPlatform::allocNVMemory(uint32_t size,uint32_t ID)
+uintptr_t SamdPlatform::allocNVMemory(size_t size,uint32_t ID)
 {
     if(size > EEPROM_EMULATION_SIZE)
         fatalError();
     return 1;
 }
 
-uint32_t SamdPlatform::reloadNVMemory(uint32_t ID)
+uintptr_t SamdPlatform::reloadNVMemory(uint32_t ID)
 {
     return 1;
 }

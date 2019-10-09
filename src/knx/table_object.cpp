@@ -99,9 +99,9 @@ uint8_t* TableObject::save()
     if(_data == NULL)
         return NULL;
 
-    uint32_t addr;
+    uintptr_t addr;
     uint8_t* buffer;
-    addr =(uint32_t)(_data - METADATA_SIZE);
+    addr =(uintptr_t)(_data - METADATA_SIZE);
     if(_platform.NVMemoryType() == internalFlash)
         buffer = new uint8_t[METADATA_SIZE];
     else
@@ -116,7 +116,7 @@ uint8_t* TableObject::save()
         for(uint32_t i=0;i<METADATA_SIZE;i++)
             _platform.writeNVMemory(addr+i, buffer[i]);
 
-        free (buffer);
+        delete[] buffer;
     }
 
     return _dataComplete;
@@ -177,8 +177,8 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
     _size = size;
     if (doFill){
         if(_platform.NVMemoryType() == internalFlash){
-            uint32_t addr = (uint32_t)_data;
-            for(uint32_t i=0; i<_size;i++)
+            uintptr_t addr = (uintptr_t)_data;
+            for(size_t i=0; i<_size;i++)
                 _platform.writeNVMemory(addr++, fillByte);
         }
         else{
