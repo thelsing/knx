@@ -1,4 +1,5 @@
 // used version: BSEC_1.4.7.3_Generic_Release_20190410
+// 2 changes needed for version: BSEC_1.4.7.4_Generic_Release see below
 #include <bsec.h>
 #include <knx.h>
 #ifdef ARDUINO_ARCH_ESP8266
@@ -111,7 +112,7 @@ void setup(void)
     
     iaqSensor.updateSubscription(sensorList, sizeof(sensorList)/sizeof(bsec_virtual_sensor_t), BSEC_SAMPLE_RATE_LP);
     checkIaqSensorStatus();
-    String output = "Timestamp [ms], raw temperature [°C], pressure [hPa], raw relative humidity [%], gas [Ohm], IAQ, IAQ accuracy, temperature [°C], relative humidity [%], CO2";
+    String output = "Timestamp [ms], raw temperature [°C], temperature[°C], pressure [hPa], raw relative humidity [%], humidity [%], gas [Ohm], IAQ, IAQ accuracy, CO2, CO2 Accuracy, breathVocEquivalent, breathVocAccuracy, compGasValue, compGas Accuracy, gasPercentage, gasPercentage Accuracy, staticIAQ, staticIAQ Accuracy, runInStatus, stabStatus";
     Serial.println(output);
 }
 
@@ -135,7 +136,7 @@ void loop(void)
         output += ", " + String(iaqSensor.rawHumidity);
         output += ", " + String(iaqSensor.humidity);
         output += ", " + String(iaqSensor.gasResistance);
-        output += ", " + String(iaqSensor.iaq);
+        output += ", " + String(iaqSensor.iaq); //.iaqEstimate for BSEC_1.4.7.4
         output += ", " + String(iaqSensor.iaqAccuracy);
         output += ", " + String(iaqSensor.co2Equivalent);
         output += ", " + String(iaqSensor.co2Accuracy);
@@ -143,8 +144,8 @@ void loop(void)
         output += ", " + String(iaqSensor.breathVocAccuracy);
         output += ", " + String(iaqSensor.compGasValue);
         output += ", " + String(iaqSensor.compGasAccuracy);
-        output += ", " + String(iaqSensor.gasPercentageAcccuracy);
         output += ", " + String(iaqSensor.gasPercentage);
+        output += ", " + String(iaqSensor.gasPercentageAcccuracy);
         output += ", " + String(iaqSensor.staticIaq);
         output += ", " + String(iaqSensor.staticIaqAccuracy);
         output += ", " + String(iaqSensor.runInStatus);
@@ -162,7 +163,7 @@ void loop(void)
             goPressure.value(iaqSensor.pressure);
             goRawHumidity.value(iaqSensor.rawHumidity);
             goGasResistance.value(iaqSensor.gasResistance);
-            goIaqEstimate.value(iaqSensor.iaq);
+            goIaqEstimate.value(iaqSensor.iaq); //.iaqEstimate for BSEC_1.4.7.4
             goIaqAccurace.value(iaqSensor.iaqAccuracy);
             goTemperature.value(iaqSensor.temperature);
             goHumidity.value(iaqSensor.humidity);
