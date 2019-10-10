@@ -13,7 +13,9 @@ class IpParameterObject : public InterfaceObject
     uint8_t propertySize(PropertyID id);
 
     uint8_t* save(uint8_t* buffer);
+    uint8_t* save();
     uint8_t* restore(uint8_t* buffer);
+    uint32_t size();
 
     uint32_t multicastAddress() const;
     uint8_t ttl() const { return _ttl; }

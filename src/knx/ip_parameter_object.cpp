@@ -5,6 +5,15 @@
 
 //224.0.23.12
 #define DEFAULT_MULTICAST_ADDR 0xE000170C
+#define METADATA_SIZE     ( sizeof(_projectInstallationId)  \
+                            +sizeof(_ipAssignmentMethod)    \
+                            +sizeof(_ipCapabilities)        \
+                            +sizeof(_ipAddress)             \
+                            +sizeof(_subnetMask)            \
+                            +sizeof(_defaultGateway)        \
+                            +sizeof(_multicastAddress)      \
+                            +sizeof(_ttl)                   \
+                            +sizeof(_friendlyName))
 
 IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platform): _deviceObject(deviceObject),
     _platform(platform)
@@ -145,6 +154,38 @@ uint8_t IpParameterObject::propertySize(PropertyID id)
             return 6;
     }
     return 0;
+}
+uint32_t IpParameterObject::size(){
+    return METADATA_SIZE;
+}
+
+uint8_t* IpParameterObject::save()
+{
+    uint8_t* buffer = new uint8_t[METADATA_SIZE];
+
+    buffer = pushWord(_projectInstallationId, buffer);
+    buffer = pushByte(_ipAssignmentMethod, buffer);
+    buffer = pushByte(_ipCapabilities, buffer);
+    buffer = pushInt(_ipAddress, buffer);
+    buffer = pushInt(_subnetMask, buffer);
+    buffer = pushInt(_defaultGateway, buffer);
+    buffer = pushInt(_multicastAddress, buffer);
+    buffer = pushByte(_ttl, buffer);
+    buffer = pushByteArray((uint8_t*)_friendlyName, 30, buffer);
+    buffer -= METADATA_SIZE;
+
+    if(_platform.NVMemoryType() == internalFlash){
+        _platform.freeNVMemory(_ID);
+        uintptr_t addr = _platform.allocNVMemory(METADATA_SIZE, _ID);
+
+        for(size_t i=0;i<METADATA_SIZE;i++)
+            _platform.writeNVMemory(addr+i, buffer[i]);
+
+        delete[] buffer;
+        return (uint8_t*)addr;
+    }
+
+    return buffer;
 }
 
 uint8_t* IpParameterObject::save(uint8_t* buffer)

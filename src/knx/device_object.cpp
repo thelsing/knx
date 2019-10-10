@@ -2,6 +2,15 @@
 #include "device_object.h"
 #include "bits.h"
 
+#define METADATA_SIZE     (sizeof(_deviceControl)+sizeof(_routingCount)+sizeof(_ownAddress))
+
+DeviceObject::DeviceObject(Platform& platform): _platform(platform)
+{
+    for(int i = 0; i < 10; ++i)
+        _orderNumber[i] = 0;
+    for(int i = 0; i < 6; ++i)
+        _hardwareType[i] = 0;
+}
 void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t& count, uint8_t* data)
 {
     switch (propertyId)
@@ -106,6 +115,32 @@ uint8_t DeviceObject::propertySize(PropertyID id)
     return 0;
 }
 
+uint32_t DeviceObject::size(){
+    return METADATA_SIZE;
+}
+
+uint8_t* DeviceObject::save()
+{
+    uint8_t* buffer = new uint8_t[METADATA_SIZE];
+
+    buffer = pushByte(_deviceControl, buffer);
+    buffer = pushByte(_routingCount, buffer);
+    buffer = pushWord(_ownAddress, buffer);
+    buffer -= METADATA_SIZE;
+
+    if(_platform.NVMemoryType() == internalFlash){
+        _platform.freeNVMemory(_ID);
+        uintptr_t addr = _platform.allocNVMemory(METADATA_SIZE, _ID);
+
+        for(size_t i=0;i<METADATA_SIZE;i++)
+            _platform.writeNVMemory(addr+i, buffer[i]);
+
+        delete[] buffer;
+        return (uint8_t*)addr;
+    }
+
+    return buffer;
+}
 uint8_t* DeviceObject::save(uint8_t* buffer)
 {
     buffer = pushByte(_deviceControl, buffer);

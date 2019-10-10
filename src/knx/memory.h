@@ -16,6 +16,12 @@ public:
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
 private:
+    void readFlashMemory();
+    void writeFlashMemory();
+    void readRamMemory();
+    void writeRamMemory();
+    void readExternalMemory();
+    void writeExternalMemory();
     Platform& _platform;
     bool _modified = false;
     SaveRestore* _saveRestores[MAXSAVE] = {0};

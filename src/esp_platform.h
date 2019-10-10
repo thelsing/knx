@@ -29,8 +29,12 @@ class EspPlatform : public ArduinoPlatform
     int readBytes(uint8_t* buffer, uint16_t maxLen) override;
    
     //memory
-    uint8_t* getEepromBuffer(uint16_t size);
-    void commitToEeprom();
+    bool writeNVMemory(uintptr_t addr,uint8_t data);
+    uint8_t readNVMemory(uintptr_t addr);
+    uintptr_t allocNVMemory(size_t size,uint32_t ID);
+    uintptr_t reloadNVMemory(uint32_t ID);
+    void finishNVMemory();
+    void freeNVMemory(uint32_t ID);
 private:
     WiFiUDP _udp;
 };

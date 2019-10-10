@@ -12,6 +12,8 @@ uint8_t* Platform::memoryReference()
 uint8_t* Platform::allocMemory(size_t size)
 {
     uint8_t* address =  (uint8_t*)malloc(size);
+    if(address == NULL)
+        fatalError();
 //    if (_memoryReference == 0 || address < _memoryReference)
 //        _memoryReference = address;
 	print("MemRef: ");

@@ -1,15 +1,19 @@
 #pragma once
 
 #include "interface_object.h"
+#include "platform.h"
 
 class DeviceObject: public InterfaceObject
 {
 public:
+    DeviceObject(Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     uint8_t propertySize(PropertyID id);
     uint8_t* save(uint8_t* buffer);
+    uint8_t* save();
     uint8_t* restore(uint8_t* buffer);
+    uint32_t size();
     void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
 
 
@@ -45,7 +49,8 @@ private:
     uint16_t _ownAddress = 0;
     uint16_t _manufacturerId = 0xfa; //Default to KNXA
     uint32_t _bauNumber = 0;
-    char _orderNumber[10] = "";
-    uint8_t _hardwareType[6] = { 0, 0, 0, 0, 0, 0};
+    char _orderNumber[10];
+    uint8_t _hardwareType[6];
     uint16_t _version = 0;
+    Platform& _platform;
 };

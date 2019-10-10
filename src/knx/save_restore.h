@@ -16,6 +16,7 @@ class SaveRestore
      * the start of its buffer.
      */
     virtual uint8_t* save(uint8_t* buffer) = 0;
+    virtual uint8_t* save() = 0;
     /**
      * This method is called when the object should restore its state from the buffer.
      *  
@@ -25,4 +26,8 @@ class SaveRestore
      * the start of its buffer.
      */
     virtual uint8_t* restore(uint8_t* buffer) = 0;
+    virtual uint32_t size() = 0;
+    void memoryID (uint32_t ID){_ID = ID;}
+  protected:
+    uint32_t _ID;
 };

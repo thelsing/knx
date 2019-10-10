@@ -200,22 +200,44 @@ int LinuxPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     return len;
 }
 
-uint8_t * LinuxPlatform::getEepromBuffer(uint16_t size)
+bool LinuxPlatform::writeNVMemory(uintptr_t addr,uint8_t data)
 {
-    if (_fd < 0)
-        doMemoryMapping();
-    
-    return _mappedFile + 2;
+    *((uint8_t*)addr) = data;
+    return true;
 }
 
-void LinuxPlatform::commitToEeprom()
+uint8_t LinuxPlatform::readNVMemory(uintptr_t addr)
+{
+    return *((uint8_t*)addr);
+}
+
+uintptr_t LinuxPlatform::allocNVMemory(size_t size,uint32_t ID)
 {
     if (_fd < 0)
         doMemoryMapping();
     
+    return (uintptr_t)(_mappedFile + 2);
+}
+
+uintptr_t LinuxPlatform::reloadNVMemory(uint32_t ID)
+{
+    if (_fd < 0)
+        doMemoryMapping();
+    
+    return (uintptr_t)(_mappedFile + 2);
+}
+
+void LinuxPlatform::finishNVMemory()
+{
+    if (_fd < 0)
+        doMemoryMapping();
+
     fsync(_fd);
 }
 
+void LinuxPlatform::freeNVMemory(uint32_t ID)
+{
+}
 #define FLASHSIZE 0x10000
 void LinuxPlatform::doMemoryMapping()
 {
