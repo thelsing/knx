@@ -65,6 +65,14 @@ class BauSystemB : protected BusAccessUnit
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
     void nextRestartState();
 
+    enum RestartState
+    {
+        Idle,
+        Connecting,
+        Connected,
+        Restarted
+    };
+
     DeviceObject _deviceObj;
     Memory _memory;
     AddressTableObject _addrTable;
@@ -76,6 +84,6 @@ class BauSystemB : protected BusAccessUnit
     TransportLayer _transLayer;
     NetworkLayer _netLayer;
     bool _configured = true;
-    uint8_t _restartState = 0;
+    RestartState _restartState = Idle;
     uint32_t _restartDelay = 0;
 };
