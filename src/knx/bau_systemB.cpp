@@ -1,4 +1,5 @@
 #include "bau_systemB.h"
+#include "bits.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -21,6 +22,7 @@ void BauSystemB::loop()
     dataLinkLayer().loop();
     _transLayer.loop();
     sendNextGroupTelegram();
+    nextRestartState();
 }
 
 bool BauSystemB::enabled()
@@ -293,8 +295,58 @@ void BauSystemB::addSaveRestore(SaveRestore* obj)
     _memory.addSaveRestore(obj);
 }
 
-
-void BauSystemB::restartRequest(uint16_t asap)
+bool BauSystemB::restartRequest(uint16_t asap)
 {
-    _appLayer.restartRequest(AckRequested, LowPriority, NetworkLayerParameter, asap);
+    if (_appLayer.isConnected())
+        return false;
+    _restartState = Connecting; // order important, has to be set BEFORE connectRequest
+    _appLayer.connectRequest(asap, SystemPriority);
+    _appLayer.deviceDescriptorReadRequest(AckRequested, SystemPriority, NetworkLayerParameter, asap, 0);
+    return true;
 }
+
+void BauSystemB::connectConfirm(uint16_t tsap)
+{
+    if (_restartState == Connecting && tsap >= 0)
+    {
+        /* restart connection is confirmed, go to the next state */
+        _restartState = Connected;
+        _restartDelay = millis();
+    }
+    else
+    {
+        _restartState = Idle;
+    }
+}
+
+void BauSystemB::nextRestartState()
+{
+    switch (_restartState)
+    {
+        case Idle:
+            /* inactive state, do nothing */
+            break;
+        case Connecting:
+            /* wait for connection, we do nothing here */
+            break;
+        case Connected:
+            /* connection confirmed, we send restartRequest, but we wait a moment (sending ACK etc)... */
+            if (millis() - _restartDelay > 30)
+            {
+                _appLayer.restartRequest(AckRequested, SystemPriority, NetworkLayerParameter);
+                _restartState = Restarted;
+                _restartDelay = millis();
+            }
+            break;
+        case Restarted:
+            /* restart is finished, we send a discommect */
+            if (millis() - _restartDelay > 30)
+            {
+                _appLayer.disconnectRequest(SystemPriority);
+                _restartState = Idle;
+            }
+        default:
+            break;
+    }
+}
+

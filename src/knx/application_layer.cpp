@@ -176,7 +176,10 @@ void ApplicationLayer::connectIndication(uint16_t tsap)
 void ApplicationLayer::connectConfirm(uint16_t destination, uint16_t tsap, bool status)
 {
     if (status)
+    {
         _connectedTsap = tsap;
+        _bau.connectConfirm(tsap);
+    }
     else
         _connectedTsap = -1;
 }
@@ -188,7 +191,7 @@ void ApplicationLayer::disconnectIndication(uint16_t tsap)
 
 void ApplicationLayer::disconnectConfirm(Priority priority, uint16_t tsap, bool status)
 {
-
+    _connectedTsap = -1;
 }
 
 void ApplicationLayer::dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu)
@@ -334,13 +337,23 @@ void ApplicationLayer::deviceDescriptorReadResponse(AckType ack, Priority priori
     individualSend(ack, hopType, priority, asap, apdu);
 }
 
-void ApplicationLayer::restartRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap)
+void ApplicationLayer::connectRequest(uint16_t destination, Priority priority)
+{
+    _transportLayer->connectRequest(destination, priority);
+}
+
+void ApplicationLayer::disconnectRequest(Priority priority)
+{
+    _transportLayer->disconnectRequest(_connectedTsap, priority);
+}
+
+void ApplicationLayer::restartRequest(AckType ack, Priority priority, HopCountType hopType)
 {
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(Restart);
 
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, _connectedTsap, apdu);
 }
 
 void ApplicationLayer::propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
@@ -787,4 +800,9 @@ void ApplicationLayer::individualSend(AckType ack, HopCountType hopType, Priorit
         _transportLayer->dataConnectedRequest(asap, priority, apdu);
     else
         _transportLayer->dataIndividualRequest(ack, hopType, priority, asap, apdu);
+}
+
+bool ApplicationLayer::isConnected()
+{
+    return (_connectedTsap >= 0);
 }

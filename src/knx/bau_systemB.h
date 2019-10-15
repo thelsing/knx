@@ -27,7 +27,7 @@ class BauSystemB : protected BusAccessUnit
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
-    void restartRequest(uint16_t asap);
+    bool restartRequest(uint16_t asap);
 
   protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
@@ -58,10 +58,20 @@ class BauSystemB : protected BusAccessUnit
                                        uint8_t* data, uint8_t dataLength) override;
     void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType,
                                    uint8_t* data, uint8_t dataLength) override;
+    void connectConfirm(uint16_t tsap) override;
 
     virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
     void sendNextGroupTelegram();
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
+    void nextRestartState();
+
+    enum RestartState
+    {
+        Idle,
+        Connecting,
+        Connected,
+        Restarted
+    };
 
     DeviceObject _deviceObj;
     Memory _memory;
@@ -74,4 +84,6 @@ class BauSystemB : protected BusAccessUnit
     TransportLayer _transLayer;
     NetworkLayer _netLayer;
     bool _configured = true;
+    RestartState _restartState = Idle;
+    uint32_t _restartDelay = 0;
 };
