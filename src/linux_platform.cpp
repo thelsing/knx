@@ -302,20 +302,20 @@ void LinuxPlatform::finishNVMemory()
         *addr++ = 0xDE;
 
         //write ID
-        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[0]);
-        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[1]);
-        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[2]);
-        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[3]);
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[0];
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[1];
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[2];
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[3];
 
         //write size
-        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[0]);
-        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[1]);
-        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[2]);
-        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[3]);
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[0];
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[1];
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[2];
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[3];
 
         //write data
         for (uint32_t e=0;e<_memoryBlocks[i].size;e++){
-            *addr++ = _memoryBlocks[i].data[e]);
+            *addr++ = _memoryBlocks[i].data[e];
         }
     }
     fsync(_fd);
