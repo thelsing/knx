@@ -16,7 +16,7 @@ typedef struct{
 class LinuxPlatform: public Platform
 {
     using Platform::_memoryReference;
-    using Platform::memoryReference;
+    using Platform::referenceNVMemory;
 public:
     LinuxPlatform();
     virtual ~LinuxPlatform();
