@@ -8,8 +8,7 @@ class AssociationTableObject : public TableObject
     AssociationTableObject(Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
 
-    uint8_t* save(uint8_t* buffer);
-    uint8_t* restore(uint8_t* buffer);
+    void restore(uint8_t* startAddr);
 
     int32_t translateAsap(uint16_t asap);
     int32_t nextAsap(uint16_t tsap, uint16_t& startIdx);

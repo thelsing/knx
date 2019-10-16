@@ -19,8 +19,7 @@ class AddressTableObject : public TableObject
      */
     AddressTableObject(Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    uint8_t* save(uint8_t* buffer);
-    uint8_t* restore(uint8_t* buffer);
+    void restore(uint8_t* startAddr);
     /**
      * returns the number of group addresses of the object.
      */

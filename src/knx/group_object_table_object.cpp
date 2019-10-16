@@ -41,21 +41,12 @@ GroupObject& GroupObjectTableObject::get(uint16_t asap)
     return _groupObjects[asap - 1];
 }
 
-
-uint8_t* GroupObjectTableObject::save(uint8_t* buffer)
+void GroupObjectTableObject::restore(uint8_t* startAddr)
 {
-    return TableObject::save(buffer);
-}
-
-
-uint8_t* GroupObjectTableObject::restore(uint8_t* buffer)
-{
-    buffer = TableObject::restore(buffer);
+    TableObject::restore(startAddr);
 
     _tableData = (uint16_t*)data();
     initGroupObjects();
-
-    return buffer;
 }
 
 GroupObject& GroupObjectTableObject::nextUpdatedObject(bool& valid)

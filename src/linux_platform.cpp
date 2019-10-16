@@ -200,31 +200,86 @@ int LinuxPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     return len;
 }
 
-bool LinuxPlatform::writeNVMemory(uintptr_t addr,uint8_t data)
+bool LinuxPlatform::writeNVMemory(uint8_t* addr,uint8_t data)
 {
-    *((uint8_t*)addr) = data;
+    *addr = data;
     return true;
 }
 
-uint8_t LinuxPlatform::readNVMemory(uintptr_t addr)
+uint8_t LinuxPlatform::readNVMemory(uint8_t* addr)
 {
-    return *((uint8_t*)addr);
+    return *addr;
 }
 
-uintptr_t LinuxPlatform::allocNVMemory(size_t size,uint32_t ID)
+uint8_t* LinuxPlatform::allocNVMemory(size_t size,uint32_t ID)
+{
+    int i;
+    for(i=0;i<MAX_MEMORY_BLOCKS;i++){
+        if(_memoryBlocks[i].ID == 0)
+            break;
+    }
+    if(i >= MAX_MEMORY_BLOCKS)
+        fatalError();
+
+
+    _memoryBlocks[i].data = (uint8_t*)malloc(size);
+    if(_memoryBlocks[i].data == NULL)
+        fatalError();
+
+    _memoryBlocks[i].ID = ID;
+    _memoryBlocks[i].size = size;
+
+    return _memoryBlocks[i].data;
+}
+
+void LinuxPlatform::initNVMemory()
 {
     if (_fd < 0)
         doMemoryMapping();
-    
-    return (uintptr_t)(_mappedFile + 2);
+
+    uint8_t* addr = (_mappedFile + 2);
+
+    for (int i = 0; i < MAX_MEMORY_BLOCKS; i++){
+
+        if (*addr++ != 0xBA || *addr++ != 0xAD || *addr++ != 0xC0 || *addr++ != 0xDE){
+            _memoryBlocks[i].ID = 0;
+            _memoryBlocks[i].size = 0;
+            _memoryBlocks[i].data = NULL;
+            continue;
+        }
+
+        ((uint8_t*)&_memoryBlocks[i].ID)[0] = *addr++;
+        ((uint8_t*)&_memoryBlocks[i].ID)[1] = *addr++;
+        ((uint8_t*)&_memoryBlocks[i].ID)[2] = *addr++;
+        ((uint8_t*)&_memoryBlocks[i].ID)[3] = *addr++;
+
+        ((uint8_t*)&_memoryBlocks[i].size)[0] = *addr++;
+        ((uint8_t*)&_memoryBlocks[i].size)[1] = *addr++;
+        ((uint8_t*)&_memoryBlocks[i].size)[2] = *addr++;
+        ((uint8_t*)&_memoryBlocks[i].size)[3] = *addr++;
+
+        _memoryBlocks[i].data = addr;
+        addr += _memoryBlocks[i].size;
+    }
 }
 
-uintptr_t LinuxPlatform::reloadNVMemory(uint32_t ID)
+uint8_t* LinuxPlatform::reloadNVMemory(uint32_t ID, bool pointerAccess)
 {
-    if (_fd < 0)
-        doMemoryMapping();
-    
-    return (uintptr_t)(_mappedFile + 2);
+   if(!_MemoryInitialized)
+       initNVMemory();
+
+   _MemoryInitialized=true;
+
+   int i;
+   for(i=0;i<MAX_MEMORY_BLOCKS;i++){
+       if(_memoryBlocks[i].ID == ID)
+           break;
+   }
+   if(i >= MAX_MEMORY_BLOCKS)
+       return 0;
+
+
+   return _memoryBlocks[i].data;
 }
 
 void LinuxPlatform::finishNVMemory()
@@ -232,12 +287,55 @@ void LinuxPlatform::finishNVMemory()
     if (_fd < 0)
         doMemoryMapping();
 
+    uint8_t* addr = _mappedFile + 2;
+
+
+    for (int i = 0; i < MAX_MEMORY_BLOCKS; i++)
+    {
+        if(_memoryBlocks[i].ID == 0)
+            continue;
+
+        //write valid mask
+        *addr++ = 0xBA;
+        *addr++ = 0xAD;
+        *addr++ = 0xC0;
+        *addr++ = 0xDE;
+
+        //write ID
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[0]);
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[1]);
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[2]);
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].ID)[3]);
+
+        //write size
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[0]);
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[1]);
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[2]);
+        *addr++ = ((uint8_t*)&_memoryBlocks[i].size)[3]);
+
+        //write data
+        for (uint32_t e=0;e<_memoryBlocks[i].size;e++){
+            *addr++ = _memoryBlocks[i].data[e]);
+        }
+    }
     fsync(_fd);
 }
 
 void LinuxPlatform::freeNVMemory(uint32_t ID)
 {
+    int i;
+    for(i=0;i<MAX_MEMORY_BLOCKS;i++){
+        if(_memoryBlocks[i].ID == ID)
+            break;
+    }
+    if(i >= MAX_MEMORY_BLOCKS)
+        return;
+
+    _memoryBlocks[i].data = NULL;
+    _memoryBlocks[i].size = 0;
+    _memoryBlocks[i].ID = 0;
 }
+
 #define FLASHSIZE 0x10000
 void LinuxPlatform::doMemoryMapping()
 {

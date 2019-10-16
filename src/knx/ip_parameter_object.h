@@ -12,9 +12,8 @@ class IpParameterObject : public InterfaceObject
     void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     uint8_t propertySize(PropertyID id);
 
-    uint8_t* save(uint8_t* buffer);
-    uint8_t* save();
-    uint8_t* restore(uint8_t* buffer);
+    void save();
+    void restore(uint8_t* startAddr);
     uint32_t size();
 
     uint32_t multicastAddress() const;

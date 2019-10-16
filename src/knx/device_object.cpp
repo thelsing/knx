@@ -119,43 +119,23 @@ uint32_t DeviceObject::size(){
     return METADATA_SIZE;
 }
 
-uint8_t* DeviceObject::save()
+void DeviceObject::save()
 {
-    uint8_t* buffer = new uint8_t[METADATA_SIZE];
+    _platform.freeNVMemory(_ID);
+    uint8_t* addr = _platform.allocNVMemory(METADATA_SIZE, _ID);
 
-    buffer = pushByte(_deviceControl, buffer);
-    buffer = pushByte(_routingCount, buffer);
-    buffer = pushWord(_ownAddress, buffer);
-    buffer -= METADATA_SIZE;
-
-    if(_platform.NVMemoryType() == internalFlash){
-        _platform.freeNVMemory(_ID);
-        uintptr_t addr = _platform.allocNVMemory(METADATA_SIZE, _ID);
-
-        for(size_t i=0;i<METADATA_SIZE;i++)
-            _platform.writeNVMemory(addr+i, buffer[i]);
-
-        delete[] buffer;
-        return (uint8_t*)addr;
-    }
-
-    return buffer;
-}
-uint8_t* DeviceObject::save(uint8_t* buffer)
-{
-    buffer = pushByte(_deviceControl, buffer);
-    buffer = pushByte(_routingCount, buffer);
-    buffer = pushWord(_ownAddress, buffer);
-    return buffer;
+    _platform.pushNVMemoryByte(_deviceControl, &addr);
+    _platform.pushNVMemoryByte(_routingCount, &addr);
+    _platform.pushNVMemoryWord(_ownAddress, &addr);
 }
 
-uint8_t* DeviceObject::restore(uint8_t* buffer)
+void DeviceObject::restore(uint8_t* startAddr)
 {
-    buffer = popByte(_deviceControl, buffer);
-    buffer = popByte(_routingCount, buffer);
-    buffer = popWord(_ownAddress, buffer);
+    uint8_t* addr = startAddr;
+    _deviceControl = _platform.popNVMemoryByte(&addr);
+    _routingCount = _platform.popNVMemoryByte(&addr);
+    _ownAddress = _platform.popNVMemoryWord(&addr);
     _prgMode = 0;
-    return buffer;
 }
 
 uint16_t DeviceObject::induvidualAddress()

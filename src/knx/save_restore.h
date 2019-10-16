@@ -8,24 +8,16 @@ class SaveRestore
 {
   public:
     /**
-     * This method is called when the object should save its state to the buffer.
-     *  
-     * @param buffer The buffer the object should save its state to.
-     * 
-     * @return The buffer plus the size of the object state. The next object will use this value as 
-     * the start of its buffer.
+     * This method is called when the object should save its state.
      */
-    virtual uint8_t* save(uint8_t* buffer) = 0;
-    virtual uint8_t* save() = 0;
+    virtual void save() = 0;
     /**
-     * This method is called when the object should restore its state from the buffer.
+     * This method is called when the object should restore its state from the given address.
      *  
-     * @param buffer The buffer the object should restore its state from.
+     * @param startAddr The startAddr the object should restore its state from.
      * 
-     * @return The buffer plus the size of the object state. The next object will use this value as 
-     * the start of its buffer.
      */
-    virtual uint8_t* restore(uint8_t* buffer) = 0;
+    virtual void restore(uint8_t* startAddr) = 0;
     virtual uint32_t size() = 0;
     void memoryID (uint32_t ID){_ID = ID;}
   protected:

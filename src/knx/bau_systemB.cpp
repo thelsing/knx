@@ -9,11 +9,11 @@ BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platfo
 {
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);
-    _memory.addSaveRestore(&_deviceObj);
-    _memory.addSaveRestore(&_appProgram);
     _memory.addSaveRestore(&_addrTable);
     _memory.addSaveRestore(&_assocTable);
     _memory.addSaveRestore(&_groupObjTable);
+    _memory.addSaveRestore(&_deviceObj);
+    _memory.addSaveRestore(&_appProgram);
 }
 
 void BauSystemB::loop()
@@ -139,12 +139,9 @@ void BauSystemB::deviceDescriptorReadIndication(Priority priority, HopCountType 
 void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
     uint16_t memoryAddress, uint8_t * data)
 {
-    if(_platform.NVMemoryType() == internalFlash){
-        for(uint8_t i=0;i<number;i++)
-            _platform.writeNVMemory((uintptr_t)_platform.memoryReference() + memoryAddress+i, data[i]);
-    }
-    else
-        memcpy(_platform.memoryReference() + memoryAddress, data, number);
+
+    for(uint8_t i=0;i<number;i++)
+        _platform.writeNVMemory(_platform.referenceNVMemory() + memoryAddress+i, data[i]);
 
     _memory.memoryModified();
 
@@ -155,18 +152,12 @@ void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, 
 void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
     uint16_t memoryAddress)
 {
-    if(_platform.NVMemoryType() == internalFlash){
-        uint8_t* buffer = new uint8_t[number];
-        for(uint8_t i=0;i<number;i++)
-            buffer[i] = _platform.readNVMemory((uintptr_t)_platform.memoryReference() + memoryAddress+i);
+    uint8_t* buffer = new uint8_t[number];
+    for(uint8_t i=0;i<number;i++)
+        buffer[i] = _platform.readNVMemory(_platform.referenceNVMemory() + memoryAddress+i);
 
-        _appLayer.memoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,buffer);
-        delete[] buffer;
-    }
-    else{
-    _appLayer.memoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
-            _platform.memoryReference() + memoryAddress);
-    }
+    _appLayer.memoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,buffer);
+    delete[] buffer;
 }
 
 void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap)
@@ -183,30 +174,19 @@ void BauSystemB::authorizeIndication(Priority priority, HopCountType hopType, ui
 
 void BauSystemB::userMemoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress)
 {
-    if(_platform.NVMemoryType() == internalFlash){
-        uint8_t* buffer = new uint8_t[number];
-        for(uint8_t i=0;i<number;i++)
-            buffer[i] = _platform.readNVMemory((uintptr_t)_platform.memoryReference() + memoryAddress+i);
-        _appLayer.userMemoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,buffer);
-        delete[] buffer;
-    }
-    else{
-        _appLayer.userMemoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
-                _platform.memoryReference() + memoryAddress);
-    }
+    uint8_t* buffer = new uint8_t[number];
+    for(uint8_t i=0;i<number;i++)
+        buffer[i] = _platform.readNVMemory(_platform.referenceNVMemory() + memoryAddress+i);
+    _appLayer.userMemoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,buffer);
+    delete[] buffer;
 }
 
 void BauSystemB::userMemoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t* data)
 {
-    if(_platform.NVMemoryType() == internalFlash){
-        for(uint8_t i=0;i<number;i++)
-            _platform.writeNVMemory((uintptr_t)_platform.memoryReference() + memoryAddress+i, data[i]);
-    }
-    else{
-        memcpy(_platform.memoryReference() + memoryAddress, data, number);
-    }
-    _memory.memoryModified();
+    for(uint8_t i=0;i<number;i++)
+        _platform.writeNVMemory(_platform.referenceNVMemory() + memoryAddress+i, data[i]);
 
+    _memory.memoryModified();
     if (_deviceObj.verifyMode())
         userMemoryReadIndication(priority, hopType, asap, number, memoryAddress);
 }

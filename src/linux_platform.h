@@ -5,6 +5,14 @@
 #include <string>
 #include "knx/platform.h"
 
+#define MAX_MEMORY_BLOCKS   6
+
+typedef struct{
+    uint32_t ID;
+    size_t  size;
+    uint8_t* data;
+}MemoryBlock_t;
+
 class LinuxPlatform: public Platform
 {
     using Platform::_memoryReference;
@@ -44,12 +52,13 @@ public:
     size_t readBytesUart(uint8_t *buffer, size_t length) override;
 
     //memory
-    bool writeNVMemory(uintptr_t addr,uint8_t data);
-    uint8_t readNVMemory(uintptr_t addr);
-    uintptr_t allocNVMemory(size_t size,uint32_t ID);
-    uintptr_t reloadNVMemory(uint32_t ID);
+    bool writeNVMemory(uint8_t* addr,uint8_t data);
+    uint8_t readNVMemory(uint8_t* addr);
+    uint8_t* allocNVMemory(size_t size,uint32_t ID);
+    uint8_t* reloadNVMemory(uint32_t ID, bool pointerAccess);
     void finishNVMemory();
     void freeNVMemory(uint32_t ID);
+
     uint8_t* allocMemory(size_t size) override;
     void freeMemory(uint8_t* ptr) override;
     void cmdlineArgs(int argc, char** argv);
@@ -64,6 +73,9 @@ public:
     uint8_t* _currentMaxMem = 0;
     std::string _flashFilePath = "flash.bin";
     char** _args = 0;
+    void initNVMemory();
+    MemoryBlock_t _memoryBlocks[MAX_MEMORY_BLOCKS];
+    bool _MemoryInitialized = false;
 };
 
 #endif

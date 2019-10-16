@@ -85,34 +85,132 @@ int EspPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
     return len;
 }
 
-bool EspPlatform::writeNVMemory(uintptr_t addr,uint8_t data)
+bool EspPlatform::writeNVMemory(uint8_t* addr,uint8_t data)
 {
-    *((uint8_t*)addr) = data;
+    *addr = data;
     return true;
 }
 
-uint8_t EspPlatform::readNVMemory(uintptr_t addr)
+uint8_t EspPlatform::readNVMemory(uint8_t* addr)
 {
-    return *((uint8_t*)addr);
+    return *addr;
 }
 
-uintptr_t EspPlatform::allocNVMemory(size_t size,uint32_t ID)
+uint8_t* EspPlatform::allocNVMemory(size_t size,uint32_t ID)
 {
-    return (uintptr_t)EEPROM.getDataPtr();
+    int i;
+    for(i=0;i<MAX_MEMORY_BLOCKS;i++){
+        if(_memoryBlocks[i].ID == 0)
+            break;
+    }
+    if(i >= MAX_MEMORY_BLOCKS)
+        fatalError();
+
+
+    _memoryBlocks[i].data = (uint8_t*)malloc(size);
+    if(_memoryBlocks[i].data == NULL)
+        fatalError();
+
+    _memoryBlocks[i].ID = ID;
+    _memoryBlocks[i].size = size;
+
+    return _memoryBlocks[i].data;
 }
 
-uintptr_t EspPlatform::reloadNVMemory(uint32_t ID)
+void EspPlatform::initNVMemory()
 {
     EEPROM.begin(1024);
-    return (uintptr_t)EEPROM.getDataPtr();
+    uint32_t addr = 0;
+    for (int i = 0; i < MAX_MEMORY_BLOCKS; i++){
+
+        if (EEPROM.read(addr++) != 0xBA || EEPROM.read(addr++) != 0xAD || EEPROM.read(addr++) != 0xC0 || EEPROM.read(addr++) != 0xDE){
+            _memoryBlocks[i].ID = 0;
+            _memoryBlocks[i].size = 0;
+            _memoryBlocks[i].data = NULL;
+            continue;
+        }
+
+        ((uint8_t*)&_memoryBlocks[i].ID)[0] = EEPROM.read(addr++);
+        ((uint8_t*)&_memoryBlocks[i].ID)[1] = EEPROM.read(addr++);
+        ((uint8_t*)&_memoryBlocks[i].ID)[2] = EEPROM.read(addr++);
+        ((uint8_t*)&_memoryBlocks[i].ID)[3] = EEPROM.read(addr++);
+
+        ((uint8_t*)&_memoryBlocks[i].size)[0] = EEPROM.read(addr++);
+        ((uint8_t*)&_memoryBlocks[i].size)[1] = EEPROM.read(addr++);
+        ((uint8_t*)&_memoryBlocks[i].size)[2] = EEPROM.read(addr++);
+        ((uint8_t*)&_memoryBlocks[i].size)[3] = EEPROM.read(addr++);
+
+        _memoryBlocks[i].data = EEPROM.getDataPtr() + addr;
+        addr += _memoryBlocks[i].size;
+    }
+}
+
+uint8_t* EspPlatform::reloadNVMemory(uint32_t ID, bool pointerAccess)
+{
+   if(!_MemoryInitialized)
+       initNVMemory();
+
+   _MemoryInitialized=true;
+
+   int i;
+   for(i=0;i<MAX_MEMORY_BLOCKS;i++){
+       if(_memoryBlocks[i].ID == ID)
+           break;
+   }
+   if(i >= MAX_MEMORY_BLOCKS)
+       return 0;
+
+
+   return _memoryBlocks[i].data;
 }
 
 void EspPlatform::finishNVMemory()
 {
+    uint32_t addr = 0;
+
+    for (int i = 0; i < MAX_MEMORY_BLOCKS; i++)
+    {
+        if(_memoryBlocks[i].ID == 0)
+            continue;
+
+        //write valid mask
+        EEPROM.write(addr++,0xBA);
+        EEPROM.write(addr++,0xAD);
+        EEPROM.write(addr++,0xC0);
+        EEPROM.write(addr++,0xDE);
+
+        //write ID
+        EEPROM.write(addr++,((uint8_t*)&_memoryBlocks[i].ID)[0]);
+        EEPROM.write(addr++,((uint8_t*)&_memoryBlocks[i].ID)[1]);
+        EEPROM.write(addr++,((uint8_t*)&_memoryBlocks[i].ID)[2]);
+        EEPROM.write(addr++,((uint8_t*)&_memoryBlocks[i].ID)[3]);
+
+        //write size
+        EEPROM.write(addr++,((uint8_t*)&_memoryBlocks[i].size)[0]);
+        EEPROM.write(addr++,((uint8_t*)&_memoryBlocks[i].size)[1]);
+        EEPROM.write(addr++,((uint8_t*)&_memoryBlocks[i].size)[2]);
+        EEPROM.write(addr++,((uint8_t*)&_memoryBlocks[i].size)[3]);
+
+        //write data
+        for (uint32_t e=0;e<_memoryBlocks[i].size;e++){
+            EEPROM.write(addr++,_memoryBlocks[i].data[e]);
+        }
+    }
     EEPROM.commit();
 }
 
 void EspPlatform::freeNVMemory(uint32_t ID)
 {
+    int i;
+    for(i=0;i<MAX_MEMORY_BLOCKS;i++){
+        if(_memoryBlocks[i].ID == ID)
+            break;
+    }
+    if(i >= MAX_MEMORY_BLOCKS)
+        return;
+
+    _memoryBlocks[i].data = NULL;
+    _memoryBlocks[i].size = 0;
+    _memoryBlocks[i].ID = 0;
 }
 #endif

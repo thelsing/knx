@@ -24,8 +24,8 @@ SamdFlash::SamdFlash(){
     _info = (info_data_t*)getRowAddr(_pageSize*_pageCnt-1);     //261888 (rowAddr of last row)
 }
 
-uint32_t SamdFlash::getStartAddress(){
-    return _info->freeMemoryStart;
+uint8_t* SamdFlash::getStartAddress(){
+    return (uint8_t*)_info->freeMemoryStart;
 }
 
 uint8_t SamdFlash::read(uint8_t* addr){

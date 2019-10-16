@@ -31,7 +31,7 @@ public:
     bool write(uint8_t* addr, uint8_t data);
     uint8_t read(uint8_t* addr);
     void finalise();
-    uint32_t getStartAddress();
+    uint8_t* getStartAddress();
 
 private:
     uint8_t* forcemalloc(uint32_t size, uint32_t ID);

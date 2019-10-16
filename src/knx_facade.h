@@ -19,7 +19,7 @@
 #endif
 
 void buttonUp();
-typedef uint8_t* (*saveRestoreCallback)(uint8_t* buffer);
+typedef void (*saveRestoreCallback)(uint8_t* buffer);
 
 template <class P, class B> class KnxFacade : private SaveRestore
 {
@@ -288,24 +288,18 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return 0;
     }
 
-    uint8_t* save(uint8_t* buffer)
+    void save()
     {
         if (_saveCallback != 0)
-            return _saveCallback(buffer);
-
-        return buffer;
+            _saveCallback(NULL);
     }
 
-    uint8_t* save()
-    {
-    };
 
-    uint8_t* restore(uint8_t* buffer)
+    void restore(uint8_t* startAddr)
     {
         if (_restoreCallback != 0)
-            return _restoreCallback(buffer);
+            _restoreCallback(startAddr);
 
-        return buffer;
     }
 };
 

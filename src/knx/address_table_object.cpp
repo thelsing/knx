@@ -51,18 +51,12 @@ uint16_t AddressTableObject::getTsap(uint16_t addr)
 
 #pragma region SaveRestore
 
-uint8_t* AddressTableObject::save(uint8_t* buffer)
-{
-    return TableObject::save(buffer);
-}
 
-uint8_t* AddressTableObject::restore(uint8_t* buffer)
+void AddressTableObject::restore(uint8_t* startAddr)
 {
-    buffer = TableObject::restore(buffer);
+    TableObject::restore(startAddr);
 
     _groupAddresses = (uint16_t*)data();
-
-    return buffer;
 }
 
 #pragma endregion

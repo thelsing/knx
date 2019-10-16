@@ -25,9 +25,8 @@ public:
      * This method returns the ::LoadState of the interface object.
      */
     LoadState loadState();
-    virtual uint8_t* save(uint8_t* buffer);
-    virtual uint8_t* save();
-    virtual uint8_t* restore(uint8_t* buffer);
+    virtual void save();
+    virtual void restore(uint8_t* startAddr);
     virtual uint32_t size();
 protected:
     /**
@@ -53,7 +52,6 @@ protected:
     void errorCode(ErrorCode errorCode);
 
     Platform& _platform;
-    uint8_t *_dataComplete = 0;
   private:
     uint32_t tableReference();
     bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
