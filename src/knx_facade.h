@@ -19,7 +19,7 @@
 #endif
 
 void buttonUp();
-typedef void (*saveRestoreCallback)(uint8_t* buffer);
+typedef void (*saveRestoreCallback)(uint8_t* buffer, uint32_t* size);
 
 template <class P, class B> class KnxFacade : private SaveRestore
 {
@@ -290,15 +290,42 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
     void save()
     {
+
         if (_saveCallback != 0)
-            _saveCallback(NULL);
+        {
+            uint8_t* buffer = NULL;
+            uint32_t size=0;
+            _saveCallback(buffer, &size);
+            if(buffer != NULL){
+                _platformPtr->freeNVMemory(_ID);
+                uint8_t* addr = _platformPtr->allocNVMemory(size+4, _ID);
+
+                //write size
+                _platformPtr->pushNVMemoryByte(((uint8_t*)&size)[0], &addr);
+                _platformPtr->pushNVMemoryByte(((uint8_t*)&size)[1], &addr);
+                _platformPtr->pushNVMemoryByte(((uint8_t*)&size)[2], &addr);
+                _platformPtr->pushNVMemoryByte(((uint8_t*)&size)[3], &addr);
+                for(uint32_t i=0;i<size;i++){
+                    _platformPtr->pushNVMemoryByte(buffer[i], &addr);
+                }
+                delete[] buffer;
+            }
+        }
     }
 
 
     void restore(uint8_t* startAddr)
     {
+        uint32_t size=0;
+
+        //read size
+        ((uint8_t*)&size)[0] = _platformPtr->popNVMemoryByte(&startAddr);
+        ((uint8_t*)&size)[1] = _platformPtr->popNVMemoryByte(&startAddr);
+        ((uint8_t*)&size)[2] = _platformPtr->popNVMemoryByte(&startAddr);
+        ((uint8_t*)&size)[3] = _platformPtr->popNVMemoryByte(&startAddr);
+
         if (_restoreCallback != 0)
-            _restoreCallback(startAddr);
+            _restoreCallback(startAddr, &size);
 
     }
 };
