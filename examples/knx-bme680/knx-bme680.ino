@@ -24,8 +24,8 @@
 // Helper functions declarations
 void checkIaqSensorStatus(void);
 void errLeds(void);
-uint8_t* saveBme680State(uint8_t* buffer);
-uint8_t* loadBme680State(uint8_t* buffer);
+void saveBme680State(uint8_t* buffer, uint32_t* size);
+void loadBme680State(uint8_t* buffer, uint32_t* size);
 void triggerCallback(GroupObject& go);
 void updateState();
 
@@ -214,31 +214,32 @@ void errLeds(void)
     delay(100);
 }
 
-uint8_t* loadBme680State(uint8_t* buffer)
+void loadBme680State(uint8_t* buffer, uint32_t* size)
 {
     // Existing state in EEPROM
     Serial.println("Reading state from EEPROM");
 
-    for (uint8_t i = 0; i < BSEC_MAX_STATE_BLOB_SIZE; i++) {
+    for (uint8_t i = 0; i < *size; i++) {
         Serial.println(buffer[i], HEX);
     }
 
     iaqSensor.setState(buffer);
     checkIaqSensorStatus();
-    return buffer + BSEC_MAX_STATE_BLOB_SIZE;
 }
 
-uint8_t* saveBme680State(uint8_t* buffer)
+void saveBme680State(uint8_t* buffer, uint32_t* size)
 {
+    // buffer gets freed inside knx object after saved
+    buffer = new uint8[BSEC_MAX_STATE_BLOB_SIZE];
+    *size = BSEC_MAX_STATE_BLOB_SIZE;
     iaqSensor.getState(buffer);
     checkIaqSensorStatus();
 
     Serial.println("Writing state to EEPROM");
 
-    for (uint8_t i = 0; i < BSEC_MAX_STATE_BLOB_SIZE; i++) {
+    for (uint8_t i = 0; i < *size; i++) {
         Serial.println(buffer[i], HEX);
     }
-    return buffer + BSEC_MAX_STATE_BLOB_SIZE;
 }
 
 void updateState(void)
