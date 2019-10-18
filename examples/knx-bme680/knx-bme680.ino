@@ -230,7 +230,7 @@ void loadBme680State(uint8_t* buffer, uint32_t* size)
 void saveBme680State(uint8_t* buffer, uint32_t* size)
 {
     // buffer gets freed inside knx object after saved
-    buffer = new uint8[BSEC_MAX_STATE_BLOB_SIZE];
+    buffer = new uint8_t[BSEC_MAX_STATE_BLOB_SIZE];
     *size = BSEC_MAX_STATE_BLOB_SIZE;
     iaqSensor.getState(buffer);
     checkIaqSensorStatus();
