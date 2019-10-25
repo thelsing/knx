@@ -109,7 +109,7 @@ class BusAccessUnit
     virtual void keyWriteResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t level,
                                          bool status);
     virtual void keyWriteAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t level);
-    virtual bool connectConfirm(uint16_t destination);
+    virtual void connectConfirm(uint16_t destination);
     virtual void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
                                                       uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength);
 

@@ -116,13 +116,3 @@ enum ApduType
     PropertyDescriptionRead = 0x3d8,
     PropertyDescriptionResponse = 0x3d9,
 };
-
-enum KnxMediumType
-{
-    KnxMediumType_TP1 = 0,
-    KnxMediumType_PL = 1,
-    KnxMediumType_RF = 2,
-    KnxMediumType_TP0 = 3,   // not supported anymore
-    KnxMediumType_PL132 = 4, // not supported anymore
-    KnxMediumType_IP = 5,
-};
