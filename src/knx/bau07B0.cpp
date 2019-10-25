@@ -1,4 +1,5 @@
 #include "bau07B0.h"
+#include "bits.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -9,6 +10,11 @@ Bau07B0::Bau07B0(Platform& platform)
       _dlLayer(_deviceObj, _addrTable, _netLayer, _platform)
 {
     _netLayer.dataLinkLayer(_dlLayer);
+
+    // Set Mask Version in Device Object depending on the BAU
+    uint16_t maskVersion;
+    popWord(maskVersion, _descriptor);
+    _deviceObj.maskVersion(maskVersion);
 }
 
 InterfaceObject* Bau07B0::getInterfaceObject(uint8_t idx)

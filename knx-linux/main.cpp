@@ -1,5 +1,6 @@
 #include "knx_facade.h"
 #include "knx/bau57B0.h"
+//#include "knx/bau2705.h"
 #include "knx/group_object_table_object.h"
 #include "knx/bits.h"
 #include <time.h>
@@ -7,6 +8,7 @@
 #include <stdio.h>
 
 KnxFacade<LinuxPlatform, Bau57B0> knx;
+//KnxFacade<LinuxPlatform, Bau2705> knx;
 
 long lastsend = 0;
 
@@ -94,6 +96,6 @@ int main(int argc, char **argv)
         knx.loop();
         if(knx.configured())
             appLoop();
-        delay(100);
+        delayMicroseconds(1000);
     }
 }

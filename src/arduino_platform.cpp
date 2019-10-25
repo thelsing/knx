@@ -2,6 +2,7 @@
 #include <knx/bits.h>
 
 #include <Arduino.h>
+#include <SPI.h>
 
 Stream* ArduinoPlatform::SerialDebug = &Serial;
 
@@ -60,6 +61,7 @@ void ArduinoPlatform::closeMultiCast()
 bool ArduinoPlatform::sendBytes(uint8_t * buffer, uint16_t len)
 {
     //not needed
+    return false;
 }
 
 int ArduinoPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
@@ -135,6 +137,44 @@ size_t ArduinoPlatform::readBytesUart(uint8_t *buffer, size_t length)
     }
     //printHex("p>", buffer, length);
     return length;
+}
+
+void ArduinoPlatform::setupSpi()
+{
+    SPI.begin();
+    SPI.beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
+}
+
+void ArduinoPlatform::closeSpi()
+{
+    SPI.endTransaction();
+    SPI.end();
+}
+
+int ArduinoPlatform::readWriteSpi(uint8_t *data, size_t len)
+{
+    SPI.transfer(data, len);
+    return 0;
+}
+
+void ArduinoPlatform::setupGpio(uint32_t dwPin, uint32_t dwMode)
+{
+    pinMode(dwPin, dwMode);
+}
+
+void ArduinoPlatform::closeGpio(uint32_t dwPin)
+{
+    // not used
+}
+
+void ArduinoPlatform::writeGpio(uint32_t dwPin, uint32_t dwVal)
+{
+    digitalWrite(dwPin, dwVal);
+}
+
+uint32_t ArduinoPlatform::readGpio(uint32_t dwPin)
+{
+    return digitalRead(dwPin);
 }
 
 void print(const char* s)

@@ -9,7 +9,8 @@ add_executable(knx-linux
 	../src/knx/association_table_object.cpp 
 	../src/knx/bau.cpp 
 	../src/knx/bau07B0.cpp 
-	../src/knx/bau57B0.cpp 
+       ../src/knx/bau27B0.cpp
+       ../src/knx/bau57B0.cpp
 	../src/knx/bau_systemB.cpp 
 	../src/knx/bits.cpp 
 	../src/knx/cemi_frame.cpp 
@@ -23,12 +24,50 @@ add_executable(knx-linux
 	../src/knx/memory.cpp 
 	../src/knx/network_layer.cpp 
 	../src/knx/npdu.cpp 
-	../src/knx/table_object.cpp 
+       ../src/knx/rf_physical_layer.cpp
+       ../src/knx/rf_data_link_layer.cpp
+       ../src/knx/rf_medium_object.cpp
+       ../src/knx/table_object.cpp
 	../src/knx/tpdu.cpp 
 	../src/knx/tpuart_data_link_layer.cpp 
 	../src/knx/transport_layer.cpp 
 	../src/knx/platform.cpp 
+       ../src/knx/address_table_object.h
+       ../src/knx/apdu.h
+       ../src/knx/application_layer.h
+       ../src/knx/application_program_object.h
+       ../src/knx/association_table_object.h
+       ../src/knx/bau.h
+       ../src/knx/bau07B0.h
+       ../src/knx/bau27B0.h
+       ../src/knx/bau57B0.h
+       ../src/knx/bau_systemB.h
+       ../src/knx/bits.h
+       ../src/knx/cemi_frame.h
+       ../src/knx/data_link_layer.h
+       ../src/knx/device_object.h
+       ../src/knx/group_object.h
+       ../src/knx/group_object_table_object.h
+       ../src/knx/interface_object.h
+       ../src/knx/ip_data_link_layer.h
+       ../src/knx/ip_parameter_object.h
+       ../src/knx/memory.h
+       ../src/knx/network_layer.h
+       ../src/knx/npdu.h
+       ../src/knx/rf_physical_layer.h
+       ../src/knx/rf_data_link_layer.h
+       ../src/knx/rf_medium_object.h
+       ../src/knx/table_object.h
+       ../src/knx/tpdu.h
+       ../src/knx/tpuart_data_link_layer.h
+       ../src/knx/transport_layer.h
+       ../src/knx/platform.h
 	main.cpp 
+       ../src/linux_platform.h
+       ../src/knx_facade.h
+       ../src/knx/dptconvert.h
+       ../src/knx/knx_value.h
+       ../src/knx/dpt.h
 	../src/linux_platform.cpp 
 	../src/knx_facade.cpp 
 	../src/knx/dptconvert.cpp
@@ -38,3 +77,5 @@ target_link_libraries(knx-linux  "${LIBRARIES_FROM_REFERENCES}")
 include_directories(../src)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -Wno-switch -g -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -Wno-switch -g -O0")
+set_property(TARGET knx-linux PROPERTY CXX_STANDARD 11)
+install(TARGETS knx-linux RUNTIME DESTINATION /tmp)

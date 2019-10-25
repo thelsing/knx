@@ -5,6 +5,13 @@
 #include <string>
 #include "knx/platform.h"
 
+extern void delayMicroseconds (unsigned int howLong);
+extern int gpio_direction(int pin, int dir);
+extern int gpio_read(int pin);
+extern int gpio_write(int pin, int value);
+extern int gpio_export(int pin);
+extern int gpio_unexport(int pin);
+
 class LinuxPlatform: public Platform
 {
     using Platform::_memoryReference;
@@ -43,6 +50,17 @@ public:
     int readUart() override;
     size_t readBytesUart(uint8_t *buffer, size_t length) override;
 
+    //spi
+    void setupSpi() override;
+    void closeSpi() override;
+    int readWriteSpi (uint8_t *data, size_t len) override;
+
+    //gpio
+    virtual void setupGpio(uint32_t dwPin, uint32_t dwMode) override;
+    virtual void closeGpio(uint32_t dwPin) override;
+    virtual void writeGpio(uint32_t dwPin, uint32_t dwVal) override;
+    virtual uint32_t readGpio(uint32_t dwPin) override;
+
     //memory
     uint8_t* getEepromBuffer(uint16_t size) override;
     void commitToEeprom() override;
@@ -57,6 +75,7 @@ public:
     void doMemoryMapping();
     uint8_t* _mappedFile = 0;
     int _fd = -1;
+    int _spiFd = -1;
     uint8_t* _currentMaxMem = 0;
     std::string _flashFilePath = "flash.bin";
     char** _args = 0;

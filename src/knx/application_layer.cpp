@@ -90,8 +90,11 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
             _bau.individualAddressReadAppLayerConfirm(hopType, apdu.frame().sourceAddress());
             break;
         case IndividualAddressSerialNumberRead:
-            _bau.individualAddressSerialNumberReadIndication(hopType, data + 1);
+        {
+            uint8_t* knxSerialNumber = &data[1];
+            _bau.individualAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
             break;
+        }
         case IndividualAddressSerialNumberResponse:
         {
             uint16_t domainAddress;
@@ -102,9 +105,10 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
         }
         case IndividualAddressSerialNumberWrite:
         {
-            uint16_t newAddress;
-            popWord(newAddress, data + 7);
-            _bau.individualAddressSerialNumberWriteIndication(hopType, data + 1, newAddress);
+            uint8_t* knxSerialNumber = &data[1];
+            uint16_t newIndividualAddress;
+            popWord(newIndividualAddress, &data[7]);
+            _bau.individualAddressSerialNumberWriteIndication(priority, hopType, newIndividualAddress, knxSerialNumber);
             break;
         }
     }
@@ -150,7 +154,40 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
 
 void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
 {
-
+    uint8_t* data = apdu.data();
+    switch (apdu.type())
+    {
+        // TODO: testInfo could be of any length
+        case SystemNetworkParameterRead:
+        {
+            uint16_t objectType;
+            uint16_t propertyId;
+            uint8_t testInfo[2];
+            popWord(objectType, data + 1);
+            popWord(propertyId, data + 3);
+            popByte(testInfo[0], data + 4);
+            popByte(testInfo[1], data + 5);
+            propertyId = (propertyId >> 4) & 0x0FFF;;
+            testInfo[0] &= 0x0F;
+            _bau.systemNetworkParameterReadIndication(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo));
+            break;
+        }
+        case DomainAddressSerialNumberWrite:
+        {
+            uint8_t* knxSerialNumber = &data[1];
+            uint8_t* domainAddress = &data[7];
+            _bau.domainAddressSerialNumberWriteIndication(priority, hopType, domainAddress, knxSerialNumber);
+            break;
+        }
+        case DomainAddressSerialNumberRead:
+        {
+            uint8_t* knxSerialNumber = &data[1];
+            _bau.domainAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
@@ -354,6 +391,65 @@ void ApplicationLayer::restartRequest(AckType ack, Priority priority, HopCountTy
     apdu.type(Restart);
 
     individualSend(ack, hopType, priority, _connectedTsap, apdu);
+}
+
+//TODO: ApplicationLayer::systemNetworkParameterReadRequest()
+void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, HopCountType hopType, 
+                                                          uint16_t objectType, uint16_t propertyId,
+                                                          uint8_t* testInfo, uint16_t testInfoLength, 
+                                                          uint8_t* testResult, uint16_t testResultLength)
+{
+    CemiFrame frame(testInfoLength + testResultLength + 3 + 1); // PID and testInfo share an octet (+3) and +1 for APCI byte(?)
+    APDU& apdu = frame.apdu();
+    apdu.type(SystemNetworkParameterResponse);
+    uint8_t* data = apdu.data() + 1;
+
+    pushWord(objectType, data);
+    pushWord((propertyId << 4) & 0xFFF0, data + 2);                             // Reserved bits for test_info are always 0
+    uint8_t* pData = pushByteArray(&testInfo[1], testInfoLength - 1, data + 4); // TODO: upper reserved bits (testInfo + 0) have to put into the lower bits of data + 3
+    memcpy(pData, testResult, testResultLength);
+
+    //apdu.printPDU();
+
+    _transportLayer->dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+}
+
+//TODO: ApplicationLayer::domainAddressSerialNumberWriteRequest()
+//TODO: ApplicationLayer::domainAddressSerialNumberReadRequest()
+void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
+                                                             uint8_t* knxSerialNumber)
+{
+    CemiFrame frame(13); 
+    APDU& apdu = frame.apdu();
+    apdu.type(DomainAddressSerialNumberResponse);
+
+    uint8_t* data = apdu.data() + 1;
+
+    memcpy(data, knxSerialNumber, 6);
+    memcpy(data + 6, rfDoA, 6);
+
+    //apdu.printPDU();
+
+    _transportLayer->dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+}
+
+//TODO: ApplicationLayer::IndividualAddressSerialNumberWriteRequest()
+//TODO: ApplicationLayer::IndividualAddressSerialNumberReadRequest()
+void ApplicationLayer::IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
+                                                                 uint8_t* knxSerialNumber)
+{
+    CemiFrame frame(13); 
+    APDU& apdu = frame.apdu();
+    apdu.type(IndividualAddressSerialNumberResponse);
+
+    uint8_t* data = apdu.data() + 1;
+
+    memcpy(data, knxSerialNumber, 6);
+    memcpy(data + 6, rfDoA, 6);
+
+     //apdu.printPDU();
+
+    _transportLayer->dataBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
 }
 
 void ApplicationLayer::propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 

@@ -14,15 +14,20 @@ DataLinkLayer::DataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
 
 void DataLinkLayer::dataRequest(AckType ack, AddressType addrType, uint16_t destinationAddr, FrameFormat format, Priority priority, NPDU& npdu)
 {
-    sendTelegram(npdu, ack, destinationAddr, addrType, format, priority);
+    // Normal data requests and broadcasts will always be transmitted as (domain) broadcast with domain address for open media (e.g. RF medium) 
+    // The domain address "simulates" a closed medium (such as TP) on an open medium (such as RF or PL)
+    // See 3.2.5 p.22
+    sendTelegram(npdu, ack, destinationAddr, addrType, format, priority, Broadcast);
 }
 
 void DataLinkLayer::systemBroadcastRequest(AckType ack, FrameFormat format, Priority priority, NPDU& npdu)
 {
-    sendTelegram(npdu, ack, 0, GroupAddress, format, priority);
+    // System Broadcast requests will always be transmitted as broadcast with KNX serial number for open media (e.g. RF medium) 
+    // See 3.2.5 p.22
+    sendTelegram(npdu, ack, 0, GroupAddress, format, priority, SysBroadcast);
 }
 
-void DataLinkLayer::dataConReceived(CemiFrame& frame,bool success)
+void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
 {
     AckType ack = frame.ack();
     AddressType addrType = frame.addressType();
@@ -49,12 +54,18 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     Priority priority = frame.priority();
     NPDU& npdu = frame.npdu();
     uint16_t ownAddr = _deviceObject.induvidualAddress();
+    SystemBroadcast systemBroadcast = frame.systemBroadcast();
     
     if (source == ownAddr)
         _deviceObject.induvidualAddressDuplication(true);
 
     if (addrType == GroupAddress && destination == 0)
-        _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
+    {
+        if (systemBroadcast == SysBroadcast)
+            _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
+        else 
+            _networkLayer.dataIndication(ack, addrType, destination, type, npdu, priority, source);
+    }
     else
     {
         if (addrType == InduvidualAddress && destination != _deviceObject.induvidualAddress())
@@ -73,7 +84,7 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     }
 }
 
-bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationAddr, AddressType addrType, FrameFormat format, Priority priority)
+bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationAddr, AddressType addrType, FrameFormat format, Priority priority, SystemBroadcast systemBroadcast)
 {
     CemiFrame& frame = npdu.frame();
     frame.messageCode(L_data_ind);
@@ -82,6 +93,7 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
     frame.addressType(addrType);
     frame.priority(priority);
     frame.repetition(RepititionAllowed);
+    frame.systemBroadcast(systemBroadcast);
 
     if (npdu.octetCount() <= 15)
         frame.frameType(StandardFrame);

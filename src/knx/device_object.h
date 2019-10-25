@@ -35,6 +35,8 @@ public:
     void hardwareType(const uint8_t* value);
     uint16_t version();
     void version(uint16_t value);
+    uint16_t maskVersion();
+    void maskVersion(uint16_t value);
 protected:
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
@@ -44,8 +46,9 @@ private:
     uint8_t _prgMode = 0;
     uint16_t _ownAddress = 0;
     uint16_t _manufacturerId = 0xfa; //Default to KNXA
-    uint32_t _bauNumber = 0;
+    uint32_t _bauNumber = 0xaabbccdd;
     char _orderNumber[10] = "";
     uint8_t _hardwareType[6] = { 0, 0, 0, 0, 0, 0};
     uint16_t _version = 0;
+    uint16_t _maskVersion = 0x0000;
 };

@@ -69,7 +69,7 @@ void NetworkLayer::dataConfirm(AckType ack, AddressType addressType, uint16_t de
 void NetworkLayer::systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
-    _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
+    _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
 void NetworkLayer::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)

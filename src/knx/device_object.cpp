@@ -11,7 +11,7 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             break;
         case PID_SERIAL_NUMBER:
             pushWord(_manufacturerId, data);
-            pushInt(_bauNumber, data);
+            pushInt(_bauNumber, data + 2);
             break;
         case PID_MANUFACTURER_ID:
             pushWord(_manufacturerId, data);
@@ -55,8 +55,7 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             break;
         }
         case PID_DEVICE_DESCRIPTOR:
-            data[0] = 0x57;
-            data[1] = 0xB0;
+            pushWord(_maskVersion, data);
             break;
         default:
             count = 0;
@@ -252,6 +251,16 @@ uint16_t DeviceObject::version()
 void DeviceObject::version(uint16_t value)
 {
     _version = value;
+}
+
+uint16_t DeviceObject::maskVersion()
+{
+    return _maskVersion;
+}
+
+void DeviceObject::maskVersion(uint16_t value)
+{
+    _maskVersion = value;
 }
 
 static PropertyDescription _propertyDescriptions[] = 

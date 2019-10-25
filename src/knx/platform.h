@@ -29,6 +29,15 @@ class Platform
     virtual int readUart() = 0;
     virtual size_t readBytesUart(uint8_t* buffer, size_t length) = 0;
 
+    virtual void setupSpi() = 0;
+    virtual void closeSpi() = 0;
+    virtual int readWriteSpi (uint8_t *data, size_t len) = 0;
+
+    virtual void setupGpio(uint32_t dwPin, uint32_t dwMode) = 0;
+    virtual void closeGpio(uint32_t dwPin) = 0;
+    virtual void writeGpio(uint32_t dwPin, uint32_t dwVal) = 0;
+    virtual uint32_t readGpio(uint32_t dwPin) = 0;
+
     virtual uint8_t* getEepromBuffer(uint16_t size) = 0;
     virtual void commitToEeprom() = 0;
 
