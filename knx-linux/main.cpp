@@ -1,14 +1,14 @@
 #include "knx_facade.h"
-#include "knx/bau57B0.h"
-//#include "knx/bau2705.h"
+//#include "knx/bau57B0.h"
+#include "knx/bau27B0.h"
 #include "knx/group_object_table_object.h"
 #include "knx/bits.h"
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-KnxFacade<LinuxPlatform, Bau57B0> knx;
-//KnxFacade<LinuxPlatform, Bau2705> knx;
+//KnxFacade<LinuxPlatform, Bau57B0> knx;
+KnxFacade<LinuxPlatform, Bau27B0> knx;
 
 long lastsend = 0;
 
