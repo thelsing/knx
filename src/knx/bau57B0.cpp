@@ -17,6 +17,11 @@ Bau57B0::Bau57B0(Platform& platform)
     uint16_t maskVersion;
     popWord(maskVersion, _descriptor);
     _deviceObj.maskVersion(maskVersion);
+
+    // Set which interface objects are available in the device object
+    // This differs from BAU to BAU with different medium types.
+    // See PID_IO_LIST
+    _deviceObj.ifObj(_ifObjs);
 }
 
 InterfaceObject* Bau57B0::getInterfaceObject(uint8_t idx)

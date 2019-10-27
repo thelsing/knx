@@ -16,6 +16,18 @@ Bau27B0::Bau27B0(Platform& platform)
     uint16_t maskVersion;
     popWord(maskVersion, _descriptor);
     _deviceObj.maskVersion(maskVersion);
+
+    // Set the maximum APDU length
+    // ETS will consider this value while programming the device
+    // For KNX-RF we use a smallest allowed value for now,
+    // although long frame are also supported by the implementation.
+    // Needs some experimentation.
+    _deviceObj.maxApduLength(15);
+
+    // Set which interface objects are available in the device object
+    // This differs from BAU to BAU with different medium types.
+    // See PID_IO_LIST
+    _deviceObj.ifObj(_ifObjs);
 }
 
 // see KNX AN160 p.74 for mask 27B0
