@@ -11,7 +11,10 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <signal.h>
+#include <sched.h>
+#include <sys/mman.h>
 
 volatile sig_atomic_t loopActive = 1;
 void signalHandler(int sig)
@@ -108,6 +111,13 @@ void setup()
 int main(int argc, char **argv)
 {
     printf("main() start.\n");
+
+    // Prevent swapping of this process
+    struct sched_param sp;
+    memset(&sp, 0, sizeof(sp));
+    sp.sched_priority = sched_get_priority_max(SCHED_FIFO);
+    sched_setscheduler(0, SCHED_FIFO, &sp);
+    mlockall(MCL_CURRENT | MCL_FUTURE);
 
     // Register signals
     signal(SIGINT, signalHandler);
