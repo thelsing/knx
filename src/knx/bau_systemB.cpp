@@ -3,6 +3,14 @@
 #include <string.h>
 #include <stdio.h>
 
+enum NmReadSerialNumberType
+{
+    NM_Read_SerialNumber_By_ProgrammingMode = 0x01,
+    NM_Read_SerialNumber_By_ExFactoryState = 0x02,
+    NM_Read_SerialNumber_By_PowerReset = 0x03,
+    NM_Read_SerialNumber_By_ManufacturerSpecific = 0xFE,
+};
+
 BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platform),
     _assocTable(platform), _groupObjTable(platform), _appProgram(platform),
     _platform(platform), _appLayer(_assocTable, *this),
@@ -359,9 +367,9 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
     popByte(operand, testInfo + 1); // First byte (+ 0) contains only 4 reserved bits (0)
 
     // See KNX spec. 3.5.2 p.33 (Management Procedures: Procedures with A_SystemNetworkParameter_Read)
-    switch(operand)
+    switch((NmReadSerialNumberType)operand)
     {
-        case 0x01: // NM_Read_SerialNumber_By_ProgrammingMode
+        case NM_Read_SerialNumber_By_ProgrammingMode: // NM_Read_SerialNumber_By_ProgrammingMode
             // Only send a reply if programming mode is on
             if (_deviceObj.progMode() && (objectType == OT_DEVICE) && (propertyId == PID_SERIAL_NUMBER))
             {
@@ -373,13 +381,13 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
             }
         break;
 
-        case 0x02: // NM_Read_SerialNumber_By_ExFactoryState
+        case NM_Read_SerialNumber_By_ExFactoryState: // NM_Read_SerialNumber_By_ExFactoryState
         break;
 
-        case 0x03: // NM_Read_SerialNumber_By_PowerReset
+        case NM_Read_SerialNumber_By_PowerReset: // NM_Read_SerialNumber_By_PowerReset
         break;
 
-        case 0xFE: // Manufacturer specific use of A_SystemNetworkParameter_Read
+        case NM_Read_SerialNumber_By_ManufacturerSpecific: // Manufacturer specific use of A_SystemNetworkParameter_Read
         break;
     }
 }
