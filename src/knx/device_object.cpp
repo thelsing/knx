@@ -11,7 +11,7 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             break;
         case PID_SERIAL_NUMBER:
             pushWord(_manufacturerId, data);
-            pushInt(_bauNumber, data);
+            pushInt(_bauNumber, data + 2);
             break;
         case PID_MANUFACTURER_ID:
             pushWord(_manufacturerId, data);
@@ -35,7 +35,7 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             *data = _prgMode;
             break;
         case PID_MAX_APDU_LENGTH:
-            pushWord(254, data);
+            pushWord(_maxApduLength, data);
             break;
         case PID_SUBNET_ADDR:
             *data = ((_ownAddress >> 8) & 0xff);
@@ -45,18 +45,12 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             break;
         case PID_IO_LIST:
         {
-            uint32_t ifObjs[] = {
-                6, // length
-                OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG, OT_IP_PARAMETER};
-
-            for (uint32_t i = start; i < (ifObjs[0] + 1) && i < count; i++)
-                pushInt(ifObjs[i], data);
-
+            for (uint32_t i = start; i < (_ifObjs[0] + 1) && i < count; i++)
+                pushInt(_ifObjs[i], data);
             break;
         }
         case PID_DEVICE_DESCRIPTOR:
-            data[0] = 0x57;
-            data[1] = 0xB0;
+            pushWord(_maskVersion, data);
             break;
         default:
             count = 0;
@@ -252,6 +246,36 @@ uint16_t DeviceObject::version()
 void DeviceObject::version(uint16_t value)
 {
     _version = value;
+}
+
+uint16_t DeviceObject::maskVersion()
+{
+    return _maskVersion;
+}
+
+void DeviceObject::maskVersion(uint16_t value)
+{
+    _maskVersion = value;
+}
+
+void DeviceObject::maxApduLength(uint16_t value)
+{
+    _maxApduLength = value;
+}
+
+uint16_t DeviceObject::maxApduLength()
+{
+    return _maxApduLength;
+}
+
+const uint32_t* DeviceObject::ifObj()
+{
+    return _ifObjs;
+}
+
+void DeviceObject::ifObj(const uint32_t* value)
+{
+    _ifObjs = value;
 }
 
 static PropertyDescription _propertyDescriptions[] = 

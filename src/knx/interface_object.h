@@ -47,7 +47,10 @@ enum ObjectType
     OT_RESERVED = 12,
 
     /** File Server Object */
-    OT_FILE_SERVER = 13
+    OT_FILE_SERVER = 13,
+
+    /** RF Medium Object */
+    OT_RF_MEDIUM = 19
 };
 
 /**

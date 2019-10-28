@@ -1,12 +1,24 @@
 #include "knx_facade.h"
+#if MEDIUM_TYPE == 5
 #include "knx/bau57B0.h"
+#elif MEDIUM_TYPE == 2
+#include "knx/bau27B0.h"
+#else
+#error Only MEDIUM_TYPE IP and RF supported
+#endif
 #include "knx/group_object_table_object.h"
 #include "knx/bits.h"
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 
+#if MEDIUM_TYPE == 5
 KnxFacade<LinuxPlatform, Bau57B0> knx;
+#elif MEDIUM_TYPE == 2
+KnxFacade<LinuxPlatform, Bau27B0> knx;
+#else
+#error Only MEDIUM_TYPE IP and RF supported
+#endif
 
 long lastsend = 0;
 
@@ -94,6 +106,6 @@ int main(int argc, char **argv)
         knx.loop();
         if(knx.configured())
             appLoop();
-        delay(100);
+        delayMicroseconds(100);
     }
 }

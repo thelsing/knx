@@ -35,6 +35,11 @@ class ArduinoPlatform : public Platform
     virtual int readUart();
     virtual size_t readBytesUart(uint8_t* buffer, size_t length);
 
+    //spi
+    void setupSpi() override;
+    void closeSpi() override;
+    int readWriteSpi (uint8_t *data, size_t len) override;
+
     static Stream* SerialDebug;
 
   protected:

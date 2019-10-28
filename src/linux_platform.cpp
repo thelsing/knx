@@ -19,6 +19,11 @@
 #include <errno.h>
 #include <fcntl.h>
 
+#include <sys/ioctl.h>            // Needed for SPI port
+#include <linux/spi/spidev.h>     // Needed for SPI port
+#include <poll.h>                 // Needed for GPIO edge detection
+#include <sys/time.h>             // Needed for delayMicroseconds()
+
 #include "knx/device_object.h"
 #include "knx/address_table_object.h"
 #include "knx/association_table_object.h"
@@ -299,6 +304,74 @@ void LinuxPlatform::setupUart()
 {
 }
 
+void LinuxPlatform::closeSpi()
+{
+    close(_spiFd);
+    printf ("SPI device closed.\r\n");
+}
+
+int LinuxPlatform::readWriteSpi (uint8_t *data, size_t len)
+{
+    uint16_t spiDelay = 0 ;
+    uint32_t spiSpeed = 8000000; // 4 MHz SPI speed
+    uint8_t spiBPW = 8; // Bits per word
+
+    struct spi_ioc_transfer spi ;
+
+    // Mentioned in spidev.h but not used in the original kernel documentation
+    //	test program )-:
+
+    memset (&spi, 0, sizeof (spi)) ;
+
+    spi.tx_buf        = (uint64_t)data;
+    spi.rx_buf        = (uint64_t)data;
+    spi.len           = len;
+    spi.delay_usecs   = spiDelay;
+    spi.speed_hz      = spiSpeed;
+    spi.bits_per_word = spiBPW;
+
+    return ioctl (_spiFd, SPI_IOC_MESSAGE(1), &spi) ;
+}
+
+void LinuxPlatform::setupSpi()
+{
+    if ((_spiFd = open ("/dev/spidev0.0", O_RDWR)) < 0)
+    {
+        printf ("ERROR: SPI setup failed! Could not open SPI device!\r\n");
+        return;
+    }
+
+    // Set SPI parameters.
+    int mode = 0; // Mode 0
+    uint8_t spiBPW = 8; // Bits per word
+    int speed = 8000000; // 4 MHz SPI speed
+
+    if (ioctl (_spiFd, SPI_IOC_WR_MODE, &mode) < 0)
+    {
+        printf ("ERROR: SPI Mode Change failure: %s\n", strerror (errno)) ;
+        close(_spiFd);
+        return;
+    }
+
+    if (ioctl (_spiFd, SPI_IOC_WR_BITS_PER_WORD, &spiBPW) < 0)
+    {
+        printf ("ERROR: SPI BPW Change failure: %s\n", strerror (errno)) ;
+        close(_spiFd);
+        return;
+    }
+
+    if (ioctl (_spiFd, SPI_IOC_WR_MAX_SPEED_HZ, &speed)   < 0)
+    {
+        printf ("ERROR: SPI Speed Change failure: %s\n", strerror (errno)) ;
+        close(_spiFd);
+        return;
+    }
+
+    printf ("SPI device setup ok.\r\n");
+
+
+}
+
 /*
  * On linux the memory addresses from malloc may be to big for usermermory_write.
  * So we allocate some memory at the beginning and use it for address table, group object table etc.
@@ -499,10 +572,18 @@ void println(void)
 
 void pinMode(uint32_t dwPin, uint32_t dwMode)
 {
+    gpio_export(dwPin);
+    gpio_direction(dwPin, dwMode);
 }
 
 void digitalWrite(uint32_t dwPin, uint32_t dwVal)
 {
+    gpio_write(dwPin, dwVal);
+}
+
+uint32_t digitalRead(uint32_t dwPin)
+{
+    return gpio_read(dwPin);
 }
 
 typedef void (*voidFuncPtr)(void);
@@ -519,4 +600,299 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
     memcpy(_args, argv, argc * sizeof(char*));
     _args[argc] = 0;
 }
+
+/* Buffer size for string operations (e.g. snprintf())*/
+#define MAXBUFFER 100
+
+/* Activate GPIO-Pin
+ * Write GPIO pin number to /sys/class/gpio/export
+ * Result: 0 = success, -1 = error
+ */
+int gpio_export(int pin)
+{
+    char buffer[MAXBUFFER];    /* Output Buffer       */
+    ssize_t bytes;             /* Used Buffer length  */
+    int fd;                    /* Filedescriptor      */
+    int res;                   /* Result from write() */
+
+    fd = open("/sys/class/gpio/export", O_WRONLY);
+    if (fd < 0)
+    {
+        perror("Could not export GPIO pin(open)!\n");
+        return(-1);
+    }
+
+    bytes = snprintf(buffer, MAXBUFFER, "%d", pin);
+    res = write(fd, buffer, bytes);
+
+    if (res < 0)
+    {
+        perror("Could not export GPIO pin(write)!\n");
+        return(-1);
+    }
+
+    close(fd);
+    delay(100);
+
+    return(0);
+}
+
+/* Deactivate GPIO pin
+ * Write GPIO pin number to /sys/class/gpio/unexport
+ * Result: 0 = success, -1 = error
+ */
+int gpio_unexport(int pin)
+{
+    char buffer[MAXBUFFER];    /* Output Buffer       */
+    ssize_t bytes;             /* Used Buffer length  */
+    int fd;                    /* Filedescriptor      */
+    int res;                   /* Result from write() */
+
+    fd = open("/sys/class/gpio/unexport", O_WRONLY);
+    if (fd < 0)
+    {
+        perror("Could not unexport GPIO pin(open)!\n");
+        return(-1);
+    }
+
+    bytes = snprintf(buffer, MAXBUFFER, "%d", pin);
+    res = write(fd, buffer, bytes);
+
+    if (res < 0)
+    {
+        perror("Could not unexport GPIO pin(write)!\n");
+        return(-1);
+    }
+
+    close(fd);
+    return(0);
+}
+
+/* Set GPIO pin mode (input/output)
+ * Write GPIO pin number to /sys/class/gpioXX/direction
+ * Direction: 0 = input, 1 = output
+ * Result: 0 = success, -1 = error
+ */
+int gpio_direction(int pin, int dir)
+{
+    char path[MAXBUFFER];      /* Buffer for path     */
+    int fd;                    /* Filedescriptor      */
+    int res;                   /* Result from write() */
+
+    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/direction", pin);
+    fd = open(path, O_WRONLY);
+    if (fd < 0)
+    {
+        perror("Could not set mode for GPIO pin(open)!\n");
+        return(-1);
+    }
+
+    switch (dir)
+    {
+    case INPUT : res = write(fd,"in",2); break;
+    case OUTPUT: res = write(fd,"out",3); break;
+    default: res = -1; break;
+    }
+
+    if (res < 0)
+    {
+        perror("Could not set mode for GPIO pin(write)!\n");
+        return(-1);
+    }
+
+    close(fd);
+    return(0);
+}
+
+/* Read from GPIO pin
+ * Result: -1 = error, 0/1 = GPIO pin state
+ */
+int gpio_read(int pin)
+{
+    char path[MAXBUFFER];         /* Buffer for path     */
+    int fd;                       /* Filedescriptor      */
+    char result[MAXBUFFER] = {0}; /* Buffer for result   */
+
+    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
+    fd = open(path, O_RDONLY);
+    if (fd < 0)
+    {
+        perror("Could not read from GPIO(open)!\n");
+        return(-1);
+    }
+
+    if (read(fd, result, 3) < 0)
+    {
+        perror("Could not read from GPIO(read)!\n");
+        return(-1);
+    }
+
+    close(fd);
+    return(atoi(result));
+}
+
+/* Write to GPIO pin
+ * Result: -1 = error, 0 = success
+ */
+int gpio_write(int pin, int value)
+{
+    char path[MAXBUFFER];      /* Buffer for path    */
+    int fd;                    /* Filedescriptor     */
+    int res;                   /* Result from write()*/
+
+    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
+    fd = open(path, O_WRONLY);
+
+    if (fd < 0)
+    {
+        perror("Could not write to GPIO(open)!\n");
+        return(-1);
+    }
+
+    switch (value)
+    {
+        case LOW : res = write(fd,"0",1); break;
+        case HIGH: res = write(fd,"1",1); break;
+        default: res = -1; break;
+    }
+
+    if (res < 0)
+    {
+        perror("Could not write to GPIO(write)!\n");
+        return(-1);
+    }
+
+    close(fd);
+    return(0);
+}
+
+/* Set GPIO pin edge detection
+ * 'r' (rising)
+ * 'f' (falling)
+ * 'b' (both)
+ */
+int gpio_edge(unsigned int pin, char edge)
+{
+    char path[MAXBUFFER];    /* Buffer for path    */
+    int fd;                  /* Filedescriptor     */
+
+    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/edge", pin);
+
+    fd = open(path, O_WRONLY | O_NONBLOCK );
+    if (fd < 0)
+    {
+        perror("Could not set GPIO edge detection(open)!\n");
+        return(-1);
+    }
+
+    switch (edge)
+    {
+    case 'r': strncpy(path,"rising",8); break;
+    case 'f': strncpy(path,"falling",8); break;
+    case 'b': strncpy(path,"both",8); break;
+    case 'n': strncpy(path,"none",8); break;
+    default: close(fd);return(-2);
+    }
+
+    write(fd, path, strlen(path) + 1);
+
+    close(fd);
+    return 0;
+}
+
+/* Wait for edge on GPIO pin
+ * timeout in milliseconds
+ * Result: <0: error, 0: poll() Timeout,
+ * 1: edge detected, GPIO pin reads "0"
+ * 2: edge detected, GPIO pin reads "1"
+ */
+int gpio_wait(unsigned int pin, int timeout)
+{
+    char path[MAXBUFFER];     /* Buffer for path     */
+    int fd;                   /* Filedescriptor      */
+    struct pollfd polldat[1]; /* Variable for poll() */
+    char buf[MAXBUFFER];      /* Read buffer         */
+    int rc;                   /* Result              */
+
+    /* Open GPIO pin */
+    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
+    fd = open(path, O_RDONLY | O_NONBLOCK );
+    if (fd < 0)
+    {
+        perror("Could not wait for GPIO edge(open)!\n");
+        return(-1);
+    }
+
+    /* prepare poll() */
+    memset((void*)buf, 0, sizeof(buf));
+    memset((void*)polldat, 0, sizeof(polldat));
+    polldat[0].fd = fd;
+    polldat[0].events = POLLPRI;
+
+    /* clear any existing detected edges before */
+    lseek(fd, 0, SEEK_SET);
+    rc = read(fd, buf, MAXBUFFER - 1);
+
+    rc = poll(polldat, 1, timeout);
+    if (rc < 0)
+    { /* poll() failed! */
+        perror("Could not wait for GPIO edge(poll)!\n");
+        close(fd);
+        return(-1);
+    }
+
+    if (rc == 0)
+    { /* poll() timeout! */
+        close(fd);
+        return(0);
+    }
+
+    if (polldat[0].revents & POLLPRI)
+    {
+        if (rc < 0)
+        { /* read() failed! */
+            perror("Could not wait for GPIO edge(read)!\n");
+            close(fd);
+            return(-2);
+        }
+        /* printf("poll() GPIO %d interrupt occurred: %s\n", pin, buf); */
+        close(fd);
+        return(1 + atoi(buf));
+    }
+
+    close(fd);
+    return(-1);
+}
+
+void delayMicrosecondsHard (unsigned int howLong)
+{
+  struct timeval tNow, tLong, tEnd ;
+
+  gettimeofday (&tNow, NULL) ;
+  tLong.tv_sec  = howLong / 1000000 ;
+  tLong.tv_usec = howLong % 1000000 ;
+  timeradd (&tNow, &tLong, &tEnd) ;
+
+  while (timercmp (&tNow, &tEnd, <))
+    gettimeofday (&tNow, NULL) ;
+}
+
+void delayMicroseconds (unsigned int howLong)
+{
+  struct timespec sleeper ;
+  unsigned int uSecs = howLong % 1000000 ;
+  unsigned int wSecs = howLong / 1000000 ;
+
+  /**/ if (howLong ==   0)
+    return ;
+  else if (howLong  < 100)
+    delayMicrosecondsHard (howLong) ;
+  else
+  {
+    sleeper.tv_sec  = wSecs ;
+    sleeper.tv_nsec = (long)(uSecs * 1000L) ;
+    nanosleep (&sleeper, NULL) ;
+  }
+}
+
 #endif

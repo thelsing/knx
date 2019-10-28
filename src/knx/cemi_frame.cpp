@@ -3,18 +3,88 @@
 #include "string.h"
 #include <stdio.h>
 
-CemiFrame::CemiFrame(uint8_t* data, uint16_t length): _npdu(data + NPDU_LPDU_DIFF, *this), 
-    _tpdu(data + TPDU_LPDU_DIFF, *this), _apdu(data + APDU_LPDU_DIFF, *this)
+/*
+cEMI Frame Format
+
++---------+--------+--------+--------+--------+---------+---------+--------+---------+
+    | Header  |  Msg   |Add.Info| Ctrl 1 | Ctrl 2 | Source  | Dest.   |  Data  |   APDU  |
+    |         | Code   | Length |        |        | Address | Address | Length |         |
+    +---------+--------+--------+--------+--------+---------+---------+--------+---------+
+      6 bytes   1 byte   1 byte   1 byte   1 byte   2 bytes   2 bytes   1 byte   2 bytes
+ 
+        Header          = See below the structure of a cEMI header
+        Message Code    = See below. On Appendix A is the list of all existing EMI and cEMI codes
+        Add.Info Length = 0x00 - no additional info
+        Control Field 1 =
+        Control Field 2 =
+        Source Address  = 0x0000 - filled in by router/gateway with its source address which is
+                          part of the KNX subnet
+        Dest. Address   = KNX group or individual address (2 byte)
+        Data Length     = Number of bytes of data in the APDU excluding the TPCI/APCI bits
+        APDU            = Application Protocol Data Unit - the actual payload including transport
+                          protocol control information (TPCI), application protocol control
+                          information (APCI) and data passed as an argument from higher layers of
+                          the KNX communication stack
+ 
+Control Field 1
+ 
+          Bit  |
+         ------+---------------------------------------------------------------
+           7   | Frame Type  - 0x0 for extended frame
+               |               0x1 for standard frame
+         ------+---------------------------------------------------------------
+           6   | Reserved
+               |
+         ------+---------------------------------------------------------------
+           5   | Repeat Flag - 0x0 repeat frame on medium in case of an error
+               |               0x1 do not repeat
+         ------+---------------------------------------------------------------
+           4   | System Broadcast - 0x0 system broadcast
+               |                    0x1 broadcast
+         ------+---------------------------------------------------------------
+           3   | Priority    - 0x0 system
+               |               0x1 normal
+         ------+               0x2 urgent
+           2   |               0x3 low
+               |
+         ------+---------------------------------------------------------------
+           1   | Acknowledge Request - 0x0 no ACK requested
+               | (L_Data.req)          0x1 ACK requested
+         ------+---------------------------------------------------------------
+           0   | Confirm      - 0x0 no error
+               | (L_Data.con) - 0x1 error
+         ------+---------------------------------------------------------------
+ 
+         Control Field 2
+ 
+          Bit  |
+         ------+---------------------------------------------------------------
+           7   | Destination Address Type - 0x0 individual address
+               |                          - 0x1 group address
+         ------+---------------------------------------------------------------
+          6-4  | Hop Count (0-7)
+         ------+---------------------------------------------------------------
+          3-0  | Extended Frame Format - 0x0 standard frame
+         ------+---------------------------------------------------------------
+*/ 
+
+CemiFrame::CemiFrame(uint8_t* data, uint16_t length)
+    : _npdu(data + NPDU_LPDU_DIFF, *this), 
+      _tpdu(data + TPDU_LPDU_DIFF, *this), 
+      _apdu(data + APDU_LPDU_DIFF, *this)
 {
     _data = data;
-    _ctrl1 = data + data[1] + 2;
+    _ctrl1 = data + data[1] + CEMI_HEADER_SIZE;
     _length = length;
 }
 
-CemiFrame::CemiFrame(uint8_t apduLength): _data(buffer),
-    _npdu(_data + NPDU_LPDU_DIFF, *this), _tpdu(_data + TPDU_LPDU_DIFF, *this), _apdu(_data + APDU_LPDU_DIFF, *this)
+CemiFrame::CemiFrame(uint8_t apduLength)
+    : _data(buffer),
+      _npdu(_data + NPDU_LPDU_DIFF, *this), 
+      _tpdu(_data + TPDU_LPDU_DIFF, *this), 
+      _apdu(_data + APDU_LPDU_DIFF, *this)
 {
-    _ctrl1 = _data + 2;
+    _ctrl1 = _data + CEMI_HEADER_SIZE;
     _length = 0;
 
     memset(_data, 0, apduLength + APDU_LPDU_DIFF);
@@ -22,10 +92,13 @@ CemiFrame::CemiFrame(uint8_t apduLength): _data(buffer),
     _npdu.octetCount(apduLength);
 }
 
-CemiFrame::CemiFrame(const CemiFrame & other): _data(buffer),
-    _npdu(_data + NPDU_LPDU_DIFF, *this), _tpdu(_data + TPDU_LPDU_DIFF, *this), _apdu(_data + APDU_LPDU_DIFF, *this)
+CemiFrame::CemiFrame(const CemiFrame & other)
+    : _data(buffer),
+      _npdu(_data + NPDU_LPDU_DIFF, *this),
+      _tpdu(_data + TPDU_LPDU_DIFF, *this),
+      _apdu(_data + APDU_LPDU_DIFF, *this)
 {
-    _ctrl1 = _data + 2;
+    _ctrl1 = _data + CEMI_HEADER_SIZE; 
     _length = other._length;
 
     memcpy(_data, other._data, other.totalLenght());
@@ -35,7 +108,7 @@ CemiFrame& CemiFrame::operator=(CemiFrame other)
 {
     _length = other._length;
     _data = buffer;
-    _ctrl1 = _data + 2;
+    _ctrl1 = _data + CEMI_HEADER_SIZE;
     memcpy(_data, other._data, other.totalLenght());
     _npdu._data = _data + NPDU_LPDU_DIFF;
     _tpdu._data = _data + TPDU_LPDU_DIFF;
@@ -84,10 +157,34 @@ void CemiFrame::fillTelegramTP(uint8_t* data)
     {
         memcpy(data, _ctrl1, len - 1);
     }
-    data[len - 1] = calcCRC(data, len - 1);
+    data[len - 1] = calcCrcTP(data, len - 1);
 }
 
-uint8_t CemiFrame::calcCRC(uint8_t * buffer, uint16_t len)
+uint16_t CemiFrame::telegramLengthtRF() const
+{
+    return totalLenght() - 3;
+}
+
+void CemiFrame::fillTelegramRF(uint8_t* data)
+{
+    uint16_t len = telegramLengthtRF();
+
+    // We prepare the actual KNX telegram for RF here only.
+    // The packaging into blocks with CRC16 (Format based on FT3 Data Link Layer (IEC 870-5))
+    // is done in the RF Data Link Layer code.
+    // RF always uses the Extended Frame Format. However, the length field is missing (right before the APDU)
+    // as there is already a length field at the beginning of the raw RF frame which is also used by the 
+    // physical layer to control the HW packet engine of the transceiver.
+
+    data[0] = _ctrl1[1] & 0x0F; // KNX CTRL field for RF (bits 3..0 EFF only), bits 7..4 are set to 0 for asynchronous RF frames
+    memcpy(data + 1, _ctrl1 + 2, 4); // SA, DA
+    data[5] = (_ctrl1[1] & 0xF0) | ((_rfLfn & 0x7) << 1) | ((_ctrl1[0] & 0x10) >> 4); // L/NPCI field: AT, Hopcount, LFN, AET
+    memcpy(data + 6, _ctrl1 + 7, len - 6); // APDU
+
+    //printHex("cEMI_fill: ", &data[0], len);
+}
+
+uint8_t CemiFrame::calcCrcTP(uint8_t * buffer, uint16_t len)
 {
     uint8_t crc = 0xFF;
     
@@ -196,6 +293,36 @@ uint16_t CemiFrame::destinationAddress() const
 void CemiFrame::destinationAddress(uint16_t value)
 {
     pushWord(value, _ctrl1 + 4);
+}
+
+uint8_t* CemiFrame::rfSerialOrDoA() const
+{
+    return _rfSerialOrDoA;
+}
+
+void CemiFrame::rfSerialOrDoA(uint8_t* rfSerialOrDoA)
+{
+    _rfSerialOrDoA = rfSerialOrDoA;
+}
+
+uint8_t CemiFrame::rfInfo() const
+{
+    return _rfInfo;
+}
+
+void CemiFrame::rfInfo(uint8_t rfInfo)
+{
+    _rfInfo = rfInfo;
+}
+
+uint8_t CemiFrame::rfLfn() const
+{
+    return _rfLfn;
+}
+
+void CemiFrame::rfLfn(uint8_t rfLfn)
+{
+    _rfLfn = rfLfn;
 }
 
 NPDU& CemiFrame::npdu()

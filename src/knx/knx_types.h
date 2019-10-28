@@ -71,12 +71,30 @@ enum TpduType
 
 enum ApduType
 {
+    // Application Layer services on Multicast Communication Mode 
     GroupValueRead = 0x000,
     GroupValueResponse = 0x040,
     GroupValueWrite = 0x080,
+
+    // Application Layer services on Broadcast Communication Mode
     IndividualAddressWrite = 0x0c0,
     IndividualAddressRead = 0x100,
     IndividualAddressResponse = 0x140,
+    IndividualAddressSerialNumberRead = 0x3dc,
+    IndividualAddressSerialNumberResponse = 0x3dd,
+    IndividualAddressSerialNumberWrite = 0x3de,
+
+    // Application Layer Services on System Broadcast communication mode
+    SystemNetworkParameterRead = 0x1c8,
+    SystemNetworkParameterResponse = 0x1c9,
+    SystemNetworkParameterWrite = 0x1ca,
+    // Open media specific Application Layer Services on System Broadcast communication mode
+    DomainAddressSerialNumberRead = 0x3ec,
+    DomainAddressSerialNumberResponse = 0x3ed,
+    DomainAddressSerialNumberWrite = 0x3ee,
+    
+    // Application Layer Services on Point-to-point Connection-Oriented Communication Mode (mandatory)
+    // Application Layer Services on Point-to-point Connectionless Communication Mode (either optional or mandatory)
     MemoryRead = 0x200,
     MemoryResponse = 0x240,
     MemoryWrite = 0x280,
@@ -97,7 +115,4 @@ enum ApduType
     PropertyValueWrite = 0x3d7,
     PropertyDescriptionRead = 0x3d8,
     PropertyDescriptionResponse = 0x3d9,
-    IndividualAddressSerialNumberRead = 0x3dc,
-    IndividualAddressSerialNumberResponse = 0x3dd,
-    IndividualAddressSerialNumberWrite = 0x3de,
 };

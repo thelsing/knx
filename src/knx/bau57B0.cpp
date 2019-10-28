@@ -1,4 +1,5 @@
 #include "bau57B0.h"
+#include "bits.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -11,6 +12,16 @@ Bau57B0::Bau57B0(Platform& platform)
 {
     _netLayer.dataLinkLayer(_dlLayer);
     _memory.addSaveRestore(&_ipParameters);
+
+    // Set Mask Version in Device Object depending on the BAU
+    uint16_t maskVersion;
+    popWord(maskVersion, _descriptor);
+    _deviceObj.maskVersion(maskVersion);
+
+    // Set which interface objects are available in the device object
+    // This differs from BAU to BAU with different medium types.
+    // See PID_IO_LIST
+    _deviceObj.ifObj(_ifObjs);
 }
 
 InterfaceObject* Bau57B0::getInterfaceObject(uint8_t idx)

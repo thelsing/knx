@@ -29,6 +29,10 @@ class Platform
     virtual int readUart() = 0;
     virtual size_t readBytesUart(uint8_t* buffer, size_t length) = 0;
 
+    virtual void setupSpi() = 0;
+    virtual void closeSpi() = 0;
+    virtual int readWriteSpi (uint8_t *data, size_t len) = 0;
+
     virtual uint8_t* getEepromBuffer(uint16_t size) = 0;
     virtual void commitToEeprom() = 0;
 

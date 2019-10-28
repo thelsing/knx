@@ -12,6 +12,9 @@
 #define TPDU_LPDU_DIFF (TPDU_NPDU_DIFF + NPDU_LPDU_DIFF)
 #define APDU_LPDU_DIFF (APDU_TPDU_DIFF + TPDU_NPDU_DIFF + NPDU_LPDU_DIFF)
 
+// Mesg Code and additional info length
+#define CEMI_HEADER_SIZE 2
+
 class CemiFrame
 {
     friend class DataLinkLayer;
@@ -27,6 +30,8 @@ class CemiFrame
     uint16_t totalLenght() const;
     uint16_t telegramLengthtTP() const;
     void fillTelegramTP(uint8_t* data);
+    uint16_t telegramLengthtRF() const;
+    void fillTelegramRF(uint8_t* data);
 
     FrameFormat frameType() const;
     void frameType(FrameFormat value);
@@ -47,11 +52,19 @@ class CemiFrame
     uint16_t destinationAddress() const;
     void destinationAddress(uint16_t value);
 
+    // only for RF medium
+    uint8_t* rfSerialOrDoA() const;
+    void rfSerialOrDoA(uint8_t* rfSerialOrDoA);
+    uint8_t rfInfo() const;
+    void rfInfo(uint8_t rfInfo);
+    uint8_t rfLfn() const;
+    void rfLfn(uint8_t rfInfo);
+
     NPDU& npdu();
     TPDU& tpdu();
     APDU& apdu();
 
-    uint8_t calcCRC(uint8_t* buffer, uint16_t len);
+    uint8_t calcCrcTP(uint8_t* buffer, uint16_t len);
     bool valid() const;
 
   private:
@@ -62,4 +75,9 @@ class CemiFrame
     TPDU _tpdu;
     APDU _apdu;
     uint16_t _length = 0; // only set if created from byte array
+
+    // nly for RF medium
+    uint8_t* _rfSerialOrDoA = 0;
+    uint8_t  _rfInfo = 0;
+    uint8_t  _rfLfn = 0; // RF Data Link layer frame number
 };

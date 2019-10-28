@@ -3,6 +3,14 @@
 #include <string.h>
 #include <stdio.h>
 
+enum NmReadSerialNumberType
+{
+    NM_Read_SerialNumber_By_ProgrammingMode = 0x01,
+    NM_Read_SerialNumber_By_ExFactoryState = 0x02,
+    NM_Read_SerialNumber_By_PowerReset = 0x03,
+    NM_Read_SerialNumber_By_ManufacturerSpecific = 0xFE,
+};
+
 BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platform),
     _assocTable(platform), _groupObjTable(platform), _appProgram(platform),
     _platform(platform), _appLayer(_assocTable, *this),
@@ -350,3 +358,36 @@ void BauSystemB::nextRestartState()
     }
 }
 
+void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
+                                                      uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
+{
+    uint8_t knxSerialNumber[6];
+    uint8_t operand;
+
+    popByte(operand, testInfo + 1); // First byte (+ 0) contains only 4 reserved bits (0)
+
+    // See KNX spec. 3.5.2 p.33 (Management Procedures: Procedures with A_SystemNetworkParameter_Read)
+    switch((NmReadSerialNumberType)operand)
+    {
+        case NM_Read_SerialNumber_By_ProgrammingMode: // NM_Read_SerialNumber_By_ProgrammingMode
+            // Only send a reply if programming mode is on
+            if (_deviceObj.progMode() && (objectType == OT_DEVICE) && (propertyId == PID_SERIAL_NUMBER))
+            {
+                // Send reply. testResult data is KNX serial number
+                pushWord(_deviceObj.manufacturerId(), &knxSerialNumber[0]);
+                pushInt(_deviceObj.bauNumber(), &knxSerialNumber[2]);
+                _appLayer.systemNetworkParameterReadResponse(priority, hopType, objectType, propertyId,
+                                                             testInfo, testInfoLength, knxSerialNumber, sizeof(knxSerialNumber));
+            }
+        break;
+
+        case NM_Read_SerialNumber_By_ExFactoryState: // NM_Read_SerialNumber_By_ExFactoryState
+        break;
+
+        case NM_Read_SerialNumber_By_PowerReset: // NM_Read_SerialNumber_By_PowerReset
+        break;
+
+        case NM_Read_SerialNumber_By_ManufacturerSpecific: // Manufacturer specific use of A_SystemNetworkParameter_Read
+        break;
+    }
+}
