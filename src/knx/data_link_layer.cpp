@@ -36,9 +36,13 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
     FrameFormat type = frame.frameType();
     Priority priority = frame.priority();
     NPDU& npdu = frame.npdu();
+    SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
     if (addrType == GroupAddress && destination == 0)
-        _networkLayer.systemBroadcastConfirm(ack, type, priority, source, npdu, success);
+            if (systemBroadcast == SysBroadcast)
+                _networkLayer.systemBroadcastConfirm(ack, type, priority, source, npdu, success);
+            else
+                _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success);                    
     else
         _networkLayer.dataConfirm(ack, addrType, destination, type, priority, source, npdu, success);
 
@@ -64,7 +68,7 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
         if (systemBroadcast == SysBroadcast)
             _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
         else 
-            _networkLayer.dataIndication(ack, addrType, destination, type, npdu, priority, source);
+            _networkLayer.broadcastIndication(ack, type, npdu, priority, source);
     }
     else
     {

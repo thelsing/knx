@@ -66,6 +66,18 @@ void NetworkLayer::dataConfirm(AckType ack, AddressType addressType, uint16_t de
     _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
 }
 
+void NetworkLayer::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
+{
+    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+    _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
+}
+
+void NetworkLayer::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
+{
+    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+    _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
+}
+
 void NetworkLayer::systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
@@ -75,7 +87,7 @@ void NetworkLayer::systemBroadcastIndication(AckType ack, FrameFormat format, NP
 void NetworkLayer::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
-    _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
+    _transportLayer.dataSystemBroadcastConfirm(ack, hopType, npdu.tpdu(), priority, status);
 }
 
 void NetworkLayer::dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
