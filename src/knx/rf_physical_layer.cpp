@@ -1,3 +1,5 @@
+#if MEDIUM_TYPE == 2
+
 #include "rf_physical_layer.h"
 #include "rf_data_link_layer.h"
 
@@ -793,3 +795,5 @@ void RfPhysicalLayer::loop()
         break;
     }
 }
+
+#endif // #if MEDIUM_TYPE == 2

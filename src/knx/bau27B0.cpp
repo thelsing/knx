@@ -1,3 +1,5 @@
+#if MEDIUM_TYPE == 2
+
 #include "bau27B0.h"
 #include "bits.h"
 #include <string.h>
@@ -113,3 +115,5 @@ void Bau27B0::individualAddressSerialNumberReadIndication(Priority priority, Hop
     if (!memcmp(knxSerialNumber, curSerialNumber, 6))
         _appLayer.IndividualAddressSerialNumberReadResponse(priority, hopType, _rfMediumObj.rfDomainAddress(), knxSerialNumber);
 }
+
+#endif // #if MEDIUM_TYPE == 2
