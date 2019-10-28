@@ -11,6 +11,16 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <signal.h>
+
+volatile sig_atomic_t loopActive = 1;
+void signalHandler(int sig)
+{
+  (void)sig;
+
+  // can be called asynchronously
+  loopActive = 0;
+}
 
 #if MEDIUM_TYPE == 5
 KnxFacade<LinuxPlatform, Bau57B0> knx;
@@ -97,15 +107,32 @@ void setup()
 
 int main(int argc, char **argv)
 {
+    printf("main() start.\n");
+
+    // Register signals
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
+
     knx.platform().cmdLineArgs(argc, argv);
 
     setup();
     
-    while (1)
+    while (loopActive)
     {
         knx.loop();
         if(knx.configured())
             appLoop();
         delayMicroseconds(100);
     }
+
+    // pinMode() will automatically export GPIO pin in sysfs
+    // Read or writing the GPIO pin for the first time automatically
+    // opens the "value" sysfs file to read or write the GPIO pin value.
+    // The following calls will close the "value" sysfs fiel for the pin
+    // and unexport the GPIO pin.
+    gpio_unexport(SPI_SS_PIN);
+    gpio_unexport(GPIO_GDO2_PIN);
+    gpio_unexport(GPIO_GDO0_PIN);
+
+    printf("main() exit.\n");
 }
