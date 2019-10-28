@@ -157,26 +157,6 @@ int ArduinoPlatform::readWriteSpi(uint8_t *data, size_t len)
     return 0;
 }
 
-void ArduinoPlatform::setupGpio(uint32_t dwPin, uint32_t dwMode)
-{
-    pinMode(dwPin, dwMode);
-}
-
-void ArduinoPlatform::closeGpio(uint32_t dwPin)
-{
-    // not used
-}
-
-void ArduinoPlatform::writeGpio(uint32_t dwPin, uint32_t dwVal)
-{
-    digitalWrite(dwPin, dwVal);
-}
-
-uint32_t ArduinoPlatform::readGpio(uint32_t dwPin)
-{
-    return digitalRead(dwPin);
-}
-
 void print(const char* s)
 {
     ArduinoPlatform::SerialDebug->print(s);

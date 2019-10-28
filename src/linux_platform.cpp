@@ -572,10 +572,18 @@ void println(void)
 
 void pinMode(uint32_t dwPin, uint32_t dwMode)
 {
+    gpio_export(dwPin);
+    gpio_direction(dwPin, dwMode);
 }
 
 void digitalWrite(uint32_t dwPin, uint32_t dwVal)
 {
+    gpio_write(dwPin, dwVal);
+}
+
+uint32_t digitalRead(uint32_t dwPin)
+{
+    return gpio_read(dwPin);
 }
 
 typedef void (*voidFuncPtr)(void);
@@ -593,47 +601,24 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
     _args[argc] = 0;
 }
 
-void LinuxPlatform::setupGpio(uint32_t dwPin, uint32_t dwMode)
-{
-    gpio_export(dwPin);
-    gpio_direction(dwPin, dwMode);
-}
-
-void LinuxPlatform::closeGpio(uint32_t dwPin)
-{
-    gpio_unexport(dwPin);
-    // Set direction to input always if we do not need the GPIO anymore? Unsure...
-    //gpio_direction(dwPin, INPUT);
-}
-
-void LinuxPlatform::writeGpio(uint32_t dwPin, uint32_t dwVal)
-{
-    gpio_write(dwPin, dwVal);
-}
-
-uint32_t LinuxPlatform::readGpio(uint32_t dwPin)
-{
-    return gpio_read(dwPin);
-}
-
-/* Datenpuffer fuer die GPIO-Funktionen */
+/* Buffer size for string operations (e.g. snprintf())*/
 #define MAXBUFFER 100
 
-/* GPIO-Pin aktivieren
- * Schreiben der Pinnummer nach /sys/class/gpio/export
- * Ergebnis: 0 = O.K., -1 = Fehler
+/* Activate GPIO-Pin
+ * Write GPIO pin number to /sys/class/gpio/export
+ * Result: 0 = success, -1 = error
  */
 int gpio_export(int pin)
 {
-    char buffer[MAXBUFFER];    /* Output Buffer   */
-    ssize_t bytes;             /* Datensatzlaenge */
-    int fd;                    /* Filedescriptor  */
-    int res;                   /* Ergebnis von write */
+    char buffer[MAXBUFFER];    /* Output Buffer       */
+    ssize_t bytes;             /* Used Buffer length  */
+    int fd;                    /* Filedescriptor      */
+    int res;                   /* Result from write() */
 
     fd = open("/sys/class/gpio/export", O_WRONLY);
     if (fd < 0)
     {
-        perror("Kann nicht auf export schreiben!\n");
+        perror("Could not export GPIO pin(open)!\n");
         return(-1);
     }
 
@@ -642,7 +627,7 @@ int gpio_export(int pin)
 
     if (res < 0)
     {
-        perror("Kann Pin nicht aktivieren (write)!\n");
+        perror("Could not export GPIO pin(write)!\n");
         return(-1);
     }
 
@@ -652,21 +637,21 @@ int gpio_export(int pin)
     return(0);
 }
 
-/* GPIO-Pin deaktivieren
- * Schreiben der Pinnummer nach /sys/class/gpio/unexport
- * Ergebnis: 0 = O.K., -1 = Fehler
+/* Deactivate GPIO pin
+ * Write GPIO pin number to /sys/class/gpio/unexport
+ * Result: 0 = success, -1 = error
  */
 int gpio_unexport(int pin)
 {
-    char buffer[MAXBUFFER];    /* Output Buffer   */
-    ssize_t bytes;             /* Datensatzlaenge */
-    int fd;                    /* Filedescriptor  */
-    int res;                   /* Ergebnis von write */
+    char buffer[MAXBUFFER];    /* Output Buffer       */
+    ssize_t bytes;             /* Used Buffer length  */
+    int fd;                    /* Filedescriptor      */
+    int res;                   /* Result from write() */
 
     fd = open("/sys/class/gpio/unexport", O_WRONLY);
     if (fd < 0)
     {
-        perror("Kann nicht auf unexport schreiben!\n");
+        perror("Could not unexport GPIO pin(open)!\n");
         return(-1);
     }
 
@@ -675,7 +660,7 @@ int gpio_unexport(int pin)
 
     if (res < 0)
     {
-        perror("Kann Pin nicht deaktivieren (write)!\n");
+        perror("Could not unexport GPIO pin(write)!\n");
         return(-1);
     }
 
@@ -683,22 +668,22 @@ int gpio_unexport(int pin)
     return(0);
 }
 
-/* Datenrichtung GPIO-Pin festlegen
- * Schreiben Pinnummer nach /sys/class/gpioXX/direction
- * Richtung dir: 0 = Lesen, 1 = Schreiben
- * Ergebnis: 0 = O.K., -1 = Fehler
+/* Set GPIO pin mode (input/output)
+ * Write GPIO pin number to /sys/class/gpioXX/direction
+ * Direction: 0 = input, 1 = output
+ * Result: 0 = success, -1 = error
  */
 int gpio_direction(int pin, int dir)
 {
-    char path[MAXBUFFER];      /* Buffer fuer Pfad   */
-    int fd;                    /* Filedescriptor     */
-    int res;                   /* Ergebnis von write */
+    char path[MAXBUFFER];      /* Buffer for path     */
+    int fd;                    /* Filedescriptor      */
+    int res;                   /* Result from write() */
 
     snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/direction", pin);
     fd = open(path, O_WRONLY);
     if (fd < 0)
     {
-        perror("Kann Datenrichtung nicht setzen (open)!\n");
+        perror("Could not set mode for GPIO pin(open)!\n");
         return(-1);
     }
 
@@ -711,7 +696,7 @@ int gpio_direction(int pin, int dir)
 
     if (res < 0)
     {
-        perror("Kann Datenrichtung nicht setzen (write)!\n");
+        perror("Could not set mode for GPIO pin(write)!\n");
         return(-1);
     }
 
@@ -719,26 +704,26 @@ int gpio_direction(int pin, int dir)
     return(0);
 }
 
-/* vom GPIO-Pin lesen
- * Ergebnis: -1 = Fehler, 0/1 = Portstatus
+/* Read from GPIO pin
+ * Result: -1 = error, 0/1 = GPIO pin state
  */
 int gpio_read(int pin)
 {
-    char path[MAXBUFFER];         /* Buffer fuer Pfad     */
-    int fd;                       /* Filedescriptor       */
-    char result[MAXBUFFER] = {0}; /* Buffer fuer Ergebnis */
+    char path[MAXBUFFER];         /* Buffer for path     */
+    int fd;                       /* Filedescriptor      */
+    char result[MAXBUFFER] = {0}; /* Buffer for result   */
 
     snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
     fd = open(path, O_RDONLY);
     if (fd < 0)
     {
-        perror("Kann vom GPIO nicht lesen (open)!\n");
+        perror("Could not read from GPIO(open)!\n");
         return(-1);
     }
 
     if (read(fd, result, 3) < 0)
     {
-        perror("Kann vom GPIO nicht lesen (read)!\n");
+        perror("Could not read from GPIO(read)!\n");
         return(-1);
     }
 
@@ -746,21 +731,21 @@ int gpio_read(int pin)
     return(atoi(result));
 }
 
-/* auf GPIO schreiben
- * Ergebnis: -1 = Fehler, 0 = O.K.
+/* Write to GPIO pin
+ * Result: -1 = error, 0 = success
  */
 int gpio_write(int pin, int value)
 {
-    char path[MAXBUFFER];      /* Buffer fuer Pfad   */
+    char path[MAXBUFFER];      /* Buffer for path    */
     int fd;                    /* Filedescriptor     */
-    int res;                   /* Ergebnis von write */
+    int res;                   /* Result from write()*/
 
     snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
     fd = open(path, O_WRONLY);
 
     if (fd < 0)
     {
-        perror("Kann auf GPIO nicht schreiben (open)!\n");
+        perror("Could not write to GPIO(open)!\n");
         return(-1);
     }
 
@@ -773,7 +758,7 @@ int gpio_write(int pin, int value)
 
     if (res < 0)
     {
-        perror("Kann auf GPIO nicht schreiben (write)!\n");
+        perror("Could not write to GPIO(write)!\n");
         return(-1);
     }
 
@@ -781,23 +766,22 @@ int gpio_write(int pin, int value)
     return(0);
 }
 
-/* GPIO-Pin auf Detektion einer Flanke setzen.
- * Fuer die Flanke (edge) koennen folgende Parameter gesetzt werden:
- * 'r' (rising) - steigende Flanke,
- * 'f' (falling) - fallende Flanke,
- * 'b' (both) - beide Flanken.
+/* Set GPIO pin edge detection
+ * 'r' (rising)
+ * 'f' (falling)
+ * 'b' (both)
  */
 int gpio_edge(unsigned int pin, char edge)
 {
-    char path[MAXBUFFER];    /* Buffer fuer Pfad   */
-    int fd;                    /* Filedescriptor     */
+    char path[MAXBUFFER];    /* Buffer for path    */
+    int fd;                  /* Filedescriptor     */
 
     snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/edge", pin);
 
     fd = open(path, O_WRONLY | O_NONBLOCK );
     if (fd < 0)
     {
-        perror("gpio_edge: Kann auf GPIO nicht schreiben (open)!\n");
+        perror("Could not set GPIO edge detection(open)!\n");
         return(-1);
     }
 
@@ -816,46 +800,43 @@ int gpio_edge(unsigned int pin, char edge)
     return 0;
 }
 
-/* Warten auf Flanke am GPIO-Pin.
- * Eingabewerte: pin: GPIO-Pin
- *               timeout: Wartezeit in Millisekunden
- * Der Pin muss voher eingerichtet werden (export,
- * direction, edge)
- * Rueckgabewerte: <0: Fehler, 0: poll() Timeout,
- * 1: Flanke erkannt, Pin lieferte "0"
- * 2: Flanke erkannt, Pin lieferte "1"
+/* Wait for edge on GPIO pin
+ * timeout in milliseconds
+ * Result: <0: error, 0: poll() Timeout,
+ * 1: edge detected, GPIO pin reads "0"
+ * 2: edge detected, GPIO pin reads "1"
  */
 int gpio_wait(unsigned int pin, int timeout)
 {
-    char path[MAXBUFFER];     /* Buffer fuer Pfad   */
-    int fd;                   /* Filedescriptor     */
-    struct pollfd polldat[1]; /* Variable fuer poll() */
-    char buf[MAXBUFFER];      /* Lesepuffer */
-    int rc;                   /* Hilfsvariablen */
+    char path[MAXBUFFER];     /* Buffer for path     */
+    int fd;                   /* Filedescriptor      */
+    struct pollfd polldat[1]; /* Variable for poll() */
+    char buf[MAXBUFFER];      /* Read buffer         */
+    int rc;                   /* Result              */
 
-    /* GPIO-Pin dauerhaft oeffnen */
+    /* Open GPIO pin */
     snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
     fd = open(path, O_RDONLY | O_NONBLOCK );
     if (fd < 0)
     {
-        perror("gpio_wait: Kann von GPIO nicht lesen (open)!\n");
+        perror("Could not wait for GPIO edge(open)!\n");
         return(-1);
     }
 
-    /* poll() vorbereiten */
+    /* prepare poll() */
     memset((void*)buf, 0, sizeof(buf));
     memset((void*)polldat, 0, sizeof(polldat));
     polldat[0].fd = fd;
     polldat[0].events = POLLPRI;
 
-    /* eventuell anstehende Interrupts loeschen */
+    /* clear any existing detected edges before */
     lseek(fd, 0, SEEK_SET);
     rc = read(fd, buf, MAXBUFFER - 1);
 
     rc = poll(polldat, 1, timeout);
     if (rc < 0)
     { /* poll() failed! */
-        perror("gpio_wait: Poll-Aufruf ging schief!\n");
+        perror("Could not wait for GPIO edge(poll)!\n");
         close(fd);
         return(-1);
     }
@@ -870,7 +851,7 @@ int gpio_wait(unsigned int pin, int timeout)
     {
         if (rc < 0)
         { /* read() failed! */
-            perror("gpio_wait: Kann von GPIO nicht lesen (read)!\n");
+            perror("Could not wait for GPIO edge(read)!\n");
             close(fd);
             return(-2);
         }
