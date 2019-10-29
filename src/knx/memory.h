@@ -25,7 +25,7 @@ public:
   private:
     Platform& _platform;
     bool _modified = false;
-    SaveRestore* _saveRestores[MAXSAVE] = {0};
+    Restore* _saveRestores[MAXSAVE] = {0};
     int _saveCount = 0;
     uint8_t* _data = 0;
 };

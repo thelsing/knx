@@ -15,6 +15,8 @@ bool Memory::isMemoryModified()
     return _modified;
 }
 
+// TODO implement flash layout: manufacturerID, HarwareType, Version, addr[0], size[0], addr[1], size[1], ...
+// reconstruct free flash list and used list on read
 void Memory::readMemory()
 {
     _data = _platform.getEepromBuffer(512);
@@ -41,7 +43,9 @@ void Memory::writeMemory()
     int size = _saveCount;
     for (int i = 0; i < size; i++)
     {
-        buffer = _saveRestores[i]->save(buffer);
+        SaveRestore* saveRestore = dynamic_cast<SaveRestore*>(_saveRestores[i]);
+        if(saveRestore)
+            buffer = saveRestore->save(buffer);
     }
     _platform.commitToEeprom();
     _modified = false;
