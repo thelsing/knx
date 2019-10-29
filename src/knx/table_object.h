@@ -1,7 +1,7 @@
 #pragma once
 
 #include "interface_object.h"
-#include "platform.h"
+#include "memory.h"
 
 /**
  * This class provides common functionality for interface objects that are configured by ETS with MemorWrite.
@@ -11,9 +11,9 @@ class TableObject: public InterfaceObject
 public:
     /**
      * The constuctor.
-     * @param platform the Platform on which the software runs. The class uses the memory management features of Platform.
+     * @param memory The instance of the memory management class to use.
      */
-    TableObject(Platform& platform);
+    TableObject(Memory& memory);
     virtual void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     virtual void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     virtual uint8_t propertySize(PropertyID id);
@@ -67,7 +67,7 @@ protected:
      */
     void loadState(LoadState newState);
     LoadState _state = LS_UNLOADED;
-    Platform& _platform;
+    Memory& _memory;
     uint8_t *_data = 0;
     uint32_t _size = 0;
     ErrorCode _errorCode = E_NO_FAULT;

@@ -1,4 +1,5 @@
 #include "memory.h"
+#include <string.h>
 
 Memory::Memory(Platform & platform): _platform(platform)
 {
@@ -53,4 +54,34 @@ void Memory::addSaveRestore(SaveRestore * obj)
 
     _saveRestores[_saveCount] = obj;
     _saveCount += 1;
+}
+
+
+uint8_t* Memory::allocMemory(size_t size)
+{
+    return _platform.allocMemory(size);
+}
+
+
+void Memory::freeMemory(uint8_t* ptr)
+{
+    return _platform.freeMemory(ptr);
+}
+
+void Memory::writeMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
+{
+    memcpy(toAbsolute(relativeAddress), data, size);
+    memoryModified();
+}
+
+
+uint8_t* Memory::toAbsolute(uint32_t relativeAddress)
+{
+    return _platform.memoryReference() + (ptrdiff_t)relativeAddress;
+}
+
+
+uint32_t Memory::toRelative(uint8_t* absoluteAddress)
+{
+    return absoluteAddress - _platform.memoryReference();
 }

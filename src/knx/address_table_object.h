@@ -15,9 +15,9 @@ class AddressTableObject : public TableObject
     /**
      * The contructor.
      * 
-     * @param platform This parameter is only passed to the custructor of TableObject an not used by this class.
+     * @param memory This parameter is only passed to the custructor of TableObject an not used by this class.
      */
-    AddressTableObject(Platform& platform);
+    AddressTableObject(Memory& memory);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);

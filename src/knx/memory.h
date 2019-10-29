@@ -15,7 +15,14 @@ public:
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
-private:
+
+    uint8_t* allocMemory(size_t size);
+    void freeMemory(uint8_t* ptr);
+    void writeMemory(uint32_t relativeAddress, size_t size, uint8_t* data);
+    uint8_t* toAbsolute(uint32_t relativeAddress);
+    uint32_t toRelative(uint8_t* absoluteAddress);
+
+  private:
     Platform& _platform;
     bool _modified = false;
     SaveRestore* _saveRestores[MAXSAVE] = {0};

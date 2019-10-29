@@ -5,9 +5,8 @@
 
 using namespace std;
 
-
-AssociationTableObject::AssociationTableObject(Platform& platform)
-    : TableObject(platform)
+AssociationTableObject::AssociationTableObject(Memory& memory)
+    : TableObject(memory)
 {
 
 }

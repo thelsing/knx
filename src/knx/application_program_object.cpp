@@ -1,8 +1,8 @@
 #include "application_program_object.h"
 #include "bits.h"
 
-ApplicationProgramObject::ApplicationProgramObject(Platform& platform)
-    : TableObject(platform)
+ApplicationProgramObject::ApplicationProgramObject(Memory& memory)
+    : TableObject(memory)
 {
 
 }

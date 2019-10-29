@@ -8,7 +8,7 @@ class GroupObjectTableObject : public TableObject
     friend class GroupObject;
 
   public:
-    GroupObjectTableObject(Platform& platform);
+    GroupObjectTableObject(Memory& memory);
     virtual ~GroupObjectTableObject();
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     uint16_t entryCount();

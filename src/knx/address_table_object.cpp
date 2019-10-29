@@ -5,9 +5,8 @@
 
 using namespace std;
 
-
-AddressTableObject::AddressTableObject(Platform& platform)
-    : TableObject(platform)
+AddressTableObject::AddressTableObject(Memory& memory)
+    : TableObject(memory)
 {
 
 }

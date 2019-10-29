@@ -11,8 +11,8 @@ enum NmReadSerialNumberType
     NM_Read_SerialNumber_By_ManufacturerSpecific = 0xFE,
 };
 
-BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platform),
-    _assocTable(platform), _groupObjTable(platform), _appProgram(platform),
+BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(_memory),
+    _assocTable(_memory), _groupObjTable(_memory), _appProgram(_memory),
     _platform(platform), _appLayer(_assocTable, *this),
     _transLayer(_appLayer, _addrTable), _netLayer(_transLayer)
 {
@@ -149,8 +149,7 @@ void BauSystemB::deviceDescriptorReadIndication(Priority priority, HopCountType 
 void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
     uint16_t memoryAddress, uint8_t * data)
 {
-    memcpy(_platform.memoryReference() + memoryAddress, data, number);
-    _memory.memoryModified();
+    _memory.writeMemory(memoryAddress, number, data);
 
     if (_deviceObj.verifyMode())
         memoryReadIndication(priority, hopType, asap, number, memoryAddress);
@@ -160,7 +159,7 @@ void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, u
     uint16_t memoryAddress)
 {
     _appLayer.memoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
-        _platform.memoryReference() + memoryAddress);
+        _memory.toAbsolute(memoryAddress));
 }
 
 void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap)
@@ -178,13 +177,12 @@ void BauSystemB::authorizeIndication(Priority priority, HopCountType hopType, ui
 void BauSystemB::userMemoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress)
 {
     _appLayer.userMemoryReadResponse(AckRequested, priority, hopType, asap, number, memoryAddress,
-        _platform.memoryReference() + memoryAddress);
+        _memory.toAbsolute(memoryAddress));
 }
 
 void BauSystemB::userMemoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t* data)
 {
-    memcpy(_platform.memoryReference() + memoryAddress, data, number);
-    _memory.memoryModified();
+    _memory.writeMemory(memoryAddress, number, data);
 
     if (_deviceObj.verifyMode())
         userMemoryReadIndication(priority, hopType, asap, number, memoryAddress);

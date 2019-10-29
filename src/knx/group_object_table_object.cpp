@@ -4,8 +4,8 @@
 #include "group_object.h"
 #include "bits.h"
 
-GroupObjectTableObject::GroupObjectTableObject(Platform& platform)
-    : TableObject(platform)
+GroupObjectTableObject::GroupObjectTableObject(Memory& memory)
+    : TableObject(memory)
 {
 }
 

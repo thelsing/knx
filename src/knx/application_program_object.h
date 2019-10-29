@@ -5,7 +5,7 @@
 class ApplicationProgramObject : public TableObject
 {
   public:
-    ApplicationProgramObject(Platform& platform);
+    ApplicationProgramObject(Memory& memory);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     uint8_t propertySize(PropertyID id);
