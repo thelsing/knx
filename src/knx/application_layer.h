@@ -95,7 +95,10 @@ class ApplicationLayer
                                      uint8_t descriptorType);
     void deviceDescriptorReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                       uint8_t descriptorType, uint8_t* deviceDescriptor);
-    void restartRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap);
+    void connectRequest(uint16_t destination, Priority priority);
+    void disconnectRequest(Priority priority);
+    bool isConnected();
+    void restartRequest(AckType ack, Priority priority, HopCountType hopType);
     void propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                   uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex);
     void propertyValueReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
@@ -126,6 +129,14 @@ class ApplicationLayer
     void authorizeResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t level);
     void keyWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t level, uint32_t key);
     void keyWriteResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t level);
+
+    void systemNetworkParameterReadResponse(Priority priority, HopCountType hopType, uint16_t objectType,
+                                            uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength,
+                                            uint8_t* testResult, uint16_t testResultLength);
+    void domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
+                                               uint8_t* knxSerialNumber);                                       
+    void IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
+                                               uint8_t* knxSerialNumber);                                       
 #pragma endregion
 
   private:
@@ -147,5 +158,5 @@ class ApplicationLayer
     AssociationTableObject& _assocTable;
     BusAccessUnit& _bau;
     TransportLayer* _transportLayer = 0;
-    int32_t _connectedTsap;
+    int32_t _connectedTsap = -1;
 };

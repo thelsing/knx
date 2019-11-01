@@ -2,20 +2,27 @@
 
 #include "knx/bits.h"
 
+// Set default medium type to TP if no external definitions was given
+#ifndef MEDIUM_TYPE
+#define MEDIUM_TYPE 0
+#endif
+
 #ifdef ARDUINO_ARCH_SAMD
-#include "samd_platform.h"
-#include "knx/bau07B0.h"
+    #include "samd_platform.h"
+    #include "knx/bau07B0.h"
+    #include "knx/bau27B0.h"
 #elif ARDUINO_ARCH_ESP8266
-#include "esp_platform.h"
-#include "knx/bau57B0.h"
+   #include "esp_platform.h"
+   #include "knx/bau57B0.h"
 #elif ARDUINO_ARCH_ESP32
-#define LED_BUILTIN 13
-#include "esp32_platform.h"
-#include "knx/bau57B0.h"
+   #define LED_BUILTIN 13
+   #include "esp32_platform.h"
+   #include "knx/bau57B0.h"
 #else
-#include "linux_platform.h"
-#include "knx/bau57B0.h"
-#define LED_BUILTIN 0
+   #define LED_BUILTIN 0
+   #include "linux_platform.h"
+   #include "knx/bau57B0.h"
+   #include "knx/bau27B0.h"
 #endif
 
 void buttonUp();
@@ -297,11 +304,24 @@ template <class P, class B> class KnxFacade : private SaveRestore
 };
 
 #ifdef ARDUINO_ARCH_SAMD
-extern KnxFacade<SamdPlatform, Bau07B0> knx;
+    // predefined global instance for TP or RF
+    #ifdef MEDIUM_TYPE
+        #if MEDIUM_TYPE == 0
+            extern KnxFacade<SamdPlatform, Bau07B0> knx;
+        #elif MEDIUM_TYPE == 2
+            extern KnxFacade<SamdPlatform, Bau27B0> knx;
+        #else
+            #error "Only TP and RF supported for Arduino SAMD platform!"
+        #endif
+    #else
+        #error "No medium type specified for Arduino_SAMD platform! Please set MEDIUM_TYPE! (TP:0, RF:2, IP:5)"
+    #endif
 #elif ARDUINO_ARCH_ESP8266
-extern KnxFacade<EspPlatform, Bau57B0> knx;
+    // predefined global instance for IP only
+    extern KnxFacade<EspPlatform, Bau57B0> knx;
 #elif ARDUINO_ARCH_ESP32
-extern KnxFacade<Esp32Platform, Bau57B0> knx;
+    // predefined global instance for IP only
+    extern KnxFacade<Esp32Platform, Bau57B0> knx;
 #elif __linux__
-// no predefined global instance
+    // no predefined global instance
 #endif

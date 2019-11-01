@@ -20,6 +20,9 @@ class NetworkLayer
                         Priority priority, uint16_t source);
     void dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority,
                      uint16_t source, NPDU& npdu, bool status);
+    void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+                             Priority priority, uint16_t source);
+    void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status);
     void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
                                    Priority priority, uint16_t source);
     void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status);

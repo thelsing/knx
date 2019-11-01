@@ -35,6 +35,12 @@ public:
     void hardwareType(const uint8_t* value);
     uint16_t version();
     void version(uint16_t value);
+    uint16_t maskVersion();
+    void maskVersion(uint16_t value);
+    uint16_t maxApduLength();
+    void maxApduLength(uint16_t value);
+    const uint32_t* ifObj();
+    void ifObj(const uint32_t* value);
 protected:
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
@@ -48,4 +54,7 @@ private:
     char _orderNumber[10] = "";
     uint8_t _hardwareType[6] = { 0, 0, 0, 0, 0, 0};
     uint16_t _version = 0;
+    uint16_t _maskVersion = 0x0000;
+    uint16_t _maxApduLength = 254;
+    const uint32_t* _ifObjs;
 };

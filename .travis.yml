@@ -34,8 +34,8 @@ before_install:
     - if [ "$MODE" = "ARDUINO" ]; then sed -i 's#compiler.warning_level=all#compiler.warning_level=default#' ~/.arduino15/preferences.txt; fi
     # changes for bsec lib
     # samd
-    - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(recipe.c.combine.pattern=[^$]*\{archive_file\}")( -Wl,--end-group)#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/arduino/hardware/samd/1.8.3/platform.txt; fi
-    - if [ "$MODE" = "ARDUINO" ]; then sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/arduino/hardware/samd/1.8.3/platform.txt; fi
+    - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(recipe.c.combine.pattern=[^$]*\{archive_file\}")( -Wl,--end-group)#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/arduino/hardware/samd/1.8.4/platform.txt; fi
+    - if [ "$MODE" = "ARDUINO" ]; then sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/arduino/hardware/samd/1.8.4/platform.txt; fi
     # esp8266
     - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(recipe.c.combine.pattern=[^$]*\{compiler.c.elf.libs\})( -Wl,--end-group  "-L\{build.path\}")#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.5.2/platform.txt; fi
     - if [ "$MODE" = "ARDUINO" ]; then sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.5.2/platform.txt; fi

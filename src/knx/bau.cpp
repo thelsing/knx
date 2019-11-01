@@ -52,7 +52,7 @@ void BusAccessUnit::individualAddressSerialNumberReadLocalConfirm(AckType ack, H
 {
 }
 
-void BusAccessUnit::individualAddressSerialNumberReadIndication(HopCountType hopType, uint8_t * serialNumber)
+void BusAccessUnit::individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber)
 {
 }
 
@@ -68,7 +68,8 @@ void BusAccessUnit::individualAddressSerialNumberWriteLocalConfirm(AckType ack, 
 {
 }
 
-void BusAccessUnit::individualAddressSerialNumberWriteIndication(HopCountType hopType, uint8_t * serialNumber, uint16_t newaddress)
+void BusAccessUnit::individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint16_t newIndividualAddress,
+                                                                 uint8_t* knxSerialNumber)
 {
 }
 
@@ -236,3 +237,25 @@ void BusAccessUnit::keyWriteResponseConfirm(AckType ack, Priority priority, HopC
 void BusAccessUnit::keyWriteAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t level)
 {
 }
+
+void BusAccessUnit::connectConfirm(uint16_t destination)
+{
+}
+
+void BusAccessUnit::systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
+                                                      uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
+{
+}
+
+void BusAccessUnit::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
+                                                          uint8_t* knxSerialNumber)
+{
+}
+
+void BusAccessUnit::domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber)
+{
+}
+
+
+
+

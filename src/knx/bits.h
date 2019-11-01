@@ -26,9 +26,11 @@
 #define RISING 4
 
 void delay(uint32_t millis);
+void delayMicroseconds (unsigned int howLong);
 uint32_t millis();
 void pinMode(uint32_t dwPin, uint32_t dwMode);
 void digitalWrite(uint32_t dwPin, uint32_t dwVal);
+uint32_t digitalRead(uint32_t dwPin);
 typedef void (*voidFuncPtr)(void);
 void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 

@@ -12,7 +12,7 @@ ApduType APDU::type()
     apci = getWord(_data);
     popWord(apci, _data);
     apci &= 0x3ff;
-    if ((apci >> 6) < 11) //short apci
+    if ((apci >> 6) < 11 && (apci >> 6) != 7) //short apci
         apci &= 0x3c0;
     return (ApduType)apci;
 }

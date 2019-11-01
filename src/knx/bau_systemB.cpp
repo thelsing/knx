@@ -1,6 +1,15 @@
 #include "bau_systemB.h"
+#include "bits.h"
 #include <string.h>
 #include <stdio.h>
+
+enum NmReadSerialNumberType
+{
+    NM_Read_SerialNumber_By_ProgrammingMode = 0x01,
+    NM_Read_SerialNumber_By_ExFactoryState = 0x02,
+    NM_Read_SerialNumber_By_PowerReset = 0x03,
+    NM_Read_SerialNumber_By_ManufacturerSpecific = 0xFE,
+};
 
 BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platform),
     _assocTable(platform), _groupObjTable(platform), _appProgram(platform),
@@ -21,6 +30,7 @@ void BauSystemB::loop()
     dataLinkLayer().loop();
     _transLayer.loop();
     sendNextGroupTelegram();
+    nextRestartState();
 }
 
 bool BauSystemB::enabled()
@@ -293,8 +303,91 @@ void BauSystemB::addSaveRestore(SaveRestore* obj)
     _memory.addSaveRestore(obj);
 }
 
-
-void BauSystemB::restartRequest(uint16_t asap)
+bool BauSystemB::restartRequest(uint16_t asap)
 {
-    _appLayer.restartRequest(AckRequested, LowPriority, NetworkLayerParameter, asap);
+    if (_appLayer.isConnected())
+        return false;
+    _restartState = Connecting; // order important, has to be set BEFORE connectRequest
+    _appLayer.connectRequest(asap, SystemPriority);
+    _appLayer.deviceDescriptorReadRequest(AckRequested, SystemPriority, NetworkLayerParameter, asap, 0);
+    return true;
+}
+
+void BauSystemB::connectConfirm(uint16_t tsap)
+{
+    if (_restartState == Connecting && tsap >= 0)
+    {
+        /* restart connection is confirmed, go to the next state */
+        _restartState = Connected;
+        _restartDelay = millis();
+    }
+    else
+    {
+        _restartState = Idle;
+    }
+}
+
+void BauSystemB::nextRestartState()
+{
+    switch (_restartState)
+    {
+        case Idle:
+            /* inactive state, do nothing */
+            break;
+        case Connecting:
+            /* wait for connection, we do nothing here */
+            break;
+        case Connected:
+            /* connection confirmed, we send restartRequest, but we wait a moment (sending ACK etc)... */
+            if (millis() - _restartDelay > 30)
+            {
+                _appLayer.restartRequest(AckRequested, SystemPriority, NetworkLayerParameter);
+                _restartState = Restarted;
+                _restartDelay = millis();
+            }
+            break;
+        case Restarted:
+            /* restart is finished, we send a discommect */
+            if (millis() - _restartDelay > 30)
+            {
+                _appLayer.disconnectRequest(SystemPriority);
+                _restartState = Idle;
+            }
+        default:
+            break;
+    }
+}
+
+void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
+                                                      uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
+{
+    uint8_t knxSerialNumber[6];
+    uint8_t operand;
+
+    popByte(operand, testInfo + 1); // First byte (+ 0) contains only 4 reserved bits (0)
+
+    // See KNX spec. 3.5.2 p.33 (Management Procedures: Procedures with A_SystemNetworkParameter_Read)
+    switch((NmReadSerialNumberType)operand)
+    {
+        case NM_Read_SerialNumber_By_ProgrammingMode: // NM_Read_SerialNumber_By_ProgrammingMode
+            // Only send a reply if programming mode is on
+            if (_deviceObj.progMode() && (objectType == OT_DEVICE) && (propertyId == PID_SERIAL_NUMBER))
+            {
+                // Send reply. testResult data is KNX serial number
+                pushWord(_deviceObj.manufacturerId(), &knxSerialNumber[0]);
+                pushInt(_deviceObj.bauNumber(), &knxSerialNumber[2]);
+                _appLayer.systemNetworkParameterReadResponse(priority, hopType, objectType, propertyId,
+                                                             testInfo, testInfoLength, knxSerialNumber, sizeof(knxSerialNumber));
+            }
+        break;
+
+        case NM_Read_SerialNumber_By_ExFactoryState: // NM_Read_SerialNumber_By_ExFactoryState
+        break;
+
+        case NM_Read_SerialNumber_By_PowerReset: // NM_Read_SerialNumber_By_PowerReset
+        break;
+
+        case NM_Read_SerialNumber_By_ManufacturerSpecific: // Manufacturer specific use of A_SystemNetworkParameter_Read
+        break;
+    }
 }
