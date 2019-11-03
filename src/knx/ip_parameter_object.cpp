@@ -321,3 +321,8 @@ PropertyDescription* IpParameterObject::propertyDescriptions()
 {
     return _propertyDescriptions;
 }
+
+uint16_t IpParameterObject::saveSize()
+{
+    return 51;
+}

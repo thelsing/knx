@@ -285,6 +285,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
     saveRestoreCallback _restoreCallback = 0;
     bool _toogleProgMode = false;
     bool _progLedState = false;
+    uint16_t _saveSize = 0;
 
     uint8_t* save(uint8_t* buffer)
     {
@@ -300,6 +301,16 @@ template <class P, class B> class KnxFacade : private SaveRestore
             return _restoreCallback(buffer);
 
         return buffer;
+    }
+
+    uint16_t saveSize()
+    {
+        return _saveSize;
+    }
+
+    void saveSize(uint16_t size)
+    {
+        _saveSize = size;
     }
 };
 

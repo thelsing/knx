@@ -3,13 +3,21 @@
 #include <stdint.h>
 #include "save_restore.h"
 #include "platform.h"
+#include "device_object.h"
 
 #define MAXSAVE 10
+
+typedef struct _memoryBlock
+{
+    uint8_t* address;
+    size_t size;
+    struct _memoryBlock* next;
+} MemoryBlock;
 
 class Memory
 {
 public:
-    Memory(Platform& platform);
+    Memory(Platform& platform, DeviceObject& deviceObject);
     void memoryModified();
     bool isMemoryModified();
     void readMemory();
@@ -23,9 +31,18 @@ public:
     uint32_t toRelative(uint8_t* absoluteAddress);
 
   private:
+    void removeFromFreeList(MemoryBlock* block);
+    void addToUsedList(MemoryBlock* block);
+    void removeFromUsedList(MemoryBlock* block);
+    void addToFreeList(MemoryBlock* block);
+    MemoryBlock* removeFromList(MemoryBlock* head, MemoryBlock* item);
+
     Platform& _platform;
+    DeviceObject& _deviceObject;
     bool _modified = false;
-    Restore* _saveRestores[MAXSAVE] = {0};
+    SaveRestore* _saveRestores[MAXSAVE] = {0};
     int _saveCount = 0;
     uint8_t* _data = 0;
+    MemoryBlock* _freeList = 0;
+    MemoryBlock* _usedList = 0;
 };

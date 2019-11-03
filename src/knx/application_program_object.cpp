@@ -110,3 +110,7 @@ PropertyDescription* ApplicationProgramObject::propertyDescriptions()
     return _propertyDescriptions;
 }
 
+uint16_t ApplicationProgramObject::saveSize()
+{
+    return TableObject::saveSize() + 5;
+}

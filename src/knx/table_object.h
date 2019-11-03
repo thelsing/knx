@@ -27,6 +27,7 @@ public:
     LoadState loadState();
     virtual uint8_t* save(uint8_t* buffer);
     virtual uint8_t* restore(uint8_t* buffer);
+    uint16_t saveSize();
 protected:
     /**
      * This method is called before the interface object enters a new ::LoadState.
@@ -40,10 +41,6 @@ protected:
      * must not be freed.
      */
     uint8_t* data();
-    /**
-     * returns the size of the internal data of the interface object int byte.
-     */
-    uint32_t size();
     /**
      * Set the reason for a state change failure.
      */
@@ -69,6 +66,5 @@ protected:
     LoadState _state = LS_UNLOADED;
     Memory& _memory;
     uint8_t *_data = 0;
-    uint32_t _size = 0;
     ErrorCode _errorCode = E_NO_FAULT;
 };

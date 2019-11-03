@@ -137,6 +137,18 @@
     <ClInclude Include="..\src\knx\knx_value.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\knx\bau27B0.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\rf_data_link_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\rf_medium_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\rf_physical_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\knx\address_table_object.cpp">
@@ -233,6 +245,18 @@
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\knx_value.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\bau27B0.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\rf_data_link_layer.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\rf_medium_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\rf_physical_layer.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
   </ItemGroup>

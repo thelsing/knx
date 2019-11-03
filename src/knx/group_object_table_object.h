@@ -16,11 +16,10 @@ class GroupObjectTableObject : public TableObject
     GroupObject& nextUpdatedObject(bool& valid);
     void groupObjects(GroupObject* objs, uint16_t size);
 
-    virtual uint8_t* save(uint8_t* buffer);
-    virtual uint8_t* restore(uint8_t* buffer);
+    uint8_t* restore(uint8_t* buffer);
 
   protected:
-    virtual void beforeStateChange(LoadState& newState);
+    void beforeStateChange(LoadState& newState);
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
 

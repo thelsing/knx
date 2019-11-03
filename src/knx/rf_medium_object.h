@@ -10,6 +10,7 @@ public:
     uint8_t propertySize(PropertyID id);
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);
+    uint16_t saveSize();
     void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
 
     uint8_t* rfDomainAddress();
@@ -22,6 +23,4 @@ private:
     uint8_t _rfDomainAddress[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // see KNX RF S-Mode AN160 p.11
     uint8_t _rfDiagSourceAddressFilterTable[24] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
     uint8_t _rfDiagLinkBudgetTable[24] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
-
-
 };

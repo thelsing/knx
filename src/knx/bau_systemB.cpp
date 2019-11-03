@@ -11,7 +11,7 @@ enum NmReadSerialNumberType
     NM_Read_SerialNumber_By_ManufacturerSpecific = 0xFE,
 };
 
-BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(_memory),
+BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj), _addrTable(_memory),
     _assocTable(_memory), _groupObjTable(_memory), _appProgram(_memory),
     _platform(platform), _appLayer(_assocTable, *this),
     _transLayer(_appLayer, _addrTable), _netLayer(_transLayer)

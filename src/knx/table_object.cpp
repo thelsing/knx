@@ -86,8 +86,11 @@ uint8_t* TableObject::save(uint8_t* buffer)
 {
     buffer = pushByte(_state, buffer);
     buffer = pushByte(_errorCode, buffer);
-    buffer = pushInt(_size, buffer);
-    buffer = pushByteArray(_data, _size, buffer);
+
+    if (_data)
+        buffer = pushInt(_memory.toRelative(_data), buffer);
+    else
+        buffer = pushInt(0, buffer);
 
     return buffer;
 }
@@ -102,17 +105,13 @@ uint8_t* TableObject::restore(uint8_t* buffer)
     _state = (LoadState)state;
     _errorCode = (ErrorCode)errorCode;
 
-    buffer = popInt(_size, buffer);
+    uint32_t relativeAddress = 0;
+    buffer = popInt(relativeAddress, buffer);
 
-    if (_data)
-        _memory.freeMemory(_data);
-
-    if (_size > 0)
-        _data = _memory.allocMemory(_size);
+    if (relativeAddress != 0)
+        _data = _memory.toAbsolute(relativeAddress);
     else
         _data = 0;
-
-    buffer = popByteArray(_data, _size, buffer);
 
     return buffer;
 }
@@ -128,7 +127,6 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
     {
         _memory.freeMemory(_data);
         _data = 0;
-        _size = 0;
     }
 
     if (size == 0)
@@ -137,8 +135,6 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
     _data = _memory.allocMemory(size);
     if (!_data)
         return false;
-
-    _size = size;
 
     if (doFill)
         memset(_data, fillByte, size);
@@ -277,12 +273,12 @@ uint8_t* TableObject::data()
     return _data;
 }
 
-uint32_t TableObject::size()
-{
-    return _size;
-}
-
 void TableObject::errorCode(ErrorCode errorCode)
 {
     _errorCode = errorCode;
+}
+
+uint16_t TableObject::saveSize()
+{
+    return 6;
 }

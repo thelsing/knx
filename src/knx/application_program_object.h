@@ -15,6 +15,7 @@ class ApplicationProgramObject : public TableObject
     uint32_t getInt(uint32_t addr);
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);
+    uint16_t saveSize();
 
   protected:
     uint8_t propertyCount();

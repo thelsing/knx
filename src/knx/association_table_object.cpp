@@ -44,11 +44,6 @@ uint16_t AssociationTableObject::getASAP(uint16_t idx)
     return ntohs(_tableData[2 * idx + 2]);
 }
 
-uint8_t* AssociationTableObject::save(uint8_t* buffer)
-{
-    return TableObject::save(buffer);
-}
-
 uint8_t* AssociationTableObject::restore(uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);

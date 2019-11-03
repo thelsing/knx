@@ -98,6 +98,11 @@ uint8_t* RfMediumObject::restore(uint8_t* buffer)
     return buffer;
 }
 
+uint16_t RfMediumObject::saveSize()
+{
+    return 6;
+}
+
 uint8_t* RfMediumObject::rfDomainAddress()
 {
     return _rfDomainAddress;

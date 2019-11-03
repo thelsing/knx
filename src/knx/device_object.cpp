@@ -295,3 +295,8 @@ PropertyDescription* DeviceObject::propertyDescriptions()
 {
     return _propertyDescriptions;
 }
+
+uint16_t DeviceObject::saveSize()
+{
+    return 4;
+}

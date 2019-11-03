@@ -10,6 +10,7 @@ public:
     uint8_t propertySize(PropertyID id);
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);
+    uint16_t saveSize();
     void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
 
 
