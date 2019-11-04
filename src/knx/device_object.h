@@ -2,6 +2,8 @@
 
 #include "interface_object.h"
 
+#define LEN_HARDWARE_TYPE 6
+
 class DeviceObject: public InterfaceObject
 {
 public:

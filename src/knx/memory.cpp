@@ -1,36 +1,60 @@
 #include "memory.h"
 #include <string.h>
 #include "bits.h"
+#include "table_object.h"
 
 Memory::Memory(Platform& platform, DeviceObject& deviceObject)
     : _platform(platform), _deviceObject(deviceObject)
 {
 }
 
-void Memory::memoryModified()
-{
-    _modified = true;
-}
-
-bool Memory::isMemoryModified()
-{
-    return _modified;
-}
-
 // TODO implement flash layout: manufacturerID, HarwareType, Version, addr[0], size[0], addr[1], size[1], ...
 // reconstruct free flash list and used list on read
 void Memory::readMemory()
 {
-    _data = _platform.getEepromBuffer(512);
-
-    if (_data[0] != 0x00 || _data[1] != 0xAD || _data[2] != 0xAF || _data[3] != 0xFE)
+    if (_data != nullptr)
         return;
 
-    uint8_t* buffer = _data + 4;
+    uint16_t flashSize = 512;
+    _data = _platform.getEepromBuffer(flashSize);
+
+    uint16_t metadataBlockSize = alignToPageSize(_metadataSize);
+
+    MemoryBlock* allFreeFlash = new MemoryBlock();
+    allFreeFlash->address = _data + metadataBlockSize;
+    allFreeFlash->size = flashSize - metadataBlockSize;
+    allFreeFlash->next = nullptr;
+
+    uint16_t manufacturerId = 0;
+    uint8_t* buffer = popWord(manufacturerId, _data);
+
+    uint8_t hardwareType[LEN_HARDWARE_TYPE] = {0};
+    buffer = popByteArray(hardwareType, LEN_HARDWARE_TYPE, buffer);
+
+    uint16_t version = 0;
+    buffer = popWord(version, buffer);
+    
+    if (_deviceObject.manufacturerId() != manufacturerId
+       || _deviceObject.version() != version
+       || memcmp(_deviceObject.hardwareType(), hardwareType, LEN_HARDWARE_TYPE) != 0)
+    {
+        println("saved memory doesn't match manufacturerId, version or hardwaretype");
+        return;
+    }
+
     int size = _saveCount;
     for (int i = 0; i < size; i++)
     {
         buffer = _saveRestores[i]->restore(buffer);
+        TableObject* tableObject = dynamic_cast<TableObject*>(_saveRestores[i]);
+        if (tableObject)
+        {
+            uint32_t memorySize = 0;
+            buffer = popInt(memorySize, buffer);
+
+            // this works because TableObject saves a relative addr and restores it itself
+            addNewUsedBlock(tableObject->_data, memorySize);
+        }
     }
 }
 
@@ -38,43 +62,55 @@ void Memory::writeMemory()
 {
     uint8_t* buffer = _data;
     buffer = pushWord(_deviceObject.manufacturerId(), buffer);
-    buffer = pushByteArray(_deviceObject.hardwareType(), 6, buffer);
+    buffer = pushByteArray(_deviceObject.hardwareType(), LEN_HARDWARE_TYPE, buffer);
     buffer = pushWord(_deviceObject.version(), buffer);
 
     int size = _saveCount;
     for (int i = 0; i < size; i++)
     {
-        // TODO: Hande TableObject correctly, i.e. save the size of the buffer somewhere to, so that we can rebuild the usedList and freeList
         buffer = _saveRestores[i]->save(buffer);
+
+        //save to size of the memoryblock for tableobject too, so that we can rebuild the usedList and freeList
+        TableObject* tableObject = dynamic_cast<TableObject*>(_saveRestores[i]);
+        if (tableObject)
+        {
+            MemoryBlock* block = findBlockInList(_usedList, tableObject->_data);
+            if (block == nullptr)
+            {
+                println("_data of TableObject not in errorlist");
+                _platform.fatalError();
+            }
+            buffer = pushInt(block->size, buffer);
+        }
     }
     _platform.commitToEeprom();
-    _modified = false;
 }
 
-void Memory::addSaveRestore(SaveRestore * obj)
+void Memory::addSaveRestore(SaveRestore* obj)
 {
     if (_saveCount >= MAXSAVE - 1)
         return;
 
     _saveRestores[_saveCount] = obj;
     _saveCount += 1;
+    _metadataSize += obj->saveSize();
 }
 
 
 uint8_t* Memory::allocMemory(size_t size)
 {
     // always allocate aligned to 32 bit
-    size = (size + 3) & ~0x3;
-    
+    size = alignToPageSize(size);
+
     MemoryBlock* freeBlock = _freeList;
-    MemoryBlock* blockToUse = 0;
+    MemoryBlock* blockToUse = nullptr;
     
     // find the smallest possible block that is big enough
     while (freeBlock)
     {
         if (freeBlock->size >= size)
         {
-            if (blockToUse != 0 && (blockToUse->size - size) > (freeBlock->size - size))
+            if (blockToUse != nullptr && (blockToUse->size - size) > (freeBlock->size - size))
                 blockToUse = freeBlock;
         }
         freeBlock = freeBlock->next;
@@ -111,7 +147,7 @@ uint8_t* Memory::allocMemory(size_t size)
 void Memory::freeMemory(uint8_t* ptr)
 {
     MemoryBlock* block = _usedList;
-    MemoryBlock* found = 0;
+    MemoryBlock* found = nullptr;
     while (_usedList)
     {
         if (block->address == ptr)
@@ -133,7 +169,6 @@ void Memory::freeMemory(uint8_t* ptr)
 void Memory::writeMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
 {
     memcpy(toAbsolute(relativeAddress), data, size);
-    memoryModified();
 }
 
 
@@ -153,7 +188,7 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
     if (head == item)
     {
         MemoryBlock* newHead = head->next;
-        head->next = 0;
+        head->next = nullptr;
         return newHead;
     }
 
@@ -180,7 +215,7 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
         println("tried to remove block from list not in it");
         _platform.fatalError();
     }
-    item->next = 0;
+    item->next = nullptr;
     return head;
 }
 
@@ -205,7 +240,7 @@ void Memory::addToUsedList(MemoryBlock* block)
 
 void Memory::addToFreeList(MemoryBlock* block)
 {
-    if (_freeList == 0)
+    if (_freeList == nullptr)
     {
         _freeList = block;
         return;
@@ -215,7 +250,7 @@ void Memory::addToFreeList(MemoryBlock* block)
     MemoryBlock* current = _freeList;
     while (current)
     {
-        if (current->address <= block->address && (block->next == 0 || block->address < current->next->address))
+        if (current->address <= block->address && (block->next == nullptr || block->address < current->next->address))
         {
             block->next = current->next;
             current->next = block;
@@ -235,7 +270,7 @@ void Memory::addToFreeList(MemoryBlock* block)
     }
 
     // if block is the last one, we are done 
-    if (block->next == 0)
+    if (block->next == nullptr)
         return;
 
     // now check block and block->next
@@ -245,4 +280,85 @@ void Memory::addToFreeList(MemoryBlock* block)
         block->next = block->next->next;
         delete block->next;
     }
+}
+
+uint16_t Memory::alignToPageSize(size_t size)
+{
+    // to 32 bit for now
+    return (size + 3) & ~0x3;
+}
+
+MemoryBlock* Memory::findBlockInList(MemoryBlock* head, uint8_t* address)
+{
+    while (head != nullptr)
+    {
+        if (head->address == address)
+            return head;
+
+        head = head->next;
+    }
+    return nullptr;
+}
+
+void Memory::addNewUsedBlock(uint8_t* address, size_t size)
+{
+    MemoryBlock* smallerFreeBlock = _freeList;
+    // find block in freeList where the new used block is contained in
+    while (smallerFreeBlock)
+    {
+        if (smallerFreeBlock->next == nullptr ||
+            (smallerFreeBlock->next != nullptr && smallerFreeBlock->next->address > address))
+            break;
+        
+        smallerFreeBlock = smallerFreeBlock->next;
+    }
+
+    if (smallerFreeBlock == nullptr)
+    {
+        println("addNewUsedBlock: no smallerBlock found");
+        _platform.fatalError();
+    }
+
+    if ((smallerFreeBlock->address + smallerFreeBlock->size) < (address + size))
+    {
+        println("addNewUsedBlock: found block can't contain new block");
+        _platform.fatalError();
+    }
+
+    if (smallerFreeBlock->address == address && smallerFreeBlock->size == size)
+    {
+        // we take thow whole block
+        removeFromFreeList(smallerFreeBlock);
+        addToUsedList(smallerFreeBlock);
+        return;
+    }
+
+    if (smallerFreeBlock->address == address)
+    {
+        // we take a front part of the block
+        smallerFreeBlock->address += size;
+        smallerFreeBlock->size -= size;
+    }
+    else
+    {
+        // we take a middle or end part of the block
+        uint8_t* oldEndAddr = smallerFreeBlock->address + smallerFreeBlock->size;
+        smallerFreeBlock->size -= (address - smallerFreeBlock->address);
+
+        if (address + size < oldEndAddr)
+        {
+            // we take the middle part of the block, so we need a new free block for the end part
+            MemoryBlock* newFreeBlock = new MemoryBlock();
+            newFreeBlock->next = smallerFreeBlock->next;
+            newFreeBlock->address = address + size;
+            newFreeBlock->size = oldEndAddr - newFreeBlock->address;
+            smallerFreeBlock->next = newFreeBlock;
+        }
+    }
+
+    MemoryBlock* newUsedBlock = new MemoryBlock();
+    newUsedBlock->address = address;
+    newUsedBlock->size = size;
+    newUsedBlock->next = nullptr;
+    addToUsedList(newUsedBlock);
 }

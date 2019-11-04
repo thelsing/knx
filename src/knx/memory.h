@@ -18,8 +18,6 @@ class Memory
 {
 public:
     Memory(Platform& platform, DeviceObject& deviceObject);
-    void memoryModified();
-    bool isMemoryModified();
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
@@ -35,14 +33,17 @@ public:
     void addToUsedList(MemoryBlock* block);
     void removeFromUsedList(MemoryBlock* block);
     void addToFreeList(MemoryBlock* block);
+    uint16_t alignToPageSize(size_t size);
     MemoryBlock* removeFromList(MemoryBlock* head, MemoryBlock* item);
+    MemoryBlock* findBlockInList(MemoryBlock* head, uint8_t* address);
+    void addNewUsedBlock(uint8_t* address, size_t size);
 
     Platform& _platform;
     DeviceObject& _deviceObject;
-    bool _modified = false;
     SaveRestore* _saveRestores[MAXSAVE] = {0};
     int _saveCount = 0;
-    uint8_t* _data = 0;
-    MemoryBlock* _freeList = 0;
-    MemoryBlock* _usedList = 0;
+    uint8_t* _data = nullptr;
+    MemoryBlock* _freeList = nullptr;
+    MemoryBlock* _usedList = nullptr;
+    uint16_t _metadataSize = 0;
 };

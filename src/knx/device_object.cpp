@@ -23,7 +23,7 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             pushByteArray((uint8_t*)_orderNumber, 10, data);
             break;
         case PID_HARDWARE_TYPE:
-            pushByteArray((uint8_t*)_hardwareType, 6, data);
+            pushByteArray((uint8_t*)_hardwareType, LEN_HARDWARE_TYPE, data);
             break;
         case PID_VERSION:
             pushWord(_version, data);

@@ -8,7 +8,9 @@
  */
 class TableObject: public InterfaceObject
 {
-public:
+    friend class Memory;
+
+  public:
     /**
      * The constuctor.
      * @param memory The instance of the memory management class to use.
