@@ -8,8 +8,6 @@ Memory::Memory(Platform& platform, DeviceObject& deviceObject)
 {
 }
 
-// TODO implement flash layout: manufacturerID, HarwareType, Version, addr[0], size[0], addr[1], size[1], ...
-// reconstruct free flash list and used list on read
 void Memory::readMemory()
 {
     if (_data != nullptr)
@@ -20,10 +18,7 @@ void Memory::readMemory()
 
     uint16_t metadataBlockSize = alignToPageSize(_metadataSize);
 
-    MemoryBlock* allFreeFlash = new MemoryBlock();
-    allFreeFlash->address = _data + metadataBlockSize;
-    allFreeFlash->size = flashSize - metadataBlockSize;
-    allFreeFlash->next = nullptr;
+    _freeList = new MemoryBlock(_data + metadataBlockSize, flashSize - metadataBlockSize);
 
     uint16_t manufacturerId = 0;
     uint8_t* buffer = popWord(manufacturerId, _data);
@@ -131,9 +126,7 @@ uint8_t* Memory::allocMemory(size_t size)
     else
     {
         // split block
-        MemoryBlock* newBlock = new MemoryBlock();
-        newBlock->address = blockToUse->address;
-        newBlock->size = size;
+        MemoryBlock* newBlock = new MemoryBlock(blockToUse->address, size);
         addToUsedList(newBlock);
 
         blockToUse->address += size;
@@ -356,9 +349,6 @@ void Memory::addNewUsedBlock(uint8_t* address, size_t size)
         }
     }
 
-    MemoryBlock* newUsedBlock = new MemoryBlock();
-    newUsedBlock->address = address;
-    newUsedBlock->size = size;
-    newUsedBlock->next = nullptr;
+    MemoryBlock* newUsedBlock = new MemoryBlock(address, size);
     addToUsedList(newUsedBlock);
 }

@@ -7,12 +7,16 @@
 
 #define MAXSAVE 10
 
-typedef struct _memoryBlock
+class MemoryBlock
 {
-    uint8_t* address;
-    size_t size;
-    struct _memoryBlock* next;
-} MemoryBlock;
+  public:
+    MemoryBlock(){};
+    MemoryBlock(uint8_t* address, size_t size)
+        : address(address), size(size) {}
+    uint8_t* address = nullptr;
+    size_t size = 0;
+    MemoryBlock* next = nullptr;
+};
 
 class Memory
 {
