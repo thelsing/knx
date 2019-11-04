@@ -44,8 +44,8 @@ void Memory::readMemory()
         TableObject* tableObject = dynamic_cast<TableObject*>(_saveRestores[i]);
         if (tableObject)
         {
-            uint32_t memorySize = 0;
-            buffer = popInt(memorySize, buffer);
+            uint16_t memorySize = 0;
+            buffer = popWord(memorySize, buffer);
 
             // this works because TableObject saves a relative addr and restores it itself
             addNewUsedBlock(tableObject->_data, memorySize);
@@ -75,7 +75,7 @@ void Memory::writeMemory()
                 println("_data of TableObject not in errorlist");
                 _platform.fatalError();
             }
-            buffer = pushInt(block->size, buffer);
+            buffer = pushWord(block->size, buffer);
         }
     }
     _platform.commitToEeprom();
@@ -89,6 +89,12 @@ void Memory::addSaveRestore(SaveRestore* obj)
     _saveRestores[_saveCount] = obj;
     _saveCount += 1;
     _metadataSize += obj->saveSize();
+
+    TableObject* tableObject = dynamic_cast<TableObject*>(obj);
+    if (tableObject)
+    {
+        _metadataSize += 2; //
+    }
 }
 
 
