@@ -2,6 +2,7 @@
 
 #include "table_object.h"
 #include "bits.h"
+#include "memory.h"
 
 TableObject::TableObject(Memory& memory): _memory(memory)
 {

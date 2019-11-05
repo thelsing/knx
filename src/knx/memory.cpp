@@ -1,7 +1,6 @@
 #include "memory.h"
 #include <string.h>
 #include "bits.h"
-#include "table_object.h"
 
 Memory::Memory(Platform& platform, DeviceObject& deviceObject)
     : _platform(platform), _deviceObject(deviceObject)
@@ -37,19 +36,19 @@ void Memory::readMemory()
         return;
     }
 
-    int size = _saveCount;
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _saveCount; i++)
     {
         buffer = _saveRestores[i]->restore(buffer);
-        TableObject* tableObject = dynamic_cast<TableObject*>(_saveRestores[i]);
-        if (tableObject)
-        {
-            uint16_t memorySize = 0;
-            buffer = popWord(memorySize, buffer);
+    }
 
-            // this works because TableObject saves a relative addr and restores it itself
-            addNewUsedBlock(tableObject->_data, memorySize);
-        }
+    for (int i = 0; i < _tableObjCount; i++)
+    {
+        buffer = _tableObjects[i]->restore(buffer);
+        uint16_t memorySize = 0;
+        buffer = popWord(memorySize, buffer);
+
+        // this works because TableObject saves a relative addr and restores it itself
+        addNewUsedBlock(_tableObjects[i]->_data, memorySize);
     }
 }
 
@@ -60,24 +59,26 @@ void Memory::writeMemory()
     buffer = pushByteArray(_deviceObject.hardwareType(), LEN_HARDWARE_TYPE, buffer);
     buffer = pushWord(_deviceObject.version(), buffer);
 
-    int size = _saveCount;
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < _saveCount; i++)
     {
         buffer = _saveRestores[i]->save(buffer);
+    }
+
+    for (int i = 0; i < _tableObjCount; i++)
+    {
+        buffer = _tableObjects[i]->save(buffer);
 
         //save to size of the memoryblock for tableobject too, so that we can rebuild the usedList and freeList
-        TableObject* tableObject = dynamic_cast<TableObject*>(_saveRestores[i]);
-        if (tableObject)
+
+        MemoryBlock* block = findBlockInList(_usedList, _tableObjects[i]->_data);
+        if (block == nullptr)
         {
-            MemoryBlock* block = findBlockInList(_usedList, tableObject->_data);
-            if (block == nullptr)
-            {
-                println("_data of TableObject not in errorlist");
-                _platform.fatalError();
-            }
-            buffer = pushWord(block->size, buffer);
+            println("_data of TableObject not in errorlist");
+            _platform.fatalError();
         }
+        buffer = pushWord(block->size, buffer);
     }
+    
     _platform.commitToEeprom();
 }
 
@@ -89,14 +90,18 @@ void Memory::addSaveRestore(SaveRestore* obj)
     _saveRestores[_saveCount] = obj;
     _saveCount += 1;
     _metadataSize += obj->saveSize();
-
-    TableObject* tableObject = dynamic_cast<TableObject*>(obj);
-    if (tableObject)
-    {
-        _metadataSize += 2; //
-    }
 }
 
+void Memory::addSaveRestore(TableObject* obj)
+{
+    if (_tableObjCount >= MAXTABLEOBJ - 1)
+        return;
+
+    _tableObjects[_tableObjCount] = obj;
+    _tableObjCount += 1;
+    _metadataSize += obj->saveSize();
+    _metadataSize += 2; // for size
+}
 
 uint8_t* Memory::allocMemory(size_t size)
 {

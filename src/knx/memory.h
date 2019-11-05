@@ -4,8 +4,10 @@
 #include "save_restore.h"
 #include "platform.h"
 #include "device_object.h"
+#include "table_object.h"
 
-#define MAXSAVE 10
+#define MAXSAVE 5
+#define MAXTABLEOBJ 4
 
 class MemoryBlock
 {
@@ -25,6 +27,7 @@ public:
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
+    void addSaveRestore(TableObject* obj);
 
     uint8_t* allocMemory(size_t size);
     void freeMemory(uint8_t* ptr);
@@ -45,7 +48,9 @@ public:
     Platform& _platform;
     DeviceObject& _deviceObject;
     SaveRestore* _saveRestores[MAXSAVE] = {0};
-    int _saveCount = 0;
+    TableObject* _tableObjects[MAXTABLEOBJ] = {0};
+    uint8_t _saveCount = 0;
+    uint8_t _tableObjCount = 0;
     uint8_t* _data = nullptr;
     MemoryBlock* _freeList = nullptr;
     MemoryBlock* _usedList = nullptr;

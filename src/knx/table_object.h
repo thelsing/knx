@@ -1,8 +1,8 @@
 #pragma once
 
 #include "interface_object.h"
-#include "memory.h"
 
+class Memory;
 /**
  * This class provides common functionality for interface objects that are configured by ETS with MemorWrite.
  */
