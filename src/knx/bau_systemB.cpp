@@ -15,6 +15,10 @@ BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platfo
     _assocTable(platform), _groupObjTable(platform), _appProgram(platform),
     _platform(platform), _appLayer(_assocTable, *this),
     _transLayer(_appLayer, _addrTable), _netLayer(_transLayer)
+#ifdef USE_USBIF
+    , _dlLayerUsb(_deviceObj, _addrTable, _netLayer, _platform),
+      _cemiServer(_dlLayerUsb, *this)    
+#endif      
 {
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);
@@ -23,11 +27,17 @@ BauSystemB::BauSystemB(Platform& platform): _memory(platform), _addrTable(platfo
     _memory.addSaveRestore(&_addrTable);
     _memory.addSaveRestore(&_assocTable);
     _memory.addSaveRestore(&_groupObjTable);
+#ifdef USE_USBIF
+    _memory.addSaveRestore(&_cemiServerObject);
+#endif    
 }
 
 void BauSystemB::loop()
 {
     dataLinkLayer().loop();
+#ifdef USE_USBIF
+    _dlLayerUsb.loop();
+#endif
     _transLayer.loop();
     sendNextGroupTelegram();
     nextRestartState();
@@ -41,6 +51,9 @@ bool BauSystemB::enabled()
 void BauSystemB::enabled(bool value)
 {
     dataLinkLayer().enabled(value);
+#ifdef USE_USBIF
+    _dlLayerUsb.enabled(value);
+#endif    
 }
 
 void BauSystemB::sendNextGroupTelegram()

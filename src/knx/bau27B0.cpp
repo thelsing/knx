@@ -51,6 +51,10 @@ InterfaceObject* Bau27B0::getInterfaceObject(uint8_t idx)
             return nullptr;
         case 6:
             return &_rfMediumObj;
+#ifdef USE_USBIF
+        case 7:
+            return &_cemiServerObject;
+#endif            
         default:
             return nullptr;
     }

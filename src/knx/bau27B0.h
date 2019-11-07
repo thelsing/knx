@@ -20,8 +20,13 @@ class Bau27B0 : public BauSystemB
     RfMediumObject _rfMediumObj;
 
     uint8_t _descriptor[2] = {0x27, 0xB0};
+#ifdef USE_USBIF
+    const uint32_t _ifObjs[8] = { 7, // length
+                                  OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG, OT_RF_MEDIUM, OT_CEMI_SERVER};
+#else    
     const uint32_t _ifObjs[7] = { 6, // length
                                   OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG, OT_RF_MEDIUM};
+#endif                                  
 
     void domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
                                                   uint8_t* knxSerialNumber);
