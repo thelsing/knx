@@ -28,7 +28,42 @@ enum AddressType
 
 enum MessageCode
 {
+    // L_Data services
+    L_data_req = 0x11,
+    L_data_con = 0x2E,
     L_data_ind = 0x29,
+
+    // Data Properties
+    M_PropRead_req = 0xFC,
+    M_PropRead_con = 0xFB,
+    M_PropWrite_req = 0xF6,
+    M_PropWrite_con = 0xF5,
+    M_PropInfo_ind = 0xF7,
+
+    // Function Properties
+     M_FuncPropCommand_req = 0xF8,
+     M_FuncPropCommand_con = 0xFA,
+     M_FuncPropStateRead_req = 0xF9,
+     M_FuncPropStateRead_con = 0xFA, // same as M_FuncPropStateRead_con (see 3/6/3 p.105)
+
+     // Further cEMI servies
+     M_Reset_req = 0xF1,
+     M_Reset_ind = 0xF0,
+};
+
+enum cEmiErrorCode
+{
+    Unspecified_Error = 0x00, // unknown error (R/W)
+    Out_Of_Range = 0x01,      // write value not allowed (general, if not error 2 or 3) (W)
+    Out_Of_Max_Range = 0x02,  // write value to high (W)
+    Out_Of_Min_Range = 0x03,  // write value to low (W)
+    Memory_Error = 0x04,      // memory can not be written or only with fault(s) (W)
+    Read_Only = 0x05,         // write access to a ‘read only’ or a write protected Property (W)
+    Illegal_Command = 0x06,   // COMMAND not valid or not supported (W)
+    Void_DP = 0x07,           // read or write access to an non existing Property (R/W)
+    Type_Conflict = 0x08,     // write access with a wrong data type (Datapoint length) (W)
+    Prop_Index_Range_Error = 0x09,   //  read or write access to a non existing Property array index  (R/W)
+    Value_temp_not_writeable = 0x0A, // The Property exists but can at this moment not be written with a new value (W)
 };
 
 enum Repetition
