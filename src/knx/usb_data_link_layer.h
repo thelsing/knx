@@ -21,15 +21,11 @@ class UsbDataLinkLayer
     void enabled(bool value);
     bool enabled() const;
 
+    // from cEMI server
     bool sendCemiFrame(CemiFrame& frame);
 
   private:
     bool _enabled = false;
-    uint8_t _loopState = 0;
-
-    uint8_t _buffer[512];
-
-    uint8_t _frameNumber = 0;
 
     struct _tx_queue_frame_t
     {
@@ -51,5 +47,4 @@ class UsbDataLinkLayer
     void addFrameTxQueue(CemiFrame& frame);
     bool isTxQueueEmpty();
     void loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBufferLength);
-    void frameBytesReceived(uint8_t* buffer, uint16_t length);
 };

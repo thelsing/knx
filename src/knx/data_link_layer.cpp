@@ -19,8 +19,32 @@ void DataLinkLayer::cemiServer(CemiServer& cemiServer)
 
 void DataLinkLayer::dataIndicationFromTunnel(CemiFrame& frame)
 {
-}
+    uint16_t destination = frame.destinationAddress();
+    uint16_t ownAddr = _deviceObject.induvidualAddress();
+    AddressType addrType = frame.addressType();
 
+    if (addrType == InduvidualAddress)
+    {
+        // TODO: check if this is correct: shall we send a frame to the bus too if it was intended for us?
+        if (destination == ownAddr)
+        {
+            // Send to local stack
+            frameRecieved(frame);
+        }
+        else
+        {
+            // Send to KNX medium
+            sendFrame(frame);
+        }
+    }
+    else // GroupAddress
+    {
+            // Send to local stack
+            frameRecieved(frame);
+            // Send to KNX medium
+            sendFrame(frame);
+    }
+}
 
 void DataLinkLayer::dataRequest(AckType ack, AddressType addrType, uint16_t destinationAddr, FrameFormat format, Priority priority, NPDU& npdu)
 {
@@ -69,7 +93,10 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     NPDU& npdu = frame.npdu();
     uint16_t ownAddr = _deviceObject.induvidualAddress();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
-    
+
+//    if (source != _cemiServerObj.tunnelAddress)
+        _cemiServer->dataIndicationToTunnel(frame);
+
     if (source == ownAddr)
         _deviceObject.induvidualAddressDuplication(true);
 

@@ -48,7 +48,72 @@ static uint8_t const desc_hid_report[] =
 0xC0               // End Collection  
 };
 
-uint16_t parseReport(uint8_t* data, uint16_t dataLength)
+struct _rx_queue_frame_t
+{
+    uint8_t* data;
+    uint16_t length;
+    _rx_queue_frame_t* next;
+};
+
+static struct _rx_queue_t
+{
+    _rx_queue_frame_t* front = NULL;
+    _rx_queue_frame_t* back = NULL;
+} _rx_queue;
+
+static void addFrameRxQueue(CemiFrame& frame)
+{
+    _rx_queue_frame_t* rx_frame = new _rx_queue_frame_t;
+
+    rx_frame->length = frame.totalLenght();
+    rx_frame->data = new uint8_t[rx_frame->length];
+    rx_frame->next = NULL;
+
+/*
+    print("cEMI USB RX len: ");
+    print(rx_frame->length);
+
+    printHex(" data:", rx_frame->data, rx_frame->length);
+*/
+    if (_rx_queue.back == NULL)
+    {
+        _rx_queue.front = _rx_queue.back = rx_frame;
+    }
+    else
+    {
+        _rx_queue.back->next = rx_frame;
+        _rx_queue.back = rx_frame;
+    }
+}
+
+static bool isRxQueueEmpty()
+{
+    if (_rx_queue.front == NULL)
+    {
+        return true;
+    }
+    return false;
+}
+
+static void loadNextRxFrame(uint8_t** receiveBuffer, uint16_t* receiveBufferLength)
+{
+    if (_rx_queue.front == NULL)
+    {
+        return;
+    }
+    _rx_queue_frame_t* rx_frame = _rx_queue.front;
+    *receiveBuffer = rx_frame->data;
+    *receiveBufferLength = rx_frame->length;
+    _rx_queue.front = rx_frame->next;
+
+    if (_rx_queue.front == NULL)
+    {
+        _rx_queue.back = NULL;
+    }
+    delete rx_frame;
+}
+
+static uint16_t parseReport(uint8_t* data, uint16_t dataLength)
 {
 	int8_t respDataSize = 0;
 	bool forceSend = false;
@@ -157,6 +222,9 @@ uint16_t parseReport(uint8_t* data, uint16_t dataLength)
 			data[7] == 0x01 && // KNX Tunneling (0x01)
 			data[8] == 0x03 )  // EMI ID: 3 -> cEMI
 	{
+		CemiFrame frame(&data[11], data[6]);
+		addFrameRxQueue(frame);
+
 		uint8_t messageCode = data[11];		
 		switch(messageCode)
 		{
@@ -215,21 +283,48 @@ uint16_t parseReport(uint8_t* data, uint16_t dataLength)
 	return respDataSize;
 }
 
+void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
+{
+	uint8_t buffer[length + 100];
+
+	buffer[0]  = 0x01; // ReportID (fixed 0x01)
+	buffer[1]  = 0x13; // PacketInfo must be 0x13 (SeqNo: 1, Type: 3)
+	buffer[3]  = 0x00; // Protocol version (fixed 0x00)
+	buffer[4]  = 0x08; // USB KNX Transfer Protocol Header Length (fixed 0x08)
+	buffer[7]  = 0x01; // KNX Tunneling (0x01)
+	buffer[8]  = 0x03; // EMI ID: 3 -> cEMI
+	buffer[9]  = 0x00; // Manufacturer
+	buffer[10] = 0x00; // Manufacturer
+	
+	// Copy cEMI frame to buffer
+	memcpy(&buffer[11], data, length + 100);
+
+	// We do not use reportId of the sendReport()-API here but instead provide it in the first byte of the buffer
+    usb_hid.sendReport(0, data, length + 100);
+}
+
 // Invoked when received SET_REPORT control request or
 // received data on OUT endpoint ( Report ID = 0, Type = 0 )
-void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize)
+static void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize)
 {
-  // we don't use multiple report and report ID
-  (void) report_id;
-  (void) report_type;
+	// we don't use multiple report and report ID
+	(void) report_id;
+	(void) report_type;
 
-  uint8_t tmpbuf[bufsize];
-  memcpy(tmpbuf, buffer, bufsize);
+	uint8_t tmpbuf[bufsize];
+	memcpy(tmpbuf, buffer, bufsize);
 
-  if (parseReport(tmpbuf, bufsize) > 0)
-  {
-    usb_hid.sendReport(tmpbuf[0], &tmpbuf[1], bufsize);
-  }
+	if (parseReport(tmpbuf, bufsize) > 0)
+	{
+		sendKnxTunnelHidReport(&tmpbuf[0], bufsize);
+	}
+}
+
+// class UsbDataLinkLayer
+
+UsbDataLinkLayer::UsbDataLinkLayer(DeviceObject& deviceObject, CemiServer& cemiServer, Platform& platform)
+    : _deviceObject(deviceObject), _cemiServer(cemiServer), _platform(platform)
+{
 }
 
 void UsbDataLinkLayer::loop()
@@ -241,8 +336,35 @@ void UsbDataLinkLayer::loop()
 
 	if (!isTxQueueEmpty())
 	{
-		//loadNextTxFrame();
-		//sendKnxHidReport();
+		uint8_t* buffer;
+		uint16_t length;
+		loadNextTxFrame(&buffer, &length);
+
+		print("cEMI USB TX len: ");
+		print(length);
+
+		print(" data: ");
+		printHex(" data: ", buffer, length);
+
+		sendKnxTunnelHidReport(buffer, length);
+	}
+
+	if (!isRxQueueEmpty())
+	{
+		uint8_t* buffer;
+		uint16_t length;
+		loadNextRxFrame(&buffer, &length);
+
+		// Prepare the cEMI frame
+		CemiFrame frame(buffer, length);
+
+		print("cEMI USB RX len: ");
+		print(length);
+
+		print(" data: ");
+		printHex(" data: ", buffer, length);
+
+		_cemiServer.frameReceived(frame);
 	}
 }
 
@@ -251,31 +373,9 @@ bool UsbDataLinkLayer::sendCemiFrame(CemiFrame& frame)
     if (!_enabled)
         return false;
 
-    // TODO: Is queueing really required?
-    // According to the spec. the upper layer may only send a new L_Data.req if it received
-    // the L_Data.con for the previous L_Data.req.
     addFrameTxQueue(frame);
 
     return true;
-}
-
-UsbDataLinkLayer::UsbDataLinkLayer(DeviceObject& deviceObject, CemiServer& cemiServer, Platform& platform)
-    : _deviceObject(deviceObject), _cemiServer(cemiServer), _platform(platform)
-{
-}
-
-void UsbDataLinkLayer::frameBytesReceived(uint8_t* _buffer, uint16_t length)
-{
-    // Prepare the cEMI frame
-    CemiFrame frame(_buffer, length);
-
-    print("cEMI USB RX len: ");
-    print(length);
-
-    print(" data: ");
-    printHex(" data: ", _buffer, length);
-
-    _cemiServer.frameReceived(frame);
 }
 
 void UsbDataLinkLayer::enabled(bool value)
@@ -318,11 +418,12 @@ void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
     tx_frame->data = new uint8_t[tx_frame->length];
     tx_frame->next = NULL;
 
+/*
     print("cEMI USB TX len: ");
     print(tx_frame->length);
 
     printHex(" data:", tx_frame->data, tx_frame->length);
-
+*/
     if (_tx_queue.back == NULL)
     {
         _tx_queue.front = _tx_queue.back = tx_frame;
