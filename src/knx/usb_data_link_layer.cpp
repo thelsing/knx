@@ -15,7 +15,7 @@ Adafruit_USBD_HID usb_hid;
 
 // HID report descriptor using TinyUSB's template
 // Generic In Out with 64 bytes report (max)
-uint8_t const desc_hid_report[] =
+static uint8_t const desc_hid_report[] =
 {
   //TUD_HID_REPORT_DESC_GENERIC_INOUT(64)
  0x06, 0xA0, 0xFF, // Usage Page (Vendor Defined 0xFFA0)
@@ -235,10 +235,18 @@ void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8
 void UsbDataLinkLayer::loop()
 {
     if (!_enabled)
+	{
         return;
+	}
+
+	if (!isTxQueueEmpty())
+	{
+		//loadNextTxFrame();
+		//sendKnxHidReport();
+	}
 }
 
-bool UsbDataLinkLayer::sendFrame(CemiFrame& frame)
+bool UsbDataLinkLayer::sendCemiFrame(CemiFrame& frame)
 {
     if (!_enabled)
         return false;
@@ -248,18 +256,11 @@ bool UsbDataLinkLayer::sendFrame(CemiFrame& frame)
     // the L_Data.con for the previous L_Data.req.
     addFrameTxQueue(frame);
 
-    // TODO: For now L_data.req is confirmed immediately (L_Data.con)
-    // see 3.6.3 p.80: L_Data.con shall be generated AFTER transmission of the corresponsing frame
-    // RF sender will never generate L_Data.con with C=1 (Error), but only if the TX buffer overflows
-    // The RF sender cannot detect if the RF frame was transmitted successfully or not according to the spec.
-    dataConReceived(frame, true);
-
     return true;
 }
 
-UsbDataLinkLayer::UsbDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
-                                         NetworkLayer& layer, Platform& platform)
-    : DataLinkLayer(devObj, addrTab, layer, platform)
+UsbDataLinkLayer::UsbDataLinkLayer(DeviceObject& deviceObject, CemiServer& cemiServer, Platform& platform)
+    : _deviceObject(deviceObject), _cemiServer(cemiServer), _platform(platform)
 {
 }
 
@@ -267,26 +268,14 @@ void UsbDataLinkLayer::frameBytesReceived(uint8_t* _buffer, uint16_t length)
 {
     // Prepare the cEMI frame
     CemiFrame frame(_buffer, length);
-/*            
-    frame.frameType(ExtendedFrame);         // KNX RF uses only extended frame format
-    frame.priority(SystemPriority);         // Not used in KNX RF
-    frame.ack(AckDontCare);                 // Not used in KNX RF 
-    frame.systemBroadcast(systemBroadcast); // Mapped from flag AddrExtensionType (KNX serial(0) or Domain Address(1))
-    frame.hopCount(hopCount);               // Hop count from routing counter
-    frame.addressType(addressType);         // Group address or individual address
-    frame.rfSerialOrDoA(&rfPacketBuf[4]);   // Copy pointer to field Serial or Domain Address (check broadcast flag what it is exactly)
-    frame.rfInfo(rfPacketBuf[3]);           // RF-info field (1 byte)
-    frame.rfLfn(lfn);                       // Data link layer frame number (LFN field)
-*/
 
-/*
-    print(" len: ");
-    print(newLength);
+    print("cEMI USB RX len: ");
+    print(length);
 
     print(" data: ");
-    printHex(" data: ", _buffer, newLength);
-*/
-    frameRecieved(frame);
+    printHex(" data: ", _buffer, length);
+
+    _cemiServer.frameReceived(frame);
 }
 
 void UsbDataLinkLayer::enabled(bool value)
@@ -329,12 +318,11 @@ void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
     tx_frame->data = new uint8_t[tx_frame->length];
     tx_frame->next = NULL;
 
-/*
-    print(" len: ");
-    print(totalLength);
+    print("cEMI USB TX len: ");
+    print(tx_frame->length);
 
-    printHex(" data:", tx_frame->data, totalLength);
-*/
+    printHex(" data:", tx_frame->data, tx_frame->length);
+
     if (_tx_queue.back == NULL)
     {
         _tx_queue.front = _tx_queue.back = tx_frame;

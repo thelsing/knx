@@ -10,9 +10,18 @@ using namespace std;
 Bau27B0::Bau27B0(Platform& platform)
     : BauSystemB(platform),
       _dlLayer(_deviceObj, _rfMediumObj, _addrTable, _netLayer, _platform)
+#ifdef USE_USBIF
+    , _cemiServer(_tunnelInterface, *this)
+    , _tunnelInterface(_deviceObj, _cemiServer, _platform)
+#endif      
 {
     _netLayer.dataLinkLayer(_dlLayer);
     _memory.addSaveRestore(&_rfMediumObj);
+#ifdef USE_USBIF
+    _cemiServer.dataLinkLayer(_dlLayer);
+    _dlLayer.cemiServer(_cemiServer);
+    _memory.addSaveRestore(&_cemiServerObject);
+#endif
 
     // Set Mask Version in Device Object depending on the BAU
     uint16_t maskVersion;
@@ -68,6 +77,18 @@ uint8_t* Bau27B0::descriptor()
 DataLinkLayer& Bau27B0::dataLinkLayer()
 {
     return _dlLayer;
+}
+
+void Bau27B0::enabled(bool value)
+{
+    ::BauSystemB::enabled(value);
+    _tunnelInterface.enabled(value);
+}
+
+void Bau27B0::loop()
+{
+    ::BauSystemB::loop();
+    _tunnelInterface.loop();
 }
 
 void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,

@@ -5,12 +5,17 @@
 #include "address_table_object.h"
 #include "knx_types.h"
 #include "network_layer.h"
+#include "cemi_server.h"
 
 class DataLinkLayer
 {
   public:
     DataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, NetworkLayer& layer,
                   Platform& platform);
+
+    void cemiServer(CemiServer& cemiServer);
+
+    void dataIndicationFromTunnel(CemiFrame& frame);
 
     // from network layer
     void dataRequest(AckType ack, AddressType addrType, uint16_t destinationAddr, FrameFormat format,
@@ -30,4 +35,5 @@ class DataLinkLayer
     AddressTableObject& _groupAddressTable;
     NetworkLayer& _networkLayer;
     Platform& _platform;
+    CemiServer* _cemiServer;
 };

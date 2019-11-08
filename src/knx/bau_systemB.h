@@ -12,11 +12,6 @@
 #include "tpuart_data_link_layer.h"
 #include "platform.h"
 #include "memory.h"
-#ifdef USE_USBIF
-#include "usb_data_link_layer.h"
-#include "cemi_server.h"
-#include "cemi_server_object.h"
-#endif
 
 class BauSystemB : protected BusAccessUnit
 {
@@ -93,9 +88,4 @@ class BauSystemB : protected BusAccessUnit
     bool _configured = true;
     RestartState _restartState = Idle;
     uint32_t _restartDelay = 0;
-#ifdef USE_USBIF
-    UsbDataLinkLayer _dlLayerUsb;
-    CemiServer _cemiServer;
-    CemiServerObject _cemiServerObject;
-#endif
 };

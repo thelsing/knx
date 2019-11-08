@@ -4,13 +4,23 @@
 #include "platform.h"
 #include "device_object.h"
 #include "address_table_object.h"
-
+#include "cemi_server.h"
 
 DataLinkLayer::DataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, 
     NetworkLayer& layer, Platform& platform) :
     _deviceObject(devObj), _groupAddressTable(addrTab),  _networkLayer(layer), _platform(platform)
 {
 }
+
+void DataLinkLayer::cemiServer(CemiServer& cemiServer)
+{
+    _cemiServer = &cemiServer;
+}
+
+void DataLinkLayer::dataIndicationFromTunnel(CemiFrame& frame)
+{
+}
+
 
 void DataLinkLayer::dataRequest(AckType ack, AddressType addrType, uint16_t destinationAddr, FrameFormat format, Priority priority, NPDU& npdu)
 {

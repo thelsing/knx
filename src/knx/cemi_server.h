@@ -5,6 +5,9 @@
 
 class UsbDataLinkLayer;
 class BusAccessUnit;
+class DataLinkLayer;
+class CemiFrame;
+
 /**
  * This is an implementation of the cEMI server as specified in @cite knx:3/6/3.
  * Overview on page 57.
@@ -18,18 +21,22 @@ class CemiServer
   public:
     /**
      * The constructor.
-     * @param assocTable The AssociationTable is used to translate between asap (i.e. group objects) and group addresses.
+     * @param tunnelInterface The TunnelInterface of the KNX tunnel (e.g. USB or KNXNET/IP)
      * @param bau methods are called here depending of the content of the APDU
      */
-    CemiServer(UsbDataLinkLayer& dlLayer, BusAccessUnit& bau);
+    CemiServer(UsbDataLinkLayer& tunnelInterface, BusAccessUnit& bau);
+
+    void dataLinkLayer(DataLinkLayer& layer);
 
     // from data link layer
-#pragma region Data - Link - Layer - Callbacks
-    void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
-#pragma endregion
+    // Only L_Data service
+    void dataIndicationToTunnel(CemiFrame& frame);
 
-#pragma region from bau
+    // From tunnel interface
+    void frameReceived(CemiFrame& frame);
+
+
+/*
     void propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                   uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex);
     void propertyValueReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
@@ -41,15 +48,16 @@ class CemiServer
     void propertyDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                          uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex, bool writeEnable, uint8_t type,
                                          uint16_t maxNumberOfElements, uint8_t access);
-#pragma endregion
-
+*/
   private:
+/*  
     void propertyDataSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                           uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data,
                           uint8_t length);
     void individualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
     void individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
-
-    UsbDataLinkLayer& _dlLayer;
+*/
+    DataLinkLayer* _dataLinkLayer;
+    UsbDataLinkLayer& _tunnelInterface;
     BusAccessUnit& _bau;
 };

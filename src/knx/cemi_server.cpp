@@ -6,14 +6,79 @@
 #include "bits.h"
 #include <stdio.h>
 
-CemiServer::CemiServer(UsbDataLinkLayer& dlLayer, BusAccessUnit& bau):
-    _dlLayer(dlLayer),
+CemiServer::CemiServer(UsbDataLinkLayer& tunnelInterface, BusAccessUnit& bau):
+    _tunnelInterface(tunnelInterface),
     _bau(bau)
 {
 }
 
-#pragma region DLL Callbacks
+void CemiServer::dataLinkLayer(DataLinkLayer& layer)
+{
+    _dataLinkLayer = &layer;
+}
 
+void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
+{
+    _tunnelInterface.sendCemiFrame(frame);
+}
+
+void CemiServer::frameReceived(CemiFrame& frame)
+{
+    switch(frame.messageCode())
+    {
+        case L_data_req:
+        {
+            // Send as indication to data link layer
+            frame.messageCode(L_data_ind);
+            _dataLinkLayer->dataIndicationFromTunnel(frame);
+            
+            // Send local reply to tunnel
+            frame.messageCode(L_data_con);
+            _tunnelInterface.sendCemiFrame(frame);
+            break;
+        }
+
+        case M_PropRead_req:
+        {
+            break;
+        }
+
+        case M_PropWrite_req:
+        {
+            break;
+        }
+
+        case M_FuncPropCommand_req:
+        {
+            break;
+        }
+
+        case M_FuncPropStateRead_req:
+        {
+            break;
+        }
+
+        case M_Reset_req:
+        {
+            break;
+        }
+
+        // we should not receive this: server -> client
+        case L_data_con:
+        case L_data_ind:
+        case M_PropInfo_ind:
+        case M_PropRead_con:
+        case M_PropWrite_con:
+        case M_FuncPropCommand_con:
+        //case M_FuncPropStateRead_con: // same value as M_FuncPropCommand_con
+        case M_Reset_ind:
+        default:
+            break;
+    }
+    _dataLinkLayer->dataIndicationFromTunnel(frame);
+}
+
+/*
 void CemiServer::propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
     uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
 {
@@ -176,3 +241,5 @@ void CemiServer::individualConfirm(AckType ack, HopCountType hopType, Priority p
             break;
     }
 }
+
+*/

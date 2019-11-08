@@ -4,11 +4,18 @@
 #include "rf_medium_object.h"
 #include "rf_physical_layer.h"
 #include "rf_data_link_layer.h"
+#ifdef USE_USBIF
+#include "usb_data_link_layer.h"
+#include "cemi_server.h"
+#include "cemi_server_object.h"
+#endif
 
 class Bau27B0 : public BauSystemB
 {
   public:
     Bau27B0(Platform& platform);
+    void enabled(bool value);
+    void loop();
 
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
@@ -18,6 +25,11 @@ class Bau27B0 : public BauSystemB
   private:
     RfDataLinkLayer _dlLayer;
     RfMediumObject _rfMediumObj;
+#ifdef USE_USBIF
+    CemiServer _cemiServer;
+    UsbDataLinkLayer _tunnelInterface;
+    CemiServerObject _cemiServerObject;
+#endif
 
     uint8_t _descriptor[2] = {0x27, 0xB0};
 #ifdef USE_USBIF
