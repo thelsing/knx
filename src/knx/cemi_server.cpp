@@ -33,6 +33,44 @@ void CemiServer::localManagmentRequestFromTunnel(CemiFrame& frame)
 }
 */
 
+/*	
+	uint8_t messageCode = data[11];		
+	switch(messageCode)
+	{
+		case 0xFC: // M_PropRead.req
+		{
+			data[11] = 0xFB; // M_PropRead.con
+			if (data[15] == 0x34)
+			{
+				data[18] = 00; // PID_COMM_MODE: 0: Data Link Layer
+			}
+			else
+			{
+				data[16] = 0; // Number of elements must be 0 if negative response
+				data[18] = 7; // Error code 7 (Void DP)
+			}
+			respDataSize = 1;
+			break;
+		}
+		case 0xF6: // M_PropWrite.req
+		{
+			data[11] = 0xF5; // M_PropWrite.con
+			if ((data[15] == 0x34) && (data[18] == 0x00))
+			{
+				respDataSize = -1;
+			}
+			else
+			{
+				data[16] = 0; // Number of elements must be 0 if negative response
+				data[18] = 6; // Error code 6 (illegal command)
+				respDataSize = 0;
+				forceSend = true;
+			}
+			break;
+		}
+	}
+*/
+
 void CemiServer::frameReceived(CemiFrame& frame)
 {
     switch(frame.messageCode())
@@ -55,6 +93,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
             uint32_t dataSize;
             //ObjectType opjectType = data[]
             //_bau.propertyValueRead()
+            println("M_PropRead_req");
             break;
         }
 
@@ -90,7 +129,12 @@ void CemiServer::frameReceived(CemiFrame& frame)
         default:
             break;
     }
-    _dataLinkLayer->dataIndicationFromTunnel(frame);
+}
+
+
+void CemiServer::loop()
+{
+    _usbTunnelInterface.loop();
 }
 
 /*

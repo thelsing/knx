@@ -116,7 +116,7 @@ void Bau27B0::enabled(bool value)
 void Bau27B0::loop()
 {
     ::BauSystemB::loop();
-    //_tunnelInterface.loop();
+    _cemiServer.loop();
 }
 
 void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,

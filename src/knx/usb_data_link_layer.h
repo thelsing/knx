@@ -20,7 +20,7 @@ class UsbDataLinkLayer
     bool sendCemiFrame(CemiFrame& frame);
 
   private:
-    bool _enabled = false;
+    bool _enabled = true;
 
     struct _tx_queue_frame_t
     {

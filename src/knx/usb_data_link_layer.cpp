@@ -8,12 +8,14 @@
 #include <Adafruit_TinyUSB.h>
 
 #define MIN(a, b) ((a < b) ? (a) : (b))
+#define MAX_EP_SIZE 64
+#define HID_HEADER_SIZE 3
 
-static Adafruit_USBD_HID usb_hid;
+Adafruit_USBD_HID usb_hid;
 
 // HID report descriptor using TinyUSB's template
 // Generic In Out with 64 bytes report (max)
-static uint8_t const desc_hid_report[] =
+uint8_t const desc_hid_report[] =
 {
   //TUD_HID_REPORT_DESC_GENERIC_INOUT(64)
  0x06, 0xA0, 0xFF, // Usage Page (Vendor Defined 0xFFA0)
@@ -63,9 +65,11 @@ static void addFrameRxQueue(CemiFrame& frame)
 {
     _rx_queue_frame_t* rx_frame = new _rx_queue_frame_t;
 
-    rx_frame->length = frame.totalLenght();
+    rx_frame->length = frame.dataLength();
     rx_frame->data = new uint8_t[rx_frame->length];
     rx_frame->next = nullptr;
+
+	memcpy(rx_frame->data, frame.data(), rx_frame->length);
 
 /*
     print("cEMI USB RX len: ");
@@ -111,164 +115,102 @@ static void loadNextRxFrame(uint8_t** receiveBuffer, uint16_t* receiveBufferLeng
     delete rx_frame;
 }
 
-static uint16_t parseReport(uint8_t* data, uint16_t dataLength)
+static void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t packetLength)
 {
+	if (packetLength > MAX_EP_SIZE)
+		return;
+
+	uint8_t data[MAX_EP_SIZE];
+	memset(data, 0, sizeof(data));
+	memcpy(data, requestData, packetLength);
+
 	int8_t respDataSize = 0;
-	bool forceSend = false;
-	uint16_t length = 0;
 
-	popWord(length, &data[5]);
-	length = MIN(dataLength, length);
-
-	Serial1.print("RX HID report: len: ");
-	Serial1.println(length, DEC);
-
-	for (int i = 0; i < (length + data[4] + 3); i++)
+	uint8_t serviceId = data[8];
+	switch (serviceId)
 	{
-		if (data[i] < 16)
-			Serial1.print("0");
-		Serial1.print(data[i], HEX);
-		Serial1.print(" ");
-	}
-	Serial1.println("");
-
-	if (	data[0] == 0x01 && // ReportID (fixed 0x01)
-			data[1] == 0x13 && // PacketInfo must be 0x13 (SeqNo: 1, Type: 3)
-			data[3] == 0x00 && // Protocol version (fixed 0x00)
-			data[4] == 0x08 && // USB KNX Transfer Protocol Header Length (fixed 0x08)
-			data[7] == 0x0F )  // Bus Access Server Feature (0x0F)
-	{
-		uint8_t serviceId = data[8];
-		switch (serviceId)
+		case 0x01: // Device Feature Get
 		{
-			case 0x01: // Device Feature Get
-			{
-				data[8] = 0x02;          // Device Feature Response
+			data[8] = 0x02; // Device Feature Response
 
-				uint8_t featureId = data[11];
-				switch (featureId)
-				{
-					case 0x01: // Supported EMI types
-						Serial1.println("Device Feature Get: Supported EMI types");
-						respDataSize = 2;
-						data[12] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
-						data[13] = 0x04; // USB KNX Transfer Protocol Body: Feature Data -> only cEMI supported
-						break;
-					case 0x02: // Host Device Descriptor Type 0
-						Serial1.println("Device Feature Get: Host Device Descriptor Type 0");
-						respDataSize = 2;
-						data[12] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
-						data[13] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
-						break;
-					case 0x03: // Bus connection status
-						Serial1.println("Device Feature Get: Bus connection status");
-						respDataSize = 1;
-						data[12] = 1; // USB KNX Transfer Protocol Body: Feature Data
-						break;
-					case 0x04: // KNX manufacturer code
-						Serial1.println("Device Feature Get: KNX manufacturer code");
-						respDataSize = 2;
-						data[12] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
-						data[13] = 0x00; // USB KNX Transfer Protocol Body: Feature Data -> Manufacturer Code
-						break;
-					case 0x05: // Active EMI type
-						Serial1.println("Device Feature Get: Active EMI type");
-						respDataSize = 1;
-						data[12] = 0x03; // USB KNX Transfer Protocol Body: Feature Data -> cEMI ID
-						break;
-					default:
-						respDataSize = 0;
-						break;
-				}
-				break;
-			}
-			case 0x03: // Device Feature Set
+			uint8_t featureId = data[11];
+			switch (featureId)
 			{
-				uint8_t featureId = data[11];
-				switch (featureId)
-				{
-					case 0x05: // Active EMI type
-						Serial1.print("Device Feature Set: Active EMI type: ");
-						if (data[12] < 16)
-							Serial1.print("0");
-						Serial1.println(data[12], HEX); // USB KNX Transfer Protocol Body: Feature Data -> EMI TYPE ID
-						break;
-					// All other featureIds must not be set
-					case 0x01: // Supported EMI types
-					case 0x02: // Host Device Descriptor Type 0
-					case 0x03: // Bus connection status
-					case 0x04: // KNX manufacturer code
-					default:
-						break;
-				}
-				break;
-			}
-
-			// These are only sent from the device to the host
-			case 0x02: // Device Feature Response
-			case 0x04: // Device Feature Info
-			case 0xEF: // reserved, not used
-			case 0xFF: // reserved (ESCAPE for future extensions)
-			default:
-				break;
-		}
-	}
-	else if (	data[0] == 0x01 && // ReportID (fixed 0x01)
-			data[1] == 0x13 && // PacketInfo must be 0x13 (SeqNo: 1, Type: 3)
-			data[3] == 0x00 && // Protocol version (fixed 0x00)
-			data[4] == 0x08 && // USB KNX Transfer Protocol Header Length (fixed 0x08)
-			data[7] == 0x01 && // KNX Tunneling (0x01)
-			data[8] == 0x03 )  // EMI ID: 3 -> cEMI
-	{
-		CemiFrame frame(&data[11], data[6]);
-		addFrameRxQueue(frame);
-
-		uint8_t messageCode = data[11];		
-		switch(messageCode)
-		{
-			case 0xFC: // M_PropRead.req
-			{
-				data[11] = 0xFB; // M_PropRead.con
-				if (data[15] == 0x34)
-				{
-					data[18] = 00; // PID_COMM_MODE: 0: Data Link Layer
-				}
-				else
-				{
-					data[16] = 0; // Number of elements must be 0 if negative response
-					data[18] = 7; // Error code 7 (Void DP)
-				}
-				respDataSize = 1;
-				break;
-			}
-			case 0xF6: // M_PropWrite.req
-			{
-				data[11] = 0xF5; // M_PropWrite.con
-				if ((data[15] == 0x34) && (data[18] == 0x00))
-				{
-					respDataSize = -1;
-				}
-				else
-				{
-					data[16] = 0; // Number of elements must be 0 if negative response
-					data[18] = 6; // Error code 6 (illegal command)
+				case 0x01: // Supported EMI types
+					Serial1.println("Device Feature Get: Supported EMI types");
+					respDataSize = 2;
+					data[12] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
+					data[13] = 0x04; // USB KNX Transfer Protocol Body: Feature Data -> only cEMI supported
+					break;
+				case 0x02: // Host Device Descriptor Type 0
+					Serial1.println("Device Feature Get: Host Device Descriptor Type 0");
+					respDataSize = 2;
+					data[12] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
+					data[13] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
+					break;
+				case 0x03: // Bus connection status
+					Serial1.println("Device Feature Get: Bus connection status");
+					respDataSize = 1;
+					data[12] = 1; // USB KNX Transfer Protocol Body: Feature Data
+					break;
+				case 0x04: // KNX manufacturer code
+					Serial1.println("Device Feature Get: KNX manufacturer code");
+					respDataSize = 2;
+					data[12] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
+					data[13] = 0x00; // USB KNX Transfer Protocol Body: Feature Data -> Manufacturer Code
+					break;
+				case 0x05: // Active EMI type
+					Serial1.println("Device Feature Get: Active EMI type");
+					respDataSize = 1;
+					data[12] = 0x03; // USB KNX Transfer Protocol Body: Feature Data -> cEMI ID
+					break;
+				default:
 					respDataSize = 0;
-					forceSend = true;
-				}
-				break;
+					break;
 			}
+			break;
 		}
+		case 0x03: // Device Feature Set
+		{
+			uint8_t featureId = data[11];
+			switch (featureId)
+			{
+				case 0x05: // Active EMI type
+					Serial1.print("Device Feature Set: Active EMI type: ");
+					if (data[12] < 16)
+						Serial1.print("0");
+					Serial1.println(data[12], HEX); // USB KNX Transfer Protocol Body: Feature Data -> EMI TYPE ID
+					break;
+				// All other featureIds must not be set
+				case 0x01: // Supported EMI types
+				case 0x02: // Host Device Descriptor Type 0
+				case 0x03: // Bus connection status
+				case 0x04: // KNX manufacturer code
+				default:
+					break;
+			}
+			break;
+		}
+
+		// These are only sent from the device to the host
+		case 0x02: // Device Feature Response
+		case 0x04: // Device Feature Info
+		case 0xEF: // reserved, not used
+		case 0xFF: // reserved (ESCAPE for future extensions)
+		default:
+			break;
 	}
 
-	if ((respDataSize != 0) || forceSend)
+	// Do we have to send a response?
+	if (respDataSize > 0)
 	{
 		data[2] += respDataSize; // HID Report Header: Packet Length
 		data[6] += respDataSize; // USB KNX Transfer Protocol Header: Body Length
 
 		Serial1.print("TX HID report: len: ");
-		Serial1.println((length + data[4] + 3) + respDataSize, DEC);
+		Serial1.println((packetLength) + respDataSize, DEC);
 
-		for (int i = 0; i < ((length + data[4] + 3) + respDataSize); i++)
+		for (int i = 0; i < ((packetLength) + respDataSize); i++)
 		{
 			if (data[i] < 16)
 				Serial1.print("0");
@@ -276,14 +218,14 @@ static uint16_t parseReport(uint8_t* data, uint16_t dataLength)
 			Serial1.print(" ");
 		}
 		Serial1.println("");
-	}
 
-	return respDataSize;
+		usb_hid.sendReport(0, data, MAX_EP_SIZE);
+	}
 }
 
 void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 {
-	uint8_t buffer[length + 100];
+	uint8_t buffer[length + 11];
 
 	buffer[0]  = 0x01; // ReportID (fixed 0x01)
 	buffer[1]  = 0x13; // PacketInfo must be 0x13 (SeqNo: 1, Type: 3)
@@ -295,26 +237,59 @@ void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 	buffer[10] = 0x00; // Manufacturer
 	
 	// Copy cEMI frame to buffer
-	memcpy(&buffer[11], data, length + 100);
+	memcpy(&buffer[11], data, length + HID_HEADER_SIZE + 8);
+
+	buffer[2]  = 8 + length;    // KNX USB Transfer Protocol Header length (8, only first packet!) + cEMI length
+	pushWord(length, &data[5]); // KNX USB Transfer Protocol Body length (cEMI length)
 
 	// We do not use reportId of the sendReport()-API here but instead provide it in the first byte of the buffer
-    usb_hid.sendReport(0, data, length + 100);
+    usb_hid.sendReport(0, data, MAX_EP_SIZE);
 }
 
 // Invoked when received SET_REPORT control request or
 // received data on OUT endpoint ( Report ID = 0, Type = 0 )
-static void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8_t const* buffer, uint16_t bufsize)
+void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8_t const* data, uint16_t bufSize)
 {
 	// we don't use multiple report and report ID
 	(void) report_id;
 	(void) report_type;
 
-	uint8_t tmpbuf[bufsize];
-	memcpy(tmpbuf, buffer, bufsize);
+	if (bufSize!=MAX_EP_SIZE)
+		return;
 
-	if (parseReport(tmpbuf, bufsize) > 0)
+	if (data[0] == 0x01 && // ReportID (fixed 0x01)
+		data[1] == 0x13)   // PacketInfo must be 0x13 (SeqNo: 1, Type: 3)
 	{
-		sendKnxTunnelHidReport(&tmpbuf[0], bufsize);
+		uint8_t packetLength = data[2];
+
+		Serial1.print("RX HID report: len: ");
+		Serial1.println(packetLength, DEC);
+
+		for (int i = 0; i < (packetLength + HID_HEADER_SIZE); i++)
+		{
+			if (data[i] < 16)
+				Serial1.print("0");
+			Serial1.print(data[i], HEX);
+			Serial1.print(" ");
+		}
+		Serial1.println("");
+
+		if (data[3] == 0x00 && // Protocol version (fixed 0x00)
+			data[4] == 0x08)   // USB KNX Transfer Protocol Header Length (fixed 0x08)
+		{
+			if (data[7] == 0x0F)   // Bus Access Server Feature (0x0F)
+			{
+				handleBusAccessServerProtocol(&data[0], packetLength + HID_HEADER_SIZE);
+			}
+			else if (data[7] == 0x01 && // KNX Tunneling (0x01)
+					 data[8] == 0x03)   // EMI type: only cEMI supported
+			{
+				uint16_t bodyLength;
+				popWord(bodyLength, (uint8_t*)&data[5]); // KNX USB Transfer Protocol Body length
+				CemiFrame frame((uint8_t*)&data[11], bodyLength);
+				addFrameRxQueue(frame);
+			}
+		}
 	}
 }
 
@@ -411,9 +386,11 @@ void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
 {
     _tx_queue_frame_t* tx_frame = new _tx_queue_frame_t;
 
-    tx_frame->length = frame.totalLenght();
+    tx_frame->length = frame.dataLength();
     tx_frame->data = new uint8_t[tx_frame->length];
     tx_frame->next = nullptr;
+
+	memcpy(tx_frame->data, frame.data(), tx_frame->length);
 
 /*
     print("cEMI USB TX len: ");

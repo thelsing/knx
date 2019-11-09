@@ -35,7 +35,8 @@ class CemiServer
     // From tunnel interface
     void frameReceived(CemiFrame& frame);
 
-
+    void loop();
+    
 /*
     void propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                   uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex);

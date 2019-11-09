@@ -184,6 +184,16 @@ void CemiFrame::fillTelegramRF(uint8_t* data)
     //printHex("cEMI_fill: ", &data[0], len);
 }
 
+uint8_t* CemiFrame::data()
+{
+    return _data;
+}
+
+uint16_t CemiFrame::dataLength()
+{
+    return _length;
+}
+
 uint8_t CemiFrame::calcCrcTP(uint8_t * buffer, uint16_t len)
 {
     uint8_t crc = 0xFF;

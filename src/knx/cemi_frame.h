@@ -32,6 +32,8 @@ class CemiFrame
     void fillTelegramTP(uint8_t* data);
     uint16_t telegramLengthtRF() const;
     void fillTelegramRF(uint8_t* data);
+    uint8_t* data();
+    uint16_t dataLength();
 
     FrameFormat frameType() const;
     void frameType(FrameFormat value);
