@@ -2,8 +2,8 @@
 
 #include <stdint.h>
 #include "knx_types.h"
+#include "usb_data_link_layer.h"
 
-class UsbDataLinkLayer;
 class BusAccessUnit;
 class DataLinkLayer;
 class CemiFrame;
@@ -24,7 +24,7 @@ class CemiServer
      * @param tunnelInterface The TunnelInterface of the KNX tunnel (e.g. USB or KNXNET/IP)
      * @param bau methods are called here depending of the content of the APDU
      */
-    CemiServer(UsbDataLinkLayer& tunnelInterface, BusAccessUnit& bau);
+    CemiServer(BusAccessUnit& bau);
 
     void dataLinkLayer(DataLinkLayer& layer);
 
@@ -58,6 +58,6 @@ class CemiServer
     void individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
 */
     DataLinkLayer* _dataLinkLayer;
-    UsbDataLinkLayer& _tunnelInterface;
     BusAccessUnit& _bau;
+    UsbDataLinkLayer _usbTunnelInterface;
 };

@@ -1,17 +1,15 @@
-#include "usb_data_link_layer.h"
-
 #include "bits.h"
-#include "platform.h"
-#include "device_object.h"
-#include "address_table_object.h"
+#include "usb_data_link_layer.h"
+#include "cemi_server.h"
 #include "cemi_frame.h"
 
 #include <stdio.h>
 #include <string.h>
+#include <Adafruit_TinyUSB.h>
 
 #define MIN(a, b) ((a < b) ? (a) : (b))
 
-Adafruit_USBD_HID usb_hid;
+static Adafruit_USBD_HID usb_hid;
 
 // HID report descriptor using TinyUSB's template
 // Generic In Out with 64 bytes report (max)
@@ -57,8 +55,8 @@ struct _rx_queue_frame_t
 
 static struct _rx_queue_t
 {
-    _rx_queue_frame_t* front = NULL;
-    _rx_queue_frame_t* back = NULL;
+    _rx_queue_frame_t* front = nullptr;
+    _rx_queue_frame_t* back = nullptr;
 } _rx_queue;
 
 static void addFrameRxQueue(CemiFrame& frame)
@@ -67,7 +65,7 @@ static void addFrameRxQueue(CemiFrame& frame)
 
     rx_frame->length = frame.totalLenght();
     rx_frame->data = new uint8_t[rx_frame->length];
-    rx_frame->next = NULL;
+    rx_frame->next = nullptr;
 
 /*
     print("cEMI USB RX len: ");
@@ -75,7 +73,7 @@ static void addFrameRxQueue(CemiFrame& frame)
 
     printHex(" data:", rx_frame->data, rx_frame->length);
 */
-    if (_rx_queue.back == NULL)
+    if (_rx_queue.back == nullptr)
     {
         _rx_queue.front = _rx_queue.back = rx_frame;
     }
@@ -88,7 +86,7 @@ static void addFrameRxQueue(CemiFrame& frame)
 
 static bool isRxQueueEmpty()
 {
-    if (_rx_queue.front == NULL)
+    if (_rx_queue.front == nullptr)
     {
         return true;
     }
@@ -97,7 +95,7 @@ static bool isRxQueueEmpty()
 
 static void loadNextRxFrame(uint8_t** receiveBuffer, uint16_t* receiveBufferLength)
 {
-    if (_rx_queue.front == NULL)
+    if (_rx_queue.front == nullptr)
     {
         return;
     }
@@ -106,9 +104,9 @@ static void loadNextRxFrame(uint8_t** receiveBuffer, uint16_t* receiveBufferLeng
     *receiveBufferLength = rx_frame->length;
     _rx_queue.front = rx_frame->next;
 
-    if (_rx_queue.front == NULL)
+    if (_rx_queue.front == nullptr)
     {
-        _rx_queue.back = NULL;
+        _rx_queue.back = nullptr;
     }
     delete rx_frame;
 }
@@ -322,8 +320,8 @@ static void set_report_callback(uint8_t report_id, hid_report_type_t report_type
 
 // class UsbDataLinkLayer
 
-UsbDataLinkLayer::UsbDataLinkLayer(DeviceObject& deviceObject, CemiServer& cemiServer, Platform& platform)
-    : _deviceObject(deviceObject), _cemiServer(cemiServer), _platform(platform)
+UsbDataLinkLayer::UsbDataLinkLayer(CemiServer& cemiServer)
+    : _cemiServer(cemiServer)
 {
 }
 
@@ -393,14 +391,13 @@ void UsbDataLinkLayer::enabled(bool value)
         while( !USBDevice.mounted() ) delay(1);
 
         _enabled = true;
-        print("ownaddr ");
-        println(_deviceObject.induvidualAddress(), HEX);
+        println("KNX USB Interface enabled.");
         return;
     }
 
     if (!value && _enabled)
     {
-        println("USB data link layer cannot be disabled once enabled!");
+        println("KNX USB Interface cannot be disabled once enabled!");
         return;
     }
 }
@@ -416,7 +413,7 @@ void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
 
     tx_frame->length = frame.totalLenght();
     tx_frame->data = new uint8_t[tx_frame->length];
-    tx_frame->next = NULL;
+    tx_frame->next = nullptr;
 
 /*
     print("cEMI USB TX len: ");
@@ -424,7 +421,7 @@ void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
 
     printHex(" data:", tx_frame->data, tx_frame->length);
 */
-    if (_tx_queue.back == NULL)
+    if (_tx_queue.back == nullptr)
     {
         _tx_queue.front = _tx_queue.back = tx_frame;
     }
@@ -437,7 +434,7 @@ void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
 
 bool UsbDataLinkLayer::isTxQueueEmpty()
 {
-    if (_tx_queue.front == NULL)
+    if (_tx_queue.front == nullptr)
     {
         return true;
     }
@@ -446,7 +443,7 @@ bool UsbDataLinkLayer::isTxQueueEmpty()
 
 void UsbDataLinkLayer::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBufferLength)
 {
-    if (_tx_queue.front == NULL)
+    if (_tx_queue.front == nullptr)
     {
         return;
     }
@@ -455,9 +452,9 @@ void UsbDataLinkLayer::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuffe
     *sendBufferLength = tx_frame->length;
     _tx_queue.front = tx_frame->next;
 
-    if (_tx_queue.front == NULL)
+    if (_tx_queue.front == nullptr)
     {
-        _tx_queue.back = NULL;
+        _tx_queue.back = nullptr;
     }
     delete tx_frame;
 }

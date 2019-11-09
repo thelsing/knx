@@ -2,13 +2,14 @@
 #include "cemi_frame.h"
 #include "bau.h"
 #include "usb_data_link_layer.h"
+#include "data_link_layer.h"
 #include "string.h"
 #include "bits.h"
 #include <stdio.h>
 
-CemiServer::CemiServer(UsbDataLinkLayer& tunnelInterface, BusAccessUnit& bau):
-    _tunnelInterface(tunnelInterface),
-    _bau(bau)
+CemiServer::CemiServer(BusAccessUnit& bau)
+    : _bau(bau),
+      _usbTunnelInterface(*this)
 {
 }
 
@@ -19,8 +20,18 @@ void CemiServer::dataLinkLayer(DataLinkLayer& layer)
 
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 {
-    _tunnelInterface.sendCemiFrame(frame);
+    _usbTunnelInterface.sendCemiFrame(frame);
 }
+
+/*
+void CemiServer::localManagmentRequestFromTunnel(CemiFrame& frame)
+{
+    // called from KNXNET/IP for Management Services
+
+    // Send response to IP data link layer 
+    _dataLinkLayer->localManagmentResponseToTunnel();
+}
+*/
 
 void CemiServer::frameReceived(CemiFrame& frame)
 {
@@ -34,12 +45,16 @@ void CemiServer::frameReceived(CemiFrame& frame)
             
             // Send local reply to tunnel
             frame.messageCode(L_data_con);
-            _tunnelInterface.sendCemiFrame(frame);
+            _usbTunnelInterface.sendCemiFrame(frame);
             break;
         }
 
         case M_PropRead_req:
         {
+            uint8_t* data;
+            uint32_t dataSize;
+            //ObjectType opjectType = data[]
+            //_bau.propertyValueRead()
             break;
         }
 

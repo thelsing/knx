@@ -11,6 +11,7 @@ class IpParameterObject : public InterfaceObject
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
     void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
     uint8_t propertySize(PropertyID id);
+    ObjectType objectType() { return OT_IP_PARAMETER; }
 
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);

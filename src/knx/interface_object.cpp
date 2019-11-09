@@ -69,3 +69,4 @@ PropertyDescription* InterfaceObject::propertyDescriptions()
 {
     return nullptr;
 }
+

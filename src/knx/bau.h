@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "knx_types.h"
+#include "interface_object.h"
 
 class BusAccessUnit
 {
@@ -117,4 +118,7 @@ class BusAccessUnit
                                                           uint8_t* knxSerialNumber);
 
     virtual void domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber);
+
+    virtual void propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId, uint32_t &numberOfElements, uint16_t startIndex,
+                                   uint8_t *data, uint32_t &dataSize);
 };

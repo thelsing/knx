@@ -11,6 +11,7 @@ public:
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);
     void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
+    ObjectType objectType() { return OT_RF_MEDIUM; }
 
     uint8_t* rfDomainAddress();
     void rfDomainAddress(uint8_t* value);

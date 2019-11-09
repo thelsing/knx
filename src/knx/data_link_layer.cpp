@@ -94,9 +94,12 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     uint16_t ownAddr = _deviceObject.induvidualAddress();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
+    if (_cemiServer)
+    {
 //    if (source != _cemiServerObj.tunnelAddress)
         _cemiServer->dataIndicationToTunnel(frame);
-
+    }
+    
     if (source == ownAddr)
         _deviceObject.induvidualAddressDuplication(true);
 

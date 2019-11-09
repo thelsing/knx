@@ -10,14 +10,13 @@ using namespace std;
 Bau27B0::Bau27B0(Platform& platform)
     : BauSystemB(platform),
       _dlLayer(_deviceObj, _rfMediumObj, _addrTable, _netLayer, _platform)
-#ifdef USE_USBIF
-    , _cemiServer(_tunnelInterface, *this)
-    , _tunnelInterface(_deviceObj, _cemiServer, _platform)
+#ifdef USE_CEMI_SERVER
+    , _cemiServer(*this)
 #endif      
 {
     _netLayer.dataLinkLayer(_dlLayer);
     _memory.addSaveRestore(&_rfMediumObj);
-#ifdef USE_USBIF
+#ifdef USE_CEMI_SERVER
     _cemiServer.dataLinkLayer(_dlLayer);
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
@@ -60,8 +59,37 @@ InterfaceObject* Bau27B0::getInterfaceObject(uint8_t idx)
             return nullptr;
         case 6:
             return &_rfMediumObj;
-#ifdef USE_USBIF
+#ifdef USE_CEMI_SERVER
         case 7:
+            return &_cemiServerObject;
+#endif            
+        default:
+            return nullptr;
+    }
+}
+
+InterfaceObject* Bau27B0::getInterfaceObject(ObjectType objectType, uint8_t objectInstance)
+{
+    // We do not use it right now. 
+    // Required for coupler mode as there are multiple router objects for example
+    (void) objectInstance;
+
+    switch (objectType)
+    {
+        case OT_DEVICE:
+            return &_deviceObj;
+        case OT_ADDR_TABLE:
+            return &_addrTable;
+        case OT_ASSOC_TABLE:
+            return &_assocTable;
+        case OT_GRP_OBJ_TABLE:
+            return &_groupObjTable;
+        case OT_APPLICATION_PROG:
+            return &_appProgram;
+        case OT_RF_MEDIUM:
+            return &_rfMediumObj;
+#ifdef USE_CEMI_SERVER
+        case OT_CEMI_SERVER:
             return &_cemiServerObject;
 #endif            
         default:
@@ -82,13 +110,13 @@ DataLinkLayer& Bau27B0::dataLinkLayer()
 void Bau27B0::enabled(bool value)
 {
     ::BauSystemB::enabled(value);
-    _tunnelInterface.enabled(value);
+    //_tunnelInterface.enabled(value);
 }
 
 void Bau27B0::loop()
 {
     ::BauSystemB::loop();
-    _tunnelInterface.loop();
+    //_tunnelInterface.loop();
 }
 
 void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
