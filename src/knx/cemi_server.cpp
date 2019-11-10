@@ -89,31 +89,109 @@ void CemiServer::frameReceived(CemiFrame& frame)
 
         case M_PropRead_req:
         {
-            uint8_t* data;
-            uint32_t dataSize;
-            //ObjectType opjectType = data[]
-            //_bau.propertyValueRead()
             println("M_PropRead_req");
+            
+            uint16_t objectType;
+            popWord(objectType, &frame.data()[1]);
+            uint8_t objectInstance = frame.data()[3];
+            uint8_t propertyId = frame.data()[4];
+            uint32_t numberOfElements = frame.data()[5] >> 4;
+            uint16_t startIndex = frame.data()[6] | ((frame.data()[5]&0x0F)<<8);
+            uint8_t* data = nullptr;
+            uint32_t dataSize = 0;
+
+            // propertyValueRead() allocates memory for the data! Needs to be deleted again!
+            _bau.propertyValueRead((ObjectType)objectType, objectInstance, propertyId, numberOfElements, startIndex, &data, dataSize);
+
+            if (data && dataSize && numberOfElements)
+            {
+                // Prepare positive response
+                uint8_t responseData[7 + dataSize];
+                memcpy(responseData, frame.data(), 7);
+                memcpy(&responseData[7], data, dataSize); 
+                
+                CemiFrame responseFrame(responseData, sizeof(responseData));
+                responseFrame.messageCode(M_PropRead_con);
+                _usbTunnelInterface.sendCemiFrame(responseFrame);
+
+                delete data;
+            }
+            else
+            {
+                // Prepare negative response
+                uint8_t responseData[7 + 1];
+                memcpy(responseData, frame.data(), sizeof(responseData));
+                responseData[7] = Void_DP; // Set cEMI error code
+                responseData[5] = 0; // Set Number of elements to zero
+                CemiFrame responseFrame(responseData, sizeof(responseData));
+                responseFrame.messageCode(M_PropRead_con);
+                _usbTunnelInterface.sendCemiFrame(responseFrame);
+            }
             break;
         }
 
         case M_PropWrite_req:
         {
+            println("M_PropWrite_req"); 
+
+            uint16_t objectType;
+            popWord(objectType, &frame.data()[1]);
+            uint8_t objectInstance = frame.data()[3];
+            uint8_t propertyId = frame.data()[4];
+            uint32_t numberOfElements = frame.data()[5] >> 4;
+            uint16_t startIndex = frame.data()[6] | ((frame.data()[5]&0x0F)<<8);
+            uint8_t* requestData = &frame.data()[7];
+            uint32_t requestDataSize = frame.dataLength() - 7;
+            // propertyValueRead() allocates memory for the data! Needs to be deleted again!
+            //_bau.propertyValueRead((ObjectType)objectType, objectInstance, propertyId, numberOfElements, startIndex, data, dataSize);
+if (propertyId != 0x34 && objectType!= OT_CEMI_SERVER)
+{            
+numberOfElements = 0;
+}
+            if (numberOfElements)
+            {
+                // Prepare positive response
+                uint8_t responseData[7];
+                memcpy(responseData, frame.data(), sizeof(responseData));
+                
+                CemiFrame responseFrame(responseData, sizeof(responseData));
+                responseFrame.messageCode(M_PropWrite_con);
+                _usbTunnelInterface.sendCemiFrame(responseFrame);
+            }
+            else
+            {
+                // Prepare negative response
+                uint8_t responseData[7 + 1];
+                memcpy(responseData, frame.data(), sizeof(responseData));
+                responseData[7] = Illegal_Command; // Set cEMI error code
+                responseData[5] = 0; // Set Number of elements to zero
+
+                CemiFrame responseFrame(responseData, sizeof(responseData));
+                responseFrame.messageCode(M_PropWrite_con);
+                _usbTunnelInterface.sendCemiFrame(responseFrame);
+            }
             break;
         }
 
         case M_FuncPropCommand_req:
         {
+            println("M_FuncPropCommand_req");  
             break;
         }
 
         case M_FuncPropStateRead_req:
         {
+            println("M_FuncPropStateRead_req");  
             break;
         }
 
         case M_Reset_req:
         {
+            println("M_Reset_req");  
+            // A real device reset does not work with USB
+            // M_Reset_ind is not mandatory for USB and KNXNET/IP
+            // Flush the EEPROM before resetting
+            //_bau.writeMemory();
             break;
         }
 

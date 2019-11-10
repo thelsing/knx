@@ -239,11 +239,24 @@ void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 	// Copy cEMI frame to buffer
 	memcpy(&buffer[11], data, length + HID_HEADER_SIZE + 8);
 
-	buffer[2]  = 8 + length;    // KNX USB Transfer Protocol Header length (8, only first packet!) + cEMI length
-	pushWord(length, &data[5]); // KNX USB Transfer Protocol Body length (cEMI length)
+	buffer[2]  = 8 + length;      // KNX USB Transfer Protocol Header length (8, only first packet!) + cEMI length
+	pushWord(length, &buffer[5]); // KNX USB Transfer Protocol Body length (cEMI length)
 
+/*
+	Serial1.print("TX HID report: len: ");
+	Serial1.println(buffer[2], DEC);
+
+	for (int i = 0; i < (buffer[2] + HID_HEADER_SIZE); i++)
+	{
+		if (buffer[i] < 16)
+			Serial1.print("0");
+		Serial1.print(buffer[i], HEX);
+		Serial1.print(" ");
+	}
+	Serial1.println("");
+*/
 	// We do not use reportId of the sendReport()-API here but instead provide it in the first byte of the buffer
-    usb_hid.sendReport(0, data, MAX_EP_SIZE);
+    usb_hid.sendReport(0, buffer, MAX_EP_SIZE);
 }
 
 // Invoked when received SET_REPORT control request or
@@ -262,6 +275,7 @@ void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8
 	{
 		uint8_t packetLength = data[2];
 
+/*
 		Serial1.print("RX HID report: len: ");
 		Serial1.println(packetLength, DEC);
 
@@ -273,6 +287,7 @@ void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8
 			Serial1.print(" ");
 		}
 		Serial1.println("");
+*/
 
 		if (data[3] == 0x00 && // Protocol version (fixed 0x00)
 			data[4] == 0x08)   // USB KNX Transfer Protocol Header Length (fixed 0x08)

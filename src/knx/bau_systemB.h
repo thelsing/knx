@@ -62,7 +62,7 @@ class BauSystemB : protected BusAccessUnit
                                               uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength) override;
     void connectConfirm(uint16_t tsap) override;
     void propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId, uint32_t &numberOfElements, uint16_t startIndex, 
-                           uint8_t *data, uint32_t &dataSize) override;
+                           uint8_t **data, uint32_t &dataSize) override;
 
     virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
     virtual InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance) = 0;

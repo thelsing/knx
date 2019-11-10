@@ -393,7 +393,7 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
 }
 
 void BauSystemB::propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
-                                   uint32_t &numberOfElements, uint16_t startIndex, uint8_t *data, uint32_t &dataSize)
+                                   uint32_t &numberOfElements, uint16_t startIndex, uint8_t **data, uint32_t &dataSize)
 {
     uint32_t size = 0;
     uint32_t elementCount = numberOfElements;
@@ -404,13 +404,13 @@ void BauSystemB::propertyValueRead(ObjectType objectType, uint8_t objectInstance
     {
         uint8_t elementSize = obj->propertySize((PropertyID)propertyId);
         size = elementSize * numberOfElements;
-        data = new uint8_t [size];
-        obj->readProperty((PropertyID)propertyId, startIndex, elementCount, data);
+        *data = new uint8_t [size];
+        obj->readProperty((PropertyID)propertyId, startIndex, elementCount, *data);
     }
     else
     {
         elementCount = 0;
-        data = nullptr;
+        *data = nullptr;
     }
 
     numberOfElements = elementCount;
