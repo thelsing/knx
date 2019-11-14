@@ -1,15 +1,17 @@
 #include "cemi_server.h"
 #include "cemi_frame.h"
-#include "bau.h"
+#include "bau_systemB.h"
 #include "usb_data_link_layer.h"
 #include "data_link_layer.h"
 #include "string.h"
 #include "bits.h"
 #include <stdio.h>
 
-CemiServer::CemiServer(BusAccessUnit& bau)
+CemiServer::CemiServer(BauSystemB& bau)
     : _bau(bau),
-      _usbTunnelInterface(*this)
+      _usbTunnelInterface(*this,
+        _bau.deviceObject().maskVersion(),
+        _bau.deviceObject().manufacturerId())
 {
 }
 
@@ -20,6 +22,7 @@ void CemiServer::dataLinkLayer(DataLinkLayer& layer)
 
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 {
+    println("L_data_ind: ");
     _usbTunnelInterface.sendCemiFrame(frame);
 }
 
@@ -33,50 +36,14 @@ void CemiServer::localManagmentRequestFromTunnel(CemiFrame& frame)
 }
 */
 
-/*	
-	uint8_t messageCode = data[11];		
-	switch(messageCode)
-	{
-		case 0xFC: // M_PropRead.req
-		{
-			data[11] = 0xFB; // M_PropRead.con
-			if (data[15] == 0x34)
-			{
-				data[18] = 00; // PID_COMM_MODE: 0: Data Link Layer
-			}
-			else
-			{
-				data[16] = 0; // Number of elements must be 0 if negative response
-				data[18] = 7; // Error code 7 (Void DP)
-			}
-			respDataSize = 1;
-			break;
-		}
-		case 0xF6: // M_PropWrite.req
-		{
-			data[11] = 0xF5; // M_PropWrite.con
-			if ((data[15] == 0x34) && (data[18] == 0x00))
-			{
-				respDataSize = -1;
-			}
-			else
-			{
-				data[16] = 0; // Number of elements must be 0 if negative response
-				data[18] = 6; // Error code 6 (illegal command)
-				respDataSize = 0;
-				forceSend = true;
-			}
-			break;
-		}
-	}
-*/
-
 void CemiServer::frameReceived(CemiFrame& frame)
 {
     switch(frame.messageCode())
     {
         case L_data_req:
         {
+            println("L_data_req: ");
+
             // Send as indication to data link layer
             frame.messageCode(L_data_ind);
             _dataLinkLayer->dataIndicationFromTunnel(frame);
@@ -89,7 +56,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
 
         case M_PropRead_req:
         {
-            println("M_PropRead_req");
+            print("M_PropRead_req: ");
             
             uint16_t objectType;
             popWord(objectType, &frame.data()[1]);
@@ -100,11 +67,25 @@ void CemiServer::frameReceived(CemiFrame& frame)
             uint8_t* data = nullptr;
             uint32_t dataSize = 0;
 
+            print("ObjType: ");
+            print(objectType, DEC);
+            print(" ObjInst: ");
+            print(objectInstance, DEC);
+            print(" PropId: ");
+            print(propertyId, DEC);
+            print(" NoE: ");
+            print(numberOfElements, DEC);
+            print(" startIdx: ");
+            print(startIndex, DEC);
+
             // propertyValueRead() allocates memory for the data! Needs to be deleted again!
             _bau.propertyValueRead((ObjectType)objectType, objectInstance, propertyId, numberOfElements, startIndex, &data, dataSize);
 
             if (data && dataSize && numberOfElements)
             {
+                printHex(" <- data: ", data, dataSize);
+                println("");
+
                 // Prepare positive response
                 uint8_t responseData[7 + dataSize];
                 memcpy(responseData, frame.data(), 7);
@@ -123,6 +104,10 @@ void CemiServer::frameReceived(CemiFrame& frame)
                 memcpy(responseData, frame.data(), sizeof(responseData));
                 responseData[7] = Void_DP; // Set cEMI error code
                 responseData[5] = 0; // Set Number of elements to zero
+
+                printHex(" <- error: ", &responseData[7], 1);
+                println("");
+
                 CemiFrame responseFrame(responseData, sizeof(responseData));
                 responseFrame.messageCode(M_PropRead_con);
                 _usbTunnelInterface.sendCemiFrame(responseFrame);
@@ -132,7 +117,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
 
         case M_PropWrite_req:
         {
-            println("M_PropWrite_req"); 
+            print("M_PropWrite_req: "); 
 
             uint16_t objectType;
             popWord(objectType, &frame.data()[1]);
@@ -142,18 +127,30 @@ void CemiServer::frameReceived(CemiFrame& frame)
             uint16_t startIndex = frame.data()[6] | ((frame.data()[5]&0x0F)<<8);
             uint8_t* requestData = &frame.data()[7];
             uint32_t requestDataSize = frame.dataLength() - 7;
-            // propertyValueRead() allocates memory for the data! Needs to be deleted again!
-            //_bau.propertyValueRead((ObjectType)objectType, objectInstance, propertyId, numberOfElements, startIndex, data, dataSize);
-if (propertyId != 0x34 && objectType!= OT_CEMI_SERVER)
-{            
-numberOfElements = 0;
-}
+
+            print("ObjType: ");
+            print(objectType, DEC);
+            print(" ObjInst: ");
+            print(objectInstance, DEC);
+            print(" PropId: ");
+            print(propertyId, DEC);
+            print(" NoE: ");
+            print(numberOfElements, DEC);
+            print(" startIdx: ");
+            print(startIndex, DEC);
+
+            printHex(" -> data: ", requestData, requestDataSize);
+
+            _bau.propertyValueWrite((ObjectType)objectType, objectInstance, propertyId, numberOfElements, startIndex, requestData, requestDataSize);
+
             if (numberOfElements)
             {
                 // Prepare positive response
                 uint8_t responseData[7];
                 memcpy(responseData, frame.data(), sizeof(responseData));
-                
+
+                println(" <- no error");
+
                 CemiFrame responseFrame(responseData, sizeof(responseData));
                 responseFrame.messageCode(M_PropWrite_con);
                 _usbTunnelInterface.sendCemiFrame(responseFrame);
@@ -165,6 +162,9 @@ numberOfElements = 0;
                 memcpy(responseData, frame.data(), sizeof(responseData));
                 responseData[7] = Illegal_Command; // Set cEMI error code
                 responseData[5] = 0; // Set Number of elements to zero
+
+                printHex(" <- error: ", &responseData[7], 1);
+                println("");
 
                 CemiFrame responseFrame(responseData, sizeof(responseData));
                 responseFrame.messageCode(M_PropWrite_con);

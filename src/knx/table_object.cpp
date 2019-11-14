@@ -29,7 +29,7 @@ void TableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, u
     }
 }
 
-void TableObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count)
+void TableObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t &count)
 {
     switch (id)
     {

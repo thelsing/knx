@@ -37,7 +37,7 @@ void RfMediumObject::readProperty(PropertyID propertyId, uint32_t start, uint32_
     }
 }
 
-void RfMediumObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count)
+void RfMediumObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count)
 {
     switch (id)
     {
@@ -60,6 +60,7 @@ void RfMediumObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, 
             // Not supported yet
         break;
         default:
+            count = 0;
         break;
     }
 }

@@ -6,7 +6,7 @@ class DeviceObject: public InterfaceObject
 {
 public:
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
+    void writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count);
     uint8_t propertySize(PropertyID id);
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);
@@ -41,6 +41,8 @@ public:
     void maxApduLength(uint16_t value);
     const uint32_t* ifObj();
     void ifObj(const uint32_t* value);
+    uint8_t* rfDomainAddress();
+    void rfDomainAddress(uint8_t* value);
 protected:
     uint8_t propertyCount();
     PropertyDescription* propertyDescriptions();
@@ -57,4 +59,5 @@ private:
     uint16_t _maskVersion = 0x0000;
     uint16_t _maxApduLength = 254;
     const uint32_t* _ifObjs;
+    uint8_t _rfDomainAddress[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 };

@@ -209,16 +209,17 @@ void BauSystemB::propertyDescriptionReadIndication(Priority priority, HopCountTy
 void BauSystemB::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
+    uint32_t elementCount = numberOfElements;
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
-        obj->writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
-    propertyValueReadIndication(priority, hopType, asap, objectIndex, propertyId, numberOfElements, startIndex);
+        obj->writeProperty((PropertyID)propertyId, startIndex, data, elementCount);
+    propertyValueReadIndication(priority, hopType, asap, objectIndex, propertyId, elementCount, startIndex);
 }
 
 void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
 {
-     uint8_t size = 0;
+    uint8_t size = 0;
     uint32_t elementCount = numberOfElements;
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if (obj)
@@ -393,7 +394,8 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
 }
 
 void BauSystemB::propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
-                                   uint32_t &numberOfElements, uint16_t startIndex, uint8_t **data, uint32_t &dataSize)
+                                   uint32_t &numberOfElements, uint16_t startIndex,
+                                   uint8_t **data, uint32_t &length)
 {
     uint32_t size = 0;
     uint32_t elementCount = numberOfElements;
@@ -414,5 +416,16 @@ void BauSystemB::propertyValueRead(ObjectType objectType, uint8_t objectInstance
     }
 
     numberOfElements = elementCount;
-    dataSize = size;
+    length = size;
+}
+
+void BauSystemB::propertyValueWrite(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
+                                    uint32_t &numberOfElements, uint16_t startIndex,
+                                    uint8_t* data, uint32_t length)
+{
+    InterfaceObject* obj =  getInterfaceObject(objectType, objectInstance);
+    if(obj)
+        obj->writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
+    else 
+        numberOfElements = 0;
 }

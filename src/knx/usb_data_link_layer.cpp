@@ -13,6 +13,9 @@
 
 Adafruit_USBD_HID usb_hid;
 
+uint16_t manufacturerId;
+uint16_t maskVersion;
+
 // HID report descriptor using TinyUSB's template
 // Generic In Out with 64 bytes report (max)
 uint8_t const desc_hid_report[] =
@@ -145,8 +148,7 @@ static void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t p
 				case 0x02: // Host Device Descriptor Type 0
 					Serial1.println("Device Feature Get: Host Device Descriptor Type 0");
 					respDataSize = 2;
-					data[12] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
-					data[13] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
+					pushWord(maskVersion, &data[12]); // USB KNX Transfer Protocol Body: Feature Data -> Mask version
 					break;
 				case 0x03: // Bus connection status
 					Serial1.println("Device Feature Get: Bus connection status");
@@ -156,8 +158,7 @@ static void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t p
 				case 0x04: // KNX manufacturer code
 					Serial1.println("Device Feature Get: KNX manufacturer code");
 					respDataSize = 2;
-					data[12] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
-					data[13] = 0x00; // USB KNX Transfer Protocol Body: Feature Data -> Manufacturer Code
+					pushWord(manufacturerId, &data[12]); // USB KNX Transfer Protocol Body: Feature Data -> Manufacturer Code
 					break;
 				case 0x05: // Active EMI type
 					Serial1.println("Device Feature Get: Active EMI type");
@@ -310,9 +311,13 @@ void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8
 
 // class UsbDataLinkLayer
 
-UsbDataLinkLayer::UsbDataLinkLayer(CemiServer& cemiServer)
+UsbDataLinkLayer::UsbDataLinkLayer(CemiServer& cemiServer,
+                                   uint16_t mId,
+								   uint16_t mV)
     : _cemiServer(cemiServer)
 {
+	manufacturerId = mId;
+	maskVersion = mV;
 }
 
 void UsbDataLinkLayer::loop()
@@ -327,13 +332,13 @@ void UsbDataLinkLayer::loop()
 		uint8_t* buffer;
 		uint16_t length;
 		loadNextTxFrame(&buffer, &length);
-
+/*
 		print("cEMI USB TX len: ");
 		print(length);
 
 		print(" data: ");
 		printHex(" data: ", buffer, length);
-
+*/
 		sendKnxTunnelHidReport(buffer, length);
 	}
 
@@ -345,13 +350,13 @@ void UsbDataLinkLayer::loop()
 
 		// Prepare the cEMI frame
 		CemiFrame frame(buffer, length);
-
+/*
 		print("cEMI USB RX len: ");
 		print(length);
 
 		print(" data: ");
 		printHex(" data: ", buffer, length);
-
+*/
 		_cemiServer.frameReceived(frame);
 	}
 }

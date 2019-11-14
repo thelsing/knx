@@ -4,7 +4,7 @@
 #include "knx_types.h"
 #include "usb_data_link_layer.h"
 
-class BusAccessUnit;
+class BauSystemB;
 class DataLinkLayer;
 class CemiFrame;
 
@@ -24,7 +24,7 @@ class CemiServer
      * @param tunnelInterface The TunnelInterface of the KNX tunnel (e.g. USB or KNXNET/IP)
      * @param bau methods are called here depending of the content of the APDU
      */
-    CemiServer(BusAccessUnit& bau);
+    CemiServer(BauSystemB& bau);
 
     void dataLinkLayer(DataLinkLayer& layer);
 
@@ -37,28 +37,8 @@ class CemiServer
 
     void loop();
     
-/*
-    void propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
-                                  uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex);
-    void propertyValueReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
-                                   uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length);
-    void propertyValueWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
-                                   uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length);
-    void propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
-                                        uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex);
-    void propertyDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
-                                         uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex, bool writeEnable, uint8_t type,
-                                         uint16_t maxNumberOfElements, uint8_t access);
-*/
   private:
-/*  
-    void propertyDataSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
-                          uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data,
-                          uint8_t length);
-    void individualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
-    void individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
-*/
     DataLinkLayer* _dataLinkLayer;
-    BusAccessUnit& _bau;
+    BauSystemB& _bau;
     UsbDataLinkLayer _usbTunnelInterface;
 };

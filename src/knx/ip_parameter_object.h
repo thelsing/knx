@@ -9,7 +9,7 @@ class IpParameterObject : public InterfaceObject
   public:
     IpParameterObject(DeviceObject& deviceObject, Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
+    void writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count);
     uint8_t propertySize(PropertyID id);
     ObjectType objectType() { return OT_IP_PARAMETER; }
 

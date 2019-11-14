@@ -25,7 +25,7 @@ void ApplicationProgramObject::readProperty(PropertyID id, uint32_t start, uint3
     }
 }
 
-void ApplicationProgramObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count)
+void ApplicationProgramObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count)
 {
     switch (id)
     {

@@ -10,7 +10,7 @@ class CemiFrame;
 class UsbDataLinkLayer
 {
   public:
-    UsbDataLinkLayer(CemiServer& cemiServer);
+    UsbDataLinkLayer(CemiServer& cemiServer, uint16_t manufacturerId, uint16_t maskVersion);
 
     void loop();
     void enabled(bool value);
