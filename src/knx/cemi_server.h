@@ -31,13 +31,19 @@ class CemiServer
     // from data link layer
     // Only L_Data service
     void dataIndicationToTunnel(CemiFrame& frame);
+    void dataConfirmationToTunnel(CemiFrame& frame);
 
     // From tunnel interface
     void frameReceived(CemiFrame& frame);
 
+    uint16_t clientAddress() const;
+    void clientAddress(uint16_t value);
+
     void loop();
     
   private:
+    uint16_t _clientAddress;
+
     DataLinkLayer* _dataLinkLayer;
     BauSystemB& _bau;
     UsbDataLinkLayer _usbTunnelInterface;

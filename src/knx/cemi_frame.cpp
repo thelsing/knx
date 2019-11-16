@@ -259,6 +259,17 @@ void CemiFrame::ack(AckType value)
     _ctrl1[0] |= value;
 }
 
+Confirm CemiFrame::confirm() const
+{
+    return (Confirm)(_ctrl1[0] & ConfirmError);
+}
+
+void CemiFrame::confirm(Confirm value)
+{
+    _ctrl1[0] &= ~ConfirmError;
+    _ctrl1[0] |= value;
+}
+
 AddressType CemiFrame::addressType() const
 {
     return (AddressType)(_ctrl1[1] & GroupAddress);

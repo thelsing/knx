@@ -45,6 +45,8 @@ class CemiFrame
     void priority(Priority value);
     AckType ack() const;
     void ack(AckType value);
+    Confirm confirm() const;
+    void confirm(Confirm value);
     AddressType addressType() const;
     void addressType(AddressType value);
     uint8_t hopCount() const;

@@ -364,7 +364,10 @@ void TpUartDataLinkLayer::loop()
 bool TpUartDataLinkLayer::sendFrame(CemiFrame& frame)
 {
     if (!_enabled)
+    {
+        dataConReceived(frame, false);
         return false;
+    }
 
     addFrameTxQueue(frame);
     return true;

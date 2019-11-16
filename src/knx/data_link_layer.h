@@ -13,9 +13,9 @@ class DataLinkLayer
     DataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, NetworkLayer& layer,
                   Platform& platform);
 
+    // from tunnel
     void cemiServer(CemiServer& cemiServer);
-
-    void dataIndicationFromTunnel(CemiFrame& frame);
+    void dataRequestFromTunnel(CemiFrame& frame);
 
     // from network layer
     void dataRequest(AckType ack, AddressType addrType, uint16_t destinationAddr, FrameFormat format,

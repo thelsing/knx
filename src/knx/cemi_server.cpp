@@ -13,6 +13,9 @@ CemiServer::CemiServer(BauSystemB& bau)
         _bau.deviceObject().maskVersion(),
         _bau.deviceObject().manufacturerId())
 {
+    // The cEMI server will hand out the device address + 1 to the cEMI client (e.g. ETS),
+    // so that the device and the cEMI client/server connection(tunnel) can operate simultaneously.
+    _clientAddress = _bau.deviceObject().induvidualAddress() + 1;
 }
 
 void CemiServer::dataLinkLayer(DataLinkLayer& layer)
@@ -20,10 +23,52 @@ void CemiServer::dataLinkLayer(DataLinkLayer& layer)
     _dataLinkLayer = &layer;
 }
 
+uint16_t CemiServer::clientAddress() const
+{
+    return _clientAddress;
+}
+
+void CemiServer::clientAddress(uint16_t value)
+{
+    _clientAddress = value;
+}
+
+void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
+{
+    print("L_data_con: src: ");
+    print(frame.sourceAddress(), HEX);
+    print(" dst: ");
+    print(frame.destinationAddress(), HEX);
+
+    printHex(" frame: ", frame.data(), frame.dataLength());
+
+    _usbTunnelInterface.sendCemiFrame(frame);
+}
+
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 {
-    println("L_data_ind: ");
-    _usbTunnelInterface.sendCemiFrame(frame);
+    static uint8_t lfn = 0;
+    uint8_t data[frame.dataLength() + 10];
+    data[0] = L_data_ind;
+    data[1] = 10;
+    data[2] = 0x02; // RF Info add. info
+    data[3] = 0x08; // RF info length
+    data[4] = 0x02; // RF info field (batt ok)
+    pushByteArray(_bau.deviceObject().rfDomainAddress(), 6, &data[5]);
+    data[11] = lfn;
+    lfn = (lfn + 1) & 0x7; 
+    memcpy(&data[12], &frame.data()[2], frame.dataLength() - 2);
+
+    CemiFrame tmpFrame(data, sizeof(data));
+
+    print("L_data_ind: src: ");
+    print(tmpFrame.sourceAddress(), HEX);
+    print(" dst: ");
+    print(tmpFrame.destinationAddress(), HEX);
+
+    printHex(" frame: ", tmpFrame.data(), tmpFrame.dataLength());
+
+    _usbTunnelInterface.sendCemiFrame(tmpFrame);
 }
 
 /*
@@ -42,15 +87,21 @@ void CemiServer::frameReceived(CemiFrame& frame)
     {
         case L_data_req:
         {
-            println("L_data_req: ");
+            // Fill in the cEMI client address if the client sets 
+            // source address to 0.
+            if(frame.sourceAddress() == 0x0000)
+            {
+                frame.sourceAddress(_clientAddress);
+            }
 
-            // Send as indication to data link layer
-            frame.messageCode(L_data_ind);
-            _dataLinkLayer->dataIndicationFromTunnel(frame);
-            
-            // Send local reply to tunnel
-            frame.messageCode(L_data_con);
-            _usbTunnelInterface.sendCemiFrame(frame);
+            print("L_data_req: src: ");
+            print(frame.sourceAddress(), HEX);
+            print(" dst: ");
+            print(frame.destinationAddress(), HEX);
+
+            printHex(" frame: ", frame.data(), frame.dataLength());
+
+            _dataLinkLayer->dataRequestFromTunnel(frame);
             break;
         }
 
@@ -81,6 +132,24 @@ void CemiServer::frameReceived(CemiFrame& frame)
             // propertyValueRead() allocates memory for the data! Needs to be deleted again!
             _bau.propertyValueRead((ObjectType)objectType, objectInstance, propertyId, numberOfElements, startIndex, &data, dataSize);
 
+            // Patch result for device address in device object
+            // The cEMI server will hand out the device address + 1 to the cEMI client (e.g. ETS),
+            // so that the device and the cEMI client/server connection(tunnel) can operate simultaneously.
+            // KNX IP Interfaces which offer multiple simultaneous tunnel connections seem to operate the same way.
+            // Each tunnel has its own cEMI client address which is based on the main device address.
+            if (((ObjectType) objectType == OT_DEVICE) && 
+                             (propertyId == PID_DEVICE_ADDR) &&
+                             (numberOfElements == 1))
+            {
+                data[0] = (uint8_t) (_clientAddress & 0xFF);
+            }
+            else if (((ObjectType) objectType == OT_DEVICE) && 
+                             (propertyId == PID_SUBNET_ADDR) &&
+                             (numberOfElements == 1))
+            {
+                data[0] = (uint8_t) ((_clientAddress >> 8) & 0xFF);
+            }
+
             if (data && dataSize && numberOfElements)
             {
                 printHex(" <- data: ", data, dataSize);
@@ -95,7 +164,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
                 responseFrame.messageCode(M_PropRead_con);
                 _usbTunnelInterface.sendCemiFrame(responseFrame);
 
-                delete data;
+                delete[] data;
             }
             else
             {
@@ -141,7 +210,31 @@ void CemiServer::frameReceived(CemiFrame& frame)
 
             printHex(" -> data: ", requestData, requestDataSize);
 
-            _bau.propertyValueWrite((ObjectType)objectType, objectInstance, propertyId, numberOfElements, startIndex, requestData, requestDataSize);
+            // Patch request for device address in device object
+            if (((ObjectType) objectType == OT_DEVICE) && 
+                             (propertyId == PID_DEVICE_ADDR) &&
+                             (numberOfElements == 1))
+            {
+                // Temporarily store new cEMI client address in memory
+                // We also be sent back if the client requests it again
+                _clientAddress = (_clientAddress & 0xFF00) | requestData[0];
+                print("cEMI client address: ");
+                println(_clientAddress, HEX);
+            }
+            else if (((ObjectType) objectType == OT_DEVICE) && 
+                             (propertyId == PID_SUBNET_ADDR) &&
+                             (numberOfElements == 1))
+            {
+                // Temporarily store new cEMI client address in memory
+                // We also be sent back if the client requests it again
+                _clientAddress = (_clientAddress & 0x00FF) | (requestData[0] << 8);
+                print("cEMI client address: ");
+                println(_clientAddress, HEX);
+            }            
+            else
+            {
+                _bau.propertyValueWrite((ObjectType)objectType, objectInstance, propertyId, numberOfElements, startIndex, requestData, requestDataSize);
+            }
 
             if (numberOfElements)
             {
@@ -214,169 +307,3 @@ void CemiServer::loop()
 {
     _usbTunnelInterface.loop();
 }
-
-/*
-void CemiServer::propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
-    uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
-{
-    CemiFrame frame(5);
-    APDU& apdu = frame.apdu();
-    apdu.type(PropertyValueRead);
-    uint8_t* data = apdu.data();
-    data += 1;
-    data = pushByte(objectIndex, data);
-    data = pushByte(propertyId, data);
-    pushWord(startIndex & 0xfff, data);
-    *data &= ((numberOfElements & 0xf) << 4);
-    
-    individualSend(ack, hopType, priority, asap, apdu);
-}
-
-void CemiServer::propertyValueReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
-    uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
-{
-    propertyDataSend(PropertyValueResponse, ack, priority, hopType, asap, objectIndex, propertyId, numberOfElements,
-        startIndex, data, length);
-}
-
-void CemiServer::propertyValueWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
-    uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t * data, uint8_t length)
-{
-    propertyDataSend(PropertyValueWrite, ack, priority, hopType, asap, objectIndex, propertyId, numberOfElements,
-        startIndex, data, length);
-}
-
-void CemiServer::propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
-    uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex)
-{
-    CemiFrame frame(4);
-    APDU& apdu = frame.apdu();
-    apdu.type(PropertyDescriptionRead);
-    uint8_t* data = apdu.data();
-    data[1] = objectIndex;
-    data[2] = propertyId;
-    data[3] = propertyIndex;
-    individualSend(ack, hopType, priority, asap, apdu);
-}
-
-void CemiServer::propertyDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
-    uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex, bool writeEnable, uint8_t type, 
-    uint16_t maxNumberOfElements, uint8_t access)
-{
-    CemiFrame frame(8);
-    APDU& apdu = frame.apdu();
-    apdu.type(PropertyDescriptionResponse);
-    uint8_t* data = apdu.data();
-    data[1] = objectIndex;
-    data[2] = propertyId;
-    data[3] = propertyIndex;
-    if (writeEnable)
-        data[4] |= 0x80;
-    data[4] |= (type & 0x3f);
-    pushWord(maxNumberOfElements & 0xfff, data + 5);
-    data[7] = access;
-    individualSend(ack, hopType, priority, asap, apdu);
-}
-
-
-void CemiServer::propertyDataSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
-    uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
-{
-    CemiFrame frame(5 + length);
-    APDU& apdu = frame.apdu();
-    apdu.type(type);
-    uint8_t* apduData = apdu.data();
-    apduData += 1;
-    apduData = pushByte(objectIndex, apduData);
-    apduData = pushByte(propertyId, apduData);
-    pushWord(startIndex & 0xfff, apduData);
-    *apduData |= ((numberOfElements & 0xf) << 4);
-    apduData += 2;
-    if (length > 0)
-        memcpy(apduData, data, length);
-}
-
-void CemiServer::individualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU & apdu)
-{
-    uint8_t* data = apdu.data();
-    switch (apdu.type())
-    {
-        case PropertyValueRead:
-        {
-            uint16_t startIndex;
-            popWord(startIndex, data + 3);
-            startIndex &= 0xfff;
-            _bau.propertyValueReadIndication(priority, hopType, tsap, data[1], data[2], data[3] >> 4, startIndex);
-            break;
-        }
-        case PropertyValueResponse:
-        {
-            uint16_t startIndex;
-            popWord(startIndex, data + 3);
-            startIndex &= 0xfff;
-            _bau.propertyValueReadAppLayerConfirm(priority, hopType, tsap, data[1], data[2], data[3] >> 4,
-                startIndex, data + 5, apdu.length() - 5);
-            break;
-        }
-        case PropertyValueWrite:
-        {
-            uint16_t startIndex;
-            popWord(startIndex, data + 3);
-            startIndex &= 0xfff;
-            _bau.propertyValueWriteIndication(priority, hopType, tsap, data[1], data[2], data[3] >> 4,
-                startIndex, data + 5, apdu.length() - 5);
-            break;
-        }
-        case PropertyDescriptionRead:
-            _bau.propertyDescriptionReadIndication(priority, hopType, tsap, data[1], data[2], data[3]);
-            break;
-        case PropertyDescriptionResponse:
-            _bau.propertyDescriptionReadAppLayerConfirm(priority, hopType, tsap, data[1], data[2], data[3],
-                (data[4] & 0x80) > 0, data[4] & 0x3f, getWord(data + 5) & 0xfff, data[7]);
-            break;
-    }
-}
-
-void CemiServer::individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU & apdu, bool status)
-{
-    uint8_t* data = apdu.data();
-    switch (apdu.type())
-    {
-        case PropertyValueRead:
-        {
-            uint16_t startIndex;
-            popWord(startIndex, data + 3);
-            startIndex &= 0xfff;
-            _bau.propertyValueReadLocalConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3] >> 4,
-                startIndex, status);
-            break;
-        }
-        case PropertyValueResponse:
-        {
-            uint16_t startIndex;
-            popWord(startIndex, data + 3);
-            startIndex &= 0xfff;
-            _bau.propertyValueReadResponseConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3] >> 4,
-                startIndex, data + 5, apdu.length() - 5, status);
-            break;
-        }
-        case PropertyValueWrite:
-        {
-            uint16_t startIndex;
-            popWord(startIndex, data + 3);
-            startIndex &= 0xfff;
-            _bau.propertyValueWriteLocalConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3] >> 4,
-                startIndex, data + 5, apdu.length() - 5, status);
-            break;
-        }
-        case PropertyDescriptionRead:
-            _bau.propertyDescriptionReadLocalConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3], status);
-            break;
-        case PropertyDescriptionResponse:
-            _bau.propertyDescriptionReadResponseConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3],
-                (data[4] & 0x80) > 0, data[4] & 0x3f, getWord(data + 5) & 0xfff, data[7], status);
-            break;
-    }
-}
-
-*/

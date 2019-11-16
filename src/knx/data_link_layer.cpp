@@ -17,21 +17,27 @@ void DataLinkLayer::cemiServer(CemiServer& cemiServer)
     _cemiServer = &cemiServer;
 }
 
-void DataLinkLayer::dataIndicationFromTunnel(CemiFrame& frame)
+void DataLinkLayer::dataRequestFromTunnel(CemiFrame& frame)
 {
     uint16_t destination = frame.destinationAddress();
     uint16_t ownAddr = _deviceObject.induvidualAddress();
     AddressType addrType = frame.addressType();
 
+    frame.messageCode(L_data_con);
+    _cemiServer->dataConfirmationToTunnel(frame);
+
+    frame.messageCode(L_data_ind);
+
     if (addrType == InduvidualAddress)
     {
-        // TODO: check if this is correct: shall we send a frame to the bus too if it was intended for us?
         if (destination == ownAddr)
         {
             // Send to local stack
             frameRecieved(frame);
+            // Send back a confirmation
+            //dataConReceived(frame, true);
         }
-        else
+        else // TODO: check if this is correct: shall we send a frame to the bus too if it was intended for us?
         {
             // Send to KNX medium
             sendFrame(frame);
@@ -63,6 +69,8 @@ void DataLinkLayer::systemBroadcastRequest(AckType ack, FrameFormat format, Prio
 
 void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
 {
+    frame.messageCode(L_data_con);
+    frame.confirm(success ? ConfirmNoError : ConfirmError);
     AckType ack = frame.ack();
     AddressType addrType = frame.addressType();
     uint16_t destination = frame.destinationAddress();
@@ -72,6 +80,17 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
     NPDU& npdu = frame.npdu();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
+    if (_cemiServer)
+    {
+        // Only send our own confirmation messages to the tunnel
+        if (frame.sourceAddress() == _cemiServer->clientAddress())
+        {
+            //_cemiServer->dataConfirmationToTunnel(frame);
+            // Stop processing here and do NOT send it the local network layer
+            return;
+        }
+    }
+
     if (addrType == GroupAddress && destination == 0)
             if (systemBroadcast == SysBroadcast)
                 _networkLayer.systemBroadcastConfirm(ack, type, priority, source, npdu, success);
@@ -79,9 +98,8 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
                 _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success);                    
     else
         _networkLayer.dataConfirm(ack, addrType, destination, type, priority, source, npdu, success);
-
-
 }
+
 void DataLinkLayer::frameRecieved(CemiFrame& frame)
 {
     AckType ack = frame.ack();
@@ -96,8 +114,11 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
 
     if (_cemiServer)
     {
-//    if (source != _cemiServerObj.tunnelAddress)
-        _cemiServer->dataIndicationToTunnel(frame);
+        // Do not send our own message back to the tunnel
+        if (frame.sourceAddress() != _cemiServer->clientAddress())
+        {
+            _cemiServer->dataIndicationToTunnel(frame);
+        }
     }
     
     if (source == ownAddr)
@@ -157,6 +178,12 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
 //        frame.apdu().printPDU();
 //    }
 
+    if (_cemiServer)
+    {
+        CemiFrame tmpFrame(frame.data(), frame.totalLenght());
+        _cemiServer->dataIndicationToTunnel(tmpFrame);
+    }
+    
     return sendFrame(frame);
 }
 

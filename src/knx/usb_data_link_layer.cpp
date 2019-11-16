@@ -207,7 +207,7 @@ static void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t p
 	{
 		data[2] += respDataSize; // HID Report Header: Packet Length
 		data[6] += respDataSize; // USB KNX Transfer Protocol Header: Body Length
-
+/*
 		Serial1.print("TX HID report: len: ");
 		Serial1.println((packetLength) + respDataSize, DEC);
 
@@ -219,7 +219,7 @@ static void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t p
 			Serial1.print(" ");
 		}
 		Serial1.println("");
-
+*/
 		usb_hid.sendReport(0, data, MAX_EP_SIZE);
 	}
 }

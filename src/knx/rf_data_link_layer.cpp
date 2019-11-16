@@ -24,7 +24,10 @@ void RfDataLinkLayer::loop()
 bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
 {
     if (!_enabled)
+    {
+        dataConReceived(frame, false);
         return false;
+    }
 
     // Depending on this flag, use either KNX Serial Number
     // or the RF domain address that was programmed by ETS
@@ -166,7 +169,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             // Prepare CEMI by writing/overwriting certain fields in the buffer (contiguous frame without CRC checksums)
             // See 3.6.3 p.79: L_Data services for KNX RF asynchronous frames 
             // For now we do not use additional info, but use normal method arguments for CEMI
-            _buffer[0] = 0x29;  // L_data.ind
+            _buffer[0] = (uint8_t) L_data_ind;  // L_data.ind
             _buffer[1] = 0;     // Additional info length (spec. says that local dev management is not required to use AddInfo internally)
             _buffer[2] = 0;     // CTRL1 field (will be set later, this is the field we reserved space for)
             _buffer[3] &= 0x0F; // CTRL2 field (take only RFCtrl.b3..0, b7..4 shall always be 0 for asynchronous KNX RF)
