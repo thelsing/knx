@@ -245,7 +245,7 @@ void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 
 /*
 	Serial1.print("TX HID report: len: ");
-	Serial1.println(buffer[2], DEC);
+	Serial1.println(buffer[2] + HID_HEADER_SIZE, DEC);
 
 	for (int i = 0; i < (buffer[2] + HID_HEADER_SIZE); i++)
 	{
@@ -256,8 +256,9 @@ void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 	}
 	Serial1.println("");
 */
+
 	// We do not use reportId of the sendReport()-API here but instead provide it in the first byte of the buffer
-    usb_hid.sendReport(0, buffer, MAX_EP_SIZE);
+	usb_hid.sendReport(0, buffer, MAX_EP_SIZE);
 }
 
 // Invoked when received SET_REPORT control request or
@@ -327,7 +328,8 @@ void UsbDataLinkLayer::loop()
         return;
 	}
 
-	if (!isTxQueueEmpty())
+	// Make sure that the USB HW is also ready to send another report
+	if (!isTxQueueEmpty() && usb_hid.ready())
 	{
 		uint8_t* buffer;
 		uint16_t length;
