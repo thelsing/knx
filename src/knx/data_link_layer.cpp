@@ -32,14 +32,12 @@ void DataLinkLayer::dataRequestFromTunnel(CemiFrame& frame)
     {
         if (destination == ownAddr)
         {
-            // Send to local stack
+            // Send to local stack only
             frameRecieved(frame);
-            // Send back a confirmation
-            //dataConReceived(frame, true);
         }
         else // TODO: check if this is correct: shall we send a frame to the bus too if it was intended for us?
         {
-            // Send to KNX medium
+            // Send to KNX medium only
             sendFrame(frame);
         }
     }
@@ -82,10 +80,10 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
 
     if (_cemiServer)
     {
-        // Only send our own confirmation messages to the tunnel
+        // if the confirmation was caused by a tunnel request then
+        // do not send it to the local stack
         if (frame.sourceAddress() == _cemiServer->clientAddress())
         {
-            //_cemiServer->dataConfirmationToTunnel(frame);
             // Stop processing here and do NOT send it the local network layer
             return;
         }
