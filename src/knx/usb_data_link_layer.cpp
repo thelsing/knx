@@ -11,45 +11,10 @@
 #define MAX_EP_SIZE 64
 #define HID_HEADER_SIZE 3
 
-Adafruit_USBD_HID usb_hid;
+extern Adafruit_USBD_HID usb_hid;
 
 uint16_t manufacturerId;
 uint16_t maskVersion;
-
-// HID report descriptor using TinyUSB's template
-// Generic In Out with 64 bytes report (max)
-uint8_t const desc_hid_report[] =
-{
-  //TUD_HID_REPORT_DESC_GENERIC_INOUT(64)
- 0x06, 0xA0, 0xFF, // Usage Page (Vendor Defined 0xFFA0)
-0x09, 0x01,        // Usage (0x01)
-0xA1, 0x01,        // Collection (Application)
-0x09, 0x01,        //   Usage (0x01)
-0xA1, 0x00,        //   Collection (Physical)
-0x06, 0xA1, 0xFF,  //     Usage Page (Vendor Defined 0xFFA1)
-0x09, 0x03,        //     Usage (0x03)
-0x09, 0x04,        //     Usage (0x04)
-0x15, 0x80,        //     Logical Minimum (-128)
-0x25, 0x7F,        //     Logical Maximum (127)
-0x35, 0x00,        //     Physical Minimum (0)
-0x45, 0xFF,        //     Physical Maximum (-1)
-0x75, 0x08,        //     Report Size (8)
-0x85, 0x01,        //     Report ID (1)
-0x95, 0x3F,        //     Report Count (63)
-0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
-0x09, 0x05,        //     Usage (0x05)
-0x09, 0x06,        //     Usage (0x06)
-0x15, 0x80,        //     Logical Minimum (-128)
-0x25, 0x7F,        //     Logical Maximum (127)
-0x35, 0x00,        //     Physical Minimum (0)
-0x45, 0xFF,        //     Physical Maximum (-1)
-0x75, 0x08,        //     Report Size (8)
-0x85, 0x01,        //     Report ID (1)
-0x95, 0x3F,        //     Report Count (63)
-0x91, 0x02,        //     Output (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
-0xC0,              //   End Collection
-0xC0               // End Collection  
-};
 
 struct _rx_queue_frame_t
 {
@@ -323,11 +288,6 @@ UsbDataLinkLayer::UsbDataLinkLayer(CemiServer& cemiServer,
 
 void UsbDataLinkLayer::loop()
 {
-    if (!_enabled)
-	{
-        return;
-	}
-
 	// Make sure that the USB HW is also ready to send another report
 	if (!isTxQueueEmpty() && usb_hid.ready())
 	{
@@ -365,43 +325,9 @@ void UsbDataLinkLayer::loop()
 
 bool UsbDataLinkLayer::sendCemiFrame(CemiFrame& frame)
 {
-    if (!_enabled)
-        return false;
-
     addFrameTxQueue(frame);
 
     return true;
-}
-
-void UsbDataLinkLayer::enabled(bool value)
-{
-    if (value && !_enabled)
-    {
-        usb_hid.enableOutEndpoint(true);
-        usb_hid.setPollInterval(2);
-        usb_hid.setReportDescriptor(desc_hid_report, sizeof(desc_hid_report));
-        usb_hid.setReportCallback(NULL, set_report_callback);
-
-        usb_hid.begin();
-
-        // wait until device mounted
-        while( !USBDevice.mounted() ) delay(1);
-
-        _enabled = true;
-        println("KNX USB Interface enabled.");
-        return;
-    }
-
-    if (!value && _enabled)
-    {
-        println("KNX USB Interface cannot be disabled once enabled!");
-        return;
-    }
-}
-
-bool UsbDataLinkLayer::enabled() const
-{
-    return _enabled;
 }
 
 void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)

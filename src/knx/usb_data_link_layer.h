@@ -13,15 +13,11 @@ class UsbDataLinkLayer
     UsbDataLinkLayer(CemiServer& cemiServer, uint16_t manufacturerId, uint16_t maskVersion);
 
     void loop();
-    void enabled(bool value);
-    bool enabled() const;
 
     // from cEMI server
     bool sendCemiFrame(CemiFrame& frame);
 
   private:
-    bool _enabled = true;
-
     struct _tx_queue_frame_t
     {
         uint8_t* data;
