@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include "knx_types.h"
-#include "usb_data_link_layer.h"
+#include "usb_tunnel_interface.h"
 
 class BauSystemB;
 class DataLinkLayer;
@@ -46,5 +46,5 @@ class CemiServer
 
     DataLinkLayer* _dataLinkLayer;
     BauSystemB& _bau;
-    UsbDataLinkLayer _usbTunnelInterface;
+    UsbTunnelInterface _usbTunnelInterface;
 };

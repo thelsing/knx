@@ -7,10 +7,10 @@
 class CemiServer;
 class CemiFrame;
 
-class UsbDataLinkLayer
+class UsbTunnelInterface
 {
   public:
-    UsbDataLinkLayer(CemiServer& cemiServer, uint16_t manufacturerId, uint16_t maskVersion);
+    UsbTunnelInterface(CemiServer& cemiServer, uint16_t manufacturerId, uint16_t maskVersion);
 
     void loop();
 

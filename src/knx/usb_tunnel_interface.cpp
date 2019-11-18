@@ -1,5 +1,5 @@
 #include "bits.h"
-#include "usb_data_link_layer.h"
+#include "usb_tunnel_interface.h"
 #include "cemi_server.h"
 #include "cemi_frame.h"
 
@@ -275,9 +275,9 @@ void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8
 	}
 }
 
-// class UsbDataLinkLayer
+// class UsbTunnelInterface
 
-UsbDataLinkLayer::UsbDataLinkLayer(CemiServer& cemiServer,
+UsbTunnelInterface::UsbTunnelInterface(CemiServer& cemiServer,
                                    uint16_t mId,
 								   uint16_t mV)
     : _cemiServer(cemiServer)
@@ -286,7 +286,7 @@ UsbDataLinkLayer::UsbDataLinkLayer(CemiServer& cemiServer,
 	maskVersion = mV;
 }
 
-void UsbDataLinkLayer::loop()
+void UsbTunnelInterface::loop()
 {
 	// Make sure that the USB HW is also ready to send another report
 	if (!isTxQueueEmpty() && usb_hid.ready())
@@ -323,14 +323,14 @@ void UsbDataLinkLayer::loop()
 	}
 }
 
-bool UsbDataLinkLayer::sendCemiFrame(CemiFrame& frame)
+bool UsbTunnelInterface::sendCemiFrame(CemiFrame& frame)
 {
     addFrameTxQueue(frame);
 
     return true;
 }
 
-void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
+void UsbTunnelInterface::addFrameTxQueue(CemiFrame& frame)
 {
     _tx_queue_frame_t* tx_frame = new _tx_queue_frame_t;
 
@@ -357,7 +357,7 @@ void UsbDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
     }
 }
 
-bool UsbDataLinkLayer::isTxQueueEmpty()
+bool UsbTunnelInterface::isTxQueueEmpty()
 {
     if (_tx_queue.front == nullptr)
     {
@@ -366,7 +366,7 @@ bool UsbDataLinkLayer::isTxQueueEmpty()
     return false;
 }
 
-void UsbDataLinkLayer::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBufferLength)
+void UsbTunnelInterface::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBufferLength)
 {
     if (_tx_queue.front == nullptr)
     {
