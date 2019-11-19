@@ -268,27 +268,27 @@ void CemiServer::frameReceived(CemiFrame& frame)
 
         case M_FuncPropCommand_req:
         {
-            println("M_FuncPropCommand_req");  
+            println("M_FuncPropCommand_req not implemented");  
             break;
         }
 
         case M_FuncPropStateRead_req:
         {
-            println("M_FuncPropStateRead_req");  
+            println("M_FuncPropStateRead_req not implemented");  
             break;
         }
 
         case M_Reset_req:
         {
             println("M_Reset_req");  
-            // A real device reset does not work with USB
-            // M_Reset_ind is not mandatory for USB and KNXNET/IP
-            // Flush the EEPROM before resetting
-            //_bau.writeMemory();
+            // A real device reset does not work for USB or KNXNET/IP.
+            // Thus, M_Reset_ind is NOT mandatory for USB and KNXNET/IP.
+            // We just save all data to the EEPROM
+            _bau.writeMemory();
             break;
         }
 
-        // we should not receive this: server -> client
+        // we should never receive these: server -> client
         case L_data_con:
         case L_data_ind:
         case M_PropInfo_ind:

@@ -13,7 +13,6 @@ class Bau27B0 : public BauSystemB
 {
   public:
     Bau27B0(Platform& platform);
-    void enabled(bool value);
     void loop();
 
   protected:

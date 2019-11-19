@@ -9,11 +9,47 @@
 #define MAX_EP_SIZE 64
 #define HID_HEADER_SIZE 3
 
+//#define DEBUG_TX_HID_REPORT 
+//#define DEBUG_RX_HID_REPORT 
+
 extern bool sendKnxHidReport(uint8_t* data, uint16_t length);
 extern bool isKnxHidSendReportPossible();
 
-uint16_t manufacturerId;
-uint16_t maskVersion;
+static const uint8_t descHidReport[] =
+{
+  //TUD_HID_REPORT_DESC_KNXHID_INOUT(64)
+ 0x06, 0xA0, 0xFF, // Usage Page (Vendor Defined 0xFFA0)
+0x09, 0x01,        // Usage (0x01)
+0xA1, 0x01,        // Collection (Application)
+0x09, 0x01,        //   Usage (0x01)
+0xA1, 0x00,        //   Collection (Physical)
+0x06, 0xA1, 0xFF,  //     Usage Page (Vendor Defined 0xFFA1)
+0x09, 0x03,        //     Usage (0x03)
+0x09, 0x04,        //     Usage (0x04)
+0x15, 0x80,        //     Logical Minimum (-128)
+0x25, 0x7F,        //     Logical Maximum (127)
+0x35, 0x00,        //     Physical Minimum (0)
+0x45, 0xFF,        //     Physical Maximum (-1)
+0x75, 0x08,        //     Report Size (8)
+0x85, 0x01,        //     Report ID (1)
+0x95, 0x3F,        //     Report Count (63)
+0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+0x09, 0x05,        //     Usage (0x05)
+0x09, 0x06,        //     Usage (0x06)
+0x15, 0x80,        //     Logical Minimum (-128)
+0x25, 0x7F,        //     Logical Maximum (127)
+0x35, 0x00,        //     Physical Minimum (0)
+0x45, 0xFF,        //     Physical Maximum (-1)
+0x75, 0x08,        //     Report Size (8)
+0x85, 0x01,        //     Report ID (1)
+0x95, 0x3F,        //     Report Count (63)
+0x91, 0x02,        //     Output (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
+0xC0,              //   End Collection
+0xC0               // End Collection  
+};
+
+static uint16_t manufacturerId;
+static uint16_t maskVersion;
 
 struct _rx_queue_frame_t
 {
@@ -27,6 +63,16 @@ static struct _rx_queue_t
     _rx_queue_frame_t* front = nullptr;
     _rx_queue_frame_t* back = nullptr;
 } _rx_queue;
+
+const uint8_t* getKnxHidReportDescriptor()
+{
+	return &descHidReport[0];
+}
+
+uint16_t getHidReportDescriptorLength()
+{
+	return sizeof(descHidReport);
+}
 
 static void addFrameRxQueue(CemiFrame& frame)
 {
@@ -171,7 +217,8 @@ static void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t p
 	{
 		data[2] += respDataSize; // HID Report Header: Packet Length
 		data[6] += respDataSize; // USB KNX Transfer Protocol Header: Body Length
-/*
+
+#ifdef DEBUG_TX_HID_REPORT
 		Serial1.print("TX HID report: len: ");
 		Serial1.println((packetLength) + respDataSize, DEC);
 
@@ -183,12 +230,12 @@ static void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t p
 			Serial1.print(" ");
 		}
 		Serial1.println("");
-*/
+#endif
 		sendKnxHidReport(data, MAX_EP_SIZE);
 	}
 }
 
-void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
+static void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 {
 	uint8_t buffer[length + 11];
 
@@ -207,7 +254,7 @@ void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 	buffer[2]  = 8 + length;      // KNX USB Transfer Protocol Header length (8, only first packet!) + cEMI length
 	pushWord(length, &buffer[5]); // KNX USB Transfer Protocol Body length (cEMI length)
 
-/*
+#ifdef DEBUG_TX_HID_REPORT
 	Serial1.print("TX HID report: len: ");
 	Serial1.println(buffer[2] + HID_HEADER_SIZE, DEC);
 
@@ -219,13 +266,12 @@ void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 		Serial1.print(" ");
 	}
 	Serial1.println("");
-*/
+#endif
 
-	// We do not use reportId of the sendReport()-API here but instead provide it in the first byte of the buffer
 	sendKnxHidReport(buffer, MAX_EP_SIZE);
 }
 
-// Invoked when received SET_REPORT control request or
+// Invoked when received SET_REPORT control request or via interrupt out pipe
 void handleKnxHidReport(uint8_t const* data, uint16_t bufSize)
 {
 	if (bufSize!=MAX_EP_SIZE)
@@ -236,7 +282,7 @@ void handleKnxHidReport(uint8_t const* data, uint16_t bufSize)
 	{
 		uint8_t packetLength = data[2];
 
-/*
+#ifdef DEBUG_RX_HID_REPORT
 		Serial1.print("RX HID report: len: ");
 		Serial1.println(packetLength, DEC);
 
@@ -248,7 +294,7 @@ void handleKnxHidReport(uint8_t const* data, uint16_t bufSize)
 			Serial1.print(" ");
 		}
 		Serial1.println("");
-*/
+#endif
 
 		if (data[3] == 0x00 && // Protocol version (fixed 0x00)
 			data[4] == 0x08)   // USB KNX Transfer Protocol Header Length (fixed 0x08)

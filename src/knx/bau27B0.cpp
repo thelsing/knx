@@ -107,16 +107,12 @@ DataLinkLayer& Bau27B0::dataLinkLayer()
     return _dlLayer;
 }
 
-void Bau27B0::enabled(bool value)
-{
-    ::BauSystemB::enabled(value);
-    //_tunnelInterface.enabled(value);
-}
-
 void Bau27B0::loop()
 {
     ::BauSystemB::loop();
+#ifdef USE_CEMI_SERVER    
     _cemiServer.loop();
+#endif    
 }
 
 void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
