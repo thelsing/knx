@@ -5,13 +5,12 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <Adafruit_TinyUSB.h>
 
-#define MIN(a, b) ((a < b) ? (a) : (b))
 #define MAX_EP_SIZE 64
 #define HID_HEADER_SIZE 3
 
-extern Adafruit_USBD_HID usb_hid;
+extern bool sendKnxHidReport(uint8_t* data, uint16_t length);
+extern bool isKnxHidSendReportPossible();
 
 uint16_t manufacturerId;
 uint16_t maskVersion;
@@ -185,7 +184,7 @@ static void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t p
 		}
 		Serial1.println("");
 */
-		usb_hid.sendReport(0, data, MAX_EP_SIZE);
+		sendKnxHidReport(data, MAX_EP_SIZE);
 	}
 }
 
@@ -223,19 +222,14 @@ void sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 */
 
 	// We do not use reportId of the sendReport()-API here but instead provide it in the first byte of the buffer
-	usb_hid.sendReport(0, buffer, MAX_EP_SIZE);
+	sendKnxHidReport(buffer, MAX_EP_SIZE);
 }
 
 // Invoked when received SET_REPORT control request or
-// received data on OUT endpoint ( Report ID = 0, Type = 0 )
-void set_report_callback(uint8_t report_id, hid_report_type_t report_type, uint8_t const* data, uint16_t bufSize)
+void handleKnxHidReport(uint8_t const* data, uint16_t bufSize)
 {
-	// we don't use multiple report and report ID
-	(void) report_id;
-	(void) report_type;
-
 	if (bufSize!=MAX_EP_SIZE)
-		return;
+	return;
 
 	if (data[0] == 0x01 && // ReportID (fixed 0x01)
 		data[1] == 0x13)   // PacketInfo must be 0x13 (SeqNo: 1, Type: 3)
@@ -289,7 +283,7 @@ UsbTunnelInterface::UsbTunnelInterface(CemiServer& cemiServer,
 void UsbTunnelInterface::loop()
 {
 	// Make sure that the USB HW is also ready to send another report
-	if (!isTxQueueEmpty() && usb_hid.ready())
+	if (!isTxQueueEmpty() && isKnxHidSendReportPossible())
 	{
 		uint8_t* buffer;
 		uint16_t length;

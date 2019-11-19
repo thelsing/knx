@@ -302,7 +302,6 @@ void CemiServer::frameReceived(CemiFrame& frame)
     }
 }
 
-
 void CemiServer::loop()
 {
     _usbTunnelInterface.loop();

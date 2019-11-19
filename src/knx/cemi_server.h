@@ -21,7 +21,6 @@ class CemiServer
   public:
     /**
      * The constructor.
-     * @param tunnelInterface The TunnelInterface of the KNX tunnel (e.g. USB or KNXNET/IP)
      * @param bau methods are called here depending of the content of the APDU
      */
     CemiServer(BauSystemB& bau);
