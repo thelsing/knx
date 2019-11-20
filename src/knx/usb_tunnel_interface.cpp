@@ -6,8 +6,18 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MIN(a, b) ((a < b) ? (a) : (b))
+
 #define MAX_EP_SIZE 64
 #define HID_HEADER_SIZE 3
+
+// Maximum possible payload data bytes in a transfer protocol body
+#define MAX_DATASIZE_START_PACKET 52
+#define MAX_DATASIZE_PARTIAL_PACKET 61
+
+#define PACKET_TYPE_START 1
+#define PACKET_TYPE_END 2
+#define PACKET_TYPE_PARTIAL 4
 
 //#define DEBUG_TX_HID_REPORT 
 //#define DEBUG_RX_HID_REPORT 
@@ -34,14 +44,8 @@ void UsbTunnelInterface::loop()
 		uint8_t* buffer;
 		uint16_t length;
 		loadNextTxFrame(&buffer, &length);
-/*
-		print("cEMI USB TX len: ");
-		print(length);
-
-		print(" data: ");
-		printHex(" data: ", buffer, length);
-*/
-		sendKnxTunnelHidReport(buffer, length);
+		sendKnxHidReport(buffer, length);
+		delete buffer;
 	}
 
 	if (!isRxQueueEmpty())
@@ -56,37 +60,29 @@ void UsbTunnelInterface::loop()
 
 /* USB TX */
 
-bool UsbTunnelInterface::sendCemiFrame(CemiFrame& frame)
+void UsbTunnelInterface::sendCemiFrame(CemiFrame& frame)
 {
-    addFrameTxQueue(frame);
-
-    return true;
+	sendKnxTunnelHidReport(frame.data(), frame.dataLength());
 }
 
-void UsbTunnelInterface::addFrameTxQueue(CemiFrame& frame)
+void UsbTunnelInterface::addBufferTxQueue(uint8_t* data, uint16_t length)
 {
-    _queue_buffer_t* tx_frame = new _queue_buffer_t;
+    _queue_buffer_t* tx_buffer = new _queue_buffer_t;
 
-    tx_frame->length = frame.dataLength();
-    tx_frame->data = new uint8_t[tx_frame->length];
-    tx_frame->next = nullptr;
+    tx_buffer->length = length;
+    tx_buffer->data = new uint8_t[tx_buffer->length];
+    tx_buffer->next = nullptr;
 
-	memcpy(tx_frame->data, frame.data(), tx_frame->length);
+	memcpy(tx_buffer->data, data, tx_buffer->length);
 
-/*
-    print("cEMI USB TX len: ");
-    print(tx_frame->length);
-
-    printHex(" data:", tx_frame->data, tx_frame->length);
-*/
     if (_tx_queue.back == nullptr)
     {
-        _tx_queue.front = _tx_queue.back = tx_frame;
+        _tx_queue.front = _tx_queue.back = tx_buffer;
     }
     else
     {
-        _tx_queue.back->next = tx_frame;
-        _tx_queue.back = tx_frame;
+        _tx_queue.back->next = tx_buffer;
+        _tx_queue.back = tx_buffer;
     }
 }
 
@@ -105,30 +101,78 @@ void UsbTunnelInterface::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuf
     {
         return;
     }
-    _queue_buffer_t* tx_frame = _tx_queue.front;
-    *sendBuffer = tx_frame->data;
-    *sendBufferLength = tx_frame->length;
-    _tx_queue.front = tx_frame->next;
+    _queue_buffer_t* tx_buffer = _tx_queue.front;
+    *sendBuffer = tx_buffer->data;
+    *sendBufferLength = tx_buffer->length;
+    _tx_queue.front = tx_buffer->next;
 
     if (_tx_queue.front == nullptr)
     {
         _tx_queue.back = nullptr;
     }
-    delete tx_frame;
+    delete tx_buffer;
 }
 
 void UsbTunnelInterface::sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 {
+	uint16_t maxData = MAX_DATASIZE_START_PACKET;
+	uint8_t packetType = PACKET_TYPE_START;
+
+	if (length > maxData)
+	{
+		packetType |= PACKET_TYPE_PARTIAL;
+	}
+
+	uint16_t offset = 0;
+	uint8_t* buffer = nullptr;
+
+	for(uint8_t seqNum = 1; seqNum < 6; seqNum++)
+	{
+		uint16_t copyLen = MIN(length, maxData);
+
+		// If this is the first packet we include the transport protocol header
+		if (packetType & PACKET_TYPE_START)
+		{
+			buffer = new uint8_t[copyLen + 8 + HID_HEADER_SIZE]; // length of transport protocol header: 11 bytes
+			buffer[2]  = 8 + copyLen; // KNX USB Transfer Protocol Header length		
+			buffer[3]  = 0x00; // Protocol version (fixed 0x00)
+			buffer[4]  = 0x08; // USB KNX Transfer Protocol Header Length (fixed 0x08)
+			buffer[7]  = 0x01; // KNX Tunneling (0x01)
+			buffer[8]  = 0x03; // EMI ID: 3 -> cEMI
+			buffer[9]  = 0x00; // Manufacturer
+			buffer[10] = 0x00; // Manufacturer
+			memcpy(&buffer[11], &data[offset], copyLen);
+		}
+		else
+		{
+			buffer = new uint8_t[copyLen]; // length of transport protocol header: 11 bytes
+			buffer[2] = copyLen; // KNX USB Transfer Protocol Header length
+			memcpy(&buffer[0], &data[offset], copyLen);
+		}
+
+		offset += copyLen;
+		if (offset >= length)
+		{
+			packetType |= PACKET_TYPE_END;
+		}
+
+		buffer[0]  = 0x01; // ReportID (fixed 0x01)
+		buffer[1]  = ((seqNum << 4) & 0xF0) | (packetType & 0x07); // PacketInfo (SeqNo and Type)
+		addBufferTxQueue(buffer, (buffer[2] + HID_HEADER_SIZE));
+		delete[] buffer;
+
+		if (offset >= length)
+		{
+			break;
+		}
+
+		packetType &= ~PACKET_TYPE_START;
+		maxData = MAX_DATASIZE_PARTIAL_PACKET;
+	}
+
+
 	uint8_t buffer[length + 11];
 
-	buffer[0]  = 0x01; // ReportID (fixed 0x01)
-	buffer[1]  = 0x13; // PacketInfo must be 0x13 (SeqNo: 1, Type: 3)
-	buffer[3]  = 0x00; // Protocol version (fixed 0x00)
-	buffer[4]  = 0x08; // USB KNX Transfer Protocol Header Length (fixed 0x08)
-	buffer[7]  = 0x01; // KNX Tunneling (0x01)
-	buffer[8]  = 0x03; // EMI ID: 3 -> cEMI
-	buffer[9]  = 0x00; // Manufacturer
-	buffer[10] = 0x00; // Manufacturer
 	
 	// Copy cEMI frame to buffer
 	memcpy(&buffer[11], data, length + HID_HEADER_SIZE + 8);
@@ -150,7 +194,7 @@ void UsbTunnelInterface::sendKnxTunnelHidReport(uint8_t* data, uint16_t length)
 	Serial1.println("");
 #endif
 
-	sendKnxHidReport(buffer, MAX_EP_SIZE);
+    addBufferTxQueue(buffer, (buffer[2] + HID_HEADER_SIZE));
 }
 
 /* USB RX */
@@ -180,12 +224,6 @@ void UsbTunnelInterface::addBufferRxQueue(const uint8_t* data, uint16_t length)
 
 	memcpy(rx_buffer->data, data, rx_buffer->length);
 
-/*
-    print("cEMI USB RX len: ");
-    print(rx_buffer->length);
-
-    printHex(" data:", rx_buffer->data, rx_buffer->length);
-*/
     if (_rx_queue.back == nullptr)
     {
         _rx_queue.front =_rx_queue.back = rx_buffer;
@@ -377,7 +415,7 @@ void UsbTunnelInterface::handleBusAccessServerProtocol(const uint8_t* requestDat
 		}
 		Serial1.println("");
 #endif
-		sendKnxHidReport(data, MAX_EP_SIZE);
+		addBufferTxQueue(data, packetLength + respDataSize);
 	}
 }
 

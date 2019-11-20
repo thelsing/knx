@@ -15,7 +15,7 @@ class UsbTunnelInterface
     void loop();
 
     // from cEMI server
-    bool sendCemiFrame(CemiFrame& frame);
+    void sendCemiFrame(CemiFrame& frame);
 
     static const uint8_t* getKnxHidReportDescriptor();
     static uint16_t getHidReportDescriptorLength();
@@ -44,7 +44,7 @@ class UsbTunnelInterface
 
     // USB TX queue
     _queue_t _tx_queue;
-    void addFrameTxQueue(CemiFrame& frame);
+    void addBufferTxQueue(uint8_t* data, uint16_t length);
     bool isTxQueueEmpty();
     void loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBufferLength);
 
