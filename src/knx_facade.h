@@ -263,6 +263,16 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return _bau.parameters().getInt(addr);
     }
 
+    float paramFloat(uint32_t addr)
+    {
+        if (!_bau.configured())
+            return 0;
+        uint8_t* data = _bau.parameters().data(addr);
+        uint32_t rawbe = ((data[0] << 24) | (data[1] << 16) |  (data[2] << 8) | (data[3]));
+        float value = *((float*)&rawbe);
+        return value;
+    }
+
     GroupObject& getGroupObject(uint16_t goNr)
     {
         return _bau.groupObjectTable().get(goNr);
