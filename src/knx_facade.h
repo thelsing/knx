@@ -283,6 +283,11 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _bau.restartRequest(individualAddress);
     }
 
+    void toogleProgMode()
+    {
+        _toogleProgMode = true;
+    }
+
   private:
     P* _platformPtr = 0;
     B* _bauPtr = 0;
