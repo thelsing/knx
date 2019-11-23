@@ -49,6 +49,43 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 #elif ARDUINO_ARCH_ESP32
 #include <Arduino.h>
 #include <esp_wifi.h>
+#elif ARCH_STM32
+#define DEC 10
+#define HEX 16
+
+#define INPUT (0x0)
+#define OUTPUT (0x1)
+#define INPUT_PULLUP (0x2)
+#define INPUT_PULLDOWN (0x3)
+
+#define LOW (0x0)
+#define HIGH (0x1)
+#define CHANGE 2
+#define FALLING 3
+#define RISING 4
+
+
+
+#define htons(x) ( (((x)<<8)&0xFF00) | (((x)>>8)&0xFF) )
+#define ntohs(x) htons(x)
+#define htonl(x) ( ((x)<<24 & 0xFF000000UL) | \
+                   ((x)<< 8 & 0x00FF0000UL) | \
+                   ((x)>> 8 & 0x0000FF00UL) | \
+                   ((x)>>24 & 0x000000FFUL) )
+#define ntohl(x) htonl(x)
+
+#define lowByte(val) ((val)&255)
+#define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
+#define bitRead(val, bitno) (((val) >> (bitno)) & 1)
+
+extern "C" {
+    void delay(uint32_t millis);
+    uint32_t millis();
+}
+void pinMode(uint32_t dwPin, uint32_t dwMode);
+void digitalWrite(uint32_t dwPin, uint32_t dwVal);
+typedef void (*voidFuncPtr)(void);
+void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 #endif
 
 void print(const char[]);

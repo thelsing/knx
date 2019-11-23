@@ -11,6 +11,9 @@
     #include "samd_platform.h"
     #include "knx/bau07B0.h"
     #include "knx/bau27B0.h"
+#elif ARCH_STM32
+#include "stm32_platform.h"
+#include "knx/bau07B0.h"
 #elif ARDUINO_ARCH_ESP8266
    #include "esp_platform.h"
    #include "knx/bau57B0.h"
@@ -331,6 +334,8 @@ template <class P, class B> class KnxFacade : private SaveRestore
     #else
         #error "No medium type specified for Arduino_SAMD platform! Please set MEDIUM_TYPE! (TP:0, RF:2, IP:5)"
     #endif
+#elif ARCH_STM32
+extern KnxFacade<Stm32Platform, Bau07B0> knx;
 #elif ARDUINO_ARCH_ESP8266
     // predefined global instance for IP only
     extern KnxFacade<EspPlatform, Bau57B0> knx;

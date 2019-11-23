@@ -25,6 +25,9 @@
 #elif __linux__
     // no predefined global instance
     #define ICACHE_RAM_ATTR
+#elif ARCH_STM32
+#define ICACHE_RAM_ATTR
+KnxFacade<Stm32Platform, Bau07B0> knx;
 #endif
 
 #ifndef __linux__
