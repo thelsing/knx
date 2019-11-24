@@ -5,6 +5,7 @@
 #include "device_object.h"
 #include "address_table_object.h"
 
+//#define DEBUG_DATA_LINK_LAYER
 
 DataLinkLayer::DataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, 
     NetworkLayer& layer, Platform& platform) :
@@ -59,7 +60,43 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     NPDU& npdu = frame.npdu();
     uint16_t ownAddr = _deviceObject.induvidualAddress();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
-    
+
+#ifdef DEBUG_DATA_LINK_LAYER
+    println("Link RX:");
+    print("\tSRC: ");
+    print((source >> 12) & 0x0F);
+    print(".");
+    print((source >> 8) & 0x0F);
+    print(".");
+    println(source & 0xFF);
+
+    if (addrType == InduvidualAddress)
+    {
+        print("\tDST: ");
+        print((destination >> 12) & 0x0F);
+        print(".");
+        print((destination >> 8) & 0x0F);
+        print(".");
+        println(destination & 0xFF);
+    }
+    else
+    {
+        if(destination == 0)
+        {
+            println("\tSystem Broadcast");
+        }
+        else
+        {
+            print("\tDST: ");
+            print((destination >> 11) & 0x0F);
+            print("/");
+            print((destination >> 8) & 0x07);
+            print("/");
+            println(destination & 0xFF);
+        }
+    }
+#endif
+
     if (source == ownAddr)
         _deviceObject.induvidualAddressDuplication(true);
 
@@ -111,6 +148,43 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
         return false;
     }
 
+#ifdef DEBUG_DATA_LINK_LAYER
+    uint16_t source = _deviceObject.induvidualAddress();
+
+    println("Link TX:");
+    print("\tSRC: ");
+    print((source >> 12) & 0x0F);
+    print(".");
+    print((source >> 8) & 0x0F);
+    print(".");
+    println(source & 0xFF);
+
+    if (addrType == InduvidualAddress)
+    {
+        print("\tDST: ");
+        print((destinationAddr >> 12) & 0x0F);
+        print(".");
+        print((destinationAddr >> 8) & 0x0F);
+        print(".");
+        println(destinationAddr & 0xFF);
+    }
+    else
+    {
+        if(destinationAddr == 0)
+        {
+            println("\tSystem Broadcast");
+        }
+        else
+        {
+            print("\tDST: ");
+            print((destinationAddr >> 11) & 0x0F);
+            print("/");
+            print((destinationAddr >> 8) & 0x07);
+            print("/");
+            println(destinationAddr & 0xFF);
+        }
+    }
+#endif
 //    if (frame.npdu().octetCount() > 0)
 //    {
 //        _print("<- DLL ");
