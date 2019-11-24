@@ -1,9 +1,12 @@
 #include "stm32_platform.h"
 #include <stdio.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <sys/times.h>
+#include <sys/unistd.h>
 #include <knx/bits.h>
 #include <string.h>
 #include <ring_buffer.h>
-
 #include <main.h>
 
 
@@ -13,25 +16,105 @@
 #define USER_MEMORY_PAGE 127
 
 extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
 #define TPUART &huart1
+#define TPUART_UART USART1
+#define CONSOLE_HUART &huart2
+#define CONSOLE_UART USART2
 #endif
 
 // #define DEBUG_TPUSART_COMMUNICATION_RX
 // #define DEBUG_TPUSART_COMMUNICATION_TX
-#define DEBUG_MEMORY_SIZE 128
+// #define DEBUG_MEMORY_SIZE 128
 
 #define RX_BUFFER_LEN 64
 #define TX_BUFFER_LEN 64
+#define DBG_BUFFER_LEN 1024
+
 
 static uint8_t RX_BUF[RX_BUFFER_LEN];
 static uint8_t TX_BUF[TX_BUFFER_LEN];
+static uint8_t DBG_BUF[DBG_BUFFER_LEN];
 static struct ring_buffer rx_buffer = BUFFER_STATIC_INIT(RX_BUF, RX_BUFFER_LEN);
 static struct ring_buffer tx_buffer = BUFFER_STATIC_INIT(TX_BUF, TX_BUFFER_LEN);
+static struct ring_buffer dbg_buffer = BUFFER_STATIC_INIT(DBG_BUF, DBG_BUFFER_LEN);
 static uint8_t __USER_MEMORY[USER_MEMORY_SIZE];
 
 volatile static int tx_it_enable = 0;
-unsigned char rx_byte;
+static unsigned char rx_byte;
 
+#include <stdint.h>
+
+
+uint32_t millis() {
+    return HAL_GetTick();
+}
+
+extern "C" {
+    int _write(int file, char *ptr, int len);
+    void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle);
+}
+volatile static bool dbg_xfer_in_progress = false;
+static uint8_t dbg_data_to_xfer = 0;
+static inline void dbg_start_next_xfer()
+{
+    if(buffer_length(&dbg_buffer) > 0)
+    {
+        fifo_pop(&dbg_buffer, &dbg_data_to_xfer);
+        HAL_UART_Transmit_IT(CONSOLE_HUART, &dbg_data_to_xfer, 1);
+        dbg_xfer_in_progress = true;
+    }
+    else
+    {
+        dbg_xfer_in_progress = false;
+    }
+}
+
+volatile static bool knx_xfer_in_progress = false;
+static uint8_t knx_data_to_xfer = 0;
+static inline void knx_start_next_xfer()
+{
+    if(buffer_length(&tx_buffer) > 0)
+    {
+        fifo_pop(&tx_buffer, &knx_data_to_xfer);
+        HAL_UART_Transmit_IT(TPUART, &knx_data_to_xfer, 1);
+        knx_xfer_in_progress = true;
+    }
+    else
+    {
+        knx_xfer_in_progress = false;
+    }
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+    /* Set transmission flag: transfer complete */
+    if(UartHandle->Instance == CONSOLE_UART)
+    {
+        dbg_start_next_xfer();
+    }
+    if(UartHandle->Instance == TPUART_UART)
+    {
+        knx_start_next_xfer();
+    }
+}
+
+int _write(int file, char *ptr, int len)
+{
+    int i;
+    if (file == STDOUT_FILENO || file == STDERR_FILENO) {
+        for (i = 0; i < len; i++) {
+            if (ptr[i] == '\n') {
+                while(fifo_push(&dbg_buffer, '\r') == -1);
+            }
+            while(fifo_push(&dbg_buffer, static_cast<uint8_t>(ptr[i])) == -1);
+            if(!dbg_xfer_in_progress) dbg_start_next_xfer();
+        }
+        return i;
+    }
+    errno = EIO;
+    return -1;
+}
 
 void delay(uint32_t delay)
 {
@@ -64,7 +147,8 @@ void tpuart_send(uint8_t data)
 #ifdef DEBUG_TPUSART_COMMUNICATION_TX
     print('>');
 #endif
-    HAL_UART_Transmit(TPUART, &data, 1, 100);
+    while(fifo_push(&tx_buffer, data) == -1);
+    if(!knx_xfer_in_progress) knx_start_next_xfer();
 }
 
 uint32_t tpuart_rx_size()
