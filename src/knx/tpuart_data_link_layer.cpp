@@ -428,8 +428,13 @@ void TpUartDataLinkLayer::enabled(bool value)
 
         if (resetChip()){
             _enabled = true;
-            print("ownaddr ");
-            println(_deviceObject.induvidualAddress(), HEX);
+            uint16_t source = _deviceObject.induvidualAddress();
+            print("Individual Address ");
+            print((source >> 12) & 0x0F);
+            print(".");
+            print((source >> 8) & 0x0F);
+            print(".");
+            println(source & 0xFF);
         }
         else{
         	_enabled = false;
