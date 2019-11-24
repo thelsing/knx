@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <string.h>
 
+//#define DEBUG_TPUART_XFER_TX
+//#define DEBUG_TPUART_XFER_RX
+//#define DEBUG_TPUART_XFER_TIME
+
 // NCN5120
 //#define NCN5120
 
@@ -407,7 +411,12 @@ TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObjec
 
 void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
 {
-    //printHex("=>", buffer, length);
+#ifdef DEBUG_TPUART_XFER_RX
+#ifdef DEBUG_TPUART_XFER_TIME
+    printf("%llu:",millis());
+#endif
+    printHex("TPUART ->", buffer, length);
+#endif
     CemiFrame frame(buffer, length);
 
     frameRecieved(frame);
@@ -487,6 +496,13 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
     }
     else
     {
+
+#ifdef DEBUG_TPUART_XFER_TX
+#ifdef DEBUG_TPUART_XFER_TIME
+    printf("%llu:",millis());
+#endif
+    printHex("TPUART <- ", _sendBuffer, _sendBufferLength);
+#endif
         _TxByteCnt = 0;
         return false;
     }
