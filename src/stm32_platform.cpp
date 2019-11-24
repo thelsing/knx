@@ -25,6 +25,8 @@ extern UART_HandleTypeDef huart1;
 
 static uint8_t RX_BUF[RX_BUFFER_LEN];
 static uint8_t TX_BUF[TX_BUFFER_LEN];
+static struct ring_buffer rx_buffer = BUFFER_STATIC_INIT(RX_BUF, RX_BUFFER_LEN);
+static struct ring_buffer tx_buffer = BUFFER_STATIC_INIT(TX_BUF, TX_BUFFER_LEN);
 static uint8_t __USER_MEMORY[USER_MEMORY_SIZE];
 
 volatile static int tx_it_enable = 0;
@@ -39,9 +41,6 @@ void delay(uint32_t delay)
 
 void tpuart_usart_setup(void)
 {
-    init_static_ring_buffer(&rx_buffer, RX_BUF, RX_BUFFER_LEN);
-    init_static_ring_buffer(&tx_buffer, TX_BUF, TX_BUFFER_LEN);
-
     if(HAL_UART_Receive_IT(TPUART, (unsigned char *)(&rx_byte), 1) != HAL_OK)
     {
         printf("!!! Error on tpuart_usart_setup, Can't HAL_UART_Receive_IT in start_tpuart_reception\n");
