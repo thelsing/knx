@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <knx/bits.h>
+#include "knx/bits.h"
 
 void print(const char* s)
 {

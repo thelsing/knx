@@ -1,12 +1,12 @@
 #include "stm32_platform.h"
+#include "knx/bits.h"
+#include "ring_buffer.h"
 #include <stdio.h>
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/times.h>
 #include <sys/unistd.h>
-#include <knx/bits.h>
 #include <string.h>
-#include <ring_buffer.h>
 #include <main.h>
 
 
