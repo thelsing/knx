@@ -10,6 +10,10 @@
 
 #define MAX_EP_SIZE 64
 #define HID_HEADER_SIZE 3
+#define MAX_KNX_TELEGRAM_SIZE 263
+#define KNX_HID_REPORT_ID 0x01
+#define PROTOCOL_VERSION 0x00
+#define PROTOCOL_HEADER_LENGTH 0x08
 
 // Maximum possible payload data bytes in a transfer protocol body
 #define MAX_DATASIZE_START_PACKET 52
@@ -145,6 +149,10 @@ void UsbTunnelInterface::sendKnxHidReport(ProtocolIdType protId, ServiceIdType s
 	uint16_t offset = 0;
 	uint8_t* buffer = nullptr;
 
+	// In theory we can only have sequence numbers from 1..5
+	// First packet: 51 bytes max
+	// Other packets: 62 bytes max.
+	// -> 51 + 4*62 = 296 bytes -> enough for a KNX cEMI extended frame APDU + Transport Protocol Header length
 	for(uint8_t seqNum = 1; seqNum < 6; seqNum++)
 	{
 		uint16_t copyLen = MIN(length, maxData);
@@ -154,8 +162,8 @@ void UsbTunnelInterface::sendKnxHidReport(ProtocolIdType protId, ServiceIdType s
 		{
 			buffer = new uint8_t[copyLen + 8 + HID_HEADER_SIZE]; // length of transport protocol header: 11 bytes
 			buffer[2]  = 8 + copyLen; // KNX USB Transfer Protocol Body length		
-			buffer[3]  = 0x00; // Protocol version (fixed 0x00)
-			buffer[4]  = 0x08; // USB KNX Transfer Protocol Header Length (fixed 0x08)
+			buffer[3]  = PROTOCOL_VERSION; // Protocol version (fixed 0x00)
+			buffer[4]  = PROTOCOL_HEADER_LENGTH; // USB KNX Transfer Protocol Header Length (fixed 0x08)
 			pushWord(copyLen, &buffer[5]); // KNX USB Transfer Protocol Body length (e.g. cEMI length)			
 			buffer[7]  = (uint8_t) protId; // KNX Tunneling (0x01) or KNX Bus Access Server (0x0f)
 			buffer[8]  = (protId == KnxTunneling) ? (uint8_t)CEMI : (uint8_t)servId; // either EMI ID or Service Id
@@ -176,7 +184,7 @@ void UsbTunnelInterface::sendKnxHidReport(ProtocolIdType protId, ServiceIdType s
 			packetType |= PACKET_TYPE_END;
 		}
 
-		buffer[0]  = 0x01; // ReportID (fixed 0x01)
+		buffer[0]  = KNX_HID_REPORT_ID; // ReportID (fixed 0x01)
 		buffer[1]  = ((seqNum << 4) & 0xF0) | (packetType & 0x07); // PacketInfo (SeqNo and Type)
 
 		addBufferTxQueue(buffer, (buffer[2] + HID_HEADER_SIZE));
@@ -199,7 +207,7 @@ void UsbTunnelInterface::sendKnxHidReport(ProtocolIdType protId, ServiceIdType s
 void UsbTunnelInterface::receiveHidReport(uint8_t const* data, uint16_t bufSize)
 {
 	// Check KNX ReportID (fixed 0x01)
-	if (data[0] == 0x01)
+	if (data[0] == KNX_HID_REPORT_ID)
 	{
 		// We just store only the used space of the HID report buffer
 		// which is normally padded with 0 to fill the complete USB EP size (e.g. 64 bytes)
@@ -282,8 +290,8 @@ void UsbTunnelInterface::loadNextRxBuffer(uint8_t** receiveBuffer, uint16_t* rec
 
 void UsbTunnelInterface::handleTransferProtocolPacket(uint8_t* data, uint16_t length)
 {
-	if (data[0] == 0x00 && // Protocol version (fixed 0x00)
-		data[1] == 0x08)   // USB KNX Transfer Protocol Header Length (fixed 0x08)
+	if (data[0] == PROTOCOL_VERSION && // Protocol version (fixed 0x00)
+		data[1] == PROTOCOL_HEADER_LENGTH)   // USB KNX Transfer Protocol Header Length (fixed 0x08)
 	{
 		uint16_t bodyLength;
 		popWord(bodyLength, (uint8_t*)&data[2]); // KNX USB Transfer Protocol Body length
@@ -319,30 +327,95 @@ void UsbTunnelInterface::handleHidReportRxQueue()
 {
 	if (isRxQueueEmpty())
 	{
-		Serial1.println("Error: RX HID report queue was empty!");
+		println("Error: RX HID report queue was empty!");
 		return;
 	}
 
-	uint8_t* data;
-	uint16_t bufSize;
-	loadNextRxBuffer(&data, &bufSize);
-		
-	// Get KNX HID report header details
-	uint8_t seqNum = data[1] >> 4;
-	uint8_t packetType = data[1] & 0x07;
-	uint8_t packetLength = data[2];
+	uint8_t tpPacket[MAX_KNX_TELEGRAM_SIZE + PROTOCOL_HEADER_LENGTH]; // Transport Protocol Header + Body
+	uint16_t offset = 0;
+	bool success = false;
 
-	// first RX buffer from queue should contain the first part of the transfer protocol packet
-	if ((seqNum != 1) || ((packetType & PACKET_TYPE_START) != PACKET_TYPE_START) )
+	// Now we have to reassemble the whole transport protocol packet which might be distributed over multiple HID reports
+
+	// In theory we can only have sequence numbers from 1..5
+	// First packet: 51 bytes max
+	// Other packets: 62 bytes max.
+	// -> 51 + 4*62 = 296 bytes -> enough for a KNX cEMI extended frame APDU + Transport Protocol Header length
+	for(int expSeqNum = 1; expSeqNum < 6; expSeqNum++)
 	{
-		// if this is not the case, then dicard this packet and free the memory
+		// We should have at least one packet: either single packet (START and END set) or
+		// start packet (START and PARTIAL set) -> thus load first part
+		uint8_t* data;
+		uint16_t bufSize;
+		loadNextRxBuffer(&data, &bufSize); // bufSize contains the complete HID report length incl. HID header
+
+		// Get KNX HID report header details
+		uint8_t seqNum = data[1] >> 4;
+		uint8_t packetType = data[1] & 0x07;
+		uint8_t packetLength = MIN(data[2], bufSize - HID_HEADER_SIZE); // Do not try to read more than we actually have!
+
+		// Does the received sequence number match the expected one?
+		if (expSeqNum != seqNum)
+		{
+			println("Error: Wrong sequence number!");
+			delete data;
+			continue;
+		}
+
+		// first RX buffer from queue should contain the first part of the transfer protocol packet
+		if ((expSeqNum == 1) && ((packetType & PACKET_TYPE_START) != PACKET_TYPE_START))
+		{
+			println("Error: Sequence number 1 does not contain a START packet!");
+			delete data;
+			continue;
+		}
+
+		// Make sure we only have one START packet
+		if ((expSeqNum != 1) && ((packetType & PACKET_TYPE_START) == PACKET_TYPE_START))
+		{
+			println("Error: Sequence number (!=1) contains a START packet!");
+			delete data;
+			continue;
+		}
+
+		// Make sure other packets are marked correctly as PARTIAL packet
+		if ((expSeqNum != 1) && ((packetType & PACKET_TYPE_PARTIAL) != PACKET_TYPE_PARTIAL))
+		{
+			println("Error: Sequence number (!=1) must be a PARTIAL packet!");
+			delete data;
+			continue;
+		}
+
+		// Not really necessary, but we reset the offset here to zero
+		if ((packetType & PACKET_TYPE_START) == PACKET_TYPE_START)
+		{
+			offset = 0;
+		}
+
+		// Copy KNX HID Report Body to final buffer for concatenating
+		memcpy(&tpPacket[offset], &data[3], packetLength);
+		// Remove the source HID report buffer
 		delete data;
-		return;
+		// Move offset
+		offset += packetLength;
+
+		// If we reached the end of the transport protocol packet, leave the loop
+		if ((packetType & PACKET_TYPE_END) == PACKET_TYPE_END)
+		{
+			success = true;
+			break;
+		}
 	}
 
-	handleTransferProtocolPacket(&data[3], packetLength);
-	
-	delete data;
+	// Make sure that we really saw the end of the transport protocol packet
+	if (success)
+	{
+		handleTransferProtocolPacket(tpPacket, offset);
+	}
+	else
+	{
+		println("Error: Did not find END packet!");
+	}
 }
 
 void UsbTunnelInterface::handleBusAccessServerProtocol(ServiceIdType servId, const uint8_t* requestData, uint16_t packetLength)

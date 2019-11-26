@@ -2,8 +2,6 @@
 
 #include <stdint.h>
 
-#define MAX_KNX_TELEGRAM_SIZE 263
-
 class CemiServer;
 class CemiFrame;
 
