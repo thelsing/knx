@@ -324,14 +324,15 @@ void UsbTunnelInterface::handleHidReportRxQueue()
 
 void UsbTunnelInterface::handleBusAccessServerProtocol(ServiceIdType servId, const uint8_t* requestData, uint16_t packetLength)
 {
-	uint8_t respData[3];
+	uint8_t respData[3]; // max. 3 bytes are required for a response
 
 	switch (servId)
 	{
 		case DeviceFeatureGet: // Device Feature Get
 		{
 			FeatureIdType featureId = (FeatureIdType)requestData[0];
-			respData[0] = (uint8_t) featureId;
+			respData[0] = (uint8_t) featureId; // first byte in repsonse is the featureId itself again
+
 			switch (featureId)
 			{
 				case SupportedEmiType: // Supported EMI types
