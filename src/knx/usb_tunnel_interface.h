@@ -88,6 +88,7 @@ class UsbTunnelInterface
     void loadNextRxBuffer(uint8_t** receiveBuffer, uint16_t* receiveBufferLength);
     static bool rxHaveCompletePacket;
 
+    void handleTransferProtocolPacket(uint8_t* data, uint16_t length);
     void handleHidReportRxQueue();
     void handleBusAccessServerProtocol(ServiceIdType servId, const uint8_t* requestData, uint16_t packetLength);
     void sendKnxHidReport(ProtocolIdType protId, ServiceIdType servId, uint8_t* data, uint16_t length);

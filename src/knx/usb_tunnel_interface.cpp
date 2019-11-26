@@ -260,6 +260,41 @@ void UsbTunnelInterface::loadNextRxBuffer(uint8_t** receiveBuffer, uint16_t* rec
     delete rx_buffer;
 }
 
+void UsbTunnelInterface::handleTransferProtocolPacket(uint8_t* data, uint16_t length)
+{
+	if (data[0] == 0x00 && // Protocol version (fixed 0x00)
+		data[1] == 0x08)   // USB KNX Transfer Protocol Header Length (fixed 0x08)
+	{
+		uint16_t bodyLength;
+		popWord(bodyLength, (uint8_t*)&data[2]); // KNX USB Transfer Protocol Body length
+
+		if (data[4] == (uint8_t) BusAccessServer)   // Bus Access Server Feature (0x0F)
+		{
+			handleBusAccessServerProtocol((ServiceIdType)data[5], &data[8], bodyLength);
+		}
+		else if (data[4] == (uint8_t) KnxTunneling) // KNX Tunneling (0x01)
+		{
+			if (data[5] == (uint8_t) CEMI)   // EMI type: only cEMI supported (0x03))
+			{
+				// Prepare the cEMI frame
+				CemiFrame frame((uint8_t*)&data[8], bodyLength);
+		/*
+				print("cEMI USB RX len: ");
+				print(length);
+
+				print(" data: ");
+				printHex(" data: ", buffer, length);
+		*/
+				_cemiServer.frameReceived(frame);
+			}
+			else
+			{
+				println("Error: Only cEMI is supported!");
+			}
+		}
+	}
+}
+
 void UsbTunnelInterface::handleHidReportRxQueue()
 {
 	uint8_t* data;
@@ -291,32 +326,7 @@ void UsbTunnelInterface::handleHidReportRxQueue()
 		Serial1.println("");
 #endif
 
-		if (data[3] == 0x00 && // Protocol version (fixed 0x00)
-			data[4] == 0x08)   // USB KNX Transfer Protocol Header Length (fixed 0x08)
-		{
-			uint16_t bodyLength;
-			popWord(bodyLength, (uint8_t*)&data[5]); // KNX USB Transfer Protocol Body length
-
-			if (data[7] == (uint8_t) BusAccessServer)   // Bus Access Server Feature (0x0F)
-			{
-				handleBusAccessServerProtocol((ServiceIdType)data[8], &data[11], packetLength + HID_HEADER_SIZE);
-			}
-			else if (data[7] == (uint8_t) KnxTunneling && // KNX Tunneling (0x01)
-					 data[8] == (uint8_t) CEMI)   // EMI type: only cEMI supported (0x03)
-			{
-
-				// Prepare the cEMI frame
-				CemiFrame frame((uint8_t*)&data[11], bodyLength);
-		/*
-				print("cEMI USB RX len: ");
-				print(length);
-
-				print(" data: ");
-				printHex(" data: ", buffer, length);
-		*/
-				_cemiServer.frameReceived(frame);
-			}
-		}
+		handleTransferProtocolPacket(&data[3], packetLength);
 	}
 	
 	delete data;
@@ -402,7 +412,7 @@ void UsbTunnelInterface::handleBusAccessServerProtocol(ServiceIdType servId, con
 const uint8_t UsbTunnelInterface::descHidReport[] =
 {
   //TUD_HID_REPORT_DESC_KNXHID_INOUT(64)
- 0x06, 0xA0, 0xFF, // Usage Page (Vendor Defined 0xFFA0)
+0x06, 0xA0, 0xFF,  // Usage Page (Vendor Defined 0xFFA0)
 0x09, 0x01,        // Usage (0x01)
 0xA1, 0x01,        // Collection (Application)
 0x09, 0x01,        //   Usage (0x01)
