@@ -23,8 +23,8 @@
 #define PACKET_TYPE_END 2
 #define PACKET_TYPE_PARTIAL 4
 
-#define DEBUG_TX_HID_REPORT 
-#define DEBUG_RX_HID_REPORT 
+//#define DEBUG_TX_HID_REPORT 
+//#define DEBUG_RX_HID_REPORT 
 
 extern bool sendHidReport(uint8_t* data, uint16_t length);
 extern bool isSendHidReportPossible();
@@ -119,19 +119,19 @@ void UsbTunnelInterface::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuf
     delete tx_buffer;
 
 #ifdef DEBUG_TX_HID_REPORT
-	Serial1.print("TX HID report: len: ");
+	print("TX HID report: len: ");
 	// We do not print the padded zeros
 	uint8_t len = (*sendBuffer)[2];
-	Serial1.println(len, DEC);
+	println(len, DEC);
 
 	for (int i = 0; i < len; i++)
 	{
 		if ((*sendBuffer)[i] < 16)
-			Serial1.print("0");
-		Serial1.print((*sendBuffer)[i], HEX);
-		Serial1.print(" ");
+			print("0");
+		print((*sendBuffer)[i], HEX);
+		print(" ");
 	}
-	Serial1.println("");
+	println("");
 #endif
 
 }
@@ -274,17 +274,17 @@ void UsbTunnelInterface::loadNextRxBuffer(uint8_t** receiveBuffer, uint16_t* rec
     delete rx_buffer;
 
 #ifdef DEBUG_RX_HID_REPORT
-	Serial1.print("RX HID report: len: ");
-	Serial1.println(*receiveBufferLength, DEC);
+	print("RX HID report: len: ");
+	println(*receiveBufferLength, DEC);
 
 	for (int i = 0; i < (*receiveBufferLength); i++)
 	{
 		if ((*receiveBuffer)[i] < 16)
-			Serial1.print("0");
-		Serial1.print((*receiveBuffer)[i], HEX);
-		Serial1.print(" ");
+			print("0");
+		print((*receiveBuffer)[i], HEX);
+		print(" ");
 	}
-	Serial1.println("");
+	println("");
 #endif
 }
 
