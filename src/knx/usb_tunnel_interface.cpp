@@ -48,6 +48,9 @@ void UsbTunnelInterface::loop()
 		delete buffer;
 	}
 
+	// Check if we already a COMPLETE transport protocol packet
+	// A transport protocol packet might be split into multiple HID reports and
+	// need to be assembled again
 	if (rxHaveCompletePacket)
 	{
 		handleHidReportRxQueue();
@@ -258,6 +261,20 @@ void UsbTunnelInterface::loadNextRxBuffer(uint8_t** receiveBuffer, uint16_t* rec
         _rx_queue.back = nullptr;
     }
     delete rx_buffer;
+
+#ifdef DEBUG_RX_HID_REPORT
+	Serial1.print("RX HID report: len: ");
+	Serial1.println(*receiveBufferLength, DEC);
+
+	for (int i = 0; i < (*receiveBufferLength); i++)
+	{
+		if ((*receiveBuffer)[i] < 16)
+			Serial1.print("0");
+		Serial1.print((*receiveBuffer)[i], HEX);
+		Serial1.print(" ");
+	}
+	Serial1.println("");
+#endif
 }
 
 void UsbTunnelInterface::handleTransferProtocolPacket(uint8_t* data, uint16_t length)
@@ -297,37 +314,32 @@ void UsbTunnelInterface::handleTransferProtocolPacket(uint8_t* data, uint16_t le
 
 void UsbTunnelInterface::handleHidReportRxQueue()
 {
-	uint8_t* data;
-	uint16_t bufSize;
-
 	if (isRxQueueEmpty())
 	{
 		Serial1.println("Error: RX HID report queue was empty!");
 		return;
 	}
-		
+
+	uint8_t* data;
+	uint16_t bufSize;
 	loadNextRxBuffer(&data, &bufSize);
 		
-	if (data[1] == 0x13)   // PacketInfo must be 0x13 (SeqNo: 1, Type: 3)
+	// Get KNX HID report header details
+	uint8_t seqNum = data[1] >> 4;
+	uint8_t packetType = data[1] & 0x07;
+	uint8_t packetLength = data[2];
+
+	// first RX buffer from queue should contain the first part of the transfer protocol packet
+	if ((seqNum != 1) || ((packetType & PACKET_TYPE_START) != PACKET_TYPE_START) )
 	{
-		uint8_t packetLength = data[2];
-
-#ifdef DEBUG_RX_HID_REPORT
-		Serial1.print("RX HID report: len: ");
-		Serial1.println(packetLength, DEC);
-
-		for (int i = 0; i < (packetLength + HID_HEADER_SIZE); i++)
-		{
-			if (data[i] < 16)
-				Serial1.print("0");
-			Serial1.print(data[i], HEX);
-			Serial1.print(" ");
-		}
-		Serial1.println("");
-#endif
-
-		handleTransferProtocolPacket(&data[3], packetLength);
+		// if this is not the case, then dicard this packet and free the memory
+		delete data;
+		return;
 	}
+
+
+
+	handleTransferProtocolPacket(&data[3], packetLength);
 	
 	delete data;
 }
