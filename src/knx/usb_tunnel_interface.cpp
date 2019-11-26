@@ -113,6 +113,23 @@ void UsbTunnelInterface::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuf
         _tx_queue.back = nullptr;
     }
     delete tx_buffer;
+
+#ifdef DEBUG_TX_HID_REPORT
+	Serial1.print("TX HID report: len: ");
+	// We do not print the padded zeros
+	uint8_t len = (*sendBuffer)[2];
+	Serial1.println(len, DEC);
+
+	for (int i = 0; i < len; i++)
+	{
+		if ((*sendBuffer)[i] < 16)
+			Serial1.print("0");
+		Serial1.print((*sendBuffer)[i], HEX);
+		Serial1.print(" ");
+	}
+	Serial1.println("");
+#endif
+
 }
 
 void UsbTunnelInterface::sendKnxHidReport(ProtocolIdType protId, ServiceIdType servId, uint8_t* data, uint16_t length)
@@ -161,20 +178,6 @@ void UsbTunnelInterface::sendKnxHidReport(ProtocolIdType protId, ServiceIdType s
 
 		buffer[0]  = 0x01; // ReportID (fixed 0x01)
 		buffer[1]  = ((seqNum << 4) & 0xF0) | (packetType & 0x07); // PacketInfo (SeqNo and Type)
-
-#ifdef DEBUG_TX_HID_REPORT
-	Serial1.print("TX HID report: len: ");
-	Serial1.println(buffer[2] + HID_HEADER_SIZE, DEC);
-
-	for (int i = 0; i < (buffer[2] + HID_HEADER_SIZE); i++)
-	{
-		if (buffer[i] < 16)
-			Serial1.print("0");
-		Serial1.print(buffer[i], HEX);
-		Serial1.print(" ");
-	}
-	Serial1.println("");
-#endif
 
 		addBufferTxQueue(buffer, (buffer[2] + HID_HEADER_SIZE));
 
@@ -337,8 +340,6 @@ void UsbTunnelInterface::handleHidReportRxQueue()
 		return;
 	}
 
-
-
 	handleTransferProtocolPacket(&data[3], packetLength);
 	
 	delete data;
@@ -411,9 +412,9 @@ void UsbTunnelInterface::handleBusAccessServerProtocol(ServiceIdType servId, con
 		}
 
 		// These are only sent from the device to the host
-		case DeviceDescriptorResponse: // Device Feature Response
-		case DeviceFeatureInfo: // Device Feature Info
-		case DeviceFeatureEscape: // reserved (ESCAPE for future extensions)
+		case DeviceFeatureResponse: // Device Feature Response
+		case DeviceFeatureInfo:     // Device Feature Info
+		case DeviceFeatureEscape:   // reserved (ESCAPE for future extensions)
 		default:
 			break;
 	}
