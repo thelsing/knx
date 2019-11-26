@@ -7,6 +7,39 @@
 class CemiServer;
 class CemiFrame;
 
+enum ProtocolIdType
+{
+	KnxTunneling = 0x01,
+	BusAccessServer = 0x0f
+};
+
+enum EmiIdType
+{
+	EmiIdNotUsed = 0x00,
+	EMI1 = 0x01,
+	EMI2 = 0x02,
+	CEMI = 0x03
+};
+
+enum ServiceIdType
+{
+	ServiceIdNotUsed = 0x00,
+	DeviceFeatureGet = 0x01,
+	DeviceFeatureResponse = 0x02,
+	DeviceFeatureSet = 0x03,
+	DeviceFeatureInfo = 0x04,
+  DeviceFeatureEscape = 0xFF
+};
+
+enum FeatureIdType
+{
+  SupportedEmiType = 0x01,
+  HostDeviceDescriptorType0 = 0x02,
+  BusConnectionStatus = 0x03,
+  KnxManufacturerCode = 0x04,
+  ActiveEmiType = 0x05
+};
+
 class UsbTunnelInterface
 {
   public:
@@ -19,7 +52,7 @@ class UsbTunnelInterface
 
     static const uint8_t* getKnxHidReportDescriptor();
     static uint16_t getHidReportDescriptorLength();
-    static void receiveKnxHidReport(uint8_t const* data, uint16_t bufSize);
+    static void receiveHidReport(uint8_t const* data, uint16_t bufSize);
 
   private:
     struct _queue_buffer_t
@@ -53,8 +86,9 @@ class UsbTunnelInterface
     static void addBufferRxQueue(const uint8_t* data, uint16_t length);
     bool isRxQueueEmpty();
     void loadNextRxBuffer(uint8_t** receiveBuffer, uint16_t* receiveBufferLength);
+    static bool rxHaveCompletePacket;
 
-    void handleKnxHidReport(uint8_t const* data, uint16_t bufSize);
-    void handleBusAccessServerProtocol(const uint8_t* requestData, uint16_t packetLength);
-    void sendKnxTunnelHidReport(uint8_t* data, uint16_t length);
+    void handleHidReportRxQueue();
+    void handleBusAccessServerProtocol(ServiceIdType servId, const uint8_t* requestData, uint16_t packetLength);
+    void sendKnxHidReport(ProtocolIdType protId, ServiceIdType servId, uint8_t* data, uint16_t length);
 };
