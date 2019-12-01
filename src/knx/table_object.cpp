@@ -65,8 +65,8 @@ uint8_t TableObject::propertySize(PropertyID id)
 
 TableObject::~TableObject()
 {
-    if (_data != 0)
-        _memory.freeMemory(_data);
+//    if (_data != 0)
+//        _memory.freeMemory(_data);
 }
 
 LoadState TableObject::loadState()

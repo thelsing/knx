@@ -47,6 +47,9 @@ void Memory::readMemory()
         uint16_t memorySize = 0;
         buffer = popWord(memorySize, buffer);
 
+        if (memorySize == 0)
+            continue;
+
         // this works because TableObject saves a relative addr and restores it itself
         addNewUsedBlock(_tableObjects[i]->_data, memorySize);
     }
@@ -69,14 +72,19 @@ void Memory::writeMemory()
         buffer = _tableObjects[i]->save(buffer);
 
         //save to size of the memoryblock for tableobject too, so that we can rebuild the usedList and freeList
-
-        MemoryBlock* block = findBlockInList(_usedList, _tableObjects[i]->_data);
-        if (block == nullptr)
+        if (_tableObjects[i]->_data != nullptr)
         {
-            println("_data of TableObject not in errorlist");
-            _platform.fatalError();
+
+            MemoryBlock* block = findBlockInList(_usedList, _tableObjects[i]->_data);
+            if (block == nullptr)
+            {
+                println("_data of TableObject not in errorlist");
+                _platform.fatalError();
+            }
+            buffer = pushWord(block->size, buffer);
         }
-        buffer = pushWord(block->size, buffer);
+        else
+            pushWord(0, buffer);
     }
     
     _platform.commitToEeprom();
@@ -94,7 +102,7 @@ void Memory::addSaveRestore(SaveRestore* obj)
 
 void Memory::addSaveRestore(TableObject* obj)
 {
-    if (_tableObjCount >= MAXTABLEOBJ - 1)
+    if (_tableObjCount >= MAXTABLEOBJ)
         return;
 
     _tableObjects[_tableObjCount] = obj;
@@ -117,6 +125,8 @@ uint8_t* Memory::allocMemory(size_t size)
         if (freeBlock->size >= size)
         {
             if (blockToUse != nullptr && (blockToUse->size - size) > (freeBlock->size - size))
+                blockToUse = freeBlock;
+            else if (blockToUse == nullptr)
                 blockToUse = freeBlock;
         }
         freeBlock = freeBlock->next;
@@ -254,12 +264,29 @@ void Memory::addToFreeList(MemoryBlock* block)
     MemoryBlock* current = _freeList;
     while (current)
     {
-        if (current->address <= block->address && (block->next == nullptr || block->address < current->next->address))
+        if (current->address <= block->address && (current->next == nullptr || block->address < current->next->address))
         {
+            //add after current
             block->next = current->next;
             current->next = block;
             break;
         }
+        else if (current->address > block->address)
+        {
+            //add before current
+            block->next = current;
+
+            if (current == _freeList)
+                _freeList = block;
+
+            // swap current and block for merge
+            MemoryBlock* tmp = current;
+            current = block;
+            block = tmp;
+
+            break;
+        }
+
         current = current->next;
     }
     // now check if we can merge the blocks
