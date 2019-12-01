@@ -140,6 +140,9 @@
     <ClInclude Include="..\src\knx\bau27B0.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\knx\knx_ip_frame.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\knx\rf_data_link_layer.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
@@ -248,6 +251,9 @@
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\bau27B0.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\knx_ip_frame.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\rf_data_link_layer.cpp">
