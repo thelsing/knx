@@ -29,27 +29,37 @@ bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
         return false;
     }
 
-    // Depending on this flag, use either KNX Serial Number
-    // or the RF domain address that was programmed by ETS
-    if (frame.systemBroadcast() == SysBroadcast)
+    // If no serial number of domain address was set,
+    // use our own SN/DoA
+    if (frame.rfSerialOrDoA() == nullptr)
     {
-        uint8_t knxSerialNumber[6];
-        pushWord(_deviceObject.manufacturerId(), &knxSerialNumber[0]);
-        pushInt(_deviceObject.bauNumber(), &knxSerialNumber[2]);
-        frame.rfSerialOrDoA(&knxSerialNumber[0]);
-    }
-    else
-    {
-        frame.rfSerialOrDoA(_rfMediumObj.rfDomainAddress());
+        // Depending on this flag, use either KNX Serial Number
+        // or the RF domain address that was programmed by ETS
+        if (frame.systemBroadcast() == SysBroadcast)
+        {
+            uint8_t knxSerialNumber[6];
+            pushWord(_deviceObject.manufacturerId(), &knxSerialNumber[0]);
+            pushInt(_deviceObject.bauNumber(), &knxSerialNumber[2]);
+            frame.rfSerialOrDoA(&knxSerialNumber[0]);
+        }
+        else
+        {
+            frame.rfSerialOrDoA(_rfMediumObj.rfDomainAddress());
+        }
     }
 
-    // Set Data Link Layer Frame Number
-    frame.rfLfn(_frameNumber);
-    // Link Layer frame number counts 0..7
-    _frameNumber = (_frameNumber + 1) & 0x7; 
+    // If Link Layer frame is set to 0xFF,
+    // use our own counter
+    if (frame.rfLfn() == 0xFF)
+    {
+        // Set Data Link Layer Frame Number
+        frame.rfLfn(_frameNumber);
+        // Link Layer frame number counts 0..7
+        _frameNumber = (_frameNumber + 1) & 0x7;
+    }
 
     // bidirectional device, battery is ok, signal strength indication is void (no measurement)
-    frame.rfInfo(0x02); 
+    frame.rfInfo(0x02);
 
     // TODO: Is queueing really required?
     // According to the spec. the upper layer may only send a new L_Data.req if it received
@@ -321,8 +331,8 @@ void RfDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
     tx_frame->next = NULL;
 
     // Prepare the raw RF frame
-    fillRfFrame(frame, tx_frame->data);
 /*
+    fillRfFrame(frame, tx_frame->data);
     print("TX LFN: ");
     print(frame.rfLfn());
 

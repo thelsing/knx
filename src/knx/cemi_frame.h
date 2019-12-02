@@ -80,7 +80,7 @@ class CemiFrame
     APDU _apdu;
     uint16_t _length = 0; // only set if created from byte array
 
-    // nly for RF medium
+    // only for RF medium
     uint8_t* _rfSerialOrDoA = 0;
     uint8_t  _rfInfo = 0;
     uint8_t  _rfLfn = 0; // RF Data Link layer frame number

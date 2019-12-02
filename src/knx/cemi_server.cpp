@@ -94,6 +94,38 @@ void CemiServer::frameReceived(CemiFrame& frame)
                 frame.sourceAddress(_clientAddress);
             }
 
+#if MEDIUM_TYPE == 2 
+            // Check if we have additional info for RF
+
+            uint8_t rfSerialOrDoA[6];
+            uint8_t rfLfn;
+
+            if (((frame.data())[1] == 0x0A) && // Additional info total length: we only handle one additional info of type RF
+                ((frame.data())[2] == 0x02) && // Additional info type: RF
+                ((frame.data())[3] == 0x08) )  // Additional info length of type RF: 8 bytes (fixed)
+            {
+                // Use the values provided in the RF additonal info 
+                memcpy(&rfSerialOrDoA, &((frame.data())[5]), 6);
+                rfLfn = (frame.data())[11];
+            }
+            else
+            {
+                // Let the RF data link layer fill in its own values
+                memset(&rfSerialOrDoA, 0x00, 6);
+                rfLfn = 0xFF;
+            }
+
+            if ( (rfSerialOrDoA[0] == 0x00) && (rfSerialOrDoA[1] == 0x00) && (rfSerialOrDoA[2] == 0x00) &&
+                 (rfSerialOrDoA[3] == 0x00) && (rfSerialOrDoA[4] == 0x00) && (rfSerialOrDoA[5] == 0x00) )
+            {
+                frame.rfSerialOrDoA(nullptr);
+            }
+            else
+            {
+                frame.rfSerialOrDoA(rfSerialOrDoA);
+            }
+#endif
+
             print("L_data_req: src: ");
             print(frame.sourceAddress(), HEX);
             print(" dst: ");
