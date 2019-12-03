@@ -118,50 +118,34 @@ void Bau27B0::loop()
 void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
                                                           uint8_t* knxSerialNumber)
 {
-    uint8_t curSerialNumber[6];
-    pushWord(_deviceObj.manufacturerId(), &curSerialNumber[0]);
-    pushInt(_deviceObj.bauNumber(), &curSerialNumber[2]);
-
     // If the received serial number matches our serial number
     // then store the received RF domain address in the RF medium object
-    if (!memcmp(knxSerialNumber, curSerialNumber, 6))
+    if (!memcmp(knxSerialNumber, _deviceObj.knxSerialNumber(), 6))
         _rfMediumObj.rfDomainAddress(rfDoA);
 }
 
 void Bau27B0::domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber)
 {
-    uint8_t curSerialNumber[6];
-    pushWord(_deviceObj.manufacturerId(), &curSerialNumber[0]);
-    pushInt(_deviceObj.bauNumber(), &curSerialNumber[2]);
-
     // If the received serial number matches our serial number
     // then send a response with the current RF domain address stored in the RF medium object
-    if (!memcmp(knxSerialNumber, curSerialNumber, 6))
+    if (!memcmp(knxSerialNumber, _deviceObj.knxSerialNumber(), 6))
         _appLayer.domainAddressSerialNumberReadResponse(priority, hopType, _rfMediumObj.rfDomainAddress(), knxSerialNumber);
 }
 
 void Bau27B0::individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint16_t newIndividualAddress,
                                                           uint8_t* knxSerialNumber)
 {
-    uint8_t curSerialNumber[6];
-    pushWord(_deviceObj.manufacturerId(), &curSerialNumber[0]);
-    pushInt(_deviceObj.bauNumber(), &curSerialNumber[2]);
-
     // If the received serial number matches our serial number
     // then store the received new individual address in the device object
-    if (!memcmp(knxSerialNumber, curSerialNumber, 6))
+    if (!memcmp(knxSerialNumber, _deviceObj.knxSerialNumber(), 6))
         _deviceObj.induvidualAddress(newIndividualAddress);
 }
 
 void Bau27B0::individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber)
 {
-    uint8_t curSerialNumber[6];
-    pushWord(_deviceObj.manufacturerId(), &curSerialNumber[0]);
-    pushInt(_deviceObj.bauNumber(), &curSerialNumber[2]);
-
     // If the received serial number matches our serial number
     // then send a response with the current RF domain address stored in the RF medium object and the serial number
-    if (!memcmp(knxSerialNumber, curSerialNumber, 6))
+    if (!memcmp(knxSerialNumber, _deviceObj.knxSerialNumber(), 6))
         _appLayer.IndividualAddressSerialNumberReadResponse(priority, hopType, _rfMediumObj.rfDomainAddress(), knxSerialNumber);
 }
 

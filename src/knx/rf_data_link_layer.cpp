@@ -23,12 +23,6 @@ void RfDataLinkLayer::loop()
 
 bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
 {
-    if (!_enabled)
-    {
-        dataConReceived(frame, false);
-        return false;
-    }
-
     // If no serial number of domain address was set,
     // use our own SN/DoA
     if (frame.rfSerialOrDoA() == nullptr)
@@ -37,10 +31,7 @@ bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
         // or the RF domain address that was programmed by ETS
         if (frame.systemBroadcast() == SysBroadcast)
         {
-            uint8_t knxSerialNumber[6];
-            pushWord(_deviceObject.manufacturerId(), &knxSerialNumber[0]);
-            pushInt(_deviceObject.bauNumber(), &knxSerialNumber[2]);
-            frame.rfSerialOrDoA(&knxSerialNumber[0]);
+            frame.rfSerialOrDoA((uint8_t*)_deviceObject.knxSerialNumber());
         }
         else
         {
@@ -60,6 +51,12 @@ bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
 
     // bidirectional device, battery is ok, signal strength indication is void (no measurement)
     frame.rfInfo(0x02);
+
+    if (!_enabled)
+    {
+        dataConReceived(frame, false);
+        return false;
+    }
 
     // TODO: Is queueing really required?
     // According to the spec. the upper layer may only send a new L_Data.req if it received

@@ -362,7 +362,6 @@ void BauSystemB::nextRestartState()
 void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
                                                       uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
 {
-    uint8_t knxSerialNumber[6];
     uint8_t operand;
 
     popByte(operand, testInfo + 1); // First byte (+ 0) contains only 4 reserved bits (0)
@@ -375,10 +374,8 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
             if (_deviceObj.progMode() && (objectType == OT_DEVICE) && (propertyId == PID_SERIAL_NUMBER))
             {
                 // Send reply. testResult data is KNX serial number
-                pushWord(_deviceObj.manufacturerId(), &knxSerialNumber[0]);
-                pushInt(_deviceObj.bauNumber(), &knxSerialNumber[2]);
                 _appLayer.systemNetworkParameterReadResponse(priority, hopType, objectType, propertyId,
-                                                             testInfo, testInfoLength, knxSerialNumber, sizeof(knxSerialNumber));
+                                                             testInfo, testInfoLength, (uint8_t*) _deviceObj.knxSerialNumber(), 6);
             }
         break;
 

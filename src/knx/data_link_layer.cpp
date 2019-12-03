@@ -157,13 +157,25 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
 //        frame.apdu().printPDU();
 //    }
 
+    // The data link layer might be an open media link layer
+    // and will setup rfSerialOrDoA, rfInfo and rfLfn that we also 
+    // have to send through the cEMI server tunnel
+    // Thus, reuse the modified cEMI frame as "frame" is only passed by reference here!
+    bool success = sendFrame(frame);
+
     if (_cemiServer)
     {
         CemiFrame tmpFrame(frame.data(), frame.totalLenght());
+        // We can just copy the pointer for rfSerialOrDoA as sendFrame() sets
+        // a pointer to const uint8_t data in either device object (serial) or
+        // RF medium object (domain address)
+        tmpFrame.rfSerialOrDoA(frame.rfSerialOrDoA()); 
+        tmpFrame.rfInfo(frame.rfInfo());
+        tmpFrame.rfLfn(frame.rfLfn());
         _cemiServer->dataIndicationToTunnel(tmpFrame);
     }
-    
-    return sendFrame(frame);
+
+    return success;
 }
 
 uint8_t* DataLinkLayer::frameData(CemiFrame& frame)

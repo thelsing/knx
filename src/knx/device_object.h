@@ -29,6 +29,8 @@ public:
     void manufacturerId(uint16_t value);
     uint32_t bauNumber();
     void bauNumber(uint32_t value);
+    const uint8_t* knxSerialNumber();
+    void knxSerialNumber(const uint8_t* value);
     const char* orderNumber();
     void orderNumber(const char* value);
     const uint8_t* hardwareType();
@@ -51,8 +53,7 @@ private:
     uint8_t _routingCount = 0;
     uint8_t _prgMode = 0;
     uint16_t _ownAddress = 0;
-    uint16_t _manufacturerId = 0xfa; //Default to KNXA
-    uint32_t _bauNumber = 0;
+    uint8_t _knxSerialNumber[6] = { 0x00, 0xFA, 0x00, 0x00, 0x00, 0x00 };  //Default to KNXA (0xFA)
     char _orderNumber[10] = "";
     uint8_t _hardwareType[6] = { 0, 0, 0, 0, 0, 0};
     uint16_t _version = 0;

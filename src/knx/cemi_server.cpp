@@ -47,16 +47,16 @@ void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
 
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 {
-    static uint8_t lfn = 0;
+#if MEDIUM_TYPE == 2    
+
     uint8_t data[frame.dataLength() + 10];
-    data[0] = L_data_ind;
-    data[1] = 10;
-    data[2] = 0x02; // RF Info add. info
-    data[3] = 0x08; // RF info length
-    data[4] = 0x02; // RF info field (batt ok)
-    pushByteArray(_bau.deviceObject().rfDomainAddress(), 6, &data[5]);
-    data[11] = lfn;
-    lfn = (lfn + 1) & 0x7; 
+    data[0] = L_data_ind;     // Message Code
+    data[1] = 10;             // Total additional info length
+    data[2] = 0x02;           // RF add. info: type
+    data[3] = 0x08;           // RF add. info: length
+    data[4] = frame.rfInfo(); // RF add. info: info field (batt ok, bidir)
+    pushByteArray(frame.rfSerialOrDoA(), 6, &data[5]); // RF add. info:Serial or Domain Address
+    data[11] = frame.rfLfn(); // RF add. info: link layer frame number
     memcpy(&data[12], &frame.data()[2], frame.dataLength() - 2);
 
     CemiFrame tmpFrame(data, sizeof(data));
@@ -69,6 +69,19 @@ void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
     printHex(" frame: ", tmpFrame.data(), tmpFrame.dataLength());
 
     _usbTunnelInterface.sendCemiFrame(tmpFrame);
+
+#else
+
+    print("L_data_ind: src: ");
+    print(frame.sourceAddress(), HEX);
+    print(" dst: ");
+    print(frame.destinationAddress(), HEX);
+
+    printHex(" frame: ", frame.data(), frame.dataLength());
+
+    _usbTunnelInterface.sendCemiFrame(frame);
+
+#endif
 }
 
 /*

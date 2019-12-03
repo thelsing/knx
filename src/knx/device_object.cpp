@@ -10,11 +10,10 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             pushWord(OT_DEVICE, data);
             break;
         case PID_SERIAL_NUMBER:
-            pushWord(_manufacturerId, data);
-            pushInt(_bauNumber, data + 2);
+            pushByteArray((uint8_t*)_knxSerialNumber, 6, data);
             break;
         case PID_MANUFACTURER_ID:
-            pushWord(_manufacturerId, data);
+            pushByteArray(&_knxSerialNumber[0], 2, data);
             break;
         case PID_DEVICE_CONTROL:
             *data = _deviceControl;
@@ -220,22 +219,36 @@ void DeviceObject::progMode(bool value)
 
 uint16_t DeviceObject::manufacturerId()
 {
-    return _manufacturerId;
+    uint16_t manufacturerId;
+    popWord(manufacturerId, &_knxSerialNumber[0]);
+    return manufacturerId;
 }
 
 void DeviceObject::manufacturerId(uint16_t value)
 {
-    _manufacturerId = value;
+   pushWord(value, &_knxSerialNumber[0]);
 }
 
 uint32_t DeviceObject::bauNumber()
 {
-    return _bauNumber;
+    uint32_t bauNumber;
+    popInt(bauNumber, &_knxSerialNumber[2]);
+    return bauNumber;
 }
 
 void DeviceObject::bauNumber(uint32_t value)
 {
-    _bauNumber = value;
+   pushInt(value, &_knxSerialNumber[2]);
+}
+
+const uint8_t* DeviceObject::knxSerialNumber()
+{
+    return _knxSerialNumber;
+}
+
+void DeviceObject::knxSerialNumber(const uint8_t* value)
+{
+    pushByteArray(value, 6, _knxSerialNumber);
 }
 
 const char* DeviceObject::orderNumber()
