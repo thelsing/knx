@@ -200,7 +200,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             // then we received the domain address and not the KNX serial number
             if (systemBroadcast == Broadcast)
             {
-                // Check if  the received RF domain address matches the one stored in the RF medium object
+                // Check if the received RF domain address matches the one stored in the RF medium object
                 // If it does not match then skip the remaining processing
                 if (memcmp(_rfMediumObj.rfDomainAddress(), &rfPacketBuf[4], 6))
                 {

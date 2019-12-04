@@ -42,6 +42,7 @@ class CemiServer
     
   private:
     uint16_t _clientAddress;
+    uint8_t _frameNumber = 0;
 
     DataLinkLayer* _dataLinkLayer;
     BauSystemB& _bau;

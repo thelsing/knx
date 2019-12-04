@@ -69,9 +69,9 @@ Control Field 1
 */ 
 
 CemiFrame::CemiFrame(uint8_t* data, uint16_t length)
-    : _npdu(data + NPDU_LPDU_DIFF, *this), 
-      _tpdu(data + TPDU_LPDU_DIFF, *this), 
-      _apdu(data + APDU_LPDU_DIFF, *this)
+    : _npdu(data + data[1] + NPDU_LPDU_DIFF, *this), 
+      _tpdu(data + data[1] + TPDU_LPDU_DIFF, *this), 
+      _apdu(data + data[1] + APDU_LPDU_DIFF, *this)
 {
     _data = data;
     _ctrl1 = data + data[1] + CEMI_HEADER_SIZE;

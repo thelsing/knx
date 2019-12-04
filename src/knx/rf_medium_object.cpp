@@ -41,6 +41,9 @@ void RfMediumObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data,
 {
     switch (id)
     {
+        case PID_RF_MULTI_TYPE:
+            // We only support RF ready and not RF multi, ignore write request
+        break;
         case PID_RF_DOMAIN_ADDRESS:
             for (uint8_t i = start; i < start + count; i++)
                 _rfDomainAddress[i-1] = data[i - start];

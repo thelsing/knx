@@ -48,6 +48,7 @@ void DataLinkLayer::systemBroadcastRequest(AckType ack, FrameFormat format, Prio
 
 void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
 {
+    MessageCode backupMsgCode = frame.messageCode();
     frame.messageCode(L_data_con);
     frame.confirm(success ? ConfirmNoError : ConfirmError);
     AckType ack = frame.ack();
@@ -77,6 +78,8 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
                 _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success);                    
     else
         _networkLayer.dataConfirm(ack, addrType, destination, type, priority, source, npdu, success);
+
+    frame.messageCode(backupMsgCode);
 }
 
 void DataLinkLayer::frameRecieved(CemiFrame& frame)
@@ -172,6 +175,7 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
         tmpFrame.rfSerialOrDoA(frame.rfSerialOrDoA()); 
         tmpFrame.rfInfo(frame.rfInfo());
         tmpFrame.rfLfn(frame.rfLfn());
+        tmpFrame.confirm(ConfirmNoError);
         _cemiServer->dataIndicationToTunnel(tmpFrame);
     }
 
