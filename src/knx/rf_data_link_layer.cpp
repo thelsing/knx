@@ -328,8 +328,8 @@ void RfDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
     tx_frame->next = NULL;
 
     // Prepare the raw RF frame
-/*
     fillRfFrame(frame, tx_frame->data);
+/*
     print("TX LFN: ");
     print(frame.rfLfn());
 
