@@ -315,11 +315,16 @@ void CemiServer::frameReceived(CemiFrame& frame)
 
         case M_Reset_req:
         {
-            println("M_Reset_req");  
+            println("M_Reset_req: sending M_Reset_ind");  
             // A real device reset does not work for USB or KNXNET/IP.
             // Thus, M_Reset_ind is NOT mandatory for USB and KNXNET/IP.
             // We just save all data to the EEPROM
             _bau.writeMemory();
+            // Prepare response
+            uint8_t responseData[1];
+            CemiFrame responseFrame(responseData, sizeof(responseData));
+            responseFrame.messageCode(M_Reset_ind);
+            _usbTunnelInterface.sendCemiFrame(responseFrame);
             break;
         }
 
