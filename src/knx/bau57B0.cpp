@@ -47,6 +47,31 @@ InterfaceObject* Bau57B0::getInterfaceObject(uint8_t idx)
     }
 }
 
+InterfaceObject* Bau57B0::getInterfaceObject(ObjectType objectType, uint8_t objectInstance)
+{
+    // We do not use it right now. 
+    // Required for coupler mode as there are multiple router objects for example
+    (void) objectInstance;
+
+    switch (objectType)
+    {
+        case OT_DEVICE:
+            return &_deviceObj;
+        case OT_ADDR_TABLE:
+            return &_addrTable;
+        case OT_ASSOC_TABLE:
+            return &_assocTable;
+        case OT_GRP_OBJ_TABLE:
+            return &_groupObjTable;
+        case OT_APPLICATION_PROG:
+            return &_appProgram;
+        case OT_IP_PARAMETER:
+            return &_ipParameters;
+        default:
+            return nullptr;
+    }
+}
+
 uint8_t* Bau57B0::descriptor()
 {
     return _descriptor;
