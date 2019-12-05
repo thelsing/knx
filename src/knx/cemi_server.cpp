@@ -37,6 +37,10 @@ void CemiServer::clientAddress(uint16_t value)
 
 void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
 {
+    MessageCode backupMsgCode = frame.messageCode();
+    
+    frame.messageCode(L_data_con);
+
     print("L_data_con: src: ");
     print(frame.sourceAddress(), HEX);
     print(" dst: ");
@@ -45,6 +49,8 @@ void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
     printHex(" frame: ", frame.data(), frame.dataLength());
 
     _usbTunnelInterface.sendCemiFrame(frame);
+
+    frame.messageCode(backupMsgCode);
 }
 
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)

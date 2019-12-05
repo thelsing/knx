@@ -73,8 +73,6 @@ void DeviceObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, u
             _prgMode = data[0];
             break;
         case PID_RF_DOMAIN_ADDRESS_CEMI_SERVER:
-            //for (uint8_t i = start; i < start + count; i++)
-                //_rfDomainAddress[i-1] = data[i - start];
             memcpy(_rfDomainAddress, data, propertySize(PID_RF_DOMAIN_ADDRESS_CEMI_SERVER));
             break;
         case PID_SUBNET_ADDR:

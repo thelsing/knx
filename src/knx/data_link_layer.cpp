@@ -21,7 +21,6 @@ void DataLinkLayer::cemiServer(CemiServer& cemiServer)
 
 void DataLinkLayer::dataRequestFromTunnel(CemiFrame& frame)
 {
-    frame.messageCode(L_data_con);
     _cemiServer->dataConfirmationToTunnel(frame);
 
     frame.messageCode(L_data_ind);
