@@ -38,7 +38,7 @@ void CemiServer::clientAddress(uint16_t value)
 void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
 {
     MessageCode backupMsgCode = frame.messageCode();
-    
+
     frame.messageCode(L_data_con);
 
     print("L_data_con: src: ");
@@ -83,16 +83,6 @@ void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 
     _usbTunnelInterface.sendCemiFrame(tmpFrame);
 }
-
-/*
-void CemiServer::localManagmentRequestFromTunnel(CemiFrame& frame)
-{
-    // called from KNXNET/IP for Management Services
-
-    // Send response to IP data link layer 
-    _dataLinkLayer->localManagmentResponseToTunnel();
-}
-*/
 
 void CemiServer::frameReceived(CemiFrame& frame)
 {
