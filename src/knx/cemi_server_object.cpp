@@ -1,3 +1,5 @@
+#ifdef USE_CEMI_SERVER
+
 #include <cstring>
 #include "cemi_server_object.h"
 #include "bits.h"
@@ -109,3 +111,5 @@ PropertyDescription* CemiServerObject::propertyDescriptions()
 {
     return _propertyDescriptions;
 }
+
+#endif

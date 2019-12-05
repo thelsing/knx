@@ -12,6 +12,8 @@ DataLinkLayer::DataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
 {
 }
 
+#ifdef USE_CEMI_SERVER
+
 void DataLinkLayer::cemiServer(CemiServer& cemiServer)
 {
     _cemiServer = &cemiServer;
@@ -30,6 +32,7 @@ void DataLinkLayer::dataRequestFromTunnel(CemiFrame& frame)
     // Send to KNX medium
     sendFrame(frame);
 }
+#endif
 
 void DataLinkLayer::dataRequest(AckType ack, AddressType addrType, uint16_t destinationAddr, FrameFormat format, Priority priority, NPDU& npdu)
 {
@@ -60,16 +63,15 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
     NPDU& npdu = frame.npdu();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
-    if (_cemiServer)
+#ifdef USE_CEMI_SERVER
+    // if the confirmation was caused by a tunnel request then
+    // do not send it to the local stack
+    if (frame.sourceAddress() == _cemiServer->clientAddress())
     {
-        // if the confirmation was caused by a tunnel request then
-        // do not send it to the local stack
-        if (frame.sourceAddress() == _cemiServer->clientAddress())
-        {
-            // Stop processing here and do NOT send it the local network layer
-            return;
-        }
+        // Stop processing here and do NOT send it the local network layer
+        return;
     }
+#endif    
 
     if (addrType == GroupAddress && destination == 0)
             if (systemBroadcast == SysBroadcast)
@@ -94,15 +96,14 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     uint16_t ownAddr = _deviceObject.induvidualAddress();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
-    if (_cemiServer)
+#ifdef USE_CEMI_SERVER
+    // Do not send our own message back to the tunnel
+    if (frame.sourceAddress() != _cemiServer->clientAddress())
     {
-        // Do not send our own message back to the tunnel
-        if (frame.sourceAddress() != _cemiServer->clientAddress())
-        {
-            _cemiServer->dataIndicationToTunnel(frame);
-        }
+        _cemiServer->dataIndicationToTunnel(frame);
     }
-    
+#endif
+
     if (source == ownAddr)
         _deviceObject.induvidualAddressDuplication(true);
 
@@ -166,18 +167,17 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
     // Thus, reuse the modified cEMI frame as "frame" is only passed by reference here!
     bool success = sendFrame(frame);
 
-    if (_cemiServer)
-    {
-        CemiFrame tmpFrame(frame.data(), frame.totalLenght());
-        // We can just copy the pointer for rfSerialOrDoA as sendFrame() sets
-        // a pointer to const uint8_t data in either device object (serial) or
-        // RF medium object (domain address)
-        tmpFrame.rfSerialOrDoA(frame.rfSerialOrDoA()); 
-        tmpFrame.rfInfo(frame.rfInfo());
-        tmpFrame.rfLfn(frame.rfLfn());
-        tmpFrame.confirm(ConfirmNoError);
-        _cemiServer->dataIndicationToTunnel(tmpFrame);
-    }
+#ifdef USE_CEMI_SERVER
+    CemiFrame tmpFrame(frame.data(), frame.totalLenght());
+    // We can just copy the pointer for rfSerialOrDoA as sendFrame() sets
+    // a pointer to const uint8_t data in either device object (serial) or
+    // RF medium object (domain address)
+    tmpFrame.rfSerialOrDoA(frame.rfSerialOrDoA()); 
+    tmpFrame.rfInfo(frame.rfInfo());
+    tmpFrame.rfLfn(frame.rfLfn());
+    tmpFrame.confirm(ConfirmNoError);
+    _cemiServer->dataIndicationToTunnel(tmpFrame);
+#endif
 
     return success;
 }

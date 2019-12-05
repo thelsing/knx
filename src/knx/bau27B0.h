@@ -4,10 +4,8 @@
 #include "rf_medium_object.h"
 #include "rf_physical_layer.h"
 #include "rf_data_link_layer.h"
-#ifdef USE_CEMI_SERVER
 #include "cemi_server.h"
 #include "cemi_server_object.h"
-#endif
 
 class Bau27B0 : public BauSystemB
 {

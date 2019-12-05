@@ -1,3 +1,5 @@
+#ifdef USE_CEMI_SERVER
+
 #include "bits.h"
 #include "usb_tunnel_interface.h"
 #include "cemi_server.h"
@@ -537,3 +539,5 @@ uint16_t UsbTunnelInterface::getHidReportDescriptorLength()
 {
 	return sizeof(descHidReport);
 }
+
+#endif
