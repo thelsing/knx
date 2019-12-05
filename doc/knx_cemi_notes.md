@@ -25,5 +25,5 @@ Development environment
 -----------------------
 * PlatformIO
 * Segger J-Link EDU
-* [GY-SAMD21 Board, compatible to Adafruit Feather M0](https://eckstein-shop.de/GY-SAMD21-Mini-Breakout-fuer-Arduino)
+* [GY-SAMD21 Board](https://eckstein-shop.de/GY-SAMD21-Mini-Breakout-fuer-Arduino), compatible to [Adafruit Feather M0](https://www.adafruit.com/product/2772)
 
