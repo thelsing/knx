@@ -37,10 +37,10 @@ before_install:
     - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(recipe.c.combine.pattern=[^$]*\{archive_file\}")( -Wl,--end-group)#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/arduino/hardware/samd/1.8.4/platform.txt; fi
     - if [ "$MODE" = "ARDUINO" ]; then sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/arduino/hardware/samd/1.8.4/platform.txt; fi
     # esp8266
-    - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(recipe.c.combine.pattern=[^$]*\{compiler.c.elf.libs\})( -Wl,--end-group  "-L\{build.path\}")#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.1/platform.txt; fi
-    - if [ "$MODE" = "ARDUINO" ]; then sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.1/platform.txt; fi
-    - if [ "$MODE" = "ARDUINO" ]; then sed -i '/^.*libalgobsec.*$/d' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.1/tools/sdk/ld/eagle.app.v6.common.ld.h; fi
-    - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(\*libwps\.a:\(\.literal\.\* \.text\.\*\))#\1\n    *libalgobsec.a:(.literal.* .text.*)#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.1/tools/sdk/ld/eagle.app.v6.common.ld.h; fi
+    - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(recipe.c.combine.pattern=[^$]*\{compiler.c.elf.libs\})( -Wl,--end-group  "-L\{build.path\}")#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.2/platform.txt; fi
+    - if [ "$MODE" = "ARDUINO" ]; then sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.2/platform.txt; fi
+    - if [ "$MODE" = "ARDUINO" ]; then sed -i '/^.*libalgobsec.*$/d' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.2/tools/sdk/ld/eagle.app.v6.common.ld.h; fi
+    - if [ "$MODE" = "ARDUINO" ]; then sed -ri 's#(\*libwps\.a:\(\.literal\.\* \.text\.\*\))#\1\n    *libalgobsec.a:(.literal.* .text.*)#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.2/tools/sdk/ld/eagle.app.v6.common.ld.h; fi
 
     # the HDC100X lib is not properly set up in githup so move things around a bit
     - if [ "$MODE" = "ARDUINO" ]; then rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master; fi
