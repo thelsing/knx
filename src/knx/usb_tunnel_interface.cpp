@@ -434,28 +434,28 @@ void UsbTunnelInterface::handleBusAccessServerProtocol(ServiceIdType servId, con
 			switch (featureId)
 			{
 				case SupportedEmiType: // Supported EMI types
-					Serial1.println("Device Feature Get: Supported EMI types");
+					println("Device Feature Get: Supported EMI types");
 					respData[1] = 0x00; // USB KNX Transfer Protocol Body: Feature Data
 					respData[2] = 0x04; // USB KNX Transfer Protocol Body: Feature Data -> only cEMI supported
 					sendKnxHidReport(BusAccessServer, DeviceFeatureResponse, respData, 3);
 					break;
 				case HostDeviceDescriptorType0: // Host Device Descriptor Type 0
-					Serial1.println("Device Feature Get: Host Device Descriptor Type 0");
+					println("Device Feature Get: Host Device Descriptor Type 0");
 					pushWord(_maskVersion, &respData[1]); // USB KNX Transfer Protocol Body: Feature Data -> Mask version
 					sendKnxHidReport(BusAccessServer, DeviceFeatureResponse, respData, 3);
 					break;
 				case BusConnectionStatus: // Bus connection status
-					Serial1.println("Device Feature Get: Bus connection status");
+					println("Device Feature Get: Bus connection status");
 					respData[1] = 1; // USB KNX Transfer Protocol Body: Feature Data -> bus connection status
 					sendKnxHidReport(BusAccessServer, DeviceFeatureResponse, respData, 2);
 					break;
 				case KnxManufacturerCode: // KNX manufacturer code
-					Serial1.println("Device Feature Get: KNX manufacturer code");
+					println("Device Feature Get: KNX manufacturer code");
 					pushWord(_manufacturerId, &respData[1]); // USB KNX Transfer Protocol Body: Feature Data -> Manufacturer Code
 					sendKnxHidReport(BusAccessServer, DeviceFeatureResponse, respData, 3);
 					break;
 				case ActiveEmiType: // Active EMI type
-					Serial1.println("Device Feature Get: Active EMI type");
+					println("Device Feature Get: Active EMI type");
 					respData[1] = (uint8_t) CEMI; // USB KNX Transfer Protocol Body: Feature Data -> cEMI type ID
 					sendKnxHidReport(BusAccessServer, DeviceFeatureResponse, respData, 2);
 					break;
@@ -470,10 +470,10 @@ void UsbTunnelInterface::handleBusAccessServerProtocol(ServiceIdType servId, con
 			switch (featureId)
 			{
 				case ActiveEmiType: // Active EMI type
-					Serial1.print("Device Feature Set: Active EMI type: ");
+					print("Device Feature Set: Active EMI type: ");
 					if (requestData[1] < 16)
-						Serial1.print("0");
-					Serial1.println(requestData[1], HEX); // USB KNX Transfer Protocol Body: Feature Data -> EMI TYPE ID
+						print("0");
+					println(requestData[1], HEX); // USB KNX Transfer Protocol Body: Feature Data -> EMI TYPE ID
 					break;
 				// All other featureIds must not be set
 				case SupportedEmiType: // Supported EMI types
