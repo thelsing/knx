@@ -10,11 +10,10 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
             pushWord(OT_DEVICE, data);
             break;
         case PID_SERIAL_NUMBER:
-            pushWord(_manufacturerId, data);
-            pushInt(_bauNumber, data + 2);
+            pushByteArray((uint8_t*)_knxSerialNumber, 6, data);
             break;
         case PID_MANUFACTURER_ID:
-            pushWord(_manufacturerId, data);
+            pushByteArray(&_knxSerialNumber[0], 2, data);
             break;
         case PID_DEVICE_CONTROL:
             *data = _deviceControl;
@@ -52,12 +51,15 @@ void DeviceObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t&
         case PID_DEVICE_DESCRIPTOR:
             pushWord(_maskVersion, data);
             break;
+        case PID_RF_DOMAIN_ADDRESS_CEMI_SERVER:
+            pushByteArray((uint8_t*)_rfDomainAddress, 6, data);
+            break;
         default:
             count = 0;
     }
 }
 
-void DeviceObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count)
+void DeviceObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count)
 {
     switch (id)
     {
@@ -69,6 +71,18 @@ void DeviceObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, ui
             break;
         case PID_PROG_MODE:
             _prgMode = data[0];
+            break;
+        case PID_RF_DOMAIN_ADDRESS_CEMI_SERVER:
+            memcpy(_rfDomainAddress, data, propertySize(PID_RF_DOMAIN_ADDRESS_CEMI_SERVER));
+            break;
+        case PID_SUBNET_ADDR:
+            _ownAddress = (data[0] << 8) | (_ownAddress & 0xff);
+            break;
+        case PID_DEVICE_ADDR:
+            _ownAddress = data[0] | (_ownAddress & 0xff00);
+            break;
+        default:
+            count = 0;
             break;
     }
 }
@@ -93,6 +107,7 @@ uint8_t DeviceObject::propertySize(PropertyID id)
         return 4;
     case PID_SERIAL_NUMBER:
     case PID_HARDWARE_TYPE:
+    case PID_RF_DOMAIN_ADDRESS_CEMI_SERVER:
         return 6;
     case PID_ORDER_INFO:
         return 10;
@@ -105,6 +120,7 @@ uint8_t* DeviceObject::save(uint8_t* buffer)
     buffer = pushByte(_deviceControl, buffer);
     buffer = pushByte(_routingCount, buffer);
     buffer = pushWord(_ownAddress, buffer);
+    buffer = pushByteArray((uint8_t*)_rfDomainAddress, 6, buffer);
     return buffer;
 }
 
@@ -113,6 +129,7 @@ uint8_t* DeviceObject::restore(uint8_t* buffer)
     buffer = popByte(_deviceControl, buffer);
     buffer = popByte(_routingCount, buffer);
     buffer = popWord(_ownAddress, buffer);
+    buffer = popByteArray((uint8_t*)_rfDomainAddress, 6, buffer);
     _prgMode = 0;
     return buffer;
 }
@@ -200,22 +217,36 @@ void DeviceObject::progMode(bool value)
 
 uint16_t DeviceObject::manufacturerId()
 {
-    return _manufacturerId;
+    uint16_t manufacturerId;
+    popWord(manufacturerId, &_knxSerialNumber[0]);
+    return manufacturerId;
 }
 
 void DeviceObject::manufacturerId(uint16_t value)
 {
-    _manufacturerId = value;
+   pushWord(value, &_knxSerialNumber[0]);
 }
 
 uint32_t DeviceObject::bauNumber()
 {
-    return _bauNumber;
+    uint32_t bauNumber;
+    popInt(bauNumber, &_knxSerialNumber[2]);
+    return bauNumber;
 }
 
 void DeviceObject::bauNumber(uint32_t value)
 {
-    _bauNumber = value;
+   pushInt(value, &_knxSerialNumber[2]);
+}
+
+const uint8_t* DeviceObject::knxSerialNumber()
+{
+    return _knxSerialNumber;
+}
+
+void DeviceObject::knxSerialNumber(const uint8_t* value)
+{
+    pushByteArray(value, 6, _knxSerialNumber);
 }
 
 const char* DeviceObject::orderNumber()
@@ -276,6 +307,16 @@ const uint32_t* DeviceObject::ifObj()
 void DeviceObject::ifObj(const uint32_t* value)
 {
     _ifObjs = value;
+}
+
+uint8_t* DeviceObject::rfDomainAddress()
+{
+    return _rfDomainAddress;
+}
+
+void DeviceObject::rfDomainAddress(uint8_t* value)
+{
+    pushByteArray(value, 6, _rfDomainAddress);
 }
 
 static PropertyDescription _propertyDescriptions[] = 

@@ -79,7 +79,7 @@ void IpParameterObject::readProperty(PropertyID propertyId, uint32_t start, uint
     }
 }
 
-void IpParameterObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count)
+void IpParameterObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count)
 {
     switch (id)
     {
@@ -113,6 +113,9 @@ void IpParameterObject::writeProperty(PropertyID id, uint8_t start, uint8_t* dat
         case PID_FRIENDLY_NAME:
             for (uint8_t i = start; i < start + count; i++)
                 _friendlyName[i-1] = data[i - start];
+            break;
+        default:
+            count = 0;
             break;
     }
 }

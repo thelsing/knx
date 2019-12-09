@@ -23,30 +23,40 @@ void RfDataLinkLayer::loop()
 
 bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
 {
-    if (!_enabled)
-        return false;
-
-    // Depending on this flag, use either KNX Serial Number
-    // or the RF domain address that was programmed by ETS
-    if (frame.systemBroadcast() == SysBroadcast)
+    // If no serial number of domain address was set,
+    // use our own SN/DoA
+    if (frame.rfSerialOrDoA() == nullptr)
     {
-        uint8_t knxSerialNumber[6];
-        pushWord(_deviceObject.manufacturerId(), &knxSerialNumber[0]);
-        pushInt(_deviceObject.bauNumber(), &knxSerialNumber[2]);
-        frame.rfSerialOrDoA(&knxSerialNumber[0]);
-    }
-    else
-    {
-        frame.rfSerialOrDoA(_rfMediumObj.rfDomainAddress());
+        // Depending on this flag, use either KNX Serial Number
+        // or the RF domain address that was programmed by ETS
+        if (frame.systemBroadcast() == SysBroadcast)
+        {
+            frame.rfSerialOrDoA((uint8_t*)_deviceObject.knxSerialNumber());
+        }
+        else
+        {
+            frame.rfSerialOrDoA(_rfMediumObj.rfDomainAddress());
+        }
     }
 
-    // Set Data Link Layer Frame Number
-    frame.rfLfn(_frameNumber);
-    // Link Layer frame number counts 0..7
-    _frameNumber = (_frameNumber + 1) & 0x7; 
+    // If Link Layer frame is set to 0xFF,
+    // use our own counter
+    if (frame.rfLfn() == 0xFF)
+    {
+        // Set Data Link Layer Frame Number
+        frame.rfLfn(_frameNumber);
+        // Link Layer frame number counts 0..7
+        _frameNumber = (_frameNumber + 1) & 0x7;
+    }
 
     // bidirectional device, battery is ok, signal strength indication is void (no measurement)
-    frame.rfInfo(0x02); 
+    frame.rfInfo(0x02);
+
+    if (!_enabled)
+    {
+        dataConReceived(frame, false);
+        return false;
+    }
 
     // TODO: Is queueing really required?
     // According to the spec. the upper layer may only send a new L_Data.req if it received
@@ -166,7 +176,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             // Prepare CEMI by writing/overwriting certain fields in the buffer (contiguous frame without CRC checksums)
             // See 3.6.3 p.79: L_Data services for KNX RF asynchronous frames 
             // For now we do not use additional info, but use normal method arguments for CEMI
-            _buffer[0] = 0x29;  // L_data.ind
+            _buffer[0] = (uint8_t) L_data_ind;  // L_data.ind
             _buffer[1] = 0;     // Additional info length (spec. says that local dev management is not required to use AddInfo internally)
             _buffer[2] = 0;     // CTRL1 field (will be set later, this is the field we reserved space for)
             _buffer[3] &= 0x0F; // CTRL2 field (take only RFCtrl.b3..0, b7..4 shall always be 0 for asynchronous KNX RF)
@@ -190,7 +200,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             // then we received the domain address and not the KNX serial number
             if (systemBroadcast == Broadcast)
             {
-                // Check if  the received RF domain address matches the one stored in the RF medium object
+                // Check if the received RF domain address matches the one stored in the RF medium object
                 // If it does not match then skip the remaining processing
                 if (memcmp(_rfMediumObj.rfDomainAddress(), &rfPacketBuf[4], 6))
                 {

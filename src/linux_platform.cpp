@@ -602,7 +602,16 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
 }
 
 /* Buffer size for string operations (e.g. snprintf())*/
-#define MAXBUFFER 100
+#define MAX_STRBUF_SIZE 100
+#define MAX_NUM_GPIO 64
+
+static int gpioFds [MAX_NUM_GPIO] =
+{
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+} ;
 
 /* Activate GPIO-Pin
  * Write GPIO pin number to /sys/class/gpio/export
@@ -610,10 +619,12 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
  */
 int gpio_export(int pin)
 {
-    char buffer[MAXBUFFER];    /* Output Buffer       */
-    ssize_t bytes;             /* Used Buffer length  */
-    int fd;                    /* Filedescriptor      */
-    int res;                   /* Result from write() */
+    char buffer[MAX_STRBUF_SIZE];    /* Output Buffer       */
+    ssize_t bytes;                   /* Used Buffer length  */
+    int fd;                          /* Filedescriptor      */
+    int res;                         /* Result from write() */
+
+    fprintf(stderr, "Export GPIO pin %d\n", pin);
 
     fd = open("/sys/class/gpio/export", O_WRONLY);
     if (fd < 0)
@@ -622,7 +633,7 @@ int gpio_export(int pin)
         return(-1);
     }
 
-    bytes = snprintf(buffer, MAXBUFFER, "%d", pin);
+    bytes = snprintf(buffer, MAX_STRBUF_SIZE, "%d", pin);
     res = write(fd, buffer, bytes);
 
     if (res < 0)
@@ -643,10 +654,14 @@ int gpio_export(int pin)
  */
 int gpio_unexport(int pin)
 {
-    char buffer[MAXBUFFER];    /* Output Buffer       */
-    ssize_t bytes;             /* Used Buffer length  */
-    int fd;                    /* Filedescriptor      */
-    int res;                   /* Result from write() */
+    char buffer[MAX_STRBUF_SIZE];    /* Output Buffer       */
+    ssize_t bytes;                   /* Used Buffer length  */
+    int fd;                          /* Filedescriptor      */
+    int res;                         /* Result from write() */
+
+    fprintf(stderr, "Unexport GPIO pin %d\n", pin);
+
+    close(gpioFds[pin]);
 
     fd = open("/sys/class/gpio/unexport", O_WRONLY);
     if (fd < 0)
@@ -655,7 +670,7 @@ int gpio_unexport(int pin)
         return(-1);
     }
 
-    bytes = snprintf(buffer, MAXBUFFER, "%d", pin);
+    bytes = snprintf(buffer, MAX_STRBUF_SIZE, "%d", pin);
     res = write(fd, buffer, bytes);
 
     if (res < 0)
@@ -675,11 +690,13 @@ int gpio_unexport(int pin)
  */
 int gpio_direction(int pin, int dir)
 {
-    char path[MAXBUFFER];      /* Buffer for path     */
-    int fd;                    /* Filedescriptor      */
-    int res;                   /* Result from write() */
+    char path[MAX_STRBUF_SIZE];      /* Buffer for path     */
+    int fd;                          /* Filedescriptor      */
+    int res;                         /* Result from write() */
 
-    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/direction", pin);
+    fprintf(stderr, "Set GPIO direction for pin %d to %s\n", pin, (dir==INPUT) ? "INPUT":"OUTPUT");
+
+    snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/direction", pin);
     fd = open(path, O_WRONLY);
     if (fd < 0)
     {
@@ -709,26 +726,26 @@ int gpio_direction(int pin, int dir)
  */
 int gpio_read(int pin)
 {
-    char path[MAXBUFFER];         /* Buffer for path     */
-    int fd;                       /* Filedescriptor      */
-    char result[MAXBUFFER] = {0}; /* Buffer for result   */
+    char path[MAX_STRBUF_SIZE];         /* Buffer for path     */
+    char c;
 
-    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
-    fd = open(path, O_RDONLY);
-    if (fd < 0)
+    snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/value", pin);
+    if (gpioFds[pin] < 0)
+        gpioFds[pin] = open(path, O_RDWR);
+    if (gpioFds[pin] < 0)
     {
         perror("Could not read from GPIO(open)!\n");
         return(-1);
     }
 
-    if (read(fd, result, 3) < 0)
+    lseek(gpioFds [pin], 0L, SEEK_SET) ;
+    if (read(gpioFds[pin], &c, 1) < 0)
     {
         perror("Could not read from GPIO(read)!\n");
         return(-1);
     }
 
-    close(fd);
-    return(atoi(result));
+    return (c == '0') ? LOW : HIGH;
 }
 
 /* Write to GPIO pin
@@ -736,14 +753,14 @@ int gpio_read(int pin)
  */
 int gpio_write(int pin, int value)
 {
-    char path[MAXBUFFER];      /* Buffer for path    */
-    int fd;                    /* Filedescriptor     */
-    int res;                   /* Result from write()*/
+    char path[MAX_STRBUF_SIZE];      /* Buffer for path    */
+    int res;                         /* Result from write()*/
 
-    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
-    fd = open(path, O_WRONLY);
+    snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/value", pin);
+    if (gpioFds[pin] < 0)
+        gpioFds[pin] = open(path, O_RDWR);
 
-    if (fd < 0)
+    if (gpioFds[pin] < 0)
     {
         perror("Could not write to GPIO(open)!\n");
         return(-1);
@@ -751,8 +768,8 @@ int gpio_write(int pin, int value)
 
     switch (value)
     {
-        case LOW : res = write(fd,"0",1); break;
-        case HIGH: res = write(fd,"1",1); break;
+        case LOW : res = write(gpioFds[pin], "0\n", 2); break;
+        case HIGH: res = write(gpioFds[pin], "1\n", 2); break;
         default: res = -1; break;
     }
 
@@ -762,7 +779,6 @@ int gpio_write(int pin, int value)
         return(-1);
     }
 
-    close(fd);
     return(0);
 }
 
@@ -773,10 +789,10 @@ int gpio_write(int pin, int value)
  */
 int gpio_edge(unsigned int pin, char edge)
 {
-    char path[MAXBUFFER];    /* Buffer for path    */
-    int fd;                  /* Filedescriptor     */
+    char path[MAX_STRBUF_SIZE];    /* Buffer for path    */
+    int fd;                        /* Filedescriptor     */
 
-    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/edge", pin);
+    snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/edge", pin);
 
     fd = open(path, O_WRONLY | O_NONBLOCK );
     if (fd < 0)
@@ -808,14 +824,14 @@ int gpio_edge(unsigned int pin, char edge)
  */
 int gpio_wait(unsigned int pin, int timeout)
 {
-    char path[MAXBUFFER];     /* Buffer for path     */
-    int fd;                   /* Filedescriptor      */
-    struct pollfd polldat[1]; /* Variable for poll() */
-    char buf[MAXBUFFER];      /* Read buffer         */
-    int rc;                   /* Result              */
+    char path[MAX_STRBUF_SIZE];     /* Buffer for path     */
+    int fd;                         /* Filedescriptor      */
+    struct pollfd polldat[1];       /* Variable for poll() */
+    char buf[MAX_STRBUF_SIZE];      /* Read buffer         */
+    int rc;                         /* Result              */
 
     /* Open GPIO pin */
-    snprintf(path, MAXBUFFER, "/sys/class/gpio/gpio%d/value", pin);
+    snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/value", pin);
     fd = open(path, O_RDONLY | O_NONBLOCK );
     if (fd < 0)
     {
@@ -831,7 +847,7 @@ int gpio_wait(unsigned int pin, int timeout)
 
     /* clear any existing detected edges before */
     lseek(fd, 0, SEEK_SET);
-    rc = read(fd, buf, MAXBUFFER - 1);
+    rc = read(fd, buf, MAX_STRBUF_SIZE - 1);
 
     rc = poll(polldat, 1, timeout);
     if (rc < 0)

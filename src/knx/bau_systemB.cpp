@@ -207,10 +207,11 @@ void BauSystemB::propertyDescriptionReadIndication(Priority priority, HopCountTy
 void BauSystemB::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
+    uint32_t elementCount = numberOfElements;
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
-        obj->writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
-    propertyValueReadIndication(priority, hopType, asap, objectIndex, propertyId, numberOfElements, startIndex);
+        obj->writeProperty((PropertyID)propertyId, startIndex, data, elementCount);
+    propertyValueReadIndication(priority, hopType, asap, objectIndex, propertyId, elementCount, startIndex);
 }
 
 void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
@@ -359,7 +360,6 @@ void BauSystemB::nextRestartState()
 void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
                                                       uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
 {
-    uint8_t knxSerialNumber[6];
     uint8_t operand;
 
     popByte(operand, testInfo + 1); // First byte (+ 0) contains only 4 reserved bits (0)
@@ -372,10 +372,8 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
             if (_deviceObj.progMode() && (objectType == OT_DEVICE) && (propertyId == PID_SERIAL_NUMBER))
             {
                 // Send reply. testResult data is KNX serial number
-                pushWord(_deviceObj.manufacturerId(), &knxSerialNumber[0]);
-                pushInt(_deviceObj.bauNumber(), &knxSerialNumber[2]);
                 _appLayer.systemNetworkParameterReadResponse(priority, hopType, objectType, propertyId,
-                                                             testInfo, testInfoLength, knxSerialNumber, sizeof(knxSerialNumber));
+                                                             testInfo, testInfoLength, (uint8_t*) _deviceObj.knxSerialNumber(), 6);
             }
         break;
 
@@ -390,6 +388,42 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
     }
 }
 
+void BauSystemB::propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
+                                   uint32_t &numberOfElements, uint16_t startIndex,
+                                   uint8_t **data, uint32_t &length)
+{
+    uint32_t size = 0;
+    uint32_t elementCount = numberOfElements;
+
+    InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
+
+    if (obj)
+    {
+        uint8_t elementSize = obj->propertySize((PropertyID)propertyId);
+        size = elementSize * numberOfElements;
+        *data = new uint8_t [size];
+        obj->readProperty((PropertyID)propertyId, startIndex, elementCount, *data);
+    }
+    else
+    {
+        elementCount = 0;
+        *data = nullptr;
+    }
+
+    numberOfElements = elementCount;
+    length = size;
+}
+
+void BauSystemB::propertyValueWrite(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
+                                    uint32_t &numberOfElements, uint16_t startIndex,
+                                    uint8_t* data, uint32_t length)
+{
+    InterfaceObject* obj =  getInterfaceObject(objectType, objectInstance);
+    if(obj)
+        obj->writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
+    else 
+        numberOfElements = 0;
+}
 
 Memory& BauSystemB::memory()
 {

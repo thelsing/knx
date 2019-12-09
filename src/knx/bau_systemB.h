@@ -29,6 +29,13 @@ class BauSystemB : protected BusAccessUnit
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
     bool restartRequest(uint16_t asap);
+    
+    void propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
+                           uint32_t &numberOfElements, uint16_t startIndex, 
+                           uint8_t **data, uint32_t &length) override;
+    void propertyValueWrite(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
+                            uint32_t &numberOfElements, uint16_t startIndex,
+                            uint8_t* data, uint32_t length) override;
 
   protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
@@ -60,10 +67,11 @@ class BauSystemB : protected BusAccessUnit
     void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType,
                                    uint8_t* data, uint8_t dataLength) override;
     void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
-                                              uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength);
+                                              uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength) override;
     void connectConfirm(uint16_t tsap) override;
 
     virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
+    virtual InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance) = 0;
     void sendNextGroupTelegram();
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
     void nextRestartState();
