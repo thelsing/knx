@@ -21,6 +21,7 @@ class BauSystemB : protected BusAccessUnit
     DeviceObject& deviceObject();
     GroupObjectTableObject& groupObjectTable();
     ApplicationProgramObject& parameters();
+    Memory& memory();
     bool configured();
     bool enabled();
     void enabled(bool value);

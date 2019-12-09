@@ -220,6 +220,12 @@ void TableObject::loadEventLoaded(uint8_t* data)
             break;
         case LE_UNLOAD:
             loadState(LS_UNLOADED);
+            //free nv memory
+            if (_data)
+            {
+                _memory.freeMemory(_data);
+                _data = 0;
+            }
             break;
         case LE_ADDITIONAL_LOAD_CONTROLS:
             loadState(LS_ERROR);

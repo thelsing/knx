@@ -92,6 +92,8 @@ void setup()
         printf("Aenderung senden: %d\n", knx.paramByte(4));
         printf("Abgleich %d\n", knx.paramByte(5));
     }
+    else
+        println("not configured");
     knx.start();
 }
 

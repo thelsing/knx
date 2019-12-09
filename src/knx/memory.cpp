@@ -162,7 +162,7 @@ void Memory::freeMemory(uint8_t* ptr)
 {
     MemoryBlock* block = _usedList;
     MemoryBlock* found = nullptr;
-    while (_usedList)
+    while (block)
     {
         if (block->address == ptr)
         {
@@ -213,15 +213,16 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
     }
 
     bool found = false;
-    while (head)
+    MemoryBlock* block = head;
+    while (block)
     {
-        if (head->next == item)
+        if (block->next == item)
         {
             found = true;
-            head->next = item->next;
+            block->next = item->next;
             break;
         }
-        head = head->next;
+        block = block->next;
     }
 
     if (!found)
@@ -374,7 +375,7 @@ void Memory::addNewUsedBlock(uint8_t* address, size_t size)
     {
         // we take a middle or end part of the block
         uint8_t* oldEndAddr = smallerFreeBlock->address + smallerFreeBlock->size;
-        smallerFreeBlock->size -= (address - smallerFreeBlock->address);
+        smallerFreeBlock->size = (address - smallerFreeBlock->address);
 
         if (address + size < oldEndAddr)
         {

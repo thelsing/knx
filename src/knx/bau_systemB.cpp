@@ -389,3 +389,9 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
         break;
     }
 }
+
+
+Memory& BauSystemB::memory()
+{
+    return _memory;
+}
