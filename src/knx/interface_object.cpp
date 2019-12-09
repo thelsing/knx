@@ -48,11 +48,16 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
 
 void InterfaceObject::readProperty(PropertyID id, uint32_t start, uint32_t &count, uint8_t *data)
 {
+    // Set number of elements to zero as we are in the end of the call chain
+    // Nobody processed the property before.
     count = 0;
 }
 
-void InterfaceObject::writeProperty(PropertyID id, uint8_t start, uint8_t *data, uint8_t count)
+void InterfaceObject::writeProperty(PropertyID id, uint32_t start, uint8_t *data, uint32_t &count)
 {
+    // Set number of elements to zero as we are in the end of the call chain
+    // Nobody processed the property before.
+    count = 0;
 }
 
 uint8_t InterfaceObject::propertySize(PropertyID id)
@@ -69,3 +74,4 @@ PropertyDescription* InterfaceObject::propertyDescriptions()
 {
     return nullptr;
 }
+

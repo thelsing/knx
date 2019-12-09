@@ -11,6 +11,7 @@ class Bau57B0 : public BauSystemB
 
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
+    InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
     uint8_t* descriptor();
     DataLinkLayer& dataLinkLayer();
 

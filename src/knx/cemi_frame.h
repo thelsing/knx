@@ -32,6 +32,8 @@ class CemiFrame
     void fillTelegramTP(uint8_t* data);
     uint16_t telegramLengthtRF() const;
     void fillTelegramRF(uint8_t* data);
+    uint8_t* data();
+    uint16_t dataLength();
 
     FrameFormat frameType() const;
     void frameType(FrameFormat value);
@@ -43,6 +45,8 @@ class CemiFrame
     void priority(Priority value);
     AckType ack() const;
     void ack(AckType value);
+    Confirm confirm() const;
+    void confirm(Confirm value);
     AddressType addressType() const;
     void addressType(AddressType value);
     uint8_t hopCount() const;
@@ -76,8 +80,8 @@ class CemiFrame
     APDU _apdu;
     uint16_t _length = 0; // only set if created from byte array
 
-    // nly for RF medium
+    // only for RF medium
     uint8_t* _rfSerialOrDoA = 0;
     uint8_t  _rfInfo = 0;
-    uint8_t  _rfLfn = 0; // RF Data Link layer frame number
+    uint8_t  _rfLfn = 0xFF; // RF Data Link layer frame number
 };

@@ -6,11 +6,12 @@ class RfMediumObject: public InterfaceObject
 {
 public:
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
+    void writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count);
     uint8_t propertySize(PropertyID id);
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);
     void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
+    ObjectType objectType() { return OT_RF_MEDIUM; }
 
     uint8_t* rfDomainAddress();
     void rfDomainAddress(uint8_t* value);

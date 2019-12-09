@@ -15,7 +15,7 @@ public:
      */
     TableObject(Platform& platform);
     virtual void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    virtual void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
+    virtual void writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count);
     virtual uint8_t propertySize(PropertyID id);
     /**
      * The destructor.

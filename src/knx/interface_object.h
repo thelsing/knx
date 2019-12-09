@@ -84,11 +84,12 @@ class InterfaceObject : public SaveRestore
      * 
      * @param start (for properties with multiple values) at which element should we start
      * 
-     * @param count how many values should be written.
+     * @param[in, out] count how many values should be written. If there is a problem (e.g. property does not exist)
+     *        this value is set to 0.
      * 
-     * @param data The data that should be written.
+     * @param[in] data The data that should be written.
      */
-    virtual void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
+    virtual void writeProperty(PropertyID id, uint32_t start, uint8_t *data, uint32_t &count);
     /**
      * Gets the size of of property in bytes.
      * 
@@ -117,6 +118,13 @@ class InterfaceObject : public SaveRestore
      */
 
     void readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
+
+    /**
+     * Gets object type.
+     * 
+     * @returns object type
+     */
+    virtual ObjectType objectType() = 0;
 
   protected:
     /**

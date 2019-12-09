@@ -69,9 +69,9 @@ Control Field 1
 */ 
 
 CemiFrame::CemiFrame(uint8_t* data, uint16_t length)
-    : _npdu(data + NPDU_LPDU_DIFF, *this), 
-      _tpdu(data + TPDU_LPDU_DIFF, *this), 
-      _apdu(data + APDU_LPDU_DIFF, *this)
+    : _npdu(data + data[1] + NPDU_LPDU_DIFF, *this), 
+      _tpdu(data + data[1] + TPDU_LPDU_DIFF, *this), 
+      _apdu(data + data[1] + APDU_LPDU_DIFF, *this)
 {
     _data = data;
     _ctrl1 = data + data[1] + CEMI_HEADER_SIZE;
@@ -184,6 +184,16 @@ void CemiFrame::fillTelegramRF(uint8_t* data)
     //printHex("cEMI_fill: ", &data[0], len);
 }
 
+uint8_t* CemiFrame::data()
+{
+    return _data;
+}
+
+uint16_t CemiFrame::dataLength()
+{
+    return _length;
+}
+
 uint8_t CemiFrame::calcCrcTP(uint8_t * buffer, uint16_t len)
 {
     uint8_t crc = 0xFF;
@@ -246,6 +256,17 @@ AckType CemiFrame::ack() const
 void CemiFrame::ack(AckType value)
 {
     _ctrl1[0] &= ~AckRequested;
+    _ctrl1[0] |= value;
+}
+
+Confirm CemiFrame::confirm() const
+{
+    return (Confirm)(_ctrl1[0] & ConfirmError);
+}
+
+void CemiFrame::confirm(Confirm value)
+{
+    _ctrl1[0] &= ~ConfirmError;
     _ctrl1[0] |= value;
 }
 

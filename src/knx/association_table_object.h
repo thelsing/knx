@@ -7,6 +7,7 @@ class AssociationTableObject : public TableObject
   public:
     AssociationTableObject(Platform& platform);
     void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
+    ObjectType objectType() { return OT_ASSOC_TABLE; }
 
     uint8_t* save(uint8_t* buffer);
     uint8_t* restore(uint8_t* buffer);
