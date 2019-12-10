@@ -4,7 +4,7 @@
 #include "cemi_server_object.h"
 #include "bits.h"
 
-void CemiServerObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t& count, uint8_t* data)
+void CemiServerObject::readProperty(PropertyID propertyId, uint16_t start, uint8_t& count, uint8_t* data)
 {
     switch (propertyId)
     {
@@ -47,7 +47,7 @@ void CemiServerObject::readProperty(PropertyID propertyId, uint32_t start, uint3
     }
 }
 
-void CemiServerObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count)
+void CemiServerObject::writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count)
 {
     switch (id)
     {

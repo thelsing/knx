@@ -83,6 +83,9 @@
     <ClInclude Include="..\src\knx\bau_systemB.h" />
     <ClInclude Include="..\src\knx\bits.h" />
     <ClInclude Include="..\src\knx\cemi_frame.h" />
+    <ClInclude Include="..\src\knx\cemi_server.h" />
+    <ClInclude Include="..\src\knx\cemi_server_object.h" />
+    <ClInclude Include="..\src\knx\datapoint_types.h" />
     <ClInclude Include="..\src\knx\data_link_layer.h" />
     <ClInclude Include="..\src\knx\device_object.h" />
     <ClInclude Include="..\src\knx\dpt.h" />
@@ -99,7 +102,7 @@
     <ClInclude Include="..\src\knx\network_layer.h" />
     <ClInclude Include="..\src\knx\npdu.h" />
     <ClInclude Include="..\src\knx\platform.h" />
-    <ClInclude Include="..\src\knx\property_types.h" />
+    <ClInclude Include="..\src\knx\property.h" />
     <ClInclude Include="..\src\knx\rf_data_link_layer.h" />
     <ClInclude Include="..\src\knx\rf_medium_object.h" />
     <ClInclude Include="..\src\knx\rf_physical_layer.h" />
@@ -108,6 +111,7 @@
     <ClInclude Include="..\src\knx\tpdu.h" />
     <ClInclude Include="..\src\knx\tpuart_data_link_layer.h" />
     <ClInclude Include="..\src\knx\transport_layer.h" />
+    <ClInclude Include="..\src\knx\usb_tunnel_interface.h" />
     <ClInclude Include="..\src\knx_facade.h" />
     <ClInclude Include="..\src\linux_platform.h" />
   </ItemGroup>
@@ -131,6 +135,9 @@
     <ClCompile Include="..\src\knx\bau_systemB.cpp" />
     <ClCompile Include="..\src\knx\bits.cpp" />
     <ClCompile Include="..\src\knx\cemi_frame.cpp" />
+    <ClCompile Include="..\src\knx\cemi_server.cpp" />
+    <ClCompile Include="..\src\knx\cemi_server_object.cpp" />
+    <ClCompile Include="..\src\knx\datapoint_types.cpp" />
     <ClCompile Include="..\src\knx\data_link_layer.cpp" />
     <ClCompile Include="..\src\knx\device_object.cpp" />
     <ClCompile Include="..\src\knx\dpt.cpp" />
@@ -153,6 +160,7 @@
     <ClCompile Include="..\src\knx\tpdu.cpp" />
     <ClCompile Include="..\src\knx\tpuart_data_link_layer.cpp" />
     <ClCompile Include="..\src\knx\transport_layer.cpp" />
+    <ClCompile Include="..\src\knx\usb_tunnel_interface.cpp" />
     <ClCompile Include="..\src\knx_facade.cpp" />
     <ClCompile Include="..\src\linux_platform.cpp" />
     <ClCompile Include="main.cpp" />

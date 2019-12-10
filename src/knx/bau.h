@@ -120,10 +120,10 @@ class BusAccessUnit
     virtual void domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber);
 
     virtual void propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
-                                   uint32_t &numberOfElements, uint16_t startIndex,
-                                   uint8_t **data, uint32_t &length);
-                                   
+                                   uint8_t& numberOfElements, uint16_t startIndex,
+                                   uint8_t** data, uint32_t& length);
+
     virtual void propertyValueWrite(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
-                                    uint32_t &numberOfElements, uint16_t startIndex,
+                                    uint8_t& numberOfElements, uint16_t startIndex,
                                     uint8_t* data, uint32_t length);
 };

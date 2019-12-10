@@ -16,8 +16,8 @@ class TableObject: public InterfaceObject
      * @param memory The instance of the memory management class to use.
      */
     TableObject(Memory& memory);
-    virtual void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    virtual void writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count);
+    virtual void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data);
+    virtual void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count);
     virtual uint8_t propertySize(PropertyID id);
     /**
      * The destructor.

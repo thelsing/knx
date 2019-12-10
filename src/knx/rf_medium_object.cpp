@@ -2,7 +2,7 @@
 #include "rf_medium_object.h"
 #include "bits.h"
 
-void RfMediumObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t& count, uint8_t* data)
+void RfMediumObject::readProperty(PropertyID propertyId, uint16_t start, uint8_t& count, uint8_t* data)
 {
     switch (propertyId)
     {
@@ -37,7 +37,7 @@ void RfMediumObject::readProperty(PropertyID propertyId, uint32_t start, uint32_
     }
 }
 
-void RfMediumObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count)
+void RfMediumObject::writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count)
 {
     switch (id)
     {

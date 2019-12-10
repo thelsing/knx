@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stddef.h>
-#include "property_types.h"
+#include "property.h"
 #include "save_restore.h"
 
 /** Enum for the type of an interface object. See Section 2.2 of knx:3/7/3 */
@@ -75,7 +75,7 @@ class InterfaceObject : public SaveRestore
      * 
      * @param[out] data The requested data of the property.
      */
-    virtual void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
+    virtual void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data);
     /**
      * Write property of the interface object. If the interface object does not have the property this 
      * method does nothing. See section 4.8.4.4 of @cite knx:3/4/1.
@@ -89,7 +89,7 @@ class InterfaceObject : public SaveRestore
      * 
      * @param[in] data The data that should be written.
      */
-    virtual void writeProperty(PropertyID id, uint32_t start, uint8_t *data, uint32_t &count);
+    virtual void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count);
     /**
      * Gets the size of of property in bytes.
      * 

@@ -104,9 +104,6 @@
     <ClInclude Include="..\src\knx\platform.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\knx\property_types.h">
-      <Filter>Header files\knx</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\knx\save_restore.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
@@ -150,6 +147,21 @@
       <Filter>Header files\knx</Filter>
     </ClInclude>
     <ClInclude Include="..\src\knx\rf_physical_layer.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\property.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\cemi_server.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\cemi_server_object.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\datapoint_types.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\usb_tunnel_interface.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
   </ItemGroup>
@@ -263,6 +275,18 @@
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\platform.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\cemi_server.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\cemi_server_object.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\datapoint_types.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\usb_tunnel_interface.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
   </ItemGroup>

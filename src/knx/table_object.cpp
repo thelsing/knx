@@ -9,7 +9,7 @@ TableObject::TableObject(Memory& memory): _memory(memory)
 
 }
 
-void TableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data)
+void TableObject::readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data)
 {
     switch (id)
     {
@@ -30,7 +30,7 @@ void TableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, u
     }
 }
 
-void TableObject::writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t &count)
+void TableObject::writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count)
 {
     switch (id)
     {

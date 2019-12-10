@@ -6,8 +6,8 @@ class ApplicationProgramObject : public TableObject
 {
   public:
     ApplicationProgramObject(Memory& memory);
-    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    void writeProperty(PropertyID id, uint32_t start, uint8_t* data, uint32_t& count);
+    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data);
+    void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count);
     uint8_t propertySize(PropertyID id);
     ObjectType objectType() { return OT_APPLICATION_PROG; }    
     uint8_t* data(uint32_t addr);

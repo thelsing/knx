@@ -8,19 +8,19 @@ void BusAccessUnit::groupValueReadIndication(uint16_t asap, Priority priority, H
 {
 }
 
-void BusAccessUnit::groupValueReadResponseConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopTtype, uint8_t * data, uint8_t dataLength, bool status)
+void BusAccessUnit::groupValueReadResponseConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopTtype, uint8_t* data, uint8_t dataLength, bool status)
 {
 }
 
-void BusAccessUnit::groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, uint8_t * data, uint8_t dataLength)
+void BusAccessUnit::groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, uint8_t* data, uint8_t dataLength)
 {
 }
 
-void BusAccessUnit::groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, uint8_t * data, uint8_t dataLength, bool status)
+void BusAccessUnit::groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, uint8_t* data, uint8_t dataLength, bool status)
 {
 }
 
-void BusAccessUnit::groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType, uint8_t * data, uint8_t dataLength)
+void BusAccessUnit::groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType, uint8_t* data, uint8_t dataLength)
 {
 }
 
@@ -48,7 +48,7 @@ void BusAccessUnit::individualAddressReadAppLayerConfirm(HopCountType hopType, u
 {
 }
 
-void BusAccessUnit::individualAddressSerialNumberReadLocalConfirm(AckType ack, HopCountType hopType, uint8_t * serialNumber, bool status)
+void BusAccessUnit::individualAddressSerialNumberReadLocalConfirm(AckType ack, HopCountType hopType, uint8_t* serialNumber, bool status)
 {
 }
 
@@ -56,11 +56,11 @@ void BusAccessUnit::individualAddressSerialNumberReadIndication(Priority priorit
 {
 }
 
-void BusAccessUnit::individualAddressSerialNumberReadResponseConfirm(AckType ack, HopCountType hopType, uint8_t * serialNumber, uint16_t domainAddress, bool status)
+void BusAccessUnit::individualAddressSerialNumberReadResponseConfirm(AckType ack, HopCountType hopType, uint8_t* serialNumber, uint16_t domainAddress, bool status)
 {
 }
 
-void BusAccessUnit::individualAddressSerialNumberReadAppLayerConfirm(HopCountType hopType, uint8_t * serialNumber, uint16_t individualAddress, uint16_t domainAddress)
+void BusAccessUnit::individualAddressSerialNumberReadAppLayerConfirm(HopCountType hopType, uint8_t* serialNumber, uint16_t individualAddress, uint16_t domainAddress)
 {
 }
 
@@ -81,12 +81,12 @@ void BusAccessUnit::deviceDescriptorReadIndication(Priority priority, HopCountTy
 {
 }
 
-void BusAccessUnit::deviceDescriptorReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t descriptor_type, 
-    uint8_t * device_descriptor, bool status)
+void BusAccessUnit::deviceDescriptorReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t descriptor_type,
+                                                        uint8_t* device_descriptor, bool status)
 {
 }
 
-void BusAccessUnit::deviceDescriptorReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t descriptortype, uint8_t * deviceDescriptor)
+void BusAccessUnit::deviceDescriptorReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t descriptortype, uint8_t* deviceDescriptor)
 {
 }
 
@@ -106,19 +106,19 @@ void BusAccessUnit::propertyValueReadIndication(Priority priority, HopCountType 
 {
 }
 
-void BusAccessUnit::propertyValueReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t * data, uint8_t length, bool status)
+void BusAccessUnit::propertyValueReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length, bool status)
 {
 }
 
-void BusAccessUnit::propertyValueReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t * data, uint8_t length)
+void BusAccessUnit::propertyValueReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
 }
 
-void BusAccessUnit::propertyValueWriteLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t * data, uint8_t length, bool status)
+void BusAccessUnit::propertyValueWriteLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length, bool status)
 {
 }
 
-void BusAccessUnit::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t * data, uint8_t length)
+void BusAccessUnit::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
 }
 
@@ -150,19 +150,19 @@ void BusAccessUnit::memoryReadIndication(Priority priority, HopCountType hopType
 {
 }
 
-void BusAccessUnit::memoryReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint16_t memoryAddress, uint8_t * data, bool status)
+void BusAccessUnit::memoryReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint16_t memoryAddress, uint8_t* data, bool status)
 {
 }
 
-void BusAccessUnit::memoryReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint16_t memoryAddress, uint8_t * data)
+void BusAccessUnit::memoryReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint16_t memoryAddress, uint8_t* data)
 {
 }
 
-void BusAccessUnit::memoryWriteLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint16_t memoryAddress, uint8_t * data, bool status)
+void BusAccessUnit::memoryWriteLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint16_t memoryAddress, uint8_t* data, bool status)
 {
 }
 
-void BusAccessUnit::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint16_t memoryAddress, uint8_t * data)
+void BusAccessUnit::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint16_t memoryAddress, uint8_t* data)
 {
 }
 
@@ -174,19 +174,19 @@ void BusAccessUnit::userMemoryReadIndication(Priority priority, HopCountType hop
 {
 }
 
-void BusAccessUnit::userMemoryReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t * memoryData, bool status)
+void BusAccessUnit::userMemoryReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t* memoryData, bool status)
 {
 }
 
-void BusAccessUnit::userMemoryReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t * memoryData)
+void BusAccessUnit::userMemoryReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t* memoryData)
 {
 }
 
-void BusAccessUnit::userMemoryWriteLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t * memoryData, bool status)
+void BusAccessUnit::userMemoryWriteLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t* memoryData, bool status)
 {
 }
 
-void BusAccessUnit::userMemoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t * memoryData)
+void BusAccessUnit::userMemoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress, uint8_t* memoryData)
 {
 }
 
@@ -198,11 +198,11 @@ void BusAccessUnit::userManufacturerInfoIndication(Priority priority, HopCountTy
 {
 }
 
-void BusAccessUnit::userManufacturerInfoResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t * info, bool status)
+void BusAccessUnit::userManufacturerInfoResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t* info, bool status)
 {
 }
 
-void BusAccessUnit::userManufacturerInfoAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t * info)
+void BusAccessUnit::userManufacturerInfoAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t* info)
 {
 }
 
@@ -243,12 +243,12 @@ void BusAccessUnit::connectConfirm(uint16_t destination)
 }
 
 void BusAccessUnit::systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
-                                                      uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
+                                                         uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
 {
 }
 
 void BusAccessUnit::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                                          uint8_t* knxSerialNumber)
+                                                             uint8_t* knxSerialNumber)
 {
 }
 
@@ -257,15 +257,13 @@ void BusAccessUnit::domainAddressSerialNumberReadIndication(Priority priority, H
 }
 
 void BusAccessUnit::propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
-                                      uint32_t &numberOfElements, uint16_t startIndex, 
-                                      uint8_t **data, uint32_t &length)
+                                      uint8_t& numberOfElements, uint16_t startIndex,
+                                      uint8_t** data, uint32_t& length)
 {
 }
 
 void BusAccessUnit::propertyValueWrite(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
-                                    uint32_t &numberOfElements, uint16_t startIndex, 
-                                    uint8_t* data, uint32_t length)
+                                       uint8_t& numberOfElements, uint16_t startIndex,
+                                       uint8_t* data, uint32_t length)
 {
 }
-
-

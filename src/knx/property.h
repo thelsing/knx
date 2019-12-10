@@ -215,12 +215,24 @@ enum AccessLevel
     WriteLv3 = 0x03,
 };
 
-class PropertyDescription
+struct PropertyDescription
 {
-public:
     PropertyID Id;
     bool WriteEnable;
     PropertyDataType Type;
     uint16_t MaxElements;
     uint8_t Access;
+};
+
+class Property
+{
+  public:
+    PropertyID Id();
+    bool WriteEnable();
+    PropertyDataType Type();
+    uint16_t MaxElements();
+    uint8_t Access();
+    uint16_t CurrentElements();
+    uint8_t ElementSize();
+    void read(uint32_t start, uint32_t& count, uint8_t* data);
 };
