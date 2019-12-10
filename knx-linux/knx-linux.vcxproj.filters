@@ -217,9 +217,6 @@
     <ClCompile Include="..\src\knx\npdu.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\knx\platform.cpp">
-      <Filter>Source files\knx</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\knx\table_object.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>

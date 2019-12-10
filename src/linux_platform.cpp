@@ -35,10 +35,7 @@
 #define MAX_MEM 4096
 
 LinuxPlatform::LinuxPlatform()
-{
-    Platform::_memoryReference = (uint8_t*)malloc(MAX_MEM);
-    _currentMaxMem = Platform::_memoryReference;
-}
+{}
 
 LinuxPlatform::~LinuxPlatform()
 {
@@ -370,25 +367,6 @@ void LinuxPlatform::setupSpi()
     printf ("SPI device setup ok.\r\n");
 
 
-}
-
-/*
- * On linux the memory addresses from malloc may be to big for usermermory_write.
- * So we allocate some memory at the beginning and use it for address table, group object table etc.
- *
- **/
-uint8_t* LinuxPlatform::allocMemory(size_t size)
-{
-    uint8_t* addr = _currentMaxMem;
-    _currentMaxMem += size;
-    if ((_currentMaxMem - Platform::_memoryReference) > MAX_MEM)
-        throw std::overflow_error("MAX_MEM was to small");
-    return addr;
-}
-
-void LinuxPlatform::freeMemory(uint8_t* ptr)
-{
-    /* do nothing. Memory is freed on restart()*/
 }
 
 void LinuxPlatform::flashFilePath(const std::string path)

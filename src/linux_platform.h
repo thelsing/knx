@@ -13,8 +13,6 @@ extern int gpio_unexport(int pin);
 
 class LinuxPlatform: public Platform
 {
-    using Platform::_memoryReference;
-    using Platform::memoryReference;
 public:
     LinuxPlatform();
     virtual ~LinuxPlatform();
@@ -57,8 +55,6 @@ public:
     //memory
     uint8_t* getEepromBuffer(uint16_t size) override;
     void commitToEeprom() override;
-    uint8_t* allocMemory(size_t size) override;
-    void freeMemory(uint8_t* ptr) override;
     void cmdlineArgs(int argc, char** argv);
 
   private:

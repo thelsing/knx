@@ -145,7 +145,6 @@
     <ClCompile Include="..\src\knx\memory.cpp" />
     <ClCompile Include="..\src\knx\network_layer.cpp" />
     <ClCompile Include="..\src\knx\npdu.cpp" />
-    <ClCompile Include="..\src\knx\platform.cpp" />
     <ClCompile Include="..\src\knx\rf_data_link_layer.cpp" />
     <ClCompile Include="..\src\knx\rf_medium_object.cpp" />
     <ClCompile Include="..\src\knx\rf_physical_layer.cpp" />

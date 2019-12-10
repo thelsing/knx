@@ -7,7 +7,6 @@
 class Platform
 {
   public:
-    Platform();
     // ip config
     virtual uint32_t currentIpAddress() = 0;
     virtual uint32_t currentSubnetMask() = 0;
@@ -48,11 +47,4 @@ class Platform
 #endif
     virtual uint8_t* getEepromBuffer(uint16_t size) = 0;
     virtual void commitToEeprom() = 0;
-
-    virtual uint8_t* memoryReference();
-    virtual uint8_t* allocMemory(size_t size);
-    virtual void freeMemory(uint8_t* ptr);
-
-  protected:
-    uint8_t* _memoryReference = 0;
 };
