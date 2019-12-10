@@ -27,8 +27,8 @@ class Platform
     //multicast socket
     virtual void setupMultiCast(uint32_t addr, uint16_t port);
     virtual void closeMultiCast();
-    virtual bool sendBytes(uint8_t* buffer, uint16_t len);
-    virtual int readBytes(uint8_t* buffer, uint16_t maxLen);
+    virtual bool sendBytesMultiCast(uint8_t* buffer, uint16_t len);
+    virtual int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen);
     
     //UART
     virtual void setupUart();

@@ -58,7 +58,7 @@ void EspPlatform::closeMultiCast()
     _udp.stop();
 }
 
-bool EspPlatform::sendBytes(uint8_t * buffer, uint16_t len)
+bool EspPlatform::sendBytesMultiCast(uint8_t * buffer, uint16_t len)
 {
     //printHex("<- ",buffer, len);
     int result = 0;
@@ -68,7 +68,7 @@ bool EspPlatform::sendBytes(uint8_t * buffer, uint16_t len)
     return true;
 }
 
-int EspPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
+int EspPlatform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen)
 {
     int len = _udp.parsePacket();
     if (len == 0)

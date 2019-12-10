@@ -145,7 +145,7 @@ void LinuxPlatform::closeMultiCast()
     close(_socketFd);
 }
 
-bool LinuxPlatform::sendBytes(uint8_t* buffer, uint16_t len)
+bool LinuxPlatform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
 {
     struct sockaddr_in address = { 0 };
     address.sin_family = AF_INET;
@@ -166,7 +166,7 @@ bool LinuxPlatform::sendBytes(uint8_t* buffer, uint16_t len)
     return true;
 }
 
-int LinuxPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
+int LinuxPlatform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen)
 {
     uint32_t sin_len;
     struct sockaddr_in sin;

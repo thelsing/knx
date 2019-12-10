@@ -78,12 +78,12 @@ void Platform::setupMultiCast(uint32_t addr, uint16_t port)
 void Platform::closeMultiCast()
 {}
 
-bool Platform::sendBytes(uint8_t *buffer, uint16_t len)
+bool Platform::sendBytesMultiCast(uint8_t *buffer, uint16_t len)
 {
     return false;
 }
 
-int Platform::readBytes(uint8_t *buffer, uint16_t maxLen)
+int Platform::readBytesMultiCast(uint8_t *buffer, uint16_t maxLen)
 {
     return 0;
 }

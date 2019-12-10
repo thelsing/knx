@@ -24,8 +24,8 @@ public:
     //multicast
     void setupMultiCast(uint32_t addr, uint16_t port) override;
     void closeMultiCast() override;
-    bool sendBytes(uint8_t* buffer, uint16_t len) override;
-    int readBytes(uint8_t* buffer, uint16_t maxLen) override;
+    bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
+    int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
     
     //memory
     uint8_t* getEepromBuffer(uint16_t size);

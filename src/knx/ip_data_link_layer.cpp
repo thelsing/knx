@@ -47,7 +47,7 @@ void IpDataLinkLayer::loop()
         return;
 
     uint8_t buffer[512];
-    int len = _platform.readBytes(buffer, 512);
+    int len = _platform.readBytesMultiCast(buffer, 512);
     if (len <= 0)
         return;
 
@@ -101,5 +101,5 @@ bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
     if (!_enabled)
         return false;
 
-    return _platform.sendBytes(bytes, length);
+    return _platform.sendBytesMultiCast(bytes, length);
 }
