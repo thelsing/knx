@@ -42,9 +42,7 @@ void Esp32Platform::restart()
 
 void Esp32Platform::setupMultiCast(uint32_t addr, uint16_t port)
 {
-    _mulitcastAddr = htonl(addr);
-    _mulitcastPort = port;
-    IPAddress mcastaddr(_mulitcastAddr);
+    IPAddress mcastaddr(htonl(addr));
     
     Serial.printf("setup multicast addr: %s port: %d ip: %s\n", mcastaddr.toString().c_str(), port,
         WiFi.localIP().toString().c_str());

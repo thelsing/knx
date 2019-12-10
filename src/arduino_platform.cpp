@@ -10,30 +10,6 @@ ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial) : _knxSerial(knxSeri
 {
 }
 
-uint32_t ArduinoPlatform::currentIpAddress()
-{
-    // not needed
-    return 0;
-}
-
-uint32_t ArduinoPlatform::currentSubnetMask()
-{
-    // not needed
-    return 0;
-}
-
-uint32_t ArduinoPlatform::currentDefaultGateway()
-{
-    // not needed
-    return 0;
-}
-
-void ArduinoPlatform::macAddress(uint8_t * addr)
-{
-    // not needed
-}
-
-
 void ArduinoPlatform::fatalError()
 {
     const int period = 200;
@@ -46,28 +22,6 @@ void ArduinoPlatform::fatalError()
             digitalWrite(LED_BUILTIN, LOW);
 #endif
     }
-}
-
-void ArduinoPlatform::setupMultiCast(uint32_t addr, uint16_t port)
-{
-    //not needed
-}
-
-void ArduinoPlatform::closeMultiCast()
-{
-    //not needed
-}
-
-bool ArduinoPlatform::sendBytes(uint8_t * buffer, uint16_t len)
-{
-    //not needed
-    return false;
-}
-
-int ArduinoPlatform::readBytes(uint8_t * buffer, uint16_t maxLen)
-{
-    //not needed
-    return 0;
 }
 
 void ArduinoPlatform::knxUart( HardwareSerial* serial )

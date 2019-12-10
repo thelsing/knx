@@ -52,6 +52,7 @@ add_executable(knx-linux
 	../src/knx/network_layer.h
 	../src/knx/npdu.cpp 
 	../src/knx/npdu.h
+    ../src/knx/platform.cpp
 	../src/knx/platform.h
 	../src/knx/rf_data_link_layer.cpp
 	../src/knx/rf_data_link_layer.h

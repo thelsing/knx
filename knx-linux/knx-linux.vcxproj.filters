@@ -262,5 +262,8 @@
     <ClCompile Include="..\src\knx\rf_physical_layer.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\knx\platform.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

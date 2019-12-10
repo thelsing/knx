@@ -22,12 +22,6 @@ public:
     std::string flashFilePath();
     void flashFilePath(const std::string path);
 
-    // ip stuff
-    uint32_t currentIpAddress() override;
-    uint32_t currentSubnetMask() override;
-    uint32_t currentDefaultGateway() override;
-    void macAddress(uint8_t* addr) override;
-
     // basic stuff
     void restart() override;
     void fatalError() override;
@@ -38,15 +32,6 @@ public:
     bool sendBytes(uint8_t* buffer, uint16_t len) override;
     int readBytes(uint8_t* buffer, uint16_t maxLen) override;
     
-    //uart
-    void setupUart() override;
-    void closeUart() override;
-    int uartAvailable() override;
-    size_t writeUart(const uint8_t data) override;
-    size_t writeUart(const uint8_t *buffer, size_t size) override;
-    int readUart() override;
-    size_t readBytesUart(uint8_t *buffer, size_t length) override;
-
     //spi
     void setupSpi() override;
     void closeSpi() override;

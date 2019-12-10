@@ -33,6 +33,8 @@ class EspPlatform : public ArduinoPlatform
     void commitToEeprom();
 private:
     WiFiUDP _udp;
+	uint32_t _mulitcastAddr;
+    uint16_t _mulitcastPort;
 };
 
 #endif

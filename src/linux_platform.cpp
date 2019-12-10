@@ -42,20 +42,6 @@ LinuxPlatform::~LinuxPlatform()
     delete[] _args;
 }
 
-uint32_t LinuxPlatform::currentIpAddress()
-{
-    return 0;
-}
-
-uint32_t LinuxPlatform::currentSubnetMask()
-{
-    return 0;
-}
-
-uint32_t LinuxPlatform::currentDefaultGateway()
-{
-    return 0;
-}
 
 uint32_t millis()
 {
@@ -73,16 +59,7 @@ void delay(uint32_t millis)
     nanosleep(&ts, NULL);
 }
 
-void LinuxPlatform::macAddress(uint8_t* data)
-{
-    // hardcode some address
-    data[0] = 0x08;
-    data[1] = 0x00;
-    data[2] = 0x27;
-    data[3] = 0x6c;
-    data[4] = 0xa8;
-    data[5] = 0x2a;
-}
+
 
 void LinuxPlatform::restart()
 {
@@ -260,45 +237,6 @@ void LinuxPlatform::doMemoryMapping()
         //exit(-1);
     }
     _mappedFile = addr;
-}
-
-size_t LinuxPlatform::readBytesUart(uint8_t *buffer, size_t length)
-{
-    return 0;
-}
-
-
-int LinuxPlatform::readUart()
-{
-    return -1;
-}
-
-
-size_t LinuxPlatform::writeUart(const uint8_t *buffer, size_t size)
-{
-    return 0;
-}
-
-
-size_t LinuxPlatform::writeUart(const uint8_t data)
-{
-    return 0;
-}
-
-
-int LinuxPlatform::uartAvailable()
-{
-    return 0;
-}
-
-
-void LinuxPlatform::closeUart()
-{
-}
-
-
-void LinuxPlatform::setupUart()
-{
 }
 
 void LinuxPlatform::closeSpi()
