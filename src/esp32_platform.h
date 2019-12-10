@@ -6,8 +6,6 @@
 
 class Esp32Platform : public ArduinoPlatform
 {
-    using ArduinoPlatform::_mulitcastAddr;
-    using ArduinoPlatform::_mulitcastPort;
 public:
     Esp32Platform();
     Esp32Platform( HardwareSerial* s);

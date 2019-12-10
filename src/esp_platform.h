@@ -6,9 +6,6 @@
 
 class EspPlatform : public ArduinoPlatform
 {
-    using ArduinoPlatform::_mulitcastAddr;
-    using ArduinoPlatform::_mulitcastPort;
-
   public:
     EspPlatform();
     EspPlatform( HardwareSerial* s);
