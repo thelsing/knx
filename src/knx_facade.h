@@ -26,7 +26,7 @@
 #endif
 
 void buttonUp();
-typedef uint8_t* (*saveRestoreCallback)(uint8_t* buffer);
+typedef uint8_t* (*SaveRestoreCallback)(uint8_t* buffer);
 
 template <class P, class B> class KnxFacade : private SaveRestore
 {
@@ -221,12 +221,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
         enabled(true);
     }
 
-    void setSaveCallback(saveRestoreCallback func)
+    void setSaveCallback(SaveRestoreCallback func)
     {
         _saveCallback = func;
     }
 
-    void setRestoreCallback(saveRestoreCallback func)
+    void setRestoreCallback(SaveRestoreCallback func)
     {
         _restoreCallback = func;
     }
@@ -281,8 +281,8 @@ template <class P, class B> class KnxFacade : private SaveRestore
     uint32_t _ledPin = LED_BUILTIN;
     uint32_t _buttonPinInterruptOn = RISING;
     uint32_t _buttonPin = 0;
-    saveRestoreCallback _saveCallback = 0;
-    saveRestoreCallback _restoreCallback = 0;
+    SaveRestoreCallback _saveCallback = 0;
+    SaveRestoreCallback _restoreCallback = 0;
     bool _toogleProgMode = false;
     bool _progLedState = false;
     uint16_t _saveSize = 0;

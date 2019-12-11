@@ -164,6 +164,12 @@
     <ClInclude Include="..\src\knx\usb_tunnel_interface.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\knx\data_property.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\knx\callback_property.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\knx\address_table_object.cpp">
@@ -287,6 +293,15 @@
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\src\knx\usb_tunnel_interface.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\property.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\data_property.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\knx\callback_property.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
   </ItemGroup>

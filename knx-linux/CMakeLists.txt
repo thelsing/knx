@@ -24,10 +24,14 @@ add_executable(knx-linux
 	../src/knx/bau_systemB.h
 	../src/knx/bits.cpp 
 	../src/knx/bits.h
+	../src/knx/callback_property.cpp 
+	../src/knx/callback_property.h
 	../src/knx/cemi_frame.cpp 
 	../src/knx/cemi_frame.h
 	../src/knx/data_link_layer.cpp 
 	../src/knx/data_link_layer.h
+	../src/knx/data_property.cpp 
+	../src/knx/data_property.h
 	../src/knx/device_object.cpp 
 	../src/knx/device_object.h
 	../src/knx/dpt.cpp
@@ -60,6 +64,8 @@ add_executable(knx-linux
 	../src/knx/rf_medium_object.h
 	../src/knx/rf_physical_layer.cpp
 	../src/knx/rf_physical_layer.h
+	../src/knx/property.cpp
+	../src/knx/property.h
 	../src/knx/table_object.cpp
 	../src/knx/table_object.h
 	../src/knx/tpdu.cpp 

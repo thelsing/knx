@@ -82,11 +82,13 @@
     <ClInclude Include="..\src\knx\bau57B0.h" />
     <ClInclude Include="..\src\knx\bau_systemB.h" />
     <ClInclude Include="..\src\knx\bits.h" />
+    <ClInclude Include="..\src\knx\callback_property.h" />
     <ClInclude Include="..\src\knx\cemi_frame.h" />
     <ClInclude Include="..\src\knx\cemi_server.h" />
     <ClInclude Include="..\src\knx\cemi_server_object.h" />
     <ClInclude Include="..\src\knx\datapoint_types.h" />
     <ClInclude Include="..\src\knx\data_link_layer.h" />
+    <ClInclude Include="..\src\knx\data_property.h" />
     <ClInclude Include="..\src\knx\device_object.h" />
     <ClInclude Include="..\src\knx\dpt.h" />
     <ClInclude Include="..\src\knx\dptconvert.h" />
@@ -134,11 +136,13 @@
     <ClCompile Include="..\src\knx\bau57B0.cpp" />
     <ClCompile Include="..\src\knx\bau_systemB.cpp" />
     <ClCompile Include="..\src\knx\bits.cpp" />
+    <ClCompile Include="..\src\knx\callback_property.cpp" />
     <ClCompile Include="..\src\knx\cemi_frame.cpp" />
     <ClCompile Include="..\src\knx\cemi_server.cpp" />
     <ClCompile Include="..\src\knx\cemi_server_object.cpp" />
     <ClCompile Include="..\src\knx\datapoint_types.cpp" />
     <ClCompile Include="..\src\knx\data_link_layer.cpp" />
+    <ClCompile Include="..\src\knx\data_property.cpp" />
     <ClCompile Include="..\src\knx\device_object.cpp" />
     <ClCompile Include="..\src\knx\dpt.cpp" />
     <ClCompile Include="..\src\knx\dptconvert.cpp" />
@@ -153,6 +157,7 @@
     <ClCompile Include="..\src\knx\network_layer.cpp" />
     <ClCompile Include="..\src\knx\npdu.cpp" />
     <ClCompile Include="..\src\knx\platform.cpp" />
+    <ClCompile Include="..\src\knx\property.cpp" />
     <ClCompile Include="..\src\knx\rf_data_link_layer.cpp" />
     <ClCompile Include="..\src\knx\rf_medium_object.cpp" />
     <ClCompile Include="..\src\knx\rf_physical_layer.cpp" />

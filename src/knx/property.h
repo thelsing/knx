@@ -224,15 +224,25 @@ struct PropertyDescription
     uint8_t Access;
 };
 
+typedef uint8_t (*PropertyCallback)(uint16_t start, uint8_t count, uint8_t* data);
+
 class Property
 {
   public:
+    Property(PropertyID id, bool writeEnable, PropertyDataType type, uint16_t maxElements, uint8_t access);
+    virtual ~Property();
     PropertyID Id();
     bool WriteEnable();
     PropertyDataType Type();
     uint16_t MaxElements();
     uint8_t Access();
-    uint16_t CurrentElements();
     uint8_t ElementSize();
-    void read(uint32_t start, uint32_t& count, uint8_t* data);
+    virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) = 0;
+    virtual uint8_t write(uint16_t start, uint8_t count, uint8_t* data) = 0;
+  protected:
+    PropertyID _id;
+    bool _writeEnable;
+    PropertyDataType _type;
+    uint16_t _maxElements;
+    uint8_t _access;
 };
