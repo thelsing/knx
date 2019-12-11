@@ -124,11 +124,11 @@ static PropertyDescription _propertyDescriptions[] =
     { PID_RF_RETRANSMITTER, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0 },
     { PID_RF_DOMAIN_ADDRESS, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 }
 };
-static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+static uint8_t _propertyDescriptionCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
-uint8_t RfMediumObject::propertyCount()
+uint8_t RfMediumObject::propertyDescriptionCount()
 {
-    return _propertyCount;
+    return _propertyDescriptionCount;
 }
 
 PropertyDescription* RfMediumObject::propertyDescriptions()

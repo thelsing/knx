@@ -133,11 +133,11 @@ static PropertyDescription _propertyDescriptions[] =
     { PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0 },
     { PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0 },
 };
-static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+static uint8_t _propertyDescriptionCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
-uint8_t GroupObjectTableObject::propertyCount()
+uint8_t GroupObjectTableObject::propertyDescriptionCount()
 {
-    return _propertyCount;
+    return _propertyDescriptionCount;
 }
 
 

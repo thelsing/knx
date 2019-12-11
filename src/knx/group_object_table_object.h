@@ -10,19 +10,19 @@ class GroupObjectTableObject : public TableObject
   public:
     GroupObjectTableObject(Memory& memory);
     virtual ~GroupObjectTableObject();
-    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data);
-    ObjectType objectType() { return OT_GRP_OBJ_TABLE; }
+    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
+    ObjectType objectType() override { return OT_GRP_OBJ_TABLE; }
     uint16_t entryCount();
     GroupObject& get(uint16_t asap);
     GroupObject& nextUpdatedObject(bool& valid);
     void groupObjects(GroupObject* objs, uint16_t size);
 
-    uint8_t* restore(uint8_t* buffer);
+    uint8_t* restore(uint8_t* buffer) override;
 
   protected:
-    void beforeStateChange(LoadState& newState);
-    uint8_t propertyCount();
-    PropertyDescription* propertyDescriptions();
+    void beforeStateChange(LoadState& newState) override;
+    uint8_t propertyDescriptionCount() override;
+    PropertyDescription* propertyDescriptions() override;
 
   private:
     void freeGroupObjects();

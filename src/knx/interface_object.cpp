@@ -1,9 +1,17 @@
+#include <cstring>
+
 #include "interface_object.h"
+
+InterfaceObject::~InterfaceObject()
+{
+    if (_properties != nullptr)
+        delete[] _properties;
+}
 
 void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access)
 {
     PropertyDescription* descriptions = propertyDescriptions();
-    uint8_t count = propertyCount();
+    uint8_t count = propertyDescriptionCount();
 
     numberOfElements = 0;
     if (descriptions == nullptr || count == 0)
@@ -65,7 +73,7 @@ uint8_t InterfaceObject::propertySize(PropertyID id)
     return 0;
 }
 
-uint8_t InterfaceObject::propertyCount()
+uint8_t InterfaceObject::propertyDescriptionCount()
 {
     return 0;
 }
@@ -75,3 +83,20 @@ PropertyDescription* InterfaceObject::propertyDescriptions()
     return nullptr;
 }
 
+
+void InterfaceObject::initializeProperties(size_t propertiesSize, Property** properties)
+{
+    _propertyCount = propertiesSize / sizeof(Property*);
+    _properties = new Property*[_propertyCount];
+    memcpy(_properties, properties, propertiesSize);
+}
+
+
+Property* InterfaceObject::property(PropertyID id)
+{
+    for (int i = 0; i < _propertyCount; i++)
+        if (_properties[i]->Id() == id)
+            return _properties[i];
+
+    return nullptr;
+}

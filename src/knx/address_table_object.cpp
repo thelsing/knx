@@ -87,11 +87,11 @@ static PropertyDescription _propertyDescriptions[] =
     { PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0 },
 };
 
-static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+static uint8_t _propertyDescriptionCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
-uint8_t AddressTableObject::propertyCount()
+uint8_t AddressTableObject::propertyDescriptionCount()
 {
-    return _propertyCount;
+    return _propertyDescriptionCount;
 }
 
 

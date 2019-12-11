@@ -62,7 +62,7 @@ class InterfaceObject : public SaveRestore
     /**
      * Destructor
      */
-    virtual ~InterfaceObject() {}
+    virtual ~InterfaceObject();
     /**
      * Read a property of the interface object. See section 4.8.4.2 of @cite knx:3/4/1.
      * 
@@ -126,14 +126,27 @@ class InterfaceObject : public SaveRestore
      */
     virtual ObjectType objectType() = 0;
 
+    /**
+     * Gets property with PropertyID id if it exists and nullptr otherwise.
+     */
+    Property* property(PropertyID id);
+
   protected:
     /**
      * Returns the number of properties the interface object has.
      */
-    virtual uint8_t propertyCount();
+    virtual uint8_t propertyDescriptionCount();
     /**
      * Returns a pointer to the first PropertyDescription of the interface object. 
      * This is used by readPropertyDescription() together with propertyCount().
      */
     virtual PropertyDescription* propertyDescriptions();
+
+    /**
+     * Intializes the Property-array the the supplied values.
+     */
+    void initializeProperties(size_t propertiesSize, Property** properties);
+
+    Property** _properties = nullptr;
+    uint8_t _propertyCount = 0;
 };

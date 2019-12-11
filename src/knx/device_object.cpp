@@ -324,11 +324,11 @@ static PropertyDescription _propertyDescriptions[] =
     { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 },
     { PID_SERIAL_NUMBER, false, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 }
 };
-static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+static uint8_t _propertyDescriptionCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
-uint8_t DeviceObject::propertyCount()
+uint8_t DeviceObject::propertyDescriptionCount()
 {
-    return _propertyCount;
+    return _propertyDescriptionCount;
 }
 
 

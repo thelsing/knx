@@ -8,7 +8,13 @@
 
 IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platform): _deviceObject(deviceObject),
     _platform(platform)
-{}
+{
+    Property* properties[] =
+    {
+        new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0)
+    };
+    initializeProperties(sizeof(properties), properties);  
+}
 
 void IpParameterObject::readProperty(PropertyID propertyId, uint16_t start, uint8_t& count, uint8_t* data)
 {
@@ -312,11 +318,11 @@ static PropertyDescription _propertyDescriptions[] =
     { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 },
     { PID_PROJECT_INSTALLATION_ID, true, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv3 },
 };
-static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
+static uint8_t _propertyDescriptionCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
 
-uint8_t IpParameterObject::propertyCount()
+uint8_t IpParameterObject::propertyDescriptionCount()
 {
-    return _propertyCount;
+    return _propertyDescriptionCount;
 }
 
 

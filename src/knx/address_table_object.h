@@ -52,9 +52,9 @@ class AddressTableObject : public TableObject
     bool contains(uint16_t groupAddress);
 
   protected:
-    virtual void beforeStateChange(LoadState& newState);
-    uint8_t propertyCount();
-    PropertyDescription* propertyDescriptions();
+    virtual void beforeStateChange(LoadState& newState) override;
+    uint8_t propertyDescriptionCount() override;
+    PropertyDescription* propertyDescriptions() override;
 
   private:
     uint16_t* _groupAddresses = 0;

@@ -16,9 +16,9 @@ class TableObject: public InterfaceObject
      * @param memory The instance of the memory management class to use.
      */
     TableObject(Memory& memory);
-    virtual void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data);
-    virtual void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count);
-    virtual uint8_t propertySize(PropertyID id);
+    virtual void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
+    virtual void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count) override;
+    virtual uint8_t propertySize(PropertyID id) override;
     /**
      * The destructor.
      */
@@ -27,9 +27,9 @@ class TableObject: public InterfaceObject
      * This method returns the ::LoadState of the interface object.
      */
     LoadState loadState();
-    virtual uint8_t* save(uint8_t* buffer);
-    virtual uint8_t* restore(uint8_t* buffer);
-    uint16_t saveSize();
+    virtual uint8_t* save(uint8_t* buffer) override;
+    virtual uint8_t* restore(uint8_t* buffer) override;
+    uint16_t saveSize() override;
 protected:
     /**
      * This method is called before the interface object enters a new ::LoadState.

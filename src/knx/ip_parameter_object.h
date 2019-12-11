@@ -1,6 +1,7 @@
 #pragma once
 
 #include "interface_object.h"
+#include "data_property.h"
 #include "device_object.h"
 #include "platform.h"
 
@@ -8,21 +9,24 @@ class IpParameterObject : public InterfaceObject
 {
   public:
     IpParameterObject(DeviceObject& deviceObject, Platform& platform);
-    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data);
-    void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count);
-    uint8_t propertySize(PropertyID id);
-    ObjectType objectType() { return OT_IP_PARAMETER; }
+    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
+    void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count) override;
+    uint8_t propertySize(PropertyID id) override;
+    ObjectType objectType() override
+    {
+        return OT_IP_PARAMETER;
+    }
 
-    uint8_t* save(uint8_t* buffer);
-    uint8_t* restore(uint8_t* buffer);
-    uint16_t saveSize();
+    uint8_t* save(uint8_t* buffer) override;
+    uint8_t* restore(uint8_t* buffer) override;
+    uint16_t saveSize() override;
 
     uint32_t multicastAddress() const;
     uint8_t ttl() const { return _ttl; }
 
   protected:
-    uint8_t propertyCount();
-    PropertyDescription* propertyDescriptions();
+    uint8_t propertyDescriptionCount() override;
+    PropertyDescription* propertyDescriptions() override;
 
   private:
     uint16_t _projectInstallationId = 0;
@@ -46,4 +50,7 @@ class IpParameterObject : public InterfaceObject
     void loadState(LoadState newState);
     LoadState _state = LS_UNLOADED;
     ErrorCode _errorCode = E_NO_FAULT;
+
+    Property** _properties = nullptr;
+    uint8_t _propertyCount = 0;
 };

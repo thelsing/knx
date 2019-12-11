@@ -15,7 +15,11 @@ class SaveRestore
      * @return The buffer plus the size of the object state. The next object will use this value as 
      * the start of its buffer.
      */
-    virtual uint8_t* save(uint8_t* buffer) = 0;
+    virtual uint8_t* save(uint8_t* buffer)
+    {
+        return buffer;
+    }
+    
     /**
      * This method is called when the object should restore its state from the buffer.
      *  
@@ -24,9 +28,16 @@ class SaveRestore
      * @return The buffer plus the size of the object state. The next object will use this value as 
      * the start of its buffer.
      */
-    virtual uint8_t* restore(uint8_t* buffer) = 0;
+    virtual uint8_t* restore(uint8_t* buffer)
+    {
+        return buffer;
+    }
+    
     /**
      * @return The number of byte the object needs to save its state. 
      */
-    virtual uint16_t saveSize() = 0;
+    virtual uint16_t saveSize()
+    {
+        return 0;
+    }
 };

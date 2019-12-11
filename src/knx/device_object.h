@@ -7,14 +7,14 @@
 class DeviceObject: public InterfaceObject
 {
 public:
-    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data);
-    void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count);
-    uint8_t propertySize(PropertyID id);
-    uint8_t* save(uint8_t* buffer);
-    uint8_t* restore(uint8_t* buffer);
-    uint16_t saveSize();
+    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
+    void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count) override;
+    uint8_t propertySize(PropertyID id) override;
+    uint8_t* save(uint8_t* buffer) override;
+    uint8_t* restore(uint8_t* buffer) override;
+    uint16_t saveSize() override;
     void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
-    ObjectType objectType() { return OT_DEVICE; }
+    ObjectType objectType() override { return OT_DEVICE; }
 
     uint16_t induvidualAddress();
     void induvidualAddress(uint16_t value);
@@ -49,8 +49,8 @@ public:
     uint8_t* rfDomainAddress();
     void rfDomainAddress(uint8_t* value);
 protected:
-    uint8_t propertyCount();
-    PropertyDescription* propertyDescriptions();
+    uint8_t propertyDescriptionCount() override;
+    PropertyDescription* propertyDescriptions() override;
 private:
     uint8_t _deviceControl = 0;
     uint8_t _routingCount = 0;

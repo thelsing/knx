@@ -6,6 +6,12 @@ CallbackProperty::CallbackProperty(PropertyID id, bool writeEnable, PropertyData
     : Property(id, writeEnable, type, maxElements, access), _readCallback(), _writeCallback()
 {}
 
+CallbackProperty::CallbackProperty(PropertyID id, bool writeEnable, PropertyDataType type,
+                                   uint16_t maxElements, uint8_t access,
+                                   PropertyCallback readCallback)
+    : Property(id, writeEnable, type, maxElements, access), _readCallback()
+{}
+
 uint8_t CallbackProperty::read(uint16_t start, uint8_t count, uint8_t* data)
 {
     if (count == 0 || _readCallback == nullptr)

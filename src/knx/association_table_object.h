@@ -6,18 +6,18 @@ class AssociationTableObject : public TableObject
 {
   public:
     AssociationTableObject(Memory& memory);
-    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data);
-    ObjectType objectType() { return OT_ASSOC_TABLE; }
+    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
+    ObjectType objectType() override { return OT_ASSOC_TABLE; }
 
-    uint8_t* restore(uint8_t* buffer);
+    uint8_t* restore(uint8_t* buffer) override;
 
     int32_t translateAsap(uint16_t asap);
     int32_t nextAsap(uint16_t tsap, uint16_t& startIdx);
 
   protected:
-    void beforeStateChange(LoadState& newState);
-    uint8_t propertyCount();
-    PropertyDescription* propertyDescriptions();
+    void beforeStateChange(LoadState& newState) override;
+    uint8_t propertyDescriptionCount() override;
+    PropertyDescription* propertyDescriptions() override;
 
   private:
     uint16_t entryCount();
