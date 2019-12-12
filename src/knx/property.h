@@ -10,6 +10,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "save_restore.h"
 
 /** The data type of a property. */
 enum PropertyDataType
@@ -224,9 +225,7 @@ struct PropertyDescription
     uint8_t Access;
 };
 
-typedef uint8_t (*PropertyCallback)(uint16_t start, uint8_t count, uint8_t* data);
-
-class Property
+class Property : public SaveRestore
 {
   public:
     Property(PropertyID id, bool writeEnable, PropertyDataType type, uint16_t maxElements, uint8_t access);

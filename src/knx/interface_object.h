@@ -131,6 +131,10 @@ class InterfaceObject : public SaveRestore
      */
     Property* property(PropertyID id);
 
+    virtual uint8_t* save(uint8_t* buffer) override;
+    virtual uint8_t* restore(uint8_t* buffer) override;
+    virtual uint16_t saveSize() override;
+
   protected:
     /**
      * Returns the number of properties the interface object has.

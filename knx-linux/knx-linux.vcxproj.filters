@@ -301,8 +301,5 @@
     <ClCompile Include="..\src\knx\data_property.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\knx\callback_property.cpp">
-      <Filter>Source files\knx</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

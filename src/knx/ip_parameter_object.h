@@ -1,7 +1,6 @@
 #pragma once
 
 #include "interface_object.h"
-#include "data_property.h"
 #include "device_object.h"
 #include "platform.h"
 
@@ -40,17 +39,4 @@ class IpParameterObject : public InterfaceObject
     char _friendlyName[30] = {0};
     DeviceObject& _deviceObject;
     Platform& _platform;
-
-    void loadEvent(uint8_t* data);
-    void loadEventUnloaded(uint8_t* data);
-    void loadEventLoading(uint8_t* data);
-    void loadEventLoaded(uint8_t* data);
-    void loadEventError(uint8_t* data);
-    void additionalLoadControls(uint8_t* data);
-    void loadState(LoadState newState);
-    LoadState _state = LS_UNLOADED;
-    ErrorCode _errorCode = E_NO_FAULT;
-
-    Property** _properties = nullptr;
-    uint8_t _propertyCount = 0;
 };

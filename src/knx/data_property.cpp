@@ -81,3 +81,16 @@ DataProperty::~DataProperty()
     if (_data)
         delete[] _data;
 }
+
+DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType type,
+                           uint16_t maxElements, uint8_t access, uint16_t value)
+    : Property(id, writeEnable, type, maxElements, access)
+{
+    uint8_t elementSize = ElementSize();
+    if (elementSize == 2)
+    {
+        uint8_t data[elementSize];
+        pushWord(value, data);
+        write(1, 1, data);
+    }
+}

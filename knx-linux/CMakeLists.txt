@@ -24,7 +24,6 @@ add_executable(knx-linux
 	../src/knx/bau_systemB.h
 	../src/knx/bits.cpp 
 	../src/knx/bits.h
-	../src/knx/callback_property.cpp 
 	../src/knx/callback_property.h
 	../src/knx/cemi_frame.cpp 
 	../src/knx/cemi_frame.h

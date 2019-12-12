@@ -56,21 +56,37 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
 
 void InterfaceObject::readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data)
 {
-    // Set number of elements to zero as we are in the end of the call chain
-    // Nobody processed the property before.
-    count = 0;
+    Property* prop = property(id);
+    if (prop == nullptr)
+    {
+        count = 0;
+        return;
+    }
+
+    count = prop->read(start, count, data);
 }
 
 void InterfaceObject::writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count)
 {
-    // Set number of elements to zero as we are in the end of the call chain
-    // Nobody processed the property before.
-    count = 0;
+    Property* prop = property(id);
+    if (prop == nullptr)
+    {
+        count = 0;
+        return;
+    }
+
+    count = prop->write(start, count, data);
 }
 
 uint8_t InterfaceObject::propertySize(PropertyID id)
 {
-    return 0;
+    Property* prop = property(id);
+    if (prop == nullptr)
+    {
+        return 0;
+    }
+
+    return prop->ElementSize();
 }
 
 uint8_t InterfaceObject::propertyDescriptionCount()
@@ -99,4 +115,48 @@ Property* InterfaceObject::property(PropertyID id)
             return _properties[i];
 
     return nullptr;
+}
+
+
+uint8_t* InterfaceObject::save(uint8_t* buffer)
+{
+    for (int i = 0; i < _propertyCount; i++)
+    {
+        Property* prop = _properties[i];
+        if (!prop->WriteEnable())
+            continue;
+        
+        buffer = prop->save(buffer);
+    }
+    return buffer;
+}
+
+
+uint8_t* InterfaceObject::restore(uint8_t* buffer)
+{
+    for (int i = 0; i < _propertyCount; i++)
+    {
+        Property* prop = _properties[i];
+        if (!prop->WriteEnable())
+            continue;
+
+        buffer = prop->restore(buffer);
+    }
+    return buffer;
+}
+
+
+uint16_t InterfaceObject::saveSize()
+{
+    uint16_t size = 0;
+
+    for (int i = 0; i < _propertyCount; i++)
+    {
+        Property* prop = _properties[i];
+        if (!prop->WriteEnable())
+            continue;
+
+        size += prop->saveSize();
+    }
+    return size;
 }
