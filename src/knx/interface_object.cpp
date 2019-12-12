@@ -15,7 +15,7 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
 
     numberOfElements = 0;
     if (descriptions == nullptr || count == 0)
-        return;
+        return readPropertyDescription2(propertyId, propertyIndex, writeEnable, type, numberOfElements, access);
 
     PropertyDescription* desc = nullptr;
 
@@ -51,6 +51,53 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
         type = desc->Type;
         numberOfElements = desc->MaxElements;
         access = desc->Access;
+    }
+    else
+        return readPropertyDescription2(propertyId, propertyIndex, writeEnable, type, numberOfElements, access);
+}
+
+void InterfaceObject::readPropertyDescription2(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access)
+{
+    uint8_t count = _propertyCount;
+
+    numberOfElements = 0;
+    if (_properties == nullptr || count == 0)
+        return;
+
+    Property* prop = nullptr;
+
+    // from KNX spec. 03.03.07 Application Layer (page 56) - 3.4.3.3  A_PropertyDescription_Read-service
+    // Summary: either propertyId OR propertyIndex, but not both at the same time
+    if (propertyId != 0)
+    {
+        for (uint8_t i = 0; i < count; i++)
+        {
+            Property* p = _properties[i];
+            if (p->Id() != propertyId)
+                continue;
+
+            prop = p;
+            propertyIndex = i;
+            break;
+        }
+    }
+    else
+    {
+        // If propertyId is zero, propertyIndex shall be used.
+        // Response: propertyIndex of received A_PropertyDescription_Read
+        if (propertyIndex < count)
+        {
+            prop = _properties[propertyIndex];
+        }
+    }
+
+    if (prop != nullptr)
+    {
+        propertyId = prop->Id();
+        writeEnable = prop->WriteEnable();
+        type = prop->Type();
+        numberOfElements = prop->MaxElements();
+        access = prop->Access();
     }
 }
 
@@ -159,4 +206,14 @@ uint16_t InterfaceObject::saveSize()
         size += prop->saveSize();
     }
     return size;
+}
+
+
+const Property* InterfaceObject::property(PropertyID id) const
+{
+    for (int i = 0; i < _propertyCount; i++)
+        if (_properties[i]->Id() == id)
+            return _properties[i];
+
+    return nullptr; 
 }

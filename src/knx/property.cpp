@@ -3,32 +3,32 @@
 
 #include <cstring>
 
-PropertyID Property::Id()
+PropertyID Property::Id() const
 {
     return _id;
 }
 
-bool Property::WriteEnable()
+bool Property::WriteEnable() const
 {
     return _writeEnable;
 }
 
-PropertyDataType Property::Type()
+PropertyDataType Property::Type() const
 {
     return _type;
 }
 
-uint16_t Property::MaxElements()
+uint16_t Property::MaxElements() const
 {
     return _maxElements;
 }
 
-uint8_t Property::Access()
+uint8_t Property::Access() const
 {
     return _access;
 }
 
-uint8_t Property::ElementSize()
+uint8_t Property::ElementSize() const
 {
     switch (_type)
     {

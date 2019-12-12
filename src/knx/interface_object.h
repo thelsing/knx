@@ -116,9 +116,9 @@ class InterfaceObject : public SaveRestore
      * 
      * @param[out] access the ::AccessLevel necessary to read/write the property. 
      */
-
+    // TODO: remove first version after complete property refactoring
     void readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
-
+    void readPropertyDescription2(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
     /**
      * Gets object type.
      * 
@@ -130,6 +130,11 @@ class InterfaceObject : public SaveRestore
      * Gets property with PropertyID id if it exists and nullptr otherwise.
      */
     Property* property(PropertyID id);
+
+    /**
+     * Gets const property with PropertyID id if it exists and nullptr otherwise.
+     */
+    const Property* property(PropertyID id) const;
 
     virtual uint8_t* save(uint8_t* buffer) override;
     virtual uint8_t* restore(uint8_t* buffer) override;

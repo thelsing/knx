@@ -18,7 +18,7 @@ template <class T> class CallbackProperty : public Property
         : Property(id, writeEnable, type, maxElements, access), _interfaceObject(io), _readCallback(readCallback)
     {}
     
-    virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) override
+    virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) const override
     {
         if (count == 0 || _readCallback == nullptr || start > _maxElements || start + count > _maxElements + 1)
             return 0;

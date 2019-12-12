@@ -34,7 +34,7 @@ class SaveRestore
     }
     
     /**
-     * @return The number of byte the object needs to save its state. 
+     * @return The maximum number of bytes the object needs to save its state. 
      */
     virtual uint16_t saveSize()
     {

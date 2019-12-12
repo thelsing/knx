@@ -3,7 +3,7 @@
 
 #include <cstring>
 
-uint8_t DataProperty::read(uint16_t start, uint8_t count, uint8_t* data)
+uint8_t DataProperty::read(uint16_t start, uint8_t count, uint8_t* data) const
 {
     if (count == 0 || _currentElements == 0 || start > _currentElements || count > _currentElements - start + 1)
         return 0;
@@ -93,4 +93,66 @@ DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType typ
         pushWord(value, data);
         write(1, 1, data);
     }
+}
+
+DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType type, 
+                           uint16_t maxElements, uint8_t access, uint32_t value)
+    : Property(id, writeEnable, type, maxElements, access)
+{
+    uint8_t elementSize = ElementSize();
+    if (elementSize == 4)
+    {
+        uint8_t data[elementSize];
+        pushInt(value, data);
+        write(1, 1, data);
+    }
+}
+
+DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType type,
+                           uint16_t maxElements, uint8_t access, uint8_t value)
+    : Property(id, writeEnable, type, maxElements, access)
+{
+    uint8_t elementSize = ElementSize();
+    if (elementSize == 1)
+    {
+        uint8_t data[elementSize];
+        data[0] = value;
+        write(1, 1, data);
+    }
+}
+
+uint16_t DataProperty::saveSize()
+{
+    return sizeof(_currentElements) + _maxElements * ElementSize();
+}
+
+
+uint8_t* DataProperty::restore(uint8_t* buffer)
+{
+    uint16_t elements = 0;
+    buffer = popWord(elements, buffer);
+
+    if (elements != _currentElements)
+    {
+        if (_data != nullptr)
+            delete[] _data;
+        
+        _data = new uint8_t[elements * ElementSize()];
+        _currentElements = elements;
+    }
+
+    if (elements > 0)
+        buffer = popByteArray(_data, elements * ElementSize(), buffer);
+
+    return buffer;
+}
+
+
+uint8_t* DataProperty::save(uint8_t* buffer)
+{
+    buffer = pushWord(_currentElements, buffer);
+    if (_currentElements > 0)
+        buffer = pushByteArray(_data, _currentElements, buffer);
+
+    return buffer;
 }

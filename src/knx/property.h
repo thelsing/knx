@@ -230,13 +230,13 @@ class Property : public SaveRestore
   public:
     Property(PropertyID id, bool writeEnable, PropertyDataType type, uint16_t maxElements, uint8_t access);
     virtual ~Property();
-    PropertyID Id();
-    bool WriteEnable();
-    PropertyDataType Type();
-    uint16_t MaxElements();
-    uint8_t Access();
-    uint8_t ElementSize();
-    virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) = 0;
+    PropertyID Id() const;
+    bool WriteEnable() const;
+    PropertyDataType Type() const;
+    uint16_t MaxElements() const;
+    uint8_t Access() const;
+    uint8_t ElementSize() const;
+    virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) const = 0;
     virtual uint8_t write(uint16_t start, uint8_t count, uint8_t* data) = 0;
   protected:
     PropertyID _id;
