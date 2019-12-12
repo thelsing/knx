@@ -44,10 +44,10 @@ class CemiServer
     void loop();
     
   private:
-    uint16_t _clientAddress;
+    uint16_t _clientAddress = 0;
     uint8_t _frameNumber = 0;
 
-    DataLinkLayer* _dataLinkLayer;
+    DataLinkLayer* _dataLinkLayer = nullptr;
     BauSystemB& _bau;
     UsbTunnelInterface _usbTunnelInterface;
 };

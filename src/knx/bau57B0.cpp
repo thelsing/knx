@@ -12,8 +12,17 @@ Bau57B0::Bau57B0(Platform& platform)
     : BauSystemB(platform),
       _ipParameters(_deviceObj, platform),
       _dlLayer(_deviceObj, _addrTable, _ipParameters, _netLayer, _platform)
+#ifdef USE_CEMI_SERVER
+      ,
+      _cemiServer(*this)
+#endif
 {
     _netLayer.dataLinkLayer(_dlLayer);
+#ifdef USE_CEMI_SERVER
+    _cemiServer.dataLinkLayer(_dlLayer);
+    _dlLayer.cemiServer(_cemiServer);
+    _memory.addSaveRestore(&_cemiServerObject);
+#endif
     _memory.addSaveRestore(&_ipParameters);
 
     // Set Mask Version in Device Object depending on the BAU

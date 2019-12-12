@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config.h"
+
 #include <stdint.h>
 #include "device_object.h"
 #include "address_table_object.h"

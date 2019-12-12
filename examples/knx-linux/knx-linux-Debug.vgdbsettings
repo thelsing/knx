@@ -18,7 +18,7 @@
         <Transport>SSH</Transport>
         <UserName>tkunze</UserName>
       </RemoteHost>
-      <LocalDirectory>$(ProjectDir)\..</LocalDirectory>
+      <LocalDirectory>$(ProjectDir)\..\..</LocalDirectory>
       <RemoteDirectory>/home/tkunze/vgdb/knx-linux</RemoteDirectory>
       <FileMasks>
         <string>*.cpp</string>
@@ -36,7 +36,6 @@
       </FileMasks>
       <TransferNewFilesOnly>false</TransferNewFilesOnly>
       <IncludeSubdirectories>true</IncludeSubdirectories>
-      <SelectedDirectories />
       <DeleteDisappearedFiles>true</DeleteDisappearedFiles>
       <ApplyGlobalExclusionList>true</ApplyGlobalExclusionList>
       <Extension>
@@ -59,7 +58,7 @@
         <Revision>0</Revision>
       </Version>
     </ToolchainID>
-    <RelativeSourceDirectory>knx-linux</RelativeSourceDirectory>
+    <RelativeSourceDirectory>examples/knx-linux</RelativeSourceDirectory>
     <ConfigurationType>DEBUG</ConfigurationType>
     <BinaryDirectory>Debug</BinaryDirectory>
     <MainCMakeTarget>knx-linux</MainCMakeTarget>

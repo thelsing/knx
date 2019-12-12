@@ -8,9 +8,7 @@
     if (payload_length != (x)) \
     return false
 #define ENSURE_PAYLOAD(x) 
-//\
-//    for (int pi = 0; pi < (x); ++pi) \
-//    payload[pi] = 0
+
 
 int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {

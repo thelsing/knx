@@ -5,6 +5,7 @@
 #include "bau_systemB.h"
 #include "ip_parameter_object.h"
 #include "ip_data_link_layer.h"
+#include "cemi_server_object.h"
 
 class Bau57B0 : public BauSystemB
 {
@@ -20,6 +21,10 @@ class Bau57B0 : public BauSystemB
   private:
     IpParameterObject _ipParameters;
     IpDataLinkLayer _dlLayer;
+#ifdef USE_CEMI_SERVER
+    CemiServer _cemiServer;
+    CemiServerObject _cemiServerObject;
+#endif
     uint8_t _descriptor[2] = {0x57, 0xb0};
     const uint32_t _ifObjs[7] = { 6, // length
                                   OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG, OT_IP_PARAMETER};

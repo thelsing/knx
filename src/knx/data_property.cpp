@@ -25,7 +25,7 @@ uint8_t DataProperty::read(uint16_t start, uint8_t count, uint8_t* data) const
 
 uint8_t DataProperty::write(uint16_t start, uint8_t count, uint8_t* data)
 {
-    if (count == 0 || start > _maxElements || !_writeEnable || start + count > _maxElements + 1)
+    if (count == 0 || start > _maxElements || start + count > _maxElements + 1)
         return 0;
 
     if (start == 0)
@@ -152,7 +152,7 @@ uint8_t* DataProperty::save(uint8_t* buffer)
 {
     buffer = pushWord(_currentElements, buffer);
     if (_currentElements > 0)
-        buffer = pushByteArray(_data, _currentElements, buffer);
+        buffer = pushByteArray(_data, _currentElements * ElementSize(), buffer);
 
     return buffer;
 }

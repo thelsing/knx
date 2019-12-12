@@ -27,7 +27,7 @@ template <class T> class CallbackProperty : public Property
     }
     virtual uint8_t write(uint16_t start, uint8_t count, uint8_t* data) override
     {
-        if (count == 0 || start > _maxElements || !_writeEnable || start + count > _maxElements + 1 || _writeCallback == nullptr)
+        if (count == 0 || start > _maxElements || start + count > _maxElements + 1 || _writeCallback == nullptr)
             return 0;
         return _writeCallback(_interfaceObject, start, count, data);
     }

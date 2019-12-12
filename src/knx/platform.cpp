@@ -56,7 +56,7 @@ void Platform::setupUart()
 
 uint32_t Platform::currentIpAddress()
 {
-    return 0;
+    return 0x01020304;
 }
 
 uint32_t Platform::currentSubnetMask()
