@@ -86,39 +86,21 @@ DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType typ
                            uint16_t maxElements, uint8_t access, uint16_t value)
     : Property(id, writeEnable, type, maxElements, access)
 {
-    uint8_t elementSize = ElementSize();
-    if (elementSize == 2)
-    {
-        uint8_t data[elementSize];
-        pushWord(value, data);
-        write(1, 1, data);
-    }
+    Property::write(value);
 }
 
 DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType type, 
                            uint16_t maxElements, uint8_t access, uint32_t value)
     : Property(id, writeEnable, type, maxElements, access)
 {
-    uint8_t elementSize = ElementSize();
-    if (elementSize == 4)
-    {
-        uint8_t data[elementSize];
-        pushInt(value, data);
-        write(1, 1, data);
-    }
+    Property::write(value);
 }
 
 DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType type,
                            uint16_t maxElements, uint8_t access, uint8_t value)
     : Property(id, writeEnable, type, maxElements, access)
 {
-    uint8_t elementSize = ElementSize();
-    if (elementSize == 1)
-    {
-        uint8_t data[elementSize];
-        data[0] = value;
-        write(1, 1, data);
-    }
+    Property::write(value);
 }
 
 uint16_t DataProperty::saveSize()

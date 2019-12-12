@@ -100,12 +100,8 @@ uint32_t IpParameterObject::multicastAddress() const
 {
     const Property* prop = property(PID_ROUTING_MULTICAST_ADDRESS);
 
-    uint8_t data[4];
-    uint8_t count = prop->read(1, 1, data);
-
     uint32_t value = DEFAULT_MULTICAST_ADDR;
-    if (count == 1)
-        popInt(value, data);
+    prop->read(value);
 
     return value;
 }
@@ -114,8 +110,8 @@ uint8_t IpParameterObject::ttl() const
 {
     const Property* prop = property(PID_TTL);
 
-    uint8_t data[1];
-    prop->read(1, 1, data);
-    return data[0];
+    uint8_t value = 0;
+    prop->read(value);
+    return value;
 }
 #endif

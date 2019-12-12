@@ -111,3 +111,73 @@ Property::Property(PropertyID id, bool writeEnable, PropertyDataType type,
 
 Property::~Property()
 {}
+
+
+uint8_t Property::read(uint8_t& value) const
+{
+    if (ElementSize() != 1)
+        return 0;
+    
+    return read(1, 1, &value);
+}
+
+
+uint8_t Property::read(uint16_t& value) const
+{
+    if (ElementSize() != 2)
+        return 0;
+
+    uint8_t data[2];
+    uint8_t count = read(1, 1, data);
+    if (count > 0)
+    {
+        popWord(value, data);
+    }
+    return count;
+}
+
+
+uint8_t Property::read(uint32_t& value) const
+{
+    if (ElementSize() != 4)
+        return 0;
+
+    uint8_t data[4];
+    uint8_t count = read(1, 1, data);
+    if (count > 0)
+    {
+        popInt(value, data);
+    }
+    return count;
+}
+
+
+uint8_t Property::write(uint8_t& value)
+{
+    if (ElementSize() != 1)
+        return 0;
+
+    return write(1, 1, &value);
+}
+
+
+uint8_t Property::write(uint16_t& value)
+{
+    if (ElementSize() != 2)
+        return 0;
+
+    uint8_t data[2];
+    pushWord(value, data);
+    return write(1, 1, data);
+}
+
+
+uint8_t Property::write(uint32_t& value)
+{
+    if (ElementSize() != 4)
+        return 0;
+
+    uint8_t data[4];
+    pushInt(value, data);
+    return write(1, 1, data);
+}
