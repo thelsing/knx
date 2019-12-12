@@ -7,7 +7,7 @@
       <PathStyle>Win10LXSS</PathStyle>
     </CustomSourceDirectories>
     <BuildHost>
-      <HostName>Immerlund</HostName>
+      <HostName>Suzail</HostName>
       <Transport>SSH</Transport>
       <UserName>tkunze</UserName>
     </BuildHost>
@@ -83,6 +83,7 @@
     <ExportCompileCommands>false</ExportCompileCommands>
     <DisableToolchainFile>false</DisableToolchainFile>
     <DeployAsRoot>false</DeployAsRoot>
+    <CMakeCleanMode>RemoveBuildDirectory</CMakeCleanMode>
   </Build>
   <CustomBuild>
     <PreSyncActions />
