@@ -9,7 +9,6 @@ class ApplicationProgramObject : public TableObject
     void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
     void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count) override;
     uint8_t propertySize(PropertyID id) override;
-    ObjectType objectType() override { return OT_APPLICATION_PROG; }    
     uint8_t* data(uint32_t addr);
     uint8_t getByte(uint32_t addr);
     uint16_t getWord(uint32_t addr);

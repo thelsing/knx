@@ -1,6 +1,5 @@
-#if MEDIUM_TYPE == 2
-
 #include "bau27B0.h"
+#ifdef USE_RF
 #include "bits.h"
 #include <string.h>
 #include <stdio.h>
@@ -23,9 +22,7 @@ Bau27B0::Bau27B0(Platform& platform)
 #endif
 
     // Set Mask Version in Device Object depending on the BAU
-    uint16_t maskVersion;
-    popWord(maskVersion, _descriptor);
-    _deviceObj.maskVersion(maskVersion);
+    _deviceObj.maskVersion(0x27B0);
 
     // Set the maximum APDU length
     // ETS will consider this value while programming the device
@@ -95,11 +92,6 @@ InterfaceObject* Bau27B0::getInterfaceObject(ObjectType objectType, uint8_t obje
         default:
             return nullptr;
     }
-}
-
-uint8_t* Bau27B0::descriptor()
-{
-    return _descriptor;
 }
 
 DataLinkLayer& Bau27B0::dataLinkLayer()

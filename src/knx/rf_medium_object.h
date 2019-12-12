@@ -13,7 +13,6 @@ public:
     uint8_t* save(uint8_t* buffer) override;
     uint8_t* restore(uint8_t* buffer) override;
     uint16_t saveSize() override;
-    ObjectType objectType() override { return OT_RF_MEDIUM; }
 
     uint8_t* rfDomainAddress();
     void rfDomainAddress(uint8_t* value);

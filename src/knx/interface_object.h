@@ -119,12 +119,6 @@ class InterfaceObject : public SaveRestore
     // TODO: remove first version after complete property refactoring
     void readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
     void readPropertyDescription2(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
-    /**
-     * Gets object type.
-     * 
-     * @returns object type
-     */
-    virtual ObjectType objectType() = 0;
 
     /**
      * Gets property with PropertyID id if it exists and nullptr otherwise.

@@ -18,7 +18,6 @@ class Bau27B0 : public BauSystemB
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
-    uint8_t* descriptor();
     DataLinkLayer& dataLinkLayer();
 
   private:
@@ -27,10 +26,6 @@ class Bau27B0 : public BauSystemB
 #ifdef USE_CEMI_SERVER
     CemiServer _cemiServer;
     CemiServerObject _cemiServerObject;
-#endif
-
-    uint8_t _descriptor[2] = {0x27, 0xB0};
-#ifdef USE_CEMI_SERVER
     const uint32_t _ifObjs[8] = { 7, // length
                                   OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG, OT_RF_MEDIUM, OT_CEMI_SERVER};
 #else    

@@ -26,9 +26,7 @@ Bau57B0::Bau57B0(Platform& platform)
     _memory.addSaveRestore(&_ipParameters);
 
     // Set Mask Version in Device Object depending on the BAU
-    uint16_t maskVersion;
-    popWord(maskVersion, _descriptor);
-    _deviceObj.maskVersion(maskVersion);
+    _deviceObj.maskVersion(0x57B0);
 
     // Set which interface objects are available in the device object
     // This differs from BAU to BAU with different medium types.
@@ -82,11 +80,6 @@ InterfaceObject* Bau57B0::getInterfaceObject(ObjectType objectType, uint8_t obje
         default:
             return nullptr;
     }
-}
-
-uint8_t* Bau57B0::descriptor()
-{
-    return _descriptor;
 }
 
 DataLinkLayer& Bau57B0::dataLinkLayer()

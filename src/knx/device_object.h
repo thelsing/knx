@@ -14,7 +14,6 @@ public:
     uint8_t* restore(uint8_t* buffer) override;
     uint16_t saveSize() override;
     void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
-    ObjectType objectType() override { return OT_DEVICE; }
 
     uint16_t induvidualAddress();
     void induvidualAddress(uint16_t value);

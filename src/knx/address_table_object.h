@@ -20,7 +20,6 @@ class AddressTableObject : public TableObject
     AddressTableObject(Memory& memory);
     void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
     uint8_t* restore(uint8_t* buffer) override;
-    ObjectType objectType() override { return OT_ADDR_TABLE; }
 
     /**
      * returns the number of group addresses of the object.

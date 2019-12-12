@@ -40,7 +40,6 @@ class BauSystemB : protected BusAccessUnit
 
   protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
-    virtual uint8_t* descriptor() = 0;
     void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
                                uint16_t memoryAddress, uint8_t* data) override;
     void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,

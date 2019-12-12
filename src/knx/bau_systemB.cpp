@@ -142,8 +142,10 @@ void BauSystemB::deviceDescriptorReadIndication(Priority priority, HopCountType 
 {
     if (descriptorType != 0)
         descriptorType = 0x3f;
-
-    _appLayer.deviceDescriptorReadResponse(AckRequested, priority, hopType, asap, descriptorType, descriptor());
+    
+    uint8_t data[2];
+    pushWord(_deviceObj.maskVersion(), data);
+    _appLayer.deviceDescriptorReadResponse(AckRequested, priority, hopType, asap, descriptorType, data);
 }
 
 void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,

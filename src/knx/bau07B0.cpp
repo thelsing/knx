@@ -22,9 +22,7 @@ Bau07B0::Bau07B0(Platform& platform)
 #endif
 
     // Set Mask Version in Device Object depending on the BAU
-    uint16_t maskVersion;
-    popWord(maskVersion, _descriptor);
-    _deviceObj.maskVersion(maskVersion);
+    _deviceObj.maskVersion(0x07B0);
 
     // Set which interface objects are available in the device object
     // This differs from BAU to BAU with different medium types.
@@ -82,11 +80,6 @@ InterfaceObject* Bau07B0::getInterfaceObject(ObjectType objectType, uint8_t obje
         default:
             return nullptr;
     }
-}
-
-uint8_t* Bau07B0::descriptor()
-{
-    return _descriptor;
 }
 
 DataLinkLayer& Bau07B0::dataLinkLayer()

@@ -11,7 +11,6 @@ class GroupObjectTableObject : public TableObject
     GroupObjectTableObject(Memory& memory);
     virtual ~GroupObjectTableObject();
     void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
-    ObjectType objectType() override { return OT_GRP_OBJ_TABLE; }
     uint16_t entryCount();
     GroupObject& get(uint16_t asap);
     GroupObject& nextUpdatedObject(bool& valid);

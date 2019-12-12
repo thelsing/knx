@@ -7,7 +7,6 @@ class AssociationTableObject : public TableObject
   public:
     AssociationTableObject(Memory& memory);
     void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
-    ObjectType objectType() override { return OT_ASSOC_TABLE; }
 
     uint8_t* restore(uint8_t* buffer) override;
 

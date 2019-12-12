@@ -10,12 +10,6 @@ class IpParameterObject : public InterfaceObject
 {
   public:
     IpParameterObject(DeviceObject& deviceObject, Platform& platform);
-
-    ObjectType objectType() override
-    {
-        return OT_IP_PARAMETER;
-    }
-
     uint32_t multicastAddress() const;
     uint8_t ttl() const;
 

@@ -13,7 +13,6 @@ public:
     uint8_t propertySize(PropertyID id) override;
     uint8_t* save(uint8_t* buffer) override;
     uint8_t* restore(uint8_t* buffer) override;
-    ObjectType objectType() override { return OT_CEMI_SERVER; }
 
 protected:
   uint8_t propertyDescriptionCount() override;
