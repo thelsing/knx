@@ -170,6 +170,9 @@
     <ClInclude Include="..\src\knx\callback_property.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\knx\config.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\knx\address_table_object.cpp">

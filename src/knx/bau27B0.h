@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config.h"
+#ifdef USE_RF
 #include "bau_systemB.h"
 #include "rf_medium_object.h"
 #include "rf_physical_layer.h"
@@ -43,3 +45,4 @@ class Bau27B0 : public BauSystemB
                                                       uint8_t* knxSerialNumber);
     void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber);
 };
+#endif

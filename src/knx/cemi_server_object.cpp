@@ -1,3 +1,4 @@
+#include "config.h"
 #ifdef USE_CEMI_SERVER
 
 #include <cstring>

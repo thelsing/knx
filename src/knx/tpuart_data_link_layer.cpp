@@ -1,5 +1,5 @@
 #include "tpuart_data_link_layer.h"
-
+#ifdef USE_TP
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
@@ -536,3 +536,4 @@ void TpUartDataLinkLayer::loadNextTxFrame()
     }
     delete tx_frame;
 }
+#endif

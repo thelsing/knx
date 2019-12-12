@@ -1,11 +1,9 @@
 #include "knx_facade.h"
-#if MEDIUM_TYPE == 5
+
 #include "knx/bau57B0.h"
-#elif MEDIUM_TYPE == 2
 #include "knx/bau27B0.h"
-#else
-#error Only MEDIUM_TYPE IP and RF supported
-#endif
+#include "knx/bau07B0.h"
+
 #include "knx/group_object_table_object.h"
 #include "knx/bits.h"
 #include <time.h>
@@ -25,6 +23,14 @@ void signalHandler(int sig)
   loopActive = 0;
 }
 
+bool sendHidReport(uint8_t* data, uint16_t length)
+{
+    return false;
+}
+bool isSendHidReportPossible()
+{
+    return false;
+}
 #if MEDIUM_TYPE == 5
 KnxFacade<LinuxPlatform, Bau57B0> knx;
 #elif MEDIUM_TYPE == 2
@@ -60,7 +66,6 @@ void measureTemp()
     if (currentValue > max)
         MAX.value(currentValue);
 
-    double min = MIN.value();
     if (currentValue < (double)MIN.value())
         MIN.value(currentValue);
 }
@@ -142,9 +147,10 @@ int main(int argc, char **argv)
     // opens the "value" sysfs file to read or write the GPIO pin value.
     // The following calls will close the "value" sysfs fiel for the pin
     // and unexport the GPIO pin.
+#ifdef USE_RF
     gpio_unexport(SPI_SS_PIN);
     gpio_unexport(GPIO_GDO2_PIN);
     gpio_unexport(GPIO_GDO0_PIN);
-
+#endif
     printf("main() exit.\n");
 }

@@ -1,4 +1,5 @@
-#if MEDIUM_TYPE == 2
+#include "config.h"
+#ifdef USE_RF
 
 #include "rf_physical_layer.h"
 #include "rf_data_link_layer.h"
@@ -376,4 +377,4 @@ void RfDataLinkLayer::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuffer
     delete tx_frame;
 }
 
-#endif // #if MEDIUM_TYPE == 2
+#endif

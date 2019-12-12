@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config.h"
+#ifdef USE_IP
 #include "bau_systemB.h"
 #include "ip_parameter_object.h"
 #include "ip_data_link_layer.h"
@@ -22,3 +24,4 @@ class Bau57B0 : public BauSystemB
     const uint32_t _ifObjs[7] = { 6, // length
                                   OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG, OT_IP_PARAMETER};
 };
+#endif

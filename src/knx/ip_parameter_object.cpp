@@ -1,4 +1,5 @@
 #include "ip_parameter_object.h"
+#ifdef USE_IP
 #include "device_object.h"
 #include "platform.h"
 #include "bits.h"
@@ -109,7 +110,12 @@ uint32_t IpParameterObject::multicastAddress() const
     return value;
 }
 
-uint16_t IpParameterObject::saveSize()
+uint8_t IpParameterObject::ttl() const
 {
-    return 51;
+    const Property* prop = property(PID_TTL);
+
+    uint8_t data[1];
+    prop->read(1, 1, data);
+    return data[0];
 }
+#endif

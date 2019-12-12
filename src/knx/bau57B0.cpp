@@ -1,7 +1,10 @@
+#include "config.h"
 #include "bau57B0.h"
 #include "bits.h"
 #include <string.h>
 #include <stdio.h>
+
+#ifdef USE_IP
 
 using namespace std;
 
@@ -81,3 +84,5 @@ DataLinkLayer& Bau57B0::dataLinkLayer()
 {
     return _dlLayer;
 }
+
+#endif

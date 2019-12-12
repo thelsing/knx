@@ -2,6 +2,9 @@
 #include "rf_medium_object.h"
 #include "bits.h"
 
+#include "config.h"
+#ifdef USE_RF
+
 void RfMediumObject::readProperty(PropertyID propertyId, uint16_t start, uint8_t& count, uint8_t* data)
 {
     switch (propertyId)
@@ -135,3 +138,4 @@ PropertyDescription* RfMediumObject::propertyDescriptions()
 {
     return _propertyDescriptions;
 }
+#endif

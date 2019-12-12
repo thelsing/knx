@@ -1,5 +1,8 @@
 #pragma once
 
+#include "config.h"
+#ifdef USE_RF
+
 #include <stdint.h>
 #include "data_link_layer.h"
 
@@ -56,3 +59,5 @@ class RfDataLinkLayer : public DataLinkLayer
     void frameBytesReceived(uint8_t* buffer, uint16_t length);
     uint16_t calcCrcRF(uint8_t* buffer, uint32_t offset, uint32_t len);
 };
+
+#endif

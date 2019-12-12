@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#ifdef USE_TP
+
 using namespace std;
 
 Bau07B0::Bau07B0(Platform& platform)
@@ -99,3 +101,5 @@ void Bau07B0::loop()
     _cemiServer.loop();
 #endif    
 }
+
+#endif

@@ -111,7 +111,7 @@
   <ImportedPropertySheets />
   <CodeSense>
     <Enabled>True</Enabled>
-    <CXXFLAGS>-DMEDIUM_TYPE=5 -DUSE_CEMI_SERVER</CXXFLAGS>
+    <CXXFLAGS>-DMEDIUM_TYPE=5</CXXFLAGS>
     <ExtraSettings>
       <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
       <SupportLightweightReferenceAnalysis>true</SupportLightweightReferenceAnalysis>

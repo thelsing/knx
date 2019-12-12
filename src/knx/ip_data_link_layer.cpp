@@ -1,5 +1,7 @@
 #include "ip_data_link_layer.h"
 
+#ifdef USE_IP
+
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
@@ -103,3 +105,4 @@ bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 
     return _platform.sendBytesMultiCast(bytes, length);
 }
+#endif

@@ -1,6 +1,7 @@
+#pragma once
 
-#ifndef RF_PHYSICAL_LAYER_H
-#define RF_PHYSICAL_LAYER_H
+#include "config.h"
+#ifdef USE_RF
 
 #include <stdint.h>
 

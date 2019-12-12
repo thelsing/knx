@@ -1,3 +1,4 @@
+#include "config.h"
 #ifdef USE_CEMI_SERVER
 
 #include "cemi_server.h"
@@ -146,7 +147,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
             popWord(objectType, &frame.data()[1]);
             uint8_t objectInstance = frame.data()[3];
             uint8_t propertyId = frame.data()[4];
-            uint32_t numberOfElements = frame.data()[5] >> 4;
+            uint8_t numberOfElements = frame.data()[5] >> 4;
             uint16_t startIndex = frame.data()[6] | ((frame.data()[5]&0x0F)<<8);
             uint8_t* data = nullptr;
             uint32_t dataSize = 0;
@@ -225,7 +226,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
             popWord(objectType, &frame.data()[1]);
             uint8_t objectInstance = frame.data()[3];
             uint8_t propertyId = frame.data()[4];
-            uint32_t numberOfElements = frame.data()[5] >> 4;
+            uint8_t numberOfElements = frame.data()[5] >> 4;
             uint16_t startIndex = frame.data()[6] | ((frame.data()[5]&0x0F)<<8);
             uint8_t* requestData = &frame.data()[7];
             uint32_t requestDataSize = frame.dataLength() - 7;

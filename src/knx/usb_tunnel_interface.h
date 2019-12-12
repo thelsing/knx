@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config.h"
+#ifdef USE_CEMI_SERVER
 #include <stdint.h>
 
 class CemiServer;
@@ -91,3 +93,4 @@ class UsbTunnelInterface
     void handleBusAccessServerProtocol(ServiceIdType servId, const uint8_t* requestData, uint16_t packetLength);
     void sendKnxHidReport(ProtocolIdType protId, ServiceIdType servId, uint8_t* data, uint16_t length);
 };
+#endif

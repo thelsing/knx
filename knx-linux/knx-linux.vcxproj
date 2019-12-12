@@ -86,6 +86,7 @@
     <ClInclude Include="..\src\knx\cemi_frame.h" />
     <ClInclude Include="..\src\knx\cemi_server.h" />
     <ClInclude Include="..\src\knx\cemi_server_object.h" />
+    <ClInclude Include="..\src\knx\config.h" />
     <ClInclude Include="..\src\knx\datapoint_types.h" />
     <ClInclude Include="..\src\knx\data_link_layer.h" />
     <ClInclude Include="..\src\knx\data_property.h" />

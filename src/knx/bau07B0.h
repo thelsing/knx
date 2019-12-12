@@ -1,9 +1,12 @@
 #pragma once
 
+#include "config.h"
 #include "bau_systemB.h"
 #include "tpuart_data_link_layer.h"
 #include "cemi_server.h"
 #include "cemi_server_object.h"
+
+#ifdef USE_TP
 
 class Bau07B0 : public BauSystemB
 {
@@ -33,3 +36,4 @@ class Bau07B0 : public BauSystemB
                                   OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG};
 #endif                                  
 };
+#endif

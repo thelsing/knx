@@ -25,8 +25,10 @@ add_executable(knx-linux
 	../src/knx/bits.cpp 
 	../src/knx/bits.h
 	../src/knx/callback_property.h
-	../src/knx/cemi_frame.cpp 
+	../src/knx/cemi_frame.cpp
 	../src/knx/cemi_frame.h
+	../src/knx/cemi_server.cpp 
+	../src/knx/cemi_server_object.cpp 
 	../src/knx/data_link_layer.cpp 
 	../src/knx/data_link_layer.h
 	../src/knx/data_property.cpp 
@@ -47,6 +49,7 @@ add_executable(knx-linux
 	../src/knx/ip_data_link_layer.h
 	../src/knx/ip_parameter_object.cpp 
 	../src/knx/ip_parameter_object.h
+	../src/knx/knx_ip_frame.cpp
 	../src/knx/knx_value.cpp
 	../src/knx/knx_value.h
 	../src/knx/memory.cpp 
@@ -57,14 +60,14 @@ add_executable(knx-linux
 	../src/knx/npdu.h
     ../src/knx/platform.cpp
 	../src/knx/platform.h
+	../src/knx/property.cpp
+	../src/knx/property.h 
 	../src/knx/rf_data_link_layer.cpp
 	../src/knx/rf_data_link_layer.h
 	../src/knx/rf_medium_object.cpp
 	../src/knx/rf_medium_object.h
 	../src/knx/rf_physical_layer.cpp
 	../src/knx/rf_physical_layer.h
-	../src/knx/property.cpp
-	../src/knx/property.h
 	../src/knx/table_object.cpp
 	../src/knx/table_object.h
 	../src/knx/tpdu.cpp 
@@ -73,6 +76,7 @@ add_executable(knx-linux
 	../src/knx/tpuart_data_link_layer.h
 	../src/knx/transport_layer.cpp 
 	../src/knx/transport_layer.h
+	../src/knx/usb_tunnel_interface.cpp
 	../src/knx_facade.cpp 
 	../src/knx_facade.h
 	../src/linux_platform.cpp 

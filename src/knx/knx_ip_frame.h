@@ -1,7 +1,8 @@
 #pragma once
 
 #include "cemi_frame.h"
-
+#include "config.h"
+#ifdef USE_IP
 enum KnxIpVersion
 {
     KnxIp1_0
@@ -46,3 +47,4 @@ class KnxIpFrame
   private:
     uint8_t* _data = 0;
 };
+#endif

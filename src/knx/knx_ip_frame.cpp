@@ -1,4 +1,6 @@
 #include "knx_ip_frame.h"
+
+#ifdef USE_IP
 #include "bits.h"
 
 #define KNXIP_HEADER_LEN 0x6
@@ -32,6 +34,7 @@ void KnxIpFrame::protocolVersion(KnxIpVersion version)
 
 uint16_t KnxIpFrame::serviceTypeIdentifier() const
 {
+    return 0;
 }
 
 void KnxIpFrame::serviceTypeIdentifier(uint16_t identifier)
@@ -47,3 +50,4 @@ void KnxIpFrame::totalLength(uint16_t length)
 {
     pushWord(length, _data + 2);
 }
+#endif
