@@ -115,11 +115,13 @@
           - "~/.platformio"
       env:
         - PLATFORMIO_CI_SRC=examples/knx-usb
+        - PLATFORMIO_LIBDEPS_DIR=/tmp/libdeps
       install:
         - pip install -U platformio
         - platformio update      
       script:
-        - platformio ci --project-conf=examples/knx-usb/platformio.ini          
+        #- platformio ci --project-conf=examples/knx-usb/platformio.ini          
+        - platformio run -c examples/knx-usb/platformio.ini          
       
 notifications:
   email:
