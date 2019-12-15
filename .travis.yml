@@ -86,7 +86,7 @@
         - platformio update      
       script:
         - platformio settings set force_verbose yes
-        - platformio ci --lib="." --project-conf=examples/knx-usb/platformio.ini          
+        - platformio ci --lib="." --project-conf=examples/knx-usb/platformio.ini examples/knx-usb/src/main.cpp     
       
 notifications:
   email:
