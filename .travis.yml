@@ -85,7 +85,7 @@
         - pip install -U platformio
         - platformio update      
       script:
-        - platformio settings force_verbose yes
+        - platformio settings set force_verbose yes
         - platformio ci --lib="." --project-conf=examples/knx-usb/platformio.ini          
       
 notifications:
