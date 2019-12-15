@@ -84,12 +84,13 @@
           - "~/.platformio"
       env:
         - PLATFORMIO_LIBDEPS_DIR=/tmp/libdeps
+        - PLATFORMIO_EXTRA_SCRIPTS=pre:/tmp/scripts/custom_hwids.py
       install:
         - pip install -U platformio
         - platformio update      
       script:
-        - mkdir -p /tmp/build
-        - cp examples/knx-usb/custom_hwids.py /tmp/build
+        - mkdir -p /tmp/scripts
+        - cp examples/knx-usb/custom_hwids.py /tmp/scripts
         - platformio settings set force_verbose yes
         - platformio ci --build-dir /tmp/build --lib="." --project-conf=examples/knx-usb/platformio.ini examples/knx-usb/src/main.cpp     
       
