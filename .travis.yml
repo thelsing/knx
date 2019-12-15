@@ -80,8 +80,9 @@
         directories:
           - "~/.platformio"
       env:
-        - PLATFORMIO_CI_SRC=examples/knx-usb
+        - PLATFORMIO_CI_SRC=examples/knx-usb/src/main.cpp
         - PLATFORMIO_LIBDEPS_DIR=/tmp/libdeps
+        - PLATFORMIO_EXTRA_SCRIPTS=pre:examples/knx-usb/custom_hwids.py
       install:
         - pip install -U platformio
         - platformio update      
