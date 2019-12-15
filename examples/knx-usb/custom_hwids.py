@@ -1,5 +1,8 @@
 Import("env")
 
+# access to global build environment
+print(env)
+
 board_config = env.BoardConfig()
 board_config.update("build.hwids", [
 #  ["0x135e", "0x0024"] # Merten GmbH & Co. KG
