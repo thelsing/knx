@@ -90,14 +90,14 @@
         - pip install -U platformio
         - platformio update      
       script:
-        - mkdir -p examples/knx-usb/lib/knx
-        - cp -rv src/* examples/knx-usb/lib/knx
-        - cp -v library.properties examples/knx-usb/lib/knx
+        #- mkdir -p examples/knx-usb/lib/knx
+        #- cp -rv src/* examples/knx-usb/lib/knx
+        #- cp -v library.properties examples/knx-usb/lib/knx
         - mkdir -p /tmp/scripts
         - cp examples/knx-usb/custom_hwids.py /tmp/scripts
         - platformio settings set force_verbose yes
         - echo "-------";pwd;echo "--------";
-        - platformio ci --lib="." --project-conf=examples/knx-usb/platformio.ini examples/knx-usb/src/main.cpp
+        - platformio ci --lib="." --project-conf=examples/knx-usb/platformio-ci.ini examples/knx-usb/src/main.cpp
       
 notifications:
   email:
