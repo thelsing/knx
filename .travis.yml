@@ -96,7 +96,8 @@
         - mkdir -p /tmp/scripts
         - cp examples/knx-usb/custom_hwids.py /tmp/scripts
         - platformio settings set force_verbose yes
-        - platformio ci --build-dir /tmp/build --lib="." --project-conf=examples/knx-usb/platformio.ini examples/knx-usb/src/main.cpp
+        - echo "-------";pwd;echo "--------";
+        - platformio ci --lib="." --project-conf=examples/knx-usb/platformio.ini examples/knx-usb/src/main.cpp
       
 notifications:
   email:
