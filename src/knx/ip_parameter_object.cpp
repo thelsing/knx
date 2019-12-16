@@ -7,7 +7,7 @@
 #include "callback_property.h"
 
 //224.0.23.12
-#define DEFAULT_MULTICAST_ADDR 0xE000170CUL
+#define DEFAULT_MULTICAST_ADDR ((uint32_t)0xE000170C)
 
 IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platform): _deviceObject(deviceObject),
     _platform(platform)
