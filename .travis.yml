@@ -83,16 +83,11 @@
         directories:
           - "~/.platformio"
       env:
-        - PLATFORMIO_LIBDEPS_DIR=/tmp/libdeps
         - PLATFORMIO_EXTRA_SCRIPTS=pre:/tmp/scripts/custom_hwids.py
-        - PLATFORMIO_LIB_EXTRA_DIRS=""
       install:
         - pip install -U platformio
         - platformio update      
       script:
-        #- mkdir -p examples/knx-usb/lib/knx
-        #- cp -rv src/* examples/knx-usb/lib/knx
-        #- cp -v library.properties examples/knx-usb/lib/knx
         - mkdir -p /tmp/scripts
         - cp examples/knx-usb/custom_hwids.py /tmp/scripts
         - platformio settings set force_verbose yes
