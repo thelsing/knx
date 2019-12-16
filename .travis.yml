@@ -83,13 +83,13 @@
         directories:
           - "~/.platformio"
       env:
-        - PLATFORMIO_EXTRA_SCRIPTS=pre:/tmp/scripts/custom_hwids.py
+        - PLATFORMIO_EXTRA_SCRIPTS=pre:~/build/nanosonde/knx/examples/knx-usb/custom_hwids.py
       install:
         - pip install -U platformio
         - platformio update      
       script:
-        - mkdir -p /tmp/scripts
-        - cp examples/knx-usb/custom_hwids.py /tmp/scripts
+        #- mkdir -p /tmp/scripts
+        #- cp examples/knx-usb/custom_hwids.py /tmp/scripts
         - platformio settings set force_verbose yes
         - echo "-------";pwd;echo "--------";
         - platformio ci --lib="." --project-conf=examples/knx-usb/platformio-ci.ini examples/knx-usb/src/main.cpp
