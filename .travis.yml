@@ -25,7 +25,7 @@
       install:
       
       script:
-        - cd knx-linux
+        - cd examples/knx-linux
         - mkdir -p build
         - cd build
         - cmake ..
