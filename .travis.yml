@@ -62,6 +62,8 @@
           # the HDC100X lib is not properly set up in githup so move things around a bit
           - rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
           - downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"
+          - ln -s $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/HDC100X.cpp  $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X.cpp
+          - ln -s $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/HDC100X.h  $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X.h
           #- mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
           #- buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
 
