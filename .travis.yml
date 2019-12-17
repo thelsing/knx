@@ -92,8 +92,10 @@
         - mkdir -p /tmp/scripts
         - cp examples/knx-usb/custom_hwids.py /tmp/scripts
         - platformio settings set force_verbose yes
-        - echo "-------";pwd;echo "--------";
+        - echo "-------";echo "Compiling example knx-usb";echo "--------";
         - platformio ci --lib="." --project-conf=examples/knx-usb/platformio-ci.ini examples/knx-usb/src/main.cpp
+        - echo "-------";echo "Compiling example knx-demo";echo "--------";
+        - platformio ci --lib="." --project-conf=examples/knx-demo/platformio-ci.ini examples/knx-demo/knx-demo.ino
       
 notifications:
   email:
