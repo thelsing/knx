@@ -60,9 +60,9 @@
           - sed -ri 's#(\*libwps\.a:\(\.literal\.\* \.text\.\*\))#\1\n    *libalgobsec.a:(.literal.* .text.*)#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.3/tools/sdk/ld/eagle.app.v6.common.ld.h
 
           # the HDC100X lib is not properly set up in githup so move things around a bit
-          - rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
-          - downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"
-          - mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
+          #- rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
+          #- downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"
+          #- mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
           #- buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
 
       install:
@@ -100,7 +100,10 @@
 
         - echo "-------";echo "Compiling example knx-demo";echo "--------";
         - platformio ci --lib="." --project-conf=examples/knx-demo/platformio-ci.ini examples/knx-demo/knx-demo.ino
-      
+
+        - echo "-------";echo "Compiling example knx-hdc1008";echo "--------";
+        - platformio ci --lib="." --project-conf=examples/knx-hdc1008/platformio-ci.ini examples/knx-hdc1008/knx-hdc1008.ino
+
 notifications:
   email:
     on_success: change

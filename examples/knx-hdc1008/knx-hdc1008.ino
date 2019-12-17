@@ -1,4 +1,4 @@
-#include <HDC100X.h>
+#include <HDC100X/HDC100X.h>
 #include <knx.h>
 #ifdef ARDUINO_ARCH_ESP8266
 #include <WiFiManager.h>
