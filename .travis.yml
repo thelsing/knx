@@ -60,8 +60,8 @@
           - sed -ri 's#(\*libwps\.a:\(\.literal\.\* \.text\.\*\))#\1\n    *libalgobsec.a:(.literal.* .text.*)#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.6.3/tools/sdk/ld/eagle.app.v6.common.ld.h
 
           # the HDC100X lib is not properly set up in githup so move things around a bit
-          #- rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
-          #- downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"
+          - rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
+          - downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"
           #- mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
           #- buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
 
