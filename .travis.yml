@@ -103,9 +103,6 @@
         - echo "-------";echo "Compiling example knx-demo";echo "--------";
         - platformio ci --lib="." --project-conf=examples/knx-demo/platformio-ci.ini examples/knx-demo/knx-demo.ino
 
-        - echo "-------";echo "Compiling example knx-hdc1008";echo "--------";
-        - platformio ci --lib="." --project-conf=examples/knx-hdc1008/platformio-ci.ini examples/knx-hdc1008/knx-hdc1008.ino
-
 notifications:
   email:
     on_success: change
