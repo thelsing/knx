@@ -91,9 +91,13 @@
         # PRE scripts have to be copied manually as "platformio ci does not care about it"
         - mkdir -p /tmp/scripts
         - cp examples/knx-usb/custom_hwids.py /tmp/scripts
-        - platformio settings set force_verbose yes
+
+        # Enable verbose output of platformio
+        #- platformio settings set force_verbose yes
+
         - echo "-------";echo "Compiling example knx-usb";echo "--------";
         - platformio ci --lib="." --project-conf=examples/knx-usb/platformio-ci.ini examples/knx-usb/src/main.cpp
+
         - echo "-------";echo "Compiling example knx-demo";echo "--------";
         - platformio ci --lib="." --project-conf=examples/knx-demo/platformio-ci.ini examples/knx-demo/knx-demo.ino
       
