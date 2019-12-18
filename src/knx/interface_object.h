@@ -148,7 +148,7 @@ class InterfaceObject : public SaveRestore
     /**
      * Intializes the Property-array the the supplied values.
      */
-    void initializeProperties(size_t propertiesSize, Property** properties);
+    virtual void initializeProperties(size_t propertiesSize, Property** properties);
 
     Property** _properties = nullptr;
     uint8_t _propertyCount = 0;

@@ -3,71 +3,15 @@
 #include "table_object.h"
 #include "bits.h"
 #include "memory.h"
+#include "callback_property.h"
+#include "data_property.h"
 
-TableObject::TableObject(Memory& memory): _memory(memory)
-{
-
-}
-
-void TableObject::readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data)
-{
-    switch (id)
-    {
-        case PID_LOAD_STATE_CONTROL:
-            data[0] = _state;
-            break;
-        case PID_TABLE_REFERENCE:
-            if (_state == LS_UNLOADED)
-                pushInt(0, data);
-            else
-                pushInt(tableReference(), data);
-            break;
-        case PID_ERROR_CODE:
-            data[0] = _errorCode;
-            break;
-        default:
-            InterfaceObject::readProperty(id, start, count, data);
-    }
-}
-
-void TableObject::writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count)
-{
-    switch (id)
-    {
-        case PID_LOAD_STATE_CONTROL:
-            loadEvent(data);
-            break;
-
-        //case PID_MCB_TABLE:
-        //    TODO
-        //    break;
-        default:
-            InterfaceObject::writeProperty(id, start, data, count);
-    }
-}
-
-uint8_t TableObject::propertySize(PropertyID id)
-{
-    switch (id)
-    {
-        case PID_LOAD_STATE_CONTROL:
-            return 1;
-        case PID_TABLE_REFERENCE:
-            return 4;
-        case PID_ERROR_CODE:
-            return 1;
-        case PID_OBJECT_TYPE:
-            return 2;
-        default:
-            return InterfaceObject::propertySize(id);
-    }
-}
+TableObject::TableObject(Memory& memory)
+    : _memory(memory)
+{}
 
 TableObject::~TableObject()
-{
-//    if (_data != 0)
-//        _memory.freeMemory(_data);
-}
+{}
 
 LoadState TableObject::loadState()
 {
@@ -86,7 +30,6 @@ void TableObject::loadState(LoadState newState)
 uint8_t* TableObject::save(uint8_t* buffer)
 {
     buffer = pushByte(_state, buffer);
-    buffer = pushByte(_errorCode, buffer);
 
     if (_data)
         buffer = pushInt(_memory.toRelative(_data), buffer);
@@ -100,11 +43,8 @@ uint8_t* TableObject::save(uint8_t* buffer)
 uint8_t* TableObject::restore(uint8_t* buffer)
 {
     uint8_t state = 0;
-    uint8_t errorCode = 0;
     buffer = popByte(state, buffer);
-    buffer = popByte(errorCode, buffer);
     _state = (LoadState)state;
-    _errorCode = (ErrorCode)errorCode;
 
     uint32_t relativeAddress = 0;
     buffer = popInt(relativeAddress, buffer);
@@ -180,7 +120,7 @@ void TableObject::loadEventUnloaded(uint8_t* data)
             break;
         default:
             loadState(LS_ERROR);
-            _errorCode = E_GOT_UNDEF_LOAD_CMD;
+            errorCode(E_GOT_UNDEF_LOAD_CMD);
     }
 }
 
@@ -203,7 +143,7 @@ void TableObject::loadEventLoading(uint8_t* data)
             break;
         default:
             loadState(LS_ERROR);
-            _errorCode = E_GOT_UNDEF_LOAD_CMD;
+            errorCode(E_GOT_UNDEF_LOAD_CMD);
     }
 }
 
@@ -229,11 +169,11 @@ void TableObject::loadEventLoaded(uint8_t* data)
             break;
         case LE_ADDITIONAL_LOAD_CONTROLS:
             loadState(LS_ERROR);
-            _errorCode = E_INVALID_OPCODE;
+            errorCode(E_INVALID_OPCODE);
             break;
         default:
             loadState(LS_ERROR);
-            _errorCode = E_GOT_UNDEF_LOAD_CMD;
+            errorCode(E_GOT_UNDEF_LOAD_CMD);
     }
 }
 
@@ -252,7 +192,7 @@ void TableObject::loadEventError(uint8_t* data)
             break;
         default:
             loadState(LS_ERROR);
-            _errorCode = E_GOT_UNDEF_LOAD_CMD;
+            errorCode(E_GOT_UNDEF_LOAD_CMD);
     }
 }
 
@@ -261,7 +201,7 @@ void TableObject::additionalLoadControls(uint8_t* data)
     if (data[1] != 0x0B) // Data Relative Allocation
     {
         loadState(LS_ERROR);
-        _errorCode = E_INVALID_OPCODE;
+        errorCode(E_INVALID_OPCODE);
         return;
     }
 
@@ -271,7 +211,7 @@ void TableObject::additionalLoadControls(uint8_t* data)
     if (!allocTable(size, doFill, fillByte))
     {
         loadState(LS_ERROR);
-        _errorCode = E_MAX_TABLE_LENGTH_EXEEDED;
+        errorCode(E_MAX_TABLE_LENGTH_EXEEDED);
     }
 }
 
@@ -282,10 +222,58 @@ uint8_t* TableObject::data()
 
 void TableObject::errorCode(ErrorCode errorCode)
 {
-    _errorCode = errorCode;
+    uint8_t data = errorCode;
+    Property* prop = property(PID_ERROR_CODE);
+    prop->write(data);
 }
 
 uint16_t TableObject::saveSize()
 {
-    return 6;
+    return 5 + InterfaceObject::saveSize();
+}
+
+void TableObject::initializeProperties(size_t propertiesSize, Property** properties)
+{
+    Property* ownProperties[] =
+    {
+        new CallbackProperty<TableObject>(this, PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3,
+            [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+                if (start == 0)
+                    return 1;
+
+                data[0] = obj->_state;
+                return 1;
+            },
+            [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+                obj->loadEvent(data);
+                return 1;
+            }),
+        new CallbackProperty<TableObject>(this, PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0,
+            [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+                if (start == 0)
+                    return 1;
+
+                if (obj->_state == LS_UNLOADED)
+                    pushInt(0, data);
+                else
+                    pushInt(obj->tableReference(), data);
+                return 1;
+            }),
+        new DataProperty(PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t)E_NO_FAULT)
+     };
+    //TODO: missing
+
+    //      23 PID_TABLE 3 / (3)
+    //      27 PID_MCB_TABLE 3 / 3
+
+    uint8_t ownPropertiesCount = sizeof(ownProperties) / sizeof(Property*);
+
+    uint8_t propertyCount = propertiesSize / sizeof(Property*);
+    uint8_t allPropertiesCount = propertyCount + ownPropertiesCount;
+
+    Property* allProperties[allPropertiesCount];
+    memcpy(allProperties, properties, propertiesSize);
+    memcpy(allProperties + propertyCount, ownProperties, sizeof(ownProperties));
+
+    InterfaceObject::initializeProperties(sizeof(allProperties), allProperties);
 }

@@ -6,7 +6,6 @@ class AssociationTableObject : public TableObject
 {
   public:
     AssociationTableObject(Memory& memory);
-    void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
 
     uint8_t* restore(uint8_t* buffer) override;
 
@@ -15,8 +14,6 @@ class AssociationTableObject : public TableObject
 
   protected:
     void beforeStateChange(LoadState& newState) override;
-    uint8_t propertyDescriptionCount() override;
-    PropertyDescription* propertyDescriptions() override;
 
   private:
     uint16_t entryCount();

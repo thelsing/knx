@@ -16,9 +16,7 @@ class TableObject: public InterfaceObject
      * @param memory The instance of the memory management class to use.
      */
     TableObject(Memory& memory);
-    virtual void readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data) override;
-    virtual void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count) override;
-    virtual uint8_t propertySize(PropertyID id) override;
+
     /**
      * The destructor.
      */
@@ -48,6 +46,8 @@ protected:
      */
     void errorCode(ErrorCode errorCode);
 
+    void initializeProperties(size_t propertiesSize, Property** properties) override;
+
   private:
     uint32_t tableReference();
     bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
@@ -68,5 +68,4 @@ protected:
     LoadState _state = LS_UNLOADED;
     Memory& _memory;
     uint8_t *_data = 0;
-    ErrorCode _errorCode = E_NO_FAULT;
 };

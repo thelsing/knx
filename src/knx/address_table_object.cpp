@@ -2,25 +2,19 @@
 
 #include "address_table_object.h"
 #include "bits.h"
+#include "data_property.h"
 
 using namespace std;
 
 AddressTableObject::AddressTableObject(Memory& memory)
     : TableObject(memory)
 {
-
-}
-
-void AddressTableObject::readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data)
-{
-    switch (id)
+    Property* properties[] =
     {
-        case PID_OBJECT_TYPE:
-            pushWord(OT_ADDR_TABLE, data);
-            break;
-        default:
-            TableObject::readProperty(id, start, count, data);
-    }
+        new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ADDR_TABLE)
+    };
+
+    TableObject::initializeProperties(sizeof(properties), properties);
 }
 
 uint16_t AddressTableObject::entryCount()
@@ -77,25 +71,4 @@ void AddressTableObject::beforeStateChange(LoadState& newState)
         return;
 
     _groupAddresses = (uint16_t*)data();
-}
-
-static PropertyDescription _propertyDescriptions[] =
-{
-    { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 },
-    { PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3 },
-    { PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0 },
-    { PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0 },
-};
-
-static uint8_t _propertyDescriptionCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
-
-uint8_t AddressTableObject::propertyDescriptionCount()
-{
-    return _propertyDescriptionCount;
-}
-
-
-PropertyDescription* AddressTableObject::propertyDescriptions()
-{
-    return _propertyDescriptions;
 }
