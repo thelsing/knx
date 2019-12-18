@@ -41,6 +41,6 @@ pybind11_add_module(knx
 	src/knx/dpt.cpp)
 include_directories(src pybind11/include)
 
-set(outdir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-set_target_properties(knx PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${outdir})
+#set(outdir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+#set_target_properties(knx PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${outdir})
 set_target_properties(knx PROPERTIES OUTPUT_NAME knx)
