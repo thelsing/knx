@@ -7,8 +7,10 @@
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - deadsnakes/ppa
           packages:
             - g++-7
+            - python3.7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       cache:
@@ -20,9 +22,6 @@
         quiet: true
 
       before_install:
-        - sudo add-apt-repository -y ppa:deadsnakes/ppa
-        - sudo apt-get -q update
-        - sudo apt-get -y install python3.7
         - eval "${MATRIX_EVAL}"
 
       install:
