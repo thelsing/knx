@@ -25,11 +25,20 @@
       install:
       
       script:
+        - echo "building knx-linux"
         - cd examples/knx-linux
         - mkdir -p build
         - cd build
         - cmake ..
         - make
+        - cd ../../..
+        - echo "building knxPython"
+        - cd examples/knxPython
+        - mkdir -p build
+        - cd build
+        - cmake ..
+        - make
+        - cd ../../..
 
     # Test build for Arduino platform
     - language: cpp
