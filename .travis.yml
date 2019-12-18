@@ -9,6 +9,7 @@
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
+            - python3.7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       cache:
