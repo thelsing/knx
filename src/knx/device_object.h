@@ -58,7 +58,7 @@ private:
     uint8_t _knxSerialNumber[6] = { 0x00, 0xFA, 0x00, 0x00, 0x00, 0x00 };  //Default to KNXA (0xFA)
     char _orderNumber[10] = "";
     uint8_t _hardwareType[6] = { 0, 0, 0, 0, 0, 0};
-    uint16_t _version = 1;
+    uint16_t _version = 2;
     uint16_t _maskVersion = 0x0000;
     uint16_t _maxApduLength = 254;
     const uint32_t* _ifObjs;
