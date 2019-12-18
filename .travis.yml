@@ -7,10 +7,8 @@
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - deadsnakes
           packages:
             - g++-7
-            - python3.7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       cache:
@@ -33,14 +31,6 @@
         - cd build
         - cmake ..
         - make
-        - cd ../../..
-        - echo "building knxPython"
-        - cd examples/knxPython
-        - mkdir -p build
-        - cd build
-        - cmake ..
-        - make
-        - cd ../../..
 
     # Test build for Arduino platform
     - language: cpp
