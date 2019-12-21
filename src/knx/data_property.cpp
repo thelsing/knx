@@ -23,7 +23,7 @@ uint8_t DataProperty::read(uint16_t start, uint8_t count, uint8_t* data) const
     return count;
 }
 
-uint8_t DataProperty::write(uint16_t start, uint8_t count, uint8_t* data)
+uint8_t DataProperty::write(uint16_t start, uint8_t count, const uint8_t* data)
 {
     if (count == 0 || start > _maxElements || start + count > _maxElements + 1)
         return 0;
@@ -103,13 +103,20 @@ DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType typ
     Property::write(value);
 }
 
+DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType type,
+                           uint16_t maxElements, uint8_t access, const uint8_t* value)
+    : Property(id, writeEnable, type, maxElements, access)
+{
+    Property::write(value);
+}
+
 uint16_t DataProperty::saveSize()
 {
     return sizeof(_currentElements) + _maxElements * ElementSize();
 }
 
 
-uint8_t* DataProperty::restore(uint8_t* buffer)
+const uint8_t* DataProperty::restore(const uint8_t* buffer)
 {
     uint16_t elements = 0;
     buffer = popWord(elements, buffer);
@@ -137,4 +144,10 @@ uint8_t* DataProperty::save(uint8_t* buffer)
         buffer = pushByteArray(_data, _currentElements * ElementSize(), buffer);
 
     return buffer;
+}
+
+
+const uint8_t* DataProperty::data()
+{
+    return _data;
 }

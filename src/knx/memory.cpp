@@ -20,7 +20,7 @@ void Memory::readMemory()
     _freeList = new MemoryBlock(_data + metadataBlockSize, flashSize - metadataBlockSize);
 
     uint16_t manufacturerId = 0;
-    uint8_t* buffer = popWord(manufacturerId, _data);
+    const uint8_t* buffer = popWord(manufacturerId, _data);
 
     uint8_t hardwareType[LEN_HARDWARE_TYPE] = {0};
     buffer = popByteArray(hardwareType, LEN_HARDWARE_TYPE, buffer);

@@ -179,7 +179,7 @@ uint8_t* InterfaceObject::save(uint8_t* buffer)
 }
 
 
-uint8_t* InterfaceObject::restore(uint8_t* buffer)
+const uint8_t* InterfaceObject::restore(const uint8_t* buffer)
 {
     for (int i = 0; i < _propertyCount; i++)
     {

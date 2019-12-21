@@ -152,7 +152,7 @@ uint8_t Property::read(uint32_t& value) const
 }
 
 
-uint8_t Property::write(uint8_t& value)
+uint8_t Property::write(uint8_t value)
 {
     if (ElementSize() != 1)
         return 0;
@@ -161,7 +161,7 @@ uint8_t Property::write(uint8_t& value)
 }
 
 
-uint8_t Property::write(uint16_t& value)
+uint8_t Property::write(uint16_t value)
 {
     if (ElementSize() != 2)
         return 0;
@@ -172,7 +172,7 @@ uint8_t Property::write(uint16_t& value)
 }
 
 
-uint8_t Property::write(uint32_t& value)
+uint8_t Property::write(uint32_t value)
 {
     if (ElementSize() != 4)
         return 0;
@@ -180,4 +180,21 @@ uint8_t Property::write(uint32_t& value)
     uint8_t data[4];
     pushInt(value, data);
     return write(1, 1, data);
+}
+
+
+uint8_t Property::write(const uint8_t* value)
+{
+    return write(1, 1, value);
+}
+
+
+uint8_t Property::write(uint16_t position, uint16_t value)
+{
+    if (ElementSize() != 2)
+        return 0;
+
+    uint8_t data[2];
+    pushWord(value, data);
+    return write(position, 1, data);
 }

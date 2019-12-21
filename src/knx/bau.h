@@ -114,10 +114,10 @@ class BusAccessUnit
     virtual void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
                                                       uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength);
 
-    virtual void domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                                          uint8_t* knxSerialNumber);
+    virtual void domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                                          const uint8_t* knxSerialNumber);
 
-    virtual void domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber);
+    virtual void domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const uint8_t* knxSerialNumber);
 
     virtual void propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
                                    uint8_t& numberOfElements, uint16_t startIndex,

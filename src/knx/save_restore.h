@@ -28,7 +28,7 @@ class SaveRestore
      * @return The buffer plus the size of the object state. The next object will use this value as 
      * the start of its buffer.
      */
-    virtual uint8_t* restore(uint8_t* buffer)
+    virtual const uint8_t* restore(const uint8_t* buffer)
     {
         return buffer;
     }

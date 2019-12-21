@@ -15,7 +15,7 @@ class GroupObjectTableObject : public TableObject
     GroupObject& nextUpdatedObject(bool& valid);
     void groupObjects(GroupObject* objs, uint16_t size);
 
-    uint8_t* restore(uint8_t* buffer) override;
+    const uint8_t* restore(const uint8_t* buffer) override;
 
   protected:
     void beforeStateChange(LoadState& newState) override;

@@ -99,7 +99,7 @@ uint8_t* RfMediumObject::save(uint8_t* buffer)
     return buffer;
 }
 
-uint8_t* RfMediumObject::restore(uint8_t* buffer)
+const uint8_t* RfMediumObject::restore(const uint8_t* buffer)
 {
     buffer = popByteArray((uint8_t*)_rfDomainAddress, 6, buffer);
     return buffer;

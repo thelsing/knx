@@ -9,7 +9,7 @@ template <class T> class CallbackProperty : public Property
   public:
     CallbackProperty(T* io, PropertyID id, bool writeEnable, PropertyDataType type, uint16_t maxElements,
                      uint8_t access, uint8_t (*readCallback)(T*, uint16_t, uint8_t, uint8_t*),
-                     uint8_t (*writeCallback)(T*, uint16_t, uint8_t, uint8_t*))
+                     uint8_t (*writeCallback)(T*, uint16_t, uint8_t, const uint8_t*))
         : Property(id, writeEnable, type, maxElements, access),
           _interfaceObject(io), _readCallback(readCallback), _writeCallback(writeCallback)
     {}
@@ -25,7 +25,7 @@ template <class T> class CallbackProperty : public Property
 
         return _readCallback(_interfaceObject, start, count, data);
     }
-    virtual uint8_t write(uint16_t start, uint8_t count, uint8_t* data) override
+    virtual uint8_t write(uint16_t start, uint8_t count, const uint8_t* data) override
     {
         if (count == 0 || start > _maxElements || start + count > _maxElements + 1 || _writeCallback == nullptr)
             return 0;
@@ -34,5 +34,5 @@ template <class T> class CallbackProperty : public Property
   private:
     T* _interfaceObject = nullptr;
     uint8_t (*_readCallback)(T*, uint16_t, uint8_t, uint8_t*) = nullptr;
-    uint8_t (*_writeCallback)(T*, uint16_t, uint8_t, uint8_t*) = nullptr;
+    uint8_t (*_writeCallback)(T*, uint16_t, uint8_t, const uint8_t*) = nullptr;
 };

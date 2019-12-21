@@ -33,7 +33,7 @@ GroupObject& GroupObjectTableObject::get(uint16_t asap)
     return _groupObjects[asap - 1];
 }
 
-uint8_t* GroupObjectTableObject::restore(uint8_t* buffer)
+const uint8_t* GroupObjectTableObject::restore(const uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
 

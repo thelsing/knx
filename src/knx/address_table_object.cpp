@@ -44,7 +44,7 @@ uint16_t AddressTableObject::getTsap(uint16_t addr)
 
 #pragma region SaveRestore
 
-uint8_t* AddressTableObject::restore(uint8_t* buffer)
+const uint8_t* AddressTableObject::restore(const uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
 

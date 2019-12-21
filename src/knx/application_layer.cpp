@@ -154,7 +154,7 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
 
 void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
 {
-    uint8_t* data = apdu.data();
+    const uint8_t* data = apdu.data();
     switch (apdu.type())
     {
         // TODO: testInfo could be of any length
@@ -174,14 +174,14 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
         }
         case DomainAddressSerialNumberWrite:
         {
-            uint8_t* knxSerialNumber = &data[1];
-            uint8_t* domainAddress = &data[7];
+            const uint8_t* knxSerialNumber = &data[1];
+            const uint8_t* domainAddress = &data[7];
             _bau.domainAddressSerialNumberWriteIndication(priority, hopType, domainAddress, knxSerialNumber);
             break;
         }
         case DomainAddressSerialNumberRead:
         {
-            uint8_t* knxSerialNumber = &data[1];
+            const uint8_t* knxSerialNumber = &data[1];
             _bau.domainAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
             break;
         }

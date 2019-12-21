@@ -40,7 +40,7 @@ uint8_t* TableObject::save(uint8_t* buffer)
 }
 
 
-uint8_t* TableObject::restore(uint8_t* buffer)
+const uint8_t* TableObject::restore(const uint8_t* buffer)
 {
     uint8_t state = 0;
     buffer = popByte(state, buffer);
@@ -83,7 +83,7 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
     return true;
 }
 
-void TableObject::loadEvent(uint8_t* data)
+void TableObject::loadEvent(const uint8_t* data)
 {
     switch (_state)
     {
@@ -105,7 +105,7 @@ void TableObject::loadEvent(uint8_t* data)
     }
 }
 
-void TableObject::loadEventUnloaded(uint8_t* data)
+void TableObject::loadEventUnloaded(const uint8_t* data)
 {
     uint8_t event = data[0];
     switch (event)
@@ -124,7 +124,7 @@ void TableObject::loadEventUnloaded(uint8_t* data)
     }
 }
 
-void TableObject::loadEventLoading(uint8_t* data)
+void TableObject::loadEventLoading(const uint8_t* data)
 {
     uint8_t event = data[0];
     switch (event)
@@ -147,7 +147,7 @@ void TableObject::loadEventLoading(uint8_t* data)
     }
 }
 
-void TableObject::loadEventLoaded(uint8_t* data)
+void TableObject::loadEventLoaded(const uint8_t* data)
 {
     uint8_t event = data[0];
     switch (event)
@@ -177,7 +177,7 @@ void TableObject::loadEventLoaded(uint8_t* data)
     }
 }
 
-void TableObject::loadEventError(uint8_t* data)
+void TableObject::loadEventError(const uint8_t* data)
 {
     uint8_t event = data[0];
     switch (event)
@@ -196,7 +196,7 @@ void TableObject::loadEventError(uint8_t* data)
     }
 }
 
-void TableObject::additionalLoadControls(uint8_t* data)
+void TableObject::additionalLoadControls(const uint8_t* data)
 {
     if (data[1] != 0x0B) // Data Relative Allocation
     {
@@ -244,7 +244,7 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
                 data[0] = obj->_state;
                 return 1;
             },
-            [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+            [](TableObject* obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
                 obj->loadEvent(data);
                 return 1;
             }),

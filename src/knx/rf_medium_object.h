@@ -11,7 +11,7 @@ public:
     void writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count) override;
     uint8_t propertySize(PropertyID id) override;
     uint8_t* save(uint8_t* buffer) override;
-    uint8_t* restore(uint8_t* buffer) override;
+    const uint8_t* restore(const uint8_t* buffer) override;
     uint16_t saveSize() override;
 
     uint8_t* rfDomainAddress();

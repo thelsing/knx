@@ -247,12 +247,12 @@ void BusAccessUnit::systemNetworkParameterReadIndication(Priority priority, HopC
 {
 }
 
-void BusAccessUnit::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                                             uint8_t* knxSerialNumber)
+void BusAccessUnit::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                                             const uint8_t* knxSerialNumber)
 {
 }
 
-void BusAccessUnit::domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber)
+void BusAccessUnit::domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const uint8_t* knxSerialNumber)
 {
 }
 

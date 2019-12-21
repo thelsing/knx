@@ -34,7 +34,16 @@ Bau27B0::Bau27B0(Platform& platform)
     // Set which interface objects are available in the device object
     // This differs from BAU to BAU with different medium types.
     // See PID_IO_LIST
-    _deviceObj.ifObj(_ifObjs);
+    Property* prop = _deviceObj.property(PID_IO_LIST);
+    prop->write(1, OT_DEVICE);
+    prop->write(2, OT_ADDR_TABLE);
+    prop->write(3, OT_ASSOC_TABLE);
+    prop->write(4, OT_GRP_OBJ_TABLE);
+    prop->write(5, OT_APPLICATION_PROG);
+    prop->write(6, OT_RF_MEDIUM);
+#ifdef USE_CEMI_SERVER
+    prop->write(7, OT_CEMI_SERVER);
+#endif
 }
 
 // see KNX AN160 p.74 for mask 27B0

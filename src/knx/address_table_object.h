@@ -18,7 +18,7 @@ class AddressTableObject : public TableObject
      * @param memory This parameter is only passed to the custructor of TableObject an not used by this class.
      */
     AddressTableObject(Memory& memory);
-    uint8_t* restore(uint8_t* buffer) override;
+    const uint8_t* restore(const uint8_t* buffer) override;
 
     /**
      * returns the number of group addresses of the object.

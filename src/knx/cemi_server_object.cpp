@@ -82,16 +82,6 @@ uint8_t CemiServerObject::propertySize(PropertyID id)
     return 0;
 }
 
-uint8_t* CemiServerObject::save(uint8_t* buffer)
-{
-    return buffer;
-}
-
-uint8_t* CemiServerObject::restore(uint8_t* buffer)
-{
-    return buffer;
-}
-
 static PropertyDescription _propertyDescriptions[] = 
 {
     { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 },

@@ -25,8 +25,8 @@ class TableObject: public InterfaceObject
      * This method returns the ::LoadState of the interface object.
      */
     LoadState loadState();
-    virtual uint8_t* save(uint8_t* buffer) override;
-    virtual uint8_t* restore(uint8_t* buffer) override;
+    uint8_t* save(uint8_t* buffer) override;
+    const uint8_t* restore(const uint8_t* buffer) override;
     uint16_t saveSize() override;
 protected:
     /**
@@ -51,12 +51,12 @@ protected:
   private:
     uint32_t tableReference();
     bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
-    void loadEvent(uint8_t* data);
-    void loadEventUnloaded(uint8_t* data);
-    void loadEventLoading(uint8_t* data);
-    void loadEventLoaded(uint8_t* data);
-    void loadEventError(uint8_t* data);
-    void additionalLoadControls(uint8_t* data);
+    void loadEvent(const uint8_t* data);
+    void loadEventUnloaded(const uint8_t* data);
+    void loadEventLoading(const uint8_t* data);
+    void loadEventLoaded(const uint8_t* data);
+    void loadEventError(const uint8_t* data);
+    void additionalLoadControls(const uint8_t* data);
     /**
      * set the ::LoadState of the interface object.
      * 

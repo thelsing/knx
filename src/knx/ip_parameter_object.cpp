@@ -25,7 +25,7 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
                 pushWord(io->_deviceObject.induvidualAddress(), data);
                 return 1;
             },
-            [](IpParameterObject* io, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t 
+            [](IpParameterObject* io, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t 
             { 
                 io->_deviceObject.induvidualAddress(getWord(data));
                 return 1; 
