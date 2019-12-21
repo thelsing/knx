@@ -25,6 +25,7 @@
       install:
       
       script:
+        - echo "building knx-linux"
         - cd examples/knx-linux
         - mkdir -p build
         - cd build

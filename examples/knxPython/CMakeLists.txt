@@ -2,7 +2,7 @@
 #Note: VisualGDB will automatically update this file when you add new sources to the project.
 
 cmake_minimum_required(VERSION 2.7)
-#project(knx)
+project(knx)
 
 add_subdirectory(pybind11)
 
@@ -41,6 +41,6 @@ pybind11_add_module(knx
 	src/knx/dpt.cpp)
 include_directories(src pybind11/include)
 
-set(outdir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-set_target_properties(knx PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${outdir})
+#set(outdir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+#set_target_properties(knx PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${outdir})
 set_target_properties(knx PROPERTIES OUTPUT_NAME knx)
