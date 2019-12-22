@@ -34,20 +34,43 @@ void KnxIpFrame::protocolVersion(KnxIpVersion version)
 
 uint16_t KnxIpFrame::serviceTypeIdentifier() const
 {
-    return 0;
+    return getWord(_data + 2);
 }
 
 void KnxIpFrame::serviceTypeIdentifier(uint16_t identifier)
 {
+    pushWord(identifier, _data + 2);
 }
 
 uint16_t KnxIpFrame::totalLength() const
 {
-    return getWord(_data + 2);
+    return getWord(_data + 4);
 }
 
 void KnxIpFrame::totalLength(uint16_t length)
 {
-    pushWord(length, _data + 2);
+    pushWord(length, _data + 4);
 }
 #endif
+
+uint8_t* KnxIpFrame::data()
+{
+    return _data;
+}
+
+
+KnxIpFrame::~KnxIpFrame()
+{
+    if (_freeData)
+        delete _data;
+}
+
+
+KnxIpFrame::KnxIpFrame(uint16_t length)
+{
+    _data = new uint8_t[length];
+    _freeData = true;
+    headerLength(KNXIP_HEADER_LEN);
+    protocolVersion(KnxIp1_0);
+    totalLength(length);
+}

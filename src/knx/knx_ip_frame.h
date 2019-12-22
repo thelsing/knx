@@ -3,9 +3,12 @@
 #include "cemi_frame.h"
 #include "config.h"
 #ifdef USE_IP
+
+#define KNXIP_HEADER_LEN 0x6
+
 enum KnxIpVersion
 {
-    KnxIp1_0
+    KnxIp1_0 = 0x10
 };
 
 enum KnxIpServiceType
@@ -35,6 +38,8 @@ class KnxIpFrame
 {
   public:
     KnxIpFrame(uint8_t* data, uint16_t length);
+    KnxIpFrame(uint16_t totalLength);
+    virtual ~KnxIpFrame();
     uint8_t headerLength() const;
     void headerLength(uint8_t length);
     KnxIpVersion protocolVersion() const;
@@ -43,8 +48,10 @@ class KnxIpFrame
     void serviceTypeIdentifier(uint16_t identifier);
     uint16_t totalLength() const;
     void totalLength(uint16_t length);
+    uint8_t* data();
 
-  private:
+  protected:
+    bool _freeData = false;
     uint8_t* _data = 0;
 };
 #endif

@@ -173,6 +173,9 @@
     <ClInclude Include="..\..\src\knx_facade.h">
       <Filter>Header files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\knx\knx_ip_routing_indication.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -302,6 +305,9 @@
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\knx\usb_tunnel_interface.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\knx\knx_ip_routing_indication.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
   </ItemGroup>
