@@ -41,6 +41,7 @@ uint8_t Property::ElementSize() const
         case PDT_INT:
         case PDT_KNX_FLOAT:
         case PDT_UNSIGNED_INT:
+        case PDT_VERSION:
             return 2;
         case PDT_ALARM_INFO:
         case PDT_BINARY_INFORMATION:
@@ -57,7 +58,6 @@ uint8_t Property::ElementSize() const
         case PDT_SCALING:
         case PDT_TIME:
         case PDT_UTF8:
-        case PDT_VERSION:
             return 3;
         case PDT_FLOAT:
         case PDT_GENERIC_04:
