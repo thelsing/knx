@@ -26,11 +26,23 @@ public:
     void restart() override;
     void fatalError() override;
 
+    // ip config
+    uint32_t currentIpAddress() override;
+    uint32_t currentSubnetMask() override;
+    uint32_t currentDefaultGateway() override;
+    void macAddress(uint8_t* data) override;
+    
+
     //multicast
     void setupMultiCast(uint32_t addr, uint16_t port) override;
     void closeMultiCast() override;
     bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
     int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
+
+    void setupUniCast(uint32_t addr, uint16_t port, uint8_t type);
+    void closeUniCast();
+    bool sendBytesUniCast(uint8_t* buffer, uint16_t len);
+    int readBytesUniCast(uint8_t* buffer, uint16_t maxLen);
     
     //spi
     void setupSpi() override;
@@ -44,15 +56,25 @@ public:
 
   private:
     uint32_t _multicastAddr = -1;
-    uint16_t _port = -1;
-    int _socketFd = -1;
+    uint16_t _multicastPort = -1;
+    int _multicastSocketFd = -1;
+
+    uint32_t _unicastAddr = -1;
+    uint16_t _unicastPort = -1;
+    int _unicastSocketFd = -1;
+    uint8_t _unicastType = -1;
+
     void doMemoryMapping();
     uint8_t* _mappedFile = 0;
     int _fd = -1;
     int _spiFd = -1;
-    uint8_t* _currentMaxMem = 0;
     std::string _flashFilePath = "flash.bin";
     char** _args = 0;
+
+    uint8_t _macAddress[6] = {0, 0, 0, 0, 0, 0};
+    uint32_t _ipAddress = 0;
+    uint32_t _netmask = 0;
+    uint32_t _defaultGateway = 0;
 };
 
 #endif

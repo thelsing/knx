@@ -51,6 +51,8 @@ add_executable(knx-linux
 	../../src/knx/ip_parameter_object.h
 	../../src/knx/knx_ip_frame.cpp
 	../../src/knx/knx_ip_routing_indication.cpp
+	../../src/knx/knx_ip_search_request.cpp
+	../../src/knx/ip_host_protocol_address_information.cpp
 	../../src/knx/knx_value.cpp
 	../../src/knx/knx_value.h
 	../../src/knx/memory.cpp 

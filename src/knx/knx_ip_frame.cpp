@@ -10,6 +10,7 @@ KnxIpFrame::KnxIpFrame(uint8_t* data,
                        uint16_t length)
 {
     _data = data;
+    _dataLength = length;
 }
 
 uint8_t KnxIpFrame::headerLength() const
@@ -62,13 +63,14 @@ uint8_t* KnxIpFrame::data()
 KnxIpFrame::~KnxIpFrame()
 {
     if (_freeData)
-        delete _data;
+        delete[] _data;
 }
 
 
 KnxIpFrame::KnxIpFrame(uint16_t length)
 {
     _data = new uint8_t[length];
+    _dataLength = length;
     _freeData = true;
     headerLength(KNXIP_HEADER_LEN);
     protocolVersion(KnxIp1_0);

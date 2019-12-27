@@ -176,6 +176,18 @@
     <ClInclude Include="..\..\src\knx\knx_ip_routing_indication.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\knx\knx_ip_search_request.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knx\ip_host_protocol_address_information.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knx\knx_ip_search_response.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knx\knx_ip_dib.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -308,6 +320,18 @@
       <Filter>Source files\knx</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\knx\knx_ip_routing_indication.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\knx\ip_host_protocol_address_information.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\knx\knx_ip_search_request.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\knx\knx_ip_search_response.cpp">
+      <Filter>Source files\knx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\knx\knx_ip_dib.cpp">
       <Filter>Source files\knx</Filter>
     </ClCompile>
   </ItemGroup>

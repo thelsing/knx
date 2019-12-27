@@ -7,6 +7,7 @@
 #include "device_object.h"
 #include "address_table_object.h"
 #include "knx_ip_routing_indication.h"
+#include "knx_ip_search_request.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -55,9 +56,19 @@ void IpDataLinkLayer::loop()
     switch ((KnxIpServiceType)code)
     {
         case RoutingIndication:
+        {
             KnxIpRoutingIndication routingIndication(buffer, len);
             frameRecieved(routingIndication.frame());
             break;
+        }
+        case SearchRequest:
+        {
+            KnxIpSearchRequest searchRequest(buffer, len);
+            break;
+        }
+        default:
+            print("Unhandled service identifier: ");
+            println(code, HEX);
     }
 }
 

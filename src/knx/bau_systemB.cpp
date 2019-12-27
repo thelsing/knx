@@ -232,6 +232,10 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
     uint8_t data[size];
     if(obj)
         obj->readProperty((PropertyID)propertyId, startIndex, elementCount, data);
+    
+    if (elementCount == 0)
+        size = 0;
+    
     _appLayer.propertyValueReadResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, elementCount,
         startIndex, data, size);
 }

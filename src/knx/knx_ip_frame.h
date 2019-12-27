@@ -53,5 +53,6 @@ class KnxIpFrame
   protected:
     bool _freeData = false;
     uint8_t* _data = 0;
+    uint16_t _dataLength;
 };
 #endif
