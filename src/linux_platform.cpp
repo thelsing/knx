@@ -992,8 +992,6 @@ void delayMicroseconds(unsigned int howLong)
     }
 }
 
-#endif
-
 void LinuxPlatform::setupUniCast(uint32_t addr, uint16_t port, uint8_t type)
 {
     if (_unicastSocketFd >= 0)
@@ -1106,3 +1104,4 @@ uint32_t LinuxPlatform::currentDefaultGateway()
 {
     return _defaultGateway;
 }
+#endif

@@ -1,5 +1,5 @@
 #include "knx_ip_dib.h"
-
+#ifdef USE_IP
 DIB::DIB(uint8_t* data) : _data(data)
 {}
 
@@ -13,3 +13,4 @@ uint8_t DIB::length()
 {
     return *_data;
 }
+#endif
