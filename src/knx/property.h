@@ -241,6 +241,7 @@ class Property : public SaveRestore
     uint8_t read(uint8_t& value) const;
     uint8_t read(uint16_t& value) const;
     uint8_t read(uint32_t& value) const;
+    uint8_t read(uint8_t* value) const;
     uint8_t write(uint8_t value);
     uint8_t write(uint16_t value);
     uint8_t write(uint16_t position, uint16_t value);

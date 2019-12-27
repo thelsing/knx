@@ -51,6 +51,9 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
                 break;
             case GroupValueWrite:
                 _bau.groupValueWriteIndication(asap, priority, hopType, data, len);
+            default:
+                /* other apdutypes ar not valid here. If the appear do nothing */
+                break;
         }
     }
 }
@@ -68,6 +71,9 @@ void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Prior
     case GroupValueWrite:
         _bau.groupValueWriteLocalConfirm(ack, _savedAsapWriteRequest, priority, hopType, apdu.data(), apdu.length() - 1, status);
         break;
+    default:
+        print("datagroup-confirm: unhandled APDU-Type: ");
+        println(apdu.type());
     }
 }
 
@@ -111,6 +117,9 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
             _bau.individualAddressSerialNumberWriteIndication(priority, hopType, newIndividualAddress, knxSerialNumber);
             break;
         }
+        default:
+            print("Broadcast-indication: unhandled APDU-Type: ");
+            println(apdu.type());
     }
 }
 
@@ -149,6 +158,9 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
             _bau.individualAddressSerialNumberWriteLocalConfirm(ack, hopType, data + 1, newAddress, status);
             break;
         }
+        default:
+            print("Broadcast-confirm: unhandled APDU-Type: ");
+            println(apdu.type());
     }
 }
 
@@ -791,6 +803,9 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         case KeyResponse:
             _bau.keyWriteAppLayerConfirm(priority, hopType, tsap, data[1]);
             break;
+        default:
+            print("Indiviual-indication: unhandled APDU-Type: ");
+            println(apdu.type());
     }
 }
 
@@ -887,6 +902,9 @@ void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Prio
         case KeyResponse:
             _bau.keyWriteResponseConfirm(ack, priority, hopType, tsap, data[1], status);
             break;
+        default:
+            print("Indiviual-confirm: unhandled APDU-Type: ");
+            println(apdu.type());
     }
 }
 

@@ -210,6 +210,8 @@ void TransportLayer::dataIndividualIndication(uint16_t destination, HopCountType
             case Connecting:
                 A10(source);
                 break;
+            default: /* do nothing */
+                break;
             }
         }
         break;
@@ -351,6 +353,9 @@ void TransportLayer::dataIndividualConfirm(AckType ack, uint16_t destination, Ho
         //E24
         //A0: do nothing
         break;
+    default:
+        break;
+        /* DataGroup and DataBroadcast should not appear here. If they do ignore them. */
     }
 }
 

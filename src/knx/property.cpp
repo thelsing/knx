@@ -100,8 +100,9 @@ uint8_t Property::ElementSize() const
             return 19;
         case PDT_GENERIC_20:
             return 20;
+        default:
+            return 0;
     }
-    return 0;
 }
 
 Property::Property(PropertyID id, bool writeEnable, PropertyDataType type,
@@ -151,6 +152,10 @@ uint8_t Property::read(uint32_t& value) const
     return count;
 }
 
+uint8_t Property::read(uint8_t* value) const
+{
+    return read(1, 1, value);
+}
 
 uint8_t Property::write(uint8_t value)
 {

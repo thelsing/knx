@@ -24,8 +24,6 @@ public:
     void manufacturerId(uint16_t value);
     uint32_t bauNumber();
     void bauNumber(uint32_t value);
-    const uint8_t* knxSerialNumber();
-    void knxSerialNumber(const uint8_t* value);
     const uint8_t* orderNumber();
     void orderNumber(const uint8_t* value);
     const uint8_t* hardwareType();

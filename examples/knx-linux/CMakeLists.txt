@@ -49,9 +49,13 @@ add_executable(knx-linux
 	../../src/knx/ip_data_link_layer.h
 	../../src/knx/ip_parameter_object.cpp 
 	../../src/knx/ip_parameter_object.h
+	../../src/knx/knx_ip_device_information_dib.cpp
+	../../src/knx/knx_ip_dib.cpp
 	../../src/knx/knx_ip_frame.cpp
 	../../src/knx/knx_ip_routing_indication.cpp
 	../../src/knx/knx_ip_search_request.cpp
+	../../src/knx/knx_ip_search_response.cpp
+	../../src/knx/knx_ip_supported_service_dib.cpp
 	../../src/knx/ip_host_protocol_address_information.cpp
 	../../src/knx/knx_value.cpp
 	../../src/knx/knx_value.h
@@ -87,7 +91,7 @@ add_executable(knx-linux
 	main.cpp)
 target_link_libraries(knx-linux  "${LIBRARIES_FROM_REFERENCES}")
 include_directories(../../src)
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -Wno-switch -g -O0")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -Wno-switch -g -O0")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -g -O0")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -g -O0")
 set_property(TARGET knx-linux PROPERTY CXX_STANDARD 11)
 add_definitions(-DMEDIUM_TYPE=5)

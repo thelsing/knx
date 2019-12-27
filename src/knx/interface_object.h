@@ -125,6 +125,24 @@ class InterfaceObject : public SaveRestore
      */
     Property* property(PropertyID id);
 
+    template <typename T>
+    T propertyValue(PropertyID id)
+    {
+        const Property* prop = property(id);
+
+        T value = 0;
+        prop->read(value);
+        return value;
+    }
+    
+    template <typename T>
+    void propertyValue(PropertyID id, T value)
+    {
+        Property* prop = property(id);
+        prop->write(value);
+    }
+
+    const uint8_t* propertyData(PropertyID id);
     /**
      * Gets const property with PropertyID id if it exists and nullptr otherwise.
      */

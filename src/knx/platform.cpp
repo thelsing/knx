@@ -83,25 +83,12 @@ bool Platform::sendBytesMultiCast(uint8_t *buffer, uint16_t len)
     return false;
 }
 
-int Platform::readBytesMultiCast(uint8_t *buffer, uint16_t maxLen)
-{
-    return 0;
-}
-
-void Platform::setupUniCast(uint32_t addr, uint16_t port, uint8_t type)
-{}
-
-
-void Platform::closeUniCast()
-{}
-
-
-bool Platform::sendBytesUniCast(uint8_t* buffer, uint16_t len)
+bool Platform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
 {
     return false;
 }
 
-int Platform::readBytesUniCast(uint8_t *buffer, uint16_t maxLen)
+int Platform::readBytesMultiCast(uint8_t *buffer, uint16_t maxLen)
 {
     return 0;
 }

@@ -4,7 +4,7 @@
 #include "config.h"
 #ifdef USE_IP
 
-#define KNXIP_HEADER_LEN 0x6
+#define LEN_KNXIP_HEADER 0x6
 
 enum KnxIpVersion
 {

@@ -378,7 +378,7 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
             {
                 // Send reply. testResult data is KNX serial number
                 _appLayer.systemNetworkParameterReadResponse(priority, hopType, objectType, propertyId,
-                                                             testInfo, testInfoLength, (uint8_t*) _deviceObj.knxSerialNumber(), 6);
+                                                             testInfo, testInfoLength, (uint8_t*)_deviceObj.propertyData(PID_SERIAL_NUMBER), 6);
             }
         break;
 

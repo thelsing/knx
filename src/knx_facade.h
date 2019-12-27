@@ -71,7 +71,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
     void enabled(bool value)
     {
-        _bau.enabled(true);
+        _bau.enabled(value);
     }
 
     bool progMode()

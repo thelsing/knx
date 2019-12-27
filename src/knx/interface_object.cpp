@@ -1,6 +1,7 @@
 #include <cstring>
 
 #include "interface_object.h"
+#include "data_property.h"
 
 InterfaceObject::~InterfaceObject()
 {
@@ -216,4 +217,11 @@ const Property* InterfaceObject::property(PropertyID id) const
             return _properties[i];
 
     return nullptr; 
+}
+
+
+const uint8_t* InterfaceObject::propertyData(PropertyID id)
+{
+    DataProperty* prop = (DataProperty*)property(id);
+    return prop->data();
 }

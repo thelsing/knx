@@ -77,7 +77,7 @@ LinuxPlatform::LinuxPlatform()
         memcpy(_macAddress, ifr.ifr_hwaddr.sa_data, IFHWADDRLEN);
 
         ioctl(socketMac, SIOCGIFADDR, &ifr);
-        
+
         struct sockaddr_in* ipaddr = (struct sockaddr_in*)&ifr.ifr_addr;
         _ipAddress = ntohl(ipaddr->sin_addr.s_addr);
 
@@ -111,7 +111,6 @@ LinuxPlatform::LinuxPlatform()
                 {
                     char* pEnd;
                     _defaultGateway = ntohl(strtol(g, &pEnd, 16));
-                  
                 }
                 break;
             }
@@ -992,72 +991,17 @@ void delayMicroseconds(unsigned int howLong)
     }
 }
 
-void LinuxPlatform::setupUniCast(uint32_t addr, uint16_t port, uint8_t type)
-{
-    if (_unicastSocketFd >= 0)
-        closeUniCast();
-
-    _unicastAddr = addr;
-    _unicastPort = port;
-    _unicastType = type;
-
-    uint32_t loop = 1;
-
-    struct sockaddr_in sin;
-    memset(&sin, 0, sizeof(sin));
-    sin.sin_family = AF_INET;
-    sin.sin_addr.s_addr = htonl(INADDR_ANY);
-    sin.sin_port = htons(port);
-
-    int socketType = 0;
-    if (type == IPV4_UDP)
-        socketType = SOCK_DGRAM;
-    else
-        socketType = SOCK_STREAM;
-
-    _unicastSocketFd = socket(AF_INET, socketType, 0);
-    if (_unicastSocketFd == -1)
-    {
-        perror("socket()");
-        fatalError();
-    }
-
-    /* Mehr Prozessen erlauben, denselben Port zu nutzen */
-    loop = 1;
-    if (setsockopt(_unicastSocketFd, SOL_SOCKET, SO_REUSEADDR, &loop, sizeof(loop)) < 0)
-    {
-        perror("setsockopt:SO_REUSEADDR");
-        fatalError();
-    }
-
-    if (bind(_unicastSocketFd, (struct sockaddr*)&sin, sizeof(sin)) < 0)
-    {
-        perror("bind");
-        fatalError();
-    }
-
-    uint32_t flags = fcntl(_unicastSocketFd, F_GETFL);
-    flags |= O_NONBLOCK;
-    fcntl(_unicastSocketFd, F_SETFL, flags);
-}
-
-void LinuxPlatform::closeUniCast()
-{
-    close(_unicastSocketFd);
-    _unicastSocketFd = -1;
-}
-
-bool LinuxPlatform::sendBytesUniCast(uint8_t* buffer, uint16_t len)
+bool LinuxPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
 {
     struct sockaddr_in address = {0};
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = htonl(_unicastAddr);
-    address.sin_port = htons(_unicastPort);
+    address.sin_addr.s_addr = htonl(addr);
+    address.sin_port = htons(port);
 
     ssize_t retVal = 0;
     do
     {
-        retVal = sendto(_unicastSocketFd, buffer, len, 0, (struct sockaddr*)&address, sizeof(address));
+        retVal = sendto(_multicastSocketFd, buffer, len, 0, (struct sockaddr*)&address, sizeof(address));
         if (retVal == -1)
         {
             if (errno != EAGAIN && errno != EWOULDBLOCK)
@@ -1068,37 +1012,20 @@ bool LinuxPlatform::sendBytesUniCast(uint8_t* buffer, uint16_t len)
     return true;
 }
 
-int LinuxPlatform::readBytesUniCast(uint8_t* buffer,
-                                    uint16_t maxLen)
-{
-    uint32_t sin_len;
-    struct sockaddr_in sin;
-
-    sin_len = sizeof(sin);
-    ssize_t len = recvfrom(_unicastSocketFd, buffer, maxLen, 0, (struct sockaddr*)&sin, &sin_len);
-    //    if (len > 0)
-    //        printHex("->", buffer, len);
-
-    return len;
-}
-
 void LinuxPlatform::macAddress(uint8_t* mac_address)
 {
     memcpy(mac_address, _macAddress, IFHWADDRLEN);
 }
-
 
 uint32_t LinuxPlatform::currentIpAddress()
 {
     return _ipAddress;
 }
 
-
 uint32_t LinuxPlatform::currentSubnetMask()
 {
     return _netmask;
 }
-
 
 uint32_t LinuxPlatform::currentDefaultGateway()
 {

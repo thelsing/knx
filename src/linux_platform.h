@@ -38,11 +38,7 @@ public:
     void closeMultiCast() override;
     bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
     int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
-
-    void setupUniCast(uint32_t addr, uint16_t port, uint8_t type);
-    void closeUniCast();
-    bool sendBytesUniCast(uint8_t* buffer, uint16_t len);
-    int readBytesUniCast(uint8_t* buffer, uint16_t maxLen);
+    bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
     
     //spi
     void setupSpi() override;
@@ -58,11 +54,6 @@ public:
     uint32_t _multicastAddr = -1;
     uint16_t _multicastPort = -1;
     int _multicastSocketFd = -1;
-
-    uint32_t _unicastAddr = -1;
-    uint16_t _unicastPort = -1;
-    int _unicastSocketFd = -1;
-    uint8_t _unicastType = -1;
 
     void doMemoryMapping();
     uint8_t* _mappedFile = 0;

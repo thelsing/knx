@@ -23,7 +23,7 @@ DeviceObject::DeviceObject()
                 if(start == 0)
                     return 1;
                 
-                pushByteArray(io->knxSerialNumber(), 2, data);
+                pushByteArray(io->propertyData(PID_SERIAL_NUMBER), 2, data);
                 return 1;
             }),
         new DataProperty(PID_DEVICE_CONTROL, true, PDT_BITSET8, 1, ReadLv3 | WriteLv3, (uint8_t)0),
@@ -161,43 +161,31 @@ void DeviceObject::progMode(bool value)
 uint16_t DeviceObject::manufacturerId()
 {
     uint16_t manufacturerId;
-    popWord(manufacturerId, knxSerialNumber());
+    popWord(manufacturerId, propertyData(PID_SERIAL_NUMBER));
     return manufacturerId;
 }
 
 void DeviceObject::manufacturerId(uint16_t value)
 {
     uint8_t data[LEN_KNX_SERIAL];
-    memcpy(data, knxSerialNumber(), LEN_KNX_SERIAL);
+    memcpy(data, propertyData(PID_SERIAL_NUMBER), LEN_KNX_SERIAL);
     pushWord(value, data);
-    knxSerialNumber(data);
+    propertyValue(PID_SERIAL_NUMBER, data);
 }
 
 uint32_t DeviceObject::bauNumber()
 {
     uint32_t bauNumber;
-    popInt(bauNumber, knxSerialNumber() + 2);
+    popInt(bauNumber, propertyData(PID_SERIAL_NUMBER) + 2);
     return bauNumber;
 }
 
 void DeviceObject::bauNumber(uint32_t value)
 {
     uint8_t data[LEN_KNX_SERIAL];
-    memcpy(data, knxSerialNumber(), LEN_KNX_SERIAL);
+    memcpy(data, propertyData(PID_SERIAL_NUMBER), LEN_KNX_SERIAL);
     pushInt(value, data + 2);
-    knxSerialNumber(data);
-}
-
-const uint8_t* DeviceObject::knxSerialNumber()
-{
-    DataProperty* prop = (DataProperty*)property(PID_SERIAL_NUMBER);
-    return prop->data();
-}
-
-void DeviceObject::knxSerialNumber(const uint8_t* value)
-{
-    Property* prop = property(PID_SERIAL_NUMBER);
-    prop->write(value);
+    propertyValue(PID_SERIAL_NUMBER, data);
 }
 
 const uint8_t* DeviceObject::orderNumber()

@@ -15,13 +15,17 @@ enum DescriptionTypeCode : uint8_t
     MFR_DATA = 0xFE
 };
 
-class DIB
+class KnxIpDIB
 {
   public:
-    DIB(uint8_t* data);
-    DescriptionTypeCode code();
-    uint8_t length();
-  private:
+    KnxIpDIB(uint8_t* data);
+    virtual ~KnxIpDIB();
+    DescriptionTypeCode code() const;
+    void code(DescriptionTypeCode value);
+    uint8_t length() const;
+    void length(uint8_t value);
+
+  protected:
     uint8_t* _data = 0;
 };
 #endif

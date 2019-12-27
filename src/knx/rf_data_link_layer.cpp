@@ -32,7 +32,7 @@ bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
         // or the RF domain address that was programmed by ETS
         if (frame.systemBroadcast() == SysBroadcast)
         {
-            frame.rfSerialOrDoA((uint8_t*)_deviceObject.knxSerialNumber());
+            frame.rfSerialOrDoA((uint8_t*)_deviceObject.propertyData(PID_SERIAL_NUMBER));
         }
         else
         {

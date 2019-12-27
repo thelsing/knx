@@ -1,6 +1,8 @@
 #include "knx_ip_frame.h"
 
 #ifdef USE_IP
+
+#include <cstring>
 #include "bits.h"
 
 #define KNXIP_HEADER_LEN 0x6
@@ -72,7 +74,8 @@ KnxIpFrame::KnxIpFrame(uint16_t length)
     _data = new uint8_t[length];
     _dataLength = length;
     _freeData = true;
-    headerLength(KNXIP_HEADER_LEN);
+    memset(_data, 0, length);
+    headerLength(LEN_KNXIP_HEADER);
     protocolVersion(KnxIp1_0);
     totalLength(length);
 }

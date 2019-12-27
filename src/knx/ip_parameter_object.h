@@ -6,12 +6,12 @@
 #include "device_object.h"
 #include "platform.h"
 
+#define KNXIP_MULTICAST_PORT 3671
+
 class IpParameterObject : public InterfaceObject
 {
   public:
     IpParameterObject(DeviceObject& deviceObject, Platform& platform);
-    uint32_t multicastAddress() const;
-    uint8_t ttl() const;
 
   private:
     DeviceObject& _deviceObject;

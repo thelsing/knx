@@ -31,10 +31,7 @@ class Platform
     virtual int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen);
 
     //unicast socket
-    virtual void setupUniCast(uint32_t addr, uint16_t port, uint8_t type);
-    virtual void closeUniCast();
-    virtual bool sendBytesUniCast(uint8_t* buffer, uint16_t len);
-    virtual int readBytesUniCast(uint8_t* buffer, uint16_t maxLen);
+    virtual bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len);
     
     //UART
     virtual void setupUart();

@@ -14,9 +14,9 @@ KnxIpRoutingIndication::KnxIpRoutingIndication(uint8_t* data,
 }
 
 KnxIpRoutingIndication::KnxIpRoutingIndication(CemiFrame frame)
-    : KnxIpFrame(frame.totalLenght() + KNXIP_HEADER_LEN), _frame(_data + headerLength(), frame.totalLenght())
+    : KnxIpFrame(frame.totalLenght() + LEN_KNXIP_HEADER), _frame(_data + headerLength(), frame.totalLenght())
 {
     serviceTypeIdentifier(RoutingIndication);
-    memcpy(_data + KNXIP_HEADER_LEN, frame.data(), frame.totalLenght());
+    memcpy(_data + LEN_KNXIP_HEADER, frame.data(), frame.totalLenght());
 }
 #endif

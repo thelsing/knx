@@ -96,22 +96,4 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
     initializeProperties(sizeof(properties), properties);
 }
 
-uint32_t IpParameterObject::multicastAddress() const
-{
-    const Property* prop = property(PID_ROUTING_MULTICAST_ADDRESS);
-
-    uint32_t value = DEFAULT_MULTICAST_ADDR;
-    prop->read(value);
-
-    return value;
-}
-
-uint8_t IpParameterObject::ttl() const
-{
-    const Property* prop = property(PID_TTL);
-
-    uint8_t value = 0;
-    prop->read(value);
-    return value;
-}
 #endif
