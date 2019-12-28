@@ -1,5 +1,5 @@
 #include "config.h"
-#ifdef USE_CEMI_SERVER
+#ifdef USE_USB
 
 #include "bits.h"
 #include "usb_tunnel_interface.h"

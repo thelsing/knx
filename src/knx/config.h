@@ -10,7 +10,12 @@
 #define GPIO_GDO0_PIN 24 // GPIO 24 (GPIO_GEN5) -> WiringPi: 5  -> Pin number on header: 18
 #endif
 
-//#define USE_CEMI_SERVER
+
 #define USE_RF
 #define USE_TP
 #define USE_IP
+//#define USE_USB
+//#define USE_CEMI_SERVER
+#ifdef USE_USB
+#define USE_CEMI_SERVER
+#endif

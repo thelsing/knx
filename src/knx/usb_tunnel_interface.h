@@ -1,7 +1,7 @@
 #pragma once
 
 #include "config.h"
-#ifdef USE_CEMI_SERVER
+#ifdef USE_USB
 #include <stdint.h>
 
 class CemiServer;
