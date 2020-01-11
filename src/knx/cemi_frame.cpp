@@ -160,6 +160,8 @@ void CemiFrame::fillTelegramTP(uint8_t* data)
     data[len - 1] = calcCrcTP(data, len - 1);
 }
 
+#ifdef USE_RF
+
 uint16_t CemiFrame::telegramLengthtRF() const
 {
     return totalLenght() - 3;
@@ -183,7 +185,7 @@ void CemiFrame::fillTelegramRF(uint8_t* data)
 
     //printHex("cEMI_fill: ", &data[0], len);
 }
-
+#endif
 uint8_t* CemiFrame::data()
 {
     return _data;
@@ -315,7 +317,7 @@ void CemiFrame::destinationAddress(uint16_t value)
 {
     pushWord(value, _ctrl1 + 4);
 }
-
+#ifdef USE_RF
 uint8_t* CemiFrame::rfSerialOrDoA() const
 {
     return _rfSerialOrDoA;
@@ -345,7 +347,7 @@ void CemiFrame::rfLfn(uint8_t rfLfn)
 {
     _rfLfn = rfLfn;
 }
-
+#endif
 NPDU& CemiFrame::npdu()
 {
     return _npdu;
