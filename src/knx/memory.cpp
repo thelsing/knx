@@ -9,11 +9,14 @@ Memory::Memory(Platform& platform, DeviceObject& deviceObject)
 
 void Memory::readMemory()
 {
+    println("readMemory");
     if (_data != nullptr)
         return;
 
     uint16_t flashSize = 512;
     _data = _platform.getEepromBuffer(flashSize);
+
+    printHex("RESTORED ", _data, _metadataSize);
 
     uint16_t metadataBlockSize = alignToPageSize(_metadataSize);
 
@@ -28,21 +31,44 @@ void Memory::readMemory()
     uint16_t version = 0;
     buffer = popWord(version, buffer);
     
+    
+    
     if (_deviceObject.manufacturerId() != manufacturerId
        || _deviceObject.version() != version
        || memcmp(_deviceObject.hardwareType(), hardwareType, LEN_HARDWARE_TYPE) != 0)
     {
         println("saved memory doesn't match manufacturerId, version or hardwaretype");
+        print("manufacturerId: ");
+        print(manufacturerId, HEX);
+        print(" ");
+        println(_deviceObject.manufacturerId(), HEX);
+        print("version: ");
+        print(version, HEX);
+        print(" ");
+        println(_deviceObject.version(), HEX);
+        print("hardwareType: ");
+        printHex("", hardwareType, LEN_HARDWARE_TYPE);
+        print(" ");
+        printHex("", _deviceObject.hardwareType(), LEN_HARDWARE_TYPE);
         return;
     }
 
+    println("manufacturerId, version and hardwareType matches");
+    print("saverestores ");
+    println(_saveCount);
     for (int i = 0; i < _saveCount; i++)
     {
+        println(_data - buffer);
+        println(".");
         buffer = _saveRestores[i]->restore(buffer);
     }
-
+    println("restored saveRestores");
+    print("tableObjs ");
+    println(_tableObjCount);
     for (int i = 0; i < _tableObjCount; i++)
     {
+        println(_data - buffer);
+        println(".");
         buffer = _tableObjects[i]->restore(buffer);
         uint16_t memorySize = 0;
         buffer = popWord(memorySize, buffer);
@@ -53,6 +79,7 @@ void Memory::readMemory()
         // this works because TableObject saves a relative addr and restores it itself
         addNewUsedBlock(_tableObjects[i]->_data, memorySize);
     }
+    println("restored Tableobjects");
 }
 
 void Memory::writeMemory()
@@ -62,13 +89,23 @@ void Memory::writeMemory()
     buffer = pushByteArray(_deviceObject.hardwareType(), LEN_HARDWARE_TYPE, buffer);
     buffer = pushWord(_deviceObject.version(), buffer);
 
+    print("save saveRestores ");
+    println(_saveCount);
     for (int i = 0; i < _saveCount; i++)
     {
+        println(_data - buffer);
+        println(".");
+        println((int)_saveRestores[i], HEX);
         buffer = _saveRestores[i]->save(buffer);
     }
 
+    print("save tableobjs ");
+    println(_tableObjCount);
     for (int i = 0; i < _tableObjCount; i++)
     {
+        println(_data - buffer);
+        println(".");
+        println((int)_tableObjects[i], HEX);
         buffer = _tableObjects[i]->save(buffer);
 
         //save to size of the memoryblock for tableobject too, so that we can rebuild the usedList and freeList
@@ -84,10 +121,11 @@ void Memory::writeMemory()
             buffer = pushWord(block->size, buffer);
         }
         else
-            pushWord(0, buffer);
+            buffer = pushWord(0, buffer);
     }
     
     _platform.commitToEeprom();
+    printHex("SAVED ", _data, _metadataSize);
 }
 
 void Memory::addSaveRestore(SaveRestore* obj)

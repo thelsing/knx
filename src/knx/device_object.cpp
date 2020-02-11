@@ -214,7 +214,7 @@ void DeviceObject::hardwareType(const uint8_t* value)
 
 uint16_t DeviceObject::version()
 {
-    Property* prop = property(PID_HARDWARE_TYPE);
+    Property* prop = property(PID_VERSION);
     uint16_t value;
     prop->read(value);
     return value;
@@ -222,7 +222,7 @@ uint16_t DeviceObject::version()
 
 void DeviceObject::version(uint16_t value)
 {
-    Property* prop = property(PID_HARDWARE_TYPE);
+    Property* prop = property(PID_VERSION);
     prop->write(value);
 }
 

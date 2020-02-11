@@ -11,8 +11,8 @@
 #endif
 
 
-#define USE_RF
-#define USE_TP
+//#define USE_RF
+//#define USE_TP
 #define USE_IP
 //#define USE_USB
 //#define USE_CEMI_SERVER
