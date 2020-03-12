@@ -1,7 +1,7 @@
 #pragma once
 
 #include "knx/bits.h"
-
+#include "knx/config.h"
 // Set default medium type to TP if no external definitions was given
 #ifndef MEDIUM_TYPE
 #define MEDIUM_TYPE 0
