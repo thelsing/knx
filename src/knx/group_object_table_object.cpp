@@ -1,9 +1,10 @@
-#include <cstring>
-
 #include "group_object_table_object.h"
+
 #include "group_object.h"
 #include "bits.h"
 #include "data_property.h"
+
+#include <cstring>
 
 GroupObjectTableObject::GroupObjectTableObject(Memory& memory)
     : TableObject(memory)

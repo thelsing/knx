@@ -1,4 +1,5 @@
 #include "knx_ip_device_information_dib.h"
+
 #include "bits.h"
 
 KnxIpDeviceInformationDIB::KnxIpDeviceInformationDIB(uint8_t* data) : KnxIpDIB(data)

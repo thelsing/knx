@@ -1,7 +1,9 @@
 #include "application_program_object.h"
+
 #include "bits.h"
 #include "data_property.h"
 #include "callback_property.h"
+
 #include <cstring>
 
 ApplicationProgramObject::ApplicationProgramObject(Memory& memory)

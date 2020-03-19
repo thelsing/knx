@@ -1,7 +1,5 @@
 #include "ip_data_link_layer.h"
 
-#ifdef USE_IP
-
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
@@ -12,6 +10,8 @@
 
 #include <stdio.h>
 #include <string.h>
+
+#ifdef USE_IP
 
 #define KNXIP_HEADER_LEN 0x6
 #define KNXIP_PROTOCOL_VERSION 0x10

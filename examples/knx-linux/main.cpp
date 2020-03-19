@@ -41,10 +41,10 @@ KnxFacade<LinuxPlatform, Bau27B0> knx;
 
 long lastsend = 0;
 
-#define CURR knx.getGroupObject(1)
-#define MAX knx.getGroupObject(2)
-#define MIN knx.getGroupObject(3)
-#define RESET knx.getGroupObject(4)
+#define GO_CURR knx.getGroupObject(1)
+#define GO_MAX knx.getGroupObject(2)
+#define GO_MIN knx.getGroupObject(3)
+#define GO_RESET knx.getGroupObject(4)
 
 void measureTemp()
 {
@@ -60,22 +60,22 @@ void measureTemp()
     //    currentValue *= (670433.28 + 273);
     //    currentValue -= 273;
     println(currentValue);
-    CURR.value(currentValue);
+    GO_CURR.value(currentValue);
 
-    double max = MAX.value();
+    double max = GO_MAX.value();
     if (currentValue > max)
-        MAX.value(currentValue);
+        GO_MAX.value(currentValue);
 
-    if (currentValue < (double)MIN.value())
-        MIN.value(currentValue);
+    if (currentValue < (double)GO_MIN.value())
+        GO_MIN.value(currentValue);
 }
 
 void resetCallback(GroupObject& go)
 {
     if (go.value())
     {
-        MAX.valueNoSend(-273.0);
-        MIN.valueNoSend(670433.28);
+        GO_MAX.valueNoSend(-273.0);
+        GO_MIN.valueNoSend(670433.28);
     }
 }
 
@@ -97,13 +97,13 @@ void setup()
 
     if (knx.configured())
     {
-        CURR.dataPointType(Dpt(9, 1));
-        MIN.dataPointType(Dpt(9, 1));
-        MIN.value(670433.28);
-        MAX.dataPointType(Dpt(9, 1));
-        MAX.valueNoSend(-273.0);
-        RESET.dataPointType(Dpt(1, 15));
-        RESET.callback(resetCallback);
+        GO_CURR.dataPointType(Dpt(9, 1));
+        GO_MIN.dataPointType(Dpt(9, 1));
+        GO_MIN.value(670433.28);
+        GO_MAX.dataPointType(Dpt(9, 1));
+        GO_MAX.valueNoSend(-273.0);
+        GO_RESET.dataPointType(Dpt(1, 15));
+        GO_RESET.callback(resetCallback);
         printf("Timeout: %d\n", knx.paramWord(0));
         printf("Zykl. senden: %d\n", knx.paramByte(2));
         printf("Min/Max senden: %d\n", knx.paramByte(3));

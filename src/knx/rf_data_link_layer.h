@@ -5,6 +5,7 @@
 
 #include <stdint.h>
 #include "data_link_layer.h"
+#include "rf_physical_layer.h"
 
 #define MAX_KNX_TELEGRAM_SIZE 263
 

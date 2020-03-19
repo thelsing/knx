@@ -1,5 +1,5 @@
 #include "tpuart_data_link_layer.h"
-#ifdef USE_TP
+
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 #include <string.h>
+
+#ifdef USE_TP
 
 // NCN5120
 //#define NCN5120

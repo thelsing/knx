@@ -1,5 +1,4 @@
 #include "config.h"
-#ifdef USE_USB
 
 #include "bits.h"
 #include "usb_tunnel_interface.h"
@@ -9,7 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MIN(a, b) ((a < b) ? (a) : (b))
+#ifdef USE_USB
 
 #define MAX_EP_SIZE 64
 #define HID_HEADER_SIZE 3

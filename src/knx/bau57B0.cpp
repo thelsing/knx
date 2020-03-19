@@ -1,6 +1,8 @@
-#include "config.h"
 #include "bau57B0.h"
+
+#include "config.h"
 #include "bits.h"
+
 #include <string.h>
 #include <stdio.h>
 

@@ -1,8 +1,11 @@
 #include "bau27B0.h"
-#ifdef USE_RF
+
 #include "bits.h"
+
 #include <string.h>
 #include <stdio.h>
+
+#ifdef USE_RF
 
 using namespace std;
 

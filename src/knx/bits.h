@@ -3,12 +3,17 @@
 #include <cstddef>
 #include <cstdint>
 
+#define MIN(a, b) ((a < b) ? (a) : (b))
+#define MAX(a, b) ((a > b) ? (a) : (b))
+#define ABS(x) ((x > 0) ? (x) : (-x))
+
 #ifdef __linux__
 #include <arpa/inet.h>
 
 #define lowByte(val) ((val)&255)
 #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
 #define bitRead(val, bitno) (((val) >> (bitno)) & 1)
+
 
 // print functions are implemented in the platform files
 #define DEC 10

@@ -1,14 +1,16 @@
-#include "config.h"
-#ifdef USE_CEMI_SERVER
-
 #include "cemi_server.h"
+
+#include "config.h"
 #include "cemi_frame.h"
 #include "bau_systemB.h"
 #include "usb_tunnel_interface.h"
 #include "data_link_layer.h"
 #include "string.h"
 #include "bits.h"
+
 #include <stdio.h>
+
+#ifdef USE_CEMI_SERVER
 
 CemiServer::CemiServer(BauSystemB& bau)
     : _bau(bau),

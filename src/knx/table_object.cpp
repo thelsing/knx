@@ -1,10 +1,11 @@
-#include <string.h>
-
 #include "table_object.h"
+
 #include "bits.h"
 #include "memory.h"
 #include "callback_property.h"
 #include "data_property.h"
+
+#include <string.h>
 
 TableObject::TableObject(Memory& memory)
     : _memory(memory)

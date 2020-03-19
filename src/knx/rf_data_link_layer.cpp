@@ -1,9 +1,7 @@
-#include "config.h"
-#ifdef USE_RF
-
-#include "rf_physical_layer.h"
 #include "rf_data_link_layer.h"
 
+#include "config.h"
+#include "rf_physical_layer.h"
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
@@ -13,6 +11,8 @@
 
 #include <stdio.h>
 #include <string.h>
+
+#ifdef USE_RF
 
 void RfDataLinkLayer::loop()
 {

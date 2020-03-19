@@ -1,4 +1,5 @@
 #include "knx_ip_dib.h"
+
 #ifdef USE_IP
 KnxIpDIB::KnxIpDIB(uint8_t* data) : _data(data)
 {}

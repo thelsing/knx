@@ -46,21 +46,40 @@ class Platform
     virtual void setupSpi();
     virtual void closeSpi();
     virtual int readWriteSpi(uint8_t *data, size_t len);
-#if 0
-    // Flash memory
+
+    virtual uint8_t* getNonVolatileMemoryStart();
+    virtual size_t getNonVolatileMemorySize();
+    virtual void commitNonVolatileMemory();
+    // address is relative to start of nonvolatile memory
+    virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size);
+
+    NvMemoryType NonVolatileMemoryType();
+    void NonVolatileMemoryType(NvMemoryType type);
+
+  protected:
+        // Flash memory
+    
     virtual size_t flashEraseBlockSize(); // in pages
     virtual size_t flashPageSize();       // in bytes
     virtual uint8_t* userFlashStart();   // start of user flash aligned to start of an erase block
     virtual size_t userFlashSizeEraseBlocks(); // in eraseBlocks
     virtual void flashErase(uint16_t eraseBlockNum); //relativ to userFlashStart
     virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); //write a single page to flash (pageNumber relative to userFashStart
-#endif
-    virtual uint8_t* getEepromBuffer(uint16_t size) = 0;
-    virtual void commitToEeprom() = 0;
-
-    NvMemoryType NonVolatileMemoryType();
-    void NonVolatileMemoryType(NvMemoryType type);
-
-  protected:
+    
     NvMemoryType _memoryType = Eeprom;
+
+  private:
+    void loadEraseblockContaining(uint32_t relativeAddress);
+    uint32_t bufferedEraseBlockStart();
+    uint32_t bufferedEraseBlockEnd();
+    int32_t getEraseBlockNumberOf(uint32_t relativeAddress);
+    void writeBufferedEraseBlock();
+    void bufferEraseBlock(uint32_t eraseBlockNumber);
+
+    // in theory we would have to use this buffer for memory reads too,
+    // but because ets always restarts the device after programming it
+    // we can ignore this issue
+    uint8_t* _eraseblockBuffer = nullptr;
+    int32_t _bufferedEraseblockNumber = -1;
+    bool _bufferedEraseblockDirty = false;
 };

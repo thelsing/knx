@@ -1,5 +1,15 @@
 #include "linux_platform.h"
 #ifdef __linux__
+
+#include "knx/device_object.h"
+#include "knx/address_table_object.h"
+#include "knx/association_table_object.h"
+#include "knx/group_object_table_object.h"
+#include "knx/application_program_object.h"
+#include "knx/ip_parameter_object.h"
+#include "knx/bits.h"
+#include "knx/ip_host_protocol_address_information.h"
+
 #include <cstdio>
 #include <string>
 #include <cstring>
@@ -26,15 +36,6 @@
 #include <linux/spi/spidev.h> // Needed for SPI port
 #include <poll.h>             // Needed for GPIO edge detection
 #include <sys/time.h>         // Needed for delayMicroseconds()
-
-#include "knx/device_object.h"
-#include "knx/address_table_object.h"
-#include "knx/association_table_object.h"
-#include "knx/group_object_table_object.h"
-#include "knx/application_program_object.h"
-#include "knx/ip_parameter_object.h"
-#include "knx/bits.h"
-#include "knx/ip_host_protocol_address_information.h"
 
 #define MAX_MEM 4096
 
@@ -264,15 +265,15 @@ int LinuxPlatform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen)
     return len;
 }
 
-uint8_t* LinuxPlatform::getEepromBuffer(uint16_t size)
+uint8_t* LinuxPlatform::getNonVolatileMemoryStart()
 {
     if (_fd < 0)
         doMemoryMapping();
 
-    return _mappedFile + 2;
+    return _mappedFile;
 }
 
-void LinuxPlatform::commitToEeprom()
+void LinuxPlatform::commitNonVolatileMemory()
 {
     if (_fd < 0)
         doMemoryMapping();
@@ -312,8 +313,6 @@ void LinuxPlatform::doMemoryMapping()
     if (addr[0] != 0xAF || addr[1] != 0xFE)
     {
         memset(addr, 0, FLASHSIZE);
-        addr[0] = 0xAF;
-        addr[1] = 0xFE;
     }
 
     if (addr == MAP_FAILED)

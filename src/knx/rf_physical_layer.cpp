@@ -1,18 +1,14 @@
-#include "config.h"
-#ifdef USE_RF
-
 #include "rf_physical_layer.h"
-#include "rf_data_link_layer.h"
 
+#include "config.h"
+#include "rf_data_link_layer.h"
 #include "bits.h"
 #include "platform.h"
 
 #include <stdio.h>
 #include <string.h>
 
-#define MIN(a, b) ((a < b) ? (a) : (b))
-#define MAX(a, b) ((a > b) ? (a) : (b))
-#define ABS(x)    ((x > 0) ? (x) : (-x))
+#ifdef USE_RF
 
 // Table for encoding 4-bit data into a 8-bit Manchester encoding.
 const uint8_t RfPhysicalLayer::manchEncodeTab[16] =   {0xAA,  // 0x0 Manchester encoded
