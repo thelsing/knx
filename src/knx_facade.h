@@ -334,14 +334,11 @@ template <class P, class B> class KnxFacade : private SaveRestore
     // predefined global instance for IP only
     extern KnxFacade<EspPlatform, Bau57B0> knx;
 #elif ARDUINO_ARCH_ESP32
-<<<<<<< Updated upstream
     // predefined global instance for IP only
     extern KnxFacade<Esp32Platform, Bau57B0> knx;
-=======
-extern KnxFacade<Esp32Platform, Bau57B0> knx;
 #elif ARDUINO_ARCH_STM32
-extern KnxFacade<Stm32Platform, Bau57B0> knx;
->>>>>>> Stashed changes
+    // predefined global instance for TP only
+    extern KnxFacade<Stm32Platform, Bau57B0> knx;
 #elif __linux__
     // no predefined global instance
 #endif
