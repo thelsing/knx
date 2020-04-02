@@ -18,6 +18,9 @@
    #define LED_BUILTIN 13
    #include "esp32_platform.h"
    #include "knx/bau57B0.h"
+#elif ARDUINO_ARCH_STM32
+   #include "stm32_platform.h"
+   #include "knx/bau57B0.h"
 #else
    #define LED_BUILTIN 0
    #include "linux_platform.h"
@@ -331,8 +334,14 @@ template <class P, class B> class KnxFacade : private SaveRestore
     // predefined global instance for IP only
     extern KnxFacade<EspPlatform, Bau57B0> knx;
 #elif ARDUINO_ARCH_ESP32
+<<<<<<< Updated upstream
     // predefined global instance for IP only
     extern KnxFacade<Esp32Platform, Bau57B0> knx;
+=======
+extern KnxFacade<Esp32Platform, Bau57B0> knx;
+#elif ARDUINO_ARCH_STM32
+extern KnxFacade<Stm32Platform, Bau57B0> knx;
+>>>>>>> Stashed changes
 #elif __linux__
     // no predefined global instance
 #endif
