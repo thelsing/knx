@@ -20,7 +20,7 @@
    #include "knx/bau57B0.h"
 #elif ARDUINO_ARCH_STM32
    #include "stm32_platform.h"
-   #include "knx/bau57B0.h"
+   #include "knx/bau07B0.h"
 #else
    #define LED_BUILTIN 0
    #include "linux_platform.h"
@@ -338,7 +338,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
     extern KnxFacade<Esp32Platform, Bau57B0> knx;
 #elif ARDUINO_ARCH_STM32
     // predefined global instance for TP only
-    extern KnxFacade<Stm32Platform, Bau57B0> knx;
+    extern KnxFacade<Stm32Platform, Bau07B0> knx;
 #elif __linux__
     // no predefined global instance
 #endif
