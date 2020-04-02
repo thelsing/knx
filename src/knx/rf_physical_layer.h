@@ -59,7 +59,7 @@ extern void delayMicroseconds (unsigned int howLong);
 #define PKTLEN   0x06         // Packet length
 #define PKTCTRL1 0x07         // Packet automation control
 #define PKTCTRL0 0x08         // Packet automation control
-#define DADDR    0x09         // Device address
+#define DEVADDR  0x09         // Device address
 #define CHANNR   0x0A         // Channel number
 #define FSCTRL1  0x0B         // Frequency synthesizer control
 #define FSCTRL0  0x0C         // Frequency synthesizer control

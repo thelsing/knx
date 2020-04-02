@@ -19,7 +19,6 @@ Stm32Platform::~Stm32Platform()
 
 void Stm32Platform::restart()
 {
-    println("restart");
     NVIC_SystemReset();
 }
 

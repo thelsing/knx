@@ -1,11 +1,8 @@
 #ifdef ARDUINO_ARCH_STM32
 #include "arduino_platform.h"
 
-
 class Stm32Platform : public ArduinoPlatform
 {
-    using ArduinoPlatform::_mulitcastAddr;
-    using ArduinoPlatform::_mulitcastPort;
 public:
     Stm32Platform();
     Stm32Platform( HardwareSerial* s);

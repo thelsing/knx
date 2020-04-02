@@ -24,6 +24,8 @@
     KnxFacade<Esp32Platform, Bau57B0> knx;
 #elif ARDUINO_ARCH_STM32
     KnxFacade<Stm32Platform, Bau57B0> knx;
+    // no predefined global instance
+    #define ICACHE_RAM_ATTR
 #elif __linux__
     // no predefined global instance
     #define ICACHE_RAM_ATTR
