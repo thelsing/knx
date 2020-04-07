@@ -17,6 +17,7 @@
 #elif ARDUINO_ARCH_ESP32
    #define LED_BUILTIN 13
    #include "esp32_platform.h"
+   #include "knx/bau07B0.h"
    #include "knx/bau57B0.h"
 #elif ARDUINO_ARCH_STM32
    #include "stm32_platform.h"
@@ -334,8 +335,18 @@ template <class P, class B> class KnxFacade : private SaveRestore
     // predefined global instance for IP only
     extern KnxFacade<EspPlatform, Bau57B0> knx;
 #elif ARDUINO_ARCH_ESP32
-    // predefined global instance for IP only
-    extern KnxFacade<Esp32Platform, Bau57B0> knx;
+    // predefined global instance for TP or IP
+    #ifdef MEDIUM_TYPE
+        #if MEDIUM_TYPE == 0
+            extern KnxFacade<Esp32Platform, Bau07B0> knx;
+        #elif MEDIUM_TYPE == 5
+            extern KnxFacade<Esp32Platform, Bau57B0> knx;
+        #else
+            #error "Only TP and IP supported for Arduino ESP32 platform!"
+        #endif
+    #else
+        #error "No medium type specified for Arduino ESP32 platform! Please set MEDIUM_TYPE! (TP:0, RF:2, IP:5)"
+    #endif
 #elif ARDUINO_ARCH_STM32
     // predefined global instance for TP only
     extern KnxFacade<Stm32Platform, Bau07B0> knx;
