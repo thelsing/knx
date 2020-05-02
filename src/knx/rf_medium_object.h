@@ -15,7 +15,7 @@ public:
     uint16_t saveSize() override;
 
     uint8_t* rfDomainAddress();
-    void rfDomainAddress(uint8_t* value);
+    void rfDomainAddress(const uint8_t* value);
 
 protected:
     uint8_t propertyDescriptionCount() override;

@@ -115,7 +115,7 @@ uint8_t* RfMediumObject::rfDomainAddress()
     return _rfDomainAddress;
 }
 
-void RfMediumObject::rfDomainAddress(uint8_t* value)
+void RfMediumObject::rfDomainAddress(const uint8_t* value)
 {
     pushByteArray(value, 6, _rfDomainAddress);
 }
