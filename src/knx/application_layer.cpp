@@ -429,7 +429,7 @@ void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, Hop
 //TODO: ApplicationLayer::domainAddressSerialNumberWriteRequest()
 //TODO: ApplicationLayer::domainAddressSerialNumberReadRequest()
 void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                                             uint8_t* knxSerialNumber)
+                                                             const uint8_t* knxSerialNumber)
 {
     CemiFrame frame(13); 
     APDU& apdu = frame.apdu();
