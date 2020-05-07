@@ -526,7 +526,7 @@ struct tm KNXValue::timeValue() const
             return *timePtr;
         }
     }
-    struct tm tmp;
+    struct tm tmp = {0};
     return tmp;
 }
 
