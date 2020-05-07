@@ -36,6 +36,7 @@
     - language: cpp
       os: linux
       env:
+          - ARDUINO_IDE_VERSION="1.8.11"
       cache:
         directories:
           - ~/arduino_ide
