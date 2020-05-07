@@ -26,13 +26,13 @@ class Bau27B0 : public BauSystemB
 #ifdef USE_CEMI_SERVER
     CemiServer _cemiServer;
     CemiServerObject _cemiServerObject;
-#endif                                  
+#endif
 
-    void domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                                  uint8_t* knxSerialNumber);
-    void domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber);
+    void domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                                  const uint8_t* knxSerialNumber) override;
+    void domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const uint8_t* knxSerialNumber) override;
     void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint16_t newIndividualAddress,
-                                                      uint8_t* knxSerialNumber);
-    void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber);
+                                                      uint8_t* knxSerialNumber) override;
+    void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber) override;
 };
 #endif

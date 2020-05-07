@@ -119,8 +119,8 @@ void Bau27B0::loop()
 #endif    
 }
 
-void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                                          uint8_t* knxSerialNumber)
+void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                                       const uint8_t* knxSerialNumber)
 {
     // If the received serial number matches our serial number
     // then store the received RF domain address in the RF medium object
@@ -128,7 +128,7 @@ void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCou
         _rfMediumObj.rfDomainAddress(rfDoA);
 }
 
-void Bau27B0::domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber)
+void Bau27B0::domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const uint8_t* knxSerialNumber)
 {
     // If the received serial number matches our serial number
     // then send a response with the current RF domain address stored in the RF medium object

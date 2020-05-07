@@ -134,7 +134,7 @@ class ApplicationLayer
                                             uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength,
                                             uint8_t* testResult, uint16_t testResultLength);
     void domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                               uint8_t* knxSerialNumber);                                       
+                                               const uint8_t* knxSerialNumber);                                       
     void IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
                                                uint8_t* knxSerialNumber);                                       
 #pragma endregion
