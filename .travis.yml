@@ -79,7 +79,7 @@
     # Test build for PlatformIO based projects
     - language: python
       python:
-        - "2.7"
+        - "3.8"
       cache:
         directories:
           - "~/.platformio"
