@@ -53,6 +53,7 @@
           - sed -i 's#compiler.warning_level=all#compiler.warning_level=default#' ~/.arduino15/preferences.txt
           # changes for bsec lib
           # samd
+          - ls -l ~/.arduino15/packages/arduino/hardware/samd
           - sed -ri 's#(recipe.c.combine.pattern=[^$]*\{archive_file\}")( -Wl,--end-group)#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/arduino/hardware/samd/1.8.11/platform.txt
           - sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/arduino/hardware/samd/1.8.11/platform.txt
           # esp8266
@@ -80,7 +81,7 @@
     # Test build for PlatformIO based projects
     - language: python
       python:
-        - "3.8"
+        - "3.7"
       cache:
         directories:
           - "~/.platformio"
