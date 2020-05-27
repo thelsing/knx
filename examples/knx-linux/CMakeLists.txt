@@ -75,7 +75,9 @@ add_executable(knx-linux
 	../../src/knx/rf_medium_object.h
 	../../src/knx/rf_physical_layer.cpp
 	../../src/knx/rf_physical_layer.h
-	../../src/knx/table_object.cpp
+        ../../src/knx/secure_application_layer.cpp
+        ../../src/knx/secure_application_layer.h
+        ../../src/knx/table_object.cpp
 	../../src/knx/table_object.h
 	../../src/knx/tpdu.cpp 
 	../../src/knx/tpdu.h

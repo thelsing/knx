@@ -267,7 +267,7 @@ void ApplicationLayer::groupValueReadRequest(AckType ack, uint16_t asap, Priorit
     uint16_t tsap = (uint16_t)value;
 
     // first to bus then to itself
-    _transportLayer->dataGroupRequest(ack, hopType, priority, tsap, apdu);
+    dataGroupRequest(ack, hopType, priority, tsap, apdu);
     dataGroupIndication(hopType, priority, tsap, apdu);
 }
 
@@ -290,7 +290,7 @@ void ApplicationLayer::individualAddressWriteRequest(AckType ack, HopCountType h
     apdu.type(IndividualAddressWrite);
     uint8_t* apduData = apdu.data();
     pushWord(newaddress, apduData + 1);
-    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void ApplicationLayer::individualAddressReadRequest(AckType ack, HopCountType hopType)
@@ -298,7 +298,7 @@ void ApplicationLayer::individualAddressReadRequest(AckType ack, HopCountType ho
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(IndividualAddressRead);
-    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void ApplicationLayer::individualAddressReadResponse(AckType ack, HopCountType hopType)
@@ -306,7 +306,7 @@ void ApplicationLayer::individualAddressReadResponse(AckType ack, HopCountType h
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(IndividualAddressResponse);
-    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void ApplicationLayer::individualAddressSerialNumberReadRequest(AckType ack, HopCountType hopType, uint8_t * serialNumber)
@@ -316,7 +316,7 @@ void ApplicationLayer::individualAddressSerialNumberReadRequest(AckType ack, Hop
     apdu.type(IndividualAddressSerialNumberRead);
     uint8_t* data = apdu.data() + 1;
     memcpy(data, serialNumber, 6);
-    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void ApplicationLayer::individualAddressSerialNumberReadResponse(AckType ack, HopCountType hopType, 
@@ -329,7 +329,7 @@ void ApplicationLayer::individualAddressSerialNumberReadResponse(AckType ack, Ho
     memcpy(data, serialNumber, 6);
     data += 6;
     pushWord(domainAddress, data);
-    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void ApplicationLayer::individualAddressSerialNumberWriteRequest(AckType ack, HopCountType hopType, uint8_t * serialNumber,
@@ -342,7 +342,7 @@ void ApplicationLayer::individualAddressSerialNumberWriteRequest(AckType ack, Ho
     memcpy(data, serialNumber, 6);
     data += 6;
     pushWord(newaddress, data);
-    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void ApplicationLayer::deviceDescriptorReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
@@ -423,7 +423,7 @@ void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, Hop
 
     //apdu.printPDU();
 
-    _transportLayer->dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
 }
 
 //TODO: ApplicationLayer::domainAddressSerialNumberWriteRequest()
@@ -442,7 +442,7 @@ void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, 
 
     //apdu.printPDU();
 
-    _transportLayer->dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
 }
 
 //TODO: ApplicationLayer::IndividualAddressSerialNumberWriteRequest()
@@ -461,7 +461,7 @@ void ApplicationLayer::IndividualAddressSerialNumberReadResponse(Priority priori
 
      //apdu.printPDU();
 
-    _transportLayer->dataBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
 }
 
 void ApplicationLayer::propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
@@ -652,9 +652,9 @@ void ApplicationLayer::propertyDataSend(ApduType type, AckType ack, Priority pri
         memcpy(apduData, data, length);
 
     if (asap == _connectedTsap)
-        _transportLayer->dataConnectedRequest(asap, priority, apdu);
+        dataConnectedRequest(asap, priority, apdu);
     else
-        _transportLayer->dataIndividualRequest(ack, hopType, priority, asap, apdu);
+        dataIndividualRequest(ack, hopType, priority, asap, apdu);
 }
 
 void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap, Priority priority, HopCountType hopType, 
@@ -676,7 +676,7 @@ void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap,
     }
     // no need to check if there is a tsap. This is a response, so the read got trough
     uint16_t tsap = (uint16_t)_assocTable.translateAsap(asap);
-    _transportLayer->dataGroupRequest(ack, hopType, priority, tsap, apdu);
+    dataGroupRequest(ack, hopType, priority, tsap, apdu);
     dataGroupIndication(hopType, priority, tsap, apdu);
 }
 
@@ -911,12 +911,34 @@ void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Prio
 void ApplicationLayer::individualSend(AckType ack, HopCountType hopType, Priority priority, uint16_t asap, APDU& apdu)
 {
     if (asap == _connectedTsap)
-        _transportLayer->dataConnectedRequest(asap, priority, apdu);
+        dataConnectedRequest(asap, priority, apdu);
     else
-        _transportLayer->dataIndividualRequest(ack, hopType, priority, asap, apdu);
+        dataIndividualRequest(ack, hopType, priority, asap, apdu);
 }
 
 bool ApplicationLayer::isConnected()
 {
     return (_connectedTsap >= 0);
+}
+
+void ApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
+{
+    _transportLayer->dataGroupRequest(ack, hopType, priority, tsap, apdu);
+}
+void ApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
+{
+    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+}
+void ApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
+{
+    _transportLayer->dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+}
+void ApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
+{
+    _transportLayer->dataIndividualRequest(ack, hopType, priority, destination, apdu);
+}
+void ApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu)
+{
+    // apdu must be valid until it was confirmed
+    _transportLayer->dataConnectedRequest(tsap, priority, apdu);
 }

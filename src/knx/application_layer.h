@@ -139,6 +139,14 @@ class ApplicationLayer
                                                uint8_t* knxSerialNumber);                                       
 #pragma endregion
 
+  protected:
+    // to transport layer
+    virtual void dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
+    virtual void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu);
+    virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu);
+    virtual void dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu);
+    virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu); // apdu must be valid until it was confirmed
+
   private:
     void propertyDataSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                           uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data,

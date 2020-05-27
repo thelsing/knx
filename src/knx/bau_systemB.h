@@ -8,6 +8,7 @@
 #include "group_object_table_object.h"
 #include "application_program_object.h"
 #include "application_layer.h"
+#include "secure_application_layer.h"
 #include "transport_layer.h"
 #include "network_layer.h"
 #include "data_link_layer.h"
@@ -91,7 +92,11 @@ class BauSystemB : protected BusAccessUnit
     GroupObjectTableObject _groupObjTable;
     ApplicationProgramObject _appProgram;
     Platform& _platform;
+#ifdef USE_DATASECURE
+    SecureApplicationLayer _appLayer;
+#else
     ApplicationLayer _appLayer;
+#endif
     TransportLayer _transLayer;
     NetworkLayer _netLayer;
     bool _configured = true;
