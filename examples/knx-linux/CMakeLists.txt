@@ -4,7 +4,10 @@ set(LIBRARIES_FROM_REFERENCES "")
 add_executable(knx-linux 
 	../../src/knx/address_table_object.cpp 
 	../../src/knx/address_table_object.h
-	../../src/knx/apdu.cpp 
+        ../../src/knx/aes.c
+        ../../src/knx/aes.h
+        ../../src/knx/aes.hpp
+        ../../src/knx/apdu.cpp
 	../../src/knx/apdu.h
 	../../src/knx/application_layer.cpp 
 	../../src/knx/application_layer.h

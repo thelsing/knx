@@ -50,4 +50,18 @@ class SecureApplicationLayer :  public ApplicationLayer
     virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu); // apdu must be valid until it was confirmed
 
   private:
+    uint32_t calcAuthOnlyMac(uint8_t* apdu, uint8_t apduLength, uint8_t* key, uint8_t* iv, uint8_t* ctr0);
+    uint32_t calcConfAuthMac(uint8_t* associatedData, uint16_t associatedDataLength, uint8_t* apdu, uint8_t apduLength, uint8_t* key, uint8_t* iv);
+
+    void block0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t extFrameFormat, uint8_t tpci, uint8_t apci, uint8_t payloadLength);
+    void blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr);
+
+    uint64_t lastValidSequenceNumber(bool toolAcces, uint16_t srcAddr);
+
+    bool decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength);
+    void encrypt(uint8_t* buffer, uint16_t srcAddr, uint16_t dstAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength);
+
+    // Our FDSK
+    static uint8_t _key[];
+
 };

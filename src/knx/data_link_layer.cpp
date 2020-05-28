@@ -108,10 +108,15 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
 
     if (addrType == GroupAddress && destination == 0)
     {
+#if !defined(USE_TP)
         if (systemBroadcast == SysBroadcast)
             _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
         else 
             _networkLayer.broadcastIndication(ack, type, npdu, priority, source);
+#else
+        _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
+        _networkLayer.broadcastIndication(ack, type, npdu, priority, source);
+#endif
     }
     else
     {

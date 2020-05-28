@@ -423,7 +423,8 @@ void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, Hop
 
     //apdu.printPDU();
 
-    dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    //dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
 }
 
 //TODO: ApplicationLayer::domainAddressSerialNumberWriteRequest()

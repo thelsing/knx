@@ -23,6 +23,8 @@ enum KnxIpServiceType
     ConnectionStateResponse = 0x208,
     DisconnectRequest = 0x209,
     DisconnectResponse = 0x20A,
+    SearchRequestSecure = 0x20B,
+    SearchResponseSecure = 0x20C,
     DeviceConfigurationRequest = 0x310,
     DeviceConfigurationAck = 0x311,
     TunnelingRequest = 0x420,

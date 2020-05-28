@@ -70,6 +70,17 @@ void IpDataLinkLayer::loop()
             _platform.sendBytesUniCast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
             break;
         }
+        /*
+        case SearchRequestSecure:
+        {
+            KnxIpSearchRequest searchRequest(buffer, len);
+            KnxIpSearchResponse searchResponse(_ipParameters, _deviceObject);
+            searchResponse.serviceTypeIdentifier(SearchResponseSecure);
+
+            auto hpai = searchRequest.hpai();
+            _platform.sendBytesUniCast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
+            break;
+        }*/
         default:
             print("Unhandled service identifier: ");
             println(code, HEX);

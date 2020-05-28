@@ -150,4 +150,7 @@ enum ApduType
     PropertyValueWrite = 0x3d7,
     PropertyDescriptionRead = 0x3d8,
     PropertyDescriptionResponse = 0x3d9,
+
+    // Secure Service
+    SecureService = 0x3F1
 };

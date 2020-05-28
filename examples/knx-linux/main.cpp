@@ -46,6 +46,130 @@ long lastsend = 0;
 #define MIN knx.getGroupObject(3)
 #define RESET knx.getGroupObject(4)
 
+int ceil(float num) {
+    int inum = (int)num;
+    if (num == (float)inum) {
+        return inum;
+    }
+    return inum + 1;
+}
+
+int toBase32(uint8_t* in, long length, uint8_t*& out, bool usePadding)
+{
+  char base32StandardAlphabet[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"};
+  char standardPaddingChar = '=';
+
+  int result = 0;
+  int count = 0;
+  int bufSize = 8;
+  int index = 0;
+  int size = 0; // size of temporary array
+  uint8_t* temp = NULL;
+
+  if (length < 0 || length > 268435456LL)
+  {
+    return 0;
+  }
+
+  size = 8 * ceil(length / 4.0); // Calculating size of temporary array. Not very precise.
+  temp = (uint8_t*)malloc(size); // Allocating temporary array.
+
+  if (length > 0)
+  {
+    int buffer = in[0];
+    int next = 1;
+    int bitsLeft = 8;
+
+    while (count < bufSize && (bitsLeft > 0 || next < length))
+    {
+      if (bitsLeft < 5)
+      {
+        if (next < length)
+        {
+          buffer <<= 8;
+          buffer |= in[next] & 0xFF;
+          next++;
+          bitsLeft += 8;
+        }
+        else
+        {
+          int pad = 5 - bitsLeft;
+          buffer <<= pad;
+          bitsLeft += pad;
+        }
+      }
+      index = 0x1F & (buffer >> (bitsLeft -5));
+
+      bitsLeft -= 5;
+      temp[result] = (uint8_t)base32StandardAlphabet[index];
+      result++;
+    }
+  }
+
+  if (usePadding)
+  {
+    int pads = (result % 8);
+    if (pads > 0)
+    {
+      pads = (8 - pads);
+      for (int i = 0; i < pads; i++)
+      {
+        temp[result] = standardPaddingChar;
+        result++;
+      }
+    }
+  }
+
+  out = (uint8_t*)malloc(result);
+  memcpy(out, temp, result);
+  free(temp);
+
+  return result;
+}
+
+int fromBase32(uint8_t* in, long length, uint8_t*& out)
+{
+  int result = 0; // Length of the array of decoded values.
+  int buffer = 0;
+  int bitsLeft = 0;
+  uint8_t* temp = NULL;
+
+  temp = (uint8_t*)malloc(length); // Allocating temporary array.
+
+  for (int i = 0; i < length; i++)
+  {
+    uint8_t ch = in[i];
+
+    // ignoring some characters: ' ', '\t', '\r', '\n', '='
+    if (ch == 0xA0 || ch == 0x09 || ch == 0x0A || ch == 0x0D || ch == 0x3D) continue;
+
+    // recovering mistyped: '0' -> 'O', '1' -> 'L', '8' -> 'B'
+    if (ch == 0x30) { ch = 0x4F; } else if (ch == 0x31) { ch = 0x4C; } else if (ch == 0x38) { ch = 0x42; }
+
+
+    // look up one base32 symbols: from 'A' to 'Z' or from 'a' to 'z' or from '2' to '7'
+    if ((ch >= 0x41 && ch <= 0x5A) || (ch >= 0x61 && ch <= 0x7A)) { ch = ((ch & 0x1F) - 1); }
+    else if (ch >= 0x32 && ch <= 0x37) { ch -= (0x32 - 26); }
+    else { free(temp); return 0; }
+
+    buffer <<= 5;
+    buffer |= ch;
+    bitsLeft += 5;
+    if (bitsLeft >= 8)
+    {
+      temp[result] = (unsigned char)((unsigned int)(buffer >> (bitsLeft - 8)) & 0xFF);
+      result++;
+      bitsLeft -= 8;
+    }
+  }
+
+  out = (uint8_t*)malloc(result);
+  memcpy(out, temp, result);
+  free(temp);
+
+  return result;
+}
+
 void measureTemp()
 {
     long now = millis();
@@ -118,6 +242,14 @@ void setup()
 int main(int argc, char **argv)
 {
     printf("main() start.\n");
+
+    uint8_t inPlain[] { 0x00, 0xFA, 0x01, 0x02, 0x03, 0x04, // KNX Serial
+                        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F}; // Key
+    uint8_t* outEncoded = NULL;
+
+    uint8_t len = toBase32(inPlain, sizeof(inPlain), outEncoded, false);
+
+    printf("FDSK(len: %d): %s\n", len, outEncoded);
 
     // Prevent swapping of this process
     struct sched_param sp;
