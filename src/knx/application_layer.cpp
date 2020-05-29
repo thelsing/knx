@@ -118,7 +118,7 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
             break;
         }
         default:
-#if (defined(USE_TP)||defined(USE_IP))
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
             dataSystemBroadcastIndication(hopType, priority, source, apdu);
 #else
             print("Broadcast-indication: unhandled APDU-Type: ");
@@ -163,7 +163,7 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
             break;
         }
         default:
-#if (defined(USE_TP)||defined(USE_IP))
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
             dataSystemBroadcastConfirm(hopType, priority, apdu, status);
 #else
             print("Broadcast-confirm: unhandled APDU-Type: ");
@@ -206,14 +206,14 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
             break;
         }
         default:
-#if !(defined(USE_TP)||defined(USE_IP))
-            // For open media (e.g. PL, RF)
-            print("SystemBroadcast-indication: unhandled APDU-Type: ");
-            println(apdu.type());
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
+        // For closed media
+        print("Broadcast-indication: unhandled APDU-Type: ");
+        println(apdu.type());
 #else
-            // For closed media
-            print("Broadcast-indication: unhandled APDU-Type: ");
-            println(apdu.type());
+        // For open media (e.g. PL, RF)
+        print("SystemBroadcast-indication: unhandled APDU-Type: ");
+        println(apdu.type());
 #endif
             break;
     }
@@ -252,14 +252,14 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
         break;
     }
     default:
-#if !(defined(USE_TP)||defined(USE_IP))
-            // For open media (e.g. PL, RF)
-            print("SystemBroadcast-confirm: unhandled APDU-Type: ");
-            println(apdu.type());
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
+        // For closed media
+        print("Broadcast-confirm: unhandled APDU-Type: ");
+        println(apdu.type());
 #else
-            // For closed media
-            print("Broadcast-confirm: unhandled APDU-Type: ");
-            println(apdu.type());
+        // For open media (e.g. PL, RF)
+        print("SystemBroadcast-confirm: unhandled APDU-Type: ");
+        println(apdu.type());
 #endif
             break;
     }
