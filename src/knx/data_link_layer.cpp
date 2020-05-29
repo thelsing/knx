@@ -45,7 +45,11 @@ void DataLinkLayer::systemBroadcastRequest(AckType ack, FrameFormat format, Prio
 {
     // System Broadcast requests will always be transmitted as broadcast with KNX serial number for open media (e.g. RF medium) 
     // See 3.2.5 p.22
+#if !(defined(USE_TP)||defined(USE_IP))
     sendTelegram(npdu, ack, 0, GroupAddress, format, priority, SysBroadcast);
+#else
+    sendTelegram(npdu, ack, 0, GroupAddress, format, priority, Broadcast);
+#endif
 }
 
 void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
@@ -73,10 +77,17 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
 #endif    
 
     if (addrType == GroupAddress && destination == 0)
+    {
+#if !(defined(USE_TP)||defined(USE_IP))
             if (systemBroadcast == SysBroadcast)
                 _networkLayer.systemBroadcastConfirm(ack, type, priority, source, npdu, success);
             else
                 _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success);                    
+#else
+            (void) systemBroadcast; // not used
+            _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success);
+#endif
+    }
     else
         _networkLayer.dataConfirm(ack, addrType, destination, type, priority, source, npdu, success);
 
@@ -108,13 +119,13 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
 
     if (addrType == GroupAddress && destination == 0)
     {
-#if !defined(USE_TP)
+#if !(defined(USE_TP)||defined(USE_IP))
         if (systemBroadcast == SysBroadcast)
             _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
         else 
             _networkLayer.broadcastIndication(ack, type, npdu, priority, source);
 #else
-        _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
+        (void) systemBroadcast; // not used
         _networkLayer.broadcastIndication(ack, type, npdu, priority, source);
 #endif
     }
