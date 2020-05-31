@@ -829,6 +829,12 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
                 startIndex, data + 5, apdu.length() - 5);
             break;
         }
+        case FunctionPropertyCommand:
+            _bau.functionPropertyCommandIndication(priority, hopType, tsap, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            break;
+        case FunctionPropertyState:
+            _bau.functionPropertyStateIndication(priority, hopType, tsap, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            break;
         case PropertyDescriptionRead:
             _bau.propertyDescriptionReadIndication(priority, hopType, tsap, data[1], data[2], data[3]);
             break;

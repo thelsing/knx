@@ -106,6 +106,14 @@ void BusAccessUnit::propertyValueReadIndication(Priority priority, HopCountType 
 {
 }
 
+void BusAccessUnit::functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t* data, uint8_t length)
+{
+}
+
+void BusAccessUnit::functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t* data, uint8_t length)
+{
+}
+
 void BusAccessUnit::propertyValueReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length, bool status)
 {
 }
