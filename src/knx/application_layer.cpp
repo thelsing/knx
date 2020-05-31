@@ -552,6 +552,26 @@ void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority,
         startIndex, data, length);
 }
 
+void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+                                                     uint8_t objectIndex, uint8_t propertyId, uint8_t returnCode, uint8_t* resultData, uint8_t resultLength)
+{
+    CemiFrame frame(3 + resultLength + 1);
+    APDU& apdu = frame.apdu();
+    apdu.type(FunctionPropertyStateResponse);
+    uint8_t* data = apdu.data() + 1;
+
+    data[0] = objectIndex;
+    data[1] = propertyId;
+    data[2] = returnCode;
+    if (resultLength > 0)
+        memcpy(&data[3], resultData, resultLength);
+
+    if (asap == _connectedTsap)
+        dataConnectedRequest(asap, priority, apdu);
+    else
+        dataIndividualRequest(ack, hopType, priority, asap, apdu);
+}
+
 void ApplicationLayer::propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
     uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex)
 {

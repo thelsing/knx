@@ -23,19 +23,49 @@ SecureApplicationLayer::SecureApplicationLayer(AssociationTableObject& assocTabl
 {
 }
 
+/* from transport layer */
+
 void SecureApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
-    ApplicationLayer::dataGroupIndication(hopType, priority, tsap, apdu);
+    if (apdu.type() == SecureService)
+    {
+        // Decrypt secure APDU
+
+        // Process decrypted inner APDU
+        ApplicationLayer::dataGroupIndication(hopType, priority, tsap, apdu);
+    }
+    else
+    {
+        ApplicationLayer::dataGroupIndication(hopType, priority, tsap, apdu);
+    }
 }
 
 void SecureApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority,  uint16_t tsap, APDU& apdu, bool status)
 {
-    ApplicationLayer::dataGroupConfirm(ack, hopType, priority, tsap, apdu, status);
+    if (apdu.type() == SecureService)
+    {
+        // Decrypt secure APDU
+
+        // Process decrypted inner APDU
+        ApplicationLayer::dataGroupConfirm(ack, hopType, priority, tsap, apdu, status);
+    }
+    else
+    {
+        ApplicationLayer::dataGroupConfirm(ack, hopType, priority, tsap, apdu, status);
+    }
 }
 
 void SecureApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
 {
-    ApplicationLayer::dataBroadcastIndication(hopType, priority, source, apdu);
+    if (apdu.type() == SecureService)
+    {
+        // Secure APDU is not allowed in Broadcast
+        println("Secure APDU in Broadcast not allowed!");
+    }
+    else
+    {
+        ApplicationLayer::dataBroadcastIndication(hopType, priority, source, apdu);
+    }
 }
 
 void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status)
@@ -45,7 +75,15 @@ void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopT
 
 void SecureApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
 {
-    ApplicationLayer::dataSystemBroadcastIndication(hopType, priority, source, apdu);
+    if (apdu.type() == SecureService)
+    {
+        // Secure APDU is not allowed in Broadcast
+        println("Secure APDU in SystemBroadcast not allowed!");
+    }
+    else
+    {
+        ApplicationLayer::dataSystemBroadcastIndication(hopType, priority, source, apdu);
+    }
 }
 
 void SecureApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
@@ -55,12 +93,32 @@ void SecureApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Pr
 
 void SecureApplicationLayer::dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
-    ApplicationLayer::dataIndividualIndication(hopType, priority, tsap, apdu);
+    if (apdu.type() == SecureService)
+    {
+        // Decrypt secure APDU
+
+        // Process decrypted inner APDU
+        ApplicationLayer::dataIndividualIndication(hopType, priority, tsap, apdu);
+    }
+    else
+    {
+        ApplicationLayer::dataIndividualIndication(hopType, priority, tsap, apdu);
+    }
 }
 
 void SecureApplicationLayer::dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status)
 {
-    ApplicationLayer::dataIndividualConfirm(ack, hopType, priority, tsap, apdu, status);
+    if (apdu.type() == SecureService)
+    {
+        // Decrypt secure APDU
+
+        // Process decrypted inner APDU
+        ApplicationLayer::dataIndividualConfirm(ack, hopType, priority, tsap, apdu, status);
+    }
+    else
+    {
+        ApplicationLayer::dataIndividualConfirm(ack, hopType, priority, tsap, apdu, status);
+    }
 }
 
 void SecureApplicationLayer::connectIndication(uint16_t tsap)
@@ -85,7 +143,40 @@ void SecureApplicationLayer::disconnectConfirm(Priority priority, uint16_t tsap,
 
 void SecureApplicationLayer::dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu)
 {
-    ApplicationLayer::dataConnectedIndication(priority, tsap, apdu);
+    if (apdu.type() == SecureService)
+    {
+        // Decrypt secure APDU
+
+        println("Secure APDU: ");
+        apdu.printPDU();
+
+        uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
+        CemiFrame plainFrame(plainApduLength);
+
+        uint16_t srcAddress = apdu.frame().sourceAddress();
+        uint16_t dstAddress = apdu.frame().destinationAddress();
+        uint8_t tpci = apdu.frame().data()[TPDU_LPDU_DIFF]; // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI [fixed TPDU_LPDU_DIFF]
+        print("Secure Debug: TPCI: ");
+        println(tpci, HEX);
+
+        // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI (fixed APDU_LPDU_DIFF)
+        if (decrypt(plainFrame.data()+APDU_LPDU_DIFF, srcAddress, dstAddress, tpci, apdu.data(), apdu.length()))
+        {
+            println("Plain APDU: ");
+            plainFrame.apdu().printPDU();
+
+            // Process decrypted inner APDU
+            ApplicationLayer::dataConnectedIndication(priority, tsap, plainFrame.apdu());
+        }
+        else
+        {
+            println("Decryption failed!");
+        }
+    }
+    else
+    {
+        ApplicationLayer::dataConnectedIndication(priority, tsap, apdu);
+    }
 }
 
 void SecureApplicationLayer::dataConnectedConfirm(uint16_t tsap)
@@ -93,27 +184,35 @@ void SecureApplicationLayer::dataConnectedConfirm(uint16_t tsap)
     ApplicationLayer::dataConnectedConfirm(tsap);
 }
 
+/* to transport layer */
+
 void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
     ApplicationLayer::dataGroupRequest(ack, hopType, priority, tsap, apdu);
 }
+
 void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
     ApplicationLayer::dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
+
 void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
     ApplicationLayer::dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
 }
+
 void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
 {
     ApplicationLayer::dataIndividualRequest(ack, hopType, priority, destination, apdu);
 }
+
 void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu)
 {
     // apdu must be valid until it was confirmed
     ApplicationLayer::dataConnectedRequest(tsap, priority, apdu);
 }
+
+/* encryption/decryption stuff */
 
 class TpTelegram
 {
@@ -325,7 +424,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
     pBuf = popByte(scf, secureAsdu);
 
         bool toolAccess = ((scf & 0x80) == 0x80);
-        bool systemBroadcast = ((scf & 0x08) == 0x08);
+        // bool systemBroadcast = ((scf & 0x08) == 0x08); // not used for decryption
         uint8_t sai = (scf >> 4) & 0x07; // sai can only be 0x0 (CCM auth only) or 0x1 (CCM with auth+conf), other values are reserved
         bool authOnly = ( sai == 0);
         uint8_t service = (scf & 0x07); // only 0x0 (S-A_Data-PDU), 0x2 (S-A_Sync_Req-PDU) or 0x3 (S-A_Sync_Rsp-PDU) are valid values

@@ -42,7 +42,8 @@ add_executable(knx-linux
 	../../src/knx/dpt.h
 	../../src/knx/dptconvert.cpp
 	../../src/knx/dptconvert.h
-	../../src/knx/group_object.cpp 
+        ../../src/knx/function_property.h
+        ../../src/knx/group_object.cpp
 	../../src/knx/group_object.h
 	../../src/knx/group_object_table_object.cpp 
 	../../src/knx/group_object_table_object.h

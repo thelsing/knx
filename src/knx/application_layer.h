@@ -44,7 +44,7 @@ class ApplicationLayer
      * 
      * @param hopType Should routing be endless or should the NetworkLayer::hopCount be used? See also ::HopCountType.
      */
-    void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
+    virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
     /**
      * Report the status of an APDU that we sent via multicast communiation back to us. See 3.2 of @cite knx:3/3/4. 
      * See also ApplicationLayer::dataGroupConfirm and TransportLayer::dataGroupRequest. This method is called by 
@@ -63,20 +63,20 @@ class ApplicationLayer
      * 
      * @param ack Did we want a DataLinkLayer acknowledgement? See ::AckType.
      */
-    void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
+    virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
                           APDU& apdu, bool status);
-    void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status);
-    void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status);
-    void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
-    void connectIndication(uint16_t tsap);
-    void connectConfirm(uint16_t destination, uint16_t tsap, bool status);
-    void disconnectIndication(uint16_t tsap);
-    void disconnectConfirm(Priority priority, uint16_t tsap, bool status);
-    void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu);
-    void dataConnectedConfirm(uint16_t tsap);
+    virtual void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
+    virtual void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status);
+    virtual void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
+    virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status);
+    virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
+    virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
+    virtual void connectIndication(uint16_t tsap);
+    virtual void connectConfirm(uint16_t destination, uint16_t tsap, bool status);
+    virtual void disconnectIndication(uint16_t tsap);
+    virtual void disconnectConfirm(Priority priority, uint16_t tsap, bool status);
+    virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu);
+    virtual void dataConnectedConfirm(uint16_t tsap);
 #pragma endregion
 
 #pragma region from bau
@@ -105,6 +105,8 @@ class ApplicationLayer
                                    uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length);
     void propertyValueWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                    uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length);
+    void functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+                                       uint8_t objectIndex, uint8_t propertyId, uint8_t returnCode, uint8_t *data, uint8_t length);
     void propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                         uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex);
     void propertyDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,

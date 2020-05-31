@@ -203,3 +203,23 @@ uint8_t Property::write(uint16_t position, uint16_t value)
     pushWord(value, data);
     return write(position, 1, data);
 }
+
+uint8_t Property::command(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+{
+    (void)data;
+    (void)length;
+    (void)resultData;
+    resultLength = 0;
+
+    return 0xFF;
+}
+
+uint8_t Property::state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t &resultLength)
+{
+    (void)data;
+    (void)length;
+    (void)resultData;
+    resultLength = 0;
+
+    return 0xFF;
+}

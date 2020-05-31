@@ -49,6 +49,9 @@ enum ObjectType
     /** File Server Object */
     OT_FILE_SERVER = 13,
 
+    /** Security Interface Object */
+    OT_SECURITY = 17,
+
     /** RF Medium Object */
     OT_RF_MEDIUM = 19
 };
@@ -98,6 +101,34 @@ class InterfaceObject : public SaveRestore
      * @returns the size in byte or 0 if the interface object does not have the property
      */
     virtual uint8_t propertySize(PropertyID id);
+    /**
+     * Call command of a function property of the interface object. Property type must be PDT_FUNCTION
+     *
+     * @param id id of the property to call
+     *
+     * @param[in] length The size of the data buffer
+     *
+     * @param[in] data The argument data for the function
+     *
+     * @param[out] resultLength The size of the result data buffer
+     *
+     * @param[out] resultData The result data for the function
+     */
+    virtual uint8_t command(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t &resultLength);
+    /**
+     * Get state of a function property of the interface object. Property type must be PDT_FUNCTION
+     *
+     * @param id id of the property to call
+     *
+     * @param[in] length The size of the data buffer
+     *
+     * @param[in] data The argument data for the function
+     *
+     * @param[out] resultLength The size of the result data buffer
+     *
+     * @param[out] resultData The result data for the function
+     */
+    virtual uint8_t state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t resultLength);
     /**
      * Read the Description of a property of the interface object. The output parameters are only valid if nuberOfElements is not zero.
      * 

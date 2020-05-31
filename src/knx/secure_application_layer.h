@@ -25,29 +25,29 @@ class SecureApplicationLayer :  public ApplicationLayer
     SecureApplicationLayer(AssociationTableObject& assocTable, BusAccessUnit& bau);
 
     // from transport layer
-    void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
-    void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
-                          APDU& apdu, bool status);
-    void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status);
-    void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status);
-    void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
-    void connectIndication(uint16_t tsap);
-    void connectConfirm(uint16_t destination, uint16_t tsap, bool status);
-    void disconnectIndication(uint16_t tsap);
-    void disconnectConfirm(Priority priority, uint16_t tsap, bool status);
-    void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu);
-    void dataConnectedConfirm(uint16_t tsap);
+    virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
+    virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
+                                  APDU& apdu, bool status) override;
+    virtual void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
+    virtual void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
+    virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status) override;
+    virtual void connectIndication(uint16_t tsap) override;
+    virtual void connectConfirm(uint16_t destination, uint16_t tsap, bool status) override;
+    virtual void disconnectIndication(uint16_t tsap) override;
+    virtual void disconnectConfirm(Priority priority, uint16_t tsap, bool status) override;
+    virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu) override;
+    virtual void dataConnectedConfirm(uint16_t tsap) override;
 
   protected:
     // to transport layer
-    virtual void dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
-    virtual void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu);
-    virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu);
-    virtual void dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu);
-    virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu); // apdu must be valid until it was confirmed
+    virtual void dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
+    virtual void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu) override;
+    virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu) override;
+    virtual void dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu) override;
+    virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu) override; // apdu must be valid until it was confirmed
 
   private:
     uint32_t calcAuthOnlyMac(uint8_t* apdu, uint8_t apduLength, uint8_t* key, uint8_t* iv, uint8_t* ctr0);
