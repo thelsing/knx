@@ -158,6 +158,19 @@ enum PropertyID
     PID_MAX_INTERFACE_APDU_LENGTH = 68,
     PID_MAX_LOCAL_APDU_LENGTH = 69,
 
+    /** Security Interface Object */
+    PID_SECURITY_MODE = 51,                     // Enable and disable the Security Mode
+    PID_P2P_KEY_TABLE = 52,                     // Security keys used for securing point-to-point and broadcast communication
+    PID_GRP_KEY_TABLE = 53,                     // Security keys used for securing standard mode group communication
+    PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE = 54, // IAs and last valid sequence numbers of communication partners with secure links
+    PID_SECURITY_FAILURES_LOG = 55,             // Provides security failure information
+    PID_TOOL_KEY = 56,                          // Stores the security information for the central MaC in S-Mode and Ctrl-Mode
+    PID_SECURITY_REPORT = 57,                   // KNX Data Security-related status and diagnostic information
+    PID_SECURITY_REPORT_CONTROL = 58,           // Control the spontaneous communication of the security report through DMP_InterfaceObject-InfoReport_RCl
+    PID_SEQUENCE_NUMBER_SENDING = 59,           // Sequence Number used for the next outgoing secure communication
+    PID_ZONE_KEY_TABLE = 60,                    // Security keys used for securing zone addressing communication
+    PID_GO_SECURITY_FLAGS = 61,                 // Defines the required security requirements for each group object
+    PID_ROLE_TABLE = 62,                        // Role table
 };
 
 enum LoadState

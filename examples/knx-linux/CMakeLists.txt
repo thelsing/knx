@@ -32,7 +32,8 @@ add_executable(knx-linux
 	../../src/knx/cemi_frame.h
 	../../src/knx/cemi_server.cpp 
 	../../src/knx/cemi_server_object.cpp 
-	../../src/knx/data_link_layer.cpp 
+        ../../src/knx/cemi_server_object.h
+        ../../src/knx/data_link_layer.cpp
 	../../src/knx/data_link_layer.h
 	../../src/knx/data_property.cpp 
 	../../src/knx/data_property.h
@@ -81,6 +82,8 @@ add_executable(knx-linux
 	../../src/knx/rf_physical_layer.h
         ../../src/knx/secure_application_layer.cpp
         ../../src/knx/secure_application_layer.h
+        ../../src/knx/security_interface_object.cpp
+        ../../src/knx/security_interface_object.h
         ../../src/knx/table_object.cpp
 	../../src/knx/table_object.h
 	../../src/knx/tpdu.cpp 
