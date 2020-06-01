@@ -64,5 +64,24 @@ SecurityInterfaceObject::SecurityInterfaceObject()
     };
     initializeProperties(sizeof(properties), properties);
 }
+
+uint8_t* SecurityInterfaceObject::save(uint8_t* buffer)
+{
+    //buffer = pushWord(_ownAddress, buffer);
+    return InterfaceObject::save(buffer);
+}
+
+const uint8_t* SecurityInterfaceObject::restore(const uint8_t* buffer)
+{
+    //buffer = popWord(_ownAddress, buffer);
+    return InterfaceObject::restore(buffer);
+}
+
+uint16_t SecurityInterfaceObject::saveSize()
+{
+    //return 2 + InterfaceObject::saveSize();
+    return 0;
+}
+
 #endif
 
