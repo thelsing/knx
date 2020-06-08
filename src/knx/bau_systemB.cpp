@@ -240,6 +240,32 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
         startIndex, data, size);
 }
 
+void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+                                                   uint8_t propertyId, uint8_t* data, uint8_t length)
+{
+    uint8_t resultLength = 0;
+    uint8_t resultData[32];
+
+    InterfaceObject* obj = getInterfaceObject(objectIndex);
+    if(obj)
+        obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+
+    _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, resultData, resultLength);
+}
+
+void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+                                                 uint8_t propertyId, uint8_t* data, uint8_t length)
+{
+    uint8_t resultLength = 0;
+    uint8_t resultData[32];
+
+    InterfaceObject* obj = getInterfaceObject(objectIndex);
+    if(obj)
+        obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+
+    _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, resultData, resultLength);
+}
+
 void BauSystemB::individualAddressReadIndication(HopCountType hopType)
 {
     if (_deviceObj.progMode())

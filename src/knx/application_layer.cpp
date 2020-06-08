@@ -494,6 +494,25 @@ void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority,
         startIndex, data, length);
 }
 
+void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+                                                     uint8_t objectIndex, uint8_t propertyId, uint8_t* resultData, uint8_t resultLength)
+{
+    CemiFrame frame(3 + resultLength + 1);
+    APDU& apdu = frame.apdu();
+    apdu.type(FunctionPropertyStateResponse);
+    uint8_t* data = apdu.data() + 1;
+
+    data[0] = objectIndex;
+    data[1] = propertyId;
+    if (resultLength > 0)
+        memcpy(&data[2], resultData, resultLength);
+
+    if (asap == _connectedTsap)
+        _transportLayer->dataConnectedRequest(asap, priority, apdu);
+    else
+        _transportLayer->dataIndividualRequest(ack, hopType, priority, asap, apdu);
+}
+
 void ApplicationLayer::propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
     uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex)
 {
@@ -751,6 +770,12 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
                 startIndex, data + 5, apdu.length() - 5);
             break;
         }
+        case FunctionPropertyCommand:
+            _bau.functionPropertyCommandIndication(priority, hopType, tsap, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            break;
+        case FunctionPropertyState:
+            _bau.functionPropertyStateIndication(priority, hopType, tsap, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            break;
         case PropertyDescriptionRead:
             _bau.propertyDescriptionReadIndication(priority, hopType, tsap, data[1], data[2], data[3]);
             break;
