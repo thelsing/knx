@@ -508,9 +508,9 @@ void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority prior
         memcpy(&data[2], resultData, resultLength);
 
     if (asap == _connectedTsap)
-        dataConnectedRequest(asap, priority, apdu);
+        _transportLayer->dataConnectedRequest(asap, priority, apdu);
     else
-        dataIndividualRequest(ack, hopType, priority, asap, apdu);
+        _transportLayer->dataIndividualRequest(ack, hopType, priority, asap, apdu);
 }
 
 void ApplicationLayer::propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
