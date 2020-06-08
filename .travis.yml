@@ -75,7 +75,7 @@
          # - buildExampleSketch knx-bme680
          # - buildExampleSketch knx-hdc1008
           - build_platform zero
-          - build_platform esp8266
+         # - build_platform esp8266
 
     # Test build for PlatformIO based projects
     - language: python
