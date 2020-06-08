@@ -48,6 +48,10 @@ class BusAccessUnit
                                                uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, bool status);
     virtual void propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                              uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex);
+    virtual void functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+                                                   uint8_t propertyId, uint8_t* data, uint8_t length);
+    virtual void functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+                                                 uint8_t propertyId, uint8_t* data, uint8_t length);
     virtual void propertyValueReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                                   uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length, bool status);
     virtual void propertyValueReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
