@@ -46,7 +46,6 @@ void DataLinkLayer::broadcastRequest(AckType ack, FrameFormat format, Priority p
     // System Broadcast requests will always be transmitted as broadcast with KNX serial number for open media (e.g. RF medium) 
     // See 3.2.5 p.22
 #if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-    (void)broadcastType; // not used on TP/IP, always normal broadcast
     sendTelegram(npdu, ack, 0, GroupAddress, format, priority, Broadcast);
 #else
     sendTelegram(npdu, ack, 0, GroupAddress, format, priority, broadcastType);
