@@ -55,7 +55,7 @@ void SecureApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType,
     }
 }
 
-void SecureApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
+void SecureApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, SystemBroadcast broadcastType)
 {
     if (apdu.type() == SecureService)
     {
@@ -64,31 +64,13 @@ void SecureApplicationLayer::dataBroadcastIndication(HopCountType hopType, Prior
     }
     else
     {
-        ApplicationLayer::dataBroadcastIndication(hopType, priority, source, apdu);
+        ApplicationLayer::dataBroadcastIndication(hopType, priority, source, apdu, broadcastType);
     }
 }
 
-void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status)
+void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status, SystemBroadcast broadcastType)
 {
-    ApplicationLayer::dataBroadcastConfirm(ack, hopType, priority, apdu, status);
-}
-
-void SecureApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
-{
-    if (apdu.type() == SecureService)
-    {
-        // Secure APDU is not allowed in Broadcast
-        println("Secure APDU in SystemBroadcast not allowed!");
-    }
-    else
-    {
-        ApplicationLayer::dataSystemBroadcastIndication(hopType, priority, source, apdu);
-    }
-}
-
-void SecureApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
-{
-    ApplicationLayer::dataSystemBroadcastConfirm(hopType, priority, apdu, status);
+    ApplicationLayer::dataBroadcastConfirm(ack, hopType, priority, apdu, status, broadcastType);
 }
 
 void SecureApplicationLayer::dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
@@ -198,7 +180,7 @@ void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopT
 
 void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
-    ApplicationLayer::dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    ApplicationLayer::dataSystemBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)

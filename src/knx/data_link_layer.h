@@ -24,7 +24,7 @@ class DataLinkLayer
     // from network layer
     void dataRequest(AckType ack, AddressType addrType, uint16_t destinationAddr, FrameFormat format,
                      Priority priority, NPDU& npdu);
-    void systemBroadcastRequest(AckType ack, FrameFormat format, Priority priority, NPDU& npdu);
+    void broadcastRequest(AckType ack, FrameFormat format, Priority priority, NPDU& npdu, SystemBroadcast broadcastType);
     virtual void loop() = 0;
     virtual void enabled(bool value) = 0;
     virtual bool enabled() const = 0;
@@ -32,7 +32,7 @@ class DataLinkLayer
   protected:
     void frameRecieved(CemiFrame& frame);
     void dataConReceived(CemiFrame& frame, bool success);
-    bool sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAddr, AddressType addrType, FrameFormat format, Priority priority, SystemBroadcast systemBroadcast);
+    bool sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAddr, AddressType addrType, FrameFormat format, Priority priority, SystemBroadcast broadcastType);
     virtual bool sendFrame(CemiFrame& frame) = 0;
     uint8_t* frameData(CemiFrame& frame);
     DeviceObject& _deviceObject;

@@ -243,29 +243,27 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
 void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                                    uint8_t propertyId, uint8_t* data, uint8_t length)
 {
-    uint8_t returnCode = 0xFF;
     uint8_t resultLength = 0;
     uint8_t resultData[32];
 
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
-        returnCode = obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+        obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
 
-    _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, returnCode, resultData, resultLength);
+    _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, resultData, resultLength);
 }
 
 void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                                  uint8_t propertyId, uint8_t* data, uint8_t length)
 {
-    uint8_t returnCode = 0xFF;
     uint8_t resultLength = 0;
     uint8_t resultData[32];
 
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
-        returnCode = obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+        obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
 
-    _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, returnCode, resultData, resultLength);
+    _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, resultData, resultLength);
 }
 
 void BauSystemB::individualAddressReadIndication(HopCountType hopType)

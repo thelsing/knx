@@ -21,17 +21,14 @@ class NetworkLayer
     void dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority,
                      uint16_t source, NPDU& npdu, bool status);
     void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                             Priority priority, uint16_t source);
-    void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status);
-    void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                                   Priority priority, uint16_t source);
-    void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status);
+                             Priority priority, uint16_t source, SystemBroadcast broadcastType);
+    void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status,
+                          SystemBroadcast broadcastType);
 
     // from transport layer
     void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu);
     void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu);
-    void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu);
-    void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu);
+    void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, SystemBroadcast broadcastType);
 
   private:
     void sendDataRequest(TPDU& tpdu, HopCountType hopType, AckType ack, uint16_t destination, Priority priority, AddressType addrType);

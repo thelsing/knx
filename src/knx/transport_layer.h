@@ -24,10 +24,8 @@ public:
     void dataIndividualConfirm(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu, bool status);
     void dataGroupIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
     void dataGroupConfirm(AckType ack, uint16_t source, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu, bool status);
-    void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
-    void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, bool status);
-    void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
-    void dataSystemBroadcastConfirm(AckType ack, HopCountType hopType, TPDU& tpdu, Priority priority, bool status);
+    void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu, SystemBroadcast broadcastType);
+    void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, bool status, SystemBroadcast broadcastType);
 #pragma endregion
     
 #pragma region from application layer
@@ -48,8 +46,7 @@ public:
      * @param ack Did we want a DataLinkLayer acknowledgement? See ::AckType.
      */
     void dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
-    void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu);
-    void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu);
+    void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, SystemBroadcast broadcastType);
     void dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu);
     
     void connectRequest(uint16_t destination, Priority priority);

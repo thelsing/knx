@@ -20,6 +20,9 @@ Bau27B0::Bau27B0(Platform& platform)
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
 #endif
+#ifdef USE_DATASECURE
+    _memory.addSaveRestore(&_secIfObj);
+#endif
 
     // Set Mask Version in Device Object depending on the BAU
     _deviceObj.maskVersion(0x27B0);
@@ -41,7 +44,12 @@ Bau27B0::Bau27B0(Platform& platform)
     prop->write(4, OT_GRP_OBJ_TABLE);
     prop->write(5, OT_APPLICATION_PROG);
     prop->write(6, OT_RF_MEDIUM);
-#ifdef USE_CEMI_SERVER
+#if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
+    prop->write(7, OT_SECURITY);
+    prop->write(8, OT_CEMI_SERVER);
+#elif defined(USE_DATASECURE)
+    prop->write(7, OT_SECURITY);
+#elif defined(USE_CEMI_SERVER)
     prop->write(7, OT_CEMI_SERVER);
 #endif
 }
@@ -65,10 +73,18 @@ InterfaceObject* Bau27B0::getInterfaceObject(uint8_t idx)
             return nullptr;
         case 6:
             return &_rfMediumObj;
-#ifdef USE_CEMI_SERVER
+#if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
+        case 7:
+            return &_secIfObj;
+        case 8:
+            return &_cemiServerObject;
+#elif defined(USE_CEMI_SERVER)
         case 7:
             return &_cemiServerObject;
-#endif            
+#elif defined(USE_DATASECURE)
+        case 7:
+            return &_secIfObj;
+#endif
         default:
             return nullptr;
     }
@@ -94,6 +110,10 @@ InterfaceObject* Bau27B0::getInterfaceObject(ObjectType objectType, uint8_t obje
             return &_appProgram;
         case OT_RF_MEDIUM:
             return &_rfMediumObj;
+#ifdef USE_DATASECURE
+        case OT_SECURITY:
+            return &_secIfObj;
+#endif
 #ifdef USE_CEMI_SERVER
         case OT_CEMI_SERVER:
             return &_cemiServerObject;

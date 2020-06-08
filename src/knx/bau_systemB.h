@@ -6,6 +6,7 @@
 #include "address_table_object.h"
 #include "association_table_object.h"
 #include "group_object_table_object.h"
+#include "security_interface_object.h"
 #include "application_program_object.h"
 #include "application_layer.h"
 #include "secure_application_layer.h"
@@ -98,6 +99,7 @@ class BauSystemB : protected BusAccessUnit
     Platform& _platform;
 #ifdef USE_DATASECURE
     SecureApplicationLayer _appLayer;
+    SecurityInterfaceObject _secIfObj;
 #else
     ApplicationLayer _appLayer;
 #endif

@@ -77,107 +77,157 @@ void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Prior
     }
 }
 
-void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
+void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, SystemBroadcast broadcastType)
 {
     uint8_t* data = apdu.data();
-    switch (apdu.type())
+
+    if (broadcastType == Broadcast)
     {
-        case IndividualAddressWrite:
+        // APCI on Broadcast
+        switch (apdu.type())
         {
-            uint16_t newAddress;
-            popWord(newAddress, data + 1);
-            _bau.individualAddressWriteIndication(hopType, newAddress);
-            break;
+            case IndividualAddressWrite:
+            {
+                uint16_t newAddress;
+                popWord(newAddress, data + 1);
+                _bau.individualAddressWriteIndication(hopType, newAddress);
+                break;
+            }
+            case IndividualAddressRead:
+                _bau.individualAddressReadIndication(hopType);
+                break;
+            case IndividualAddressResponse:
+                _bau.individualAddressReadAppLayerConfirm(hopType, apdu.frame().sourceAddress());
+                break;
+            case IndividualAddressSerialNumberRead:
+            {
+                uint8_t* knxSerialNumber = &data[1];
+                _bau.individualAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
+                break;
+            }
+            case IndividualAddressSerialNumberResponse:
+            {
+                uint16_t domainAddress;
+                popWord(domainAddress, data + 7);
+                _bau.individualAddressSerialNumberReadAppLayerConfirm(hopType, data + 1, apdu.frame().sourceAddress(),
+                    domainAddress);
+                break;
+            }
+            case IndividualAddressSerialNumberWrite:
+            {
+                uint8_t* knxSerialNumber = &data[1];
+                uint16_t newIndividualAddress;
+                popWord(newIndividualAddress, &data[7]);
+                _bau.individualAddressSerialNumberWriteIndication(priority, hopType, newIndividualAddress, knxSerialNumber);
+                break;
+            }
+#if !((MEDIUM_TYPE == 5) || (MEDIUM_TYPE == 0))
+            default:
+                print("Broadcast-indication: unhandled APDU-Type: ");
+                println(apdu.type());
+                break;
         }
-        case IndividualAddressRead:
-            _bau.individualAddressReadIndication(hopType);
-            break;
-        case IndividualAddressResponse:
-            _bau.individualAddressReadAppLayerConfirm(hopType, apdu.frame().sourceAddress());
-            break;
-        case IndividualAddressSerialNumberRead:
+    }
+    else if (broadcastType == SysBroadcast)
+    {
+        // APCI on SystemBroadcast
+        switch (apdu.type())
         {
-            uint8_t* knxSerialNumber = &data[1];
-            _bau.individualAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
-            break;
-        }
-        case IndividualAddressSerialNumberResponse:
-        {
-            uint16_t domainAddress;
-            popWord(domainAddress, data + 7);
-            _bau.individualAddressSerialNumberReadAppLayerConfirm(hopType, data + 1, apdu.frame().sourceAddress(),
-                domainAddress);
-            break;
-        }
-        case IndividualAddressSerialNumberWrite:
-        {
-            uint8_t* knxSerialNumber = &data[1];
-            uint16_t newIndividualAddress;
-            popWord(newIndividualAddress, &data[7]);
-            _bau.individualAddressSerialNumberWriteIndication(priority, hopType, newIndividualAddress, knxSerialNumber);
-            break;
-        }
-        default:
-#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-            dataSystemBroadcastIndication(hopType, priority, source, apdu);
-#else
-            print("Broadcast-indication: unhandled APDU-Type: ");
-            println(apdu.type());
 #endif
+            // TODO: testInfo could be of any length
+            case SystemNetworkParameterRead:
+            {
+                uint16_t objectType;
+                uint16_t propertyId;
+                uint8_t testInfo[2];
+                popWord(objectType, data + 1);
+                popWord(propertyId, data + 3);
+                popByte(testInfo[0], data + 4);
+                popByte(testInfo[1], data + 5);
+                propertyId = (propertyId >> 4) & 0x0FFF;;
+                testInfo[0] &= 0x0F;
+                _bau.systemNetworkParameterReadIndication(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo));
+                break;
+            }
+            case DomainAddressSerialNumberWrite:
+            {
+                const uint8_t* knxSerialNumber = &data[1];
+                const uint8_t* domainAddress = &data[7];
+                _bau.domainAddressSerialNumberWriteIndication(priority, hopType, domainAddress, knxSerialNumber);
+                break;
+            }
+            case DomainAddressSerialNumberRead:
+            {
+                const uint8_t* knxSerialNumber = &data[1];
+                _bau.domainAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
+                break;
+            }
+#if !((MEDIUM_TYPE == 5) || (MEDIUM_TYPE == 0))
+            default:
+                if (broadcastType == SysBroadcast)
+                {
+                    print("System");
+                }
+#endif
+                print("Broadcast-indication: unhandled APDU-Type: ");
+                println(apdu.type());
+                break;
+        }
     }
 }
 
-void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status)
+void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status, SystemBroadcast broadcastType)
 {
     uint8_t* data = apdu.data();
-    switch (apdu.type())
-    {
-        case IndividualAddressWrite:
-        {
-            uint16_t newAddress;
-            popWord(newAddress, data + 1);
-            _bau.individualAddressWriteLocalConfirm(ack, hopType, newAddress, status);
-            break;
-        }
-        case IndividualAddressRead:
-            _bau.individualAddressReadLocalConfirm(ack, hopType, status);
-            break;
-        case IndividualAddressResponse:
-            _bau.individualAddressReadResponseConfirm(ack, hopType, status);
-            break;
-        case IndividualAddressSerialNumberRead:
-            _bau.individualAddressSerialNumberReadLocalConfirm(ack, hopType, data + 1, status);
-            break;
-        case IndividualAddressSerialNumberResponse:
-        {
-            uint16_t domainAddress;
-            popWord(domainAddress, data + 7);
-            _bau.individualAddressSerialNumberReadResponseConfirm(ack, hopType, data + 1, domainAddress, status);
-            break;
-        }
-        case IndividualAddressSerialNumberWrite:
-        {
-            uint16_t newAddress;
-            popWord(newAddress, data + 7);
-            _bau.individualAddressSerialNumberWriteLocalConfirm(ack, hopType, data + 1, newAddress, status);
-            break;
-        }
-        default:
-#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-            dataSystemBroadcastConfirm(hopType, priority, apdu, status);
-#else
-            print("Broadcast-confirm: unhandled APDU-Type: ");
-            println(apdu.type());
-#endif
-    }
-}
 
-void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
-{
-    const uint8_t* data = apdu.data();
-    switch (apdu.type())
+    if (broadcastType == Broadcast)
     {
-        // TODO: testInfo could be of any length
+        // APCI on Broadcast
+        switch (apdu.type())
+        {
+            case IndividualAddressWrite:
+            {
+                uint16_t newAddress;
+                popWord(newAddress, data + 1);
+                _bau.individualAddressWriteLocalConfirm(ack, hopType, newAddress, status);
+                break;
+            }
+            case IndividualAddressRead:
+                _bau.individualAddressReadLocalConfirm(ack, hopType, status);
+                break;
+            case IndividualAddressResponse:
+                _bau.individualAddressReadResponseConfirm(ack, hopType, status);
+                break;
+            case IndividualAddressSerialNumberRead:
+                _bau.individualAddressSerialNumberReadLocalConfirm(ack, hopType, data + 1, status);
+                break;
+            case IndividualAddressSerialNumberResponse:
+            {
+                uint16_t domainAddress;
+                popWord(domainAddress, data + 7);
+                _bau.individualAddressSerialNumberReadResponseConfirm(ack, hopType, data + 1, domainAddress, status);
+                break;
+            }
+            case IndividualAddressSerialNumberWrite:
+            {
+                uint16_t newAddress;
+                popWord(newAddress, data + 7);
+                _bau.individualAddressSerialNumberWriteLocalConfirm(ack, hopType, data + 1, newAddress, status);
+                break;
+            }
+#if !((MEDIUM_TYPE == 5) || (MEDIUM_TYPE == 0))
+            default:
+                print("Broadcast-confirm: unhandled APDU-Type: ");
+                println(apdu.type());
+                break;
+        }
+    }
+    else if (broadcastType == SysBroadcast)
+    {
+        // APCI on SystemBroadcast
+        switch (apdu.type())
+        {
+#endif
         case SystemNetworkParameterRead:
         {
             uint16_t objectType;
@@ -189,79 +239,33 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
             popByte(testInfo[1], data + 5);
             propertyId = (propertyId >> 4) & 0x0FFF;;
             testInfo[0] &= 0x0F;
-            _bau.systemNetworkParameterReadIndication(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo));
+            //TODO: _bau.systemNetworkParameterReadLocalConfirm(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo), status);
             break;
         }
         case DomainAddressSerialNumberWrite:
         {
             const uint8_t* knxSerialNumber = &data[1];
             const uint8_t* domainAddress = &data[7];
-            _bau.domainAddressSerialNumberWriteIndication(priority, hopType, domainAddress, knxSerialNumber);
+            //TODO: _bau.domainAddressSerialNumberWriteLocalConfirm(priority, hopType, domainAddress, knxSerialNumber, status);
             break;
         }
         case DomainAddressSerialNumberRead:
         {
             const uint8_t* knxSerialNumber = &data[1];
-            _bau.domainAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
+            //TODO: _bau.domainAddressSerialNumberReadLocalConfirm(priority, hopType, knxSerialNumber, status);
             break;
         }
         default:
-#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-        // For closed media
-        print("Broadcast-indication: unhandled APDU-Type: ");
-        println(apdu.type());
-#else
-        // For open media (e.g. PL, RF)
-        print("SystemBroadcast-indication: unhandled APDU-Type: ");
-        println(apdu.type());
+#if !((MEDIUM_TYPE == 5) || (MEDIUM_TYPE == 0))
+                if (broadcastType == SysBroadcast)
+                {
+                    print("System");
+                }
 #endif
+            print("Broadcast-confirm: unhandled APDU-Type: ");
+            println(apdu.type());
             break;
-    }
-}
-
-void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
-{
-    const uint8_t* data = apdu.data();
-    switch (apdu.type())
-    {
-    case SystemNetworkParameterRead:
-    {
-        uint16_t objectType;
-        uint16_t propertyId;
-        uint8_t testInfo[2];
-        popWord(objectType, data + 1);
-        popWord(propertyId, data + 3);
-        popByte(testInfo[0], data + 4);
-        popByte(testInfo[1], data + 5);
-        propertyId = (propertyId >> 4) & 0x0FFF;;
-        testInfo[0] &= 0x0F;
-        //TODO: _bau.systemNetworkParameterReadLocalConfirm(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo), status);
-        break;
-    }
-    case DomainAddressSerialNumberWrite:
-    {
-        const uint8_t* knxSerialNumber = &data[1];
-        const uint8_t* domainAddress = &data[7];
-        //TODO: _bau.domainAddressSerialNumberWriteLocalConfirm(priority, hopType, domainAddress, knxSerialNumber, status);
-        break;
-    }
-    case DomainAddressSerialNumberRead:
-    {
-        const uint8_t* knxSerialNumber = &data[1];
-        //TODO: _bau.domainAddressSerialNumberReadLocalConfirm(priority, hopType, knxSerialNumber, status);
-        break;
-    }
-    default:
-#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-        // For closed media
-        print("Broadcast-confirm: unhandled APDU-Type: ");
-        println(apdu.type());
-#else
-        // For open media (e.g. PL, RF)
-        print("SystemBroadcast-confirm: unhandled APDU-Type: ");
-        println(apdu.type());
-#endif
-            break;
+        }
     }
 }
 
@@ -553,7 +557,7 @@ void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority,
 }
 
 void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
-                                                     uint8_t objectIndex, uint8_t propertyId, uint8_t returnCode, uint8_t* resultData, uint8_t resultLength)
+                                                     uint8_t objectIndex, uint8_t propertyId, uint8_t* resultData, uint8_t resultLength)
 {
     CemiFrame frame(3 + resultLength + 1);
     APDU& apdu = frame.apdu();
@@ -562,9 +566,8 @@ void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority prior
 
     data[0] = objectIndex;
     data[1] = propertyId;
-    data[2] = returnCode;
     if (resultLength > 0)
-        memcpy(&data[3], resultData, resultLength);
+        memcpy(&data[2], resultData, resultLength);
 
     if (asap == _connectedTsap)
         dataConnectedRequest(asap, priority, apdu);
@@ -1011,11 +1014,11 @@ void ApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Prior
 }
 void ApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
-    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu, Broadcast);
 }
 void ApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
-    _transportLayer->dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu, SysBroadcast);
 }
 void ApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
 {

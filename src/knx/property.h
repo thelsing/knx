@@ -251,8 +251,8 @@ class Property : public SaveRestore
     uint8_t ElementSize() const;
     virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) const = 0;
     virtual uint8_t write(uint16_t start, uint8_t count, const uint8_t* data) = 0;
-    virtual uint8_t command(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
-    virtual uint8_t state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+    virtual void command(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+    virtual void state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
     uint8_t read(uint8_t& value) const;
     uint8_t read(uint16_t& value) const;
     uint8_t read(uint32_t& value) const;

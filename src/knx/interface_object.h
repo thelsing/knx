@@ -114,7 +114,7 @@ class InterfaceObject : public SaveRestore
      *
      * @param[out] resultData The result data for the function
      */
-    virtual uint8_t command(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t &resultLength);
+    virtual void command(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t &resultLength);
     /**
      * Get state of a function property of the interface object. Property type must be PDT_FUNCTION
      *
@@ -128,7 +128,7 @@ class InterfaceObject : public SaveRestore
      *
      * @param[out] resultData The result data for the function
      */
-    virtual uint8_t state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t resultLength);
+    virtual void state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t resultLength);
     /**
      * Read the Description of a property of the interface object. The output parameters are only valid if nuberOfElements is not zero.
      * 

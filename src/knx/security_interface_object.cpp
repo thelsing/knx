@@ -31,28 +31,24 @@ SecurityInterfaceObject::SecurityInterfaceObject()
             }),
         new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_MODE, ReadLv3 | WriteLv0,
             // Command Callback of PID_SECURITY_MODE
-            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> uint8_t {
+            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 // TODO
-                return 0;
             },
             // State Callback of PID_SECURITY_MODE
-            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> uint8_t {
+            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 // TODO
-                return 0;
             }),
         new DataProperty( PID_P2P_KEY_TABLE, true, PDT_GENERIC_20, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
         new DataProperty( PID_GRP_KEY_TABLE, true, PDT_GENERIC_18, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
         new DataProperty( PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE, true, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
         new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_FAILURES_LOG, ReadLv3 | WriteLv0,
             // Command Callback of PID_SECURITY_FAILURES_LOG
-            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> uint8_t {
+            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 // TODO
-                return 0;
             },
             // State Callback of PID_SECURITY_FAILURES_LOG
-            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> uint8_t {
+            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 // TODO
-                return 0;
             }),
         new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value (default is FDSK)
         new DataProperty( PID_SECURITY_REPORT, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
