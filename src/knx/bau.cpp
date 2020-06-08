@@ -256,6 +256,20 @@ void BusAccessUnit::domainAddressSerialNumberReadIndication(Priority priority, H
 {
 }
 
+void BusAccessUnit::systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, uint16_t objectType,
+                                                         uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status)
+{
+}
+
+void BusAccessUnit::domainAddressSerialNumberWriteLocalConfirm(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                                             const uint8_t* knxSerialNumber, bool status)
+{
+}
+
+void BusAccessUnit::domainAddressSerialNumberReadLocalConfirm(Priority priority, HopCountType hopType, const uint8_t* knxSerialNumber, bool status)
+{
+}
+
 void BusAccessUnit::propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
                                       uint8_t& numberOfElements, uint16_t startIndex,
                                       uint8_t** data, uint32_t& length)

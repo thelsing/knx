@@ -150,4 +150,14 @@ void Bau27B0::individualAddressSerialNumberReadIndication(Priority priority, Hop
         _appLayer.IndividualAddressSerialNumberReadResponse(priority, hopType, _rfMediumObj.rfDomainAddress(), knxSerialNumber);
 }
 
+void Bau27B0::domainAddressSerialNumberWriteLocalConfirm(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                                         const uint8_t* knxSerialNumber, bool status)
+{
+}
+
+void Bau27B0::domainAddressSerialNumberReadLocalConfirm(Priority priority, HopCountType hopType, const uint8_t* knxSerialNumber, bool status)
+{
+}
+
+
 #endif // #ifdef USE_RF

@@ -239,20 +239,20 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
             popByte(testInfo[1], data + 5);
             propertyId = (propertyId >> 4) & 0x0FFF;;
             testInfo[0] &= 0x0F;
-            //TODO: _bau.systemNetworkParameterReadLocalConfirm(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo), status);
+            _bau.systemNetworkParameterReadLocalConfirm(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo), status);
             break;
         }
         case DomainAddressSerialNumberWrite:
         {
             const uint8_t* knxSerialNumber = &data[1];
             const uint8_t* domainAddress = &data[7];
-            //TODO: _bau.domainAddressSerialNumberWriteLocalConfirm(priority, hopType, domainAddress, knxSerialNumber, status);
+            _bau.domainAddressSerialNumberWriteLocalConfirm(priority, hopType, domainAddress, knxSerialNumber, status);
             break;
         }
         case DomainAddressSerialNumberRead:
         {
             const uint8_t* knxSerialNumber = &data[1];
-            //TODO: _bau.domainAddressSerialNumberReadLocalConfirm(priority, hopType, knxSerialNumber, status);
+            _bau.domainAddressSerialNumberReadLocalConfirm(priority, hopType, knxSerialNumber, status);
             break;
         }
         default:
