@@ -41,11 +41,16 @@ void DataLinkLayer::dataRequest(AckType ack, AddressType addrType, uint16_t dest
     sendTelegram(npdu, ack, destinationAddr, addrType, format, priority, Broadcast);
 }
 
-void DataLinkLayer::systemBroadcastRequest(AckType ack, FrameFormat format, Priority priority, NPDU& npdu)
+void DataLinkLayer::broadcastRequest(AckType ack, FrameFormat format, Priority priority, NPDU& npdu, SystemBroadcast broadcastType)
 {
     // System Broadcast requests will always be transmitted as broadcast with KNX serial number for open media (e.g. RF medium) 
     // See 3.2.5 p.22
-    sendTelegram(npdu, ack, 0, GroupAddress, format, priority, SysBroadcast);
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
+    (void)broadcastType; // not used on TP/IP, always normal broadcast
+    sendTelegram(npdu, ack, 0, GroupAddress, format, priority, Broadcast);
+#else
+    sendTelegram(npdu, ack, 0, GroupAddress, format, priority, broadcastType);
+#endif
 }
 
 void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
@@ -60,7 +65,7 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
     FrameFormat type = frame.frameType();
     Priority priority = frame.priority();
     NPDU& npdu = frame.npdu();
-    SystemBroadcast systemBroadcast = frame.systemBroadcast();
+    SystemBroadcast broadcastType = frame.systemBroadcast();
 
 #ifdef USE_CEMI_SERVER
     // if the confirmation was caused by a tunnel request then
@@ -73,10 +78,13 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
 #endif    
 
     if (addrType == GroupAddress && destination == 0)
-            if (systemBroadcast == SysBroadcast)
-                _networkLayer.systemBroadcastConfirm(ack, type, priority, source, npdu, success);
-            else
-                _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success);                    
+    {
+        _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success, broadcastType);
+    }
+    else if (addrType == InduvidualAddress && destination == 0)
+    {
+        _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success, broadcastType);
+    }
     else
         _networkLayer.dataConfirm(ack, addrType, destination, type, priority, source, npdu, success);
 
@@ -93,7 +101,7 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     Priority priority = frame.priority();
     NPDU& npdu = frame.npdu();
     uint16_t ownAddr = _deviceObject.induvidualAddress();
-    SystemBroadcast systemBroadcast = frame.systemBroadcast();
+    SystemBroadcast broadcastType = frame.systemBroadcast();
 
 #ifdef USE_CEMI_SERVER
     // Do not send our own message back to the tunnel
@@ -108,10 +116,11 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
 
     if (addrType == GroupAddress && destination == 0)
     {
-        if (systemBroadcast == SysBroadcast)
-            _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
-        else 
-            _networkLayer.broadcastIndication(ack, type, npdu, priority, source);
+        _networkLayer.broadcastIndication(ack, type, npdu, priority, source, broadcastType);
+    }
+    else if (addrType == InduvidualAddress && destination == 0)
+    {
+        _networkLayer.broadcastIndication(ack, type, npdu, priority, source, broadcastType);
     }
     else
     {
@@ -131,7 +140,7 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     }
 }
 
-bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationAddr, AddressType addrType, FrameFormat format, Priority priority, SystemBroadcast systemBroadcast)
+bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationAddr, AddressType addrType, FrameFormat format, Priority priority, SystemBroadcast broadcastType)
 {
     CemiFrame& frame = npdu.frame();
     frame.messageCode(L_data_ind);
@@ -140,7 +149,7 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
     frame.addressType(addrType);
     frame.priority(priority);
     frame.repetition(RepititionAllowed);
-    frame.systemBroadcast(systemBroadcast);
+    frame.systemBroadcast(broadcastType);
 
     if (npdu.octetCount() <= 15)
         frame.frameType(StandardFrame);

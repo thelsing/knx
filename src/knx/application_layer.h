@@ -65,10 +65,8 @@ class ApplicationLayer
      */
     void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
                           APDU& apdu, bool status);
-    void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status);
-    void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status);
+    void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, SystemBroadcast broadcastType);
+    void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status, SystemBroadcast broadcastType);
     void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
     void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
     void connectIndication(uint16_t tsap);
