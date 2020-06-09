@@ -31,6 +31,7 @@ add_executable(knx-linux
         ../../src/knx/cemi_server.h
         ../../src/knx/cemi_server_object.cpp
         ../../src/knx/cemi_server_object.h
+        ../../src/knx/config.h
         ../../src/knx/data_link_layer.cpp
 	../../src/knx/data_link_layer.h
 	../../src/knx/data_property.cpp 
@@ -67,6 +68,7 @@ add_executable(knx-linux
         ../../src/knx/knx_ip_supported_service_dib.h
         ../../src/knx/ip_host_protocol_address_information.cpp
         ../../src/knx/ip_host_protocol_address_information.h
+        ../../src/knx/knx_types.h
         ../../src/knx/knx_value.cpp
 	../../src/knx/knx_value.h
 	../../src/knx/memory.cpp 
@@ -85,6 +87,7 @@ add_executable(knx-linux
 	../../src/knx/rf_medium_object.h
 	../../src/knx/rf_physical_layer.cpp
 	../../src/knx/rf_physical_layer.h
+        ../../src/knx/save_restore.h
 	../../src/knx/table_object.cpp
 	../../src/knx/table_object.h
 	../../src/knx/tpdu.cpp 
