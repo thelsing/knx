@@ -73,6 +73,24 @@ void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopT
     ApplicationLayer::dataBroadcastConfirm(ack, hopType, priority, apdu, status);
 }
 
+void SecureApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
+{
+    if (apdu.type() == SecureService)
+    {
+        // Secure APDU is not allowed in SystemBroadcast
+        println("Secure APDU in SystemBroadcast not allowed!");
+    }
+    else
+    {
+        ApplicationLayer::dataSystemBroadcastIndication(hopType, priority, source, apdu);
+    }
+}
+
+void SecureApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
+{
+    ApplicationLayer::dataSystemBroadcastConfirm(hopType, priority, apdu, status);
+}
+
 void SecureApplicationLayer::dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
     if (apdu.type() == SecureService)
