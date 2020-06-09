@@ -201,7 +201,7 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
             print("SystemBroadcast-indication: unhandled APDU-Type: ");
             println(apdu.type());
             break;
-        }
+    }
 }
 
 void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
@@ -228,20 +228,20 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
         {
             const uint8_t* knxSerialNumber = &data[1];
             const uint8_t* domainAddress = &data[7];
-            _bau.domainAddressSerialNumberWriteIndication(priority, hopType, domainAddress, knxSerialNumber);
+            _bau.domainAddressSerialNumberWriteLocalConfirm(priority, hopType, domainAddress, knxSerialNumber, status);
             break;
         }
         case DomainAddressSerialNumberRead:
         {
             const uint8_t* knxSerialNumber = &data[1];
-            _bau.domainAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
+            _bau.domainAddressSerialNumberReadLocalConfirm(priority, hopType, knxSerialNumber, status);
             break;
         }
         default:
             print("SystemBroadcast-confirm: unhandled APDU-Type: ");
             println(apdu.type());
             break;
-        }
+    }
 }
 
 void ApplicationLayer::dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
