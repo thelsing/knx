@@ -45,7 +45,6 @@ void NetworkLayer::dataIndication(AckType ack, AddressType addrType, uint16_t de
     }
     // destination == 0
     _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
-
 }
 
 void NetworkLayer::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)

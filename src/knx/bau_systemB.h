@@ -72,6 +72,8 @@ class BauSystemB : protected BusAccessUnit
                                    uint8_t* data, uint8_t dataLength) override;
     void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
                                               uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength) override;
+    void systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, uint16_t objectType,
+                                                uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status) override;
     void connectConfirm(uint16_t tsap) override;
 
     virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;

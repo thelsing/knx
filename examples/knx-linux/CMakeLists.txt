@@ -28,8 +28,11 @@ add_executable(knx-linux
 	../../src/knx/cemi_frame.cpp
 	../../src/knx/cemi_frame.h
 	../../src/knx/cemi_server.cpp 
-	../../src/knx/cemi_server_object.cpp 
-	../../src/knx/data_link_layer.cpp 
+        ../../src/knx/cemi_server.h
+        ../../src/knx/cemi_server_object.cpp
+        ../../src/knx/cemi_server_object.h
+        ../../src/knx/config.h
+        ../../src/knx/data_link_layer.cpp
 	../../src/knx/data_link_layer.h
 	../../src/knx/data_property.cpp 
 	../../src/knx/data_property.h
@@ -50,14 +53,23 @@ add_executable(knx-linux
 	../../src/knx/ip_parameter_object.cpp 
 	../../src/knx/ip_parameter_object.h
 	../../src/knx/knx_ip_device_information_dib.cpp
-	../../src/knx/knx_ip_dib.cpp
-	../../src/knx/knx_ip_frame.cpp
-	../../src/knx/knx_ip_routing_indication.cpp
-	../../src/knx/knx_ip_search_request.cpp
-	../../src/knx/knx_ip_search_response.cpp
-	../../src/knx/knx_ip_supported_service_dib.cpp
-	../../src/knx/ip_host_protocol_address_information.cpp
-	../../src/knx/knx_value.cpp
+        ../../src/knx/knx_ip_device_information_dib.h
+        ../../src/knx/knx_ip_dib.cpp
+        ../../src/knx/knx_ip_dib.h
+        ../../src/knx/knx_ip_frame.cpp
+        ../../src/knx/knx_ip_frame.h
+        ../../src/knx/knx_ip_routing_indication.cpp
+        ../../src/knx/knx_ip_routing_indication.h
+        ../../src/knx/knx_ip_search_request.cpp
+        ../../src/knx/knx_ip_search_request.h
+        ../../src/knx/knx_ip_search_response.cpp
+        ../../src/knx/knx_ip_search_response.h
+        ../../src/knx/knx_ip_supported_service_dib.cpp
+        ../../src/knx/knx_ip_supported_service_dib.h
+        ../../src/knx/ip_host_protocol_address_information.cpp
+        ../../src/knx/ip_host_protocol_address_information.h
+        ../../src/knx/knx_types.h
+        ../../src/knx/knx_value.cpp
 	../../src/knx/knx_value.h
 	../../src/knx/memory.cpp 
 	../../src/knx/memory.h
@@ -65,7 +77,7 @@ add_executable(knx-linux
 	../../src/knx/network_layer.h
 	../../src/knx/npdu.cpp 
 	../../src/knx/npdu.h
-    ../../src/knx/platform.cpp
+        ../../src/knx/platform.cpp
 	../../src/knx/platform.h
 	../../src/knx/property.cpp
 	../../src/knx/property.h 
@@ -75,6 +87,7 @@ add_executable(knx-linux
 	../../src/knx/rf_medium_object.h
 	../../src/knx/rf_physical_layer.cpp
 	../../src/knx/rf_physical_layer.h
+        ../../src/knx/save_restore.h
 	../../src/knx/table_object.cpp
 	../../src/knx/table_object.h
 	../../src/knx/tpdu.cpp 
@@ -84,7 +97,8 @@ add_executable(knx-linux
 	../../src/knx/transport_layer.cpp 
 	../../src/knx/transport_layer.h
 	../../src/knx/usb_tunnel_interface.cpp
-	../../src/knx_facade.cpp 
+        ../../src/knx/usb_tunnel_interface.h
+        ../../src/knx_facade.cpp
 	../../src/knx_facade.h
 	../../src/linux_platform.cpp 
 	../../src/linux_platform.h
