@@ -34,5 +34,8 @@ class Bau27B0 : public BauSystemB
     void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint16_t newIndividualAddress,
                                                       uint8_t* knxSerialNumber) override;
     void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber) override;
+    void domainAddressSerialNumberWriteLocalConfirm(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                                    const uint8_t* knxSerialNumber, bool status) override;
+    void domainAddressSerialNumberReadLocalConfirm(Priority priority, HopCountType hopType, const uint8_t* knxSerialNumber, bool status) override;
 };
 #endif

@@ -55,7 +55,7 @@ void SecureApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType,
     }
 }
 
-void SecureApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, SystemBroadcast broadcastType)
+void SecureApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
 {
     if (apdu.type() == SecureService)
     {
@@ -64,13 +64,13 @@ void SecureApplicationLayer::dataBroadcastIndication(HopCountType hopType, Prior
     }
     else
     {
-        ApplicationLayer::dataBroadcastIndication(hopType, priority, source, apdu, broadcastType);
+        ApplicationLayer::dataBroadcastIndication(hopType, priority, source, apdu);
     }
 }
 
-void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status, SystemBroadcast broadcastType)
+void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status)
 {
-    ApplicationLayer::dataBroadcastConfirm(ack, hopType, priority, apdu, status, broadcastType);
+    ApplicationLayer::dataBroadcastConfirm(ack, hopType, priority, apdu, status);
 }
 
 void SecureApplicationLayer::dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
@@ -375,7 +375,7 @@ void SecureApplicationLayer::block0(uint8_t* buffer, uint8_t* seqNum, uint16_t i
     pBuf = pushByte(payloadLength, pBuf); // Payload length
 }
 
-void SecureApplicationLayer::blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr)
+void SecureApplicationLayer::blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr)
 {
     uint8_t* pBuf = buffer;
     pBuf = pushByteArray(seqNum, 6, pBuf);
@@ -442,7 +442,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
     // Clear block counter0 buffer
     uint8_t ctr0[16] = {0x00};
     // Create first block for block counter 0
-    blockCtr0(ctr0, seqNum, srcAddr, dstAddr, false);
+    blockCtr0(ctr0, seqNum, srcAddr, dstAddr);
 
     uint32_t mac;
     pBuf = popInt(mac, pBuf);
@@ -547,7 +547,7 @@ void SecureApplicationLayer::encrypt(uint8_t* buffer, uint16_t srcAddr, uint16_t
     // Clear block counter0 buffer
     uint8_t ctr0[16] = {0x00};
     // Create first block for block counter 0
-    blockCtr0(ctr0, seqNum, srcAddr, dstAddr, false);
+    blockCtr0(ctr0, seqNum, srcAddr, dstAddr);
 
     if (authOnly)
     {

@@ -76,7 +76,7 @@ const uint8_t* SecurityInterfaceObject::restore(const uint8_t* buffer)
 uint16_t SecurityInterfaceObject::saveSize()
 {
     //return 2 + InterfaceObject::saveSize();
-    return 0;
+    return InterfaceObject::saveSize();
 }
 
 #endif

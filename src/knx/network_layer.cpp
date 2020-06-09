@@ -43,10 +43,8 @@ void NetworkLayer::dataIndication(AckType ack, AddressType addrType, uint16_t de
         _transportLayer.dataGroupIndication(destination, hopType, priority, source, npdu.tpdu());
         return;
     }
-
-    // assert: programming error
-    // should never be reached!
-    // destination == 0 && (addrType == InduvidualAddress || ddrType == GroupAddress)
+    // destination == 0
+    _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
 void NetworkLayer::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
@@ -63,22 +61,32 @@ void NetworkLayer::dataConfirm(AckType ack, AddressType addressType, uint16_t de
         _transportLayer.dataGroupConfirm(ack, source, destination, hopType, priority, npdu.tpdu(), status);
         return;
     }
-
-    // assert: programming error
-    // should never be reached!
-    // destination == 0 && (addrType == InduvidualAddress || ddrType == GroupAddress)
+    // destination == 0
+    _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
 }
 
-void NetworkLayer::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, SystemBroadcast broadcastType)
+void NetworkLayer::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
-    _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu(), broadcastType);
+    _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
-void NetworkLayer::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, SystemBroadcast broadcastType)
+void NetworkLayer::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
-    _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status, broadcastType);
+    _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
+}
+
+void NetworkLayer::systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
+{
+    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+    _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
+}
+
+void NetworkLayer::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
+{
+    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+    _transportLayer.dataSystemBroadcastConfirm(ack, hopType, npdu.tpdu(), priority, status);
 }
 
 void NetworkLayer::dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -110,7 +118,12 @@ void NetworkLayer::dataGroupRequest(AckType ack, uint16_t destination, HopCountT
     sendDataRequest(tpdu, hopType, ack, destination, priority, GroupAddress);
 }
 
-void NetworkLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, SystemBroadcast broadcastType)
+void NetworkLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
+{
+    sendDataRequest(tpdu, hopType, ack, 0, priority, GroupAddress);
+}
+
+void NetworkLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
 {
     NPDU& npdu = tpdu.frame().npdu();
 
@@ -121,5 +134,5 @@ void NetworkLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Prior
 
     FrameFormat frameFormat = npdu.octetCount() > 15 ? ExtendedFrame : StandardFrame;
 
-    _dataLinkLayer->broadcastRequest(ack, frameFormat, priority, npdu, broadcastType);
+    _dataLinkLayer->systemBroadcastRequest(ack, frameFormat, priority, npdu);
 }

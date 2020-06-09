@@ -373,14 +373,24 @@ void TransportLayer::dataGroupConfirm(AckType ack, uint16_t source, uint16_t des
     _applicationLayer.dataGroupConfirm(ack, hopType, priority, destination, tpdu.apdu(), status);
 }
 
-void TransportLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu, SystemBroadcast broadcastType)
+void TransportLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
 {
-    _applicationLayer.dataBroadcastIndication(hopType, priority, source, tpdu.apdu(), broadcastType);
+    _applicationLayer.dataBroadcastIndication(hopType, priority, source, tpdu.apdu());
 }
 
-void TransportLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, bool status, SystemBroadcast broadcastType)
+void TransportLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, bool status)
 {
-    _applicationLayer.dataBroadcastConfirm(ack, hopType, priority, tpdu.apdu(), status, broadcastType);
+    _applicationLayer.dataBroadcastConfirm(ack, hopType, priority, tpdu.apdu(), status);
+}
+
+void TransportLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
+{
+    _applicationLayer.dataSystemBroadcastIndication(hopType, priority, source, tpdu.apdu());
+}
+
+void TransportLayer::dataSystemBroadcastConfirm(AckType ack, HopCountType hopType, TPDU& tpdu, Priority priority, bool status)
+{
+    _applicationLayer.dataSystemBroadcastConfirm(hopType, priority, tpdu.apdu(), status);
 }
 
 void TransportLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
@@ -390,10 +400,16 @@ void TransportLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priorit
     _networkLayer->dataGroupRequest(ack, groupAdress, hopType, priority, tpdu);
 }
 
-void TransportLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, SystemBroadcast broadcastType)
+void TransportLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
     TPDU& tpdu = apdu.frame().tpdu();
-    _networkLayer->dataBroadcastRequest(ack, hopType, priority, tpdu, broadcastType);
+    _networkLayer->dataBroadcastRequest(ack, hopType, priority, tpdu);
+}
+
+void TransportLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
+{
+    TPDU& tpdu = apdu.frame().tpdu();
+    return _networkLayer->dataSystemBroadcastRequest(ack, hopType, priority, tpdu);
 }
 
 void TransportLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
@@ -514,7 +530,12 @@ void TransportLayer::ackTimeoutIndication()
     }
 }
 
-
+uint8_t TransportLayer::getTPCI(uint16_t dstAddress)
+{
+    // Return seqNum that would be used for sending next frame
+    // together with the TPDU type.
+    return ((_seqNoSend & 0xF) << 2) | ((dstAddress == _connectionAddress) ? 0x40 : 0);
+}
 
 void TransportLayer::loop()
 {
