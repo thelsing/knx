@@ -8,6 +8,9 @@
 #include "callback_property.h"
 #include "function_property.h"
 
+// Our FDSK
+uint8_t SecurityInterfaceObject::_fdsk[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+
 SecurityInterfaceObject::SecurityInterfaceObject()
 {
     Property* properties[] =
@@ -50,7 +53,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
             [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 // TODO
             }),
-        new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value (default is FDSK)
+        new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint8_t*) _fdsk ), // default is FDSK
         new DataProperty( PID_SECURITY_REPORT, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
         new DataProperty( PID_SECURITY_REPORT_CONTROL, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
         new DataProperty( PID_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value

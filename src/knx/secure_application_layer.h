@@ -5,6 +5,8 @@
 #include "knx_types.h"
 #include "apdu.h"
 
+class DeviceObject;
+class SecurityInterfaceObject;
 class AssociationTableObject;
 class BusAccessUnit;
 /**
@@ -22,7 +24,7 @@ class SecureApplicationLayer :  public ApplicationLayer
      * @param assocTable The AssociationTable is used to translate between asap (i.e. group objects) and group addresses.
      * @param bau methods are called here depending of the content of the APDU
      */
-    SecureApplicationLayer(AssociationTableObject& assocTable, BusAccessUnit& bau);
+    SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, AssociationTableObject& assocTable, BusAccessUnit& bau);
 
     // from transport layer
     virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
@@ -56,12 +58,32 @@ class SecureApplicationLayer :  public ApplicationLayer
     void block0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t extFrameFormat, uint8_t tpci, uint8_t apci, uint8_t payloadLength);
     void blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr);
 
+    const uint8_t *toolKey(uint16_t devAddr);
+    const uint8_t* securityKey(uint16_t addr, bool isGroupAddress);
+
+    uint16_t indAddressIndex(uint16_t indAddr);         // returns 1-based index of address in security IA table
+    uint16_t groupAddressIndex(uint16_t groupAddr);     // returns 1-based index of address in group address table
+    uint16_t groupObjectIndex(uint16_t groupAddrIndex); // returns 1-based index of object in association table
+    const uint8_t* p2pKey(uint16_t addressIndex);       // returns p2p key for IA index
+    const uint8_t* groupKey(uint16_t addressIndex);     // returns group key for group address index
+
+    uint8_t groupObjectSecurity(uint16_t groupObjectIndex);
+
+    uint64_t nextSequenceNumber(bool toolAccess);
+    void updateSequenceNumber(bool toolAccess, uint64_t seqNum);
+
     uint64_t lastValidSequenceNumber(bool toolAcces, uint16_t srcAddr);
+    void updateLastValidSequence(bool toolAccess, uint16_t remoteAddr, uint64_t seqNo);
 
-    bool decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength);
-    void encrypt(uint8_t* buffer, uint16_t srcAddr, uint16_t dstAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength);
+    void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint16_t remoteNextSeqNum);
+    void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seq, long challenge);
 
-    // Our FDSK
-    static uint8_t _key[];
+    bool decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength);
+    void encrypt(uint8_t* buffer, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength);
 
+    bool _syncReqBroadcast;
+    uint32_t _lastSyncRes;
+
+    SecurityInterfaceObject& _secIfObj;
+    DeviceObject& _deviceObj;
 };

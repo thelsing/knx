@@ -13,5 +13,8 @@ public:
   const uint8_t* restore(const uint8_t* buffer) override;
   uint16_t saveSize() override;
 
+private:
+  // Our FDSK
+  static uint8_t _fdsk[];
 };
 #endif

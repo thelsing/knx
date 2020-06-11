@@ -119,13 +119,14 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
         }
         default:
 #if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-        // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
-        dataSystemBroadcastIndication(hopType, priority, source, apdu);
+            // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
+            dataSystemBroadcastIndication(hopType, priority, source, apdu);
 #else
             print("Broadcast-indication: unhandled APDU-Type: ");
             println(apdu.type());
-            break;
+
 #endif
+            break;
     }
 }
 
@@ -166,13 +167,14 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
         }
         default:
 #if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-        // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
-        dataSystemBroadcastConfirm(hopType, priority, apdu, status);
+            // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
+            dataSystemBroadcastConfirm(hopType, priority, apdu, status);
 #else
             print("Broadcast-confirm: unhandled APDU-Type: ");
             println(apdu.type());
-            break;
+
 #endif
+            break;
     }
 }
 

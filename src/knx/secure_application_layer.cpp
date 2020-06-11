@@ -2,6 +2,8 @@
 #include "transport_layer.h"
 #include "cemi_frame.h"
 #include "association_table_object.h"
+#include "security_interface_object.h"
+#include "device_object.h"
 #include "apdu.h"
 #include "bau.h"
 #include "string.h"
@@ -10,17 +12,22 @@
 #include <stdio.h>
 
 const uint8_t SecureDataPdu = 0;
-const uint8_t SecureServiceRequest = 2;
-const uint8_t SecureServiceResponse = 3;
+const uint8_t SecureSyncRequest = 2;
+const uint8_t SecureSyncResponse = 3;
 
-uint8_t lastValidSequenceNumberTool = 0;
+uint64_t sequenceNumberToolAccess = 0;
+uint64_t sequenceNumber = 0;
 
-// Our FDSK
-uint8_t SecureApplicationLayer::_key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+uint64_t lastValidSequenceNumberTool = 0;
+uint64_t lastValidSequenceNumber = 0;
 
-SecureApplicationLayer::SecureApplicationLayer(AssociationTableObject& assocTable, BusAccessUnit& bau):
-    ApplicationLayer(assocTable, bau)
+
+SecureApplicationLayer::SecureApplicationLayer(DeviceObject &deviceObj, SecurityInterfaceObject &secIfObj, AssociationTableObject& assocTable, BusAccessUnit& bau):
+    ApplicationLayer(assocTable, bau),
+    _secIfObj(secIfObj),
+    _deviceObj(deviceObj)
 {
+
 }
 
 /* from transport layer */
@@ -150,6 +157,8 @@ void SecureApplicationLayer::dataConnectedIndication(Priority priority, uint16_t
         println("Secure APDU: ");
         apdu.printPDU();
 
+        // Somehow ugly that we need to know the size in advance here at this point
+        // Same length calculation is also in the decrypt() function
         uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
         CemiFrame plainFrame(plainApduLength);
 
@@ -158,19 +167,23 @@ void SecureApplicationLayer::dataConnectedIndication(Priority priority, uint16_t
         uint8_t tpci = apdu.frame().data()[TPDU_LPDU_DIFF]; // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI [fixed TPDU_LPDU_DIFF]
         print("Secure Debug: TPCI: ");
         println(tpci, HEX);
+        // Note:
+        // The TPCI is also included in the MAC calculation to provide authenticity for this field.
+        // However, a secure APDU (with a MAC) is only included in transport layer PDUs T_DATA_GROUP, T_DATA_TAG_GROUP, T_DATA_INDIVIDUAL, T_DATA_CONNECTED
+        // and not in T_CONNECT, T_DISCONNECT, T_ACK, T_NACK.
+        // This means the DATA/CONTROL flag is always 0(=DATA). The flag "NUMBERED" differentiates between T_DATA_INDIVIDUAL and T_DATA_CONNECTED.
+        // The seqNumber is only in T_DATA_CONNECTED and 0 in case of T_DATA_GROUP and T_DATA_GROUP (leaving out T_DATA_TAG_GROUP).
+        // Summary: effectively only the "NUMBERED" flag (bit6) and the SeqNumber (bit5-2) are used from transport layer.
+        //          In T_DATA_* services the bits1-0 of TPCI octet are used as bits9-8 for APCI type which is fixed to 0x03. SecureService APCI is 0x03F1.
 
         // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI (fixed APDU_LPDU_DIFF)
-        if (decrypt(plainFrame.data()+APDU_LPDU_DIFF, srcAddress, dstAddress, tpci, apdu.data(), apdu.length()))
+        if (decrypt(plainFrame.data()+APDU_LPDU_DIFF, srcAddress, dstAddress, false, tpci, apdu.data(), apdu.length()))
         {
             println("Plain APDU: ");
             plainFrame.apdu().printPDU();
 
             // Process decrypted inner APDU
             ApplicationLayer::dataConnectedIndication(priority, tsap, plainFrame.apdu());
-        }
-        else
-        {
-            println("Decryption failed!");
         }
     }
     else
@@ -211,106 +224,6 @@ void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priori
     // apdu must be valid until it was confirmed
     ApplicationLayer::dataConnectedRequest(tsap, priority, apdu);
 }
-
-/* encryption/decryption stuff */
-
-class TpTelegram
-{
-public:
-    TpTelegram()
-    {
-
-    }
-
-    ~TpTelegram()
-    {
-        if (_data)
-            delete[] _data;
-    }
-
-    void parseByteArray(uint8_t *buf)
-    {
-        _ctrlField = buf[0];
-        _ctrlFieldExt = buf[1];
-        _srcAddr = buf[2] << 8 | buf[3];
-        _dstAddr = buf[4] << 8 | buf[5];
-        _dataLen = buf[6];
-
-        // Copy starting from TPCI octet
-        _dataLen += 1;
-        _data = new uint8_t (_dataLen);
-        memcpy(_data, &buf[7], _dataLen);
-    }
-
-    uint16_t SrcAddr()
-    {
-        return _srcAddr;
-    }
-
-    uint16_t DstAddr()
-    {
-        return _dstAddr;
-    }
-
-    uint8_t Tpci()
-    {
-        uint8_t tpci;
-
-        tpci = (_data[0] & 0xFC) >> 2;
-
-        return tpci;
-    }
-
-    uint16_t Apci()
-    {
-        uint16_t apci;
-
-        if (_dataLen > 1)
-        {
-            apci = (_data[0] & 0x03) << 8 | _data[1];
-        }
-        else
-        {
-            apci = (_data[0] & 0x03);
-        }
-
-        return apci;
-    }
-
-    uint8_t* Apdu()
-    {
-        return _data;
-    }
-
-    uint16_t ApduLen()
-    {
-        return _dataLen;
-    }
-
-    uint8_t* Asdu()
-    {
-        return _data + 2;
-    }
-
-    uint16_t AsduLen()
-    {
-        return _dataLen - 2;
-    }
-
-    bool isSecureTelegram()
-    {
-        return Apci() == SecureService;
-    }
-
-private:
-    uint8_t _ctrlField;
-    uint8_t _ctrlFieldExt;
-    uint16_t _srcAddr;
-    uint16_t _dstAddr;
-    uint8_t _dataLen;
-    uint8_t* _data;
-
-};
 
 uint32_t SecureApplicationLayer::calcAuthOnlyMac(uint8_t* apdu, uint8_t apduLength, uint8_t* key, uint8_t* iv, uint8_t* ctr0)
 {
@@ -403,6 +316,69 @@ void SecureApplicationLayer::blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_
     pBuf = pushByte(0x01, pBuf);
 }
 
+const uint8_t* SecureApplicationLayer::toolKey(uint16_t devAddr)
+{
+    const uint8_t* toolKey = _secIfObj.propertyData(PID_TOOL_KEY);
+    return toolKey;
+}
+
+const uint8_t* SecureApplicationLayer::p2pKey(uint16_t addressIndex)
+{
+    // TODO
+    return _secIfObj.propertyData(PID_P2P_KEY_TABLE);
+}
+
+const uint8_t* SecureApplicationLayer::groupKey(uint16_t addressIndex)
+{
+    // TODO
+    return _secIfObj.propertyData(PID_GRP_KEY_TABLE);
+}
+
+uint16_t SecureApplicationLayer::groupAddressIndex(uint16_t groupAddr)
+{
+    // TODO
+    return 0;
+}
+
+uint16_t SecureApplicationLayer::indAddressIndex(uint16_t indAddr)
+{
+    // TODO
+    return 0;
+}
+
+const uint8_t* SecureApplicationLayer::securityKey(uint16_t addr, bool isGroupAddress)
+{
+    if (isGroupAddress)
+    {
+        uint16_t gaIndex = groupAddressIndex(addr);
+        if (gaIndex > 0)
+            return groupKey(gaIndex);
+    }
+    else
+    {
+        uint16_t iaIndex = indAddressIndex(addr);
+        if (iaIndex > 0)
+            return p2pKey(iaIndex);
+    }
+
+    return nullptr;
+}
+
+// returns next outgoing sequence number for secure communication
+uint64_t SecureApplicationLayer::nextSequenceNumber(bool toolAccess)
+{
+    return toolAccess ? sequenceNumberToolAccess : sequenceNumber;
+}
+
+// stores next outgoing sequence number for secure communication
+void SecureApplicationLayer::updateSequenceNumber(bool toolAccess, uint64_t seqNum)
+{
+    if (toolAccess)
+        sequenceNumberToolAccess = seqNum;
+    else
+        sequenceNumber = seqNum;
+}
+
 uint64_t SecureApplicationLayer::lastValidSequenceNumber(bool toolAcces, uint16_t srcAddr)
 {
     if (toolAcces)
@@ -414,7 +390,50 @@ uint64_t SecureApplicationLayer::lastValidSequenceNumber(bool toolAcces, uint16_
     return 0;
 }
 
-bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength)
+void SecureApplicationLayer::updateLastValidSequence(bool toolAccess, uint16_t remoteAddr, uint64_t seqNo)
+{
+    if (toolAccess)
+        // TODO
+        //lastValidSequenceToolAccess.put(remoteAddr, seqNo);
+        lastValidSequenceNumberTool = seqNo;
+    //else
+        // TODO
+        //lastValidSequence.put(remoteAddr, seqNo);
+}
+
+void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint16_t remoteNextSeqNum)
+{
+    uint64_t ourNextSeqNum = nextSequenceNumber(toolAccess);
+    // asdu = ByteBuffer.allocate(12).put(sixBytes(ourNextSeq)).put(sixBytes(remoteNextSeq));
+    // response = secure(SecureSyncResponse, address(), dst, asdu.array(), toolAccess, true).get();
+
+    _lastSyncRes = millis();
+
+    // Send encrypted SyncResponse message using T_DATA_INDIVIDUAL
+    //dataIndividualRequest(AckType::AckDontCare, NetworkLayerParameter, SystemPriority, dstAddr, apdu);
+}
+
+void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seqNum, long challenge)
+{
+    uint64_t nextRemoteSeqNum  = ((uint64_t)seqNum[0] << 40) | ((uint64_t)seqNum[1] << 32) | ((uint64_t)seqNum[2] << 24) |
+                                 ((uint64_t)seqNum[3] << 16) | ((uint64_t)seqNum[4] << 8) | (uint64_t)seqNum[5];
+
+    uint64_t nextSeqNum = 1 + lastValidSequenceNumber(toolAccess, srcAddr);
+
+    if (nextRemoteSeqNum > nextSeqNum)
+    {
+        updateLastValidSequence(toolAccess, srcAddr, nextRemoteSeqNum - 1);
+        nextSeqNum = nextRemoteSeqNum;
+    }
+
+    _syncReqBroadcast = (dstAddr == 0x0000) && dstAddrIsGroupAddr;
+
+    uint16_t toAddr = _syncReqBroadcast ? dstAddr : srcAddr;
+    bool toIsGroupAddress = _syncReqBroadcast;
+    sendSyncResponse(toAddr, toIsGroupAddress, toolAccess, nextSeqNum);
+}
+
+bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength)
 {
     uint8_t extendedFrameFormat = 0;
 
@@ -424,18 +443,27 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
     pBuf = popByte(scf, secureAsdu);
 
         bool toolAccess = ((scf & 0x80) == 0x80);
-        // bool systemBroadcast = ((scf & 0x08) == 0x08); // not used for decryption
+        bool systemBroadcast = ((scf & 0x08) == 0x08);
         uint8_t sai = (scf >> 4) & 0x07; // sai can only be 0x0 (CCM auth only) or 0x1 (CCM with auth+conf), other values are reserved
         bool authOnly = ( sai == 0);
         uint8_t service = (scf & 0x07); // only 0x0 (S-A_Data-PDU), 0x2 (S-A_Sync_Req-PDU) or 0x3 (S-A_Sync_Rsp-PDU) are valid values
 
+    bool syncReq = service == SecureSyncRequest;
+    bool syncRes = service == SecureSyncResponse;
+
+    uint8_t* key = dstAddrIsGroupAddr ? securityKey(dstAddr) : toolAccess ? toolKey(srcAddr == _deviceObj.induvidualAddress() ? dstAddr : srcAddr) : securityKey(srcAddr);
+
     uint8_t seqNum[6];
     pBuf = popByteArray(seqNum, 6, pBuf);
+    uint64_t receivedSeqNumber = ((uint64_t)seqNum[0] << 40) | ((uint64_t)seqNum[1] << 32) | ((uint64_t)seqNum[2] << 24) |
+                                 ((uint64_t)seqNum[3] << 16) | ((uint64_t)seqNum[4] << 8) | (uint64_t)seqNum[5];
+
+    // Provide array for KNX serial number if it is a SyncRequest
+    // DataService and SyncResponse do not use this variable.
+    uint8_t knxSerialNumber[6];
 
     if (service == SecureDataPdu)
     {
-        uint64_t receivedSeqNumber = ((uint64_t)seqNum[0] << 40) | ((uint64_t)seqNum[1] << 32) | ((uint64_t)seqNum[2] << 24) |
-                                     ((uint64_t)seqNum[3] << 16) | ((uint64_t)seqNum[4] << 8) | (uint64_t)seqNum[5];
         uint64_t expectedSeqNumber = lastValidSequenceNumber(toolAccess, srcAddr) + 1;
 
         if (receivedSeqNumber < expectedSeqNumber)
@@ -448,6 +476,38 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
             return false;
         }
     }
+    else if(syncReq)
+    {
+        pBuf = popByteArray(knxSerialNumber, 6, pBuf);
+
+        // ignore sync.reqs not addressed to us
+        if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
+        {
+            uint8_t emptySerialNumber[6] = {0};
+            if (systemBroadcast || dstAddr != _deviceObj.induvidualAddress() || !memcmp(knxSerialNumber, emptySerialNumber, 6))
+                return false;
+        }
+
+        // if responded to another request within the last 1 second, ignore
+        if ((millis() - _lastSyncRes) < 1000)
+        {
+            return false;
+        }
+    }
+    else if (syncRes)
+    {
+        // TODO
+        //final var request = pendingSyncRequests.get(src);
+        //if (request == null)
+        //    return null;
+
+        // in a sync.res, seq actually contains our challenge from sync.req xored with a random value
+        // extract the random value and store it in seq to use it for block0 and ctr0
+        //final var challengeXorRandom = BitSet.valueOf(seq);
+        //final var challenge = BitSet.valueOf(sixBytes((long) request[0]));
+        //challengeXorRandom.xor(challenge);
+        //seq = challengeXorRandom.toByteArray();
+    }
 
     uint16_t apduLength = secureAdsuLength - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
     pBuf = popByteArray(plainApdu, apduLength, pBuf);
@@ -455,7 +515,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
     // Clear IV buffer
     uint8_t iv[16] = {0x00};
     // Create first block B0 for AES CBC MAC calculation, used as IV later
-    block0(iv, seqNum, srcAddr, dstAddr, false, extendedFrameFormat, tpci | (SecureService >> 8), SecureService & 0x00FF, apduLength);
+    block0(iv, seqNum, srcAddr, dstAddr, dstAddrIsGroupAddr, extendedFrameFormat, tpci | (SecureService >> 8), SecureService & 0x00FF, apduLength);
 
     // Clear block counter0 buffer
     uint8_t ctr0[16] = {0x00};
@@ -481,6 +541,8 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
 
             return false;
         }
+
+        memcpy(plainApdu, secureAsdu, apduLength);
     }
     else
     {
@@ -507,7 +569,12 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
         popByteArray(plainApdu, apduLength, &buffer[4]); // apdu is now decrypted (overwritten)
 
         // Do calculations for Auth+Conf
-        uint8_t associatedData[1] = {scf};
+        uint8_t associatedData[syncReq ? 7 : 1];
+        associatedData[0] = scf;
+        if (syncReq)
+        {
+            memcpy(&associatedData[1], knxSerialNumber, 6);
+        }
         uint32_t calculatedMac = calcConfAuthMac(associatedData, sizeof(associatedData), plainApdu, apduLength, _key, iv);
         if (calculatedMac != decryptedMac)
         {
@@ -518,39 +585,43 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
             print(decryptedMac, HEX);
             return false;
         }
+
+        // prevent a sync.req sent by us to trigger sync notification, this happens if we provide our own tool key
+        // for decryption above
+        if (syncReq && srcAddr != _deviceObj.induvidualAddress())
+            return false;
+
+        if (syncReq)
+        {
+            uint64_t challenge  = ((uint64_t)plainApdu[0] << 40) | ((uint64_t)plainApdu[1] << 32) | ((uint64_t)plainApdu[2] << 24) |
+                                  ((uint64_t)plainApdu[3] << 16) | ((uint64_t)plainApdu[4] << 8) | (uint64_t)plainApdu[5];
+            receivedSyncRequest(srcAddr, dstAddr, dstAddrIsGroupAddr, toolAccess, seqNum, challenge);
+        }
+        else if (syncRes)
+        {
+            //receivedSyncResponse(srcAddr, toolAccess, plainApdu);
+        }
+        else
+        {
+            if (srcAddr == _deviceObj.induvidualAddress())
+            {
+                //logger.trace("update next {}seq -> {}", toolAccess ? "tool access " : "", receivedSeq);
+                updateSequenceNumber(toolAccess, receivedSeqNumber + 1);
+            }
+            else
+            {
+                //logger.trace("update last valid {}seq of {} -> {}", toolAccess ? "tool access " : "", src, receivedSeq);
+                updateLastValidSequence(toolAccess, srcAddr, receivedSeqNumber);
+            }
+        }
+        if (syncReq || syncRes)
+            return false;
     }
 
     return true;
 }
 
-/*
-void SecureApplicationLayer::test_datasecure_decrypt()
-{
-    TpTelegram t;
-    t.parseByteArray(secureTelegram);
-
-    if (t.isSecureTelegram())
-    {
-        uint16_t apduLength = t.AsduLen() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
-        uint8_t apdu[apduLength];
-
-        if (decrypt(apdu, t.SrcAddr(), t.DstAddr(), t.Tpci(), t.Asdu(), t.AsduLen()))
-        {
-            std::cout << "Plain APDU: ";
-            for (uint8_t i = 0; i< apduLength; i++)
-            {
-                std::cout << std::hex << static_cast<unsigned int>(apdu[i]) << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
-    else
-    {
-        std::cout << "Telegram is not secured!" << std::endl;
-    }
-}
-*/
-void SecureApplicationLayer::encrypt(uint8_t* buffer, uint16_t srcAddr, uint16_t dstAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength)
+void SecureApplicationLayer::encrypt(uint8_t* buffer, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength)
 {
     uint8_t scf = 0x90;
     uint8_t seqNum[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x04};
@@ -560,7 +631,7 @@ void SecureApplicationLayer::encrypt(uint8_t* buffer, uint16_t srcAddr, uint16_t
     // Clear IV buffer
     uint8_t iv[16] = {0x00};
     // Create first block B0 for AES CBC MAC calculation, used as IV later
-    block0(iv, seqNum, srcAddr, dstAddr, false, extendedFrameFormat, tpci | (SecureService >> 8), SecureService & 0x00FF, apduLength);
+    block0(iv, seqNum, srcAddr, dstAddr, dstAddrIsGroupAddr, extendedFrameFormat, tpci | (SecureService >> 8), SecureService & 0x00FF, apduLength);
 
     // Clear block counter0 buffer
     uint8_t ctr0[16] = {0x00};

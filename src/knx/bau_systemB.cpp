@@ -13,7 +13,12 @@ enum NmReadSerialNumberType
 
 BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj), _addrTable(_memory),
     _assocTable(_memory), _groupObjTable(_memory), _appProgram(_memory),
-    _platform(platform), _appLayer(_assocTable, *this),
+    _platform(platform),
+#ifdef USE_DATASECURE
+    _appLayer(_deviceObj, _secIfObj, _assocTable, *this),
+#else
+    _appLayer(_assocTable, *this),
+#endif
     _transLayer(_appLayer, _addrTable), _netLayer(_transLayer)
 {
     _appLayer.transportLayer(_transLayer);
