@@ -8,8 +8,12 @@
 #include "bau.h"
 #include "string.h"
 #include "bits.h"
+
+// Select what cipher modes to include. We need AES128-CBC and AES128-CTR modes.
+#define CBC 1
+#define CTR 1
+#define ECB 0
 #include "aes.hpp"
-#include <stdio.h>
 
 const uint8_t SecureDataPdu = 0;
 const uint8_t SecureSyncRequest = 2;
