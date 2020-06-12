@@ -428,16 +428,23 @@ void SecureApplicationLayer::updateLastValidSequence(bool toolAccess, uint16_t r
         //lastValidSequence.put(remoteAddr, seqNo);
 }
 
-void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint16_t remoteNextSeqNum)
+void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint64_t remoteNextSeqNum)
 {
     uint64_t ourNextSeqNum = nextSequenceNumber(toolAccess);
-    // asdu = ByteBuffer.allocate(12).put(sixBytes(ourNextSeq)).put(sixBytes(remoteNextSeq));
-    // response = secure(SecureSyncResponse, address(), dst, asdu.array(), toolAccess, true).get();
 
-    _lastSyncRes = millis();
+    uint8_t asdu[12];
+    sixBytes(ourNextSeqNum, &asdu[0]);
+    sixBytes(remoteNextSeqNum, &asdu[6]);
 
-    // Send encrypted SyncResponse message using T_DATA_INDIVIDUAL
-    //dataIndividualRequest(AckType::AckDontCare, NetworkLayerParameter, SystemPriority, dstAddr, apdu);
+    CemiFrame response(3 + 6 + sizeof(asdu) + 4); // 3 bytes (TPCI, APCI, SCF) + 6 bytes (SeqNum) + 12 bytes + 4 bytes (MAC)
+
+    if(secure(response.data() + APDU_LPDU_DIFF, SecureSyncResponse, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, asdu, sizeof(asdu), toolAccess, true))
+    {
+        _lastSyncRes = millis();
+
+        // Send encrypted SyncResponse message using T_DATA_INDIVIDUAL
+        _transportLayer->dataIndividualRequest(AckType::AckDontCare, NetworkLayerParameter, SystemPriority, dstAddr, response.apdu());
+    }
 }
 
 void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seqNum, long challenge)
@@ -450,6 +457,11 @@ void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstA
         updateLastValidSequence(toolAccess, srcAddr, nextRemoteSeqNum - 1);
         nextSeqNum = nextRemoteSeqNum;
     }
+
+    // Remember challenge for securing the sync.res later
+    //stashSyncRequest(srcAddr, challenge); // TODO: save challenge in a map to handle multiple requests
+    sixBytes(challenge, _challenge);
+    _challengeSrcAddr = srcAddr;
 
     _syncReqBroadcast = (dstAddr == 0x0000) && dstAddrIsGroupAddr;
 
@@ -547,17 +559,22 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
     }
     else if (syncRes)
     {
-        // TODO
+        // TODO: fetch challenge depending on srcAddr to handle multiple requests (would use std::unordered_map normally)
         //final var request = pendingSyncRequests.get(src);
         //if (request == null)
         //    return null;
+        if (_challengeSrcAddr != srcAddr)
+        {
+            println("Did not find matching challenge for source address!");
+            return false;
+        }
 
         // in a sync.res, seq actually contains our challenge from sync.req xored with a random value
-        // extract the random value and store it in seq to use it for block0 and ctr0
-        //final var challengeXorRandom = BitSet.valueOf(seq);
-        //final var challenge = BitSet.valueOf(sixBytes((long) request[0]));
-        //challengeXorRandom.xor(challenge);
-        //seq = challengeXorRandom.toByteArray();
+        // extract the random value and store it in seqNum to use it for block0 and ctr0
+        for (uint8_t i = 0; i < sizeof(seqNum); i++)
+        {
+            seqNum[i] ^= _challenge[i];
+        }
     }
 
     uint16_t apduLength = secureAdsuLength - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
@@ -671,27 +688,27 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
     return true;
 }
 
-void SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr,
-                                     uint8_t tpci, uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality)
+bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr,
+                                    uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality)
 {
     if (toolAccess)
     {
         if (!confidentiality)
         {
             println("Error: tool access requires auth+conf security");
-            return;
+            return false;
         }
         if (dstAddrIsGroupAddr && dstAddr != 0)
         {
             println("Error: tool access requires individual address");
-            return;
+            return false;
         }
     }
 
     const uint8_t* key = toolAccess ? toolKey(_syncReqBroadcast ? _deviceObj.induvidualAddress() : dstAddr) : securityKey(dstAddr, dstAddrIsGroupAddr);
     if (key == nullptr)
     {
-        return;
+        return false;
     }
 
     bool syncReq = service == SecureSyncRequest;
@@ -700,11 +717,11 @@ void SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
     uint8_t snoLength = syncReq ? 6 : 0;
     //ByteBuffer secureApdu = ByteBuffer.allocate(3 + SeqSize + snoLength + apdu.length + MacSize);
 
-    uint8_t tmpTpci = _transportLayer->getTPCI(dstAddr) | (SecureService >> 8);
-
+    uint8_t tpci = _transportLayer->getTPCI(dstAddr) | (SecureService >> 8);
+    uint8_t apci = SecureService & 0x00FF;
     uint8_t* pBuf = buffer;
-    pBuf = pushByte(tmpTpci, pBuf);                   // TPCI
-    pBuf = pushByte(SecureService & 0x00FF, pBuf);    // APCI
+    pBuf = pushByte(tpci, pBuf);                      // TPCI
+    pBuf = pushByte(apci, pBuf);                      // APCI
 
     bool systemBcast = false; // Not implemented yet
 
@@ -756,6 +773,11 @@ void SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         //final var request = pendingSyncRequests.remove(dst);
         //if (request == null)
         //    throw new KnxSecureException("sending sync.res without corresponding .req");
+        if (_challengeSrcAddr != dstAddr)
+        {
+            println("Did not find matching challenge for destination address!");
+            return false;
+        }
 
         // Now XOR the new random SeqNum with the challenge from the SyncRequest
         uint8_t rndXorChallenge[6];
@@ -772,7 +794,7 @@ void SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
     // Clear IV buffer
     uint8_t iv[16] = {0x00};
     // Create first block B0 for AES CBC MAC calculation, used as IV later
-    block0(iv, seq, srcAddr, dstAddr, dstAddrIsGroupAddr, extendedFrameFormat, tpci | (SecureService >> 8), SecureService & 0x00FF, apduLength);
+    block0(iv, seq, srcAddr, dstAddr, dstAddrIsGroupAddr, extendedFrameFormat, tpci, apci, apduLength);
 
     // Clear block counter0 buffer
     uint8_t ctr0[16] = {0x00};
@@ -804,6 +826,8 @@ void SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         pBuf = pushByteArray(apdu, apduLength, pBuf);          // Plain APDU
         pBuf = pushInt(tmpMac, pBuf);                          // MAC
     }
+
+    return true;
 }
 
 /*

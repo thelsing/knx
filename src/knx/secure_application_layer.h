@@ -78,16 +78,17 @@ class SecureApplicationLayer :  public ApplicationLayer
     uint64_t lastValidSequenceNumber(bool toolAcces, uint16_t srcAddr);
     void updateLastValidSequence(bool toolAccess, uint16_t remoteAddr, uint64_t seqNo);
 
-    void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint16_t remoteNextSeqNum);
+    void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint64_t remoteNextSeqNum);
     void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seq, long challenge);
     void receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu);
 
     bool decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength);
-    void secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality);
+    bool secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality);
 
     bool _syncReqBroadcast;
     uint32_t _lastSyncRes;
     uint8_t _challenge[6];
+    uint16_t _challengeSrcAddr;
 
     SecurityInterfaceObject& _secIfObj;
     DeviceObject& _deviceObj;
