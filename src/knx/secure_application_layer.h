@@ -52,11 +52,14 @@ class SecureApplicationLayer :  public ApplicationLayer
     virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu) override; // apdu must be valid until it was confirmed
 
   private:
-    uint32_t calcAuthOnlyMac(uint8_t* apdu, uint8_t apduLength, uint8_t* key, uint8_t* iv, uint8_t* ctr0);
-    uint32_t calcConfAuthMac(uint8_t* associatedData, uint16_t associatedDataLength, uint8_t* apdu, uint8_t apduLength, uint8_t* key, uint8_t* iv);
+    uint32_t calcAuthOnlyMac(uint8_t* apdu, uint8_t apduLength, const uint8_t *key, uint8_t* iv, uint8_t* ctr0);
+    uint32_t calcConfAuthMac(uint8_t* associatedData, uint16_t associatedDataLength, uint8_t* apdu, uint8_t apduLength, const uint8_t* key, uint8_t* iv);
 
     void block0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t extFrameFormat, uint8_t tpci, uint8_t apci, uint8_t payloadLength);
     void blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr);
+
+    void sixBytes(uint64_t num, uint8_t* toByteArray);
+    uint64_t toUInt64(uint8_t* data, uint8_t dataLen);
 
     const uint8_t *toolKey(uint16_t devAddr);
     const uint8_t* securityKey(uint16_t addr, bool isGroupAddress);
@@ -77,13 +80,17 @@ class SecureApplicationLayer :  public ApplicationLayer
 
     void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint16_t remoteNextSeqNum);
     void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seq, long challenge);
+    void receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu);
 
     bool decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength);
-    void encrypt(uint8_t* buffer, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength);
+    void secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality);
 
     bool _syncReqBroadcast;
     uint32_t _lastSyncRes;
+    uint8_t _challenge[6];
 
     SecurityInterfaceObject& _secIfObj;
     DeviceObject& _deviceObj;
+
+    bool testSeq {false};
 };

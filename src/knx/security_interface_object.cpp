@@ -22,14 +22,12 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 if (start == 0)
                     return 1;
 
-                // TODO: implement PID_LOAD_STATE_CONTROL for complete interface object
-                //data[0] = obj->_state;
+                data[0] = obj->_state;
                 return 1;
             },
             // WriteCallback of PID_LOAD_STATE_CONTROL
             [](SecurityInterfaceObject* obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
-                // TODO: implement PID_LOAD_STATE_CONTROL for complete interface object
-                //obj->loadEvent(data);
+                obj->_state = (LoadState) data[0];
                 return 1;
             }),
         new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_MODE, ReadLv3 | WriteLv0,
@@ -80,6 +78,11 @@ uint16_t SecurityInterfaceObject::saveSize()
 {
     //return 2 + InterfaceObject::saveSize();
     return InterfaceObject::saveSize();
+}
+
+bool SecurityInterfaceObject::isLoaded()
+{
+    return _state == LS_LOADED;
 }
 
 #endif

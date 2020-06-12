@@ -13,7 +13,11 @@ public:
   const uint8_t* restore(const uint8_t* buffer) override;
   uint16_t saveSize() override;
 
+  bool isLoaded();
+
 private:
+  LoadState _state = LS_UNLOADED;
+
   // Our FDSK
   static uint8_t _fdsk[];
 };

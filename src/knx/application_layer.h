@@ -149,6 +149,9 @@ class ApplicationLayer
     virtual void dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu);
     virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu); // apdu must be valid until it was confirmed
 
+    // Protected: we need to access it in derived class SecureApplicationLayer
+    TransportLayer* _transportLayer = 0;
+
   private:
     void propertyDataSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                           uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data,
@@ -167,6 +170,6 @@ class ApplicationLayer
     uint16_t _savedAsapResponse;
     AssociationTableObject& _assocTable;
     BusAccessUnit& _bau;
-    TransportLayer* _transportLayer = 0;
+
     int32_t _connectedTsap = -1;
 };
