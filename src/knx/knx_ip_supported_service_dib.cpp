@@ -1,5 +1,6 @@
 #include "knx_ip_supported_service_dib.h"
 
+#ifdef USE_IP
 KnxIpSupportedServiceDIB::KnxIpSupportedServiceDIB(uint8_t* data) : KnxIpDIB(data)
 {}
 
@@ -39,3 +40,4 @@ void KnxIpSupportedServiceDIB::serviceVersion(ServiceFamily family,  uint8_t ver
         }
     }
 }
+#endif

@@ -118,8 +118,15 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
             break;
         }
         default:
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
+            // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
+            dataSystemBroadcastIndication(hopType, priority, source, apdu);
+#else
             print("Broadcast-indication: unhandled APDU-Type: ");
             println(apdu.type());
+
+#endif
+            break;
     }
 }
 
@@ -159,8 +166,15 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
             break;
         }
         default:
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
+            // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
+            dataSystemBroadcastConfirm(hopType, priority, apdu, status);
+#else
             print("Broadcast-confirm: unhandled APDU-Type: ");
             println(apdu.type());
+
+#endif
+            break;
     }
 }
 
@@ -198,13 +212,58 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
             break;
         }
         default:
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
+            print("Broadcast-indication: unhandled APDU-Type: ");
+#else
+            print("SystemBroadcast-indication: unhandled APDU-Type: ");
+#endif
+            println(apdu.type());
             break;
     }
 }
 
 void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
 {
-
+    const uint8_t* data = apdu.data();
+    switch (apdu.type())
+    {
+        // TODO: testInfo could be of any length
+        case SystemNetworkParameterRead:
+        {
+            uint16_t objectType;
+            uint16_t propertyId;
+            uint8_t testInfo[2];
+            popWord(objectType, data + 1);
+            popWord(propertyId, data + 3);
+            popByte(testInfo[0], data + 4);
+            popByte(testInfo[1], data + 5);
+            propertyId = (propertyId >> 4) & 0x0FFF;;
+            testInfo[0] &= 0x0F;
+            _bau.systemNetworkParameterReadLocalConfirm(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo), status);
+            break;
+        }
+        case DomainAddressSerialNumberWrite:
+        {
+            const uint8_t* knxSerialNumber = &data[1];
+            const uint8_t* domainAddress = &data[7];
+            _bau.domainAddressSerialNumberWriteLocalConfirm(priority, hopType, domainAddress, knxSerialNumber, status);
+            break;
+        }
+        case DomainAddressSerialNumberRead:
+        {
+            const uint8_t* knxSerialNumber = &data[1];
+            _bau.domainAddressSerialNumberReadLocalConfirm(priority, hopType, knxSerialNumber, status);
+            break;
+        }
+        default:
+#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
+            print("Broadcast-confirm: unhandled APDU-Type: ");
+#else
+            print("SystemBroadcast-confirm: unhandled APDU-Type: ");
+#endif
+            println(apdu.type());
+            break;
+    }
 }
 
 void ApplicationLayer::dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
@@ -494,6 +553,25 @@ void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority,
         startIndex, data, length);
 }
 
+void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+                                                     uint8_t objectIndex, uint8_t propertyId, uint8_t* resultData, uint8_t resultLength)
+{
+    CemiFrame frame(3 + resultLength + 1);
+    APDU& apdu = frame.apdu();
+    apdu.type(FunctionPropertyStateResponse);
+    uint8_t* data = apdu.data() + 1;
+
+    data[0] = objectIndex;
+    data[1] = propertyId;
+    if (resultLength > 0)
+        memcpy(&data[2], resultData, resultLength);
+
+    if (asap == _connectedTsap)
+        _transportLayer->dataConnectedRequest(asap, priority, apdu);
+    else
+        _transportLayer->dataIndividualRequest(ack, hopType, priority, asap, apdu);
+}
+
 void ApplicationLayer::propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
     uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex)
 {
@@ -751,6 +829,12 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
                 startIndex, data + 5, apdu.length() - 5);
             break;
         }
+        case FunctionPropertyCommand:
+            _bau.functionPropertyCommandIndication(priority, hopType, tsap, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            break;
+        case FunctionPropertyState:
+            _bau.functionPropertyStateIndication(priority, hopType, tsap, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            break;
         case PropertyDescriptionRead:
             _bau.propertyDescriptionReadIndication(priority, hopType, tsap, data[1], data[2], data[3]);
             break;

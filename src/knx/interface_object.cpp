@@ -137,6 +137,30 @@ uint8_t InterfaceObject::propertySize(PropertyID id)
     return prop->ElementSize();
 }
 
+void InterfaceObject::command(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+{
+    Property* prop = property(id);
+    if (prop == nullptr)
+    {
+        resultLength = 0;
+        return;;
+    }
+
+    prop->command(data, length, resultData, resultLength);
+}
+
+void InterfaceObject::state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t resultLength)
+{
+    Property* prop = property(id);
+    if (prop == nullptr)
+    {
+        resultLength = 0;
+        return;;
+    }
+
+    prop->state(data, length, resultData, resultLength);
+}
+
 uint8_t InterfaceObject::propertyDescriptionCount()
 {
     return 0;
