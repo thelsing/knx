@@ -41,14 +41,19 @@ void SecureApplicationLayer::dataGroupIndication(HopCountType hopType, Priority 
     if (apdu.type() == SecureService)
     {
         // Decrypt secure APDU
+        // Somehow ugly that we need to know the size in advance here at this point
+        uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
+        CemiFrame plainFrame(plainApduLength);
+        // Decrypt secure APDU
+        if (decryptSecureApdu(apdu, plainFrame.apdu()))
+        {
+            // Process decrypted inner APDU
+            ApplicationLayer::dataGroupIndication(hopType, priority, tsap, plainFrame.apdu());
+        }
+        return;
+    }
 
-        // Process decrypted inner APDU
-        ApplicationLayer::dataGroupIndication(hopType, priority, tsap, apdu);
-    }
-    else
-    {
-        ApplicationLayer::dataGroupIndication(hopType, priority, tsap, apdu);
-    }
+    ApplicationLayer::dataGroupIndication(hopType, priority, tsap, apdu);
 }
 
 void SecureApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority,  uint16_t tsap, APDU& apdu, bool status)
@@ -56,31 +61,58 @@ void SecureApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType,
     if (apdu.type() == SecureService)
     {
         // Decrypt secure APDU
+        // Somehow ugly that we need to know the size in advance here at this point
+        uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
+        CemiFrame plainFrame(plainApduLength);
+        // Decrypt secure APDU
+        if (decryptSecureApdu(apdu, plainFrame.apdu()))
+        {
+            // Process decrypted inner APDU
+            ApplicationLayer::dataGroupConfirm(ack, hopType, priority, tsap, plainFrame.apdu(), status);
+        }
+        return;
+    }
 
-        // Process decrypted inner APDU
-        ApplicationLayer::dataGroupConfirm(ack, hopType, priority, tsap, apdu, status);
-    }
-    else
-    {
-        ApplicationLayer::dataGroupConfirm(ack, hopType, priority, tsap, apdu, status);
-    }
+    ApplicationLayer::dataGroupConfirm(ack, hopType, priority, tsap, apdu, status);
 }
 
 void SecureApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
 {
     if (apdu.type() == SecureService)
     {
-        // Secure APDU is not allowed in Broadcast
-        println("Secure APDU in Broadcast not allowed!");
+        // Decrypt secure APDU
+        // Somehow ugly that we need to know the size in advance here at this point
+        uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
+        CemiFrame plainFrame(plainApduLength);
+        // Decrypt secure APDU
+        if (decryptSecureApdu(apdu, plainFrame.apdu()))
+        {
+            // Process decrypted inner APDU
+            ApplicationLayer::dataBroadcastIndication(hopType, priority, source, plainFrame.apdu());
+        }
+        return;
     }
-    else
-    {
-        ApplicationLayer::dataBroadcastIndication(hopType, priority, source, apdu);
-    }
+
+    ApplicationLayer::dataBroadcastIndication(hopType, priority, source, apdu);
 }
 
 void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status)
 {
+    if (apdu.type() == SecureService)
+    {
+        // Decrypt secure APDU
+        // Somehow ugly that we need to know the size in advance here at this point
+        uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
+        CemiFrame plainFrame(plainApduLength);
+        // Decrypt secure APDU
+        if (decryptSecureApdu(apdu, plainFrame.apdu()))
+        {
+            // Process decrypted inner APDU
+            ApplicationLayer::dataBroadcastConfirm(ack, hopType, priority, plainFrame.apdu(), status);
+        }
+        return;
+    }
+
     ApplicationLayer::dataBroadcastConfirm(ack, hopType, priority, apdu, status);
 }
 
@@ -88,17 +120,39 @@ void SecureApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType,
 {
     if (apdu.type() == SecureService)
     {
-        // Secure APDU is not allowed in SystemBroadcast
-        println("Secure APDU in SystemBroadcast not allowed!");
+        // Decrypt secure APDU
+        // Somehow ugly that we need to know the size in advance here at this point
+        uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
+        CemiFrame plainFrame(plainApduLength);
+        // Decrypt secure APDU
+        if (decryptSecureApdu(apdu, plainFrame.apdu()))
+        {
+            // Process decrypted inner APDU
+            ApplicationLayer::dataSystemBroadcastIndication(hopType, priority, source, plainFrame.apdu());
+        }
+        return;
     }
-    else
-    {
-        ApplicationLayer::dataSystemBroadcastIndication(hopType, priority, source, apdu);
-    }
+
+    ApplicationLayer::dataSystemBroadcastIndication(hopType, priority, source, apdu);
 }
 
 void SecureApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
 {
+    if (apdu.type() == SecureService)
+    {
+        // Decrypt secure APDU
+        // Somehow ugly that we need to know the size in advance here at this point
+        uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
+        CemiFrame plainFrame(plainApduLength);
+        // Decrypt secure APDU
+        if (decryptSecureApdu(apdu, plainFrame.apdu()))
+        {
+            // Process decrypted inner APDU
+            ApplicationLayer::dataSystemBroadcastConfirm(hopType, priority, plainFrame.apdu(), status);
+        }
+        return;
+    }
+
     ApplicationLayer::dataSystemBroadcastConfirm(hopType, priority, apdu, status);
 }
 
@@ -107,14 +161,19 @@ void SecureApplicationLayer::dataIndividualIndication(HopCountType hopType, Prio
     if (apdu.type() == SecureService)
     {
         // Decrypt secure APDU
+        // Somehow ugly that we need to know the size in advance here at this point
+        uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
+        CemiFrame plainFrame(plainApduLength);
+        // Decrypt secure APDU
+        if (decryptSecureApdu(apdu, plainFrame.apdu()))
+        {
+            // Process decrypted inner APDU
+            ApplicationLayer::dataIndividualIndication(hopType, priority, tsap, plainFrame.apdu());
+        }
+        return;
+    }
 
-        // Process decrypted inner APDU
-        ApplicationLayer::dataIndividualIndication(hopType, priority, tsap, apdu);
-    }
-    else
-    {
-        ApplicationLayer::dataIndividualIndication(hopType, priority, tsap, apdu);
-    }
+    ApplicationLayer::dataIndividualIndication(hopType, priority, tsap, apdu);
 }
 
 void SecureApplicationLayer::dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status)
@@ -132,68 +191,23 @@ void SecureApplicationLayer::dataIndividualConfirm(AckType ack, HopCountType hop
     }
 }
 
-void SecureApplicationLayer::connectIndication(uint16_t tsap)
-{
-    ApplicationLayer::connectIndication(tsap);
-}
-
-void SecureApplicationLayer::connectConfirm(uint16_t destination, uint16_t tsap, bool status)
-{
-    ApplicationLayer::connectConfirm(destination, tsap, status);
-}
-
-void SecureApplicationLayer::disconnectIndication(uint16_t tsap)
-{
-    ApplicationLayer::disconnectIndication(tsap);
-}
-
-void SecureApplicationLayer::disconnectConfirm(Priority priority, uint16_t tsap, bool status)
-{
-    ApplicationLayer::disconnectConfirm(priority, tsap, status);
-}
-
 void SecureApplicationLayer::dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu)
 {
     if (apdu.type() == SecureService)
     {
-        // Decrypt secure APDU
-
-        println("Secure APDU: ");
-        apdu.printPDU();
-
         // Somehow ugly that we need to know the size in advance here at this point
-        // Same length calculation is also in the decrypt() function
         uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
         CemiFrame plainFrame(plainApduLength);
-
-        uint16_t srcAddress = apdu.frame().sourceAddress();
-        uint16_t dstAddress = apdu.frame().destinationAddress();
-        uint8_t tpci = apdu.frame().data()[TPDU_LPDU_DIFF]; // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI [fixed TPDU_LPDU_DIFF]
-        print("Secure Debug: TPCI: ");
-        println(tpci, HEX);
-        // Note:
-        // The TPCI is also included in the MAC calculation to provide authenticity for this field.
-        // However, a secure APDU (with a MAC) is only included in transport layer PDUs T_DATA_GROUP, T_DATA_TAG_GROUP, T_DATA_INDIVIDUAL, T_DATA_CONNECTED
-        // and not in T_CONNECT, T_DISCONNECT, T_ACK, T_NACK.
-        // This means the DATA/CONTROL flag is always 0(=DATA). The flag "NUMBERED" differentiates between T_DATA_INDIVIDUAL and T_DATA_CONNECTED.
-        // The seqNumber is only in T_DATA_CONNECTED and 0 in case of T_DATA_GROUP and T_DATA_GROUP (leaving out T_DATA_TAG_GROUP).
-        // Summary: effectively only the "NUMBERED" flag (bit6) and the SeqNumber (bit5-2) are used from transport layer.
-        //          In T_DATA_* services the bits1-0 of TPCI octet are used as bits9-8 for APCI type which is fixed to 0x03. SecureService APCI is 0x03F1.
-
-        // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI (fixed APDU_LPDU_DIFF)
-        if (decrypt(plainFrame.data()+APDU_LPDU_DIFF, srcAddress, dstAddress, false, tpci, apdu.data(), apdu.length()))
+        // Decrypt secure APDU
+        if (decryptSecureApdu(apdu, plainFrame.apdu()))
         {
-            println("Plain APDU: ");
-            plainFrame.apdu().printPDU();
-
             // Process decrypted inner APDU
             ApplicationLayer::dataConnectedIndication(priority, tsap, plainFrame.apdu());
         }
+        return;
     }
-    else
-    {
-        ApplicationLayer::dataConnectedIndication(priority, tsap, apdu);
-    }
+
+    ApplicationLayer::dataConnectedIndication(priority, tsap, apdu);
 }
 
 void SecureApplicationLayer::dataConnectedConfirm(uint16_t tsap)
@@ -401,31 +415,69 @@ uint64_t SecureApplicationLayer::nextSequenceNumber(bool toolAccess)
 void SecureApplicationLayer::updateSequenceNumber(bool toolAccess, uint64_t seqNum)
 {
     if (toolAccess)
+    {
         sequenceNumberToolAccess = seqNum;
+        //TODO: securityInterface.set(Pid.ToolSequenceNumberSending, sixBytes(seqNo).array());
+    }
     else
+    {
         sequenceNumber = seqNum;
+        //TODO: securityInterface.set(Pid.SequenceNumberSending, sixBytes(seqNo).array());
+    }
 }
 
 uint64_t SecureApplicationLayer::lastValidSequenceNumber(bool toolAcces, uint16_t srcAddr)
 {
     if (toolAcces)
     {
+        // TODO: add map to handle multiplpe lastValidSequenceNumberTool for each srcAddr
+        // lastValidSequence.getOrDefault(remote, 0L);
         return lastValidSequenceNumberTool;
     }
+    else
+    {
+/*
+ *  TODO:
+        byte[] addresses = securityInterface.get(Pid.SecurityIndividualAddressTable);
+        var addr = remote.toByteArray();
+        // precondition: array size is multiple of entrySize
+        int entrySize = 2 + 6; // Address and SeqNum
+        for (int offset = 0; offset < addresses.length; offset += entrySize)
+        {
+            if (Arrays.equals(addr, 0, addr.length, addresses, offset, offset + 2))
+                return unsigned(Arrays.copyOfRange(addresses, offset + 2, offset + 2 + 6));
+        }
+*/
+    }
 
-    // TODO
     return 0;
 }
 
 void SecureApplicationLayer::updateLastValidSequence(bool toolAccess, uint16_t remoteAddr, uint64_t seqNo)
 {
     if (toolAccess)
-        // TODO
+        // TODO: add map to handle multiplpe lastValidSequenceNumberTool for each srcAddr
         //lastValidSequenceToolAccess.put(remoteAddr, seqNo);
         lastValidSequenceNumberTool = seqNo;
-    //else
-        // TODO
-        //lastValidSequence.put(remoteAddr, seqNo);
+    else
+    {
+/*
+ * TODO:
+        byte[] addresses = securityInterface.get(Pid.SecurityIndividualAddressTable);
+        var addr = remote.toByteArray();
+
+        int entrySize = addr.length + 6; // Address + SeqNum
+        // precondition: array size is multiple of entrySize
+        for (int offset = 0; offset < addresses.length; offset += entrySize) {
+            if (Arrays.equals(addr, 0, addr.length, addresses, offset, offset + 2)) {
+                final var start = 1 + offset / entrySize;
+                final var data = ByteBuffer.allocate(8).put(addr).put(sixBytes(seqNo));
+                securityInterface.set(Pid.SecurityIndividualAddressTable, start, 1, data.array());
+                break;
+            }
+        }
+*/
+    }
 }
 
 void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint64_t remoteNextSeqNum)
@@ -475,6 +527,11 @@ void SecureApplicationLayer::receivedSyncResponse(uint16_t remoteAddr, bool tool
 //    final var request = pendingSyncRequests.get(remote);
 //    if (request == null)
 //        return;
+    if (_challengeSrcAddr != remoteAddr)
+    {
+        println("receivedSyncResponse(): Did not find matching challenge for remoteAddr!");
+        return;
+    }
 
     // Bytes 0-5 in the "APDU" buffer contain the remote sequence number
     // Bytes 6-11 in the "APDU" buffer contain the local sequence number
@@ -497,10 +554,8 @@ void SecureApplicationLayer::receivedSyncResponse(uint16_t remoteAddr, bool tool
     //syncRequestCompleted(request);
 }
 
-bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength)
+bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu)
 {
-    uint8_t extendedFrameFormat = 0;
-
     const uint8_t* pBuf;
     uint8_t scf;
 
@@ -577,13 +632,15 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
         }
     }
 
-    uint16_t apduLength = secureAdsuLength - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
-    pBuf = popByteArray(plainApdu, apduLength, pBuf);
+    pBuf = popByteArray(plainApdu, plainApduLength, pBuf);
 
+    // No LTE-HEE for now
+    // Data Secure always uses extended frame format with APDU length > 15 octets (long messages), no standard frames
+    uint8_t extendedFrameFormat = 0;
     // Clear IV buffer
     uint8_t iv[16] = {0x00};
     // Create first block B0 for AES CBC MAC calculation, used as IV later
-    block0(iv, seqNum, srcAddr, dstAddr, dstAddrIsGroupAddr, extendedFrameFormat, tpci | (SecureService >> 8), SecureService & 0x00FF, apduLength);
+    block0(iv, seqNum, srcAddr, dstAddr, dstAddrIsGroupAddr, extendedFrameFormat, tpci | (SecureService >> 8), SecureService & 0x00FF, plainApduLength);
 
     // Clear block counter0 buffer
     uint8_t ctr0[16] = {0x00};
@@ -598,7 +655,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
         // APDU is already plain, no decryption needed
 
         // Only check the MAC
-        uint32_t calculatedMac = calcAuthOnlyMac(plainApdu, apduLength, key, iv, ctr0);
+        uint32_t calculatedMac = calcAuthOnlyMac(plainApdu, plainApduLength, key, iv, ctr0);
         if (calculatedMac != mac)
         {
             // security failure
@@ -610,13 +667,13 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
             return false;
         }
 
-        memcpy(plainApdu, secureAsdu, apduLength);
+        memcpy(plainApdu, secureAsdu, plainApduLength);
     }
     else
     {
         // APDU is encrypted and needs decryption
 
-        uint16_t bufLen = 4 + apduLength;
+        uint16_t bufLen = 4 + plainApduLength;
         // AES-128 operates on blocks of 16 bytes, add padding
         //uint16_t bufLenPadded = (bufLen + 15) / 16 * 16;
         //uint8_t buffer[bufLenPadded];
@@ -625,7 +682,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
         //memset(buffer, 0x00, bufLenPadded);
 
         pushInt(mac, &buffer[0]);
-        pushByteArray(plainApdu, apduLength, &buffer[4]); // apdu is still encrypted
+        pushByteArray(plainApdu, plainApduLength, &buffer[4]); // apdu is still encrypted
 
         struct AES_ctx ctx;
         AES_init_ctx_iv(&ctx, key, ctr0);
@@ -634,7 +691,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
 
         uint32_t decryptedMac;
         popInt(decryptedMac, &buffer[0]);
-        popByteArray(plainApdu, apduLength, &buffer[4]); // apdu is now decrypted (overwritten)
+        popByteArray(plainApdu, plainApduLength, &buffer[4]); // apdu is now decrypted (overwritten)
 
         // Do calculations for Auth+Conf
         uint8_t associatedData[syncReq ? 7 : 1];
@@ -643,7 +700,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
         {
             memcpy(&associatedData[1], knxSerialNumber, 6);
         }
-        uint32_t calculatedMac = calcConfAuthMac(associatedData, sizeof(associatedData), plainApdu, apduLength, key, iv);
+        uint32_t calculatedMac = calcConfAuthMac(associatedData, sizeof(associatedData), plainApdu, plainApduLength, key, iv);
         if (calculatedMac != decryptedMac)
         {
             // security failure
@@ -681,11 +738,46 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint1
                 updateLastValidSequence(toolAccess, srcAddr, receivedSeqNumber);
             }
         }
+        // In case it was a sync.req or a sync.res we not have anything for the application layer to send to
         if (syncReq || syncRes)
             return false;
     }
 
     return true;
+}
+
+bool SecureApplicationLayer::decryptSecureApdu(APDU& secureApdu, APDU& plainApdu)
+{
+    // Decrypt secure APDU
+
+    println("Secure APDU: ");
+    secureApdu.printPDU();
+
+    uint16_t srcAddress = secureApdu.frame().sourceAddress();
+    uint16_t dstAddress = secureApdu.frame().destinationAddress();
+    bool isDstAddrGroupAddr = secureApdu.frame().addressType() == GroupAddress;
+    uint8_t tpci = secureApdu.frame().data()[TPDU_LPDU_DIFF]; // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI [fixed TPDU_LPDU_DIFF]
+    print("Secure Debug: TPCI: ");
+    println(tpci, HEX);
+    // Note:
+    // The TPCI is also included in the MAC calculation to provide authenticity for this field.
+    // However, a secure APDU (with a MAC) is only included in transport layer PDUs T_DATA_GROUP, T_DATA_TAG_GROUP, T_DATA_INDIVIDUAL, T_DATA_CONNECTED
+    // and not in T_CONNECT, T_DISCONNECT, T_ACK, T_NACK.
+    // This means the DATA/CONTROL flag is always 0(=DATA). The flag "NUMBERED" differentiates between T_DATA_INDIVIDUAL and T_DATA_CONNECTED.
+    // The seqNumber is only used in T_DATA_CONNECTED and 0 in case of T_DATA_GROUP and T_DATA_GROUP (leaving out T_DATA_TAG_GROUP).
+    // Summary: effectively only the "NUMBERED" flag (bit6) and the SeqNumber (bit5-2) are used from transport layer.
+    //          In T_DATA_* services the bits1-0 of TPCI octet are used as bits9-8 for APCI type which is fixed to 0x03. SecureService APCI is 0x03F1.
+
+    // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI (fixed APDU_LPDU_DIFF)
+    if (decrypt(plainApdu.frame().data()+APDU_LPDU_DIFF, plainApdu.length(), srcAddress, dstAddress, isDstAddrGroupAddr, tpci, secureApdu.data()))
+    {
+        println("Plain APDU: ");
+        plainApdu.frame().apdu().printPDU();
+
+        return true;
+    }
+
+    return false;
 }
 
 bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr,
@@ -789,7 +881,8 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         pBuf = pushByteArray(rndXorChallenge, 6, pBuf);
     }
 
-    // For now only 0
+    // No LTE-HEE for now
+    // Data Secure always uses extended frame format with APDU length > 15 octets (long messages), no standard frames
     uint8_t extendedFrameFormat = 0;
     // Clear IV buffer
     uint8_t iv[16] = {0x00};

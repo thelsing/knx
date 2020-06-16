@@ -36,10 +36,6 @@ class SecureApplicationLayer :  public ApplicationLayer
     virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
     virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
     virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status) override;
-    virtual void connectIndication(uint16_t tsap) override;
-    virtual void connectConfirm(uint16_t destination, uint16_t tsap, bool status) override;
-    virtual void disconnectIndication(uint16_t tsap) override;
-    virtual void disconnectConfirm(Priority priority, uint16_t tsap, bool status) override;
     virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu) override;
     virtual void dataConnectedConfirm(uint16_t tsap) override;
 
@@ -82,8 +78,10 @@ class SecureApplicationLayer :  public ApplicationLayer
     void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seq, long challenge);
     void receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu);
 
-    bool decrypt(uint8_t* plainApdu, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, uint16_t secureAdsuLength);
+    bool decrypt(uint8_t* plainApdu, uint16_t plainapduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu);
     bool secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality);
+
+    bool decryptSecureApdu(APDU& secureApdu, APDU &plainApdu);
 
     bool _syncReqBroadcast;
     uint32_t _lastSyncRes;

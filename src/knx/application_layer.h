@@ -71,12 +71,12 @@ class ApplicationLayer
     virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status);
     virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
     virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
-    virtual void connectIndication(uint16_t tsap);
-    virtual void connectConfirm(uint16_t destination, uint16_t tsap, bool status);
-    virtual void disconnectIndication(uint16_t tsap);
-    virtual void disconnectConfirm(Priority priority, uint16_t tsap, bool status);
     virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu);
     virtual void dataConnectedConfirm(uint16_t tsap);
+    void connectIndication(uint16_t tsap);
+    void connectConfirm(uint16_t destination, uint16_t tsap, bool status);
+    void disconnectIndication(uint16_t tsap);
+    void disconnectConfirm(Priority priority, uint16_t tsap, bool status);
 #pragma endregion
 
 #pragma region from bau
