@@ -37,10 +37,10 @@ SecurityInterfaceObject::SecurityInterfaceObject()
             // Command Callback of PID_SECURITY_MODE
             [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 uint8_t serviceId = data[1] & 0xff;
-                resultLength = 1;
                 if (serviceId != 0)
                 {
-                    resultData[0] = 0xF2; // InvalidCommand
+                    resultData[0] = ReturnCodes::InvalidCommand;
+                    resultLength = 1;
                     return;
                 }
                 if (length == 3)
@@ -48,29 +48,37 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                     uint8_t mode = data[2];
                     if (mode > 1)
                     {
-                        resultData[0] = 0xF8; // DataVoid
+                        resultData[0] = ReturnCodes::DataVoid;
+                        resultLength = 1;
                         return;
                     }
                     obj->_secAppLayer->setSecurityMode(mode == 1);
-                    resultData[0] = serviceId;
+                    resultData[0] = ReturnCodes::Success;
+                    resultData[1] = serviceId;
+                    resultLength = 2;
                 }
+                resultData[0] = ReturnCodes::GenericError;
+                resultLength = 1;
             },
             // State Callback of PID_SECURITY_MODE
             [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 uint8_t serviceId = data[1] & 0xff;
-                resultLength = 2;
                 if (serviceId != 0)
                 {
-                    resultData[0] = 0xF2; // InvalidCommand
+                    resultData[0] = ReturnCodes::InvalidCommand;
                     resultLength = 1;
                     return;
                 }
                 if (length == 2)
                 {
-                    resultData[0] = serviceId;
-                    resultData[1] = obj->_secAppLayer->isSecurityModeEnabled() ? 1 : 0;
-                    resultLength = 2;
+                    resultData[0] = ReturnCodes::Success;
+                    resultData[1] = serviceId;
+                    resultData[2] = obj->_secAppLayer->isSecurityModeEnabled() ? 1 : 0;
+                    resultLength = 3;
+                    return;
                 }
+                resultData[0] = ReturnCodes::GenericError;
+                resultLength = 1;
             }),
         new DataProperty( PID_P2P_KEY_TABLE, true, PDT_GENERIC_20, 1, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_GRP_KEY_TABLE, true, PDT_GENERIC_18, 1, ReadLv3 | WriteLv0 ), // written by ETS
@@ -80,7 +88,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
             [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 if (length != 3)
                 {
-                    resultData[0] = 0xF8; // DataVoid
+                    resultData[0] = ReturnCodes::DataVoid;
                     resultLength = 1;
                     return;
                 }
@@ -89,15 +97,19 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 if (id == 0 && info == 0)
                 {
                     obj->_secAppLayer->clearFailureLog();
-                    resultData[0] = id;
-                    resultLength = 1;
+                    resultData[0] = ReturnCodes::Success;
+                    resultData[1] = id;
+                    resultLength = 2;
+                    return;
                 }
+                resultData[0] = ReturnCodes::GenericError;
+                resultLength = 1;
             },
             // State Callback of PID_SECURITY_FAILURES_LOG
             [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 if (length != 3)
                 {
-                    resultData[0] = 0xF8; // DataVoid
+                    resultData[0] = ReturnCodes::DataVoid;
                     resultLength = 1;
                     return;
                 }
@@ -107,38 +119,35 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 // failure counters
                 if (id == 0 && info == 0)
                 {
-                    resultData[0] = id;
-                    resultData[1] = info;
-                    obj->_secAppLayer->getFailureCounters(&resultData[2]); // Put 8 bytes in the buffer
-                    resultLength = 2 + 8;
+                    resultData[0] = ReturnCodes::Success;
+                    resultData[1] = id;
+                    resultData[2] = info;
+                    obj->_secAppLayer->getFailureCounters(&resultData[3]); // Put 8 bytes in the buffer
+                    resultLength = 3 + 8;
+                    return;
                 }
                 // query latest failure by index
                 else if(id == 1)
                 {
-                    uint8_t maxBufferSize = resultLength;
-                    // TODO:
-                    //int index = info;
-                    //int i = 0;
-                    //for (var msgInfo : lastFailures) {
-                    //    if (i++ == index)
-                    //        return new ServiceResult(ByteBuffer.allocate(2 + msgInfo.length).put((byte) id)
-                    //                .put((byte) index).put(msgInfo).array());
-                    //}
+                    uint8_t maxBufferSize = resultLength; // Remember the maximum buffer size of the buffer that is provided to us
                     uint8_t index = info;
                     uint8_t numBytes = obj->_secAppLayer->getFromFailureLogByIndex(index, &resultData[2], maxBufferSize);
                     if ( numBytes > 0)
                     {
-                        resultData[0] = id;
-                        resultData[1] = index;
+                        resultData[0] = ReturnCodes::Success;
+                        resultData[1] = id;
+                        resultData[2] = index;
                         resultLength += numBytes;
-                        resultLength = 2 + numBytes;
+                        resultLength = 3 + numBytes;
                         return;
                     }
-                    resultData[0] = 0xF8; // DataVoid
+                    resultData[0] = ReturnCodes::DataVoid;
                     resultData[1] = id;
                     resultLength = 2;
                     return;
                 }
+                resultData[0] = ReturnCodes::GenericError;
+                resultLength = 1;
             }),
         new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint8_t*) _fdsk ), // default is FDSK
         new DataProperty( PID_SECURITY_REPORT, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, _secReport ), // Not implemented
@@ -158,19 +167,16 @@ void SecurityInterfaceObject::secureApplicationLayer(SecureApplicationLayer& sec
 
 uint8_t* SecurityInterfaceObject::save(uint8_t* buffer)
 {
-    //buffer = pushWord(_ownAddress, buffer);
     return InterfaceObject::save(buffer);
 }
 
 const uint8_t* SecurityInterfaceObject::restore(const uint8_t* buffer)
 {
-    //buffer = popWord(_ownAddress, buffer);
     return InterfaceObject::restore(buffer);
 }
 
 uint16_t SecurityInterfaceObject::saveSize()
 {
-    //return 2 + InterfaceObject::saveSize();
     return InterfaceObject::saveSize();
 }
 

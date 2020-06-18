@@ -66,6 +66,29 @@ enum cEmiErrorCode
     Value_temp_not_writeable = 0x0A, // The Property exists but can at this moment not be written with a new value (W)
 };
 
+enum ReturnCodes
+{
+    // Generic positive return codes
+    Success = 0x00,                 // service, function or command executed sucessfully
+    SuccessWithCrc = 0x01,          // positive message confirmation, CRC over original data
+    // Generic negative return codes
+    MemoryError = 0xF1,             // memory cannot be accessed or only with fault(s)
+    InvalidCommand = 0xF2,          // server does not support the requested command. ets: also non-existing or protected resource
+    ImpossibleCommand = 0xF3,       // command cannot be executed because a dependency is not fulfilled
+    ExceedsMaxApduLength  = 0xF4,   // data will not fit into a frame supported by this server
+    DataOverflow  = 0xF5,           // attempt to write data beyond what is reserved for the addressed resource
+    OutOfMinRange = 0xF6,           // write value below minimum supported value
+    OutOfMaxRange = 0xF7,           // write value exceeds maximum supported value
+    DataVoid = 0xF8,                // request contains invalid data
+    TemporarilyNotAvailable = 0xF9, // data access not possible at this time
+    AccessWriteOnly = 0xFA,         // read access to write-only resource
+    AccessReadOnly = 0xFB,          // write access to read-only resource
+    AccessDenied = 0xFC,            // access to recource is not allowed because of authorization/security
+    AddressVoid = 0xFD,             // resource is not present, address does not exist
+    DataTypeConflict = 0xFE,        // write access with wrong datatype (datapoint length)
+    GenericError = 0xFF             // service, function or command failed
+};
+
 enum Repetition
 {
     NoRepitiion = 0,
