@@ -530,11 +530,11 @@ void TransportLayer::ackTimeoutIndication()
     }
 }
 
-uint8_t TransportLayer::getTPCI(uint16_t dstAddress)
+uint8_t TransportLayer::getTPCI(uint16_t dstAddr)
 {
     // Return seqNum that would be used for sending next frame
     // together with the TPDU type.
-    return ((_seqNoSend & 0xF) << 2) | ((dstAddress == _connectionAddress) ? 0x40 : 0);
+    return ((_seqNoSend & 0xF) << 2) | ((dstAddr == _connectionAddress) ? 0x40 : 0);
 }
 
 void TransportLayer::loop()

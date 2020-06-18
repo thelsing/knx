@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include "security_interface_object.h"
+#include "secure_application_layer.h"
 #include "bits.h"
 #include "data_property.h"
 #include "callback_property.h"
@@ -10,6 +11,8 @@
 
 // Our FDSK
 uint8_t SecurityInterfaceObject::_fdsk[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+uint8_t SecurityInterfaceObject::_secReport[] = { 0x00, 0x00, 0x00 };
+uint8_t SecurityInterfaceObject::_secReportCtrl[] = { 0x00, 0x00, 0x00 };
 
 SecurityInterfaceObject::SecurityInterfaceObject()
 {
@@ -48,8 +51,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                         resultData[0] = 0xF8; // DataVoid
                         return;
                     }
-                    // TODO
-                    //setSecurityMode(mode == 1);
+                    obj->_secAppLayer->setSecurityMode(mode == 1);
                     resultData[0] = serviceId;
                 }
             },
@@ -65,9 +67,8 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 }
                 if (length == 2)
                 {
-                    // TODO
                     resultData[0] = serviceId;
-                    //resultData[1] = isSecurityModeEnabled() ? 1 : 0;
+                    resultData[1] = obj->_secAppLayer->isSecurityModeEnabled() ? 1 : 0;
                     resultLength = 2;
                 }
             }),
@@ -128,14 +129,19 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 }
             }),
         new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint8_t*) _fdsk ), // default is FDSK
-        new DataProperty( PID_SECURITY_REPORT, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
-        new DataProperty( PID_SECURITY_REPORT_CONTROL, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
-        new DataProperty( PID_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0, (uint16_t)0 ), // TODO: value
+        new DataProperty( PID_SECURITY_REPORT, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, _secReport ), // Not implemented
+        new DataProperty( PID_SECURITY_REPORT_CONTROL, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, _secReportCtrl ), // Not implemented
+        new DataProperty( PID_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 ), // Updated by our devices accordingly
         new DataProperty( PID_ZONE_KEY_TABLE, true, PDT_GENERIC_19, 1, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_GO_SECURITY_FLAGS, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_ROLE_TABLE, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0 ), // written by ETS
     };
     initializeProperties(sizeof(properties), properties);
+}
+
+void SecurityInterfaceObject::secureApplicationLayer(SecureApplicationLayer& secAppLayer)
+{
+    _secAppLayer = &secAppLayer;
 }
 
 uint8_t* SecurityInterfaceObject::save(uint8_t* buffer)

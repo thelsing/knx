@@ -26,6 +26,9 @@ class SecureApplicationLayer :  public ApplicationLayer
      */
     SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, AssociationTableObject& assocTable, BusAccessUnit& bau);
 
+    void setSecurityMode(bool enabled);
+    bool isSecurityModeEnabled();
+
     // from transport layer
     virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
     virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
@@ -79,9 +82,12 @@ class SecureApplicationLayer :  public ApplicationLayer
     void receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu);
 
     bool decrypt(uint8_t* plainApdu, uint16_t plainapduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu);
-    bool secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality);
+    bool secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality);
 
-    bool decryptSecureApdu(APDU& secureApdu, APDU &plainApdu);
+    bool decodeSecureApdu(APDU& secureApdu, APDU& plainApdu);
+    bool createSecureApdu(APDU& plainApdu, APDU& secureApdu, bool toolAccess, bool confidentialty);
+
+    bool _securityModeEnabled {false};
 
     bool _syncReqBroadcast;
     uint32_t _lastSyncRes;

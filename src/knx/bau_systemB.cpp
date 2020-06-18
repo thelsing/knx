@@ -21,6 +21,9 @@ BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj), _addr
 #endif
     _transLayer(_appLayer, _addrTable), _netLayer(_transLayer)
 {
+#ifdef USE_DATASECURE
+    _secIfObj.secureApplicationLayer(_appLayer);
+#endif
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);
     _memory.addSaveRestore(&_deviceObj);

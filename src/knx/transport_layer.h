@@ -57,7 +57,7 @@ public:
     // apdu must be valid until it was confirmed
     void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu);
 
-    uint8_t getTPCI(uint16_t tsap);
+    uint8_t getTPCI(uint16_t dstAddr);
 #pragma endregion
 
 #pragma region other
