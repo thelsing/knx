@@ -994,3 +994,21 @@ bool SecureApplicationLayer::isSecurityModeEnabled()
 {
     return _securityModeEnabled;
 }
+
+void SecureApplicationLayer::clearFailureLog()
+{
+    println("clearFailureLog()");
+}
+
+void SecureApplicationLayer::getFailureCounters(uint8_t* data)
+{
+    memset(data, 0, 8);
+    println("getFailureCounters()");
+}
+
+uint8_t SecureApplicationLayer::getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen)
+{
+    print("getFromFailureLogByIndex(): Index: ");
+    println(index);
+    return 0;
+}

@@ -88,7 +88,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 uint8_t info = data[2];
                 if (id == 0 && info == 0)
                 {
-                    //TODO: clearFailureLog();
+                    obj->_secAppLayer->clearFailureLog();
                     resultData[0] = id;
                     resultLength = 1;
                 }
@@ -107,13 +107,15 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 // failure counters
                 if (id == 0 && info == 0)
                 {
-                    //TODO:
-                    // var counters = ByteBuffer.allocate(10).put((byte) id).put((byte) info).put(failureCountersArray());
-                    // return new ServiceResult(counters.array());
+                    resultData[0] = id;
+                    resultData[1] = info;
+                    obj->_secAppLayer->getFailureCounters(&resultData[2]); // Put 8 bytes in the buffer
+                    resultLength = 2 + 8;
                 }
                 // query latest failure by index
                 else if(id == 1)
                 {
+                    uint8_t maxBufferSize = resultLength;
                     // TODO:
                     //int index = info;
                     //int i = 0;
@@ -122,6 +124,16 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                     //        return new ServiceResult(ByteBuffer.allocate(2 + msgInfo.length).put((byte) id)
                     //                .put((byte) index).put(msgInfo).array());
                     //}
+                    uint8_t index = info;
+                    uint8_t numBytes = obj->_secAppLayer->getFromFailureLogByIndex(index, &resultData[2], maxBufferSize);
+                    if ( numBytes > 0)
+                    {
+                        resultData[0] = id;
+                        resultData[1] = index;
+                        resultLength += numBytes;
+                        resultLength = 2 + numBytes;
+                        return;
+                    }
                     resultData[0] = 0xF8; // DataVoid
                     resultData[1] = id;
                     resultLength = 2;

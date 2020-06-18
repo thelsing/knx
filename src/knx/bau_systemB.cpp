@@ -251,8 +251,8 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
 void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                                    uint8_t propertyId, uint8_t* data, uint8_t length)
 {
-    uint8_t resultLength = 0;
     uint8_t resultData[32];
+    uint8_t resultLength = sizeof(resultData);
 
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
@@ -264,8 +264,8 @@ void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountTy
 void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                                  uint8_t propertyId, uint8_t* data, uint8_t length)
 {
-    uint8_t resultLength = 0;
     uint8_t resultData[32];
+    uint8_t resultLength = sizeof(resultData);
 
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)

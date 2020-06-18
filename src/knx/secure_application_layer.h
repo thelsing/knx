@@ -28,6 +28,9 @@ class SecureApplicationLayer :  public ApplicationLayer
 
     void setSecurityMode(bool enabled);
     bool isSecurityModeEnabled();
+    void clearFailureLog();
+    void getFailureCounters(uint8_t* data);
+    uint8_t getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen);
 
     // from transport layer
     virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
