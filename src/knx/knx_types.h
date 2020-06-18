@@ -66,6 +66,8 @@ enum cEmiErrorCode
     Value_temp_not_writeable = 0x0A, // The Property exists but can at this moment not be written with a new value (W)
 };
 
+// Unified return codes for KNX services and functions
+// Note, that several older KNX services and functions do not use these return codes.
 enum ReturnCodes
 {
     // Generic positive return codes
