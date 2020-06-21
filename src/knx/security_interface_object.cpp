@@ -80,9 +80,9 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 resultData[0] = ReturnCodes::GenericError;
                 resultLength = 1;
             }),
-        new DataProperty( PID_P2P_KEY_TABLE, true, PDT_GENERIC_20, 1, ReadLv3 | WriteLv0 ), // written by ETS
-        new DataProperty( PID_GRP_KEY_TABLE, true, PDT_GENERIC_18, 1, ReadLv3 | WriteLv0 ), // written by ETS
-        new DataProperty( PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE, true, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0 ), // written by ETS
+        new DataProperty( PID_P2P_KEY_TABLE, true, PDT_GENERIC_20, 32, ReadLv3 | WriteLv0 ), // written by ETS
+        new DataProperty( PID_GRP_KEY_TABLE, true, PDT_GENERIC_18, 32, ReadLv3 | WriteLv0 ), // written by ETS
+        new DataProperty( PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE, true, PDT_GENERIC_08, 32, ReadLv3 | WriteLv0 ), // written by ETS
         new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_FAILURES_LOG, ReadLv3 | WriteLv0,
             // Command Callback of PID_SECURITY_FAILURES_LOG
             [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
@@ -152,10 +152,10 @@ SecurityInterfaceObject::SecurityInterfaceObject()
         new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint8_t*) _fdsk ), // default is FDSK
         new DataProperty( PID_SECURITY_REPORT, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, _secReport ), // Not implemented
         new DataProperty( PID_SECURITY_REPORT_CONTROL, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, _secReportCtrl ), // Not implemented
-        new DataProperty( PID_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 ), // Updated by our devices accordingly
-        new DataProperty( PID_ZONE_KEY_TABLE, true, PDT_GENERIC_19, 1, ReadLv3 | WriteLv0 ), // written by ETS
-        new DataProperty( PID_GO_SECURITY_FLAGS, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0 ), // written by ETS
-        new DataProperty( PID_ROLE_TABLE, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0 ), // written by ETS
+        new DataProperty( PID_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 ), // Updated by our device accordingly
+        new DataProperty( PID_ZONE_KEY_TABLE, true, PDT_GENERIC_19, 32, ReadLv3 | WriteLv0 ), // written by ETS
+        new DataProperty( PID_GO_SECURITY_FLAGS, true, PDT_GENERIC_01, 32, ReadLv3 | WriteLv0 ), // written by ETS
+        new DataProperty( PID_ROLE_TABLE, true, PDT_GENERIC_01, 32, ReadLv3 | WriteLv0 ), // written by ETS
     };
     initializeProperties(sizeof(properties), properties);
 }
