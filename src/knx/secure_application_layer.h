@@ -60,8 +60,8 @@ class SecureApplicationLayer :  public ApplicationLayer
     void block0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t extFrameFormat, uint8_t tpci, uint8_t apci, uint8_t payloadLength);
     void blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr);
 
-    void sixBytes(uint64_t num, uint8_t* toByteArray);
-    uint64_t toUInt64(uint8_t* data, uint8_t dataLen);
+    void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
+    uint64_t sixBytesToUInt64(uint8_t* data);
 
     const uint8_t *toolKey(uint16_t devAddr);
     const uint8_t* securityKey(uint16_t addr, bool isGroupAddress);
@@ -90,12 +90,16 @@ class SecureApplicationLayer :  public ApplicationLayer
     bool decodeSecureApdu(APDU& secureApdu, APDU& plainApdu);
     bool createSecureApdu(APDU& plainApdu, APDU& secureApdu, bool toolAccess, bool confidentialty);
 
+    void encryptAesCbc(uint8_t* buffer, uint16_t bufLen, const uint8_t* iv, const uint8_t* key);
+    void xcryptAesCtr(uint8_t* buffer, uint16_t bufLen, const uint8_t* iv, const uint8_t* key);
+
     bool _securityModeEnabled {false};
 
     bool _syncReqBroadcast;
     uint32_t _lastSyncRes;
     uint8_t _challenge[6];
     uint16_t _challengeSrcAddr;
+    bool _isChallengeValid {false};
 
     SecurityInterfaceObject& _secIfObj;
     DeviceObject& _deviceObj;

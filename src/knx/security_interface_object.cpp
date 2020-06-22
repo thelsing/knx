@@ -156,6 +156,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
         new DataProperty( PID_ZONE_KEY_TABLE, true, PDT_GENERIC_19, 32, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_GO_SECURITY_FLAGS, true, PDT_GENERIC_01, 32, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_ROLE_TABLE, true, PDT_GENERIC_01, 32, ReadLv3 | WriteLv0 ), // written by ETS
+        new DataProperty( PID_TOOL_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 ) // Updated by our device accordingly (non-standardized!)
     };
     initializeProperties(sizeof(properties), properties);
 }

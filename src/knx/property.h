@@ -171,6 +171,7 @@ enum PropertyID
     PID_ZONE_KEY_TABLE = 60,                    // Security keys used for securing zone addressing communication
     PID_GO_SECURITY_FLAGS = 61,                 // Defines the required security requirements for each group object
     PID_ROLE_TABLE = 62,                        // Role table
+    PID_TOOL_SEQUENCE_NUMBER_SENDING = 250,     // Sequence Number used for the next outgoing secure communication (Tool Access only, non-standardized!)
 };
 
 enum LoadState
