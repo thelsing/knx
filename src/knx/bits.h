@@ -34,7 +34,7 @@ uint32_t digitalRead(uint32_t dwPin);
 typedef void (*voidFuncPtr)(void);
 void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 
-#elif ARDUINO_ARCH_SAMD
+#elif ARDUINO_ARCH_SAMD || ARDUINO_ARCH_STM32
 #include <Arduino.h>
 
 #define getbyte(x,n) (*(((uint8_t*)&(x))+n))

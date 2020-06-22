@@ -19,7 +19,7 @@ enum ComFlag
 
 class GroupObject;
 
-#ifdef __linux__
+#if __has_include(<functional>)
 #include <functional>
 typedef std::function<void(GroupObject&)> GroupObjectUpdatedHandler;
 #else

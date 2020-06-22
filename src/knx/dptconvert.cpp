@@ -1723,8 +1723,9 @@ double float16FromPayload(const uint8_t* payload, int index)
 }
 float float32FromPayload(const uint8_t* payload, int index)
 {
-    uint32_t area = unsigned32FromPayload(payload, index);
-    return *((float*)&area);
+    union { float f; uint32_t i; } area;
+    area.i = unsigned32FromPayload(payload, index);
+    return area.f;
 }
 int64_t signed64FromPayload(const uint8_t* payload, int index)
 {
@@ -1815,8 +1816,9 @@ void float16ToPayload(uint8_t* payload, size_t payload_length, int index, double
 }
 void float32ToPayload(uint8_t* payload, size_t payload_length, int index, double value, uint32_t mask)
 {
-    float num = value;
-    unsigned32ToPayload(payload, payload_length, index, *((uint32_t*)&num), mask);
+    union { float f; uint32_t i; } num;
+    num.f = value;
+    unsigned32ToPayload(payload, payload_length, index, num.i, mask);
 }
 void signed64ToPayload(uint8_t* payload, size_t payload_length, int index, int64_t value, uint64_t mask)
 {
