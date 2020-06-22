@@ -416,11 +416,11 @@ int busValueToUnsigned8(const uint8_t* payload, size_t payload_length, const Dpt
     switch (datatype.subGroup)
     {
         case 1:
-            value = (uint8_t)(unsigned8FromPayload(payload, 0) * 100.0 / 255.0);
+            value = (uint8_t)round(unsigned8FromPayload(payload, 0) * 100.0 / 255.0);
             return true;
 
         case 3:
-            value = (uint8_t)unsigned8FromPayload(payload, 0) * 360.0 / 255.0;
+            value = (uint8_t)round(unsigned8FromPayload(payload, 0) * 360.0 / 255.0);
             return true;
 
         case 6:
