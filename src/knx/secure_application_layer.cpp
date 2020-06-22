@@ -392,7 +392,6 @@ void SecureApplicationLayer::sixBytesFromUInt64(uint64_t num, uint8_t* toByteArr
 
 uint64_t SecureApplicationLayer::sixBytesToUInt64(uint8_t* data)
 {
-/*
     uint64_t l = 0;
 
     for (uint8_t i = 0; i < 6; i++)
@@ -400,9 +399,6 @@ uint64_t SecureApplicationLayer::sixBytesToUInt64(uint8_t* data)
         l = (l << 8) + data[i];
     }
     return l;
-*/
-    return  ((uint64_t)data[0] << 40) + ((uint64_t)data[1] << 32) +
-            (data[2] << 24) + (data[3] << 16) + (data[4] << 8) + data[5];
 }
 
 const uint8_t* SecureApplicationLayer::toolKey(uint16_t devAddr)
@@ -543,7 +539,8 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
     sixBytesFromUInt64(ourNextSeqNum, &asdu[0]);
     sixBytesFromUInt64(remoteNextSeqNum, &asdu[6]);
 
-    CemiFrame response(3 + 6 + sizeof(asdu) + 4); // 3 bytes (TPCI, APCI, SCF) + 6 bytes (SeqNum) + 12 bytes + 4 bytes (MAC)
+    CemiFrame response(2 + 6 + sizeof(asdu) + 4); // 2 bytes (APCI, SCF) + 6 bytes (SeqNum) + 12 bytes + 4 bytes (MAC)
+                                                      // Note: additional TPCI byte is already handled internally!
 
     uint8_t tpci = 0;
     if (!_syncReqBroadcast)
@@ -574,7 +571,7 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
     }
 }
 
-void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seqNum, long challenge)
+void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seqNum, uint64_t challenge)
 {
     uint64_t nextRemoteSeqNum = sixBytesToUInt64(seqNum);
     uint64_t nextSeqNum = 1 + lastValidSequenceNumber(toolAccess, srcAddr);
@@ -963,6 +960,8 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         {
             println("sending sync.res without corresponding .req");
         }
+
+        printHex("Decrypted challenge: ", _challenge, 6);
 
         // Now XOR the new random SeqNum with the challenge from the SyncRequest
         uint8_t rndXorChallenge[6];

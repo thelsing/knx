@@ -81,7 +81,7 @@ class SecureApplicationLayer :  public ApplicationLayer
     void updateLastValidSequence(bool toolAccess, uint16_t remoteAddr, uint64_t seqNo);
 
     void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint64_t remoteNextSeqNum);
-    void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seq, long challenge);
+    void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seq, uint64_t challenge);
     void receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu);
 
     bool decrypt(uint8_t* plainApdu, uint16_t plainapduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu);
