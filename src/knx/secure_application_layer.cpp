@@ -245,12 +245,11 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
 {
     // TODO:
     // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
-    bool needsEncryption = true;
+    bool needsEncryption = false;
 
     if (needsEncryption)
     {
-        //ByteBuffer secureApdu = ByteBuffer.allocate(3 + SeqSize + apdu.length + MacSize);
-        uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
+        uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
         // create secure APDU
         if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
@@ -265,21 +264,85 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
 
 void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
+    // TODO:
+    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
+    bool needsEncryption = true;
+
+    if (needsEncryption)
+    {
+        uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
+        CemiFrame secureFrame(secureApduLength);
+        // create secure APDU
+        if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
+        {
+            ApplicationLayer::dataBroadcastRequest(ack, hopType, SystemPriority, secureFrame.apdu());
+        }
+        return;
+    }
+
     ApplicationLayer::dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
+    // TODO:
+    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
+    bool needsEncryption = true;
+
+    if (needsEncryption)
+    {
+        uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
+        CemiFrame secureFrame(secureApduLength);
+        // create secure APDU
+        if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
+        {
+            ApplicationLayer::dataSystemBroadcastRequest(ack, hopType, SystemPriority, secureFrame.apdu());
+        }
+        return;
+    }
+
     ApplicationLayer::dataSystemBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
 
 void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
 {
+    // TODO:
+    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
+    bool needsEncryption = true;
+
+    if (needsEncryption)
+    {
+        uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
+        CemiFrame secureFrame(secureApduLength);
+        // create secure APDU
+        if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
+        {
+            ApplicationLayer::dataIndividualRequest(ack, hopType, priority, destination, secureFrame.apdu());
+        }
+        return;
+    }
+
     ApplicationLayer::dataIndividualRequest(ack, hopType, priority, destination, apdu);
 }
 
 void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu)
 {
+    // TODO:
+    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
+    bool needsEncryption = true;
+
+    if (needsEncryption)
+    {
+        uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
+        CemiFrame secureFrame(secureApduLength);
+        // create secure APDU
+        if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
+        {
+            ApplicationLayer::dataConnectedRequest(tsap, priority, secureFrame.apdu());
+        }
+        return;
+    }
+
     // apdu must be valid until it was confirmed
     ApplicationLayer::dataConnectedRequest(tsap, priority, apdu);
 }
@@ -933,18 +996,9 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
     }
     else if (syncRes)
     {
-        // Just for testing
-        if (testSeq)
-        {
-            // Do not use a random number, but a well-known one
-            sixBytesFromUInt64(0xaaaaaaaaaaaa, seq);
-        }
-        else
-        {
-            // use random number in SyncResponse
-            uint64_t randomNumber = 0x000102030405; // TODO: generate random number
-            sixBytesFromUInt64(randomNumber, seq);
-        }
+        // use random number in SyncResponse
+        uint64_t randomNumber = 0x000102030405; // TODO: generate random number
+        sixBytesFromUInt64(randomNumber, seq);
 
         // TODO: maybe implement something like std::map for pending SyncRequests?
         //final var request = pendingSyncRequests.remove(dst);
@@ -961,7 +1015,7 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
             println("sending sync.res without corresponding .req");
         }
 
-        printHex("Decrypted challenge: ", _challenge, 6);
+        //printHex("Decrypted challenge: ", _challenge, 6);
 
         // Now XOR the new random SeqNum with the challenge from the SyncRequest
         uint8_t rndXorChallenge[6];
