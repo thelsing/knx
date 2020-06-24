@@ -90,6 +90,7 @@ uint8_t * Esp32Platform::getEepromBuffer(uint16_t size)
 
 void Esp32Platform::commitToEeprom()
 {
+    EEPROM.getDataPtr();//make eeprom dirty again
     EEPROM.commit();
 }
 
