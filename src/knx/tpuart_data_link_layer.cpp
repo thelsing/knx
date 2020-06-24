@@ -92,6 +92,13 @@ void TpUartDataLinkLayer::loop()
     uint8_t* buffer = _receiveBuffer + 2;
     uint8_t rxByte;
 
+    if (!_enabled) {
+        if (millis() - _lastResetChipTime > 1000) { //reset chip every 1 seconds
+            _lastResetChipTime = millis();
+            _enabled = resetChip();
+        }
+    }
+
     if (!_enabled)
         return;
 
@@ -536,4 +543,4 @@ void TpUartDataLinkLayer::loadNextTxFrame()
     }
     delete tx_frame;
 }
-#endif
+#endif
