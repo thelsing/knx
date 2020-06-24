@@ -38,6 +38,8 @@ class BauSystemB : protected BusAccessUnit
                             uint8_t& numberOfElements, uint16_t startIndex,
                             uint8_t* data, uint32_t length) override;
 
+    uint32_t _lastPropertyValueWriteTime = 0;
+
   protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
     void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,

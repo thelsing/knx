@@ -69,7 +69,11 @@ void BauSystemB::sendNextGroupTelegram()
         }
         else if (flag == ReadRequest)
         {
-            _appLayer.groupValueReadRequest(AckRequested, asap, go.priority(), NetworkLayerParameter);
+            // do not send read_on_init request when configuring, or else would crash. this is judged by last PropertyValueWrite telegram received time
+            // it works under my test, although it might not be the best way
+            if(_lastPropertyValueWriteTime == 0 || millis() - _lastPropertyValueWriteTime > 10000) {
+                _appLayer.groupValueReadRequest(AckRequested, asap, go.priority(), NetworkLayerParameter);
+            }
         }
 
         go.commFlag(Transmitting);
@@ -209,6 +213,7 @@ void BauSystemB::propertyDescriptionReadIndication(Priority priority, HopCountTy
 void BauSystemB::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
+    _lastPropertyValueWriteTime = millis();
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
         obj->writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
