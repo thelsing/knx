@@ -70,7 +70,7 @@ void BauSystemB::sendNextGroupTelegram()
         else if (flag == ReadRequest)
         {
             // do not send read_on_init request when configuring, or else would crash. this is judged by last PropertyValueWrite telegram received time
-            // it works under my test, although it might not be the best way
+            // it works under my test, although it might not be the best way 
             if(_lastPropertyValueWriteTime == 0 || millis() - _lastPropertyValueWriteTime > 10000) {
                 _appLayer.groupValueReadRequest(AckRequested, asap, go.priority(), NetworkLayerParameter);
             }
