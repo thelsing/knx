@@ -1043,7 +1043,7 @@ int valueToBusValueSigned8(const KNXValue& value, uint8_t* payload, size_t paylo
     if ((int64_t)value < INT64_C(-128) || (int64_t)value > INT64_C(127))
         return false;
 
-    signed8ToPayload(payload, 0, payload_length, (uint64_t)value, 0xFF);
+    signed8ToPayload(payload, payload_length, 0, (uint64_t)value, 0xFF);
     return true;
 }
 
