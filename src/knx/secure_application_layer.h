@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "knx_types.h"
 #include "apdu.h"
+#include "bits.h"
 
 class DeviceObject;
 class SecurityInterfaceObject;
@@ -18,6 +19,46 @@ class BusAccessUnit;
  */
 class SecureApplicationLayer :  public ApplicationLayer
 {
+
+  public:
+    /**
+     * The constructor.
+     * @param assocTable The AssociationTable is used to translate between asap (i.e. group objects) and group addresses.
+     * @param bau methods are called here depending of the content of the APDU
+     */
+    SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, AssociationTableObject& assocTable, BusAccessUnit& bau);
+
+    void setSecurityMode(bool enabled);
+    bool isSecurityModeEnabled();
+    void clearFailureLog();
+    void getFailureCounters(uint8_t* data);
+    uint8_t getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen);
+
+    // from transport layer
+    virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
+    virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
+                                  APDU& apdu, bool status) override;
+    virtual void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
+    virtual void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
+    virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status) override;
+    virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu) override;
+    virtual void dataConnectedConfirm(uint16_t tsap) override;
+
+    void loop();
+
+  protected:
+    // to transport layer
+    virtual void dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
+    virtual void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu) override;
+    virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu) override;
+    virtual void dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu) override;
+    virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu) override; // apdu must be valid until it was confirmed
+
+  private:
+
     template <typename K, typename V, int SIZE>
     class Map
     {
@@ -25,11 +66,6 @@ class SecureApplicationLayer :  public ApplicationLayer
         Map()
         {
             static_assert (SIZE <= 64, "Map is too big! Max. 64 elements.");
-        }
-
-        void setInvalidValue(V value)
-        {
-            _invalidValue = value;
         }
 
         void clear()
@@ -107,7 +143,7 @@ class SecureApplicationLayer :  public ApplicationLayer
             return false;
         }
 
-        V operator[](K key) const
+        V* get(K key)
         {
             // Try to find the key
             for (uint8_t i = 0; i < SIZE; i++)
@@ -118,38 +154,11 @@ class SecureApplicationLayer :  public ApplicationLayer
                     // Key found?
                     if (keys[i] == key)
                     {
-                        return values[i];
+                        return &values[i];
                     }
                 }
             }
-            return _invalidValue;
-        }
-
-        V &operator[](K key)
-        {
-            // Try to find the key
-            for (uint8_t i = 0; i < SIZE; i++)
-            {
-                // Check if this array slot is occupied
-                if ((_validEntries >> i) & 0x01)
-                {
-                    // Key found?
-                    if (keys[i] == key)
-                    {
-                        return values[i];
-                    }
-                }
-            }
-
-            // Key was not found, so add key and value
-            uint8_t index = getNextFreeIndex();
-            if (index != noFreeEntryFoundIndex)
-            {
-                _validEntries |= 1 << index;
-                keys[index] = key;
-                return values[index];
-            }
-            return _invalidValue;
+            return nullptr;
         }
 
     private:
@@ -170,50 +179,51 @@ class SecureApplicationLayer :  public ApplicationLayer
         K keys[SIZE];
         V values[SIZE];
         static constexpr uint8_t noFreeEntryFoundIndex = 255;
-        V _invalidValue;
     };
 
-  public:
-    /**
-     * The constructor.
-     * @param assocTable The AssociationTable is used to translate between asap (i.e. group objects) and group addresses.
-     * @param bau methods are called here depending of the content of the APDU
-     */
-    SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, AssociationTableObject& assocTable, BusAccessUnit& bau);
+    enum class AddrType : uint8_t
+    {
+        group,
+        individual,
+        unknown
+    };
 
-    void setSecurityMode(bool enabled);
-    bool isSecurityModeEnabled();
-    void clearFailureLog();
-    void getFailureCounters(uint8_t* data);
-    uint8_t getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen);
-
-    // from transport layer
-    virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
-    virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
-                                  APDU& apdu, bool status) override;
-    virtual void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
-    virtual void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
-    virtual void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
-    virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
-    virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
-    virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status) override;
-    virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu) override;
-    virtual void dataConnectedConfirm(uint16_t tsap) override;
-
-  protected:
-    // to transport layer
-    virtual void dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
-    virtual void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu) override;
-    virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu) override;
-    virtual void dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu) override;
-    virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu) override; // apdu must be valid until it was confirmed
-
-  private:
     enum class DataSecurity
     {
         none,
         auth,
         authConf
+    };
+
+    struct Addr
+    {
+        Addr() = default;
+        Addr(uint8_t addr) : addr{addr} {}
+
+        uint16_t addr;
+        AddrType addrType{AddrType::unknown};
+
+        bool operator ==(const Addr &cmpAddr) const
+        {
+            if ((cmpAddr.addrType == AddrType::unknown) || (addrType == AddrType::unknown))
+            {
+                println("Unknown address type detected!");
+                return false;
+            }
+            return (cmpAddr.addr == addr) && (cmpAddr.addrType == addrType);
+        }
+    };
+
+    struct GrpAddr : Addr
+    {
+        GrpAddr() {addrType = AddrType::group;}
+        GrpAddr(uint8_t addr) : Addr{addr} {addrType = AddrType::group;}
+    };
+
+    struct IndAddr : Addr
+    {
+        IndAddr() { addrType = AddrType::individual; }
+        IndAddr(uint8_t addr) : Addr{addr} { addrType = AddrType::individual; }
     };
 
     struct SecurityControl
@@ -248,6 +258,9 @@ class SecureApplicationLayer :  public ApplicationLayer
     uint64_t lastValidSequenceNumber(bool toolAcces, uint16_t srcAddr);
     void updateLastValidSequence(bool toolAccess, uint16_t remoteAddr, uint64_t seqNo);
 
+    uint64_t getRandomNumber();
+
+    void sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess);
     void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint64_t remoteNextSeqNum);
     void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seq, uint64_t challenge);
     void receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu);
@@ -263,13 +276,13 @@ class SecureApplicationLayer :  public ApplicationLayer
 
     bool _securityModeEnabled {false};
 
-    bool _syncReqBroadcast;
+    bool _syncReqBroadcastIncoming{false};
+    bool _syncReqBroadcastOutgoing{false};
     uint32_t _lastSyncRes;
-    uint8_t _challenge[6];
-    uint16_t _challengeSrcAddr;
-    bool _isChallengeValid {false};
 
-    Map<uint16_t, SecurityControl, 8> _pendingRequests;
+    Map<Addr, SecurityControl, 1> _pendingDataRequests;
+    Map<Addr, uint64_t, 1> _pendingOutgoingSyncRequests;
+    Map<Addr, uint64_t, 1> _pendingIncomingSyncRequests;
 
     SecurityInterfaceObject& _secIfObj;
     DeviceObject& _deviceObj;

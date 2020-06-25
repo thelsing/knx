@@ -149,6 +149,8 @@ class ApplicationLayer
     virtual void dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu);
     virtual void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu); // apdu must be valid until it was confirmed
 
+    uint16_t getConnectedTsasp() {return _connectedTsap;}
+
     // Protected: we need to access it in derived class SecureApplicationLayer
     TransportLayer* _transportLayer = 0;
 

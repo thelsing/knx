@@ -25,7 +25,6 @@ uint64_t sequenceNumber = 0;
 uint64_t lastValidSequenceNumberTool = 0;
 uint64_t lastValidSequenceNumber = 0;
 
-
 SecureApplicationLayer::SecureApplicationLayer(DeviceObject &deviceObj, SecurityInterfaceObject &secIfObj, AssociationTableObject& assocTable, BusAccessUnit& bau):
     ApplicationLayer(assocTable, bau),
     _secIfObj(secIfObj),
@@ -244,7 +243,7 @@ void SecureApplicationLayer::dataConnectedConfirm(uint16_t tsap)
 void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
     // TODO:
-    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
+    // get flags auth and confidentiality for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
     bool needsEncryption = false;
 
     if (needsEncryption)
@@ -265,7 +264,6 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
 void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
     // TODO:
-    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
     bool needsEncryption = true;
 
     if (needsEncryption)
@@ -286,7 +284,6 @@ void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopT
 void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
     // TODO:
-    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
     bool needsEncryption = true;
 
     if (needsEncryption)
@@ -307,7 +304,6 @@ void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountTyp
 void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
 {
     // TODO:
-    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
     bool needsEncryption = true;
 
     if (needsEncryption)
@@ -328,7 +324,6 @@ void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hop
 void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu)
 {
     // TODO:
-    // get flags for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
     bool needsEncryption = true;
 
     if (needsEncryption)
@@ -594,6 +589,55 @@ void SecureApplicationLayer::updateLastValidSequence(bool toolAccess, uint16_t r
     }
 }
 
+void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess)
+{
+    _syncReqBroadcastOutgoing = (dstAddr == 0x0000) && dstAddrIsGroupAddr;
+
+    // use random number in SyncResponse
+    uint64_t challenge = getRandomNumber();
+
+    uint8_t asdu[6];
+    sixBytesFromUInt64(challenge, &asdu[0]);
+
+    CemiFrame request(2 + 6 + sizeof(asdu) + 4); // 2 bytes (APCI, SCF) + 6 bytes (SeqNum) + 6 bytes (challenge) + 4 bytes (MAC)
+                                                      // Note: additional TPCI byte is already handled internally!
+
+    uint8_t tpci = 0;
+    if (!_syncReqBroadcastOutgoing)
+    {
+        tpci = _transportLayer->getTPCI(dstAddr); // get next TPCI sequence number for MAC calculation from TL
+    }
+    print("sendSyncRequest: TPCI: ");
+    println(tpci, HEX);
+
+    if(secure(request.data() + APDU_LPDU_DIFF, SecureSyncRequest, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), toolAccess, true))
+    {
+        println("SyncRequest: ");
+        request.apdu().printPDU();
+
+        if (_syncReqBroadcastOutgoing)
+        {
+            _transportLayer->dataBroadcastRequest(AckType::AckDontCare, HopCountType::NetworkLayerParameter, Priority::SystemPriority, request.apdu());
+        }
+        else
+        {
+            // either send on T_DATA_INDIVIDUAL or T_DATA_CONNECTED
+            if (isConnected())
+            {
+                _transportLayer->dataConnectedRequest(getConnectedTsasp(), SystemPriority, request.apdu());
+            }
+            else
+            {
+                // Send encrypted SyncResponse message using T_DATA_INDIVIDUAL
+                _transportLayer->dataIndividualRequest(AckType::AckDontCare, NetworkLayerParameter, SystemPriority, dstAddr, request.apdu());
+            }
+        }
+
+        Addr toAddr = _syncReqBroadcastOutgoing ? (Addr)GrpAddr(0) : (Addr)IndAddr(dstAddr);
+        _pendingOutgoingSyncRequests.insertOrAssign(toAddr, challenge);
+    }
+}
+
 void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint64_t remoteNextSeqNum)
 {
     uint64_t ourNextSeqNum = nextSequenceNumber(toolAccess);
@@ -606,7 +650,7 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
                                                       // Note: additional TPCI byte is already handled internally!
 
     uint8_t tpci = 0;
-    if (!_syncReqBroadcast)
+    if (!_syncReqBroadcastIncoming)
     {
         tpci = _transportLayer->getTPCI(dstAddr); // get next TPCI sequence number for MAC calculation from TL
     }
@@ -620,16 +664,22 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
         println("SyncResponse: ");
         response.apdu().printPDU();
 
-        if (_syncReqBroadcast)
+        if (_syncReqBroadcastIncoming)
         {
             _transportLayer->dataBroadcastRequest(AckType::AckDontCare, HopCountType::NetworkLayerParameter, Priority::SystemPriority, response.apdu());
         }
         else
         {
-            //TODO: either send on T_DATA_INDIVIDUAL or T_DATA_CONNECTED depending on reception
-
-            // Send encrypted SyncResponse message using T_DATA_INDIVIDUAL
-            _transportLayer->dataIndividualRequest(AckType::AckDontCare, NetworkLayerParameter, SystemPriority, dstAddr, response.apdu());
+            // either send on T_DATA_INDIVIDUAL or T_DATA_CONNECTED
+            if (isConnected())
+            {
+                _transportLayer->dataConnectedRequest(getConnectedTsasp(), SystemPriority, response.apdu());
+            }
+            else
+            {
+                // Send encrypted SyncResponse message using T_DATA_INDIVIDUAL
+                _transportLayer->dataIndividualRequest(AckType::AckDontCare, NetworkLayerParameter, SystemPriority, dstAddr, response.apdu());
+            }
         }
     }
 }
@@ -646,29 +696,34 @@ void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstA
     }
 
     // Remember challenge for securing the sync.res later
-    //stashSyncRequest(srcAddr, challenge); // TODO: save challenge in a map to handle multiple requests
-    sixBytesFromUInt64(challenge, _challenge);
+    _pendingIncomingSyncRequests.insertOrAssign(IndAddr(srcAddr), challenge);
 
-    _syncReqBroadcast = (dstAddr == 0x0000) && dstAddrIsGroupAddr;
+    _syncReqBroadcastIncoming = (dstAddr == 0x0000) && dstAddrIsGroupAddr;
 
-    uint16_t toAddr = _syncReqBroadcast ? dstAddr : srcAddr;
-    bool toIsGroupAddress = _syncReqBroadcast;
-
-    _challengeSrcAddr = toAddr;
-    _isChallengeValid = true;
+    uint16_t toAddr = _syncReqBroadcastIncoming ? dstAddr : srcAddr;
+    bool toIsGroupAddress = _syncReqBroadcastIncoming;
 
     sendSyncResponse(toAddr, toIsGroupAddress, toolAccess, nextSeqNum);
 }
 
 void SecureApplicationLayer::receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu)
 {
-//    final var request = pendingSyncRequests.get(remote);
-//    if (request == null)
-//        return;
-    if (_challengeSrcAddr != remoteAddr)
+    // TODO: check if _syncReqBroadcastOutgoing is true
+    if (_syncReqBroadcastOutgoing)
     {
-        println("receivedSyncResponse(): Did not find matching challenge for remoteAddr!");
-        return;
+        if (_pendingOutgoingSyncRequests.get(GrpAddr(0)) == nullptr)
+        {
+            println("Cannot handle sync.res without pending sync.req! (broadcast)");
+            return;
+        }
+    }
+    else
+    {
+        if (_pendingOutgoingSyncRequests.get(IndAddr(remoteAddr)) == nullptr)
+        {
+            println("Cannot handle sync.res without pending sync.req!");
+            return;
+        }
     }
 
     // Bytes 0-5 in the "APDU" buffer contain the remote sequence number
@@ -689,7 +744,7 @@ void SecureApplicationLayer::receivedSyncResponse(uint16_t remoteAddr, bool tool
         updateSequenceNumber(toolAccess, localSeq);
     }
 
-    //syncRequestCompleted(request);
+    _pendingOutgoingSyncRequests.erase(IndAddr(remoteAddr));
 }
 
 bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu)
@@ -762,21 +817,21 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
     }
     else if (syncRes)
     {
-        // TODO: fetch challenge depending on srcAddr to handle multiple requests (would use std::unordered_map normally)
-        //final var request = pendingSyncRequests.get(src);
-        //if (request == null)
-        //    return null;
-        if (_challengeSrcAddr != srcAddr)
+        // fetch challenge depending on srcAddr to handle multiple requests
+        uint64_t *challenge = _pendingOutgoingSyncRequests.get(IndAddr(srcAddr));
+        if (challenge == nullptr)
         {
-            println("Did not find matching challenge for source address!");
+            println("Cannot find matching challenge for source address!");
             return false;
         }
 
+        uint8_t _challengeSixBytes[6];
+        sixBytesFromUInt64(*challenge, _challengeSixBytes);
         // in a sync.res, seq actually contains our challenge from sync.req xored with a random value
         // extract the random value and store it in seqNum to use it for block0 and ctr0
         for (uint8_t i = 0; i < sizeof(seqNum); i++)
         {
-            seqNum[i] ^= _challenge[i];
+            seqNum[i] ^= _challengeSixBytes[i];
         }
     }
 
@@ -946,7 +1001,7 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         }
     }
 
-    const uint8_t* key = toolAccess ? toolKey(_syncReqBroadcast ? _deviceObj.induvidualAddress() : dstAddr) : securityKey(dstAddr, dstAddrIsGroupAddr);
+    const uint8_t* key = toolAccess ? toolKey(_syncReqBroadcastIncoming ? _deviceObj.induvidualAddress() : dstAddr) : securityKey(dstAddr, dstAddrIsGroupAddr);
     if (key == nullptr)
     {
         print("Error: No key found. toolAccess: ");
@@ -997,32 +1052,30 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
     else if (syncRes)
     {
         // use random number in SyncResponse
-        uint64_t randomNumber = 0x000102030405; // TODO: generate random number
+        uint64_t randomNumber = getRandomNumber();
         sixBytesFromUInt64(randomNumber, seq);
 
-        // TODO: maybe implement something like std::map for pending SyncRequests?
-        //final var request = pendingSyncRequests.remove(dst);
-        //if (request == null)
-        //    throw new KnxSecureException("sending sync.res without corresponding .req");
-        if (_isChallengeValid && (_challengeSrcAddr == dstAddr))
+        // Get challenge from sync.req
+        uint64_t *challenge = _pendingIncomingSyncRequests.get(IndAddr(dstAddr));
+        if (challenge == nullptr)
         {
-            // Invalidate _challengeSrcAddr
-            _challengeSrcAddr = 0;
-            _isChallengeValid = false;
+            println("Cannot send sync.res without corresponding sync.req");
+            return false;
         }
         else
         {
-            println("sending sync.res without corresponding .req");
+            _pendingIncomingSyncRequests.erase(IndAddr(dstAddr));
         }
-
-        //printHex("Decrypted challenge: ", _challenge, 6);
+        uint8_t challengeSixBytes[6];
+        sixBytesFromUInt64(*challenge, challengeSixBytes);
+        //printHex("Decrypted challenge: ", challengeSixBytes, 6);
 
         // Now XOR the new random SeqNum with the challenge from the SyncRequest
         uint8_t rndXorChallenge[6];
         pushByteArray(seq, 6, rndXorChallenge);
         for (uint8_t i = 0; i < sizeof(rndXorChallenge); i++)
         {
-            rndXorChallenge[i] ^= _challenge[i];
+            rndXorChallenge[i] ^= challengeSixBytes[i];
         }
         pBuf = pushByteArray(rndXorChallenge, 6, pBuf);
     }
@@ -1129,4 +1182,15 @@ uint8_t SecureApplicationLayer::getFromFailureLogByIndex(uint8_t index, uint8_t*
     print("getFromFailureLogByIndex(): Index: ");
     println(index);
     return 0;
+}
+
+uint64_t SecureApplicationLayer::getRandomNumber()
+{
+    return 0x000102030405; // TODO: generate random number
+}
+
+void SecureApplicationLayer::loop()
+{
+    // TODO: handle timeout of outgoing sync requests
+    //_pendingOutgoingSyncRequests
 }

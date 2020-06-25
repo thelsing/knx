@@ -39,6 +39,9 @@ void BauSystemB::loop()
     _transLayer.loop();
     sendNextGroupTelegram();
     nextRestartState();
+#ifdef USE_DATASECURE
+    _appLayer.loop();
+#endif
 }
 
 bool BauSystemB::enabled()
