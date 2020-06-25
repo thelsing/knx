@@ -487,7 +487,7 @@ void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, Hop
 
 //TODO: ApplicationLayer::domainAddressSerialNumberWriteRequest()
 //TODO: ApplicationLayer::domainAddressSerialNumberReadRequest()
-void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
+void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
                                                              const uint8_t* knxSerialNumber)
 {
     CemiFrame frame(13); 
@@ -506,8 +506,8 @@ void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, 
 
 //TODO: ApplicationLayer::IndividualAddressSerialNumberWriteRequest()
 //TODO: ApplicationLayer::IndividualAddressSerialNumberReadRequest()
-void ApplicationLayer::IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                                                 uint8_t* knxSerialNumber)
+void ApplicationLayer::IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                                                 const uint8_t* knxSerialNumber)
 {
     CemiFrame frame(13); 
     APDU& apdu = frame.apdu();

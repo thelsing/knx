@@ -93,6 +93,16 @@ void TpUartDataLinkLayer::loop()
     uint8_t rxByte;
 
     if (!_enabled)
+    {
+        if (millis() - _lastResetChipTime > 1000)
+        { 
+            //reset chip every 1 seconds
+            _lastResetChipTime = millis();
+            _enabled = resetChip();
+        }
+    }
+
+    if (!_enabled)
         return;
 
     switch (_loopState)
@@ -429,14 +439,16 @@ void TpUartDataLinkLayer::enabled(bool value)
     {
         _platform.setupUart();
 
-        if (resetChip()){
+        if (resetChip())
+        {
             _enabled = true;
             print("ownaddr ");
             println(_deviceObject.induvidualAddress(), HEX);
         }
-        else{
-        	_enabled = false;
-        	println("ERROR, TPUART not responding");
+        else
+        {
+            _enabled = false;
+            println("ERROR, TPUART not responding");
         }
         return;
     }
@@ -536,4 +548,4 @@ void TpUartDataLinkLayer::loadNextTxFrame()
     }
     delete tx_frame;
 }
-#endif
+#endif
