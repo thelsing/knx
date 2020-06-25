@@ -706,9 +706,8 @@ void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstA
     sendSyncResponse(toAddr, toIsGroupAddress, toolAccess, nextSeqNum);
 }
 
-void SecureApplicationLayer::receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu)
+void SecureApplicationLayer::receivedSyncResponse(uint16_t remote, bool toolAccess, uint8_t* plainApdu)
 {
-    // TODO: check if _syncReqBroadcastOutgoing is true
     if (_syncReqBroadcastOutgoing)
     {
         if (_pendingOutgoingSyncRequests.get(GrpAddr(0)) == nullptr)
@@ -719,7 +718,7 @@ void SecureApplicationLayer::receivedSyncResponse(uint16_t remoteAddr, bool tool
     }
     else
     {
-        if (_pendingOutgoingSyncRequests.get(IndAddr(remoteAddr)) == nullptr)
+        if (_pendingOutgoingSyncRequests.get(IndAddr(remote)) == nullptr)
         {
             println("Cannot handle sync.res without pending sync.req!");
             return;
@@ -731,11 +730,11 @@ void SecureApplicationLayer::receivedSyncResponse(uint16_t remoteAddr, bool tool
     uint64_t remoteSeq = sixBytesToUInt64(plainApdu + 0);
     uint64_t localSeq = sixBytesToUInt64(plainApdu + 6);
 
-    uint64_t last = lastValidSequenceNumber(toolAccess, remoteAddr);
+    uint64_t last = lastValidSequenceNumber(toolAccess, remote);
     if (remoteSeq - 1 > last)
     {
         //logger.debug("sync.res update {} last valid {} seq -> {}", remote, toolAccess ? "tool access" : "p2p", remoteSeq -1);
-        updateLastValidSequence(toolAccess, remoteAddr, remoteSeq - 1);
+        updateLastValidSequence(toolAccess, remote, remoteSeq - 1);
     }
 
     uint64_t next = nextSequenceNumber(toolAccess);
@@ -744,7 +743,8 @@ void SecureApplicationLayer::receivedSyncResponse(uint16_t remoteAddr, bool tool
         updateSequenceNumber(toolAccess, localSeq);
     }
 
-    _pendingOutgoingSyncRequests.erase(IndAddr(remoteAddr));
+    Addr remoteAddr = _syncReqBroadcastOutgoing ? (Addr)GrpAddr(0) : (Addr)IndAddr(remote);
+    _pendingOutgoingSyncRequests.erase(remoteAddr);
 }
 
 bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu)
