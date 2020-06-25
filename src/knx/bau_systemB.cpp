@@ -56,6 +56,9 @@ void BauSystemB::enabled(bool value)
 
 void BauSystemB::sendNextGroupTelegram()
 {
+    if(!configured())
+        return;
+    
     static uint16_t startIdx = 1;
 
     GroupObjectTableObject& table = _groupObjTable;
