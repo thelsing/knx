@@ -245,11 +245,7 @@ void SecureApplicationLayer::dataConnectedConfirm(uint16_t tsap)
 
 void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
-    // TODO:
-    // get flags auth and confidentiality for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
-    bool needsEncryption = false;
-
-    if (needsEncryption)
+    if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -266,10 +262,7 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
 
 void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl)
 {
-    // TODO:
-    bool needsEncryption = true;
-
-    if (needsEncryption)
+    if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -286,10 +279,7 @@ void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopT
 
 void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl)
 {
-    // TODO:
-    bool needsEncryption = true;
-
-    if (needsEncryption)
+    if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -306,10 +296,7 @@ void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountTyp
 
 void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu, const SecurityControl& secCtrl)
 {
-    // TODO:
-    bool needsEncryption = true;
-
-    if (needsEncryption)
+    if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -326,10 +313,7 @@ void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hop
 
 void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu, const SecurityControl &secCtrl)
 {
-    // TODO:
-    bool needsEncryption = true;
-
-    if (needsEncryption)
+    if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
