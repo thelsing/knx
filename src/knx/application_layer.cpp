@@ -8,6 +8,8 @@
 #include "bits.h"
 #include <stdio.h>
 
+const SecurityControl ApplicationLayer::noSecurity {.toolAccess=true, .dataSecurity=DataSecurity::none};
+
 ApplicationLayer::ApplicationLayer(AssociationTableObject& assocTable, BusAccessUnit& bau):
     _assocTable(assocTable),  _bau(bau)
 {
@@ -17,10 +19,11 @@ void ApplicationLayer::transportLayer(TransportLayer& layer)
 {
     _transportLayer = &layer;
 }
+static constexpr SecurityControl noSecurity {.toolAccess=true, .dataSecurity=DataSecurity::none};
 
 #pragma region TL Callbacks
 
-void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
+void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl = ApplicationLayer::noSecurity)
 {
     uint8_t len = apdu.length();
     uint8_t dataArray[len];
@@ -44,13 +47,13 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
         switch (apdu.type())
         {
             case GroupValueRead:
-                _bau.groupValueReadIndication(asap, priority, hopType);
+                _bau.groupValueReadIndication(asap, priority, hopType, secCtrl);
                 break;
             case GroupValueResponse:
-                _bau.groupValueReadAppLayerConfirm(asap, priority, hopType, data, len);
+                _bau.groupValueReadAppLayerConfirm(asap, priority, hopType, secCtrl, data, len);
                 break;
             case GroupValueWrite:
-                _bau.groupValueWriteIndication(asap, priority, hopType, data, len);
+                _bau.groupValueWriteIndication(asap, priority, hopType, secCtrl, data, len);
             default:
                 /* other apdutypes ar not valid here. If the appear do nothing */
                 break;
@@ -58,18 +61,18 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
     }
 }
 
-void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority,  uint16_t tsap, APDU& apdu, bool status)
+void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority,  uint16_t tsap, APDU& apdu, const SecurityControl &secCtrl, bool status)
 {
     switch (apdu.type())
     {
     case GroupValueRead:
-        _bau.groupValueReadLocalConfirm(ack, _savedAsapReadRequest, priority, hopType, status);
+        _bau.groupValueReadLocalConfirm(ack, _savedAsapReadRequest, priority, hopType, secCtrl, status);
         break;
     case GroupValueResponse:
-        _bau.groupValueReadResponseConfirm(ack, _savedAsapResponse, priority, hopType, apdu.data(), apdu.length() - 1, status);
+        _bau.groupValueReadResponseConfirm(ack, _savedAsapResponse, priority, hopType, secCtrl, apdu.data(), apdu.length() - 1, status);
         break;
     case GroupValueWrite:
-        _bau.groupValueWriteLocalConfirm(ack, _savedAsapWriteRequest, priority, hopType, apdu.data(), apdu.length() - 1, status);
+        _bau.groupValueWriteLocalConfirm(ack, _savedAsapWriteRequest, priority, hopType, secCtrl, apdu.data(), apdu.length() - 1, status);
         break;
     default:
         print("datagroup-confirm: unhandled APDU-Type: ");
@@ -77,7 +80,7 @@ void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Prior
     }
 }
 
-void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
+void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, const SecurityControl& secCtrl)
 {
     uint8_t* data = apdu.data();
     switch (apdu.type())
@@ -86,26 +89,26 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
         {
             uint16_t newAddress;
             popWord(newAddress, data + 1);
-            _bau.individualAddressWriteIndication(hopType, newAddress);
+            _bau.individualAddressWriteIndication(hopType, secCtrl, newAddress);
             break;
         }
         case IndividualAddressRead:
-            _bau.individualAddressReadIndication(hopType);
+            _bau.individualAddressReadIndication(hopType, secCtrl);
             break;
         case IndividualAddressResponse:
-            _bau.individualAddressReadAppLayerConfirm(hopType, apdu.frame().sourceAddress());
+            _bau.individualAddressReadAppLayerConfirm(hopType, secCtrl, apdu.frame().sourceAddress());
             break;
         case IndividualAddressSerialNumberRead:
         {
             uint8_t* knxSerialNumber = &data[1];
-            _bau.individualAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
+            _bau.individualAddressSerialNumberReadIndication(priority, hopType, secCtrl, knxSerialNumber);
             break;
         }
         case IndividualAddressSerialNumberResponse:
         {
             uint16_t domainAddress;
             popWord(domainAddress, data + 7);
-            _bau.individualAddressSerialNumberReadAppLayerConfirm(hopType, data + 1, apdu.frame().sourceAddress(),
+            _bau.individualAddressSerialNumberReadAppLayerConfirm(hopType, secCtrl, data + 1, apdu.frame().sourceAddress(),
                 domainAddress);
             break;
         }
@@ -114,13 +117,13 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
             uint8_t* knxSerialNumber = &data[1];
             uint16_t newIndividualAddress;
             popWord(newIndividualAddress, &data[7]);
-            _bau.individualAddressSerialNumberWriteIndication(priority, hopType, newIndividualAddress, knxSerialNumber);
+            _bau.individualAddressSerialNumberWriteIndication(priority, hopType, secCtrl, newIndividualAddress, knxSerialNumber);
             break;
         }
         default:
 #if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
             // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
-            dataSystemBroadcastIndication(hopType, priority, source, apdu);
+            dataSystemBroadcastIndication(hopType, priority, source, apdu, secCtrl);
 #else
             print("Broadcast-indication: unhandled APDU-Type: ");
             println(apdu.type());
@@ -130,7 +133,7 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
     }
 }
 
-void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status)
+void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
     uint8_t* data = apdu.data();
     switch (apdu.type())
@@ -139,36 +142,36 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
         {
             uint16_t newAddress;
             popWord(newAddress, data + 1);
-            _bau.individualAddressWriteLocalConfirm(ack, hopType, newAddress, status);
+            _bau.individualAddressWriteLocalConfirm(ack, hopType, secCtrl, newAddress, status);
             break;
         }
         case IndividualAddressRead:
-            _bau.individualAddressReadLocalConfirm(ack, hopType, status);
+            _bau.individualAddressReadLocalConfirm(ack, hopType, secCtrl, status);
             break;
         case IndividualAddressResponse:
-            _bau.individualAddressReadResponseConfirm(ack, hopType, status);
+            _bau.individualAddressReadResponseConfirm(ack, hopType, secCtrl, status);
             break;
         case IndividualAddressSerialNumberRead:
-            _bau.individualAddressSerialNumberReadLocalConfirm(ack, hopType, data + 1, status);
+            _bau.individualAddressSerialNumberReadLocalConfirm(ack, hopType, secCtrl, data + 1, status);
             break;
         case IndividualAddressSerialNumberResponse:
         {
             uint16_t domainAddress;
             popWord(domainAddress, data + 7);
-            _bau.individualAddressSerialNumberReadResponseConfirm(ack, hopType, data + 1, domainAddress, status);
+            _bau.individualAddressSerialNumberReadResponseConfirm(ack, hopType, secCtrl, data + 1, domainAddress, status);
             break;
         }
         case IndividualAddressSerialNumberWrite:
         {
             uint16_t newAddress;
             popWord(newAddress, data + 7);
-            _bau.individualAddressSerialNumberWriteLocalConfirm(ack, hopType, data + 1, newAddress, status);
+            _bau.individualAddressSerialNumberWriteLocalConfirm(ack, hopType, secCtrl, data + 1, newAddress, status);
             break;
         }
         default:
 #if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
             // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
-            dataSystemBroadcastConfirm(hopType, priority, apdu, status);
+            dataSystemBroadcastConfirm(hopType, priority, apdu, secCtrl, status);
 #else
             print("Broadcast-confirm: unhandled APDU-Type: ");
             println(apdu.type());
@@ -178,7 +181,7 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
     }
 }
 
-void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu)
+void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, const SecurityControl &secCtrl)
 {
     const uint8_t* data = apdu.data();
     switch (apdu.type())
@@ -195,20 +198,20 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
             popByte(testInfo[1], data + 5);
             propertyId = (propertyId >> 4) & 0x0FFF;;
             testInfo[0] &= 0x0F;
-            _bau.systemNetworkParameterReadIndication(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo));
+            _bau.systemNetworkParameterReadIndication(priority, hopType, secCtrl, objectType, propertyId, testInfo, sizeof(testInfo));
             break;
         }
         case DomainAddressSerialNumberWrite:
         {
             const uint8_t* knxSerialNumber = &data[1];
             const uint8_t* domainAddress = &data[7];
-            _bau.domainAddressSerialNumberWriteIndication(priority, hopType, domainAddress, knxSerialNumber);
+            _bau.domainAddressSerialNumberWriteIndication(priority, hopType, secCtrl, domainAddress, knxSerialNumber);
             break;
         }
         case DomainAddressSerialNumberRead:
         {
             const uint8_t* knxSerialNumber = &data[1];
-            _bau.domainAddressSerialNumberReadIndication(priority, hopType, knxSerialNumber);
+            _bau.domainAddressSerialNumberReadIndication(priority, hopType, secCtrl, knxSerialNumber);
             break;
         }
         default:
@@ -222,7 +225,7 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
     }
 }
 
-void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status)
+void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
     const uint8_t* data = apdu.data();
     switch (apdu.type())
@@ -239,20 +242,20 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
             popByte(testInfo[1], data + 5);
             propertyId = (propertyId >> 4) & 0x0FFF;;
             testInfo[0] &= 0x0F;
-            _bau.systemNetworkParameterReadLocalConfirm(priority, hopType, objectType, propertyId, testInfo, sizeof(testInfo), status);
+            _bau.systemNetworkParameterReadLocalConfirm(priority, hopType, secCtrl, objectType, propertyId, testInfo, sizeof(testInfo), status);
             break;
         }
         case DomainAddressSerialNumberWrite:
         {
             const uint8_t* knxSerialNumber = &data[1];
             const uint8_t* domainAddress = &data[7];
-            _bau.domainAddressSerialNumberWriteLocalConfirm(priority, hopType, domainAddress, knxSerialNumber, status);
+            _bau.domainAddressSerialNumberWriteLocalConfirm(priority, hopType, secCtrl, domainAddress, knxSerialNumber, status);
             break;
         }
         case DomainAddressSerialNumberRead:
         {
             const uint8_t* knxSerialNumber = &data[1];
-            _bau.domainAddressSerialNumberReadLocalConfirm(priority, hopType, knxSerialNumber, status);
+            _bau.domainAddressSerialNumberReadLocalConfirm(priority, hopType, secCtrl, knxSerialNumber, status);
             break;
         }
         default:
@@ -266,14 +269,14 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
     }
 }
 
-void ApplicationLayer::dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
+void ApplicationLayer::dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
-    individualIndication(hopType, priority, tsap, apdu);
+    individualIndication(hopType, priority, tsap, apdu, secCtrl);
 }
 
-void ApplicationLayer::dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status)
+void ApplicationLayer::dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl &secCtrl, bool status)
 {
-    individualConfirm(ack, hopType, priority, tsap, apdu, status);
+    individualConfirm(ack, hopType, priority, tsap, apdu, secCtrl, status);
 }
 
 void ApplicationLayer::connectIndication(uint16_t tsap)
@@ -302,9 +305,9 @@ void ApplicationLayer::disconnectConfirm(Priority priority, uint16_t tsap, bool 
     _connectedTsap = -1;
 }
 
-void ApplicationLayer::dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu)
+void ApplicationLayer::dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
-    individualIndication(NetworkLayerParameter, priority, tsap, apdu);
+    individualIndication(NetworkLayerParameter, priority, tsap, apdu, secCtrl);
 }
 
 void ApplicationLayer::dataConnectedConfirm(uint16_t tsap)
@@ -312,7 +315,7 @@ void ApplicationLayer::dataConnectedConfirm(uint16_t tsap)
 
 }
 #pragma endregion
-void ApplicationLayer::groupValueReadRequest(AckType ack, uint16_t asap, Priority priority, HopCountType hopType)
+void ApplicationLayer::groupValueReadRequest(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl)
 {
     _savedAsapReadRequest = asap;
     CemiFrame frame(1);
@@ -326,59 +329,59 @@ void ApplicationLayer::groupValueReadRequest(AckType ack, uint16_t asap, Priorit
     uint16_t tsap = (uint16_t)value;
 
     // first to bus then to itself
-    dataGroupRequest(ack, hopType, priority, tsap, apdu);
-    dataGroupIndication(hopType, priority, tsap, apdu);
+    dataGroupRequest(ack, hopType, priority, tsap, apdu, secCtrl);
+    dataGroupIndication(hopType, priority, tsap, apdu, secCtrl);
 }
 
-void ApplicationLayer::groupValueReadResponse(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, uint8_t * data, uint8_t dataLength)
+void ApplicationLayer::groupValueReadResponse(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint8_t * data, uint8_t dataLength)
 {
     _savedAsapResponse = asap;
-    groupValueSend(GroupValueResponse, ack, asap, priority, hopType, data, dataLength);
+    groupValueSend(GroupValueResponse, ack, asap, priority, hopType, secCtrl, data, dataLength);
 }
 
-void ApplicationLayer::groupValueWriteRequest(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, uint8_t * data, uint8_t dataLength)
+void ApplicationLayer::groupValueWriteRequest(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint8_t * data, uint8_t dataLength)
 {
     _savedAsapWriteRequest = asap;
-    groupValueSend(GroupValueWrite, ack, asap, priority, hopType, data, dataLength);
+    groupValueSend(GroupValueWrite, ack, asap, priority, hopType, secCtrl, data, dataLength);
 }
 
-void ApplicationLayer::individualAddressWriteRequest(AckType ack, HopCountType hopType, uint16_t newaddress)
+void ApplicationLayer::individualAddressWriteRequest(AckType ack, HopCountType hopType, const SecurityControl& secCtrl, uint16_t newaddress)
 {
     CemiFrame frame(3);
     APDU& apdu = frame.apdu();
     apdu.type(IndividualAddressWrite);
     uint8_t* apduData = apdu.data();
     pushWord(newaddress, apduData + 1);
-    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void ApplicationLayer::individualAddressReadRequest(AckType ack, HopCountType hopType)
+void ApplicationLayer::individualAddressReadRequest(AckType ack, HopCountType hopType, const SecurityControl& secCtrl)
 {
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(IndividualAddressRead);
-    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void ApplicationLayer::individualAddressReadResponse(AckType ack, HopCountType hopType)
+void ApplicationLayer::individualAddressReadResponse(AckType ack, HopCountType hopType, const SecurityControl &secCtrl)
 {
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(IndividualAddressResponse);
-    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void ApplicationLayer::individualAddressSerialNumberReadRequest(AckType ack, HopCountType hopType, uint8_t * serialNumber)
+void ApplicationLayer::individualAddressSerialNumberReadRequest(AckType ack, HopCountType hopType, const SecurityControl &secCtrl, uint8_t * serialNumber)
 {
     CemiFrame frame(7);
     APDU& apdu = frame.apdu();
     apdu.type(IndividualAddressSerialNumberRead);
     uint8_t* data = apdu.data() + 1;
     memcpy(data, serialNumber, 6);
-    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void ApplicationLayer::individualAddressSerialNumberReadResponse(AckType ack, HopCountType hopType, 
+void ApplicationLayer::individualAddressSerialNumberReadResponse(AckType ack, HopCountType hopType, const SecurityControl& secCtrl,
     uint8_t * serialNumber, uint16_t domainAddress)
 {
     CemiFrame frame(7);
@@ -388,10 +391,10 @@ void ApplicationLayer::individualAddressSerialNumberReadResponse(AckType ack, Ho
     memcpy(data, serialNumber, 6);
     data += 6;
     pushWord(domainAddress, data);
-    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void ApplicationLayer::individualAddressSerialNumberWriteRequest(AckType ack, HopCountType hopType, uint8_t * serialNumber,
+void ApplicationLayer::individualAddressSerialNumberWriteRequest(AckType ack, HopCountType hopType, const SecurityControl &secCtrl, uint8_t * serialNumber,
     uint16_t newaddress)
 {
     CemiFrame frame(13);
@@ -401,10 +404,10 @@ void ApplicationLayer::individualAddressSerialNumberWriteRequest(AckType ack, Ho
     memcpy(data, serialNumber, 6);
     data += 6;
     pushWord(newaddress, data);
-    dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(ack, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void ApplicationLayer::deviceDescriptorReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
+void ApplicationLayer::deviceDescriptorReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t descriptorType)
 {
     CemiFrame frame(1);
@@ -413,10 +416,10 @@ void ApplicationLayer::deviceDescriptorReadRequest(AckType ack, Priority priorit
     uint8_t* data = apdu.data();
     *data |= (descriptorType & 0x3f);
     
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::deviceDescriptorReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
+void ApplicationLayer::deviceDescriptorReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t descriptorType, uint8_t* deviceDescriptor)
 {
     uint8_t length = 0;
@@ -442,7 +445,7 @@ void ApplicationLayer::deviceDescriptorReadResponse(AckType ack, Priority priori
     if (length > 1)
         memcpy(data + 1, deviceDescriptor, length - 1);
     
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
 void ApplicationLayer::connectRequest(uint16_t destination, Priority priority)
@@ -455,19 +458,19 @@ void ApplicationLayer::disconnectRequest(Priority priority)
     _transportLayer->disconnectRequest(_connectedTsap, priority);
 }
 
-void ApplicationLayer::restartRequest(AckType ack, Priority priority, HopCountType hopType)
+void ApplicationLayer::restartRequest(AckType ack, Priority priority, HopCountType hopType, const SecurityControl& secCtrl)
 {
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(Restart);
 
-    individualSend(ack, hopType, priority, _connectedTsap, apdu);
+    individualSend(ack, hopType, priority, _connectedTsap, apdu, secCtrl);
 }
 
 //TODO: ApplicationLayer::systemNetworkParameterReadRequest()
-void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, HopCountType hopType, 
+void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
                                                           uint16_t objectType, uint16_t propertyId,
-                                                          uint8_t* testInfo, uint16_t testInfoLength, 
+                                                          uint8_t* testInfo, uint16_t testInfoLength,
                                                           uint8_t* testResult, uint16_t testResultLength)
 {
     CemiFrame frame(testInfoLength + testResultLength + 3 + 1); // PID and testInfo share an octet (+3) and +1 for APCI byte(?)
@@ -482,12 +485,12 @@ void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, Hop
 
     //apdu.printPDU();
 
-    dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu, secCtrl);
 }
 
 //TODO: ApplicationLayer::domainAddressSerialNumberWriteRequest()
 //TODO: ApplicationLayer::domainAddressSerialNumberReadRequest()
-void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, const uint8_t* rfDoA,
                                                              const uint8_t* knxSerialNumber)
 {
     CemiFrame frame(13); 
@@ -501,12 +504,12 @@ void ApplicationLayer::domainAddressSerialNumberReadResponse(Priority priority, 
 
     //apdu.printPDU();
 
-    dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    dataSystemBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu, secCtrl);
 }
 
 //TODO: ApplicationLayer::IndividualAddressSerialNumberWriteRequest()
 //TODO: ApplicationLayer::IndividualAddressSerialNumberReadRequest()
-void ApplicationLayer::IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+void ApplicationLayer::IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, const uint8_t* rfDoA,
                                                                  const uint8_t* knxSerialNumber)
 {
     CemiFrame frame(13); 
@@ -520,10 +523,10 @@ void ApplicationLayer::IndividualAddressSerialNumberReadResponse(Priority priori
 
      //apdu.printPDU();
 
-    dataBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu);
+    dataBroadcastRequest(AckDontCare, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void ApplicationLayer::propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
+void ApplicationLayer::propertyValueReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
 {
     CemiFrame frame(5);
@@ -536,24 +539,24 @@ void ApplicationLayer::propertyValueReadRequest(AckType ack, Priority priority, 
     pushWord(startIndex & 0xfff, data);
     *data &= ((numberOfElements & 0xf) << 4);
     
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::propertyValueReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
+void ApplicationLayer::propertyValueReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl,
     uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
-    propertyDataSend(PropertyValueResponse, ack, priority, hopType, asap, objectIndex, propertyId, numberOfElements,
+    propertyDataSend(PropertyValueResponse, ack, priority, hopType, asap, secCtrl, objectIndex, propertyId, numberOfElements,
         startIndex, data, length);
 }
 
-void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
+void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t * data, uint8_t length)
 {
-    propertyDataSend(PropertyValueWrite, ack, priority, hopType, asap, objectIndex, propertyId, numberOfElements,
+    propertyDataSend(PropertyValueWrite, ack, priority, hopType, asap, secCtrl, objectIndex, propertyId, numberOfElements,
         startIndex, data, length);
 }
 
-void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
                                                      uint8_t objectIndex, uint8_t propertyId, uint8_t* resultData, uint8_t resultLength)
 {
     CemiFrame frame(3 + resultLength + 1);
@@ -567,12 +570,12 @@ void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority prior
         memcpy(&data[2], resultData, resultLength);
 
     if (asap == _connectedTsap)
-        dataConnectedRequest(asap, priority, apdu);
+        dataConnectedRequest(asap, priority, apdu, secCtrl);
     else
-        dataIndividualRequest(ack, hopType, priority, asap, apdu);
+        dataIndividualRequest(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+void ApplicationLayer::propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl,
     uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex)
 {
     CemiFrame frame(4);
@@ -582,10 +585,10 @@ void ApplicationLayer::propertyDescriptionReadRequest(AckType ack, Priority prio
     data[1] = objectIndex;
     data[2] = propertyId;
     data[3] = propertyIndex;
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::propertyDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+void ApplicationLayer::propertyDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex, bool writeEnable, uint8_t type, 
     uint16_t maxNumberOfElements, uint8_t access)
 {
@@ -601,10 +604,10 @@ void ApplicationLayer::propertyDescriptionReadResponse(AckType ack, Priority pri
     data[4] |= (type & 0x3f);
     pushWord(maxNumberOfElements & 0xfff, data + 5);
     data[7] = access;
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::memoryReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
+void ApplicationLayer::memoryReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
     uint16_t memoryAddress)
 {
     CemiFrame frame(3);
@@ -613,22 +616,22 @@ void ApplicationLayer::memoryReadRequest(AckType ack, Priority priority, HopCoun
     uint8_t* data = apdu.data();
     *data |= (number & 0x3f);
     pushWord(memoryAddress, data + 1);
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::memoryReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
+void ApplicationLayer::memoryReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
     uint16_t memoryAddress, uint8_t * memoryData)
 {
-    memorySend(MemoryResponse, ack, priority, hopType, asap, number, memoryAddress, memoryData);
+    memorySend(MemoryResponse, ack, priority, hopType, asap, secCtrl, number, memoryAddress, memoryData);
 }
 
-void ApplicationLayer::memoryWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+void ApplicationLayer::memoryWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t number, uint16_t memoryAddress, uint8_t * data)
 {
-    memorySend(MemoryWrite, ack, priority, hopType, asap, number, memoryAddress, data);
+    memorySend(MemoryWrite, ack, priority, hopType, asap, secCtrl, number, memoryAddress, data);
 }
 
-void ApplicationLayer::userMemoryReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+void ApplicationLayer::userMemoryReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t number, uint32_t memoryAddress)
 {
     CemiFrame frame(4);
@@ -638,30 +641,30 @@ void ApplicationLayer::userMemoryReadRequest(AckType ack, Priority priority, Hop
     data[1] |= (number & 0xf);
     data[1] |= ((memoryAddress >> 12) & 0xf0);
     pushWord(memoryAddress & 0xff, data + 2);
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::userMemoryReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
+void ApplicationLayer::userMemoryReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t number, uint32_t memoryAddress, uint8_t * memoryData)
 {
-    userMemorySend(UserMemoryResponse, ack, priority, hopType, asap, number, memoryAddress, memoryData);
+    userMemorySend(UserMemoryResponse, ack, priority, hopType, asap, secCtrl, number, memoryAddress, memoryData);
 }
 
-void ApplicationLayer::userMemoryWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+void ApplicationLayer::userMemoryWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t number, uint32_t memoryAddress, uint8_t * memoryData)
 {
-    userMemorySend(UserMemoryWrite, ack, priority, hopType, asap, number, memoryAddress, memoryData);
+    userMemorySend(UserMemoryWrite, ack, priority, hopType, asap, secCtrl, number, memoryAddress, memoryData);
 }
 
-void ApplicationLayer::userManufacturerInfoReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap)
+void ApplicationLayer::userManufacturerInfoReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl)
 {
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(UserManufacturerInfoRead);
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::userManufacturerInfoReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+void ApplicationLayer::userManufacturerInfoReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t* info)
 {
     CemiFrame frame(4);
@@ -669,30 +672,30 @@ void ApplicationLayer::userManufacturerInfoReadResponse(AckType ack, Priority pr
     apdu.type(UserMemoryRead);
     uint8_t* data = apdu.data();
     memcpy(data + 1, info, 3);
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::authorizeRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint32_t key)
+void ApplicationLayer::authorizeRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint32_t key)
 {
     CemiFrame frame(6);
     APDU& apdu = frame.apdu();
     apdu.type(AuthorizeRequest);
     uint8_t* data = apdu.data();
     pushInt(key, data + 2);
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::authorizeResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t level)
+void ApplicationLayer::authorizeResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t level)
 {
     CemiFrame frame(2);
     APDU& apdu = frame.apdu();
     apdu.type(AuthorizeResponse);
     uint8_t* data = apdu.data();
     data[1] = level;
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::keyWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t level, uint32_t key)
+void ApplicationLayer::keyWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t level, uint32_t key)
 {
     CemiFrame frame(6);
     APDU& apdu = frame.apdu();
@@ -700,20 +703,20 @@ void ApplicationLayer::keyWriteRequest(AckType ack, Priority priority, HopCountT
     uint8_t* data = apdu.data();
     data[1] = level;
     pushInt(key, data + 2);
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::keyWriteResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t level)
+void ApplicationLayer::keyWriteResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t level)
 {
     CemiFrame frame(6);
     APDU& apdu = frame.apdu();
     apdu.type(KeyResponse);
     uint8_t* data = apdu.data();
     data[1] = level;
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::propertyDataSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, 
+void ApplicationLayer::propertyDataSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t objectIndex, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
     CemiFrame frame(5 + length);
@@ -730,12 +733,12 @@ void ApplicationLayer::propertyDataSend(ApduType type, AckType ack, Priority pri
         memcpy(apduData, data, length);
 
     if (asap == _connectedTsap)
-        dataConnectedRequest(asap, priority, apdu);
+        dataConnectedRequest(asap, priority, apdu, secCtrl);
     else
-        dataIndividualRequest(ack, hopType, priority, asap, apdu);
+        dataIndividualRequest(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap, Priority priority, HopCountType hopType, 
+void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
     uint8_t* data,  uint8_t& dataLength)
 {
     CemiFrame frame(dataLength + 1);
@@ -754,11 +757,11 @@ void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap,
     }
     // no need to check if there is a tsap. This is a response, so the read got trough
     uint16_t tsap = (uint16_t)_assocTable.translateAsap(asap);
-    dataGroupRequest(ack, hopType, priority, tsap, apdu);
-    dataGroupIndication(hopType, priority, tsap, apdu);
+    dataGroupRequest(ack, hopType, priority, tsap, apdu, secCtrl);
+    dataGroupIndication(hopType, priority, tsap, apdu, secCtrl);
 }
 
-void ApplicationLayer::memorySend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
+void ApplicationLayer::memorySend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
     uint16_t memoryAddress, uint8_t * memoryData)
 {
     CemiFrame frame(3 + number);
@@ -770,10 +773,10 @@ void ApplicationLayer::memorySend(ApduType type, AckType ack, Priority priority,
     if (number > 0)
         memcpy(data + 3, memoryData, number);
 
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::userMemorySend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
+void ApplicationLayer::userMemorySend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
     uint32_t memoryAddress, uint8_t * memoryData)
 {
     CemiFrame frame(4 + number);
@@ -785,30 +788,30 @@ void ApplicationLayer::userMemorySend(ApduType type, AckType ack, Priority prior
     pushWord(memoryAddress & 0xffff, data + 2);
     if (number > 0)
         memcpy(data + 4, memoryData, number);
-    individualSend(ack, hopType, priority, asap, apdu);
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-void ApplicationLayer::individualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU & apdu)
+void ApplicationLayer::individualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU & apdu, const SecurityControl& secCtrl)
 {
     uint8_t* data = apdu.data();
     switch (apdu.type())
     {
         case DeviceDescriptorRead:
-            _bau.deviceDescriptorReadIndication(priority, hopType, tsap, *data & 0x3f);
+            _bau.deviceDescriptorReadIndication(priority, hopType, tsap, secCtrl, *data & 0x3f);
             break;
         case DeviceDescriptorResponse:
-            _bau.deviceDescriptorReadAppLayerConfirm(priority, hopType, tsap, *data & 0x3f, data + 1);
+            _bau.deviceDescriptorReadAppLayerConfirm(priority, hopType, tsap, secCtrl, *data & 0x3f, data + 1);
             break;
         case Restart:
             if ((*data & 0x3f) == 0)
-                _bau.restartRequestIndication(priority, hopType, tsap);
+                _bau.restartRequestIndication(priority, hopType, tsap, secCtrl);
             break;
         case PropertyValueRead:
         {
             uint16_t startIndex;
             popWord(startIndex, data + 3);
             startIndex &= 0xfff;
-            _bau.propertyValueReadIndication(priority, hopType, tsap, data[1], data[2], data[3] >> 4, startIndex);
+            _bau.propertyValueReadIndication(priority, hopType, tsap, secCtrl, data[1], data[2], data[3] >> 4, startIndex);
             break;
         }
         case PropertyValueResponse:
@@ -816,7 +819,7 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             uint16_t startIndex;
             popWord(startIndex, data + 3);
             startIndex &= 0xfff;
-            _bau.propertyValueReadAppLayerConfirm(priority, hopType, tsap, data[1], data[2], data[3] >> 4,
+            _bau.propertyValueReadAppLayerConfirm(priority, hopType, tsap, secCtrl, data[1], data[2], data[3] >> 4,
                 startIndex, data + 5, apdu.length() - 5);
             break;
         }
@@ -825,67 +828,67 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             uint16_t startIndex;
             popWord(startIndex, data + 3);
             startIndex &= 0xfff;
-            _bau.propertyValueWriteIndication(priority, hopType, tsap, data[1], data[2], data[3] >> 4,
+            _bau.propertyValueWriteIndication(priority, hopType, tsap, secCtrl, data[1], data[2], data[3] >> 4,
                 startIndex, data + 5, apdu.length() - 5);
             break;
         }
         case FunctionPropertyCommand:
-            _bau.functionPropertyCommandIndication(priority, hopType, tsap, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            _bau.functionPropertyCommandIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
             break;
         case FunctionPropertyState:
-            _bau.functionPropertyStateIndication(priority, hopType, tsap, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            _bau.functionPropertyStateIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
             break;
         case PropertyDescriptionRead:
-            _bau.propertyDescriptionReadIndication(priority, hopType, tsap, data[1], data[2], data[3]);
+            _bau.propertyDescriptionReadIndication(priority, hopType, tsap, secCtrl, data[1], data[2], data[3]);
             break;
         case PropertyDescriptionResponse:
-            _bau.propertyDescriptionReadAppLayerConfirm(priority, hopType, tsap, data[1], data[2], data[3],
+            _bau.propertyDescriptionReadAppLayerConfirm(priority, hopType, tsap, secCtrl, data[1], data[2], data[3],
                 (data[4] & 0x80) > 0, data[4] & 0x3f, getWord(data + 5) & 0xfff, data[7]);
             break;
         case MemoryRead:
-            _bau.memoryReadIndication(priority, hopType, tsap, data[0] & 0x3f, getWord(data + 1));
+            _bau.memoryReadIndication(priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1));
             break;
         case MemoryResponse:
-            _bau.memoryReadAppLayerConfirm(priority, hopType, tsap, data[0] & 0x3f, getWord(data + 1), data + 3);
+            _bau.memoryReadAppLayerConfirm(priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3);
             break;
         case MemoryWrite:
-            _bau.memoryWriteIndication(priority, hopType, tsap, data[0] & 0x3f, getWord(data + 1), data + 3);
+            _bau.memoryWriteIndication(priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3);
             break;
         case UserMemoryRead:
         {
             uint32_t address = ((data[1] & 0xf0) << 12) + (data[2] << 8) + data[3];
-            _bau.userMemoryReadIndication(priority, hopType, tsap, data[1] & 0xf, address);
+            _bau.userMemoryReadIndication(priority, hopType, tsap, secCtrl, data[1] & 0xf, address);
             break;
         }
         case UserMemoryResponse:
         {
             uint32_t address = ((data[1] & 0xf0) << 12) + (data[2] << 8) + data[3];
-            _bau.userMemoryReadAppLayerConfirm(priority, hopType, tsap, data[1] & 0xf, address, data + 4);
+            _bau.userMemoryReadAppLayerConfirm(priority, hopType, tsap, secCtrl, data[1] & 0xf, address, data + 4);
             break;
         }
         case UserMemoryWrite:
         {
             uint32_t address = ((data[1] & 0xf0) << 12) + (data[2] << 8) + data[3];
-            _bau.userMemoryWriteIndication(priority, hopType, tsap, data[1] & 0xf, address, data + 4);
+            _bau.userMemoryWriteIndication(priority, hopType, tsap, secCtrl, data[1] & 0xf, address, data + 4);
             break;
         }
         case UserManufacturerInfoRead:
-            _bau.userManufacturerInfoIndication(priority, hopType, tsap);
+            _bau.userManufacturerInfoIndication(priority, hopType, tsap, secCtrl);
             break;
         case UserManufacturerInfoResponse:
-            _bau.userManufacturerInfoAppLayerConfirm(priority, hopType, tsap, data + 1);
+            _bau.userManufacturerInfoAppLayerConfirm(priority, hopType, tsap, secCtrl, data + 1);
             break;
         case AuthorizeRequest:
-            _bau.authorizeIndication(priority, hopType, tsap, getInt(data + 2));
+            _bau.authorizeIndication(priority, hopType, tsap, secCtrl, getInt(data + 2));
             break;
         case AuthorizeResponse:
-            _bau.authorizeAppLayerConfirm(priority, hopType, tsap, data[1]);
+            _bau.authorizeAppLayerConfirm(priority, hopType, tsap, secCtrl, data[1]);
             break;
         case KeyWrite:
-            _bau.keyWriteIndication(priority, hopType, tsap, data[1], getInt(data + 2));
+            _bau.keyWriteIndication(priority, hopType, tsap, secCtrl, data[1], getInt(data + 2));
             break;
         case KeyResponse:
-            _bau.keyWriteAppLayerConfirm(priority, hopType, tsap, data[1]);
+            _bau.keyWriteAppLayerConfirm(priority, hopType, tsap, secCtrl, data[1]);
             break;
         default:
             print("Indiviual-indication: unhandled APDU-Type: ");
@@ -893,26 +896,26 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
     }
 }
 
-void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU & apdu, bool status)
+void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU & apdu, const SecurityControl &secCtrl, bool status)
 {
     uint8_t* data = apdu.data();
     switch (apdu.type())
     {
         case DeviceDescriptorRead:
-            _bau.deviceDescriptorReadLocalConfirm(ack, priority, hopType, tsap, *data & 0x3f, status);
+            _bau.deviceDescriptorReadLocalConfirm(ack, priority, hopType, tsap, secCtrl, *data & 0x3f, status);
             break;
         case DeviceDescriptorResponse:
-            _bau.deviceDescriptorReadResponseConfirm(ack, priority, hopType, tsap, *data & 0x3f, data + 1, status);
+            _bau.deviceDescriptorReadResponseConfirm(ack, priority, hopType, tsap, secCtrl, *data & 0x3f, data + 1, status);
             break;
         case Restart:
-            _bau.restartRequestLocalConfirm(ack, priority, hopType, tsap, status);
+            _bau.restartRequestLocalConfirm(ack, priority, hopType, tsap, secCtrl, status);
             break;
         case PropertyValueRead:
         {
             uint16_t startIndex;
             popWord(startIndex, data + 3);
             startIndex &= 0xfff;
-            _bau.propertyValueReadLocalConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3] >> 4,
+            _bau.propertyValueReadLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[1], data[2], data[3] >> 4,
                 startIndex, status);
             break;
         }
@@ -921,7 +924,7 @@ void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Prio
             uint16_t startIndex;
             popWord(startIndex, data + 3);
             startIndex &= 0xfff;
-            _bau.propertyValueReadResponseConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3] >> 4,
+            _bau.propertyValueReadResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[1], data[2], data[3] >> 4,
                 startIndex, data + 5, apdu.length() - 5, status);
             break;
         }
@@ -930,61 +933,61 @@ void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Prio
             uint16_t startIndex;
             popWord(startIndex, data + 3);
             startIndex &= 0xfff;
-            _bau.propertyValueWriteLocalConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3] >> 4,
+            _bau.propertyValueWriteLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[1], data[2], data[3] >> 4,
                 startIndex, data + 5, apdu.length() - 5, status);
             break;
         }
         case PropertyDescriptionRead:
-            _bau.propertyDescriptionReadLocalConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3], status);
+            _bau.propertyDescriptionReadLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[1], data[2], data[3], status);
             break;
         case PropertyDescriptionResponse:
-            _bau.propertyDescriptionReadResponseConfirm(ack, priority, hopType, tsap, data[1], data[2], data[3],
+            _bau.propertyDescriptionReadResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[1], data[2], data[3],
                 (data[4] & 0x80) > 0, data[4] & 0x3f, getWord(data + 5) & 0xfff, data[7], status);
             break;
         case MemoryRead:
-            _bau.memoryReadLocalConfirm(ack, priority, hopType, tsap, data[0] & 0x3f, getWord(data + 1), status);
+            _bau.memoryReadLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), status);
             break;
         case MemoryResponse:
-            _bau.memoryReadResponseConfirm(ack, priority, hopType, tsap, data[0] & 0x3f, getWord(data + 1), data + 3, status);
+            _bau.memoryReadResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3, status);
             break;
         case MemoryWrite:
-            _bau.memoryWriteLocalConfirm(ack, priority, hopType, tsap, data[0] & 0x3f, getWord(data + 1), data + 3, status);
+            _bau.memoryWriteLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3, status);
             break;
         case UserMemoryRead:
         {
             uint32_t address = ((data[1] & 0xf0) << 12) + (data[2] << 8) + data[3];
-            _bau.memoryReadLocalConfirm(ack, priority, hopType, tsap, data[1] & 0xf, address, status);
+            _bau.memoryReadLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[1] & 0xf, address, status);
             break;
         }
         case UserMemoryResponse:
         {
             uint32_t address = ((data[1] & 0xf0) << 12) + (data[2] << 8) + data[3];
-            _bau.memoryReadResponseConfirm(ack, priority, hopType, tsap, data[1] & 0xf, address, data + 4, status);
+            _bau.memoryReadResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[1] & 0xf, address, data + 4, status);
             break;
         }
         case UserMemoryWrite:
         {
             uint32_t address = ((data[1] & 0xf0) << 12) + (data[2] << 8) + data[3];
-            _bau.memoryWriteLocalConfirm(ack, priority, hopType, tsap, data[1] & 0xf, address, data + 4, status);
+            _bau.memoryWriteLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[1] & 0xf, address, data + 4, status);
             break;
         }        
         case UserManufacturerInfoRead:
-            _bau.userManufacturerInfoLocalConfirm(ack, priority, hopType, tsap, status);
+            _bau.userManufacturerInfoLocalConfirm(ack, priority, hopType, tsap, secCtrl, status);
             break;
         case UserManufacturerInfoResponse:
-            _bau.userManufacturerInfoResponseConfirm(ack, priority, hopType, tsap, data + 1, status);
+            _bau.userManufacturerInfoResponseConfirm(ack, priority, hopType, tsap, secCtrl, data + 1, status);
             break;
         case AuthorizeRequest:
-            _bau.authorizeLocalConfirm(ack, priority, hopType, tsap, getInt(data + 2), status);
+            _bau.authorizeLocalConfirm(ack, priority, hopType, tsap, secCtrl, getInt(data + 2), status);
             break;
         case AuthorizeResponse:
-            _bau.authorizeResponseConfirm(ack, priority, hopType, tsap, data[1], status);
+            _bau.authorizeResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[1], status);
             break;
         case KeyWrite:
-            _bau.keyWriteLocalConfirm(ack, priority, hopType, tsap, data[1], getInt(data + 2), status);
+            _bau.keyWriteLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[1], getInt(data + 2), status);
             break;
         case KeyResponse:
-            _bau.keyWriteResponseConfirm(ack, priority, hopType, tsap, data[1], status);
+            _bau.keyWriteResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[1], status);
             break;
         default:
             print("Indiviual-confirm: unhandled APDU-Type: ");
@@ -992,12 +995,12 @@ void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Prio
     }
 }
 
-void ApplicationLayer::individualSend(AckType ack, HopCountType hopType, Priority priority, uint16_t asap, APDU& apdu)
+void ApplicationLayer::individualSend(AckType ack, HopCountType hopType, Priority priority, uint16_t asap, APDU& apdu, const SecurityControl& secCtrl)
 {
     if (asap == _connectedTsap)
-        dataConnectedRequest(asap, priority, apdu);
+        dataConnectedRequest(asap, priority, apdu, secCtrl);
     else
-        dataIndividualRequest(ack, hopType, priority, asap, apdu);
+        dataIndividualRequest(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
 bool ApplicationLayer::isConnected()
@@ -1005,24 +1008,29 @@ bool ApplicationLayer::isConnected()
     return (_connectedTsap >= 0);
 }
 
-void ApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
+void ApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
+    (void)secCtrl; // We do not need security related information in the plain application layer
     _transportLayer->dataGroupRequest(ack, hopType, priority, tsap, apdu);
 }
-void ApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
+void ApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl &secCtrl)
 {
+    (void)secCtrl; // We do not need security related information in the plain application layer
     _transportLayer->dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
-void ApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
+void ApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl)
 {
+    (void)secCtrl; // We do not need security related information in the plain application layer
     _transportLayer->dataSystemBroadcastRequest(ack, hopType, SystemPriority, apdu);
 }
-void ApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
+void ApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu, const SecurityControl& secCtrl)
 {
+    (void)secCtrl; // We do not need security related information in the plain application layer
     _transportLayer->dataIndividualRequest(ack, hopType, priority, destination, apdu);
 }
-void ApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu)
+void ApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu, const SecurityControl &secCtrl)
 {
+    (void)secCtrl; // We do not need security related information in the plain application layer
     // apdu must be valid until it was confirmed
     _transportLayer->dataConnectedRequest(tsap, priority, apdu);
 }

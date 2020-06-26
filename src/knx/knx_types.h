@@ -182,3 +182,17 @@ enum ApduType
     // Secure Service
     SecureService = 0x3F1
 };
+
+enum class DataSecurity
+{
+    none,
+    auth,
+    authConf
+};
+
+struct SecurityControl
+{
+    bool toolAccess;
+    DataSecurity dataSecurity;
+};
+

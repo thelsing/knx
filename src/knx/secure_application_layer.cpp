@@ -41,6 +41,9 @@ void SecureApplicationLayer::dataGroupIndication(HopCountType hopType, Priority 
 
     if (apdu.type() == SecureService)
     {
+        // TODO:
+        SecurityControl secCtrl;
+
         // Decrypt secure APDU
         // Somehow ugly that we need to know the size in advance here at this point
         uint16_t plainApduLength = apdu.length() - 1 - 6 - 4; // secureAdsuLength - sizeof(scf) - sizeof(seqNum) - sizeof(mac)
@@ -49,7 +52,7 @@ void SecureApplicationLayer::dataGroupIndication(HopCountType hopType, Priority 
         if (decodeSecureApdu(apdu, plainFrame.apdu()))
         {
             // Process decrypted inner APDU
-            ApplicationLayer::dataGroupIndication(hopType, priority, tsap, plainFrame.apdu());
+            ApplicationLayer::dataGroupIndication(hopType, priority, tsap, plainFrame.apdu(), secCtrl);
         }
         return;
     }
@@ -240,7 +243,7 @@ void SecureApplicationLayer::dataConnectedConfirm(uint16_t tsap)
 
 /* to transport layer */
 
-void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
+void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
     // TODO:
     // get flags auth and confidentiality for this TSAP from PID_GO_SECURITY_FLAGS from SecIntObj
@@ -253,15 +256,15 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
         // create secure APDU
         if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
         {
-            ApplicationLayer::dataGroupRequest(ack, hopType, priority, tsap, secureFrame.apdu());
+            ApplicationLayer::dataGroupRequest(ack, hopType, priority, tsap, secureFrame.apdu(), secCtrl);
         }
         return;
     }
 
-    ApplicationLayer::dataGroupRequest(ack, hopType, priority, tsap, apdu);
+    ApplicationLayer::dataGroupRequest(ack, hopType, priority, tsap, apdu, secCtrl);
 }
 
-void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
+void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl)
 {
     // TODO:
     bool needsEncryption = true;
@@ -273,15 +276,15 @@ void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopT
         // create secure APDU
         if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
         {
-            ApplicationLayer::dataBroadcastRequest(ack, hopType, SystemPriority, secureFrame.apdu());
+            ApplicationLayer::dataBroadcastRequest(ack, hopType, SystemPriority, secureFrame.apdu(), secCtrl);
         }
         return;
     }
 
-    ApplicationLayer::dataBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    ApplicationLayer::dataBroadcastRequest(ack, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
+void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl)
 {
     // TODO:
     bool needsEncryption = true;
@@ -293,15 +296,15 @@ void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountTyp
         // create secure APDU
         if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
         {
-            ApplicationLayer::dataSystemBroadcastRequest(ack, hopType, SystemPriority, secureFrame.apdu());
+            ApplicationLayer::dataSystemBroadcastRequest(ack, hopType, SystemPriority, secureFrame.apdu(), secCtrl);
         }
         return;
     }
 
-    ApplicationLayer::dataSystemBroadcastRequest(ack, hopType, SystemPriority, apdu);
+    ApplicationLayer::dataSystemBroadcastRequest(ack, hopType, SystemPriority, apdu, secCtrl);
 }
 
-void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
+void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu, const SecurityControl& secCtrl)
 {
     // TODO:
     bool needsEncryption = true;
@@ -313,15 +316,15 @@ void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hop
         // create secure APDU
         if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
         {
-            ApplicationLayer::dataIndividualRequest(ack, hopType, priority, destination, secureFrame.apdu());
+            ApplicationLayer::dataIndividualRequest(ack, hopType, priority, destination, secureFrame.apdu(), secCtrl);
         }
         return;
     }
 
-    ApplicationLayer::dataIndividualRequest(ack, hopType, priority, destination, apdu);
+    ApplicationLayer::dataIndividualRequest(ack, hopType, priority, destination, apdu, secCtrl);
 }
 
-void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu)
+void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu, const SecurityControl &secCtrl)
 {
     // TODO:
     bool needsEncryption = true;
@@ -333,13 +336,13 @@ void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priori
         // create secure APDU
         if (createSecureApdu(apdu, secureFrame.apdu(), true, true)) // TODO: toolAccess, confidentialty
         {
-            ApplicationLayer::dataConnectedRequest(tsap, priority, secureFrame.apdu());
+            ApplicationLayer::dataConnectedRequest(tsap, priority, secureFrame.apdu(), secCtrl);
         }
         return;
     }
 
     // apdu must be valid until it was confirmed
-    ApplicationLayer::dataConnectedRequest(tsap, priority, apdu);
+    ApplicationLayer::dataConnectedRequest(tsap, priority, apdu, secCtrl);
 }
 
 void SecureApplicationLayer::encryptAesCbc(uint8_t* buffer, uint16_t bufLen, const uint8_t* iv, const uint8_t* key)

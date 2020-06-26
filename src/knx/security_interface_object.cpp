@@ -33,7 +33,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 obj->_state = (LoadState) data[0];
                 return 1;
             }),
-        new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_MODE, ReadLv3 | WriteLv0,
+        new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_MODE,
             // Command Callback of PID_SECURITY_MODE
             [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 uint8_t serviceId = data[1] & 0xff;
@@ -83,7 +83,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
         new DataProperty( PID_P2P_KEY_TABLE, true, PDT_GENERIC_20, 32, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_GRP_KEY_TABLE, true, PDT_GENERIC_18, 32, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE, true, PDT_GENERIC_08, 32, ReadLv3 | WriteLv0 ), // written by ETS
-        new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_FAILURES_LOG, ReadLv3 | WriteLv0,
+        new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_FAILURES_LOG,
             // Command Callback of PID_SECURITY_FAILURES_LOG
             [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 if (length != 3)
