@@ -94,7 +94,7 @@ void BusAccessUnit::restartRequestLocalConfirm(AckType ack, Priority priority, H
 {
 }
 
-void BusAccessUnit::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl)
+void BusAccessUnit::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, RestartType restartType, EraseCode eraseCode, uint8_t channel)
 {
 }
 

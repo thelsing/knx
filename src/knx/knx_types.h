@@ -183,7 +183,7 @@ enum ApduType
     SecureService = 0x3F1
 };
 
-enum class DataSecurity
+enum DataSecurity
 {
     none,
     auth,
@@ -196,3 +196,20 @@ struct SecurityControl
     DataSecurity dataSecurity;
 };
 
+enum RestartType
+{
+    BasicRestart = 0x0,
+    MasterReset = 0x1
+};
+
+enum EraseCode
+{
+    Void = 0x00,
+    ConfimrmedRestart = 0x01,
+    FactoryReset = 0x02,
+    ResetIA = 0x03,
+    ResetAP = 0x04,
+    ResetParam = 0x05,
+    ResetLinks = 0x06,
+    FactoryResetWithoutIA = 0x07
+};

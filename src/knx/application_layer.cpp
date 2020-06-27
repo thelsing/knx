@@ -803,10 +803,19 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             _bau.deviceDescriptorReadAppLayerConfirm(priority, hopType, tsap, secCtrl, *data & 0x3f, data + 1);
             break;
         case Restart:
-            // TODO: handle erase code for factory reset (setting FDSK again as toolkey, etc.)
-            if ((*data & 0x3f) == 0)
-                _bau.restartRequestIndication(priority, hopType, tsap, secCtrl);
+        {
+            // handle erase code for factory reset (setting FDSK again as toolkey, etc.)
+            RestartType restartType = (RestartType) (*data & 0x3f);
+            EraseCode eraseCode = EraseCode::Void;
+            uint8_t channel = 0;
+            if (restartType == RestartType::MasterReset)
+            {
+                eraseCode = (EraseCode) (*data + 1);
+                channel = *data + 2;
+            }
+            _bau.restartRequestIndication(priority, hopType, tsap, secCtrl, restartType, eraseCode, channel);
             break;
+        }
         case PropertyValueRead:
         {
             uint16_t startIndex;

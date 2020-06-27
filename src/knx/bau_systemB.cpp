@@ -158,6 +158,36 @@ bool BauSystemB::configured()
     return _configured;
 }
 
+void BauSystemB::masterReset(EraseCode eraseCode, uint8_t channel)
+{
+    switch (eraseCode)
+    {
+        case EraseCode::ConfimrmedRestart:
+        {
+            println("Confirmed restart requested.");
+            break;
+        }
+        case EraseCode::FactoryReset:
+        case EraseCode::FactoryResetWithoutIA:
+        {
+#ifdef USE_DATASECURE
+            print("Factory reset requested. type: ");
+            println(eraseCode == EraseCode::FactoryReset ? "FactoryReset with IA" : "FactoryReset without IA");
+            // If erase code is FactoryReset or FactoryResetWithoutIA, set FDSK as toolkey again
+            // and disable security mode
+            _secIfObj.factoryReset();
+#endif
+            break;
+        }
+        default:
+        {
+            print("Unhandled erase code: ");
+            println(eraseCode, HEX);
+            break;
+        }
+    }
+}
+
 void BauSystemB::deviceDescriptorReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t descriptorType)
 {
     if (descriptorType != 0)
@@ -184,12 +214,22 @@ void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, u
         _memory.toAbsolute(memoryAddress));
 }
 
-void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl)
+void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, RestartType restartType, EraseCode eraseCode, uint8_t channel)
 {
-#ifdef USE_DATASECURE
-    // If erase code is FactoryReset, set FDSK as toolkey again
-    //_secIfObj.factoryReset();
-#endif
+    if (restartType == RestartType::BasicRestart)
+    {
+        println("Basic restart requested");
+    }
+    else if (restartType == RestartType::MasterReset)
+    {
+        masterReset(eraseCode, channel);
+    }
+    else
+    {
+        println("Unhandled restart type");
+        return;
+    }
+
     // Flush the EEPROM before resetting
     _memory.writeMemory();
     _platform.restart();

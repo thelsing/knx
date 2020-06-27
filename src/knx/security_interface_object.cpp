@@ -188,6 +188,7 @@ bool SecurityInterfaceObject::isLoaded()
 
 void SecurityInterfaceObject::factoryReset()
 {
+    _secAppLayer->setSecurityMode(false);
     property(PID_TOOL_KEY)->write(1, 1, _fdsk);
 }
 
