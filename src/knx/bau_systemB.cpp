@@ -186,6 +186,10 @@ void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, u
 
 void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl)
 {
+#ifdef USE_DATASECURE
+    // If erase code is FactoryReset, set FDSK as toolkey again
+    //_secIfObj.factoryReset();
+#endif
     // Flush the EEPROM before resetting
     _memory.writeMemory();
     _platform.restart();

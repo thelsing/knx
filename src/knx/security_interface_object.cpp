@@ -9,8 +9,8 @@
 #include "callback_property.h"
 #include "function_property.h"
 
-// Our FDSK
-uint8_t SecurityInterfaceObject::_fdsk[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
+// Our FDSK. It is never changed from ETS. This is permanent default tool key restarted on every factory reset of the device.
+const uint8_t SecurityInterfaceObject::_fdsk[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
 uint8_t SecurityInterfaceObject::_secReport[] = { 0x00, 0x00, 0x00 };
 uint8_t SecurityInterfaceObject::_secReportCtrl[] = { 0x00, 0x00, 0x00 };
 
@@ -149,7 +149,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 resultData[0] = ReturnCodes::GenericError;
                 resultLength = 1;
             }),
-        new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint8_t*) _fdsk ), // default is FDSK
+        new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint8_t*) _fdsk ), // default is FDSK // TODO: do not overwrite on every device startup!!!!!!!!! ETS changes this property during programming from FDSK to some random key!
         new DataProperty( PID_SECURITY_REPORT, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, _secReport ), // Not implemented
         new DataProperty( PID_SECURITY_REPORT_CONTROL, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, _secReportCtrl ), // Not implemented
         new DataProperty( PID_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 ), // Updated by our device accordingly
@@ -184,6 +184,11 @@ uint16_t SecurityInterfaceObject::saveSize()
 bool SecurityInterfaceObject::isLoaded()
 {
     return _state == LS_LOADED;
+}
+
+void SecurityInterfaceObject::factoryReset()
+{
+    property(PID_TOOL_KEY)->write(1, 1, _fdsk);
 }
 
 #endif

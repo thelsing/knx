@@ -14,6 +14,8 @@ public:
 
   void secureApplicationLayer(SecureApplicationLayer& secAppLayer);
 
+  void factoryReset();
+
   uint8_t* save(uint8_t* buffer) override;
   const uint8_t* restore(const uint8_t* buffer) override;
   uint16_t saveSize() override;
@@ -26,7 +28,7 @@ private:
   LoadState _state = LS_UNLOADED;
 
   // Our FDSK
-  static uint8_t _fdsk[];
+  static const uint8_t _fdsk[];
   static uint8_t _secReport[];
   static uint8_t _secReportCtrl[];
 };

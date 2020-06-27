@@ -803,6 +803,7 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             _bau.deviceDescriptorReadAppLayerConfirm(priority, hopType, tsap, secCtrl, *data & 0x3f, data + 1);
             break;
         case Restart:
+            // TODO: handle erase code for factory reset (setting FDSK again as toolkey, etc.)
             if ((*data & 0x3f) == 0)
                 _bau.restartRequestIndication(priority, hopType, tsap, secCtrl);
             break;
