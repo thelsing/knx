@@ -247,16 +247,16 @@ class SecureApplicationLayer :  public ApplicationLayer
 
     uint64_t getRandomNumber();
 
-    void sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess);
-    void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint64_t remoteNextSeqNum);
-    void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, bool toolAccess, uint8_t* seq, uint64_t challenge);
-    void receivedSyncResponse(uint16_t remoteAddr, bool toolAccess, uint8_t* plainApdu);
+    void sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl);
+    void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint64_t remoteNextSeqNum);
+    void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint8_t* seq, uint64_t challenge);
+    void receivedSyncResponse(uint16_t remoteAddr, const SecurityControl &secCtrl, uint8_t* plainApdu);
 
-    bool decrypt(uint8_t* plainApdu, uint16_t plainapduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu);
-    bool secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength, bool toolAccess, bool confidentiality);
+    bool decrypt(uint8_t* plainApdu, uint16_t plainapduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, SecurityControl &secCtrl);
+    bool secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* apdu, uint16_t apduLength, const SecurityControl &secCtrl);
 
-    bool decodeSecureApdu(APDU& secureApdu, APDU& plainApdu);
-    bool createSecureApdu(APDU& plainApdu, APDU& secureApdu, bool toolAccess, bool confidentialty);
+    bool decodeSecureApdu(APDU& secureApdu, APDU& plainApdu, SecurityControl &secCtrl);
+    bool createSecureApdu(APDU& plainApdu, APDU& secureApdu, const SecurityControl &secCtrl);
 
     void encryptAesCbc(uint8_t* buffer, uint16_t bufLen, const uint8_t* iv, const uint8_t* key);
     void xcryptAesCtr(uint8_t* buffer, uint16_t bufLen, const uint8_t* iv, const uint8_t* key);

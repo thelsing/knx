@@ -23,7 +23,7 @@ static constexpr SecurityControl noSecurity {.toolAccess=true, .dataSecurity=Dat
 
 #pragma region TL Callbacks
 
-void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl = ApplicationLayer::noSecurity)
+void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
     uint8_t len = apdu.length();
     uint8_t dataArray[len];
@@ -310,7 +310,7 @@ void ApplicationLayer::dataConnectedIndication(Priority priority, uint16_t tsap,
     individualIndication(NetworkLayerParameter, priority, tsap, apdu, secCtrl);
 }
 
-void ApplicationLayer::dataConnectedConfirm(uint16_t tsap)
+void ApplicationLayer::dataConnectedConfirm(uint16_t tsap, const SecurityControl& secCtrl)
 {
 
 }
