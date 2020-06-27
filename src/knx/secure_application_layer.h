@@ -35,17 +35,17 @@ class SecureApplicationLayer :  public ApplicationLayer
     uint8_t getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen);
 
     // from transport layer
-    void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
-    void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
-                                  APDU& apdu, bool status);
-    void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status);
-    void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status);
-    void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
-    void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
-    void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu);
-    void dataConnectedConfirm(uint16_t tsap);
+    virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
+    virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
+                                  APDU& apdu, bool status) override;
+    virtual void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
+    virtual void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status) override;
+    virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) override;
+    virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status) override;
+    virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu) override;
+    virtual void dataConnectedConfirm(uint16_t tsap) override;
 
     void loop();
 
@@ -247,6 +247,8 @@ class SecureApplicationLayer :  public ApplicationLayer
 
     uint64_t getRandomNumber();
 
+    bool isSyncService(APDU& secureAsdu);
+
     void sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl);
     void sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint64_t remoteNextSeqNum);
     void receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint8_t* seq, uint64_t challenge);
@@ -267,9 +269,8 @@ class SecureApplicationLayer :  public ApplicationLayer
     bool _syncReqBroadcastOutgoing{false};
     uint32_t _lastSyncRes;
 
-    Map<Addr, SecurityControl, 1> _pendingDataRequests;
-    Map<Addr, uint64_t, 1> _pendingOutgoingSyncRequests;
-    Map<Addr, uint64_t, 1> _pendingIncomingSyncRequests;
+    Map<Addr, uint64_t, 1> _pendingOutgoingSyncRequests; // Store challenges for outgoing sync requests
+    Map<Addr, uint64_t, 1> _pendingIncomingSyncRequests; // Store challenges for incoming sync requests
 
     SecurityInterfaceObject& _secIfObj;
     DeviceObject& _deviceObj;

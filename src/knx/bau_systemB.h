@@ -65,6 +65,9 @@ class BauSystemB : protected BusAccessUnit
                                          uint8_t propertyId, uint8_t* data, uint8_t length);
     void individualAddressReadIndication(HopCountType hopType, const SecurityControl &secCtrl) override;
     void individualAddressWriteIndication(HopCountType hopType, const SecurityControl &secCtrl, uint16_t newaddress) override;
+    void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t newIndividualAddress,
+                                                      uint8_t* knxSerialNumber) override;
+    void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber) override;
     void groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
                                      uint8_t* data, uint8_t dataLength, bool status) override;
     void groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl, bool status) override;

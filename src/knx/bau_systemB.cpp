@@ -342,6 +342,26 @@ void BauSystemB::individualAddressWriteIndication(HopCountType hopType, const Se
         _deviceObj.induvidualAddress(newaddress);
 }
 
+void BauSystemB::individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t newIndividualAddress,
+                                                          uint8_t* knxSerialNumber)
+{
+    // If the received serial number matches our serial number
+    // then store the received new individual address in the device object
+    if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
+        _deviceObj.induvidualAddress(newIndividualAddress);
+}
+
+void BauSystemB::individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber)
+{
+    // If the received serial number matches our serial number
+    // then send a response with the current RF domain address stored in the RF medium object and the serial number
+    if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
+    {
+        uint8_t emptyDomainAddress[6] = {0x00};
+        _appLayer.IndividualAddressSerialNumberReadResponse(priority, hopType, secCtrl, emptyDomainAddress, knxSerialNumber);
+    }
+}
+
 void BauSystemB::groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t * data, uint8_t dataLength, bool status)
 {
     GroupObject& go = _groupObjTable.get(asap);

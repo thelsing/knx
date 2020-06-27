@@ -66,6 +66,12 @@ void SecureApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType,
 
     if (apdu.type() == SecureService)
     {
+        // We do not care about confirmations of our sync communication
+        if (isSyncService(apdu))
+        {
+            return;
+        }
+
         // Will be filled in by decodeSecureApdu()
         SecurityControl secCtrl;
 
@@ -116,6 +122,12 @@ void SecureApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopT
 
     if (apdu.type() == SecureService)
     {
+        // We do not care about confirmations of our sync communication
+        if (isSyncService(apdu))
+        {
+            return;
+        }
+
         // Will be filled in by decodeSecureApdu()
         SecurityControl secCtrl;
 
@@ -165,6 +177,12 @@ void SecureApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Pr
 
     if (apdu.type() == SecureService)
     {
+        // We do not care about confirmations of our sync communication
+        if (isSyncService(apdu))
+        {
+            return;
+        }
+
         // Will be filled in by decodeSecureApdu()
         SecurityControl secCtrl;
 
@@ -215,6 +233,12 @@ void SecureApplicationLayer::dataIndividualConfirm(AckType ack, HopCountType hop
 
     if (apdu.type() == SecureService)
     {
+        // We do not care about confirmations of our sync communication
+        if (isSyncService(apdu))
+        {
+            return;
+        }
+
         // Will be filled in by decodeSecureApdu()
         SecurityControl secCtrl;
 
@@ -271,6 +295,8 @@ void SecureApplicationLayer::dataConnectedConfirm(uint16_t tsap)
 
 void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
+    println("dataGroupRequest");
+
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
@@ -288,6 +314,8 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
 
 void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl)
 {
+    println("dataBroadcastRequest");
+
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
@@ -305,6 +333,8 @@ void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopT
 
 void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl)
 {
+    println("dataSystemBroadcastRequest");
+
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
@@ -322,6 +352,8 @@ void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountTyp
 
 void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu, const SecurityControl& secCtrl)
 {
+    println("dataIndividualRequest");
+
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
@@ -339,6 +371,8 @@ void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hop
 
 void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu, const SecurityControl &secCtrl)
 {
+    println("dataConnectedRequest");
+
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
         uint16_t secureApduLength = apdu.length() + 2 + 6 + 4; // 2(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
@@ -624,7 +658,10 @@ void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGro
     uint8_t tpci = 0;
     if (!_syncReqBroadcastOutgoing)
     {
-        tpci = _transportLayer->getTPCI(dstAddr); // get next TPCI sequence number for MAC calculation from TL
+        if (isConnected())
+        {
+            tpci |= 0x40 | _transportLayer->getTpciSeqNum(); // get next TPCI sequence number for MAC calculation from TL (T_DATA_CONNECTED)
+        }
     }
     print("sendSyncRequest: TPCI: ");
     println(tpci, HEX);
@@ -655,6 +692,10 @@ void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGro
         Addr toAddr = _syncReqBroadcastOutgoing ? (Addr)GrpAddr(0) : (Addr)IndAddr(dstAddr);
         _pendingOutgoingSyncRequests.insertOrAssign(toAddr, challenge);
     }
+    else
+    {
+        println("SyncRequest: failure during encryption");
+    }
 }
 
 void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint64_t remoteNextSeqNum)
@@ -677,7 +718,10 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
     uint8_t tpci = 0;
     if (!_syncReqBroadcastIncoming)
     {
-        tpci = _transportLayer->getTPCI(dstAddr); // get next TPCI sequence number for MAC calculation from TL
+        if (isConnected())
+        {
+            tpci |= 0x40 | _transportLayer->getTpciSeqNum(); // get next TPCI sequence number for MAC calculation from TL (T_DATA_CONNECTED)
+        }
     }
     print("sendSyncResponse: TPCI: ");
     println(tpci, HEX);
@@ -707,10 +751,16 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
             }
         }
     }
+    else
+    {
+        println("SyncResponse: failure during encryption");
+    }
 }
 
 void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint8_t* seqNum, uint64_t challenge)
 {
+    println("Received SyncRequest:");
+
     uint64_t nextRemoteSeqNum = sixBytesToUInt64(seqNum);
     uint64_t nextSeqNum = 1 + lastValidSequenceNumber(secCtrl.toolAccess, srcAddr);
 
@@ -720,19 +770,20 @@ void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstA
         nextSeqNum = nextRemoteSeqNum;
     }
 
-    // Remember challenge for securing the sync.res later
-    _pendingIncomingSyncRequests.insertOrAssign(IndAddr(srcAddr), challenge);
-
     _syncReqBroadcastIncoming = (dstAddr == 0x0000) && dstAddrIsGroupAddr;
+
+    // Remember challenge for securing the sync.res later
+    _pendingIncomingSyncRequests.insertOrAssign(_syncReqBroadcastIncoming ? (Addr) GrpAddr(0) : (Addr) IndAddr(srcAddr), challenge);
 
     uint16_t toAddr = _syncReqBroadcastIncoming ? dstAddr : srcAddr;
     bool toIsGroupAddress = _syncReqBroadcastIncoming;
-
     sendSyncResponse(toAddr, toIsGroupAddress, secCtrl, nextSeqNum);
 }
 
 void SecureApplicationLayer::receivedSyncResponse(uint16_t remote, const SecurityControl &secCtrl, uint8_t* plainApdu)
 {
+    println("Received SyncResponse:");
+
     if (_syncReqBroadcastOutgoing)
     {
         if (_pendingOutgoingSyncRequests.get(GrpAddr(0)) == nullptr)
@@ -1086,8 +1137,10 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         uint64_t randomNumber = getRandomNumber();
         sixBytesFromUInt64(randomNumber, seq);
 
+        Addr remote = _syncReqBroadcastIncoming ? (Addr)GrpAddr(0) : (Addr)IndAddr(dstAddr);
+
         // Get challenge from sync.req
-        uint64_t *challenge = _pendingIncomingSyncRequests.get(IndAddr(dstAddr));
+        uint64_t *challenge = _pendingIncomingSyncRequests.get(remote);
         if (challenge == nullptr)
         {
             println("Cannot send sync.res without corresponding sync.req");
@@ -1095,7 +1148,7 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         }
         else
         {
-            _pendingIncomingSyncRequests.erase(IndAddr(dstAddr));
+            _pendingIncomingSyncRequests.erase(remote);
         }
         uint8_t challengeSixBytes[6];
         sixBytesFromUInt64(*challenge, challengeSixBytes);
@@ -1161,7 +1214,11 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
     uint16_t srcAddress = plainApdu.frame().sourceAddress();
     uint16_t dstAddress = plainApdu.frame().destinationAddress();
     bool isDstAddrGroupAddr = plainApdu.frame().addressType() == GroupAddress;
-    uint8_t tpci = _transportLayer->getTPCI(dstAddress); // get next TPCI sequence number for MAC calculation from TL
+    uint8_t tpci = 0x00;
+    if (isConnected())
+    {
+        tpci |= 0x40 | _transportLayer->getTpciSeqNum(); // get next TPCI sequence number for MAC calculation from TL (T_DATA_CONNECTED)
+    }
     print("createSecureApdu: TPCI: ");
     println(tpci, HEX);
     // Note:
@@ -1179,7 +1236,7 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
         updateSequenceNumber(secCtrl.toolAccess, nextSequenceNumber(secCtrl.toolAccess) + 1);
 
         println("createSecureApdu: Secure APDU: ");
-        plainApdu.frame().apdu().printPDU();
+        secureApdu.frame().apdu().printPDU();
 
         return true;
     }
@@ -1224,4 +1281,17 @@ void SecureApplicationLayer::loop()
 {
     // TODO: handle timeout of outgoing sync requests
     //_pendingOutgoingSyncRequests
+}
+
+bool SecureApplicationLayer::isSyncService(APDU& secureApdu)
+{
+    uint8_t scf = *(secureApdu.data()+1);
+    uint8_t service = (scf & 0x07); // only 0x0 (S-A_Data-PDU), 0x2 (S-A_Sync_Req-PDU) or 0x3 (S-A_Sync_Rsp-PDU) are valid values
+
+    if ((service == SecureSyncRequest) || (service == SecureSyncResponse))
+    {
+        return true;
+    }
+
+    return false;
 }

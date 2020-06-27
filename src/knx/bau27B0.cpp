@@ -153,15 +153,6 @@ void Bau27B0::domainAddressSerialNumberReadIndication(Priority priority, HopCoun
         _appLayer.domainAddressSerialNumberReadResponse(priority, hopType, secCtrl, _rfMediumObj.rfDomainAddress(), knxSerialNumber);
 }
 
-void Bau27B0::individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t newIndividualAddress,
-                                                          uint8_t* knxSerialNumber)
-{
-    // If the received serial number matches our serial number
-    // then store the received new individual address in the device object
-    if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
-        _deviceObj.induvidualAddress(newIndividualAddress);
-}
-
 void Bau27B0::individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber)
 {
     // If the received serial number matches our serial number
