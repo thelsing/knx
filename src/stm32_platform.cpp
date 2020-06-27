@@ -19,12 +19,13 @@ Stm32Platform::~Stm32Platform()
 
 void Stm32Platform::restart()
 {
-    NVIC_SystemReset();
+	NVIC_SystemReset();
 }
 
 uint8_t * Stm32Platform::getEepromBuffer(uint16_t size)
 {
-	delete [] eepromPtr;	
+	delete [] eepromPtr;
+	eepromSize = size;
 	eepromPtr = new uint8_t[size];
 	for (uint16_t i = 0; i < size; ++i)
 		eepromPtr[i] = EEPROM[i];
