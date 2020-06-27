@@ -11,6 +11,8 @@ enum NmReadSerialNumberType
     NM_Read_SerialNumber_By_ManufacturerSpecific = 0xFE,
 };
 
+static constexpr auto kFunctionPropertyResultBufferMaxSize = 64;
+
 BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj), _addrTable(_memory),
     _assocTable(_memory), _groupObjTable(_memory), _appProgram(_memory),
     _platform(platform),
@@ -261,8 +263,8 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
 void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                                    uint8_t propertyId, uint8_t* data, uint8_t length)
 {
-    uint8_t resultData[32];
-    uint8_t resultLength = sizeof(resultData);
+    uint8_t resultData[kFunctionPropertyResultBufferMaxSize];
+    uint8_t resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
 
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
@@ -274,8 +276,8 @@ void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountTy
 void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                                  uint8_t propertyId, uint8_t* data, uint8_t length)
 {
-    uint8_t resultData[32];
-    uint8_t resultLength = sizeof(resultData);
+    uint8_t resultData[kFunctionPropertyResultBufferMaxSize];
+    uint8_t resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
 
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
