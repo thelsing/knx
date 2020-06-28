@@ -62,5 +62,6 @@ class TpUartDataLinkLayer : public DataLinkLayer
     void dataConBytesReceived(uint8_t* buffer, uint16_t length, bool success);
     bool resetChip();
     void stopChip();
+    void stateChip();
 };
 #endif
