@@ -14,7 +14,7 @@ Stm32Platform::Stm32Platform( HardwareSerial* s) : ArduinoPlatform(s)
 
 Stm32Platform::~Stm32Platform()
 {
-    delete [] eepromPtr;
+    delete [] _eepromPtr;
 }
 
 void Stm32Platform::restart()
@@ -24,25 +24,25 @@ void Stm32Platform::restart()
 
 uint8_t * Stm32Platform::getEepromBuffer(uint16_t size)
 {
-    if (size > E2END + 1) {
+    if (size > E2END + 1)
+    {
         fatalError();
     }
-    eepromSize = size;
-    delete [] eepromPtr;
-    eepromPtr = new uint8_t[size];
+    _eepromSize = size;
+    delete [] _eepromPtr;
+    _eepromPtr = new uint8_t[size];
     eeprom_buffer_fill();
     for (uint16_t i = 0; i < size; ++i)
-        eepromPtr[i] = eeprom_buffered_read_byte(i);
-    return eepromPtr;
+        _eepromPtr[i] = eeprom_buffered_read_byte(i);
+    return _eepromPtr;
 }
 
 void Stm32Platform::commitToEeprom()
 {
-    if(eepromPtr == nullptr || eepromSize == 0)
+    if(_eepromPtr == nullptr || _eepromSize == 0)
         return;
-    for (uint16_t i = 0; i < eepromSize; ++i) {
-        eeprom_buffered_write_byte(i, eepromPtr[i]);
-    }
+    for (uint16_t i = 0; i < _eepromSize; ++i)
+        eeprom_buffered_write_byte(i, _eepromPtr[i]);
     eeprom_buffer_flush();
 }
 
