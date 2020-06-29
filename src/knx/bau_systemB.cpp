@@ -354,7 +354,8 @@ void BauSystemB::individualAddressSerialNumberWriteIndication(Priority priority,
 void BauSystemB::individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber)
 {
     // If the received serial number matches our serial number
-    // then send a response with the current RF domain address stored in the RF medium object and the serial number
+    // then send a response with the serial number. The domain address is set to 0 for closed media.
+    // An open medium BAU has to override this method and provide a proper domain address.
     if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
     {
         uint8_t emptyDomainAddress[6] = {0x00};
