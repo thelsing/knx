@@ -15,8 +15,8 @@ public:
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();
 private:
-	uint8_t *eepromPtr;
-	uint16_t eepromSize;
+	uint8_t *eepromPtr = nullptr;
+	uint16_t eepromSize = 0;
 };
 
 #endif
