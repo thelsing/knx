@@ -530,11 +530,18 @@ void TransportLayer::ackTimeoutIndication()
     }
 }
 
+// Note: we should probably also add the TSAP as argument if would support multiple concurrent connections
 uint8_t TransportLayer::getTpciSeqNum()
 {
     // Return seqNum that would be used for sending next frame
     // together with the TPDU type.
     return ((_seqNoSend & 0xF) << 2);
+}
+
+// Note: we should probably also add the TSAP as argument if would support multiple concurrent connections
+uint16_t TransportLayer::getConnectionAddress()
+{
+    return _connectionAddress;
 }
 
 void TransportLayer::loop()

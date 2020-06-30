@@ -341,6 +341,10 @@ void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountTyp
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
+        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().destinationAddress(0x0000);
+        apdu.frame().addressType(GroupAddress);
+
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
         // create secure APDU
@@ -360,6 +364,10 @@ void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hop
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
+        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().destinationAddress(destination);
+        apdu.frame().addressType(InduvidualAddress);
+
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
         // create secure APDU
@@ -379,6 +387,10 @@ void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priori
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
+        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().destinationAddress(_transportLayer->getConnectionAddress());
+        apdu.frame().addressType(InduvidualAddress);
+
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
         // create secure APDU

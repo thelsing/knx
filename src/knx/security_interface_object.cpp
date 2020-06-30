@@ -56,6 +56,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                     resultData[0] = ReturnCodes::Success;
                     resultData[1] = serviceId;
                     resultLength = 2;
+                    return;
                 }
                 resultData[0] = ReturnCodes::GenericError;
                 resultLength = 1;

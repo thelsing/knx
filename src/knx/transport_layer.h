@@ -58,6 +58,7 @@ public:
     void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu);
 
     uint8_t getTpciSeqNum();
+    uint16_t getConnectionAddress();
 #pragma endregion
 
 #pragma region other
