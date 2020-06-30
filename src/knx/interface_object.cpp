@@ -101,7 +101,7 @@ void InterfaceObject::command(PropertyID id, uint8_t* data, uint8_t length, uint
     prop->command(data, length, resultData, resultLength);
 }
 
-void InterfaceObject::state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t resultLength)
+void InterfaceObject::state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
     Property* prop = property(id);
     if (prop == nullptr)

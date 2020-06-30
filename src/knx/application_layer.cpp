@@ -469,7 +469,7 @@ void ApplicationLayer::restartRequest(AckType ack, Priority priority, HopCountTy
 
 void ApplicationLayer::restartResponse(AckType ack, Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint8_t errorCode, uint16_t processTime)
 {
-    CemiFrame frame(3);
+    CemiFrame frame(4);
     APDU& apdu = frame.apdu();
     apdu.type(Restart);
     uint8_t* data = apdu.data();
@@ -882,20 +882,21 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             _bau.deviceDescriptorReadAppLayerConfirm(priority, hopType, tsap, secCtrl, *data & 0x3f, data + 1);
             break;
         case Restart:
+        case RestartMasterReset:
         {
             // These reserved bits must be 0
-            uint8_t reservedBits = *data & 0x1e;
+            uint8_t reservedBits = data[0] & 0x1e;
             if (reservedBits != 0)
                 return;
 
             // handle erase code for factory reset (setting FDSK again as toolkey, etc.)
-            RestartType restartType = (RestartType) (*data & 0x3f);
+            RestartType restartType = (RestartType) (data[0] & 0x3f);
             EraseCode eraseCode = EraseCode::Void;
             uint8_t channel = 0;
             if (restartType == RestartType::MasterReset)
             {
-                eraseCode = (EraseCode) (*data + 1);
-                channel = *data + 2;
+                eraseCode = (EraseCode) data[1];
+                channel = data[2];
             }
             _bau.restartRequestIndication(priority, hopType, tsap, secCtrl, restartType, eraseCode, channel);
             break;

@@ -543,10 +543,6 @@ void BauSystemB::connectConfirm(uint16_t tsap)
 
 void BauSystemB::nextRestartState()
 {
-    // TODO:
-    SecurityControl secCtrl;
-    secCtrl.dataSecurity = DataSecurity::none;
-
     switch (_restartState)
     {
         case Idle:

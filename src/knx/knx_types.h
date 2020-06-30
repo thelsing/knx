@@ -179,6 +179,7 @@ enum ApduType
     DeviceDescriptorRead = 0x300,
     DeviceDescriptorResponse = 0x340,
     Restart = 0x380,
+    RestartMasterReset = 0x381,
     AuthorizeRequest = 0x3d1,
     AuthorizeResponse = 0x3d2,
     KeyWrite = 0x3d3,
