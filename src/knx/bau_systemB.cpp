@@ -410,7 +410,20 @@ void BauSystemB::functionPropertyExtCommandIndication(Priority priority, HopCoun
 
     InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
     if(obj)
-        obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+    {
+        if (obj->property((PropertyID)propertyId)->Type() == PDT_CONTROL)
+        {
+            uint8_t count = 1;
+            obj->writeProperty((PropertyID)propertyId, 1, data, count);
+            resultLength = count ? 2 : 1;
+            resultData[0] = count ? ReturnCodes::Success : ReturnCodes::DataVoid;
+            resultData[1] = data[0];
+        }
+        else if (obj->property((PropertyID)propertyId)->Type() == PDT_FUNCTION)
+        {
+            obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+        }
+    }
 
     _appLayer.functionPropertyExtStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, resultData, resultLength);
 }
@@ -423,8 +436,19 @@ void BauSystemB::functionPropertyExtStateIndication(Priority priority, HopCountT
 
     InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
     if(obj)
-        obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
-
+    {
+        if (obj->property((PropertyID)propertyId)->Type() == PDT_CONTROL)
+        {
+            uint8_t count = 1;
+            obj->readProperty((PropertyID)propertyId, 1, count, &resultData[1]);
+            resultLength = count ? 2 : 1;
+            resultData[0] = count ? ReturnCodes::Success : ReturnCodes::DataVoid;
+        }
+        else if (obj->property((PropertyID)propertyId)->Type() == PDT_FUNCTION)
+        {
+            obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+        }
+    }
     _appLayer.functionPropertyExtStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, resultData, resultLength);
 }
 
