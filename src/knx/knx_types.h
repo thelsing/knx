@@ -155,6 +155,13 @@ enum ApduType
     
     // Application Layer Services on Point-to-point Connection-Oriented Communication Mode (mandatory)
     // Application Layer Services on Point-to-point Connectionless Communication Mode (either optional or mandatory)
+    PropertyValueExtRead = 0x1CC,
+    PropertyValueExtResponse = 0x1CD,
+    PropertyValueExtWriteCon = 0x1CE,
+    PropertyValueExtWriteConResponse = 0x1CF,
+    PropertyValueExtWriteUnCon = 0x1D0,
+    PropertyExtDescriptionRead = 0x1D2,
+    PropertyExtDescriptionResponse = 0x1D3,
     FunctionPropertyExtCommand = 0x1D4,
     FunctionPropertyExtState = 0x1D5,
     FunctionPropertyExtStateResponse = 0x1D6,
@@ -208,7 +215,7 @@ enum RestartType
 enum EraseCode
 {
     Void = 0x00,
-    ConfimrmedRestart = 0x01,
+    ConfirmedRestart = 0x01,
     FactoryReset = 0x02,
     ResetIA = 0x03,
     ResetAP = 0x04,

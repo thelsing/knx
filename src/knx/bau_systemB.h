@@ -31,8 +31,8 @@ class BauSystemB : protected BusAccessUnit
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
-    bool restartRequest(uint16_t asap, const SecurityControl &secCtrl);
-    void masterReset(EraseCode eraseCode, uint8_t channel);
+    bool restartRequest(uint16_t asap, const SecurityControl secCtrl);
+    uint8_t masterReset(EraseCode eraseCode, uint8_t channel);
 
     void propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
                            uint8_t& numberOfElements, uint16_t startIndex, 
@@ -57,16 +57,20 @@ class BauSystemB : protected BusAccessUnit
                                            uint8_t propertyId, uint8_t propertyIndex) override;
     void propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                       uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length) override;
+    void propertyValueExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                         uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length, bool confirmed);
     void propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                      uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex) override;
+    void propertyValueExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                        uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex) override;
     void functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
-                                           uint8_t propertyId, uint8_t* data, uint8_t length);
+                                           uint8_t propertyId, uint8_t* data, uint8_t length) override;
     void functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
-                                         uint8_t propertyId, uint8_t* data, uint8_t length);
+                                         uint8_t propertyId, uint8_t* data, uint8_t length) override;
     void functionPropertyExtCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
-                                                      uint8_t propertyId, uint8_t* data, uint8_t length);
+                                                      uint8_t propertyId, uint8_t* data, uint8_t length) override;
     void functionPropertyExtStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
-                                                    uint8_t propertyId, uint8_t* data, uint8_t length);
+                                                    uint8_t propertyId, uint8_t* data, uint8_t length) override;
     void individualAddressReadIndication(HopCountType hopType, const SecurityControl &secCtrl) override;
     void individualAddressWriteIndication(HopCountType hopType, const SecurityControl &secCtrl, uint16_t newaddress) override;
     void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t newIndividualAddress,
@@ -117,5 +121,6 @@ class BauSystemB : protected BusAccessUnit
     NetworkLayer _netLayer;
     bool _configured = true;
     RestartState _restartState = Idle;
+    SecurityControl _restartSecurity;
     uint32_t _restartDelay = 0;
 };

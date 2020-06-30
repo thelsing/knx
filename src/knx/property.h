@@ -86,6 +86,8 @@ enum PropertyID
     PID_VERSION = 25,
     PID_MCB_TABLE = 27,
     PID_ERROR_CODE = 28,
+    PID_OBJECT_INDEX = 29,
+    PID_DOWNLOAD_COUNTER = 30,
     
     /** Properties in the Device Object */
     PID_ROUTING_COUNT = 51,

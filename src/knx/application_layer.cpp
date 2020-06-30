@@ -467,6 +467,20 @@ void ApplicationLayer::restartRequest(AckType ack, Priority priority, HopCountTy
     individualSend(ack, hopType, priority, _connectedTsap, apdu, secCtrl);
 }
 
+void ApplicationLayer::restartResponse(AckType ack, Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint8_t errorCode, uint16_t processTime)
+{
+    CemiFrame frame(3);
+    APDU& apdu = frame.apdu();
+    apdu.type(Restart);
+    uint8_t* data = apdu.data();
+    data[0] |= (1 << 5) | 1; // Set response bit and a restart type of "master reset". Only the master reset sends a response.
+    data[1] = errorCode;
+    data[2] = processTime >> 8;
+    data[3] = processTime & 0xFF;
+
+    individualSend(ack, hopType, priority, _connectedTsap, apdu, secCtrl);
+}
+
 //TODO: ApplicationLayer::systemNetworkParameterReadRequest()
 void ApplicationLayer::systemNetworkParameterReadResponse(Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
                                                           uint16_t objectType, uint16_t propertyId,
@@ -547,6 +561,21 @@ void ApplicationLayer::propertyValueReadResponse(AckType ack, Priority priority,
 {
     propertyDataSend(PropertyValueResponse, ack, priority, hopType, asap, secCtrl, objectIndex, propertyId, numberOfElements,
         startIndex, data, length);
+}
+
+void ApplicationLayer::propertyValueExtReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl,
+    uint16_t objectType, uint8_t objectInstance, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
+{
+    propertyExtDataSend(PropertyValueExtResponse, ack, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, numberOfElements,
+                        startIndex, data, length);
+}
+
+void ApplicationLayer::propertyValueExtWriteConResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl,
+    uint16_t objectType, uint8_t objectInstance, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t returnCode)
+{
+    uint8_t noOfElem = (returnCode != ReturnCodes::Success) ? 0 : numberOfElements;
+    propertyExtDataSend(PropertyValueExtWriteConResponse, ack, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, noOfElem,
+                        startIndex, &returnCode, 1);
 }
 
 void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
@@ -761,6 +790,33 @@ void ApplicationLayer::propertyDataSend(ApduType type, AckType ack, Priority pri
         dataIndividualRequest(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
+void ApplicationLayer::propertyExtDataSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
+    uint16_t objectType, uint8_t objectInstance, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
+{
+    CemiFrame frame(9 + length);
+    APDU& apdu = frame.apdu();
+    apdu.type(type);
+    uint8_t* apduData = apdu.data();
+    apduData += 1;
+
+    apduData[0] = ((uint16_t)objectType) >> 8;
+    apduData[1] = ((uint16_t)objectType) & 0xFF;
+    apduData[2] = objectInstance >> 4;
+    apduData[3] = ((objectInstance&0x0F) << 4) | (propertyId >> 8);
+    apduData[4] = (propertyId & 0xFF);
+    apduData[5] = numberOfElements;
+    apduData[6] = (startIndex & 0x0FFF)>> 8;
+    apduData[7] = startIndex & 0xFF;
+
+    if (length > 0)
+        memcpy(apduData+8, data, length);
+
+    if (asap == _connectedTsap)
+        dataConnectedRequest(asap, priority, apdu, secCtrl);
+    else
+        dataIndividualRequest(ack, hopType, priority, asap, apdu, secCtrl);
+}
+
 void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
     uint8_t* data,  uint8_t& dataLength)
 {
@@ -827,6 +883,11 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             break;
         case Restart:
         {
+            // These reserved bits must be 0
+            uint8_t reservedBits = *data & 0x1e;
+            if (reservedBits != 0)
+                return;
+
             // handle erase code for factory reset (setting FDSK again as toolkey, etc.)
             RestartType restartType = (RestartType) (*data & 0x3f);
             EraseCode eraseCode = EraseCode::Void;
@@ -863,6 +924,29 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             startIndex &= 0xfff;
             _bau.propertyValueWriteIndication(priority, hopType, tsap, secCtrl, data[1], data[2], data[3] >> 4,
                 startIndex, data + 5, apdu.length() - 5);
+            break;
+        }
+        case PropertyValueExtRead:
+        {
+            ObjectType objectType = (ObjectType)(((data[1] & 0xff) << 8) | (data[2] & 0xff));
+            uint8_t objectInstance = ((data[3] & 0xff) << 4) | ((data[4] & 0xff) >> 4);
+            uint16_t propertyId = ((data[4] & 0xf) << 8) | (data[5] & 0xff);
+            uint8_t numberOfElements = data[6];
+            uint16_t startIndex = ((data[7] & 0xf) << 8) | (data[8] & 0xff);
+            _bau.propertyValueExtReadIndication(priority, hopType, tsap, secCtrl, objectType, objectInstance, propertyId, numberOfElements, startIndex);
+            break;
+        }
+        case PropertyValueExtWriteCon:
+        case PropertyValueExtWriteUnCon:
+        {
+            ObjectType objectType = (ObjectType)(((data[1] & 0xff) << 8) | (data[2] & 0xff));
+            uint8_t objectInstance = ((data[3] & 0xff) << 4) | ((data[4] & 0xff) >> 4);
+            uint16_t propertyId = ((data[4] & 0xf) << 8) | (data[5] & 0xff);
+            uint8_t numberOfElements = data[6];
+            uint16_t startIndex = ((data[7] & 0xf) << 8) | (data[8] & 0xff);
+            bool confirmed = (apdu.type() == PropertyValueExtWriteCon);
+            _bau.propertyValueExtWriteIndication(priority, hopType, tsap, secCtrl, objectType, objectInstance, propertyId, numberOfElements, startIndex,
+                                                 data + 9, apdu.length() - 9, confirmed);
             break;
         }
         case FunctionPropertyCommand:

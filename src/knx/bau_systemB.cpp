@@ -12,6 +12,7 @@ enum NmReadSerialNumberType
 };
 
 static constexpr auto kFunctionPropertyResultBufferMaxSize = 64;
+static constexpr auto kRestartProcessTime = 3;
 
 BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj), _addrTable(_memory),
     _assocTable(_memory), _groupObjTable(_memory), _appProgram(_memory),
@@ -158,18 +159,47 @@ bool BauSystemB::configured()
     return _configured;
 }
 
-void BauSystemB::masterReset(EraseCode eraseCode, uint8_t channel)
+uint8_t BauSystemB::masterReset(EraseCode eraseCode, uint8_t channel)
 {
+    static constexpr uint8_t successCode = 0x00; // Where does this come from? It is the code for "success".
+    static constexpr uint8_t invalidEraseCode = 0x02; // Where does this come from? It is the error code for "unspported erase code".
+
     switch (eraseCode)
     {
-        case EraseCode::ConfimrmedRestart:
+        case EraseCode::ConfirmedRestart:
         {
             println("Confirmed restart requested.");
-            break;
+            return successCode;
+        }
+        case EraseCode::ResetAP:
+        {
+            // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
+            println("ResetAP requested.");
+            return successCode;
+        }
+        case EraseCode::ResetIA:
+        {
+            // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
+            println("ResetAP requested.");
+            return successCode;
+        }
+        case EraseCode::ResetLinks:
+        {
+            // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
+            println("ResetLinks requested.");
+            return successCode;
+        }
+        case EraseCode::ResetParam:
+        {
+            // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
+            println("ResetParam requested.");
+            return successCode;
         }
         case EraseCode::FactoryReset:
         case EraseCode::FactoryResetWithoutIA:
         {
+            // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
+
 #ifdef USE_DATASECURE
             print("Factory reset requested. type: ");
             println(eraseCode == EraseCode::FactoryReset ? "FactoryReset with IA" : "FactoryReset without IA");
@@ -177,13 +207,13 @@ void BauSystemB::masterReset(EraseCode eraseCode, uint8_t channel)
             // and disable security mode
             _secIfObj.factoryReset();
 #endif
-            break;
+            return successCode;
         }
         default:
         {
             print("Unhandled erase code: ");
             println(eraseCode, HEX);
-            break;
+            return invalidEraseCode;
         }
     }
 }
@@ -222,12 +252,12 @@ void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopTyp
     }
     else if (restartType == RestartType::MasterReset)
     {
-        masterReset(eraseCode, channel);
+        uint8_t errorCode = masterReset(eraseCode, channel);
+        _appLayer.restartResponse(AckRequested, priority, hopType, secCtrl, errorCode, (errorCode == 0) ? kRestartProcessTime : 0);
     }
     else
     {
-        println("Unhandled restart type");
-        return;
+        // Cannot happen as restartType is just one bit
     }
 
     // Flush the EEPROM before resetting
@@ -279,6 +309,23 @@ void BauSystemB::propertyValueWriteIndication(Priority priority, HopCountType ho
     propertyValueReadIndication(priority, hopType, asap, secCtrl, objectIndex, propertyId, numberOfElements, startIndex);
 }
 
+void BauSystemB::propertyValueExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+    uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length, bool confirmed)
+{
+    uint8_t returnCode = ReturnCodes::Success;
+
+    InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
+    if(obj)
+        obj->writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
+    else
+        returnCode = ReturnCodes::AddressVoid;
+
+    if (confirmed)
+    {
+        _appLayer.propertyValueExtWriteConResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, numberOfElements, startIndex, returnCode);
+    }
+}
+
 void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
 {
@@ -301,7 +348,32 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
         size = 0;
     
     _appLayer.propertyValueReadResponse(AckRequested, priority, hopType, asap, secCtrl, objectIndex, propertyId, elementCount,
-        startIndex, data, size);
+                                        startIndex, data, size);
+}
+
+void BauSystemB::propertyValueExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+    uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
+{
+    uint8_t size = 0;
+    uint8_t elementCount = numberOfElements;
+    InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
+    if (obj)
+    {
+        uint8_t elementSize = obj->propertySize((PropertyID)propertyId);
+        size = elementSize * numberOfElements;
+    }
+    else
+        elementCount = 0;
+
+    uint8_t data[size];
+    if(obj)
+        obj->readProperty((PropertyID)propertyId, startIndex, elementCount, data);
+
+    if (elementCount == 0)
+        size = 0;
+
+    _appLayer.propertyValueExtReadResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, elementCount,
+                                           startIndex, data, size);
 }
 
 void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
@@ -444,11 +516,12 @@ void BauSystemB::addSaveRestore(SaveRestore* obj)
     _memory.addSaveRestore(obj);
 }
 
-bool BauSystemB::restartRequest(uint16_t asap, const SecurityControl &secCtrl)
+bool BauSystemB::restartRequest(uint16_t asap, const SecurityControl secCtrl)
 {
     if (_appLayer.isConnected())
         return false;
     _restartState = Connecting; // order important, has to be set BEFORE connectRequest
+    _restartSecurity = secCtrl;
     _appLayer.connectRequest(asap, SystemPriority);
     _appLayer.deviceDescriptorReadRequest(AckRequested, SystemPriority, NetworkLayerParameter, asap, secCtrl, 0);
     return true;
@@ -486,7 +559,7 @@ void BauSystemB::nextRestartState()
             /* connection confirmed, we send restartRequest, but we wait a moment (sending ACK etc)... */
             if (millis() - _restartDelay > 30)
             {
-                _appLayer.restartRequest(AckRequested, SystemPriority, NetworkLayerParameter, secCtrl);
+                _appLayer.restartRequest(AckRequested, SystemPriority, NetworkLayerParameter, _restartSecurity);
                 _restartState = Restarted;
                 _restartDelay = millis();
             }
