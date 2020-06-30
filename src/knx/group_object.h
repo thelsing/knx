@@ -22,12 +22,6 @@ class GroupObject;
 #ifndef HAS_FUNCTIONAL
 # if defined(__linux__) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32)
 #  define HAS_FUNCTIONAL    1
-# elif defined(__has_include)
-#  if __has_include (<functional>)
-#   define HAS_FUNCTIONAL   1
-#  else
-#   define HAS_FUNCTIONAL   0
-#  endif
 # else
 #  define HAS_FUNCTIONAL   0
 # endif
