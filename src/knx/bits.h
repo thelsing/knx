@@ -39,7 +39,7 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 
 #define getbyte(x,n) (*(((uint8_t*)&(x))+n))
 #define htons(x)  ( (getbyte(x,0)<<8) | getbyte(x,1) ) 
-#define htonl(x) ( (getbyte(x,0)<<24) | getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
+#define htonl(x) ( (getbyte(x,0)<<24) | (getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
 #define ntohs(x) htons(x)
 #define ntohl(x) htonl(x)
 
