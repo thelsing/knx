@@ -194,6 +194,9 @@
     <ClInclude Include="..\..\src\knx\knx_ip_supported_service_dib.h">
       <Filter>Header files\knx</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\knx\function_property.h">
+      <Filter>Header files\knx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

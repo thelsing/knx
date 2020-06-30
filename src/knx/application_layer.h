@@ -105,6 +105,8 @@ class ApplicationLayer
                                    uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length);
     void propertyValueWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                    uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length);
+    void functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
+                                       uint8_t objectIndex, uint8_t propertyId, uint8_t *resultData, uint8_t resultLength);
     void propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
                                         uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex);
     void propertyDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap,
@@ -133,10 +135,10 @@ class ApplicationLayer
     void systemNetworkParameterReadResponse(Priority priority, HopCountType hopType, uint16_t objectType,
                                             uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength,
                                             uint8_t* testResult, uint16_t testResultLength);
-    void domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
+    void domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
                                                const uint8_t* knxSerialNumber);                                       
-    void IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                               uint8_t* knxSerialNumber);                                       
+    void IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const uint8_t* rfDoA,
+                                               const uint8_t* knxSerialNumber);                                       
 #pragma endregion
 
   private:

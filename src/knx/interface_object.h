@@ -99,6 +99,34 @@ class InterfaceObject : public SaveRestore
      */
     virtual uint8_t propertySize(PropertyID id);
     /**
+     * Call command of a function property of the interface object. Property type must be PDT_FUNCTION
+     *
+     * @param id id of the property to call
+     *
+     * @param[in] length The size of the data buffer
+     *
+     * @param[in] data The argument data for the function
+     *
+     * @param[out] resultLength The size of the result data buffer
+     *
+     * @param[out] resultData The result data for the function
+     */
+    virtual void command(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t &resultLength);
+    /**
+     * Get state of a function property of the interface object. Property type must be PDT_FUNCTION
+     *
+     * @param id id of the property to call
+     *
+     * @param[in] length The size of the data buffer
+     *
+     * @param[in] data The argument data for the function
+     *
+     * @param[out] resultLength The size of the result data buffer
+     *
+     * @param[out] resultData The result data for the function
+     */
+    virtual void state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t resultLength);
+    /**
      * Read the Description of a property of the interface object. The output parameters are only valid if nuberOfElements is not zero.
      * 
      * @param[in,out] propertyId The id of the property of which to read the description of. If this parameter is not zero
@@ -116,9 +144,7 @@ class InterfaceObject : public SaveRestore
      * 
      * @param[out] access the ::AccessLevel necessary to read/write the property. 
      */
-    // TODO: remove first version after complete property refactoring
     void readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
-    void readPropertyDescription2(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
 
     /**
      * Gets property with PropertyID id if it exists and nullptr otherwise.
@@ -153,15 +179,6 @@ class InterfaceObject : public SaveRestore
     virtual uint16_t saveSize() override;
 
   protected:
-    /**
-     * Returns the number of properties the interface object has.
-     */
-    virtual uint8_t propertyDescriptionCount();
-    /**
-     * Returns a pointer to the first PropertyDescription of the interface object. 
-     * This is used by readPropertyDescription() together with propertyCount().
-     */
-    virtual PropertyDescription* propertyDescriptions();
 
     /**
      * Intializes the Property-array the the supplied values.

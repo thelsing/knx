@@ -56,6 +56,10 @@ class BauSystemB : protected BusAccessUnit
                                       uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length) override;
     void propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
                                      uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex) override;
+    void functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+                                           uint8_t propertyId, uint8_t* data, uint8_t length);
+    void functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+                                         uint8_t propertyId, uint8_t* data, uint8_t length);
     void individualAddressReadIndication(HopCountType hopType) override;
     void individualAddressWriteIndication(HopCountType hopType, uint16_t newaddress) override;
     void groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType,
@@ -68,6 +72,8 @@ class BauSystemB : protected BusAccessUnit
                                    uint8_t* data, uint8_t dataLength) override;
     void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
                                               uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength) override;
+    void systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, uint16_t objectType,
+                                                uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status) override;
     void connectConfirm(uint16_t tsap) override;
 
     virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;

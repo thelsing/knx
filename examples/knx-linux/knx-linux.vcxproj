@@ -93,6 +93,7 @@
     <ClInclude Include="..\..\src\knx\device_object.h" />
     <ClInclude Include="..\..\src\knx\dpt.h" />
     <ClInclude Include="..\..\src\knx\dptconvert.h" />
+    <ClInclude Include="..\..\src\knx\function_property.h" />
     <ClInclude Include="..\..\src\knx\group_object.h" />
     <ClInclude Include="..\..\src\knx\group_object_table_object.h" />
     <ClInclude Include="..\..\src\knx\interface_object.h" />

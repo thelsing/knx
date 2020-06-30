@@ -1,5 +1,7 @@
 #pragma once
 
+#ifndef NO_KNX_CONFIG
+
 #ifdef ARDUINO_ARCH_SAMD
 #define SPI_SS_PIN 10
 #define GPIO_GDO2_PIN 9
@@ -18,4 +20,6 @@
 //#define USE_CEMI_SERVER
 #ifdef USE_USB
 #define USE_CEMI_SERVER
+#endif
+
 #endif

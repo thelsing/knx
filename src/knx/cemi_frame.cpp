@@ -323,9 +323,9 @@ uint8_t* CemiFrame::rfSerialOrDoA() const
     return _rfSerialOrDoA;
 }
 
-void CemiFrame::rfSerialOrDoA(uint8_t* rfSerialOrDoA)
+void CemiFrame::rfSerialOrDoA(const uint8_t* rfSerialOrDoA)
 {
-    _rfSerialOrDoA = rfSerialOrDoA;
+    _rfSerialOrDoA = (uint8_t*)rfSerialOrDoA;
 }
 
 uint8_t CemiFrame::rfInfo() const

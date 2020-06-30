@@ -1,8 +1,6 @@
 #include "knx_ip_search_response.h"
 #ifdef USE_IP
 
-#endif
-
 #define SERVICE_FAMILIES 2
 
 KnxIpSearchResponse::KnxIpSearchResponse(IpParameterObject& parameters, DeviceObject& deviceObject)
@@ -61,3 +59,4 @@ KnxIpSupportedServiceDIB& KnxIpSearchResponse::supportedServices()
 {
     return _supportedServices;
 }
+#endif

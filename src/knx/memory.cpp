@@ -95,7 +95,7 @@ void Memory::writeMemory()
     {
         println(_data - buffer);
         println(".");
-        println((int)_saveRestores[i], HEX);
+        //println((long)_saveRestores[i], HEX);
         buffer = _saveRestores[i]->save(buffer);
     }
 
@@ -105,7 +105,7 @@ void Memory::writeMemory()
     {
         println(_data - buffer);
         println(".");
-        println((int)_tableObjects[i], HEX);
+        //println((long)_tableObjects[i], HEX);
         buffer = _tableObjects[i]->save(buffer);
 
         //save to size of the memoryblock for tableobject too, so that we can rebuild the usedList and freeList

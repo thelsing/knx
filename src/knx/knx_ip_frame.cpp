@@ -54,7 +54,6 @@ void KnxIpFrame::totalLength(uint16_t length)
 {
     pushWord(length, _data + 4);
 }
-#endif
 
 uint8_t* KnxIpFrame::data()
 {
@@ -79,3 +78,4 @@ KnxIpFrame::KnxIpFrame(uint16_t length)
     protocolVersion(KnxIp1_0);
     totalLength(length);
 }
+#endif

@@ -45,6 +45,9 @@ void BauSystemB::enabled(bool value)
 
 void BauSystemB::sendNextGroupTelegram()
 {
+    if(!configured())
+        return;
+    
     static uint16_t startIdx = 1;
 
     GroupObjectTableObject& table = _groupObjTable;
@@ -240,6 +243,32 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
         startIndex, data, size);
 }
 
+void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+                                                   uint8_t propertyId, uint8_t* data, uint8_t length)
+{
+    uint8_t resultLength = 0;
+    uint8_t resultData[32];
+
+    InterfaceObject* obj = getInterfaceObject(objectIndex);
+    if(obj)
+        obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+
+    _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, resultData, resultLength);
+}
+
+void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+                                                 uint8_t propertyId, uint8_t* data, uint8_t length)
+{
+    uint8_t resultLength = 0;
+    uint8_t resultData[32];
+
+    InterfaceObject* obj = getInterfaceObject(objectIndex);
+    if(obj)
+        obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+
+    _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, objectIndex, propertyId, resultData, resultLength);
+}
+
 void BauSystemB::individualAddressReadIndication(HopCountType hopType)
 {
     if (_deviceObj.progMode())
@@ -391,6 +420,11 @@ void BauSystemB::systemNetworkParameterReadIndication(Priority priority, HopCoun
         case NM_Read_SerialNumber_By_ManufacturerSpecific: // Manufacturer specific use of A_SystemNetworkParameter_Read
         break;
     }
+}
+
+void BauSystemB::systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, uint16_t objectType,
+                                                         uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status)
+{
 }
 
 void BauSystemB::propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,

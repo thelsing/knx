@@ -38,6 +38,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     uint8_t _xorSum = 0;
     uint32_t _lastByteRxTime;
     uint32_t _waitConfirmStartTime;
+    uint32_t _lastResetChipTime = 0;
 
     struct _tx_queue_frame_t
     {
