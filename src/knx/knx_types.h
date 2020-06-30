@@ -155,6 +155,9 @@ enum ApduType
     
     // Application Layer Services on Point-to-point Connection-Oriented Communication Mode (mandatory)
     // Application Layer Services on Point-to-point Connectionless Communication Mode (either optional or mandatory)
+    FunctionPropertyExtCommand = 0x1D4,
+    FunctionPropertyExtState = 0x1D5,
+    FunctionPropertyExtStateResponse = 0x1D6,
     MemoryRead = 0x200,
     MemoryResponse = 0x240,
     MemoryWrite = 0x280,

@@ -575,6 +575,29 @@ void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority prior
         dataIndividualRequest(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
+void ApplicationLayer::functionPropertyExtStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
+                                                        uint16_t objectType, uint8_t objectInstance, uint16_t propertyId, uint8_t* resultData, uint8_t resultLength)
+{
+    CemiFrame frame(6 + resultLength + 1);
+    APDU& apdu = frame.apdu();
+    apdu.type(FunctionPropertyStateResponse);
+    uint8_t* data = apdu.data() + 1;
+
+    data[0] = ((uint16_t)objectType) >> 8;
+    data[1] = ((uint16_t)objectType) & 0xFF;
+    data[2] = objectInstance >> 4;
+    data[3] = ((objectInstance&0x0F) << 4) | (propertyId >> 8);
+    data[4] = (propertyId & 0xFF);
+    // data[5] must contain the return code
+    if (resultLength > 0)
+        memcpy(&data[5], resultData, resultLength);
+
+    if (asap == _connectedTsap)
+        dataConnectedRequest(asap, priority, apdu, secCtrl);
+    else
+        dataIndividualRequest(ack, hopType, priority, asap, apdu, secCtrl);
+}
+
 void ApplicationLayer::propertyDescriptionReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl,
     uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex)
 {
@@ -848,6 +871,24 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         case FunctionPropertyState:
             _bau.functionPropertyStateIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
             break;
+        case FunctionPropertyExtCommand:
+        {
+            ObjectType objectType = (ObjectType)(((data[1] & 0xff) << 8) | (data[2] & 0xff));
+            uint8_t objectInstance = ((data[3] & 0xff) << 4) | ((data[4] & 0xff) >> 4);
+            uint16_t propertyId = ((data[5] & 0xf) << 8) | (data[6] & 0xff);
+            uint8_t* functionInput = &data[7];
+            _bau.functionPropertyExtCommandIndication(priority, hopType, tsap, secCtrl, objectType, objectInstance, propertyId, functionInput, apdu.length() - 8); //TODO: check length
+            break;
+        }
+        case FunctionPropertyExtState:
+        {
+            ObjectType objectType = (ObjectType)(((data[1] & 0xff) << 8) | (data[2] & 0xff));
+            uint8_t objectInstance = ((data[3] & 0xff) << 4) | ((data[4] & 0xff) >> 4);
+            uint16_t propertyId = ((data[5] & 0xf) << 8) | (data[6] & 0xff);
+            uint8_t* functionInput = &data[7];
+            _bau.functionPropertyExtStateIndication(priority, hopType, tsap, secCtrl, objectType, objectInstance, propertyId, functionInput, apdu.length() - 8); //TODO: check length
+            break;
+        }
         case PropertyDescriptionRead:
             _bau.propertyDescriptionReadIndication(priority, hopType, tsap, secCtrl, data[1], data[2], data[3]);
             break;

@@ -330,6 +330,32 @@ void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType
     _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectIndex, propertyId, resultData, resultLength);
 }
 
+void BauSystemB::functionPropertyExtCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                                      uint8_t propertyId, uint8_t* data, uint8_t length)
+{
+    uint8_t resultData[kFunctionPropertyResultBufferMaxSize];
+    uint8_t resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
+
+    InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
+    if(obj)
+        obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+
+    _appLayer.functionPropertyExtStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, resultData, resultLength);
+}
+
+void BauSystemB::functionPropertyExtStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                                    uint8_t propertyId, uint8_t* data, uint8_t length)
+{
+    uint8_t resultData[kFunctionPropertyResultBufferMaxSize];
+    uint8_t resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
+
+    InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
+    if(obj)
+        obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+
+    _appLayer.functionPropertyExtStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, resultData, resultLength);
+}
+
 void BauSystemB::individualAddressReadIndication(HopCountType hopType, const SecurityControl &secCtrl)
 {
     if (_deviceObj.progMode())

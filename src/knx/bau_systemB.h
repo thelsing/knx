@@ -63,6 +63,10 @@ class BauSystemB : protected BusAccessUnit
                                            uint8_t propertyId, uint8_t* data, uint8_t length);
     void functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                          uint8_t propertyId, uint8_t* data, uint8_t length);
+    void functionPropertyExtCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                                      uint8_t propertyId, uint8_t* data, uint8_t length);
+    void functionPropertyExtStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                                    uint8_t propertyId, uint8_t* data, uint8_t length);
     void individualAddressReadIndication(HopCountType hopType, const SecurityControl &secCtrl) override;
     void individualAddressWriteIndication(HopCountType hopType, const SecurityControl &secCtrl, uint16_t newaddress) override;
     void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t newIndividualAddress,
