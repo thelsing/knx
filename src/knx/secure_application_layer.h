@@ -35,6 +35,8 @@ class SecureApplicationLayer :  public ApplicationLayer
     void getFailureCounters(uint8_t* data);
     uint8_t getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen);
 
+    DataSecurity getGoSecurityFlags(uint16_t index);
+
     // from transport layer
     virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
     virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,

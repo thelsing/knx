@@ -491,5 +491,12 @@ void SecurityInterfaceObject::setLastValidSequenceNumber(uint16_t deviceAddr, ui
     }
 }
 
+DataSecurity SecurityInterfaceObject::getGoSecurityFlags(uint16_t index)
+{
+    // TODO
+    // PID_GO_SECURITY_FLAGS
+    return DataSecurity::none;
+}
+
 #endif
 

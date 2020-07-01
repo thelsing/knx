@@ -4,6 +4,7 @@
 #ifdef USE_DATASECURE
 
 #include "interface_object.h"
+#include "knx_types.h"
 
 class SecureApplicationLayer;
 
@@ -31,6 +32,8 @@ public:
   void setSequenceNumber(bool toolAccess, uint64_t seqNum);
   uint64_t getLastValidSequenceNumber(uint16_t deviceAddr);
   void setLastValidSequenceNumber(uint16_t deviceAddr, uint64_t seqNum);
+
+  DataSecurity getGoSecurityFlags(uint16_t index);
 
 private:
   SecureApplicationLayer* _secAppLayer = nullptr;

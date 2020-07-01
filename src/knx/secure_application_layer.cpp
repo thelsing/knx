@@ -1275,3 +1275,8 @@ bool SecureApplicationLayer::isSyncService(APDU& secureApdu)
 
     return false;
 }
+
+DataSecurity SecureApplicationLayer::getGoSecurityFlags(uint16_t index)
+{
+    return _secIfObj.getGoSecurityFlags(index);
+}

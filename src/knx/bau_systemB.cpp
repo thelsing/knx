@@ -62,10 +62,6 @@ void BauSystemB::sendNextGroupTelegram()
     if(!configured())
         return;
     
-    // TODO: get security flags from Security Interface Object for this group object
-    SecurityControl goSecurity;
-    goSecurity.dataSecurity = DataSecurity::none;
-
     static uint16_t startIdx = 1;
 
     GroupObjectTableObject& table = _groupObjTable;
@@ -81,6 +77,18 @@ void BauSystemB::sendNextGroupTelegram()
 
         if (!go.communicationEnable())
             continue;
+
+        SecurityControl goSecurity;
+        // TODO: what do we do with it?
+        goSecurity.toolAccess;
+
+#ifdef USE_DATASECURE
+        // Get security flags from Security Interface Object for this group object
+        goSecurity.dataSecurity = _appLayer.getGoSecurityFlags(asap);
+
+#else
+        goSecurity.dataSecurity = DataSecurity::none;
+#endif
 
         if (flag == WriteRequest && go.transmitEnable())
         {
