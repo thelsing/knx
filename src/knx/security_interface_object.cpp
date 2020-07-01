@@ -30,7 +30,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
             },
             // WriteCallback of PID_LOAD_STATE_CONTROL
             [](SecurityInterfaceObject* obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
-                obj->_state = (LoadState) data[0];
+                obj->loadEvent(data);
                 return 1;
             }),
         new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_MODE,
@@ -157,6 +157,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
         new DataProperty( PID_ZONE_KEY_TABLE, true, PDT_GENERIC_19, 32, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_GO_SECURITY_FLAGS, true, PDT_GENERIC_01, 32, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_ROLE_TABLE, true, PDT_GENERIC_01, 32, ReadLv3 | WriteLv0 ), // written by ETS
+        new DataProperty( PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t)E_NO_FAULT),
         new DataProperty( PID_TOOL_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 ) // Updated by our device accordingly (non-standardized!)
     };
     initializeProperties(sizeof(properties), properties);
@@ -185,6 +186,126 @@ uint16_t SecurityInterfaceObject::saveSize()
 bool SecurityInterfaceObject::isLoaded()
 {
     return _state == LS_LOADED;
+}
+
+void SecurityInterfaceObject::loadEvent(const uint8_t* data)
+{
+    switch (_state)
+    {
+        case LS_UNLOADED:
+            loadEventUnloaded(data);
+            break;
+        case LS_LOADING:
+            loadEventLoading(data);
+            break;
+        case LS_LOADED:
+            loadEventLoaded(data);
+            break;
+        case LS_ERROR:
+            loadEventError(data);
+            break;
+        default:
+            /* do nothing */
+            break;
+    }
+}
+
+void SecurityInterfaceObject::loadEventUnloaded(const uint8_t* data)
+{
+    uint8_t event = data[0];
+    switch (event)
+    {
+        case LE_NOOP:
+        case LE_LOAD_COMPLETED:
+        case LE_ADDITIONAL_LOAD_CONTROLS:
+        case LE_UNLOAD:
+            break;
+        case LE_START_LOADING:
+            loadState(LS_LOADING);
+            break;
+        default:
+            loadState(LS_ERROR);
+            errorCode(E_GOT_UNDEF_LOAD_CMD);
+    }
+}
+
+void SecurityInterfaceObject::loadEventLoading(const uint8_t* data)
+{
+    uint8_t event = data[0];
+    switch (event)
+    {
+        case LE_NOOP:
+        case LE_START_LOADING:
+            break;
+        case LE_LOAD_COMPLETED:
+            loadState(LS_LOADED);
+            break;
+        case LE_UNLOAD:
+            loadState(LS_UNLOADED);
+            break;
+        case LE_ADDITIONAL_LOAD_CONTROLS: // Not supported here
+        default:
+            loadState(LS_ERROR);
+            errorCode(E_GOT_UNDEF_LOAD_CMD);
+    }
+}
+
+void SecurityInterfaceObject::loadEventLoaded(const uint8_t* data)
+{
+    uint8_t event = data[0];
+    switch (event)
+    {
+        case LE_NOOP:
+        case LE_LOAD_COMPLETED:
+            break;
+        case LE_START_LOADING:
+            loadState(LS_LOADING);
+            break;
+        case LE_UNLOAD:
+            loadState(LS_UNLOADED);
+            break;
+        case LE_ADDITIONAL_LOAD_CONTROLS:
+            loadState(LS_ERROR);
+            errorCode(E_INVALID_OPCODE);
+            break;
+        default:
+            loadState(LS_ERROR);
+            errorCode(E_GOT_UNDEF_LOAD_CMD);
+    }
+}
+
+void SecurityInterfaceObject::loadEventError(const uint8_t* data)
+{
+    uint8_t event = data[0];
+    switch (event)
+    {
+        case LE_NOOP:
+        case LE_LOAD_COMPLETED:
+        case LE_ADDITIONAL_LOAD_CONTROLS:
+        case LE_START_LOADING:
+            break;
+        case LE_UNLOAD:
+            loadState(LS_UNLOADED);
+            break;
+        default:
+            loadState(LS_ERROR);
+            errorCode(E_GOT_UNDEF_LOAD_CMD);
+    }
+}
+
+void SecurityInterfaceObject::loadState(LoadState newState)
+{
+    if (newState == _state)
+        return;
+    //beforeStateChange(newState);
+    _state = newState;
+}
+
+void SecurityInterfaceObject::errorCode(ErrorCode errorCode)
+{
+    uint8_t data = errorCode;
+    Property* prop = property(PID_ERROR_CODE);
+    prop->write(data);
 }
 
 void SecurityInterfaceObject::factoryReset()

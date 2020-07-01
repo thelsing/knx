@@ -384,7 +384,16 @@ void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountTy
 
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
-        obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+    {
+        if (obj->property((PropertyID)propertyId)->Type() == PDT_FUNCTION)
+        {
+            obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+        }
+        else
+        {
+            resultLength = 0; // We must not send a return code or any data fields
+        }
+    }
 
     _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectIndex, propertyId, resultData, resultLength);
 }
@@ -397,7 +406,16 @@ void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType
 
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
-        obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+    {
+        if (obj->property((PropertyID)propertyId)->Type() == PDT_FUNCTION)
+        {
+            obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+        }
+        else
+        {
+            resultLength = 0; // We must not send a return code or any data fields
+        }
+    }
 
     _appLayer.functionPropertyStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectIndex, propertyId, resultData, resultLength);
 }
@@ -406,23 +424,53 @@ void BauSystemB::functionPropertyExtCommandIndication(Priority priority, HopCoun
                                                       uint8_t propertyId, uint8_t* data, uint8_t length)
 {
     uint8_t resultData[kFunctionPropertyResultBufferMaxSize];
-    uint8_t resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
+    uint8_t resultLength = 1; // we always have to include the return code at least
 
     InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
     if(obj)
     {
-        if (obj->property((PropertyID)propertyId)->Type() == PDT_CONTROL)
+        PropertyDataType propType = obj->property((PropertyID)propertyId)->Type();
+
+        if (propType == PDT_FUNCTION)
+        {
+            // The first byte is reserved and 0 for PDT_FUNCTION
+            uint8_t reservedByte = data[0];
+            if (reservedByte != 0x00)
+            {
+                resultData[0] = ReturnCodes::DataVoid;
+            }
+            else
+            {
+                resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
+                obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+                // resultLength was modified by the callee
+            }
+        }
+        else if (propType == PDT_CONTROL)
         {
             uint8_t count = 1;
+            // write the event
             obj->writeProperty((PropertyID)propertyId, 1, data, count);
-            resultLength = count ? 2 : 1;
-            resultData[0] = count ? ReturnCodes::Success : ReturnCodes::DataVoid;
-            resultData[1] = data[0];
+            if (count == 1)
+            {
+                // Read the current state (one byte only) for the response
+                obj->readProperty((PropertyID)propertyId, 1, count, &resultData[1]);
+                resultLength = count ? 2 : 1;
+                resultData[0] = count ? ReturnCodes::Success : ReturnCodes::DataVoid;
+            }
+            else
+            {
+                resultData[0] = ReturnCodes::AddressVoid;
+            }
         }
-        else if (obj->property((PropertyID)propertyId)->Type() == PDT_FUNCTION)
+        else
         {
-            obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+            resultData[0] = ReturnCodes::DataTypeConflict;
         }
+    }
+    else
+    {
+        resultData[0] = ReturnCodes::GenericError;
     }
 
     _appLayer.functionPropertyExtStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, resultData, resultLength);
@@ -437,18 +485,41 @@ void BauSystemB::functionPropertyExtStateIndication(Priority priority, HopCountT
     InterfaceObject* obj = getInterfaceObject(objectType, objectInstance);
     if(obj)
     {
-        if (obj->property((PropertyID)propertyId)->Type() == PDT_CONTROL)
+        PropertyDataType propType = obj->property((PropertyID)propertyId)->Type();
+
+        if (propType == PDT_FUNCTION)
+        {
+            // The first byte is reserved and 0 for PDT_FUNCTION
+            uint8_t reservedByte = data[0];
+            if (reservedByte != 0x00)
+            {
+                resultData[0] = ReturnCodes::DataVoid;
+            }
+            else
+            {
+                resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
+                obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+                // resultLength was modified by the callee
+            }
+        }
+        else if (propType == PDT_CONTROL)
         {
             uint8_t count = 1;
+            // Read the current state (one byte only) for the response
             obj->readProperty((PropertyID)propertyId, 1, count, &resultData[1]);
             resultLength = count ? 2 : 1;
             resultData[0] = count ? ReturnCodes::Success : ReturnCodes::DataVoid;
         }
-        else if (obj->property((PropertyID)propertyId)->Type() == PDT_FUNCTION)
+        else
         {
-            obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+            resultData[0] = ReturnCodes::DataTypeConflict;
         }
     }
+    else
+    {
+        resultData[0] = ReturnCodes::GenericError;
+    }
+
     _appLayer.functionPropertyExtStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, resultData, resultLength);
 }
 
