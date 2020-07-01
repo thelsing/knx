@@ -203,12 +203,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _bau.deviceObject().bauNumber(value);
     }
 
-    void orderNumber(const char* value)
+    void orderNumber(const uint8_t* value)
     {
         _bau.deviceObject().orderNumber(value);
     }
 
-    void hardwareType(uint8_t* value)
+    void hardwareType(const uint8_t* value)
     {
         _bau.deviceObject().hardwareType(value);
     }

@@ -19,7 +19,15 @@ enum ComFlag
 
 class GroupObject;
 
-#ifdef __linux__
+#ifndef HAS_FUNCTIONAL
+# if defined(__linux__) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32)
+#  define HAS_FUNCTIONAL    1
+# else
+#  define HAS_FUNCTIONAL   0
+# endif
+#endif
+
+#if HAS_FUNCTIONAL
 #include <functional>
 typedef std::function<void(GroupObject&)> GroupObjectUpdatedHandler;
 #else
