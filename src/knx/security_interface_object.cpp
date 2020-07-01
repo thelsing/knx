@@ -314,5 +314,182 @@ void SecurityInterfaceObject::factoryReset()
     property(PID_TOOL_KEY)->write(1, 1, _fdsk);
 }
 
+const uint8_t* SecurityInterfaceObject::toolKey(uint16_t devAddr)
+{
+    //TODO: check if multiple tool keys possible, leave it for now
+    const uint8_t* toolKey = propertyData(PID_TOOL_KEY);
+    return toolKey;
+}
+
+const uint8_t* SecurityInterfaceObject::p2pKey(uint16_t addressIndex)
+{
+    if (!isLoaded())
+        return nullptr;
+
+    // Get number of entries for this property
+    uint16_t numElements = getNumberOfElements(PID_P2P_KEY_TABLE);
+
+    if (numElements > 0)
+    {
+        uint8_t elementSize = propertySize(PID_P2P_KEY_TABLE);
+
+        // Search for address index
+        uint8_t entry[elementSize]; // 2 bytes index + keysize (16 bytes) + 2 bytes(for what?) = 20 bytes
+        for (int i = 1; i <= numElements; i++)
+        {
+            property(PID_P2P_KEY_TABLE)->read(i, 1, entry);
+            uint16_t index = (entry[0] << 8) | entry[1];
+            if (index > addressIndex)
+            {
+                return nullptr;
+            }
+            if (index == addressIndex)
+            {
+                return propertyData(PID_P2P_KEY_TABLE, i) + sizeof(index);
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+const uint8_t* SecurityInterfaceObject::groupKey(uint16_t addressIndex)
+{
+    if (!isLoaded())
+        return nullptr;
+
+    // Get number of entries for this property
+    uint16_t numElements = getNumberOfElements(PID_GRP_KEY_TABLE);
+
+    if (numElements > 0)
+    {
+        uint8_t elementSize = propertySize(PID_GRP_KEY_TABLE);
+
+        // Search for address index
+        uint8_t entry[elementSize]; // 2 bytes index + keysize (16 bytes) = 18 bytes
+        for (int i = 1; i <= numElements; i++)
+        {
+            property(PID_P2P_KEY_TABLE)->read(i, 1, entry);
+            uint16_t index = (entry[0] << 8) | entry[1];
+            if (index > addressIndex)
+            {
+                return nullptr;
+            }
+            if (index == addressIndex)
+            {
+                return propertyData(PID_GRP_KEY_TABLE, i) + sizeof(index);
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+uint16_t SecurityInterfaceObject::indAddressIndex(uint16_t indAddr)
+{
+    // Get number of entries for this property
+    uint16_t numElements = getNumberOfElements(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE);
+
+    if (numElements > 0)
+    {
+        uint8_t elementSize = propertySize(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE);
+
+        // Search for individual address
+        uint8_t entry[elementSize]; // 2 bytes address + 6 bytes seqno = 8 bytes
+        for (int i = 1; i <= numElements; i++)
+        {
+            property(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE)->read(i, 1, entry);
+            uint16_t addr = (entry[0] << 8) | entry[1];
+            if (addr == indAddr)
+            {
+                return i;
+            }
+        }
+    }
+
+    // Not found
+    return 0;
+}
+
+void SecurityInterfaceObject::setSequenceNumber(bool toolAccess, uint64_t seqNum)
+{
+    uint8_t seqBytes[6] = {0x00};
+    sixBytesFromUInt64(seqNum, seqBytes);
+
+    if (toolAccess)
+    {
+        property(PID_TOOL_SEQUENCE_NUMBER_SENDING)->write(1, 1, seqBytes);
+    }
+    else
+    {
+        property(PID_SEQUENCE_NUMBER_SENDING)->write(1, 1, seqBytes);
+    }
+}
+
+uint16_t SecurityInterfaceObject::getNumberOfElements(PropertyID propId)
+{
+    // Get number of entries for this property
+    uint16_t numElements = 0;
+
+    uint8_t data[sizeof(uint16_t)]; // is sizeof(_currentElements) which is uint16_t
+    uint8_t count = property(propId)->read(0, 1, data);
+
+    if (count > 0)
+    {
+        popWord(numElements, data);
+    }
+
+    return numElements;
+}
+
+uint64_t SecurityInterfaceObject::getLastValidSequenceNumber(uint16_t deviceAddr)
+{
+
+    // Get number of entries for this property
+    uint16_t numElements = getNumberOfElements(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE);
+
+    if (numElements > 0)
+    {
+        uint8_t elementSize = propertySize(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE);
+
+        // Search for individual address
+        uint8_t entry[elementSize]; // 2 bytes address + 6 bytes seqno = 8 bytes
+        for (int i = 1; i <= numElements; i++)
+        {
+            property(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE)->read(i, 1, entry);
+            uint16_t addr = (entry[0] << 8) | entry[1];
+            if (addr == deviceAddr)
+            {
+                return sixBytesToUInt64(&entry[2]);
+            }
+        }
+    }
+    return 0;
+}
+
+void SecurityInterfaceObject::setLastValidSequenceNumber(uint16_t deviceAddr, uint64_t seqNum)
+{
+    // Get number of entries for this property
+    uint16_t numElements = getNumberOfElements(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE);
+
+    if (numElements > 0)
+    {
+        uint8_t elementSize = propertySize(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE);
+
+        // Search for individual address
+        uint8_t entry[elementSize]; // 2 bytes address + 6 bytes seqno = 8 bytes
+        for (int i = 1; i <= numElements; i++)
+        {
+            property(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE)->read(i, 1, entry);
+            uint16_t addr = (entry[0] << 8) | entry[1];
+            if (addr == deviceAddr)
+            {
+                sixBytesFromUInt64(seqNum, &entry[2]);
+                property(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE)->write(i, 1, entry);
+            }
+        }
+    }
+}
+
 #endif
 

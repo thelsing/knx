@@ -85,3 +85,6 @@ uint8_t* pushByteArray(const uint8_t* src, uint32_t size, uint8_t* data);
 uint16_t getWord(const uint8_t* data);
 uint32_t getInt(const uint8_t* data);
 void printHex(const char* suffix, const uint8_t *data, size_t length);
+
+void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
+uint64_t sixBytesToUInt64(uint8_t* data);

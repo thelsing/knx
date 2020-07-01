@@ -190,3 +190,9 @@ const uint8_t* InterfaceObject::propertyData(PropertyID id)
     DataProperty* prop = (DataProperty*)property(id);
     return prop->data();
 }
+
+const uint8_t* InterfaceObject::propertyData(PropertyID id, uint16_t elementIndex)
+{
+    DataProperty* prop = (DataProperty*)property(id);
+    return prop->data(elementIndex);
+}

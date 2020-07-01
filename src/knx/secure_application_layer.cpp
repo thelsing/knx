@@ -2,6 +2,7 @@
 #include "transport_layer.h"
 #include "cemi_frame.h"
 #include "association_table_object.h"
+#include "address_table_object.h"
 #include "security_interface_object.h"
 #include "device_object.h"
 #include "apdu.h"
@@ -15,22 +16,16 @@
 #define ECB 0
 #include "aes.hpp"
 
-const uint8_t SecureDataPdu = 0;
-const uint8_t SecureSyncRequest = 2;
-const uint8_t SecureSyncResponse = 3;
+static constexpr uint8_t kSecureDataPdu = 0;
+static constexpr uint8_t kSecureSyncRequest = 2;
+static constexpr uint8_t kSecureSyncResponse = 3;
 
-uint64_t sequenceNumberToolAccess = 50;
-uint64_t sequenceNumber = 0;
-
-uint64_t lastValidSequenceNumberTool = 0;
-uint64_t lastValidSequenceNumber = 0;
-
-SecureApplicationLayer::SecureApplicationLayer(DeviceObject &deviceObj, SecurityInterfaceObject &secIfObj, AssociationTableObject& assocTable, BusAccessUnit& bau):
+SecureApplicationLayer::SecureApplicationLayer(DeviceObject &deviceObj, SecurityInterfaceObject &secIfObj, AssociationTableObject& assocTable, AddressTableObject &addrTab, BusAccessUnit& bau):
     ApplicationLayer(assocTable, bau),
     _secIfObj(secIfObj),
-    _deviceObj(deviceObj)
+    _deviceObj(deviceObj),
+    _addrTab(addrTab)
 {
-
 }
 
 /* from transport layer */
@@ -501,62 +496,9 @@ void SecureApplicationLayer::blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_
     pBuf = pushByte(0x01, pBuf);
 }
 
-void SecureApplicationLayer::sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray)
-{
-    toByteArray[0] = ((num >> 40) & 0xff);
-    toByteArray[1] = ((num >> 32) & 0xff);
-    toByteArray[2] = ((num >> 24) & 0xff);
-    toByteArray[3] = ((num >> 16) & 0xff);
-    toByteArray[4] = ((num >> 8) & 0xff);
-    toByteArray[5] = (num & 0xff);
-}
-
-uint64_t SecureApplicationLayer::sixBytesToUInt64(uint8_t* data)
-{
-    uint64_t l = 0;
-
-    for (uint8_t i = 0; i < 6; i++)
-    {
-        l = (l << 8) + data[i];
-    }
-    return l;
-}
-
-const uint8_t* SecureApplicationLayer::toolKey(uint16_t devAddr)
-{
-    //TODO: multiple tool keys possible
-    const uint8_t* toolKey = _secIfObj.propertyData(PID_TOOL_KEY);
-    return toolKey;
-}
-
-const uint8_t* SecureApplicationLayer::p2pKey(uint16_t addressIndex)
-{
-    if (!_secIfObj.isLoaded())
-        return nullptr;
-
-    // TODO
-    return _secIfObj.propertyData(PID_P2P_KEY_TABLE);
-}
-
-const uint8_t* SecureApplicationLayer::groupKey(uint16_t addressIndex)
-{
-    if (!_secIfObj.isLoaded())
-        return nullptr;
-
-    // TODO
-    return _secIfObj.propertyData(PID_GRP_KEY_TABLE);
-}
-
 uint16_t SecureApplicationLayer::groupAddressIndex(uint16_t groupAddr)
 {
-    // TODO
-    return 0;
-}
-
-uint16_t SecureApplicationLayer::indAddressIndex(uint16_t indAddr)
-{
-    // TODO
-    return 0;
+    return _addrTab.getTsap(groupAddr);
 }
 
 const uint8_t* SecureApplicationLayer::securityKey(uint16_t addr, bool isGroupAddress)
@@ -565,13 +507,13 @@ const uint8_t* SecureApplicationLayer::securityKey(uint16_t addr, bool isGroupAd
     {
         uint16_t gaIndex = groupAddressIndex(addr);
         if (gaIndex > 0)
-            return groupKey(gaIndex);
+            return _secIfObj.groupKey(gaIndex);
     }
     else
     {
-        uint16_t iaIndex = indAddressIndex(addr);
+        uint16_t iaIndex = _secIfObj.indAddressIndex(addr);
         if (iaIndex > 0)
-            return p2pKey(iaIndex);
+            return _secIfObj.p2pKey(iaIndex);
     }
 
     return nullptr;
@@ -580,7 +522,7 @@ const uint8_t* SecureApplicationLayer::securityKey(uint16_t addr, bool isGroupAd
 // returns next outgoing sequence number for secure communication
 uint64_t SecureApplicationLayer::nextSequenceNumber(bool toolAccess)
 {
-    return toolAccess ? sequenceNumberToolAccess : sequenceNumber;
+    return toolAccess ? _sequenceNumberToolAccess : _sequenceNumber;
 }
 
 // stores next outgoing sequence number for secure communication
@@ -588,40 +530,29 @@ void SecureApplicationLayer::updateSequenceNumber(bool toolAccess, uint64_t seqN
 {
     if (toolAccess)
     {
-        sequenceNumberToolAccess = seqNum;
-        //TODO: securityInterface.set(Pid.ToolSequenceNumberSending, sixBytes(seqNo).array());
+        _sequenceNumberToolAccess = seqNum;
     }
     else
     {
-        sequenceNumber = seqNum;
-        //TODO: securityInterface.set(Pid.SequenceNumberSending, sixBytes(seqNo).array());
+        _sequenceNumber = seqNum;
     }
+
+    // Also update the properties accordingly
+    _secIfObj.setSequenceNumber(toolAccess, seqNum);
 }
 
-uint64_t SecureApplicationLayer::lastValidSequenceNumber(bool toolAcces, uint16_t srcAddr)
+uint64_t SecureApplicationLayer::lastValidSequenceNumber(bool toolAccess, uint16_t srcAddr)
 {
-    if (toolAcces)
+    if (toolAccess)
     {
-        // TODO: add map to handle multiplpe lastValidSequenceNumberTool for each srcAddr
-        // lastValidSequence.getOrDefault(remote, 0L);
+        // TODO: check if we really have to support multiple tools at the same time
         if (srcAddr == _deviceObj.induvidualAddress())
-            return sequenceNumberToolAccess;
-        return lastValidSequenceNumberTool;
+            return _sequenceNumberToolAccess;
+        return _lastValidSequenceNumberTool;
     }
     else
     {
-/*
- *  TODO:
-        byte[] addresses = securityInterface.get(Pid.SecurityIndividualAddressTable);
-        var addr = remote.toByteArray();
-        // precondition: array size is multiple of entrySize
-        int entrySize = 2 + 6; // Address and SeqNum
-        for (int offset = 0; offset < addresses.length; offset += entrySize)
-        {
-            if (Arrays.equals(addr, 0, addr.length, addresses, offset, offset + 2))
-                return unsigned(Arrays.copyOfRange(addresses, offset + 2, offset + 2 + 6));
-        }
-*/
+        return _secIfObj.getLastValidSequenceNumber(srcAddr);
     }
 
     return 0;
@@ -630,27 +561,11 @@ uint64_t SecureApplicationLayer::lastValidSequenceNumber(bool toolAcces, uint16_
 void SecureApplicationLayer::updateLastValidSequence(bool toolAccess, uint16_t remoteAddr, uint64_t seqNo)
 {
     if (toolAccess)
-        // TODO: add map to handle multiple lastValidSequenceNumberTool for each srcAddr
-        //lastValidSequenceToolAccess.put(remoteAddr, seqNo);
-        lastValidSequenceNumberTool = seqNo;
+        // TODO: check if we really have to support multiple tools at the same time
+        _lastValidSequenceNumberTool = seqNo;
     else
     {
-/*
- * TODO:
-        byte[] addresses = securityInterface.get(Pid.SecurityIndividualAddressTable);
-        var addr = remote.toByteArray();
-
-        int entrySize = addr.length + 6; // Address + SeqNum
-        // precondition: array size is multiple of entrySize
-        for (int offset = 0; offset < addresses.length; offset += entrySize) {
-            if (Arrays.equals(addr, 0, addr.length, addresses, offset, offset + 2)) {
-                final var start = 1 + offset / entrySize;
-                final var data = ByteBuffer.allocate(8).put(addr).put(sixBytes(seqNo));
-                securityInterface.set(Pid.SecurityIndividualAddressTable, start, 1, data.array());
-                break;
-            }
-        }
-*/
+        _secIfObj.setLastValidSequenceNumber(remoteAddr, seqNo);
     }
 }
 
@@ -684,7 +599,7 @@ void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGro
     print("sendSyncRequest: TPCI: ");
     println(tpci, HEX);
 
-    if(secure(request.data() + APDU_LPDU_DIFF, SecureSyncRequest, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl))
+    if(secure(request.data() + APDU_LPDU_DIFF, kSecureSyncRequest, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl))
     {
         println("SyncRequest: ");
         request.apdu().printPDU();
@@ -744,7 +659,7 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
     print("sendSyncResponse: TPCI: ");
     println(tpci, HEX);
 
-    if(secure(response.data() + APDU_LPDU_DIFF, SecureSyncResponse, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl))
+    if(secure(response.data() + APDU_LPDU_DIFF, kSecureSyncResponse, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl))
     {
         _lastSyncRes = millis();
 
@@ -857,11 +772,11 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
     secCtrl.toolAccess = toolAccess;
     secCtrl.dataSecurity = authOnly ? DataSecurity::auth : DataSecurity::authConf;
 
-    bool syncReq = service == SecureSyncRequest;
-    bool syncRes = service == SecureSyncResponse;
+    bool syncReq = service == kSecureSyncRequest;
+    bool syncRes = service == kSecureSyncResponse;
 
     //const uint8_t* key = dstAddrIsGroupAddr ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? toolKey(srcAddr == _deviceObj.induvidualAddress() ? dstAddr : srcAddr) : securityKey(srcAddr, false);
-    const uint8_t* key = dstAddrIsGroupAddr && (dstAddr != 0) ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? toolKey(srcAddr == _deviceObj.induvidualAddress() ? dstAddr : srcAddr) : securityKey(srcAddr, false);
+    const uint8_t* key = dstAddrIsGroupAddr && (dstAddr != 0) ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? _secIfObj.toolKey(srcAddr == _deviceObj.induvidualAddress() ? dstAddr : srcAddr) : securityKey(srcAddr, false);
     if (key == nullptr)
     {
         print("Error: No key found. toolAccess: ");
@@ -879,7 +794,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
 
     uint16_t remainingPlainApduLength = plainApduLength;
 
-    if (service == SecureDataPdu)
+    if (service == kSecureDataPdu)
     {
         if (srcAddr != _deviceObj.induvidualAddress())
         {
@@ -1125,7 +1040,7 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         }
     }
 
-    const uint8_t* key = toolAccess ? toolKey(_syncReqBroadcastIncoming ? _deviceObj.induvidualAddress() : dstAddr) : securityKey(dstAddr, dstAddrIsGroupAddr);
+    const uint8_t* key = toolAccess ? _secIfObj.toolKey(_syncReqBroadcastIncoming ? _deviceObj.induvidualAddress() : dstAddr) : securityKey(dstAddr, dstAddrIsGroupAddr);
     if (key == nullptr)
     {
         print("Error: No key found. toolAccess: ");
@@ -1133,8 +1048,8 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         return false;
     }
 
-    bool syncReq = service == SecureSyncRequest;
-    bool syncRes = service == SecureSyncResponse;
+    bool syncReq = service == kSecureSyncRequest;
+    bool syncRes = service == kSecureSyncResponse;
 
     tpci |= SecureService >> 8; // OR'ing upper two APCI bits
     uint8_t apci = SecureService & 0x00FF;
@@ -1290,7 +1205,7 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
 
     // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI (fixed APDU_LPDU_DIFF)
     // We are starting from TPCI octet (including): plainApdu.frame().data()+APDU_LPDU_DIFF
-    if(secure(secureApdu.frame().data()+APDU_LPDU_DIFF, SecureDataPdu, srcAddress, dstAddress, isDstAddrGroupAddr, tpci, plainApdu.frame().data()+APDU_LPDU_DIFF, plainApdu.length()+1, secCtrl))
+    if(secure(secureApdu.frame().data()+APDU_LPDU_DIFF, kSecureDataPdu, srcAddress, dstAddress, isDstAddrGroupAddr, tpci, plainApdu.frame().data()+APDU_LPDU_DIFF, plainApdu.length()+1, secCtrl))
     {
         print("Update our next ");
         print(secCtrl.toolAccess ? "tool access" : "");
@@ -1353,7 +1268,7 @@ bool SecureApplicationLayer::isSyncService(APDU& secureApdu)
     uint8_t scf = *(secureApdu.data()+1);
     uint8_t service = (scf & 0x07); // only 0x0 (S-A_Data-PDU), 0x2 (S-A_Sync_Req-PDU) or 0x3 (S-A_Sync_Rsp-PDU) are valid values
 
-    if ((service == SecureSyncRequest) || (service == SecureSyncResponse))
+    if ((service == kSecureSyncRequest) || (service == kSecureSyncResponse))
     {
         return true;
     }

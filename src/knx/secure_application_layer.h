@@ -9,6 +9,7 @@
 class DeviceObject;
 class SecurityInterfaceObject;
 class AssociationTableObject;
+class AddressTableObject;
 class BusAccessUnit;
 /**
  * This is an implementation of the application layer as specified in @cite knx:3/5/1.
@@ -26,7 +27,7 @@ class SecureApplicationLayer :  public ApplicationLayer
      * @param assocTable The AssociationTable is used to translate between asap (i.e. group objects) and group addresses.
      * @param bau methods are called here depending of the content of the APDU
      */
-    SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, AssociationTableObject& assocTable, BusAccessUnit& bau);
+    SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, AssociationTableObject& assocTable, AddressTableObject& addrTab, BusAccessUnit& bau);
 
     void setSecurityMode(bool enabled);
     bool isSecurityModeEnabled();
@@ -225,17 +226,10 @@ class SecureApplicationLayer :  public ApplicationLayer
     void block0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t extFrameFormat, uint8_t tpci, uint8_t apci, uint8_t payloadLength);
     void blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr);
 
-    void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
-    uint64_t sixBytesToUInt64(uint8_t* data);
-
-    const uint8_t *toolKey(uint16_t devAddr);
     const uint8_t* securityKey(uint16_t addr, bool isGroupAddress);
 
-    uint16_t indAddressIndex(uint16_t indAddr);         // returns 1-based index of address in security IA table
     uint16_t groupAddressIndex(uint16_t groupAddr);     // returns 1-based index of address in group address table
     uint16_t groupObjectIndex(uint16_t groupAddrIndex); // returns 1-based index of object in association table
-    const uint8_t* p2pKey(uint16_t addressIndex);       // returns p2p key for IA index
-    const uint8_t* groupKey(uint16_t addressIndex);     // returns group key for group address index
 
     uint8_t groupObjectSecurity(uint16_t groupObjectIndex);
 
@@ -272,6 +266,13 @@ class SecureApplicationLayer :  public ApplicationLayer
     Map<Addr, uint64_t, 1> _pendingOutgoingSyncRequests; // Store challenges for outgoing sync requests
     Map<Addr, uint64_t, 1> _pendingIncomingSyncRequests; // Store challenges for incoming sync requests
 
+    uint64_t _sequenceNumberToolAccess = 50;
+    uint64_t _sequenceNumber = 0;
+
+    uint64_t _lastValidSequenceNumberTool = 0;
+    uint64_t _lastValidSequenceNumber = 0;
+
     SecurityInterfaceObject& _secIfObj;
     DeviceObject& _deviceObj;
+    AddressTableObject& _addrTab;
 };

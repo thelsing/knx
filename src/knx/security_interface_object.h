@@ -22,6 +22,16 @@ public:
 
   bool isLoaded();
 
+  const uint8_t* toolKey(uint16_t devAddr);           // returns single tool key (ETS)
+  const uint8_t* p2pKey(uint16_t addressIndex);       // returns p2p key for IA index
+  const uint8_t* groupKey(uint16_t addressIndex);     // returns group key for group address index
+
+  uint16_t indAddressIndex(uint16_t indAddr);         // returns 1-based index of address in security IA table
+
+  void setSequenceNumber(bool toolAccess, uint64_t seqNum);
+  uint64_t getLastValidSequenceNumber(uint16_t deviceAddr);
+  void setLastValidSequenceNumber(uint16_t deviceAddr, uint64_t seqNum);
+
 private:
   SecureApplicationLayer* _secAppLayer = nullptr;
 
@@ -35,6 +45,8 @@ private:
 
   void loadState(LoadState newState);
   LoadState _state = LS_UNLOADED;
+
+  uint16_t getNumberOfElements(PropertyID propId);
 
   // Our FDSK
   static const uint8_t _fdsk[];

@@ -172,6 +172,7 @@ class InterfaceObject : public SaveRestore
     }
 
     const uint8_t* propertyData(PropertyID id);
+    const uint8_t* propertyData(PropertyID id, uint16_t elementIndex);
     /**
      * Gets const property with PropertyID id if it exists and nullptr otherwise.
      */

@@ -18,7 +18,7 @@ BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj), _addr
     _assocTable(_memory), _groupObjTable(_memory), _appProgram(_memory),
     _platform(platform),
 #ifdef USE_DATASECURE
-    _appLayer(_deviceObj, _secIfObj, _assocTable, *this),
+    _appLayer(_deviceObj, _secIfObj, _assocTable, _addrTable, *this),
 #else
     _appLayer(_assocTable, *this),
 #endif

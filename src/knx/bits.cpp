@@ -84,3 +84,24 @@ uint32_t getInt(const uint8_t * data)
 {
     return (data[0] << 24) + (data[1] << 16) + (data[2] << 8) + data[3];
 }
+
+void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray)
+{
+    toByteArray[0] = ((num >> 40) & 0xff);
+    toByteArray[1] = ((num >> 32) & 0xff);
+    toByteArray[2] = ((num >> 24) & 0xff);
+    toByteArray[3] = ((num >> 16) & 0xff);
+    toByteArray[4] = ((num >> 8) & 0xff);
+    toByteArray[5] = (num & 0xff);
+}
+
+uint64_t sixBytesToUInt64(uint8_t* data)
+{
+    uint64_t l = 0;
+
+    for (uint8_t i = 0; i < 6; i++)
+    {
+        l = (l << 8) + data[i];
+    }
+    return l;
+}
