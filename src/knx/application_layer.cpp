@@ -734,7 +734,7 @@ void ApplicationLayer::memoryExtReadResponse(AckType ack, Priority priority, Hop
     uint8_t* data = apdu.data();
     data[1] = code;
     data[2] = (memoryAddress >> 16);
-    data[3] = (memoryAddress >> 0);
+    data[3] = (memoryAddress >> 8);
     data[4] = (memoryAddress & 0xFF);
 
     memcpy(&data[5], memoryData, number);
@@ -772,7 +772,7 @@ void ApplicationLayer::memoryExtWriteResponse(AckType ack, Priority priority, Ho
     uint8_t* data = apdu.data();
     data[1] = code;
     data[2] = (memoryAddress >> 16);
-    data[3] = (memoryAddress >> 0);
+    data[3] = (memoryAddress >> 8);
     data[4] = (memoryAddress & 0xFF);
 
     if (withCrc)
