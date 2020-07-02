@@ -79,25 +79,25 @@ void BauSystemB::sendNextGroupTelegram()
             continue;
 
         SecurityControl goSecurity;
-        // TODO: what do we do with it?
-        goSecurity.toolAccess;
-
-#ifdef USE_DATASECURE
-        // Get security flags from Security Interface Object for this group object
-        goSecurity.dataSecurity = _appLayer.getGoSecurityFlags(asap);
-
-#else
+        goSecurity.toolAccess = false;
         goSecurity.dataSecurity = DataSecurity::none;
-#endif
 
         if (flag == WriteRequest && go.transmitEnable())
         {
+#ifdef USE_DATASECURE
+            // Get security flags from Security Interface Object for this group object
+            goSecurity.dataSecurity = _secIfObj.getGroupObjectSecurity(asap, true);
+#endif
             uint8_t* data = go.valueRef();
             _appLayer.groupValueWriteRequest(AckRequested, asap, go.priority(), NetworkLayerParameter, goSecurity, data,
                 go.sizeInTelegram());
         }
         else if (flag == ReadRequest)
         {
+#ifdef USE_DATASECURE
+            // Get security flags from Security Interface Object for this group object
+            goSecurity.dataSecurity = _secIfObj.getGroupObjectSecurity(asap, false);
+#endif
             _appLayer.groupValueReadRequest(AckRequested, asap, go.priority(), NetworkLayerParameter, goSecurity);
         }
 
@@ -584,6 +584,19 @@ void BauSystemB::groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority
 
 void BauSystemB::groupValueReadIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl)
 {
+#ifdef USE_DATASECURE
+    DataSecurity requiredGoSecurity;
+
+    // Get security flags from Security Interface Object for this group object
+    requiredGoSecurity = _secIfObj.getGroupObjectSecurity(asap, false);
+
+    if (secCtrl.dataSecurity != requiredGoSecurity)
+    {
+        println("GroupValueRead: access denied due to wrong security flags");
+        return;
+    }
+#endif
+
     GroupObject& go = _groupObjTable.get(asap);
 
     if (!go.communicationEnable() || !go.readEnable())
@@ -606,6 +619,18 @@ void BauSystemB::groupValueReadAppLayerConfirm(uint16_t asap, Priority priority,
 
 void BauSystemB::groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t * data, uint8_t dataLength)
 {
+#ifdef USE_DATASECURE
+    DataSecurity requiredGoSecurity;
+
+    // Get security flags from Security Interface Object for this group object
+    requiredGoSecurity = _secIfObj.getGroupObjectSecurity(asap, true);
+
+    if (secCtrl.dataSecurity != requiredGoSecurity)
+    {
+        println("GroupValueWrite: access denied due to wrong security flags");
+        return;
+    }
+#endif
     GroupObject& go = _groupObjTable.get(asap);
 
     if (!go.communicationEnable() || !go.writeEnable())

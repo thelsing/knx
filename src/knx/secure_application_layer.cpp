@@ -294,6 +294,10 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
+        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().destinationAddress(_addrTab.getGroupAddress(tsap));
+        apdu.frame().addressType(GroupAddress);
+
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
         // create secure APDU
@@ -1274,9 +1278,4 @@ bool SecureApplicationLayer::isSyncService(APDU& secureApdu)
     }
 
     return false;
-}
-
-DataSecurity SecureApplicationLayer::getGoSecurityFlags(uint16_t index)
-{
-    return _secIfObj.getGoSecurityFlags(index);
 }

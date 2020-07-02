@@ -491,10 +491,33 @@ void SecurityInterfaceObject::setLastValidSequenceNumber(uint16_t deviceAddr, ui
     }
 }
 
-DataSecurity SecurityInterfaceObject::getGoSecurityFlags(uint16_t index)
+DataSecurity SecurityInterfaceObject::getGroupObjectSecurity(uint16_t index, bool isWrite)
 {
-    // TODO
-    // PID_GO_SECURITY_FLAGS
+    // security table uses same index as group object table
+
+    uint8_t data[propertySize(PID_GO_SECURITY_FLAGS)];
+
+    uint8_t count = property(PID_GO_SECURITY_FLAGS)->read(index, 1, data);
+
+    if (count > 0)
+    {
+        bool conf;
+        bool auth;
+        if (isWrite)
+        {
+            // write access flags, draft spec. p.68
+            conf = (data[0] & 2) == 2;
+            auth = (data[0] & 1) == 1;
+        }
+        else
+        {
+            // Read access flags, draft spec. p.68
+            conf = (data[0] & 8) == 8;
+            auth = (data[0] & 4) == 4;
+        }
+        return conf ? DataSecurity::authConf : auth ? DataSecurity::auth : DataSecurity::none;
+    }
+
     return DataSecurity::none;
 }
 

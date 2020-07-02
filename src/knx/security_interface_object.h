@@ -33,7 +33,7 @@ public:
   uint64_t getLastValidSequenceNumber(uint16_t deviceAddr);
   void setLastValidSequenceNumber(uint16_t deviceAddr, uint64_t seqNum);
 
-  DataSecurity getGoSecurityFlags(uint16_t index);
+  DataSecurity getGroupObjectSecurity(uint16_t index, bool isWrite);
 
 private:
   SecureApplicationLayer* _secAppLayer = nullptr;
