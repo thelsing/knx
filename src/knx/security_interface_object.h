@@ -17,10 +17,6 @@ public:
 
   void factoryReset();
 
-  uint8_t* save(uint8_t* buffer) override;
-  const uint8_t* restore(const uint8_t* buffer) override;
-  uint16_t saveSize() override;
-
   bool isLoaded();
 
   const uint8_t* toolKey(uint16_t devAddr);           // returns single tool key (ETS)

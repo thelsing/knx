@@ -168,21 +168,6 @@ void SecurityInterfaceObject::secureApplicationLayer(SecureApplicationLayer& sec
     _secAppLayer = &secAppLayer;
 }
 
-uint8_t* SecurityInterfaceObject::save(uint8_t* buffer)
-{
-    return InterfaceObject::save(buffer);
-}
-
-const uint8_t* SecurityInterfaceObject::restore(const uint8_t* buffer)
-{
-    return InterfaceObject::restore(buffer);
-}
-
-uint16_t SecurityInterfaceObject::saveSize()
-{
-    return InterfaceObject::saveSize();
-}
-
 bool SecurityInterfaceObject::isLoaded()
 {
     return _state == LS_LOADED;
