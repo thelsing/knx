@@ -30,6 +30,8 @@ class ApplicationLayer
 
     // from transport layer
     // Note: without data secure feature, the application layer is just used with SecurtyControl.dataSecurity = none
+    // hooks that can be implemented by derived class (e.g. SecureApplicationLayer)
+
 #pragma region Transport - Layer - Callbacks
     /**
      * Somebody send us an APDU via multicast communiation. See 3.2 of @cite knx:3/3/4. 
@@ -45,7 +47,7 @@ class ApplicationLayer
      * 
      * @param hopType Should routing be endless or should the NetworkLayer::hopCount be used? See also ::HopCountType.
      */
-    virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) {dataGroupIndication(hopType, priority, tsap, apdu, noSecurity);}
+    virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
     /**
      * Report the status of an APDU that we sent via multicast communiation back to us. See 3.2 of @cite knx:3/3/4. 
      * See also ApplicationLayer::dataGroupConfirm and TransportLayer::dataGroupRequest. This method is called by 
@@ -64,16 +66,15 @@ class ApplicationLayer
      * 
      * @param ack Did we want a DataLinkLayer acknowledgement? See ::AckType.
      */
-    virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
-                                  APDU& apdu, bool status) {dataGroupConfirm(ack, hopType, priority, tsap, apdu, noSecurity, status);}
-    virtual void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) {dataBroadcastIndication(hopType, priority, source, apdu, noSecurity);}
-    virtual void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status) {dataBroadcastConfirm(ack, hopType, priority, apdu, noSecurity, status);}
-    virtual void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) {dataSystemBroadcastIndication(hopType, priority, source, apdu, noSecurity);}
-    virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status) {dataSystemBroadcastConfirm(hopType, priority, apdu, noSecurity, status);}
-    virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu) {dataIndividualIndication(hopType, priority, source, apdu, noSecurity);}
-    virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status) {dataIndividualConfirm(ack, hopType, priority, tsap, apdu, noSecurity, status);}
-    virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu) {dataConnectedIndication(priority, tsap, apdu, noSecurity);}
-    virtual void dataConnectedConfirm(uint16_t tsap) {dataConnectedConfirm(tsap, noSecurity);}
+    virtual void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
+    virtual void dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
+    virtual void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, bool status);
+    virtual void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
+    virtual void dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, bool status);
+    virtual void dataIndividualIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu);
+    virtual void dataIndividualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status);
+    virtual void dataConnectedIndication(Priority priority, uint16_t tsap, APDU& apdu);
+    virtual void dataConnectedConfirm(uint16_t tsap);
     void connectIndication(uint16_t tsap);
     void connectConfirm(uint16_t destination, uint16_t tsap, bool status);
     void disconnectIndication(uint16_t tsap);
@@ -151,7 +152,6 @@ class ApplicationLayer
 
   protected:
 
-    // hooks that can be implemented by derived class (e.g. SecureApplicationLayer)
 #pragma region hooks
     void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl &secCtrl);
     void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,
