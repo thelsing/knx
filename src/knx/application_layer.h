@@ -125,6 +125,10 @@ class ApplicationLayer
                            uint16_t memoryAddress);
     void memoryReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
                             uint16_t memoryAddress, uint8_t* data);
+    void memoryExtReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ReturnCodes code, uint8_t number,
+                            uint32_t memoryAddress, uint8_t* data);
+    void memoryExtWriteResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ReturnCodes code, uint8_t number,
+                                uint32_t memoryAddress, uint8_t *memoryData);
     void memoryWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
                             uint16_t memoryAddress, uint8_t* data);
     void userMemoryReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
@@ -194,6 +198,8 @@ class ApplicationLayer
     void individualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl &secCtrl);
     void individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status);
     void individualSend(AckType ack, HopCountType hopType, Priority priority, uint16_t asap, APDU& apdu, const SecurityControl& secCtrl);
+
+    uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
 
     uint16_t _savedAsapReadRequest;
     uint16_t _savedAsapWriteRequest;

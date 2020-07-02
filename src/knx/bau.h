@@ -92,6 +92,21 @@ class BusAccessUnit
                                          uint16_t memoryAddress, uint8_t* data, bool status);
     virtual void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                        uint16_t memoryAddress, uint8_t* data);
+    virtual void memoryExtReadLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                        uint32_t memoryAddress, bool status);
+    virtual void memoryExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint32_t memoryAddress);
+    virtual void memoryExtReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                           uint32_t memoryAddress, uint8_t* data, bool status);
+    virtual void memoryExtReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                           uint32_t memoryAddress, uint8_t* data);
+    virtual void memoryExtWriteLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                         uint32_t memoryAddress, uint8_t* data, bool status);
+    virtual void memoryExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                       uint32_t memoryAddress, uint8_t* data);
+    virtual void memoryExtWriteResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                           uint32_t memoryAddress, uint8_t* data, bool status);
+    virtual void memoryExtWriteAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                           uint32_t memoryAddress, uint8_t* data);
     virtual void userMemoryReadLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                             uint32_t memoryAddress, bool status);
     virtual void userMemoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,

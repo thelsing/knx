@@ -725,6 +725,66 @@ void ApplicationLayer::memoryReadResponse(AckType ack, Priority priority, HopCou
     memorySend(MemoryResponse, ack, priority, hopType, asap, secCtrl, number, memoryAddress, memoryData);
 }
 
+void ApplicationLayer::memoryExtReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ReturnCodes code,
+                                             uint8_t number, uint32_t memoryAddress, uint8_t * memoryData)
+{
+    CemiFrame frame(5 +  number);
+    APDU& apdu = frame.apdu();
+    apdu.type(MemoryExtReadResponse);
+    uint8_t* data = apdu.data();
+    data[1] = code;
+    data[2] = (memoryAddress >> 16);
+    data[3] = (memoryAddress >> 0);
+    data[4] = (memoryAddress & 0xFF);
+
+    memcpy(&data[5], memoryData, number);
+
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
+}
+
+uint16_t ApplicationLayer::crc16Ccitt(uint8_t* input, uint16_t length)
+{
+        uint32_t polynom = 0x1021;
+        uint8_t padded[length+2];
+
+        memcpy(padded, input, length);
+        memset(padded+length, 0x00, 2);
+
+        uint32_t result = 0xffff;
+        for (uint32_t i = 0; i < 8 * (uint32_t)sizeof(padded); i++) {
+            result <<= 1;
+            uint32_t nextBit = (padded[i / 8] >> (7 - (i % 8))) & 0x1;
+            result |= nextBit;
+            if ((result & 0x10000) != 0)
+                result ^= polynom;
+        }
+        return result & 0xffff;
+}
+
+void ApplicationLayer::memoryExtWriteResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ReturnCodes code,
+                                              uint8_t number, uint32_t memoryAddress, uint8_t * memoryData)
+{
+    bool withCrc = code == ReturnCodes::SuccessWithCrc;
+
+    CemiFrame frame(5 +  (withCrc ? 2 : 0));
+    APDU& apdu = frame.apdu();
+    apdu.type(MemoryExtWriteResponse);
+    uint8_t* data = apdu.data();
+    data[1] = code;
+    data[2] = (memoryAddress >> 16);
+    data[3] = (memoryAddress >> 0);
+    data[4] = (memoryAddress & 0xFF);
+
+    if (withCrc)
+    {
+        uint16_t crc = crc16Ccitt(memoryData, number); // TODO
+        data[5] = crc >> 8;
+        data[6] = crc & 0xFF;
+    }
+
+    individualSend(ack, hopType, priority, asap, apdu, secCtrl);
+}
+
 void ApplicationLayer::memoryWriteRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
     uint8_t number, uint16_t memoryAddress, uint8_t * data)
 {
@@ -1038,6 +1098,26 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         case MemoryWrite:
             _bau.memoryWriteIndication(priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3);
             break;
+        case MemoryExtRead:
+        {
+            uint8_t number = data[1];
+            uint32_t memoryAddress =  ((data[2] & 0xff) << 16) | ((data[3] & 0xff) << 8) | (data[4] & 0xff);
+            _bau.memoryExtReadIndication(priority, hopType, tsap, secCtrl, number, memoryAddress);
+            break;
+        }
+        //case MemoryExtReadResponse:
+        //    _bau.memoryExtReadAppLayerConfirm(priority, hopType, tsap, secCtrl, data[0], getInt(data + 1), data + 4); // TODO return code
+        //    break;
+        case MemoryExtWrite:
+        {
+            uint8_t number = data[1];
+            uint32_t memoryAddress =  ((data[2] & 0xff) << 16) | ((data[3] & 0xff) << 8) | (data[4] & 0xff);
+            _bau.memoryExtWriteIndication(priority, hopType, tsap, secCtrl, number, memoryAddress, data + 5);
+            break;
+        }
+        //case MemoryExtWriteResponse:
+        //    _bau.memoryExtWriteAppLayerConfirm(priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3); // TODO return code
+        //    break;
         case UserMemoryRead:
         {
             uint32_t address = ((data[1] & 0xf0) << 12) + (data[2] << 8) + data[3];
@@ -1136,6 +1216,18 @@ void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Prio
             break;
         case MemoryWrite:
             _bau.memoryWriteLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3, status);
+            break;
+        case MemoryExtRead:
+            _bau.memoryExtReadLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), status);
+            break;
+        case MemoryExtReadResponse:
+            _bau.memoryExtReadResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3, status);
+            break;
+        case MemoryExtWrite:
+            _bau.memoryExtWriteLocalConfirm(ack, priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3, status);
+            break;
+        case MemoryExtWriteResponse:
+            _bau.memoryExtWriteResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[0] & 0x3f, getWord(data + 1), data + 3, status);
             break;
         case UserMemoryRead:
         {
