@@ -13,7 +13,7 @@ void Memory::readMemory()
     if (_data != nullptr)
         return;
 
-    uint16_t flashSize = 512;
+    uint16_t flashSize = 2048;
     _data = _platform.getEepromBuffer(flashSize);
 
     printHex("RESTORED ", _data, _metadataSize);
