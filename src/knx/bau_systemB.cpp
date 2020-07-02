@@ -34,6 +34,10 @@ BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj), _addr
     _memory.addSaveRestore(&_addrTable);
     _memory.addSaveRestore(&_assocTable);
     _memory.addSaveRestore(&_groupObjTable);
+#ifdef USE_DATASECURE
+    _memory.addSaveRestore(&_secIfObj);
+#endif
+
 }
 
 void BauSystemB::loop()

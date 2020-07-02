@@ -20,9 +20,6 @@ Bau27B0::Bau27B0(Platform& platform)
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
 #endif
-#ifdef USE_DATASECURE
-    _memory.addSaveRestore(&_secIfObj);
-#endif
 
     // Set Mask Version in Device Object depending on the BAU
     _deviceObj.maskVersion(0x27B0);
