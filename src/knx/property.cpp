@@ -204,16 +204,6 @@ uint8_t Property::write(uint16_t position, uint16_t value)
     return write(position, 1, data);
 }
 
-uint8_t Property::write(uint16_t position, uint32_t value)
-{
-    if (ElementSize() != 4)
-        return 0;
-
-    uint8_t data[4];
-    pushInt(value, data);
-    return write(position, 1, data);
-}
-
 void Property::command(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
     (void)data;
