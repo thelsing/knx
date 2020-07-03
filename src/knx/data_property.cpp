@@ -18,7 +18,7 @@ uint8_t DataProperty::read(uint16_t start, uint8_t count, uint8_t* data) const
     start -= 1;
 
     // data is already big enough to hold the data
-    memcpy(data, _data + start, count * ElementSize());
+    memcpy(data, _data + (start * ElementSize()), count * ElementSize()); 
 
     return count;
 }
@@ -66,7 +66,7 @@ uint8_t DataProperty::write(uint16_t start, uint8_t count, const uint8_t* data)
         _currentElements = start + count;
     }
 
-    memcpy(_data + start, data, count * ElementSize());
+    memcpy(_data + (start * ElementSize()), data, count * ElementSize());
 
     return count;
 }
