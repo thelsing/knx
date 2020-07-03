@@ -36,26 +36,25 @@ uint8_t Property::ElementSize() const
         case PDT_CONTROL: // is actually 10 if written, but this is always handled with a callback
         case PDT_GENERIC_01:
         case PDT_UNSIGNED_CHAR:
+        case PDT_BITSET8:
+        case PDT_BINARY_INFORMATION: // only 1 bit really
+        case PDT_ENUM8:
+        case PDT_SCALING:
             return 1;
         case PDT_GENERIC_02:
         case PDT_INT:
         case PDT_KNX_FLOAT:
         case PDT_UNSIGNED_INT:
         case PDT_VERSION:
-            return 2;
-        case PDT_ALARM_INFO:
-        case PDT_BINARY_INFORMATION:
         case PDT_BITSET16:
-        case PDT_BITSET8:
+            return 2;
         case PDT_DATE:
-        case PDT_ENUM8:
         case PDT_ESCAPE:
         case PDT_FUNCTION:
         case PDT_GENERIC_03:
         case PDT_NE_FL:
         case PDT_NE_VL:
         case PDT_POLL_GROUP_SETTING:
-        case PDT_SCALING:
         case PDT_TIME:
         case PDT_UTF8:
             return 3;
@@ -68,6 +67,7 @@ uint8_t Property::ElementSize() const
         case PDT_SHORT_CHAR_BLOCK:
             return 5;
         case PDT_GENERIC_06:
+        case PDT_ALARM_INFO:
             return 6;
         case PDT_GENERIC_07:
             return 7;

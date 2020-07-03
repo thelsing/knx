@@ -23,7 +23,11 @@ DeviceObject::DeviceObject()
             [](DeviceObject* io, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t 
             { 
                 if(start == 0)
+                {
+                    uint16_t currentNoOfElements = 1;
+                    pushWord(currentNoOfElements, data);
                     return 1;
+                }
                 
                 pushByteArray(io->propertyData(PID_SERIAL_NUMBER), 2, data);
                 return 1;
@@ -36,8 +40,12 @@ DeviceObject::DeviceObject()
             [](DeviceObject* io, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t 
             { 
                 if(start == 0)
+                {
+                    uint16_t currentNoOfElements = 1;
+                    pushWord(currentNoOfElements, data);
                     return 1;
-                
+                }
+
                 *data = io->_prgMode;
                 return 1;
             },
@@ -54,7 +62,11 @@ DeviceObject::DeviceObject()
             [](DeviceObject* io, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t 
             { 
                 if(start == 0)
+                {
+                    uint16_t currentNoOfElements = 1;
+                    pushWord(currentNoOfElements, data);
                     return 1;
+                }
 
                 *data = ((io->_ownAddress >> 8) & 0xff);
 
@@ -64,12 +76,16 @@ DeviceObject::DeviceObject()
             [](DeviceObject* io, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t 
             { 
                 if(start == 0)
+                {
+                    uint16_t currentNoOfElements = 1;
+                    pushWord(currentNoOfElements, data);
                     return 1;
+                }
 
                 *data = (io->_ownAddress & 0xff);
                 return 1;
             }),
-        new DataProperty(PID_IO_LIST, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0),
+        new DataProperty(PID_IO_LIST, false, PDT_UNSIGNED_INT, 8, ReadLv3 | WriteLv0),
         new DataProperty(PID_HARDWARE_TYPE, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv3, hardwareType),
         new DataProperty(PID_DEVICE_DESCRIPTOR, false, PDT_GENERIC_02, 1, ReadLv3 | WriteLv0),
 #ifdef USE_RF
