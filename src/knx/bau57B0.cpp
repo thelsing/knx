@@ -32,14 +32,14 @@ Bau57B0::Bau57B0(Platform& platform)
     // This differs from BAU to BAU with different medium types.
     // See PID_IO_LIST
     Property* prop = _deviceObj.property(PID_IO_LIST);
-    prop->write(1, OT_DEVICE);
-    prop->write(2, OT_ADDR_TABLE);
-    prop->write(3, OT_ASSOC_TABLE);
-    prop->write(4, OT_GRP_OBJ_TABLE);
-    prop->write(5, OT_APPLICATION_PROG);
-    prop->write(6, OT_IP_PARAMETER);
+    prop->write(1, (uint16_t) OT_DEVICE);
+    prop->write(2, (uint16_t) OT_ADDR_TABLE);
+    prop->write(3, (uint16_t) OT_ASSOC_TABLE);
+    prop->write(4, (uint16_t) OT_GRP_OBJ_TABLE);
+    prop->write(5, (uint16_t) OT_APPLICATION_PROG);
+    prop->write(6, (uint16_t) OT_IP_PARAMETER);
 #ifdef USE_CEMI_SERVER
-    prop->write(7, OT_CEMI_SERVER);
+    prop->write(7, (uint16_t) OT_CEMI_SERVER);
 #endif
 }
 

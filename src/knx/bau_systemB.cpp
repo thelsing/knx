@@ -227,7 +227,10 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
     if (obj)
     {
         uint8_t elementSize = obj->propertySize((PropertyID)propertyId);
-        size = elementSize * numberOfElements;
+        if (startIndex > 0)
+            size = elementSize * numberOfElements;
+        else
+            size = sizeof(uint16_t); // size of propert array entry 0 which is the size
     }
     else
         elementCount = 0;
