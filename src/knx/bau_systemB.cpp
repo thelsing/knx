@@ -230,7 +230,7 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
         if (startIndex > 0)
             size = elementSize * numberOfElements;
         else
-            size = sizeof(uint16_t); // size of propert array entry 0 which is the size
+            size = sizeof(uint16_t); // size of property array entry 0 which contains the current number of elements
     }
     else
         elementCount = 0;
@@ -442,7 +442,10 @@ void BauSystemB::propertyValueRead(ObjectType objectType, uint8_t objectInstance
     if (obj)
     {
         uint8_t elementSize = obj->propertySize((PropertyID)propertyId);
-        size = elementSize * numberOfElements;
+        if (startIndex > 0)
+            size = elementSize * numberOfElements;
+        else
+            size = sizeof(uint16_t); // size of property array entry 0 which contains the current number of elements
         *data = new uint8_t [size];
         obj->readProperty((PropertyID)propertyId, startIndex, elementCount, *data);
     }
