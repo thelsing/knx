@@ -1,3 +1,6 @@
+#include "config.h"
+#ifdef USE_DATASECURE
+
 #include "secure_application_layer.h"
 #include "transport_layer.h"
 #include "cemi_frame.h"
@@ -1279,3 +1282,4 @@ bool SecureApplicationLayer::isSyncService(APDU& secureApdu)
 
     return false;
 }
+#endif
