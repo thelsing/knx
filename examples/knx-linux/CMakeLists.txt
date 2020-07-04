@@ -112,6 +112,8 @@ add_executable(knx-linux
 	../../src/knx_facade.h
 	../../src/linux_platform.cpp 
 	../../src/linux_platform.h
+        fdsk.cpp
+        fdsk.h
 	main.cpp)
 target_link_libraries(knx-linux  "${LIBRARIES_FROM_REFERENCES}")
 include_directories(../../src)
