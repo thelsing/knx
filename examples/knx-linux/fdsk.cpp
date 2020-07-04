@@ -1,7 +1,6 @@
 #include "fdsk.h"
 
 #include <string.h>
-#include <stdio.h>
 
 // CRC-4 generator polynom: 10011 (x^4+x+1)
 const uint8_t FdskCalculator::crc4_tab[16] =
@@ -10,21 +9,29 @@ const uint8_t FdskCalculator::crc4_tab[16] =
     0xb, 0x8, 0xd, 0xe, 0x7, 0x4, 0x1, 0x2
 };
 
-void FdskCalculator::printFdsk(uint8_t* serialNumber, uint8_t* key)
+int FdskCalculator::snprintFdsk(char* str, int strSize, uint8_t* serialNumber, uint8_t* key)
 {
-    char* str = generateFdskString(serialNumber, key);
+    char* tmpStr = generateFdskString(serialNumber, key);
+    int written = 0;
 
-    uint8_t len = strlen(str);
-    printf("FDSK(len: %d): ", len);
     for (int i = 0; i < 36; i++)
     {
         if (((i % 6) == 0) && (i!=0))
-            printf("-");
-        printf("%c", str[i]);
+        {
+            *(str+written++) = '-';
+            if (written >= strSize-1)
+                break;
+        }
+        *(str+written++) = tmpStr[i];
+        if (written >= strSize-1)
+            break;
     }
-    printf("\n");
 
-    delete[] str;
+    *(str+written++) = '\0';
+
+    delete[] tmpStr;
+
+    return written;
 }
 
 char* FdskCalculator::generateFdskString(uint8_t* serialNumber, uint8_t* key)

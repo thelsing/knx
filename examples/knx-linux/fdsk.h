@@ -5,7 +5,7 @@
 class FdskCalculator
 {
   public:
-    void printFdsk(uint8_t* serialNumber, uint8_t* key);
+    int snprintFdsk(char* str, int strSize, uint8_t* serialNumber, uint8_t* key);
 
   private:
     char* generateFdskString(uint8_t* serialNumber, uint8_t* key);

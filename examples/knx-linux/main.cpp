@@ -134,7 +134,9 @@ int main(int argc, char **argv)
     uint8_t key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
 
     FdskCalculator calc;
-    calc.printFdsk(serialNumber, key);
+    char fdskString[42]; // 6 * 6 chars + 5 dashes + nullbyte = 42
+    calc.snprintFdsk(fdskString, sizeof(fdskString), serialNumber, key);
+    printf("FDSK: %s\n", fdskString);
 
     // Prevent swapping of this process
     struct sched_param sp;
