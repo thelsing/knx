@@ -111,6 +111,23 @@ int ArduinoPlatform::readWriteSpi(uint8_t *data, size_t len)
     return 0;
 }
 
+void printUint64(uint64_t value, int base = DEC)
+  {
+    char buf[8 * sizeof(uint64_t) + 1];
+    char* str = &buf[sizeof(buf) - 1];
+    *str = '\0';
+
+    uint64_t n = value;
+    do {
+      char c = n % base;
+      n /= base;
+
+      *--str = c < 10 ? c + '0' : c + 'A' - 10;
+    } while (n > 0);
+
+     print(str);
+}
+
 void print(const char* s)
 {
     ArduinoPlatform::SerialDebug->print(s);
@@ -168,6 +185,16 @@ void print(unsigned long num)
 void print(unsigned long num, int base)
 {
     ArduinoPlatform::SerialDebug->print(num, base);
+}
+
+void print(unsigned long long num)
+{
+    printUint64(num);
+}
+
+void print(unsigned long long num, int base)
+{
+    printUint64(num, base);
 }
 
 void print(double num)
@@ -233,6 +260,18 @@ void println(unsigned long num)
 void println(unsigned long num, int base)
 {
     ArduinoPlatform::SerialDebug->println(num, base);
+}
+
+void println(unsigned long long num)
+{
+    printUint64(num);
+    println("");
+}
+
+void println(unsigned long long num, int base)
+{
+    printUint64(num, base);
+    println("");
 }
 
 void println(double num)
