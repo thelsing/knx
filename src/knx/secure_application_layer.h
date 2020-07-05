@@ -30,8 +30,6 @@ class SecureApplicationLayer :  public ApplicationLayer
      */
     SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, AssociationTableObject& assocTable, AddressTableObject& addrTab, BusAccessUnit& bau);
 
-    void setSecurityMode(bool enabled);
-    bool isSecurityModeEnabled();
     void clearFailureLog();
     void getFailureCounters(uint8_t* data);
     uint8_t getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen);
@@ -136,8 +134,6 @@ class SecureApplicationLayer :  public ApplicationLayer
 
     void encryptAesCbc(uint8_t* buffer, uint16_t bufLen, const uint8_t* iv, const uint8_t* key);
     void xcryptAesCtr(uint8_t* buffer, uint16_t bufLen, const uint8_t* iv, const uint8_t* key);
-
-    bool _securityModeEnabled {false};
 
     bool _syncReqBroadcastIncoming{false};
     bool _syncReqBroadcastOutgoing{false};

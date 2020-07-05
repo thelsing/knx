@@ -83,25 +83,23 @@ void BauSystemB::sendNextGroupTelegram()
             continue;
 
         SecurityControl goSecurity;
-        goSecurity.toolAccess = false;
+        goSecurity.toolAccess = false; // Secured group communication never uses the toolkey. ETS knows all keys, also the group keys.
+
+#ifdef USE_DATASECURE
+        // Get security flags from Security Interface Object for this group object
+        goSecurity.dataSecurity = _secIfObj.getGroupObjectSecurity(asap);
+#else
         goSecurity.dataSecurity = DataSecurity::none;
+#endif
 
         if (flag == WriteRequest && go.transmitEnable())
         {
-#ifdef USE_DATASECURE
-            // Get security flags from Security Interface Object for this group object
-            goSecurity.dataSecurity = _secIfObj.getGroupObjectSecurity(asap, true);
-#endif
             uint8_t* data = go.valueRef();
             _appLayer.groupValueWriteRequest(AckRequested, asap, go.priority(), NetworkLayerParameter, goSecurity, data,
                 go.sizeInTelegram());
         }
         else if (flag == ReadRequest)
         {
-#ifdef USE_DATASECURE
-            // Get security flags from Security Interface Object for this group object
-            goSecurity.dataSecurity = _secIfObj.getGroupObjectSecurity(asap, false);
-#endif
             _appLayer.groupValueReadRequest(AckRequested, asap, go.priority(), NetworkLayerParameter, goSecurity);
         }
 
@@ -215,8 +213,10 @@ uint8_t BauSystemB::masterReset(EraseCode eraseCode, uint8_t channel)
             println(eraseCode == EraseCode::FactoryReset ? "FactoryReset with IA" : "FactoryReset without IA");
 #ifdef USE_DATASECURE
             // If erase code is FactoryReset or FactoryResetWithoutIA, set FDSK as toolkey again
-            // and disable security mode
-            _secIfObj.factoryReset();
+            // and disable security mode.
+            // FIXME: the A_RestartResponse PDU has still to be sent with the current toolkey.
+            // Idea: use local confirmation of sent A_RestartResponse PDU to trigger writing the FDSK afterwards
+            _secIfObj.masterReset(eraseCode);
 #endif
             return successCode;
         }
@@ -609,7 +609,7 @@ void BauSystemB::groupValueReadIndication(uint16_t asap, Priority priority, HopC
     DataSecurity requiredGoSecurity;
 
     // Get security flags from Security Interface Object for this group object
-    requiredGoSecurity = _secIfObj.getGroupObjectSecurity(asap, false);
+    requiredGoSecurity = _secIfObj.getGroupObjectSecurity(asap);
 
     if (secCtrl.dataSecurity != requiredGoSecurity)
     {
@@ -644,7 +644,7 @@ void BauSystemB::groupValueWriteIndication(uint16_t asap, Priority priority, Hop
     DataSecurity requiredGoSecurity;
 
     // Get security flags from Security Interface Object for this group object
-    requiredGoSecurity = _secIfObj.getGroupObjectSecurity(asap, true);
+    requiredGoSecurity = _secIfObj.getGroupObjectSecurity(asap);
 
     if (secCtrl.dataSecurity != requiredGoSecurity)
     {

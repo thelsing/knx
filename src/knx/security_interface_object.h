@@ -15,11 +15,13 @@ public:
 
   void secureApplicationLayer(SecureApplicationLayer& secAppLayer);
 
-  void factoryReset();
+  void masterReset(EraseCode eraseCode);
+
+  bool isSecurityModeEnabled();
 
   bool isLoaded();
 
-  const uint8_t* toolKey(uint16_t devAddr);           // returns single tool key (ETS)
+  const uint8_t* toolKey();                           // returns single tool key (ETS)
   const uint8_t* p2pKey(uint16_t addressIndex);       // returns p2p key for IA index
   const uint8_t* groupKey(uint16_t addressIndex);     // returns group key for group address index
 
@@ -29,7 +31,7 @@ public:
   uint64_t getLastValidSequenceNumber(uint16_t deviceAddr);
   void setLastValidSequenceNumber(uint16_t deviceAddr, uint64_t seqNum);
 
-  DataSecurity getGroupObjectSecurity(uint16_t index, bool isWrite);
+  DataSecurity getGroupObjectSecurity(uint16_t index);
 
   LoadState loadState();
   uint8_t* save(uint8_t* buffer) override;
@@ -38,6 +40,8 @@ public:
 
 private:
   SecureApplicationLayer* _secAppLayer = nullptr;
+
+  void setSecurityMode(bool enabled);
 
   void errorCode(ErrorCode errorCode);
 
@@ -49,6 +53,8 @@ private:
 
   void loadState(LoadState newState);
   LoadState _state = LS_UNLOADED;
+
+  bool _securityModeEnabled {false};
 
   uint16_t getNumberOfElements(PropertyID propId);
 

@@ -52,7 +52,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                         resultLength = 1;
                         return;
                     }
-                    obj->_secAppLayer->setSecurityMode(mode == 1);
+                    obj->setSecurityMode(mode == 1);
                     resultData[0] = ReturnCodes::Success;
                     resultData[1] = serviceId;
                     resultLength = 2;
@@ -74,7 +74,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 {
                     resultData[0] = ReturnCodes::Success;
                     resultData[1] = serviceId;
-                    resultData[2] = obj->_secAppLayer->isSecurityModeEnabled() ? 1 : 0;
+                    resultData[2] = obj->isSecurityModeEnabled() ? 1 : 0;
                     resultLength = 3;
                     return;
                 }
@@ -171,6 +171,7 @@ void SecurityInterfaceObject::secureApplicationLayer(SecureApplicationLayer& sec
 uint8_t* SecurityInterfaceObject::save(uint8_t* buffer)
 {
     buffer = pushByte(_state, buffer);
+    buffer = pushByte(_securityModeEnabled, buffer);
 
     return InterfaceObject::save(buffer);
 }
@@ -181,12 +182,28 @@ const uint8_t* SecurityInterfaceObject::restore(const uint8_t* buffer)
     buffer = popByte(state, buffer);
     _state = (LoadState)state;
 
+    uint8_t securityModeEnabled = 0;
+    buffer = popByte(securityModeEnabled, buffer);
+    _securityModeEnabled = securityModeEnabled;
+
     return InterfaceObject::restore(buffer);
 }
 
 uint16_t SecurityInterfaceObject::saveSize()
 {
-    return 1 + InterfaceObject::saveSize();
+    return 2 + InterfaceObject::saveSize();
+}
+
+void SecurityInterfaceObject::setSecurityMode(bool enabled)
+{
+    print("Security mode set to: ");
+    println(enabled ? "enabled" : "disabled");
+    _securityModeEnabled = enabled;
+}
+
+bool SecurityInterfaceObject::isSecurityModeEnabled()
+{
+    return _securityModeEnabled;
 }
 
 bool SecurityInterfaceObject::isLoaded()
@@ -314,16 +331,17 @@ void SecurityInterfaceObject::errorCode(ErrorCode errorCode)
     prop->write(data);
 }
 
-void SecurityInterfaceObject::factoryReset()
+void SecurityInterfaceObject::masterReset(EraseCode eraseCode)
 {
+    // TODO handle different erase codes
     println("Factory reset of security interface object requested.");
-    _secAppLayer->setSecurityMode(false);
+    setSecurityMode(false);
     property(PID_TOOL_KEY)->write(1, 1, _fdsk);
 }
 
-const uint8_t* SecurityInterfaceObject::toolKey(uint16_t devAddr)
+const uint8_t* SecurityInterfaceObject::toolKey()
 {
-    //TODO: check if multiple tool keys possible, leave it for now
+    // There is only one tool key
     const uint8_t* toolKey = propertyData(PID_TOOL_KEY);
     return toolKey;
 }
@@ -341,7 +359,7 @@ const uint8_t* SecurityInterfaceObject::p2pKey(uint16_t addressIndex)
         uint8_t elementSize = propertySize(PID_P2P_KEY_TABLE);
 
         // Search for address index
-        uint8_t entry[elementSize]; // 2 bytes index + keysize (16 bytes) + 2 bytes(for what?) = 20 bytes
+        uint8_t entry[elementSize]; // 2 bytes index + keysize (16 bytes) + 2 bytes(roles) = 20 bytes
         for (int i = 1; i <= numElements; i++)
         {
             property(PID_P2P_KEY_TABLE)->read(i, 1, entry);
@@ -498,7 +516,7 @@ void SecurityInterfaceObject::setLastValidSequenceNumber(uint16_t deviceAddr, ui
     }
 }
 
-DataSecurity SecurityInterfaceObject::getGroupObjectSecurity(uint16_t index, bool isWrite)
+DataSecurity SecurityInterfaceObject::getGroupObjectSecurity(uint16_t index)
 {
     // security table uses same index as group object table
 
@@ -508,20 +526,9 @@ DataSecurity SecurityInterfaceObject::getGroupObjectSecurity(uint16_t index, boo
 
     if (count > 0)
     {
-        bool conf;
-        bool auth;
-        if (isWrite)
-        {
-            // write access flags, draft spec. p.68
-            conf = (data[0] & 2) == 2;
-            auth = (data[0] & 1) == 1;
-        }
-        else
-        {
-            // Read access flags, draft spec. p.68
-            conf = (data[0] & 8) == 8;
-            auth = (data[0] & 4) == 4;
-        }
+        // write access flags, approved spec. AN158, p.97
+        bool conf = (data[0] & 2) == 2;
+        bool auth = (data[0] & 1) == 1;
         return conf ? DataSecurity::authConf : auth ? DataSecurity::auth : DataSecurity::none;
     }
 

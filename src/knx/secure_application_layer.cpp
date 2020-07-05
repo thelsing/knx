@@ -782,8 +782,8 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
     bool syncReq = service == kSecureSyncRequest;
     bool syncRes = service == kSecureSyncResponse;
 
-    //const uint8_t* key = dstAddrIsGroupAddr ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? toolKey(srcAddr == _deviceObj.induvidualAddress() ? dstAddr : srcAddr) : securityKey(srcAddr, false);
-    const uint8_t* key = dstAddrIsGroupAddr && (dstAddr != 0) ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? _secIfObj.toolKey(srcAddr == _deviceObj.induvidualAddress() ? dstAddr : srcAddr) : securityKey(srcAddr, false);
+    //const uint8_t* key = dstAddrIsGroupAddr ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? toolKey() : securityKey(srcAddr, false);
+    const uint8_t* key = dstAddrIsGroupAddr && (dstAddr != 0) ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? _secIfObj.toolKey() : securityKey(srcAddr, false);
     if (key == nullptr)
     {
         print("Error: No key found. toolAccess: ");
@@ -1047,7 +1047,7 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
         }
     }
 
-    const uint8_t* key = toolAccess ? _secIfObj.toolKey(_syncReqBroadcastIncoming ? _deviceObj.induvidualAddress() : dstAddr) : securityKey(dstAddr, dstAddrIsGroupAddr);
+    const uint8_t* key = toolAccess ? _secIfObj.toolKey() : securityKey(dstAddr, dstAddrIsGroupAddr);
     if (key == nullptr)
     {
         print("Error: No key found. toolAccess: ");
@@ -1229,16 +1229,6 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
     }
 
     return false;
-}
-
-void SecureApplicationLayer::setSecurityMode(bool enabled)
-{
-    _securityModeEnabled = enabled;
-}
-
-bool SecureApplicationLayer::isSecurityModeEnabled()
-{
-    return _securityModeEnabled;
 }
 
 void SecureApplicationLayer::clearFailureLog()
