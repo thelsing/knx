@@ -168,6 +168,27 @@ void SecurityInterfaceObject::secureApplicationLayer(SecureApplicationLayer& sec
     _secAppLayer = &secAppLayer;
 }
 
+uint8_t* SecurityInterfaceObject::save(uint8_t* buffer)
+{
+    buffer = pushByte(_state, buffer);
+
+    return InterfaceObject::save(buffer);
+}
+
+const uint8_t* SecurityInterfaceObject::restore(const uint8_t* buffer)
+{
+    uint8_t state = 0;
+    buffer = popByte(state, buffer);
+    _state = (LoadState)state;
+
+    return InterfaceObject::restore(buffer);
+}
+
+uint16_t SecurityInterfaceObject::saveSize()
+{
+    return 1 + InterfaceObject::saveSize();
+}
+
 bool SecurityInterfaceObject::isLoaded()
 {
     return _state == LS_LOADED;
@@ -354,8 +375,8 @@ const uint8_t* SecurityInterfaceObject::groupKey(uint16_t addressIndex)
         uint8_t entry[elementSize]; // 2 bytes index + keysize (16 bytes) = 18 bytes
         for (int i = 1; i <= numElements; i++)
         {
-            property(PID_P2P_KEY_TABLE)->read(i, 1, entry);
-            uint16_t index = (entry[0] << 8) | entry[1];
+            property(PID_GRP_KEY_TABLE)->read(i, 1, entry);
+            uint16_t index = ((entry[0] << 8) | entry[1]);
             if (index > addressIndex)
             {
                 return nullptr;

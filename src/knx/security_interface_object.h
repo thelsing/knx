@@ -31,6 +31,11 @@ public:
 
   DataSecurity getGroupObjectSecurity(uint16_t index, bool isWrite);
 
+  LoadState loadState();
+  uint8_t* save(uint8_t* buffer) override;
+  const uint8_t* restore(const uint8_t* buffer) override;
+  uint16_t saveSize() override;
+
 private:
   SecureApplicationLayer* _secAppLayer = nullptr;
 
