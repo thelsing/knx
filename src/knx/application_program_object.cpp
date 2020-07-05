@@ -13,8 +13,12 @@ ApplicationProgramObject::ApplicationProgramObject(Memory& memory)
         new DataProperty(PID_PROG_VERSION, true, PDT_GENERIC_05, 1, ReadLv3 | WriteLv3),
         new CallbackProperty<ApplicationProgramObject>(this, PID_PEI_TYPE, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0,
             [](ApplicationProgramObject* io, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
-                if (start == 0)
+                if(start == 0)
+                {
+                    uint16_t currentNoOfElements = 1;
+                    pushWord(currentNoOfElements, data);
                     return 1;
+                }
 
                 data[0] = 0;
                 return 1;
