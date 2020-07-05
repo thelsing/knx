@@ -238,8 +238,12 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
     {
         new CallbackProperty<TableObject>(this, PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3,
             [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
-                if (start == 0)
+                if(start == 0)
+                {
+                    uint16_t currentNoOfElements = 1;
+                    pushWord(currentNoOfElements, data);
                     return 1;
+                }
 
                 data[0] = obj->_state;
                 return 1;
@@ -250,8 +254,12 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
             }),
         new CallbackProperty<TableObject>(this, PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0,
             [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
-                if (start == 0)
+                if(start == 0)
+                {
+                    uint16_t currentNoOfElements = 1;
+                    pushWord(currentNoOfElements, data);
                     return 1;
+                }
 
                 if (obj->_state == LS_UNLOADED)
                     pushInt(0, data);
