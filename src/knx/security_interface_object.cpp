@@ -9,7 +9,7 @@
 #include "callback_property.h"
 #include "function_property.h"
 
-// Our FDSK. It is never changed from ETS. This is permanent default tool key restarted on every factory reset of the device.
+// Our FDSK. It is never changed from ETS. This is the permanent default tool key that is restored on every factory reset of the device.
 const uint8_t SecurityInterfaceObject::_fdsk[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };
 uint8_t SecurityInterfaceObject::_secReport[] = { 0x00, 0x00, 0x00 };
 uint8_t SecurityInterfaceObject::_secReportCtrl[] = { 0x00, 0x00, 0x00 };
@@ -316,6 +316,7 @@ void SecurityInterfaceObject::errorCode(ErrorCode errorCode)
 
 void SecurityInterfaceObject::factoryReset()
 {
+    println("Factory reset of security interface object requested.");
     _secAppLayer->setSecurityMode(false);
     property(PID_TOOL_KEY)->write(1, 1, _fdsk);
 }

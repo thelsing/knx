@@ -186,35 +186,34 @@ uint8_t BauSystemB::masterReset(EraseCode eraseCode, uint8_t channel)
         case EraseCode::ResetAP:
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
-            println("ResetAP requested.");
+            println("ResetAP requested. Not implemented yet.");
             return successCode;
         }
         case EraseCode::ResetIA:
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
-            println("ResetAP requested.");
+            println("ResetAP requested. Not implemented yet.");
             return successCode;
         }
         case EraseCode::ResetLinks:
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
-            println("ResetLinks requested.");
+            println("ResetLinks requested. Not implemented yet.");
             return successCode;
         }
         case EraseCode::ResetParam:
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
-            println("ResetParam requested.");
+            println("ResetParam requested. Not implemented yet.");
             return successCode;
         }
         case EraseCode::FactoryReset:
         case EraseCode::FactoryResetWithoutIA:
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
-
-#ifdef USE_DATASECURE
             print("Factory reset requested. type: ");
             println(eraseCode == EraseCode::FactoryReset ? "FactoryReset with IA" : "FactoryReset without IA");
+#ifdef USE_DATASECURE
             // If erase code is FactoryReset or FactoryResetWithoutIA, set FDSK as toolkey again
             // and disable security mode
             _secIfObj.factoryReset();
