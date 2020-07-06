@@ -323,6 +323,7 @@ void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopT
         apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
         apdu.frame().destinationAddress(0x0000);
         apdu.frame().addressType(GroupAddress);
+        apdu.frame().systemBroadcast(Broadcast);
 
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -346,6 +347,7 @@ void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountTyp
         apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
         apdu.frame().destinationAddress(0x0000);
         apdu.frame().addressType(GroupAddress);
+        apdu.frame().systemBroadcast(SysBroadcast);
 
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -576,7 +578,7 @@ void SecureApplicationLayer::updateLastValidSequence(bool toolAccess, uint16_t r
     }
 }
 
-void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl)
+void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, bool systemBcast)
 {
     if (secCtrl.dataSecurity != DataSecurity::authConf)
     {
@@ -606,7 +608,7 @@ void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGro
     print("sendSyncRequest: TPCI: ");
     println(tpci, HEX);
 
-    if(secure(request.data() + APDU_LPDU_DIFF, kSecureSyncRequest, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl))
+    if(secure(request.data() + APDU_LPDU_DIFF, kSecureSyncRequest, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl, systemBcast))
     {
         println("SyncRequest: ");
         request.apdu().printPDU();
@@ -638,7 +640,7 @@ void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGro
     }
 }
 
-void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint64_t remoteNextSeqNum)
+void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint64_t remoteNextSeqNum, bool systemBcast)
 {
     if (secCtrl.dataSecurity != DataSecurity::authConf)
     {
@@ -666,7 +668,7 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
     print("sendSyncResponse: TPCI: ");
     println(tpci, HEX);
 
-    if(secure(response.data() + APDU_LPDU_DIFF, kSecureSyncResponse, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl))
+    if(secure(response.data() + APDU_LPDU_DIFF, kSecureSyncResponse, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl, systemBcast))
     {
         _lastSyncRes = millis();
 
@@ -697,7 +699,7 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
     }
 }
 
-void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint8_t* seqNum, uint64_t challenge)
+void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint8_t* seqNum, uint64_t challenge, bool systemBcast)
 {
     println("Received SyncRequest:");
 
@@ -717,7 +719,7 @@ void SecureApplicationLayer::receivedSyncRequest(uint16_t srcAddr, uint16_t dstA
 
     uint16_t toAddr = _syncReqBroadcastIncoming ? dstAddr : srcAddr;
     bool toIsGroupAddress = _syncReqBroadcastIncoming;
-    sendSyncResponse(toAddr, toIsGroupAddress, secCtrl, nextSeqNum);
+    sendSyncResponse(toAddr, toIsGroupAddress, secCtrl, nextSeqNum, systemBcast);
 }
 
 void SecureApplicationLayer::receivedSyncResponse(uint16_t remote, const SecurityControl &secCtrl, uint8_t* plainApdu)
@@ -728,7 +730,7 @@ void SecureApplicationLayer::receivedSyncResponse(uint16_t remote, const Securit
     {
         if (_pendingOutgoingSyncRequests.get(GrpAddr(0)) == nullptr)
         {
-            println("Cannot handle sync.res without pending sync.req! (broadcast)");
+            println("Cannot handle sync.res without pending sync.req! (broadcast/systembroadcast)");
             return;
         }
     }
@@ -763,7 +765,7 @@ void SecureApplicationLayer::receivedSyncResponse(uint16_t remote, const Securit
     _pendingOutgoingSyncRequests.erase(remoteAddr);
 }
 
-bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, SecurityControl& secCtrl)
+bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLength, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci, uint8_t* secureAsdu, SecurityControl& secCtrl, bool systemBcast)
 {
     const uint8_t* pBuf;
     uint8_t scf;
@@ -775,6 +777,11 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
     uint8_t sai = (scf >> 4) & 0x07; // sai can only be 0x0 (CCM auth only) or 0x1 (CCM with auth+conf), other values are reserved
     bool authOnly = ( sai == 0);
     uint8_t service = (scf & 0x07); // only 0x0 (S-A_Data-PDU), 0x2 (S-A_Sync_Req-PDU) or 0x3 (S-A_Sync_Rsp-PDU) are valid values
+
+    if (systemBroadcast != systemBcast)
+    {
+        println("SBC flag in SCF does not match actual communication mode!");
+    }
 
     secCtrl.toolAccess = toolAccess;
     secCtrl.dataSecurity = authOnly ? DataSecurity::auth : DataSecurity::authConf;
@@ -956,7 +963,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
         if (syncReq)
         {
             uint64_t challenge = sixBytesToUInt64(&plainApdu[0]);
-            receivedSyncRequest(srcAddr, dstAddr, dstAddrIsGroupAddr, secCtrl, seqNum, challenge);
+            receivedSyncRequest(srcAddr, dstAddr, dstAddrIsGroupAddr, secCtrl, seqNum, challenge, systemBroadcast);
             return false;
         }
         else if (syncRes)
@@ -1002,6 +1009,7 @@ bool SecureApplicationLayer::decodeSecureApdu(APDU& secureApdu, APDU& plainApdu,
     uint16_t srcAddress = secureApdu.frame().sourceAddress();
     uint16_t dstAddress = secureApdu.frame().destinationAddress();
     bool isDstAddrGroupAddr = secureApdu.frame().addressType() == GroupAddress;
+    bool isSystemBroadcast = secureApdu.frame().systemBroadcast();
     uint8_t tpci = secureApdu.frame().data()[TPDU_LPDU_DIFF]; // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI [fixed TPDU_LPDU_DIFF]
     print("decodeSecureApdu: TPCI: ");
     println(tpci, HEX);
@@ -1016,7 +1024,7 @@ bool SecureApplicationLayer::decodeSecureApdu(APDU& secureApdu, APDU& plainApdu,
 
     // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI (fixed APDU_LPDU_DIFF)
     // We are starting from TPCI octet (including): plainApdu.frame().data()+APDU_LPDU_DIFF
-    if (decrypt(plainApdu.frame().data()+APDU_LPDU_DIFF, plainApdu.length()+1, srcAddress, dstAddress, isDstAddrGroupAddr, tpci, secureApdu.data()+1, secCtrl))
+    if (decrypt(plainApdu.frame().data()+APDU_LPDU_DIFF, plainApdu.length()+1, srcAddress, dstAddress, isDstAddrGroupAddr, tpci, secureApdu.data()+1, secCtrl, isSystemBroadcast))
     {
         println("decodeSecureApdu: Plain APDU: ");
         plainApdu.frame().apdu().printPDU();
@@ -1028,7 +1036,7 @@ bool SecureApplicationLayer::decodeSecureApdu(APDU& secureApdu, APDU& plainApdu,
 }
 
 bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t srcAddr, uint16_t dstAddr, bool dstAddrIsGroupAddr, uint8_t tpci,
-                                    uint8_t* apdu, uint16_t apduLength, const SecurityControl& secCtrl)
+                                    uint8_t* apdu, uint16_t apduLength, const SecurityControl& secCtrl, bool systemBcast)
 {
     bool toolAccess = secCtrl.toolAccess;
     bool confidentiality = secCtrl.dataSecurity == DataSecurity::authConf;
@@ -1063,8 +1071,6 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
     uint8_t* pBuf = buffer;
     pBuf = pushByte(tpci, pBuf);                      // TPCI
     pBuf = pushByte(apci, pBuf);                      // APCI
-
-    bool systemBcast = false; // Not implemented yet
 
     uint8_t scf;
     scf = service;
@@ -1194,6 +1200,7 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
     uint16_t srcAddress = plainApdu.frame().sourceAddress();
     uint16_t dstAddress = plainApdu.frame().destinationAddress();
     bool isDstAddrGroupAddr = plainApdu.frame().addressType() == GroupAddress;
+    bool isSystemBroadcast = plainApdu.frame().systemBroadcast();
     uint8_t tpci = 0x00;
     if (isConnected())
     {
@@ -1212,7 +1219,7 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
 
     // FIXME: when cEMI class is refactored, there might be additional info fields in cEMI (fixed APDU_LPDU_DIFF)
     // We are starting from TPCI octet (including): plainApdu.frame().data()+APDU_LPDU_DIFF
-    if(secure(secureApdu.frame().data()+APDU_LPDU_DIFF, kSecureDataPdu, srcAddress, dstAddress, isDstAddrGroupAddr, tpci, plainApdu.frame().data()+APDU_LPDU_DIFF, plainApdu.length()+1, secCtrl))
+    if(secure(secureApdu.frame().data()+APDU_LPDU_DIFF, kSecureDataPdu, srcAddress, dstAddress, isDstAddrGroupAddr, tpci, plainApdu.frame().data()+APDU_LPDU_DIFF, plainApdu.length()+1, secCtrl, isSystemBroadcast))
     {
         print("Update our next ");
         print(secCtrl.toolAccess ? "tool access" : "");
