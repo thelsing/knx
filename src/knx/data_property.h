@@ -17,6 +17,7 @@ class DataProperty : public Property
     virtual const uint8_t* restore(const uint8_t* buffer) override;
     virtual uint16_t saveSize() override;
     const uint8_t* data();
+    const uint8_t* data(uint16_t elementIndex);
 
   private:
     uint16_t _currentElements = 0;

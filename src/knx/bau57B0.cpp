@@ -38,7 +38,12 @@ Bau57B0::Bau57B0(Platform& platform)
     prop->write(4, (uint16_t) OT_GRP_OBJ_TABLE);
     prop->write(5, (uint16_t) OT_APPLICATION_PROG);
     prop->write(6, (uint16_t) OT_IP_PARAMETER);
-#ifdef USE_CEMI_SERVER
+#if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
+    prop->write(7, (uint16_t) OT_SECURITY);
+    prop->write(8, (uint16_t) OT_CEMI_SERVER);
+#elif defined(USE_DATASECURE)
+    prop->write(7, (uint16_t) OT_SECURITY);
+#elif defined(USE_CEMI_SERVER)
     prop->write(7, (uint16_t) OT_CEMI_SERVER);
 #endif
 }
@@ -61,6 +66,18 @@ InterfaceObject* Bau57B0::getInterfaceObject(uint8_t idx)
             return nullptr;
         case 6:
             return &_ipParameters;
+#if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
+        case 7:
+            return &_secIfObj;
+        case 8:
+            return &_cemiServerObject;
+#elif defined(USE_CEMI_SERVER)
+        case 7:
+            return &_cemiServerObject;
+#elif defined(USE_DATASECURE)
+        case 7:
+            return &_secIfObj;
+#endif
         default:
             return nullptr;
     }
@@ -86,9 +103,25 @@ InterfaceObject* Bau57B0::getInterfaceObject(ObjectType objectType, uint8_t obje
             return &_appProgram;
         case OT_IP_PARAMETER:
             return &_ipParameters;
+#ifdef USE_DATASECURE
+        case OT_SECURITY:
+            return &_secIfObj;
+#endif
+#ifdef USE_CEMI_SERVER
+        case OT_CEMI_SERVER:
+            return &_cemiServerObject;
+#endif
         default:
             return nullptr;
     }
+}
+
+void Bau57B0::doMasterReset(EraseCode eraseCode, uint8_t channel)
+{
+    // Common SystemB objects
+    BauSystemB::doMasterReset(eraseCode, channel);
+
+    _ipParameters.masterReset(eraseCode, channel);
 }
 
 DataLinkLayer& Bau57B0::dataLinkLayer()

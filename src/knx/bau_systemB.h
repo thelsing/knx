@@ -6,8 +6,10 @@
 #include "address_table_object.h"
 #include "association_table_object.h"
 #include "group_object_table_object.h"
+#include "security_interface_object.h"
 #include "application_program_object.h"
 #include "application_layer.h"
+#include "secure_application_layer.h"
 #include "transport_layer.h"
 #include "network_layer.h"
 #include "data_link_layer.h"
@@ -29,7 +31,8 @@ class BauSystemB : protected BusAccessUnit
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
-    bool restartRequest(uint16_t asap);
+    bool restartRequest(uint16_t asap, const SecurityControl secCtrl);
+    uint8_t checkmasterResetValidity(EraseCode eraseCode, uint8_t channel);
 
     void propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
                            uint8_t& numberOfElements, uint16_t startIndex, 
@@ -40,39 +43,54 @@ class BauSystemB : protected BusAccessUnit
 
   protected:
     virtual DataLinkLayer& dataLinkLayer() = 0;
-    void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
+    void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                uint16_t memoryAddress, uint8_t* data) override;
-    void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
+    void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                               uint16_t memoryAddress) override;
-    void deviceDescriptorReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t descriptorType) override;
-    void restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap) override;
-    void authorizeIndication(Priority priority, HopCountType hopType, uint16_t asap, uint32_t key) override;
-    void userMemoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number, uint32_t memoryAddress) override;
-    void userMemoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t number,
+    void memoryExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                  uint32_t memoryAddress, uint8_t* data) override;
+    void memoryExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                 uint32_t memoryAddress) override;
+    void deviceDescriptorReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t descriptorType) override;
+    void restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, RestartType restartType, EraseCode eraseCode, uint8_t channel) override;
+    void authorizeIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint32_t key) override;
+    void userMemoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint32_t memoryAddress) override;
+    void userMemoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                    uint32_t memoryAddress, uint8_t* memoryData) override;
-    void propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+    void propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                            uint8_t propertyId, uint8_t propertyIndex) override;
-    void propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+    void propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                       uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length) override;
-    void propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
+    void propertyValueExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                         uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length, bool confirmed);
+    void propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                      uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex) override;
-    void functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
-                                           uint8_t propertyId, uint8_t* data, uint8_t length);
-    void functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, uint8_t objectIndex,
-                                         uint8_t propertyId, uint8_t* data, uint8_t length);
-    void individualAddressReadIndication(HopCountType hopType) override;
-    void individualAddressWriteIndication(HopCountType hopType, uint16_t newaddress) override;
-    void groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType,
+    void propertyValueExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                        uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex) override;
+    void functionPropertyCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
+                                           uint8_t propertyId, uint8_t* data, uint8_t length) override;
+    void functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
+                                         uint8_t propertyId, uint8_t* data, uint8_t length) override;
+    void functionPropertyExtCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                                      uint8_t propertyId, uint8_t* data, uint8_t length) override;
+    void functionPropertyExtStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
+                                                    uint8_t propertyId, uint8_t* data, uint8_t length) override;
+    void individualAddressReadIndication(HopCountType hopType, const SecurityControl &secCtrl) override;
+    void individualAddressWriteIndication(HopCountType hopType, const SecurityControl &secCtrl, uint16_t newaddress) override;
+    void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t newIndividualAddress,
+                                                      uint8_t* knxSerialNumber) override;
+    void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber) override;
+    void groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
                                      uint8_t* data, uint8_t dataLength, bool status) override;
-    void groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, bool status) override;
-    void groupValueReadIndication(uint16_t asap, Priority priority, HopCountType hopType) override;
-    void groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType,
+    void groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl, bool status) override;
+    void groupValueReadIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl) override;
+    void groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
                                        uint8_t* data, uint8_t dataLength) override;
-    void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType,
+    void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
                                    uint8_t* data, uint8_t dataLength) override;
-    void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, uint16_t objectType,
+    void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t objectType,
                                               uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength) override;
-    void systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, uint16_t objectType,
+    void systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t objectType,
                                                 uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status) override;
     void connectConfirm(uint16_t tsap) override;
 
@@ -81,6 +99,8 @@ class BauSystemB : protected BusAccessUnit
     void sendNextGroupTelegram();
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
     void nextRestartState();
+
+    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel);
 
     enum RestartState
     {
@@ -97,10 +117,16 @@ class BauSystemB : protected BusAccessUnit
     GroupObjectTableObject _groupObjTable;
     ApplicationProgramObject _appProgram;
     Platform& _platform;
+#ifdef USE_DATASECURE
+    SecureApplicationLayer _appLayer;
+    SecurityInterfaceObject _secIfObj;
+#else
     ApplicationLayer _appLayer;
+#endif
     TransportLayer _transLayer;
     NetworkLayer _netLayer;
     bool _configured = true;
     RestartState _restartState = Idle;
+    SecurityControl _restartSecurity;
     uint32_t _restartDelay = 0;
 };

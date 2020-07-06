@@ -56,6 +56,9 @@ public:
     void disconnectRequest(uint16_t tsap, Priority priority);
     // apdu must be valid until it was confirmed
     void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu);
+
+    uint8_t getTpciSeqNum();
+    uint16_t getConnectionAddress();
 #pragma endregion
 
 #pragma region other

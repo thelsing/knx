@@ -9,8 +9,10 @@
 
 DeviceObject::DeviceObject()
 {
-    //Default to KNXA (0xFA)
-    uint8_t serialNumber[] = {0x00, 0xFA, 0x00, 0x00, 0x00, 0x00};
+    // Default to KNXA (0xFA)
+    // Note: ETS does not accept a SN 00FA00000000 in data secure mode.
+    //       ETS says that 00FA00000000 looks "suspicious" in the log file.
+    uint8_t serialNumber[] = {0x00, 0xFA, 0x01, 0x02, 0x03, 0x04};
     uint8_t hardwareType[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
     Property* properties[] =

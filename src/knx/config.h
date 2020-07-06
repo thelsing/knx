@@ -22,4 +22,6 @@
 #define USE_CEMI_SERVER
 #endif
 
+#define USE_DATASECURE
+
 #endif

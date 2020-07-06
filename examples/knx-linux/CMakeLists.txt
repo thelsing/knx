@@ -4,7 +4,10 @@ set(LIBRARIES_FROM_REFERENCES "")
 add_executable(knx-linux 
 	../../src/knx/address_table_object.cpp 
 	../../src/knx/address_table_object.h
-	../../src/knx/apdu.cpp 
+        ../../src/knx/aes.c
+        ../../src/knx/aes.h
+        ../../src/knx/aes.hpp
+        ../../src/knx/apdu.cpp
 	../../src/knx/apdu.h
 	../../src/knx/application_layer.cpp 
 	../../src/knx/application_layer.h
@@ -42,7 +45,8 @@ add_executable(knx-linux
 	../../src/knx/dpt.h
 	../../src/knx/dptconvert.cpp
 	../../src/knx/dptconvert.h
-	../../src/knx/group_object.cpp 
+        ../../src/knx/function_property.h
+        ../../src/knx/group_object.cpp
 	../../src/knx/group_object.h
 	../../src/knx/group_object_table_object.cpp 
 	../../src/knx/group_object_table_object.h
@@ -87,6 +91,12 @@ add_executable(knx-linux
 	../../src/knx/rf_medium_object.h
 	../../src/knx/rf_physical_layer.cpp
 	../../src/knx/rf_physical_layer.h
+        ../../src/knx/secure_application_layer.cpp
+        ../../src/knx/secure_application_layer.h
+        ../../src/knx/security_interface_object.cpp
+        ../../src/knx/security_interface_object.h
+        ../../src/knx/simple_map.h
+        ../../src/knx/table_object.cpp
         ../../src/knx/save_restore.h
 	../../src/knx/table_object.cpp
 	../../src/knx/table_object.h
@@ -102,6 +112,8 @@ add_executable(knx-linux
 	../../src/knx_facade.h
 	../../src/linux_platform.cpp 
 	../../src/linux_platform.h
+        fdsk.cpp
+        fdsk.h
 	main.cpp)
 target_link_libraries(knx-linux  "${LIBRARIES_FROM_REFERENCES}")
 include_directories(../../src)
