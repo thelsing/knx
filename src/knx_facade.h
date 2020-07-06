@@ -93,11 +93,6 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return _bau.configured();
     }
 
-    void masterReset(EraseCode erasecode, uint8_t channel)
-    {
-        _bau.masterReset(erasecode, channel);
-    }
-
     /**
      * returns HIGH if led is active on HIGH, LOW otherwise
      */

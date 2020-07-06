@@ -120,6 +120,14 @@ InterfaceObject* Bau27B0::getInterfaceObject(ObjectType objectType, uint8_t obje
     }
 }
 
+void Bau27B0::doMasterReset(EraseCode eraseCode, uint8_t channel)
+{
+    // Common SystemB objects
+    BauSystemB::doMasterReset(eraseCode, channel);
+
+    _rfMediumObj.masterReset(eraseCode, channel);
+}
+
 DataLinkLayer& Bau27B0::dataLinkLayer()
 {
     return _dlLayer;

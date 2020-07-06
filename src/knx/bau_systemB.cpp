@@ -169,7 +169,7 @@ bool BauSystemB::configured()
     return _configured;
 }
 
-uint8_t BauSystemB::masterReset(EraseCode eraseCode, uint8_t channel)
+uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channel)
 {
     static constexpr uint8_t successCode = 0x00; // Where does this come from? It is the code for "success".
     static constexpr uint8_t invalidEraseCode = 0x02; // Where does this come from? It is the error code for "unspported erase code".
@@ -206,18 +206,15 @@ uint8_t BauSystemB::masterReset(EraseCode eraseCode, uint8_t channel)
             return successCode;
         }
         case EraseCode::FactoryReset:
+        {
+            // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
+            println("Factory reset requested. type: with IA");
+            return successCode;
+        }
         case EraseCode::FactoryResetWithoutIA:
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
-            print("Factory reset requested. type: ");
-            println(eraseCode == EraseCode::FactoryReset ? "FactoryReset with IA" : "FactoryReset without IA");
-#ifdef USE_DATASECURE
-            // If erase code is FactoryReset or FactoryResetWithoutIA, set FDSK as toolkey again
-            // and disable security mode.
-            // FIXME: the A_RestartResponse PDU has still to be sent with the current toolkey.
-            // Idea: use local confirmation of sent A_RestartResponse PDU to trigger writing the FDSK afterwards
-            _secIfObj.masterReset(eraseCode);
-#endif
+            println("Factory reset requested. type: without IA");
             return successCode;
         }
         default:
@@ -267,6 +264,21 @@ void BauSystemB::memoryExtReadIndication(Priority priority, HopCountType hopType
     _appLayer.memoryExtReadResponse(AckRequested, priority, hopType, asap, secCtrl, ReturnCodes::Success, number, memoryAddress, _memory.toAbsolute(memoryAddress));
 }
 
+void BauSystemB::doMasterReset(EraseCode eraseCode, uint8_t channel)
+{
+    _addrTable.masterReset(eraseCode, channel);
+    _assocTable.masterReset(eraseCode, channel);
+    _groupObjTable.masterReset(eraseCode, channel);
+    _appProgram.masterReset(eraseCode, channel);
+#ifdef USE_DATASECURE
+    // If erase code is FactoryReset or FactoryResetWithoutIA, set FDSK as toolkey again
+    // and disable security mode.
+    // FIXME: the A_RestartResponse PDU has still to be sent with the current toolkey.
+    // Idea: use local confirmation of sent A_RestartResponse PDU to trigger writing the FDSK afterwards
+    _secIfObj.masterReset(eraseCode, channel);
+#endif
+}
+
 void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, RestartType restartType, EraseCode eraseCode, uint8_t channel)
 {
     if (restartType == RestartType::BasicRestart)
@@ -275,12 +287,17 @@ void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopTyp
     }
     else if (restartType == RestartType::MasterReset)
     {
-        uint8_t errorCode = masterReset(eraseCode, channel);
+        uint8_t errorCode = checkmasterResetValidity(eraseCode, channel);
+        // We send the restart response now before actually applying the reset values
+        // Processing time is kRestartProcessTime (example 3 seconds) that we require for the applying the master reset with restart
         _appLayer.restartResponse(AckRequested, priority, hopType, secCtrl, errorCode, (errorCode == 0) ? kRestartProcessTime : 0);
+        doMasterReset(eraseCode, channel);
     }
     else
     {
         // Cannot happen as restartType is just one bit
+        println("Unhandled restart type.");
+        _platform.fatalError();
     }
 
     // Flush the EEPROM before resetting

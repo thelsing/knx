@@ -121,15 +121,6 @@ int main(int argc, char **argv)
 {
     printf("main() start.\n");
 
-    if (argc > 1)
-    {
-        EraseCode eraseCode = (EraseCode) atoi(argv[2]);
-
-        print("Performing factory reset with erase code: ");
-        println(eraseCode, HEX);
-        knx.masterReset(eraseCode, 0);
-    }
-
     uint8_t serialNumber[] = { 0x00, 0xFA, 0x01, 0x02, 0x03, 0x04};
     uint8_t key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
 

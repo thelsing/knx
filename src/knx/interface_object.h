@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include "property.h"
 #include "save_restore.h"
+#include "knx_types.h"
 
 /** Enum for the type of an interface object. See Section 2.2 of knx:3/7/3 */
 enum ObjectType
@@ -148,6 +149,10 @@ class InterfaceObject : public SaveRestore
      * @param[out] access the ::AccessLevel necessary to read/write the property. 
      */
     void readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
+
+    // every interface object shall implement this
+    // However, for the time being we provide an empty default implementation
+    virtual void masterReset(EraseCode eraseCode, uint8_t channel);
 
     /**
      * Gets property with PropertyID id if it exists and nullptr otherwise.

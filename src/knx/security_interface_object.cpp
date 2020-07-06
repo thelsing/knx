@@ -331,7 +331,7 @@ void SecurityInterfaceObject::errorCode(ErrorCode errorCode)
     prop->write(data);
 }
 
-void SecurityInterfaceObject::masterReset(EraseCode eraseCode)
+void SecurityInterfaceObject::masterReset(EraseCode eraseCode, uint8_t channel)
 {
     // TODO handle different erase codes
     println("Factory reset of security interface object requested.");

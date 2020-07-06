@@ -116,6 +116,14 @@ InterfaceObject* Bau57B0::getInterfaceObject(ObjectType objectType, uint8_t obje
     }
 }
 
+void Bau57B0::doMasterReset(EraseCode eraseCode, uint8_t channel)
+{
+    // Common SystemB objects
+    BauSystemB::doMasterReset(eraseCode, channel);
+
+    _ipParameters.masterReset(eraseCode, channel);
+}
+
 DataLinkLayer& Bau57B0::dataLinkLayer()
 {
     return _dlLayer;

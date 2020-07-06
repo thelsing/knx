@@ -32,7 +32,7 @@ class BauSystemB : protected BusAccessUnit
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
     bool restartRequest(uint16_t asap, const SecurityControl secCtrl);
-    uint8_t masterReset(EraseCode eraseCode, uint8_t channel);
+    uint8_t checkmasterResetValidity(EraseCode eraseCode, uint8_t channel);
 
     void propertyValueRead(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
                            uint8_t& numberOfElements, uint16_t startIndex, 
@@ -99,6 +99,8 @@ class BauSystemB : protected BusAccessUnit
     void sendNextGroupTelegram();
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
     void nextRestartState();
+
+    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel);
 
     enum RestartState
     {

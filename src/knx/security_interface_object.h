@@ -15,7 +15,7 @@ public:
 
   void secureApplicationLayer(SecureApplicationLayer& secAppLayer);
 
-  void masterReset(EraseCode eraseCode);
+  virtual void masterReset(EraseCode eraseCode, uint8_t channel) override;
 
   bool isSecurityModeEnabled();
 

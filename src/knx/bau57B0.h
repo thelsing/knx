@@ -17,6 +17,7 @@ class Bau57B0 : public BauSystemB
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
     DataLinkLayer& dataLinkLayer();
 
+    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:
     IpParameterObject _ipParameters;
     IpDataLinkLayer _dlLayer;

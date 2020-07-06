@@ -54,6 +54,12 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
     }
 }
 
+void InterfaceObject::masterReset(EraseCode eraseCode, uint8_t channel)
+{
+    // every interface object shall implement this
+    // However, for the time being we provide an empty default implementation
+}
+
 void InterfaceObject::readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data)
 {
     Property* prop = property(id);

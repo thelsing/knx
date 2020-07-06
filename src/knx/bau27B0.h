@@ -20,6 +20,7 @@ class Bau27B0 : public BauSystemB
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
     DataLinkLayer& dataLinkLayer();
 
+    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:
     RfDataLinkLayer _dlLayer;
     RfMediumObject _rfMediumObj;
