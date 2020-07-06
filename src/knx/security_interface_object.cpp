@@ -333,10 +333,13 @@ void SecurityInterfaceObject::errorCode(ErrorCode errorCode)
 
 void SecurityInterfaceObject::masterReset(EraseCode eraseCode, uint8_t channel)
 {
-    // TODO handle different erase codes
-    println("Factory reset of security interface object requested.");
-    setSecurityMode(false);
-    property(PID_TOOL_KEY)->write(1, 1, _fdsk);
+    if (eraseCode == FactoryReset)
+    {
+        // TODO handle different erase codes
+        println("Factory reset of security interface object requested.");
+        setSecurityMode(false);
+        property(PID_TOOL_KEY)->write(1, 1, _fdsk);
+    }
 }
 
 const uint8_t* SecurityInterfaceObject::toolKey()
