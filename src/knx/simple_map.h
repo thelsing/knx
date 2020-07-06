@@ -1,6 +1,6 @@
 #pragma once
 
-// Provides a simple unordered map which is based on two arrays of the same data type.
+// Provides a simple unordered map which is based on two arrays of different data types, namely K and V.
 // One array is used for the keys, the other array is used for the values.
 // Tracking of free/occupied slots in the arrays is realized by a bitmask of size uint64_t.
 // As a result the maximum size of the map is 64 entries.
