@@ -26,8 +26,7 @@ Bau57B0::Bau57B0(Platform& platform)
     _memory.addSaveRestore(&_ipParameters);
 
     // Set Mask Version in Device Object depending on the BAU
-    //_deviceObj.maskVersion(0x57B0);
-    _deviceObj.maskVersion(0x07B0); // FAKE TP device that is connected over IP/TP router
+    _deviceObj.maskVersion(0x57B0);
 
     // Set which interface objects are available in the device object
     // This differs from BAU to BAU with different medium types.
