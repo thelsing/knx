@@ -20,7 +20,7 @@ Bau091A::Bau091A(Platform& platform)
 {
     _netLayer.dataLinkLayer(_dlLayerSecondary);
 #ifdef USE_CEMI_SERVER
-    _cemiServer.dataLinkLayer(_dlLayer);
+    _cemiServer.dataLinkLayer(_dlLayerSecondary); // Secondary I/F is the important one!
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
 #endif
