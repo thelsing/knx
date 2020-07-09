@@ -23,18 +23,25 @@ static constexpr uint8_t kSecureDataPdu = 0;
 static constexpr uint8_t kSecureSyncRequest = 2;
 static constexpr uint8_t kSecureSyncResponse = 3;
 
-SecureApplicationLayer::SecureApplicationLayer(DeviceObject &deviceObj, SecurityInterfaceObject &secIfObj, AssociationTableObject& assocTable, AddressTableObject &addrTab, BusAccessUnit& bau):
-    ApplicationLayer(assocTable, bau),
+SecureApplicationLayer::SecureApplicationLayer(DeviceObject &deviceObj, SecurityInterfaceObject &secIfObj, BusAccessUnit& bau):
+    ApplicationLayer(bau),
     _secIfObj(secIfObj),
-    _deviceObj(deviceObj),
-    _addrTab(addrTab)
+    _deviceObj(deviceObj)
 {
+}
+
+void SecureApplicationLayer::groupAddressTable(AddressTableObject &addrTable)
+{
+    _addrTab = &addrTable;
 }
 
 /* from transport layer */
 
 void SecureApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
+    if (_addrTab == nullptr)
+        return;
+
     println("dataGroupIndication");
 
     if (apdu.type() == SecureService)
@@ -293,12 +300,15 @@ void SecureApplicationLayer::dataConnectedConfirm(uint16_t tsap)
 
 void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
+    if (_addrTab == nullptr)
+        return;
+
     println("dataGroupRequest");
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
         apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
-        apdu.frame().destinationAddress(_addrTab.getGroupAddress(tsap));
+        apdu.frame().destinationAddress(_addrTab->getGroupAddress(tsap));
         apdu.frame().addressType(GroupAddress);
 
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
@@ -507,7 +517,10 @@ void SecureApplicationLayer::blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_
 
 uint16_t SecureApplicationLayer::groupAddressIndex(uint16_t groupAddr)
 {
-    return _addrTab.getTsap(groupAddr);
+    // Just for safety reasons, we should never get here, because the dataGroupIndication will return already return early without doing anything
+    if (_addrTab == nullptr)
+        return 0;
+    return _addrTab->getTsap(groupAddr);
 }
 
 const uint8_t* SecureApplicationLayer::securityKey(uint16_t addr, bool isGroupAddress)

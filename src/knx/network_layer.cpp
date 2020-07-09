@@ -4,7 +4,7 @@
 #include "data_link_layer.h"
 #include "bits.h"
 
-NetworkLayer::NetworkLayer(TransportLayer& layer): _transportLayer(layer)
+NetworkLayer::NetworkLayer(DeviceObject &deviceObj, TransportLayer& layer): _transportLayer(layer), _deviceObj(deviceObj)
 {
 
 }
@@ -27,6 +27,21 @@ void NetworkLayer::hopCount(uint8_t value)
 void NetworkLayer::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+
+    // Only for devices which are not a coupler
+    if (addrType == InduvidualAddress && destination != _deviceObj.induvidualAddress())
+        return;
+
+    // TODO: remove. getTSAP() will return 0 later anyway. Get rid of dependency to GAT
+    //if (addrType == GroupAddress && !_groupAddressTable.contains(destination))
+    //    return;
+
+//        if (frame.npdu().octetCount() > 0)
+//        {
+//            _print("-> DLL ");
+//            frame.apdu().printPDU();
+//        }
+
     if (addrType == InduvidualAddress)
     {
         //if (npdu.octetCount() > 0)

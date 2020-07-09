@@ -1,14 +1,14 @@
 #pragma once
 
 #include "config.h"
-#include "bau_systemB.h"
+#include "bau_systemB_device.h"
 #include "tpuart_data_link_layer.h"
 #include "cemi_server.h"
 #include "cemi_server_object.h"
 
 #ifdef USE_TP
 
-class Bau07B0 : public BauSystemB
+class Bau07B0 : public BauSystemBDevice
 {
   public:
     Bau07B0(Platform& platform);

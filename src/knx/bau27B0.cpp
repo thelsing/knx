@@ -7,8 +7,8 @@
 using namespace std;
 
 Bau27B0::Bau27B0(Platform& platform)
-    : BauSystemB(platform),
-      _dlLayer(_deviceObj, _rfMediumObj, _addrTable, _netLayer, _platform)
+    : BauSystemBDevice(platform),
+      _dlLayer(_deviceObj, _rfMediumObj, _netLayer, _platform)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif      

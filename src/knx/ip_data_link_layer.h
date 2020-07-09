@@ -11,7 +11,7 @@ class IpDataLinkLayer : public DataLinkLayer
     using DataLinkLayer::_deviceObject;
 
   public:
-    IpDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, IpParameterObject& ipParam, NetworkLayer& layer,
+    IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam, NetworkLayer& layer,
                     Platform& platform);
 
     void loop();

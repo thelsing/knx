@@ -27,6 +27,7 @@
    #include "linux_platform.h"
    #include "knx/bau57B0.h"
    #include "knx/bau27B0.h"
+   #include "knx/bau091A.h"
 #endif
 
 void buttonUp();

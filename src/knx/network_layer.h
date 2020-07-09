@@ -5,11 +5,12 @@
 #include "npdu.h"
 #include "transport_layer.h"
 class DataLinkLayer;
+class DeviceObject;
 
 class NetworkLayer
 {
   public:
-    NetworkLayer(TransportLayer& layer);
+    NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer);
 
     void dataLinkLayer(DataLinkLayer& layer);
     uint8_t hopCount() const;
@@ -38,4 +39,6 @@ class NetworkLayer
     uint8_t _hopCount = 6;
     DataLinkLayer* _dataLinkLayer = 0;
     TransportLayer& _transportLayer;
+    DeviceObject& _deviceObj;
+
 };

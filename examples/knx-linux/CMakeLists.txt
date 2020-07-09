@@ -19,13 +19,19 @@ add_executable(knx-linux
 	../../src/knx/bau.h
 	../../src/knx/bau07B0.cpp 
 	../../src/knx/bau07B0.h
-	../../src/knx/bau27B0.cpp
+        ../../src/knx/bau091A.cpp
+        ../../src/knx/bau091A.h
+        ../../src/knx/bau27B0.cpp
 	../../src/knx/bau27B0.h
 	../../src/knx/bau57B0.cpp
 	../../src/knx/bau57B0.h
 	../../src/knx/bau_systemB.cpp 
 	../../src/knx/bau_systemB.h
-	../../src/knx/bits.cpp 
+        ../../src/knx/bau_systemB_device.cpp
+        ../../src/knx/bau_systemB_device.h
+        ../../src/knx/bau_systemB_coupler.cpp
+        ../../src/knx/bau_systemB_coupler.h
+        ../../src/knx/bits.cpp
 	../../src/knx/bits.h
 	../../src/knx/callback_property.h
 	../../src/knx/cemi_frame.cpp
@@ -40,9 +46,9 @@ add_executable(knx-linux
 	../../src/knx/data_property.cpp 
 	../../src/knx/data_property.h
 	../../src/knx/device_object.cpp 
-	../../src/knx/device_object.h
-	../../src/knx/dpt.cpp
-	../../src/knx/dpt.h
+        ../../src/knx/device_object.h
+        ../../src/knx/dpt.cpp
+        ../../src/knx/dpt.h
 	../../src/knx/dptconvert.cpp
 	../../src/knx/dptconvert.h
         ../../src/knx/function_property.h

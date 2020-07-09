@@ -6,9 +6,8 @@
 #include "address_table_object.h"
 #include "cemi_server.h"
 
-DataLinkLayer::DataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, 
-    NetworkLayer& layer, Platform& platform) :
-    _deviceObject(devObj), _groupAddressTable(addrTab),  _networkLayer(layer), _platform(platform)
+DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayer& layer, Platform& platform) :
+    _deviceObject(devObj), _networkLayer(layer), _platform(platform)
 {
 }
 
@@ -115,18 +114,6 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     }
     else
     {
-        if (addrType == InduvidualAddress && destination != _deviceObject.induvidualAddress())
-            return;
-
-        if (addrType == GroupAddress && !_groupAddressTable.contains(destination))
-            return;
-
-//        if (frame.npdu().octetCount() > 0)
-//        {
-//            _print("-> DLL ");
-//            frame.apdu().printPDU();
-//        }
-
         _networkLayer.dataIndication(ack, addrType, destination, type, npdu, priority, source);
     }
 }

@@ -16,12 +16,11 @@ class RfDataLinkLayer : public DataLinkLayer
     friend class RfPhysicalLayer;
 
     using DataLinkLayer::_deviceObject;
-    using DataLinkLayer::_groupAddressTable;
     using DataLinkLayer::_platform;
 
   public:
-    RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj, AddressTableObject& addrTab, NetworkLayer& layer,
-                        Platform& platform);
+    RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj, NetworkLayer& layer,
+                    Platform& platform);
 
     void loop();
     void enabled(bool value);

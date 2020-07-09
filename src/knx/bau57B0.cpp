@@ -9,9 +9,9 @@
 using namespace std;
 
 Bau57B0::Bau57B0(Platform& platform)
-    : BauSystemB(platform),
+    : BauSystemBDevice(platform),
       _ipParameters(_deviceObj, platform),
-      _dlLayer(_deviceObj, _addrTable, _ipParameters, _netLayer, _platform)
+      _dlLayer(_deviceObj, _ipParameters, _netLayer, _platform)
 #ifdef USE_CEMI_SERVER
       ,
       _cemiServer(*this)

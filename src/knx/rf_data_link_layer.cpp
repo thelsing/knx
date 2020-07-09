@@ -73,9 +73,9 @@ bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
     return true;
 }
 
-RfDataLinkLayer::RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj, AddressTableObject& addrTab,
+RfDataLinkLayer::RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj,
                                          NetworkLayer& layer, Platform& platform)
-    : DataLinkLayer(devObj, addrTab, layer, platform),
+    : DataLinkLayer(devObj, layer, platform),
       _rfMediumObj(rfMediumObj),
       _rfPhy(*this, platform)
 {

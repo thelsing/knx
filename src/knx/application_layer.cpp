@@ -10,14 +10,18 @@
 
 const SecurityControl ApplicationLayer::noSecurity {.toolAccess=false, .dataSecurity=DataSecurity::none};
 
-ApplicationLayer::ApplicationLayer(AssociationTableObject& assocTable, BusAccessUnit& bau):
-    _assocTable(assocTable),  _bau(bau)
+ApplicationLayer::ApplicationLayer(BusAccessUnit& bau) : _bau(bau)
 {
 }
 
 void ApplicationLayer::transportLayer(TransportLayer& layer)
 {
     _transportLayer = &layer;
+}
+
+void ApplicationLayer::associationTableObject(AssociationTableObject& assocTable)
+{
+    _assocTable = &assocTable;
 }
 
 #pragma region TL Callbacks
@@ -29,6 +33,9 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
 
 void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
+    if (_assocTable == nullptr)
+        return;
+
     uint8_t len = apdu.length();
     uint8_t dataArray[len];
     uint8_t* data = dataArray;
@@ -45,8 +52,8 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
     }
 
     uint16_t startIdx = 0;
-    int32_t asap = _assocTable.nextAsap(tsap, startIdx);
-    for (; asap != -1; asap = _assocTable.nextAsap(tsap, startIdx))
+    int32_t asap = _assocTable->nextAsap(tsap, startIdx);
+    for (; asap != -1; asap = _assocTable->nextAsap(tsap, startIdx))
     {
         switch (apdu.type())
         {
@@ -365,12 +372,15 @@ void ApplicationLayer::dataConnectedConfirm(uint16_t tsap, const SecurityControl
 #pragma endregion
 void ApplicationLayer::groupValueReadRequest(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl)
 {
+    if (_assocTable == nullptr)
+        return;
+
     _savedAsapReadRequest = asap;
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(GroupValueRead);
     
-    int32_t value = _assocTable.translateAsap(asap);
+    int32_t value = _assocTable->translateAsap(asap);
     if (value < 0)
         return; // there is no tsap in association table for this asap
     
@@ -928,6 +938,9 @@ void ApplicationLayer::propertyExtDataSend(ApduType type, AckType ack, Priority 
 void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
     uint8_t* data,  uint8_t& dataLength)
 {
+    if (_assocTable == nullptr)
+        return;
+
     CemiFrame frame(dataLength + 1);
     APDU& apdu = frame.apdu();
     apdu.type(type);
@@ -943,7 +956,7 @@ void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap,
         memcpy(apdudata + 1, data, dataLength);
     }
     // no need to check if there is a tsap. This is a response, so the read got trough
-    uint16_t tsap = (uint16_t)_assocTable.translateAsap(asap);
+    uint16_t tsap = (uint16_t)_assocTable->translateAsap(asap);
     dataGroupRequest(ack, hopType, priority, tsap, apdu, secCtrl);
     dataGroupIndication(hopType, priority, tsap, apdu, secCtrl);
 }

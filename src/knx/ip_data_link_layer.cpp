@@ -5,7 +5,6 @@
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
-#include "address_table_object.h"
 #include "knx_ip_routing_indication.h"
 #include "knx_ip_search_request.h"
 #include "knx_ip_search_response.h"
@@ -18,8 +17,8 @@
 
 #define MIN_LEN_CEMI 10
 
-IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, IpParameterObject& ipParam, 
-    NetworkLayer& layer, Platform& platform) : DataLinkLayer(devObj, addrTab, layer, platform), _ipParameters(ipParam)
+IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam,
+    NetworkLayer& layer, Platform& platform) : DataLinkLayer(devObj, layer, platform), _ipParameters(ipParam)
 {
 }
 

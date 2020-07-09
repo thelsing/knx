@@ -1,10 +1,7 @@
 #include "knx_facade.h"
 
-#include "knx/bau57B0.h"
-#include "knx/bau27B0.h"
-#include "knx/bau07B0.h"
+#include "knx/bau091A.h"
 
-#include "knx/group_object_table_object.h"
 #include "knx/bits.h"
 #include <time.h>
 #include <stdlib.h>
@@ -34,59 +31,17 @@ bool isSendHidReportPossible()
     return false;
 }
 #if MEDIUM_TYPE == 5
-KnxFacade<LinuxPlatform, Bau57B0> knx;
+KnxFacade<LinuxPlatform, Bau091A> knx;
 #elif MEDIUM_TYPE == 2
-KnxFacade<LinuxPlatform, Bau27B0> knx;
+KnxFacade<LinuxPlatform, Bau2920> knx;
 #else
 #error Only MEDIUM_TYPE IP and RF supported
 #endif
-
-long lastsend = 0;
-
-#define CURR knx.getGroupObject(1)
-#define MAX knx.getGroupObject(2)
-#define MIN knx.getGroupObject(3)
-#define RESET knx.getGroupObject(4)
-
-void measureTemp()
-{
-    long now = millis();
-    if ((now - lastsend) < 10000)
-        return;
-
-    lastsend = now;
-    int r = rand();
-    double currentValue = (r * 1.0) / (RAND_MAX * 1.0);
-    currentValue *= 100;
-    currentValue -= 50;
-    //    currentValue *= (670433.28 + 273);
-    //    currentValue -= 273;
-    println(currentValue);
-    CURR.value(currentValue);
-
-    double max = MAX.value();
-    if (currentValue > max)
-        MAX.value(currentValue);
-
-    if (currentValue < (double)MIN.value())
-        MIN.value(currentValue);
-}
-
-void resetCallback(GroupObject& go)
-{
-    if (go.value())
-    {
-        MAX.valueNoSend(-273.0);
-        MIN.valueNoSend(670433.28);
-    }
-}
 
 void appLoop()
 {
     if (!knx.configured())
         return;
-    
-    measureTemp();
 }
 
 void setup()
@@ -99,18 +54,7 @@ void setup()
 
     if (knx.configured())
     {
-        CURR.dataPointType(Dpt(9, 1));
-        MIN.dataPointType(Dpt(9, 1));
-        MIN.value(670433.28);
-        MAX.dataPointType(Dpt(9, 1));
-        MAX.valueNoSend(-273.0);
-        RESET.dataPointType(Dpt(1, 15));
-        RESET.callback(resetCallback);
-        printf("Timeout: %d\n", knx.paramWord(0));
-        printf("Zykl. senden: %d\n", knx.paramByte(2));
-        printf("Min/Max senden: %d\n", knx.paramByte(3));
-        printf("Aenderung senden: %d\n", knx.paramByte(4));
-        printf("Abgleich %d\n", knx.paramByte(5));
+        printf("configured %d\n", knx.paramByte(5));
     }
     else
         println("not configured");

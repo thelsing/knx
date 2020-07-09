@@ -265,23 +265,39 @@ void TpUartDataLinkLayer::loop()
                 if (!_isEcho)
                 {
                     uint8_t c = 0x10;
-                    //ceck if individual or group address
-                    if ((buffer[6] & 0x80) == 0)
+
+                    // If this is not a nullptr we consider this a device to be a coupler
+                    // TODO: Improve for coupler mode, only ACK according to filter tables
+                    if (_groupAddressTable)
                     {
+                        //check if individual or group address
+                        if ((buffer[6] & 0x80) == 0)
+                        {
+                            //individual
+                            if (_deviceObject.induvidualAddress() == getWord(buffer + 4))
+                            {
+                                c |= 0x01;
+                            }
+                        }
+                        else
+                        {
+                            //group
+                            if (_groupAddressTable->contains(getWord(buffer + 4)) || getWord(buffer + 4) == 0)
+                            {
+                                c |= 0x01;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // TODO: test for only our coupler
                         //individual
                         if (_deviceObject.induvidualAddress() == getWord(buffer + 4))
                         {
                             c |= 0x01;
                         }
                     }
-                    else
-                    {
-                        //group
-                        if (_groupAddressTable.contains(getWord(buffer + 4)) || getWord(buffer + 4) == 0)
-                        {
-                            c |= 0x01;
-                        }
-                    }
+
                     _platform.writeUart(c);
                 }
             }
@@ -412,10 +428,15 @@ void TpUartDataLinkLayer::stopChip()
 #endif
 }
 
-TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
+TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
                                          NetworkLayer& layer, Platform& platform)
-    : DataLinkLayer(devObj, addrTab, layer, platform)
+    : DataLinkLayer(devObj, layer, platform)
 {
+}
+
+void TpUartDataLinkLayer::groupAddressTable(AddressTableObject &addrTable)
+{
+    _groupAddressTable = &addrTable;
 }
 
 void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)

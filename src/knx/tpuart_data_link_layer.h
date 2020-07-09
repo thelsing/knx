@@ -11,12 +11,14 @@
 class TpUartDataLinkLayer : public DataLinkLayer
 {
     using DataLinkLayer::_deviceObject;
-    using DataLinkLayer::_groupAddressTable;
     using DataLinkLayer::_platform;
 
   public:
-    TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, NetworkLayer& layer,
+    TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayer& layer,
                         Platform& platform);
+
+    ;
+    void groupAddressTable(AddressTableObject& addrTable);
 
     void loop();
     void enabled(bool value);
@@ -62,5 +64,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     void dataConBytesReceived(uint8_t* buffer, uint16_t length, bool success);
     bool resetChip();
     void stopChip();
+
+    AddressTableObject* _groupAddressTable = nullptr;
 };
 #endif
