@@ -55,22 +55,24 @@ InterfaceObject* Bau091A::getInterfaceObject(uint8_t idx)
     {
         case 0:
             return &_deviceObj;
-        case 4:
+        case 1:
+            return nullptr; // TODO: Router Object Primary IF
+        case 2:
+            return nullptr; // TODO: Router Object Secondary IF
+        case 3:
             return &_appProgram;
-        case 5: // would be app_program 2
-            return nullptr;
-        case 6:
+        case 4:
             return &_ipParameters;
 #if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
-        case 7:
+        case 5:
             return &_secIfObj;
-        case 8:
+        case 6:
             return &_cemiServerObject;
 #elif defined(USE_CEMI_SERVER)
-        case 7:
+        case 5:
             return &_cemiServerObject;
 #elif defined(USE_DATASECURE)
-        case 7:
+        case 5:
             return &_secIfObj;
 #endif
         default:
