@@ -108,14 +108,20 @@ InterfaceObject* Bau07B0::getInterfaceObject(ObjectType objectType, uint8_t obje
     }
 }
 
-DataLinkLayer& Bau07B0::dataLinkLayer()
+bool Bau07B0::enabled()
 {
-    return _dlLayer;
+    return _dlLayer.enabled();
+}
+
+void Bau07B0::enabled(bool value)
+{
+    _dlLayer.enabled(value);
 }
 
 void Bau07B0::loop()
 {
-    ::BauSystemB::loop();
+    _dlLayer.loop();
+    BauSystemBDevice::loop();
 #ifdef USE_CEMI_SERVER    
     _cemiServer.loop();
 #endif    

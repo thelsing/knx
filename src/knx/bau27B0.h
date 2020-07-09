@@ -13,12 +13,13 @@ class Bau27B0 : public BauSystemBDevice
 {
   public:
     Bau27B0(Platform& platform);
-    void loop();
+    virtual void loop() override;
+    virtual bool enabled() override;
+    virtual void enabled(bool value) override;
 
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
-    DataLinkLayer& dataLinkLayer();
 
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:

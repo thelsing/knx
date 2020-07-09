@@ -108,14 +108,27 @@ InterfaceObject* Bau091A::getInterfaceObject(ObjectType objectType, uint8_t obje
 void Bau091A::doMasterReset(EraseCode eraseCode, uint8_t channel)
 {
     // Common SystemB objects
-    BauSystemB::doMasterReset(eraseCode, channel);
+    BauSystemBCoupler::doMasterReset(eraseCode, channel);
 
     _ipParameters.masterReset(eraseCode, channel);
 }
 
-DataLinkLayer& Bau091A::dataLinkLayer()
+bool Bau091A::enabled()
 {
-    return _dlLayerSecondary;
+    return _dlLayerPrimary.enabled() && _dlLayerSecondary.enabled();
+}
+
+void Bau091A::enabled(bool value)
+{
+    _dlLayerPrimary.enabled(value);
+    _dlLayerSecondary.enabled(value);
+}
+
+void Bau091A::loop()
+{
+    _dlLayerPrimary.loop();
+    _dlLayerSecondary.loop();
+    BauSystemBCoupler::loop();
 }
 
 #endif

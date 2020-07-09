@@ -128,14 +128,20 @@ void Bau27B0::doMasterReset(EraseCode eraseCode, uint8_t channel)
     _rfMediumObj.masterReset(eraseCode, channel);
 }
 
-DataLinkLayer& Bau27B0::dataLinkLayer()
+bool Bau27B0::enabled()
 {
-    return _dlLayer;
+    return _dlLayer.enabled();
+}
+
+void Bau27B0::enabled(bool value)
+{
+    _dlLayer.enabled(value);
 }
 
 void Bau27B0::loop()
 {
-    ::BauSystemB::loop();
+    _dlLayer.loop();
+    BauSystemBDevice::loop();
 #ifdef USE_CEMI_SERVER    
     _cemiServer.loop();
 #endif    

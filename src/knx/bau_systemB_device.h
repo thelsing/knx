@@ -22,7 +22,6 @@ class BauSystemBDevice : public BauSystemB
     BauSystemBDevice(Platform& platform);
     virtual void loop();
     GroupObjectTableObject& groupObjectTable();
-    Memory& memory();
     bool configured();
 
   protected:
@@ -40,7 +39,7 @@ class BauSystemBDevice : public BauSystemB
     void sendNextGroupTelegram();
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
 
-    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel);
+    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
 
     AddressTableObject _addrTable;
     AssociationTableObject _assocTable;

@@ -21,22 +21,6 @@ BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj),
     _memory.addSaveRestore(&_appProgram);
 }
 
-void BauSystemB::loop()
-{
-    dataLinkLayer().loop();
-    nextRestartState();
-}
-
-bool BauSystemB::enabled()
-{
-    return dataLinkLayer().enabled();
-}
-
-void BauSystemB::enabled(bool value)
-{
-    dataLinkLayer().enabled(value);
-}
-
 void BauSystemB::readMemory()
 {
     _memory.readMemory();
@@ -166,6 +150,7 @@ void BauSystemB::memoryExtReadIndication(Priority priority, HopCountType hopType
 
 void BauSystemB::doMasterReset(EraseCode eraseCode, uint8_t channel)
 {
+    _deviceObj.masterReset(eraseCode, channel);
     _appProgram.masterReset(eraseCode, channel);
 }
 

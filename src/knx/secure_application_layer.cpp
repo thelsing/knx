@@ -1251,24 +1251,6 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
     return false;
 }
 
-void SecureApplicationLayer::clearFailureLog()
-{
-    println("clearFailureLog()");
-}
-
-void SecureApplicationLayer::getFailureCounters(uint8_t* data)
-{
-    memset(data, 0, 8);
-    println("getFailureCounters()");
-}
-
-uint8_t SecureApplicationLayer::getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen)
-{
-    print("getFromFailureLogByIndex(): Index: ");
-    println(index);
-    return 0;
-}
-
 uint64_t SecureApplicationLayer::getRandomNumber()
 {
     return 0x000102030405; // TODO: generate random number

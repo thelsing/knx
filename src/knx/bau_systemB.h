@@ -16,13 +16,13 @@ class BauSystemB : protected BusAccessUnit
 {
   public:
     BauSystemB(Platform& platform);
-    virtual void loop();
+    virtual void loop() = 0;
     ApplicationProgramObject& parameters();
     DeviceObject& deviceObject();
     Memory& memory();
     bool configured();
-    bool enabled();
-    void enabled(bool value);
+    virtual bool enabled() = 0;
+    virtual void enabled(bool value) = 0;
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
@@ -37,7 +37,6 @@ class BauSystemB : protected BusAccessUnit
                             uint8_t* data, uint32_t length) override;
 
   protected:
-    virtual DataLinkLayer& dataLinkLayer() = 0;
     virtual ApplicationLayer& applicationLayer() = 0;
 
     void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,

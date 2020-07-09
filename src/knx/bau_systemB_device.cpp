@@ -14,9 +14,6 @@ BauSystemBDevice::BauSystemBDevice(Platform& platform) :
 #endif
     _transLayer(_appLayer), _netLayer(_deviceObj, _transLayer)
 {
-#ifdef USE_DATASECURE
-    _secIfObj.secureApplicationLayer(_appLayer);
-#endif
     _appLayer.transportLayer(_transLayer);
     _appLayer.associationTableObject(_assocTable);
     _appLayer.groupAddressTable(_addrTable);
@@ -39,7 +36,6 @@ ApplicationLayer& BauSystemBDevice::applicationLayer()
 
 void BauSystemBDevice::loop()
 {
-    dataLinkLayer().loop();
     _transLayer.loop();
     sendNextGroupTelegram();
     nextRestartState();
@@ -138,10 +134,11 @@ bool BauSystemBDevice::configured()
 
 void BauSystemBDevice::doMasterReset(EraseCode eraseCode, uint8_t channel)
 {
+    BauSystemB::doMasterReset(eraseCode, channel);
+
     _addrTable.masterReset(eraseCode, channel);
     _assocTable.masterReset(eraseCode, channel);
     _groupObjTable.masterReset(eraseCode, channel);
-    _appProgram.masterReset(eraseCode, channel);
 #ifdef USE_DATASECURE
     // If erase code is FactoryReset or FactoryResetWithoutIA, set FDSK as toolkey again
     // and disable security mode.

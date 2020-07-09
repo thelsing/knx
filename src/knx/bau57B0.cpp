@@ -124,9 +124,23 @@ void Bau57B0::doMasterReset(EraseCode eraseCode, uint8_t channel)
     _ipParameters.masterReset(eraseCode, channel);
 }
 
-DataLinkLayer& Bau57B0::dataLinkLayer()
+bool Bau57B0::enabled()
 {
-    return _dlLayer;
+    return _dlLayer.enabled();
+}
+
+void Bau57B0::enabled(bool value)
+{
+    _dlLayer.enabled(value);
+}
+
+void Bau57B0::loop()
+{
+    _dlLayer.loop();
+    BauSystemBDevice::loop();
+#ifdef USE_CEMI_SERVER
+    _cemiServer.loop();
+#endif
 }
 
 #endif

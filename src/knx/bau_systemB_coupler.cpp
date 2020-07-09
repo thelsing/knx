@@ -13,9 +13,6 @@ BauSystemBCoupler::BauSystemBCoupler(Platform& platform) :
 #endif
     _transLayer(_appLayer), _netLayer(_deviceObj, _transLayer)
 {
-#ifdef USE_DATASECURE
-    _secIfObj.secureApplicationLayer(_appLayer);
-#endif
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);
     _memory.addSaveRestore(&_deviceObj);
@@ -33,7 +30,6 @@ ApplicationLayer& BauSystemBCoupler::applicationLayer()
 
 void BauSystemBCoupler::loop()
 {
-    dataLinkLayer().loop();
     _transLayer.loop();
 #ifdef USE_DATASECURE
     _appLayer.loop();
@@ -54,4 +50,5 @@ bool BauSystemBCoupler::configured()
 
 void BauSystemBCoupler::doMasterReset(EraseCode eraseCode, uint8_t channel)
 {
+    BauSystemB::doMasterReset(eraseCode, channel);
 }

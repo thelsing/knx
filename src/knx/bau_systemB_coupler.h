@@ -24,10 +24,9 @@ class BauSystemBCoupler : public BauSystemB
     bool configured();
 
   protected:
-    virtual DataLinkLayer& dataLinkLayer() = 0;
     virtual ApplicationLayer& applicationLayer() override;
 
-    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel);
+    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
 
     enum RestartState
     {

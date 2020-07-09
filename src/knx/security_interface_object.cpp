@@ -97,7 +97,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 uint8_t info = data[2];
                 if (id == 0 && info == 0)
                 {
-                    obj->_secAppLayer->clearFailureLog();
+                    obj->clearFailureLog();
                     resultData[0] = ReturnCodes::Success;
                     resultData[1] = id;
                     resultLength = 2;
@@ -123,7 +123,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                     resultData[0] = ReturnCodes::Success;
                     resultData[1] = id;
                     resultData[2] = info;
-                    obj->_secAppLayer->getFailureCounters(&resultData[3]); // Put 8 bytes in the buffer
+                    obj->getFailureCounters(&resultData[3]); // Put 8 bytes in the buffer
                     resultLength = 3 + 8;
                     return;
                 }
@@ -132,7 +132,7 @@ SecurityInterfaceObject::SecurityInterfaceObject()
                 {
                     uint8_t maxBufferSize = resultLength; // Remember the maximum buffer size of the buffer that is provided to us
                     uint8_t index = info;
-                    uint8_t numBytes = obj->_secAppLayer->getFromFailureLogByIndex(index, &resultData[2], maxBufferSize);
+                    uint8_t numBytes = obj->getFromFailureLogByIndex(index, &resultData[2], maxBufferSize);
                     if ( numBytes > 0)
                     {
                         resultData[0] = ReturnCodes::Success;
@@ -161,11 +161,6 @@ SecurityInterfaceObject::SecurityInterfaceObject()
         new DataProperty( PID_TOOL_SEQUENCE_NUMBER_SENDING, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 ) // Updated by our device accordingly (non-standardized!)
     };
     initializeProperties(sizeof(properties), properties);
-}
-
-void SecurityInterfaceObject::secureApplicationLayer(SecureApplicationLayer& secAppLayer)
-{
-    _secAppLayer = &secAppLayer;
 }
 
 uint8_t* SecurityInterfaceObject::save(uint8_t* buffer)
@@ -204,6 +199,24 @@ void SecurityInterfaceObject::setSecurityMode(bool enabled)
 bool SecurityInterfaceObject::isSecurityModeEnabled()
 {
     return _securityModeEnabled;
+}
+
+void SecurityInterfaceObject::clearFailureLog()
+{
+    println("clearFailureLog()");
+}
+
+void SecurityInterfaceObject::getFailureCounters(uint8_t* data)
+{
+    memset(data, 0, 8);
+    println("getFailureCounters()");
+}
+
+uint8_t SecurityInterfaceObject::getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen)
+{
+    print("getFromFailureLogByIndex(): Index: ");
+    println(index);
+    return 0;
 }
 
 bool SecurityInterfaceObject::isLoaded()
