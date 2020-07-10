@@ -41,18 +41,6 @@ DeviceObject& BauSystemB::deviceObject()
     return _deviceObj;
 }
 
-bool BauSystemB::configured()
-{
-    // _configured is set to true initially, if the device was configured with ETS it will be set to true after restart
-    
-    if (!_configured)
-        return false;
-    
-    _configured = _appProgram.loadState() == LS_LOADED;
-    
-    return _configured;
-}
-
 uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channel)
 {
     static constexpr uint8_t successCode = 0x00; // Where does this come from? It is the code for "success".

@@ -19,7 +19,7 @@ class RfDataLinkLayer : public DataLinkLayer
     using DataLinkLayer::_platform;
 
   public:
-    RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj, NetworkLayer& layer,
+    RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj, NetworkLayerEntity& netLayerEntity,
                     Platform& platform);
 
     void loop();

@@ -3,27 +3,24 @@
 #include <stdint.h>
 #include "knx_types.h"
 #include "npdu.h"
-#include "transport_layer.h"
-#include "network_layer_entity.h"
 
-class DeviceObject;
+class DataLinkLayer;
+class NetworkLayer;
 
-class NetworkLayer
+class NetworkLayerEntity
 {
   public:
-    NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer);
+    NetworkLayerEntity(NetworkLayer &netLayer);
 
-    NetworkLayerEntity& getEntity(uint8_t num);
-    uint8_t hopCount() const;
-    void hopCount(uint8_t value);
+    void dataLinkLayer(DataLinkLayer& layer);
 
-    // from transport layer
-    void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu);
-    void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu);
-    void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu);
+    // From network layer
+/*
     void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu);
+*/
+    void sendDataRequest(NPDU& npdu, AckType ack, uint16_t destination, Priority priority, AddressType addrType, SystemBroadcast systemBroadcast);
 
-    // from entities
+    // from data link layer
     void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
                         Priority priority, uint16_t source);
     void dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority,
@@ -36,10 +33,6 @@ class NetworkLayer
     void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status);
 
   private:
-    uint8_t _hopCount = 6;
-
-    NetworkLayerEntity _netLayerEntities[2];
-
-    TransportLayer& _transportLayer;
-    DeviceObject& _deviceObj;
+    DataLinkLayer* _dataLinkLayer = 0;
+    NetworkLayer& _netLayer;
 };

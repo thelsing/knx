@@ -5,13 +5,15 @@
 #include <stdint.h>
 #include "device_object.h"
 #include "knx_types.h"
-#include "network_layer.h"
+#include "network_layer_entity.h"
 #include "cemi_server.h"
+
+class Platform;
 
 class DataLinkLayer
 {
   public:
-    DataLinkLayer(DeviceObject& devObj, NetworkLayer& layer,
+    DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
                   Platform& platform);
 
 #ifdef USE_CEMI_SERVER
@@ -35,7 +37,7 @@ class DataLinkLayer
     virtual bool sendFrame(CemiFrame& frame) = 0;
     uint8_t* frameData(CemiFrame& frame);
     DeviceObject& _deviceObject;
-    NetworkLayer& _networkLayer;
+    NetworkLayerEntity& _networkLayerEntity;
     Platform& _platform;
 #ifdef USE_CEMI_SERVER
     CemiServer* _cemiServer;

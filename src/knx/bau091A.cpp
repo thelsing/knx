@@ -11,14 +11,15 @@ using namespace std;
 Bau091A::Bau091A(Platform& platform)
     : BauSystemBCoupler(platform),
       _ipParameters(_deviceObj, platform),
-      _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer, _platform),
-      _dlLayerSecondary(_deviceObj, _netLayer, platform)
+      _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getEntity(0), _platform),
+      _dlLayerSecondary(_deviceObj, _netLayer.getEntity(1), platform)
 #ifdef USE_CEMI_SERVER
       ,
       _cemiServer(*this)
 #endif
 {
-    _netLayer.dataLinkLayer(_dlLayerSecondary);
+    _netLayer.getEntity(0).dataLinkLayer(_dlLayerPrimary);
+    _netLayer.getEntity(1).dataLinkLayer(_dlLayerSecondary);
 #ifdef USE_CEMI_SERVER
     _cemiServer.dataLinkLayer(_dlLayerSecondary); // Secondary I/F is the important one!
     _dlLayer.cemiServer(_cemiServer);

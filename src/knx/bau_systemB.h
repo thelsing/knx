@@ -17,15 +17,18 @@ class BauSystemB : protected BusAccessUnit
   public:
     BauSystemB(Platform& platform);
     virtual void loop() = 0;
-    ApplicationProgramObject& parameters();
-    DeviceObject& deviceObject();
-    Memory& memory();
-    bool configured();
+    virtual bool configured() = 0;
     virtual bool enabled() = 0;
     virtual void enabled(bool value) = 0;
+
+    ApplicationProgramObject& parameters();
+    DeviceObject& deviceObject();
+
+    Memory& memory();
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
+
     bool restartRequest(uint16_t asap, const SecurityControl secCtrl);
     uint8_t checkmasterResetValidity(EraseCode eraseCode, uint8_t channel);
 
@@ -38,6 +41,8 @@ class BauSystemB : protected BusAccessUnit
 
   protected:
     virtual ApplicationLayer& applicationLayer() = 0;
+    virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
+    virtual InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance) = 0;
 
     void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                uint16_t memoryAddress, uint8_t* data) override;
@@ -82,10 +87,7 @@ class BauSystemB : protected BusAccessUnit
                                                 uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status) override;
     void connectConfirm(uint16_t tsap) override;
 
-    virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
-    virtual InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance) = 0;
     void nextRestartState();
-
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel);
 
     enum RestartState
@@ -100,7 +102,6 @@ class BauSystemB : protected BusAccessUnit
     DeviceObject _deviceObj;
     ApplicationProgramObject _appProgram;
     Platform& _platform;
-    bool _configured = true;
     RestartState _restartState = Idle;
     SecurityControl _restartSecurity;
     uint32_t _restartDelay = 0;

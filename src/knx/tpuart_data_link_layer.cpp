@@ -429,8 +429,8 @@ void TpUartDataLinkLayer::stopChip()
 }
 
 TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
-                                         NetworkLayer& layer, Platform& platform)
-    : DataLinkLayer(devObj, layer, platform)
+                                         NetworkLayerEntity &netLayerEntity, Platform& platform)
+    : DataLinkLayer(devObj, netLayerEntity, platform)
 {
 }
 

@@ -112,11 +112,6 @@ void BauSystemBDevice::updateGroupObject(GroupObject & go, uint8_t * data, uint8
         handler(go);
 }
 
-GroupObjectTableObject& BauSystemBDevice::groupObjectTable()
-{
-    return _groupObjTable;
-}
-
 bool BauSystemBDevice::configured()
 {
     // _configured is set to true initially, if the device was configured with ETS it will be set to true after restart
@@ -128,7 +123,11 @@ bool BauSystemBDevice::configured()
         && _addrTable.loadState() == LS_LOADED
         && _assocTable.loadState() == LS_LOADED
         && _appProgram.loadState() == LS_LOADED;
-    
+
+#ifdef USE_DATASECURE
+    _configured &= _secIfObj.loadState() == LS_LOADED;
+#endif
+
     return _configured;
 }
 

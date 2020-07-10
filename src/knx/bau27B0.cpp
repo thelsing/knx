@@ -8,12 +8,12 @@ using namespace std;
 
 Bau27B0::Bau27B0(Platform& platform)
     : BauSystemBDevice(platform),
-      _dlLayer(_deviceObj, _rfMediumObj, _netLayer, _platform)
+      _dlLayer(_deviceObj, _rfMediumObj, _netLayer.getEntity(0), _platform)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif      
 {
-    _netLayer.dataLinkLayer(_dlLayer);
+    _netLayer.getEntity(0).dataLinkLayer(_dlLayer);
     _memory.addSaveRestore(&_rfMediumObj);
 #ifdef USE_CEMI_SERVER
     _cemiServer.dataLinkLayer(_dlLayer);

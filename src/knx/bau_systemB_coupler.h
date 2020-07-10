@@ -20,21 +20,13 @@ class BauSystemBCoupler : public BauSystemB
 {
   public:
     BauSystemBCoupler(Platform& platform);
-    virtual void loop();
-    bool configured();
+    virtual void loop() override;
+    virtual bool configured() override;
 
   protected:
     virtual ApplicationLayer& applicationLayer() override;
 
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
-
-    enum RestartState
-    {
-        Idle,
-        Connecting,
-        Connected,
-        Restarted
-    };
 
     Platform& _platform;
 #ifdef USE_DATASECURE
@@ -46,7 +38,4 @@ class BauSystemBCoupler : public BauSystemB
     TransportLayer _transLayer;
     NetworkLayer _netLayer;
     bool _configured = true;
-    RestartState _restartState = Idle;
-    SecurityControl _restartSecurity;
-    uint32_t _restartDelay = 0;
 };

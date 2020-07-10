@@ -85,7 +85,9 @@ add_executable(knx-linux
 	../../src/knx/memory.h
 	../../src/knx/network_layer.cpp 
 	../../src/knx/network_layer.h
-	../../src/knx/npdu.cpp 
+        ../../src/knx/network_layer_entity.cpp
+        ../../src/knx/network_layer_entity.h
+        ../../src/knx/npdu.cpp
 	../../src/knx/npdu.h
         ../../src/knx/platform.cpp
 	../../src/knx/platform.h

@@ -5,9 +5,10 @@
 #include "device_object.h"
 #include "address_table_object.h"
 #include "cemi_server.h"
+#include "cemi_frame.h"
 
-DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayer& layer, Platform& platform) :
-    _deviceObject(devObj), _networkLayer(layer), _platform(platform)
+DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform) :
+    _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform)
 {
 }
 
@@ -73,11 +74,11 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
 
     if (addrType == GroupAddress && destination == 0)
             if (systemBroadcast == SysBroadcast)
-                _networkLayer.systemBroadcastConfirm(ack, type, priority, source, npdu, success);
+                _networkLayerEntity.systemBroadcastConfirm(ack, type, priority, source, npdu, success);
             else
-                _networkLayer.broadcastConfirm(ack, type, priority, source, npdu, success);                    
+                _networkLayerEntity.broadcastConfirm(ack, type, priority, source, npdu, success);
     else
-        _networkLayer.dataConfirm(ack, addrType, destination, type, priority, source, npdu, success);
+        _networkLayerEntity.dataConfirm(ack, addrType, destination, type, priority, source, npdu, success);
 
     frame.messageCode(backupMsgCode);
 }
@@ -108,13 +109,13 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     if (addrType == GroupAddress && destination == 0)
     {
         if (systemBroadcast == SysBroadcast)
-            _networkLayer.systemBroadcastIndication(ack, type, npdu, priority, source);
+            _networkLayerEntity.systemBroadcastIndication(ack, type, npdu, priority, source);
         else 
-            _networkLayer.broadcastIndication(ack, type, npdu, priority, source);
+            _networkLayerEntity.broadcastIndication(ack, type, npdu, priority, source);
     }
     else
     {
-        _networkLayer.dataIndication(ack, addrType, destination, type, npdu, priority, source);
+        _networkLayerEntity.dataIndication(ack, addrType, destination, type, npdu, priority, source);
     }
 }
 

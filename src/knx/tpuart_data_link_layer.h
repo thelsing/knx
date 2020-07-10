@@ -8,16 +8,17 @@
 
 #define MAX_KNX_TELEGRAM_SIZE 263
 
+class AddressTableObject;
+
 class TpUartDataLinkLayer : public DataLinkLayer
 {
     using DataLinkLayer::_deviceObject;
     using DataLinkLayer::_platform;
 
   public:
-    TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayer& layer,
+    TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
                         Platform& platform);
 
-    ;
     void groupAddressTable(AddressTableObject& addrTable);
 
     void loop();

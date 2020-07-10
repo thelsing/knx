@@ -224,6 +224,11 @@ bool SecurityInterfaceObject::isLoaded()
     return _state == LS_LOADED;
 }
 
+LoadState SecurityInterfaceObject::loadState()
+{
+    return _state;
+}
+
 void SecurityInterfaceObject::loadEvent(const uint8_t* data)
 {
     switch (_state)

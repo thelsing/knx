@@ -18,7 +18,7 @@
 #define MIN_LEN_CEMI 10
 
 IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam,
-    NetworkLayer& layer, Platform& platform) : DataLinkLayer(devObj, layer, platform), _ipParameters(ipParam)
+    NetworkLayerEntity &netLayerEntity, Platform& platform) : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam)
 {
 }
 

@@ -20,9 +20,8 @@ class BauSystemBDevice : public BauSystemB
 {
   public:
     BauSystemBDevice(Platform& platform);
-    virtual void loop();
-    GroupObjectTableObject& groupObjectTable();
-    bool configured();
+    virtual void loop() override;
+    virtual bool configured() override;
 
   protected:
     virtual ApplicationLayer& applicationLayer() override;
@@ -52,4 +51,6 @@ class BauSystemBDevice : public BauSystemB
 #endif
     TransportLayer _transLayer;
     NetworkLayer _netLayer;
+
+    bool _configured = true;
 };
