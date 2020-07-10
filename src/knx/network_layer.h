@@ -38,6 +38,7 @@ class NetworkLayer
   private:
     uint8_t _hopCount = 6;
 
+    // Support a maximum of two physical interfaces
     NetworkLayerEntity _netLayerEntities[2];
 
     TransportLayer& _transportLayer;

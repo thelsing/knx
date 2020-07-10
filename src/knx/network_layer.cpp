@@ -5,7 +5,7 @@
 #include "bits.h"
 
 NetworkLayer::NetworkLayer(DeviceObject &deviceObj, TransportLayer& layer) :
-    _netLayerEntities {*this, *this},
+    _netLayerEntities { {*this, 0}, {*this, 1} },
     _transportLayer(layer),
     _deviceObj(deviceObj)
 {

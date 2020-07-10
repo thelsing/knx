@@ -10,7 +10,7 @@ class NetworkLayer;
 class NetworkLayerEntity
 {
   public:
-    NetworkLayerEntity(NetworkLayer &netLayer);
+    NetworkLayerEntity(NetworkLayer &netLayer, uint8_t entityIndex);
 
     void dataLinkLayer(DataLinkLayer& layer);
 
@@ -35,4 +35,5 @@ class NetworkLayerEntity
   private:
     DataLinkLayer* _dataLinkLayer = 0;
     NetworkLayer& _netLayer;
+    uint8_t _entityIndex;
 };
