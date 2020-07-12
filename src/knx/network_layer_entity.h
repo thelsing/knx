@@ -9,16 +9,13 @@ class NetworkLayer;
 
 class NetworkLayerEntity
 {
+    friend class NetworkLayerCoupler;
+    friend class NetworkLayerDevice;
+
   public:
     NetworkLayerEntity(NetworkLayer &netLayer, uint8_t entityIndex);
 
     void dataLinkLayer(DataLinkLayer& layer);
-
-    // From network layer
-/*
-    void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu);
-*/
-    void sendDataRequest(NPDU& npdu, AckType ack, uint16_t destination, Priority priority, AddressType addrType, SystemBroadcast systemBroadcast);
 
     // from data link layer
     void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
@@ -33,6 +30,9 @@ class NetworkLayerEntity
     void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status);
 
   private:
+    // From network layer
+    void sendDataRequest(NPDU& npdu, AckType ack, uint16_t destination, Priority priority, AddressType addrType, SystemBroadcast systemBroadcast);
+
     DataLinkLayer* _dataLinkLayer = 0;
     NetworkLayer& _netLayer;
     uint8_t _entityIndex;

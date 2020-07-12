@@ -1,32 +1,21 @@
-#include "network_layer.h"
+#include "network_layer_device.h"
 #include "device_object.h"
 #include "tpdu.h"
 #include "cemi_frame.h"
 #include "bits.h"
 
-NetworkLayer::NetworkLayer(DeviceObject &deviceObj, TransportLayer& layer) :
-    _netLayerEntities { {*this, 0}, {*this, 1} },
-    _transportLayer(layer),
-    _deviceObj(deviceObj)
+NetworkLayerDevice::NetworkLayerDevice(DeviceObject &deviceObj, TransportLayer& layer) :
+    NetworkLayer(deviceObj, layer),
+    _netLayerEntities { {*this, 0} }
 {
 }
 
-NetworkLayerEntity& NetworkLayer::getEntity(uint8_t num)
+NetworkLayerEntity& NetworkLayerDevice::getEntity(uint8_t interfaceIndex)
 {
-    return _netLayerEntities[num];
+    return _netLayerEntities[interfaceIndex];
 }
 
-uint8_t NetworkLayer::hopCount() const
-{
-    return _hopCount;
-}
-
-void NetworkLayer::hopCount(uint8_t value)
-{
-    _hopCount = value & 0x7;
-}
-
-void NetworkLayer::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
+void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
 
@@ -64,7 +53,7 @@ void NetworkLayer::dataIndication(AckType ack, AddressType addrType, uint16_t de
     _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
-void NetworkLayer::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
+void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     if (addressType == InduvidualAddress)
@@ -82,38 +71,38 @@ void NetworkLayer::dataConfirm(AckType ack, AddressType addressType, uint16_t de
     _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
 }
 
-void NetworkLayer::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
+void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
-void NetworkLayer::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
+void NetworkLayerDevice::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
 }
 
-void NetworkLayer::systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
+void NetworkLayerDevice::systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
-void NetworkLayer::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
+void NetworkLayerDevice::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataSystemBroadcastConfirm(ack, hopType, npdu.tpdu(), priority, status);
 }
 
-void NetworkLayer::dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
+void NetworkLayerDevice::dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
 {
     NPDU& npdu = tpdu.frame().npdu();
 
     if (hopType == UnlimitedRouting)
         npdu.hopCount(7);
     else
-        npdu.hopCount(_hopCount);
+        npdu.hopCount(hopCount());
 
     //if (tpdu.apdu().length() > 0)
     //{
@@ -123,38 +112,38 @@ void NetworkLayer::dataIndividualRequest(AckType ack, uint16_t destination, HopC
     _netLayerEntities[0].sendDataRequest(npdu, ack, destination, priority, InduvidualAddress, Broadcast);
 }
 
-void NetworkLayer::dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
+void NetworkLayerDevice::dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
 {
     NPDU& npdu = tpdu.frame().npdu();
 
     if (hopType == UnlimitedRouting)
         npdu.hopCount(7);
     else
-        npdu.hopCount(_hopCount);
+        npdu.hopCount(hopCount());
 
     _netLayerEntities[0].sendDataRequest(npdu, ack, destination, priority, GroupAddress, Broadcast);
 }
 
-void NetworkLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
+void NetworkLayerDevice::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
 {
     NPDU& npdu = tpdu.frame().npdu();
 
     if (hopType == UnlimitedRouting)
         npdu.hopCount(7);
     else
-        npdu.hopCount(_hopCount);
+        npdu.hopCount(hopCount());
 
     _netLayerEntities[0].sendDataRequest(npdu, ack, 0, priority, GroupAddress, Broadcast);
 }
 
-void NetworkLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
+void NetworkLayerDevice::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
 {
     NPDU& npdu = tpdu.frame().npdu();
 
     if (hopType == UnlimitedRouting)
         npdu.hopCount(7);
     else
-        npdu.hopCount(_hopCount);
+        npdu.hopCount(hopCount());
 
     _netLayerEntities[0].sendDataRequest(npdu, ack, 0, priority, GroupAddress, SysBroadcast);
 }

@@ -83,8 +83,12 @@ add_executable(knx-linux
 	../../src/knx/knx_value.h
 	../../src/knx/memory.cpp 
 	../../src/knx/memory.h
-	../../src/knx/network_layer.cpp 
-	../../src/knx/network_layer.h
+        ../../src/knx/network_layer.cpp
+        ../../src/knx/network_layer.h
+        ../../src/knx/network_layer_coupler.cpp
+        ../../src/knx/network_layer_coupler.h
+        ../../src/knx/network_layer_device.cpp
+        ../../src/knx/network_layer_device.h
         ../../src/knx/network_layer_entity.cpp
         ../../src/knx/network_layer_entity.h
         ../../src/knx/npdu.cpp
