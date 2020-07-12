@@ -284,7 +284,10 @@ void DeviceObject::rfDomainAddress(uint8_t* value)
     prop->write(value);
 }
 
-
-
-
-
+uint8_t DeviceObject::defaultHopCount()
+{
+    Property* prop = property(PID_ROUTING_COUNT);
+    uint8_t value;
+    prop->read(value);
+    return (value >> 4) & 0x07;
+}

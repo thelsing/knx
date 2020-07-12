@@ -25,18 +25,6 @@ class NetworkLayerDevice : public NetworkLayer
     virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
 
   private:
-    // from entities
-    virtual void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
-                        Priority priority, uint16_t source) override;
-    virtual void dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority,
-                     uint16_t source, NPDU& npdu, bool status) override;
-    virtual void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                             Priority priority, uint16_t source) override;
-    virtual void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status) override;
-    virtual void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                                   Priority priority, uint16_t source) override;
-    virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status) override;
-
     // Support only physical interface for normal devices
     NetworkLayerEntity _netLayerEntities[1];
 };
