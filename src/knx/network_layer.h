@@ -42,5 +42,5 @@ class NetworkLayer
 
   private:
     TransportLayer& _transportLayer;
-    uint8_t _hopCount = 6;
+    uint8_t _hopCount; // Network Layer Parameter hop_count for the device's own outgoing frames (default value from PID_ROUTING_COUNT)
 };
