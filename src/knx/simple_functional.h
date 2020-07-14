@@ -3,8 +3,10 @@
 //
 // Basis is https://shaharmike.com/cpp/naive-std-function/
 //
+// It uses a few bytes on the heap for functor object.
+// Copy assignment just copies the pointer to the functor object and does not create a new copy! The last one has to cleanup.
 // Do not forget to call cleanup() once you do not need the function object (functor) anymore to free the memory.
-// No move semantics and/or smart pointers are used
+// No move semantics and/or smart pointers are used.
 
 template <typename T>
 class function;
@@ -42,12 +44,17 @@ class function<ReturnValue(Args...)>
     ReturnValue operator()(Args... args) const
     {
         //assert(callable_);
+        if (callable_ == nullptr)
+        {
+            while (true);
+        }
         return callable_->Invoke(args...);
     }
 
     void cleanup()
     {
         delete callable_;
+        callable_ = nullptr;
     }
 
   private:
