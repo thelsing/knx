@@ -1,5 +1,4 @@
 #pragma once
-#include <memory>
 
 //
 // Basis is https://shaharmike.com/cpp/naive-std-function/
