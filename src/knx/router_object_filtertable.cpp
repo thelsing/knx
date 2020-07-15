@@ -402,7 +402,7 @@ bool RouterObjectFilterTable::isGroupAddressInFilterTable(uint16_t groupAddress)
     if (property(PID_FILTER_TABLE_USE)->read(filterTableUse) == 0)
         return false;
 
-    if (filterTableUse != 0x00)
+    if ((filterTableUse&0x01) == 1)
     {
         // octet_address = GA_value div 8
         // bit_position = GA_value mod 8
