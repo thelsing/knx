@@ -16,14 +16,20 @@ enum RouteTableServices
     SetGroupAddress = 0x04,   // 4 bytes: start address and end address
 };
 
-RouterObjectFilterTable::RouterObjectFilterTable(Memory& memory)
+RouterObject::RouterObject(Memory& memory)
     : _memory(memory)
 {
     Property* properties[] =
     {
-        new CallbackProperty<RouterObjectFilterTable>(this, PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3,
+        new DataProperty( PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) OT_ROUTER ),
+        new DataProperty( PID_OBJECT_INDEX, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0 ), // Must be set by concrete BAUxxxx
+        new DataProperty( PID_MEDIUM_STATUS, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // For now: communication on medium is always possible
+        new DataProperty( PID_MAX_APDU_LENGTH_ROUTER, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) 254 ), // For now: fixed size
+        new DataProperty( PID_HOP_COUNT, true, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) 5), // TODO: Primary side: 5 for line coupler, 4 for backbone coupler, only exists if secondary is open medium without hop count
+        new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0 ), // Must be set by concrete BAUxxxx
+        new CallbackProperty<RouterObject>(this, PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3,
             // ReadCallback of PID_LOAD_STATE_CONTROL
-            [](RouterObjectFilterTable* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+            [](RouterObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
                 if (start == 0)
                     return 1;
 
@@ -31,12 +37,12 @@ RouterObjectFilterTable::RouterObjectFilterTable(Memory& memory)
                 return 1;
             },
             // WriteCallback of PID_LOAD_STATE_CONTROL
-            [](RouterObjectFilterTable* obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
+            [](RouterObject* obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
                 obj->loadEvent(data);
                 return 1;
             }),
-        new CallbackProperty<RouterObjectFilterTable>(this, PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0,
-            [](RouterObjectFilterTable* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+        new CallbackProperty<RouterObject>(this, PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0,
+            [](RouterObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
                 if(start == 0)
                 {
                     uint16_t currentNoOfElements = 1;
@@ -53,33 +59,33 @@ RouterObjectFilterTable::RouterObjectFilterTable(Memory& memory)
 
         new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0),
 
-        new FunctionProperty<RouterObjectFilterTable>(this, PID_ROUTETABLE_CONTROL,
+        new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
             // Command Callback of PID_ROUTETABLE_CONTROL
-            [](RouterObjectFilterTable* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 obj->functionRouteTableControl(true, data, length, resultData, resultLength);
             },
             // State Callback of PID_ROUTETABLE_CONTROL
-            [](RouterObjectFilterTable* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 obj->functionRouteTableControl(false, data, length, resultData, resultLength);
             }),
 
         new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use
 
-        new FunctionProperty<RouterObjectFilterTable>(this, PID_RF_ENABLE_SBC,
+        new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC,
             // Command Callback of PID_RF_ENABLE_SBC
-            [](RouterObjectFilterTable* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
             },
             // State Callback of PID_RF_ENABLE_SBC
-            [](RouterObjectFilterTable* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
             }),
     };
 
-    RouterObject::initializeProperties(sizeof(properties), properties);
+    initializeProperties(sizeof(properties), properties);
 }
 
-uint8_t* RouterObjectFilterTable::save(uint8_t* buffer)
+uint8_t* RouterObject::save(uint8_t* buffer)
 {
     buffer = pushByte(_state, buffer);
 
@@ -88,10 +94,10 @@ uint8_t* RouterObjectFilterTable::save(uint8_t* buffer)
     else
         buffer = pushInt(0, buffer);
 
-    return RouterObject::save(buffer);
+    return InterfaceObject::save(buffer);
 }
 
-const uint8_t* RouterObjectFilterTable::restore(const uint8_t* buffer)
+const uint8_t* RouterObject::restore(const uint8_t* buffer)
 {
     uint8_t state = 0;
     buffer = popByte(state, buffer);
@@ -107,15 +113,15 @@ const uint8_t* RouterObjectFilterTable::restore(const uint8_t* buffer)
 
     _filterTableGroupAddresses = (uint16_t*)_data;
 
-    return RouterObject::restore(buffer);
+    return InterfaceObject::restore(buffer);
 }
 
-uint16_t RouterObjectFilterTable::saveSize()
+uint16_t RouterObject::saveSize()
 {
-    return 1 + 4 + RouterObject::saveSize();
+    return 1 + 4 + InterfaceObject::saveSize();
 }
 
-void RouterObjectFilterTable::functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
     bool isError = false;
     RouteTableServices srvId = (RouteTableServices) data[1];
@@ -159,7 +165,7 @@ void RouterObjectFilterTable::functionRouteTableControl(bool isCommand, uint8_t*
     }
 }
 
-void RouterObjectFilterTable::functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+void RouterObject::functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
     if (isCommand)
     {
@@ -171,17 +177,17 @@ void RouterObjectFilterTable::functionRfEnableSbc(bool isCommand, uint8_t* data,
     resultLength = 2;
 }
 
-bool RouterObjectFilterTable::isRfSbcRoutingEnabled()
+bool RouterObject::isRfSbcRoutingEnabled()
 {
     return _rfSbcRoutingEnabled;
 }
 
-uint32_t RouterObjectFilterTable::tableReference()
+uint32_t RouterObject::tableReference()
 {
     return (uint32_t)_memory.toRelative(_data);
 }
 
-bool RouterObjectFilterTable::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
+bool RouterObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
 {
     if (_data)
     {
@@ -202,17 +208,17 @@ bool RouterObjectFilterTable::allocTable(uint32_t size, bool doFill, uint8_t fil
     return true;
 }
 
-bool RouterObjectFilterTable::isLoaded()
+bool RouterObject::isLoaded()
 {
     return _state == LS_LOADED;
 }
 
-LoadState RouterObjectFilterTable::loadState()
+LoadState RouterObject::loadState()
 {
     return _state;
 }
 
-void RouterObjectFilterTable::loadEvent(const uint8_t* data)
+void RouterObject::loadEvent(const uint8_t* data)
 {
     switch (_state)
     {
@@ -234,7 +240,7 @@ void RouterObjectFilterTable::loadEvent(const uint8_t* data)
     }
 }
 
-void RouterObjectFilterTable::loadEventUnloaded(const uint8_t* data)
+void RouterObject::loadEventUnloaded(const uint8_t* data)
 {
     uint8_t event = data[0];
     switch (event)
@@ -253,7 +259,7 @@ void RouterObjectFilterTable::loadEventUnloaded(const uint8_t* data)
     }
 }
 
-void RouterObjectFilterTable::loadEventLoading(const uint8_t* data)
+void RouterObject::loadEventLoading(const uint8_t* data)
 {
     uint8_t event = data[0];
     switch (event)
@@ -276,7 +282,7 @@ void RouterObjectFilterTable::loadEventLoading(const uint8_t* data)
     }
 }
 
-void RouterObjectFilterTable::loadEventLoaded(const uint8_t* data)
+void RouterObject::loadEventLoaded(const uint8_t* data)
 {
     uint8_t event = data[0];
     switch (event)
@@ -306,7 +312,7 @@ void RouterObjectFilterTable::loadEventLoaded(const uint8_t* data)
     }
 }
 
-void RouterObjectFilterTable::loadEventError(const uint8_t* data)
+void RouterObject::loadEventError(const uint8_t* data)
 {
     uint8_t event = data[0];
     switch (event)
@@ -325,7 +331,7 @@ void RouterObjectFilterTable::loadEventError(const uint8_t* data)
     }
 }
 
-void RouterObjectFilterTable::additionalLoadControls(const uint8_t* data)
+void RouterObject::additionalLoadControls(const uint8_t* data)
 {
     if (data[1] != 0x0B) // Data Relative Allocation
     {
@@ -344,7 +350,7 @@ void RouterObjectFilterTable::additionalLoadControls(const uint8_t* data)
     }
 }
 
-void RouterObjectFilterTable::loadState(LoadState newState)
+void RouterObject::loadState(LoadState newState)
 {
     if (newState == _state)
         return;
@@ -352,14 +358,14 @@ void RouterObjectFilterTable::loadState(LoadState newState)
     _state = newState;
 }
 
-void RouterObjectFilterTable::errorCode(ErrorCode errorCode)
+void RouterObject::errorCode(ErrorCode errorCode)
 {
     uint8_t data = errorCode;
     Property* prop = property(PID_ERROR_CODE);
     prop->write(data);
 }
 
-void RouterObjectFilterTable::beforeStateChange(LoadState& newState)
+void RouterObject::beforeStateChange(LoadState& newState)
 {
     if (newState != LS_LOADED)
         return;
@@ -370,7 +376,7 @@ void RouterObjectFilterTable::beforeStateChange(LoadState& newState)
     _filterTableGroupAddresses = (uint16_t*)_data;
 }
 
-void RouterObjectFilterTable::updateMcb()
+void RouterObject::updateMcb()
 {
     uint8_t mcb[propertySize(PID_MCB_TABLE)];
 
@@ -385,10 +391,8 @@ void RouterObjectFilterTable::updateMcb()
     property(PID_MCB_TABLE)->write(mcb);
 }
 
-void RouterObjectFilterTable::masterReset(EraseCode eraseCode, uint8_t channel)
+void RouterObject::masterReset(EraseCode eraseCode, uint8_t channel)
 {
-    RouterObject::masterReset(eraseCode, channel);
-
     if (eraseCode == FactoryReset)
     {
         // TODO handle different erase codes
@@ -396,7 +400,7 @@ void RouterObjectFilterTable::masterReset(EraseCode eraseCode, uint8_t channel)
     }
 }
 
-bool RouterObjectFilterTable::isGroupAddressInFilterTable(uint16_t groupAddress)
+bool RouterObject::isGroupAddressInFilterTable(uint16_t groupAddress)
 {
     uint8_t filterTableUse = 0x00;
     if (property(PID_FILTER_TABLE_USE)->read(filterTableUse) == 0)

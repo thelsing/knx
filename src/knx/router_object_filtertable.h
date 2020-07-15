@@ -2,15 +2,15 @@
 
 #include "config.h"
 
-#include "router_object.h"
+#include "interface_object.h"
 #include "knx_types.h"
 
 class Memory;
 
-class RouterObjectFilterTable: public RouterObject
+class RouterObject : public InterfaceObject
 {
 public:
-  RouterObjectFilterTable(Memory& memory);
+  RouterObject(Memory& memory);
 
   bool isGroupAddressInFilterTable(uint16_t groupAddress);
 

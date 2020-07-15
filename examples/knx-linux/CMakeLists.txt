@@ -103,8 +103,6 @@ add_executable(knx-linux
 	../../src/knx/rf_medium_object.h
 	../../src/knx/rf_physical_layer.cpp
 	../../src/knx/rf_physical_layer.h
-        ../../src/knx/router_object.cpp
-        ../../src/knx/router_object.h
         ../../src/knx/router_object_filtertable.cpp
         ../../src/knx/router_object_filtertable.h
         ../../src/knx/secure_application_layer.cpp

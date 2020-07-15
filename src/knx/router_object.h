@@ -15,6 +15,4 @@ public:
 protected:
   void initializeProperties(size_t propertiesSize, Property** properties) override;
 
-private:
-  uint16_t getNumberOfElements(PropertyID propId);
 };
