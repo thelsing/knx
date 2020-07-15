@@ -12,6 +12,8 @@ class RouterObjectFilterTable: public RouterObject
 public:
   RouterObjectFilterTable(Memory& memory);
 
+  bool isRfSbcRoutingEnabled();
+
   virtual void masterReset(EraseCode eraseCode, uint8_t channel) override;
 
   bool isLoaded();
@@ -22,7 +24,12 @@ public:
   uint16_t saveSize() override;
 
 private:
+  // Function properties
+  void functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+  void functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+
   uint32_t tableReference();
+  bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
   void errorCode(ErrorCode errorCode);
 
   void loadEvent(const uint8_t* data);
@@ -30,10 +37,12 @@ private:
   void loadEventLoading(const uint8_t* data);
   void loadEventLoaded(const uint8_t* data);
   void loadEventError(const uint8_t* data);
+  void additionalLoadControls(const uint8_t* data);
 
   void loadState(LoadState newState);
   LoadState _state = LS_UNLOADED;
 
   Memory& _memory;
   uint8_t *_data = 0;
+  bool _rfSbcRoutingEnabled = false;
 };

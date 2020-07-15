@@ -18,13 +18,21 @@ Bau091A::Bau091A(Platform& platform)
       _cemiServer(*this)
 #endif
 {
+    _rtObjPrimary.property(PID_MEDIUM)->write((uint8_t) DptMedium::KNX_IP);
+    _rtObjSecondary.property(PID_MEDIUM)->write((uint8_t) DptMedium::KNX_TP1);
+
+    _rtObjPrimary.property(PID_OBJECT_INDEX)->write((uint8_t) 1);
+    _rtObjSecondary.property(PID_OBJECT_INDEX)->write((uint8_t) 2);
+
     _netLayer.getEntity(0).dataLinkLayer(_dlLayerPrimary);
     _netLayer.getEntity(1).dataLinkLayer(_dlLayerSecondary);
+
 #ifdef USE_CEMI_SERVER
     _cemiServer.dataLinkLayer(_dlLayerSecondary); // Secondary I/F is the important one!
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
 #endif
+
     _memory.addSaveRestore(&_ipParameters);
 
     // Set Mask Version in Device Object depending on the BAU
@@ -35,18 +43,17 @@ Bau091A::Bau091A(Platform& platform)
     // See PID_IO_LIST
     Property* prop = _deviceObj.property(PID_IO_LIST);
     prop->write(1, (uint16_t) OT_DEVICE);
-    prop->write(2, (uint16_t) OT_ADDR_TABLE);
-    prop->write(3, (uint16_t) OT_ASSOC_TABLE);
-    prop->write(4, (uint16_t) OT_GRP_OBJ_TABLE);
-    prop->write(5, (uint16_t) OT_APPLICATION_PROG);
-    prop->write(6, (uint16_t) OT_IP_PARAMETER);
+    prop->write(2, (uint16_t) OT_ROUTER);
+    prop->write(3, (uint16_t) OT_ROUTER);
+    prop->write(3, (uint16_t) OT_APPLICATION_PROG);
+    prop->write(4, (uint16_t) OT_IP_PARAMETER);
 #if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
-    prop->write(7, (uint16_t) OT_SECURITY);
-    prop->write(8, (uint16_t) OT_CEMI_SERVER);
+    prop->write(5, (uint16_t) OT_SECURITY);
+    prop->write(6, (uint16_t) OT_CEMI_SERVER);
 #elif defined(USE_DATASECURE)
-    prop->write(7, (uint16_t) OT_SECURITY);
+    prop->write(5, (uint16_t) OT_SECURITY);
 #elif defined(USE_CEMI_SERVER)
-    prop->write(7, (uint16_t) OT_CEMI_SERVER);
+    prop->write(5, (uint16_t) OT_CEMI_SERVER);
 #endif
 }
 
@@ -57,9 +64,9 @@ InterfaceObject* Bau091A::getInterfaceObject(uint8_t idx)
         case 0:
             return &_deviceObj;
         case 1:
-            return nullptr; // TODO: Router Object Primary IF
+            return &_rtObjPrimary;
         case 2:
-            return nullptr; // TODO: Router Object Secondary IF
+            return &_rtObjSecondary;
         case 3:
             return &_appProgram;
         case 4:
@@ -91,6 +98,8 @@ InterfaceObject* Bau091A::getInterfaceObject(ObjectType objectType, uint8_t obje
     {
         case OT_DEVICE:
             return &_deviceObj;
+        case OT_ROUTER:
+            return objectInstance == 0 ? &_rtObjPrimary : &_rtObjSecondary;
         case OT_APPLICATION_PROG:
             return &_appProgram;
         case OT_IP_PARAMETER:

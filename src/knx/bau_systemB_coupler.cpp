@@ -6,6 +6,8 @@
 BauSystemBCoupler::BauSystemBCoupler(Platform& platform) :
     BauSystemB(platform),
     _platform(platform),
+    _rtObjPrimary(),
+    _rtObjSecondary(memory()),
 #ifdef USE_DATASECURE
     _appLayer(_deviceObj, _secIfObj, *this),
 #else

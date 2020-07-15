@@ -8,6 +8,14 @@
 #include "callback_property.h"
 #include "function_property.h"
 
+enum RouteTableServices
+{
+    ClearRoutingTable = 0x01, // no info bytes
+    SetRoutingTable = 0x02,   // no info bytes
+    ClearGroupAddress = 0x03, // 4 bytes: start address and end address
+    SetGroupAddress = 0x04,   // 4 bytes: start address and end address
+};
+
 RouterObjectFilterTable::RouterObjectFilterTable(Memory& memory)
     : _memory(memory)
 {
@@ -48,121 +56,24 @@ RouterObjectFilterTable::RouterObjectFilterTable(Memory& memory)
         new FunctionProperty<RouterObjectFilterTable>(this, PID_ROUTETABLE_CONTROL,
             // Command Callback of PID_ROUTETABLE_CONTROL
             [](RouterObjectFilterTable* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                if (length != 3)
-                {
-                    resultData[0] = ReturnCodes::DataVoid;
-                    resultLength = 1;
-                    return;
-                }
-                uint8_t id = data[1];
-                uint8_t info = data[2];
-                if (id == 0 && info == 0)
-                {
-                    //obj->clearFailureLog();
-                    resultData[0] = ReturnCodes::Success;
-                    resultData[1] = id;
-                    resultLength = 2;
-                    return;
-                }
-                resultData[0] = ReturnCodes::GenericError;
-                resultLength = 1;
+                obj->functionRouteTableControl(true, data, length, resultData, resultLength);
             },
             // State Callback of PID_ROUTETABLE_CONTROL
             [](RouterObjectFilterTable* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                if (length != 3)
-                {
-                    resultData[0] = ReturnCodes::DataVoid;
-                    resultLength = 1;
-                    return;
-                }
-                uint8_t id = data[1];
-                uint8_t info = data[2];
-
-                // failure counters
-                if (id == 0 && info == 0)
-                {
-                    resultData[0] = ReturnCodes::Success;
-                    resultData[1] = id;
-                    resultData[2] = info;
-                    //obj->getFailureCounters(&resultData[3]); // Put 8 bytes in the buffer
-                    resultLength = 3 + 8;
-                    return;
-                }
-                // query latest failure by index
-                else if(id == 1)
-                {
-                    uint8_t maxBufferSize = resultLength; // Remember the maximum buffer size of the buffer that is provided to us
-                    uint8_t index = info;
-                    uint8_t numBytes = 0;//obj->getFromFailureLogByIndex(index, &resultData[2], maxBufferSize);
-                    if ( numBytes > 0)
-                    {
-                        resultData[0] = ReturnCodes::Success;
-                        resultData[1] = id;
-                        resultData[2] = index;
-                        resultLength += numBytes;
-                        resultLength = 3 + numBytes;
-                        return;
-                    }
-                    resultData[0] = ReturnCodes::DataVoid;
-                    resultData[1] = id;
-                    resultLength = 2;
-                    return;
-                }
-                resultData[0] = ReturnCodes::GenericError;
-                resultLength = 1;
+                obj->functionRouteTableControl(false, data, length, resultData, resultLength);
             }),
 
         new DataProperty( PID_FILTER_TABLE_USE, false, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // TODO
-/*
+
         new FunctionProperty<RouterObjectFilterTable>(this, PID_RF_ENABLE_SBC,
             // Command Callback of PID_RF_ENABLE_SBC
             [](RouterObjectFilterTable* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                uint8_t serviceId = data[1] & 0xff;
-                if (serviceId != 0)
-                {
-                    resultData[0] = ReturnCodes::InvalidCommand;
-                    resultLength = 1;
-                    return;
-                }
-                if (length == 3)
-                {
-                    uint8_t mode = data[2];
-                    if (mode > 1)
-                    {
-                        resultData[0] = ReturnCodes::DataVoid;
-                        resultLength = 1;
-                        return;
-                    }
-                    //obj->setSecurityMode(mode == 1);
-                    resultData[0] = ReturnCodes::Success;
-                    resultData[1] = serviceId;
-                    resultLength = 2;
-                    return;
-                }
-                resultData[0] = ReturnCodes::GenericError;
-                resultLength = 1;
+                obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
             },
             // State Callback of PID_RF_ENABLE_SBC
             [](RouterObjectFilterTable* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                uint8_t serviceId = data[1] & 0xff;
-                if (serviceId != 0)
-                {
-                    resultData[0] = ReturnCodes::InvalidCommand;
-                    resultLength = 1;
-                    return;
-                }
-                if (length == 2)
-                {
-                    resultData[0] = ReturnCodes::Success;
-                    resultData[1] = serviceId;
-                    resultData[2] = 0;//obj->isSecurityModeEnabled() ? 1 : 0;
-                    resultLength = 3;
-                    return;
-                }
-                resultData[0] = ReturnCodes::GenericError;
-                resultLength = 1;
+                obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
             }),
-*/
     };
 
     RouterObject::initializeProperties(sizeof(properties), properties);
@@ -202,9 +113,101 @@ uint16_t RouterObjectFilterTable::saveSize()
     return 1 + 4 + RouterObject::saveSize();
 }
 
+void RouterObjectFilterTable::functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+{
+    bool isError = false;
+    RouteTableServices srvId = (RouteTableServices) data[1];
+
+    // Filter Table Realization Type 3
+    // The Filter Table Realisation Type 3 shall be organised as a memory mapped bit-field of
+    // 65536 bits and thus 8 192 octets. Each bit shall uniquely correspond to one Group Address.
+    // The full 16 bit KNX GA encoding range shall be supported.
+    //
+    // octet_address = GA_value div 8
+    // bit_position = GA_value mod 8
+
+    // The CRC of the Memory Control Block Table Property is a CRC16-CCITT with the following
+    // parameters:
+    // Width = 16 bit
+    // Truncated polynomial = 1021h
+    // Initial value = FFFFh
+    // Input date is NOT reflected.
+    // Output CRC is NOT reflected.
+    // No XOR is performed on the output CRC.
+    // EXAMPLE The correct CRC16-CCITT of the string ‘123456789’ is E5CCh.
+
+    if (isCommand)
+    {
+        switch(srvId)
+        {
+            case ClearRoutingTable:
+            case SetRoutingTable:
+            case ClearGroupAddress:
+            case SetGroupAddress: break;
+            default: isError = true;
+        }
+    }
+    else
+    {
+        switch(srvId)
+        {
+            case ClearRoutingTable:
+            case SetRoutingTable:
+            case ClearGroupAddress:
+            case SetGroupAddress: break;
+            default: isError = true;
+        }
+    }
+
+    if (isError)
+    {
+        resultData[0] = ReturnCodes::GenericError;
+        resultData[1] = srvId;
+        resultLength = 2;
+    }
+}
+
+void RouterObjectFilterTable::functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+{
+    if (isCommand)
+    {
+        _rfSbcRoutingEnabled = (data[0] == 1) ? true : false;
+    }
+
+    resultData[0] = ReturnCodes::Success;
+    resultData[1] = _rfSbcRoutingEnabled ? 1 : 0;
+    resultLength = 2;
+}
+
+bool RouterObjectFilterTable::isRfSbcRoutingEnabled()
+{
+    return _rfSbcRoutingEnabled;
+}
+
 uint32_t RouterObjectFilterTable::tableReference()
 {
     return (uint32_t)_memory.toRelative(_data);
+}
+
+bool RouterObjectFilterTable::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
+{
+    if (_data)
+    {
+        _memory.freeMemory(_data);
+        _data = 0;
+    }
+
+    if (size == 0)
+        return true;
+
+    _data = _memory.allocMemory(size);
+    if (!_data)
+        return false;
+
+    if (doFill)
+        memset(_data, fillByte, size);
+
+    return true;
 }
 
 bool RouterObjectFilterTable::isLoaded()
@@ -272,7 +275,9 @@ void RouterObjectFilterTable::loadEventLoading(const uint8_t* data)
         case LE_UNLOAD:
             loadState(LS_UNLOADED);
             break;
-        case LE_ADDITIONAL_LOAD_CONTROLS: // Not supported here
+        case LE_ADDITIONAL_LOAD_CONTROLS:
+            additionalLoadControls(data);
+            break;
         default:
             loadState(LS_ERROR);
             errorCode(E_GOT_UNDEF_LOAD_CMD);
@@ -292,6 +297,12 @@ void RouterObjectFilterTable::loadEventLoaded(const uint8_t* data)
             break;
         case LE_UNLOAD:
             loadState(LS_UNLOADED);
+            //free nv memory
+            if (_data)
+            {
+                _memory.freeMemory(_data);
+                _data = 0;
+            }
             break;
         case LE_ADDITIONAL_LOAD_CONTROLS:
             loadState(LS_ERROR);
@@ -319,6 +330,25 @@ void RouterObjectFilterTable::loadEventError(const uint8_t* data)
         default:
             loadState(LS_ERROR);
             errorCode(E_GOT_UNDEF_LOAD_CMD);
+    }
+}
+
+void RouterObjectFilterTable::additionalLoadControls(const uint8_t* data)
+{
+    if (data[1] != 0x0B) // Data Relative Allocation
+    {
+        loadState(LS_ERROR);
+        errorCode(E_INVALID_OPCODE);
+        return;
+    }
+
+    size_t size = ((data[2] << 24) | (data[3] << 16) | (data[4] << 8) | data[5]);
+    bool doFill = data[6] == 0x1;
+    uint8_t fillByte = data[7];
+    if (!allocTable(size, doFill, fillByte))
+    {
+        loadState(LS_ERROR);
+        errorCode(E_MAX_TABLE_LENGTH_EXEEDED);
     }
 }
 

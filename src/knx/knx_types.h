@@ -228,3 +228,13 @@ enum EraseCode
     ResetLinks = 0x06,
     FactoryResetWithoutIA = 0x07
 };
+
+enum DptMedium
+{
+    // DPT_Medium (20.1004), range 0-255
+    // All other values are reserved.
+    KNX_TP1 = 0x00,
+    KNX_PL110 = 0x01,
+    KNX_RF = 0x02,
+    KNX_IP = 0x05
+};

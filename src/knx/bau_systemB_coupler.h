@@ -8,6 +8,8 @@
 #include "group_object_table_object.h"
 #include "security_interface_object.h"
 #include "application_program_object.h"
+#include "router_object.h"
+#include "router_object_filtertable.h"
 #include "application_layer.h"
 #include "secure_application_layer.h"
 #include "transport_layer.h"
@@ -29,6 +31,9 @@ class BauSystemBCoupler : public BauSystemB
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
 
     Platform& _platform;
+    RouterObject _rtObjPrimary;
+    RouterObjectFilterTable _rtObjSecondary;
+
 #ifdef USE_DATASECURE
     SecureApplicationLayer _appLayer;
     SecurityInterfaceObject _secIfObj;
