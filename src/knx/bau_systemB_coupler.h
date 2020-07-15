@@ -8,7 +8,7 @@
 #include "group_object_table_object.h"
 #include "security_interface_object.h"
 #include "application_program_object.h"
-#include "router_object_filtertable.h"
+#include "router_object.h"
 #include "application_layer.h"
 #include "secure_application_layer.h"
 #include "transport_layer.h"

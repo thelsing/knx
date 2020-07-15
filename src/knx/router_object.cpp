@@ -1,7 +1,7 @@
 #include "config.h"
 
 #include <cstring>
-#include "router_object_filtertable.h"
+#include "router_object.h"
 #include "bits.h"
 #include "memory.h"
 #include "data_property.h"
