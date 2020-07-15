@@ -752,25 +752,6 @@ void ApplicationLayer::memoryExtReadResponse(AckType ack, Priority priority, Hop
     individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-uint16_t ApplicationLayer::crc16Ccitt(uint8_t* input, uint16_t length)
-{
-        uint32_t polynom = 0x1021;
-        uint8_t padded[length+2];
-
-        memcpy(padded, input, length);
-        memset(padded+length, 0x00, 2);
-
-        uint32_t result = 0xffff;
-        for (uint32_t i = 0; i < 8 * (uint32_t)sizeof(padded); i++) {
-            result <<= 1;
-            uint32_t nextBit = (padded[i / 8] >> (7 - (i % 8))) & 0x1;
-            result |= nextBit;
-            if ((result & 0x10000) != 0)
-                result ^= polynom;
-        }
-        return result & 0xffff;
-}
-
 void ApplicationLayer::memoryExtWriteResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ReturnCodes code,
                                               uint8_t number, uint32_t memoryAddress, uint8_t * memoryData)
 {
@@ -787,7 +768,7 @@ void ApplicationLayer::memoryExtWriteResponse(AckType ack, Priority priority, Ho
 
     if (withCrc)
     {
-        uint16_t crc = crc16Ccitt(memoryData, number); // TODO
+        uint16_t crc = crc16Ccitt(memoryData, number);
         data[5] = crc >> 8;
         data[6] = crc & 0xFF;
     }

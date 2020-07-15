@@ -201,8 +201,6 @@ class ApplicationLayer
     void individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status);
     void individualSend(AckType ack, HopCountType hopType, Priority priority, uint16_t asap, APDU& apdu, const SecurityControl& secCtrl);
 
-    uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
-
     uint16_t _savedAsapReadRequest;
     uint16_t _savedAsapWriteRequest;
     uint16_t _savedAsapResponse;
