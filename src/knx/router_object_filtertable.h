@@ -23,10 +23,13 @@ public:
   const uint8_t* restore(const uint8_t* buffer) override;
   uint16_t saveSize() override;
 
+
 private:
   // Function properties
   void functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
   void functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+
+  void updateMcb();
 
   uint32_t tableReference();
   bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
@@ -38,6 +41,7 @@ private:
   void loadEventLoaded(const uint8_t* data);
   void loadEventError(const uint8_t* data);
   void additionalLoadControls(const uint8_t* data);
+  void beforeStateChange(LoadState& newState);
 
   void loadState(LoadState newState);
   LoadState _state = LS_UNLOADED;
@@ -45,4 +49,5 @@ private:
   Memory& _memory;
   uint8_t *_data = 0;
   bool _rfSbcRoutingEnabled = false;
+  uint16_t* _filterTableGroupAddresses = 0;
 };

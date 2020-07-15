@@ -33,6 +33,9 @@ Bau091A::Bau091A(Platform& platform)
     _memory.addSaveRestore(&_cemiServerObject);
 #endif
 
+    _memory.addSaveRestore(&_rtObjPrimary);
+    _memory.addSaveRestore(&_rtObjSecondary);
+
     _memory.addSaveRestore(&_ipParameters);
 
     // Set Mask Version in Device Object depending on the BAU

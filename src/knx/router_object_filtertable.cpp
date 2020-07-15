@@ -51,7 +51,7 @@ RouterObjectFilterTable::RouterObjectFilterTable(Memory& memory)
                 return 1;
             }),
 
-        new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // TODO
+        new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0),
 
         new FunctionProperty<RouterObjectFilterTable>(this, PID_ROUTETABLE_CONTROL,
             // Command Callback of PID_ROUTETABLE_CONTROL
@@ -104,6 +104,8 @@ const uint8_t* RouterObjectFilterTable::restore(const uint8_t* buffer)
         _data = _memory.toAbsolute(relativeAddress);
     else
         _data = 0;
+
+    _filterTableGroupAddresses = (uint16_t*)_data;
 
     return RouterObject::restore(buffer);
 }
@@ -355,6 +357,32 @@ void RouterObjectFilterTable::errorCode(ErrorCode errorCode)
     uint8_t data = errorCode;
     Property* prop = property(PID_ERROR_CODE);
     prop->write(data);
+}
+
+void RouterObjectFilterTable::beforeStateChange(LoadState& newState)
+{
+    if (newState != LS_LOADED)
+        return;
+
+    // calculate crc16-ccitt for PID_MCB_TABLE
+    updateMcb();
+
+    _filterTableGroupAddresses = (uint16_t*)_data;
+}
+
+void RouterObjectFilterTable::updateMcb()
+{
+    uint8_t mcb[propertySize(PID_MCB_TABLE)];
+
+    static constexpr uint32_t segmentSize = 8192;
+    uint16_t crc16 = crc16Ccitt(_data, segmentSize);
+
+    pushInt(segmentSize, &mcb[0]); // Segment size
+    pushByte(0x00, &mcb[4]);       // CRC control byte -> 0: always valid -> according to coupler spec. it shall always be a valid CRC
+    pushByte(0xFF, &mcb[5]);       // Read access 4 bits + Write access 4 bits (unknown: value taken from real coupler device)
+    pushWord(crc16, &mcb[6]);      // CRC-16 CCITT of filter table
+
+    property(PID_MCB_TABLE)->write(mcb);
 }
 
 void RouterObjectFilterTable::masterReset(EraseCode eraseCode, uint8_t channel)
