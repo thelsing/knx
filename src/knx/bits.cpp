@@ -107,6 +107,16 @@ uint64_t sixBytesToUInt64(uint8_t* data)
     return l;
 }
 
+// The CRC of the Memory Control Block Table Property is a CRC16-CCITT with the following
+// parameters:
+// Width = 16 bit
+// Truncated polynomial = 1021h
+// Initial value = FFFFh
+// Input date is NOT reflected.
+// Output CRC is NOT reflected.
+// No XOR is performed on the output CRC.
+// EXAMPLE The correct CRC16-CCITT of the string ‘123456789’ is E5CCh.
+
 uint16_t crc16Ccitt(uint8_t* input, uint16_t length)
 {
         uint32_t polynom = 0x1021;

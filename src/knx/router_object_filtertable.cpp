@@ -126,16 +126,6 @@ void RouterObjectFilterTable::functionRouteTableControl(bool isCommand, uint8_t*
     // octet_address = GA_value div 8
     // bit_position = GA_value mod 8
 
-    // The CRC of the Memory Control Block Table Property is a CRC16-CCITT with the following
-    // parameters:
-    // Width = 16 bit
-    // Truncated polynomial = 1021h
-    // Initial value = FFFFh
-    // Input date is NOT reflected.
-    // Output CRC is NOT reflected.
-    // No XOR is performed on the output CRC.
-    // EXAMPLE The correct CRC16-CCITT of the string ‘123456789’ is E5CCh.
-
     if (isCommand)
     {
         switch(srvId)
