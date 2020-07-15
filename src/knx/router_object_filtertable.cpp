@@ -63,7 +63,7 @@ RouterObjectFilterTable::RouterObjectFilterTable(Memory& memory)
                 obj->functionRouteTableControl(false, data, length, resultData, resultLength);
             }),
 
-        new DataProperty( PID_FILTER_TABLE_USE, false, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // TODO
+        new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use
 
         new FunctionProperty<RouterObjectFilterTable>(this, PID_RF_ENABLE_SBC,
             // Command Callback of PID_RF_ENABLE_SBC
@@ -394,4 +394,23 @@ void RouterObjectFilterTable::masterReset(EraseCode eraseCode, uint8_t channel)
         // TODO handle different erase codes
         println("Factory reset of router object with filter table requested.");
     }
+}
+
+bool RouterObjectFilterTable::isGroupAddressInFilterTable(uint16_t groupAddress)
+{
+    uint8_t filterTableUse = 0x00;
+    if (property(PID_FILTER_TABLE_USE)->read(filterTableUse) == 0)
+        return false;
+
+    if (filterTableUse != 0x00)
+    {
+        // octet_address = GA_value div 8
+        // bit_position = GA_value mod 8
+        uint16_t octetAddress = groupAddress / 8;
+        uint8_t bitPosition = groupAddress % 8;
+
+        return (_data[octetAddress] & (1 << bitPosition)) == (1 << bitPosition);
+    }
+
+    return false;
 }

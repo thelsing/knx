@@ -12,6 +12,8 @@ class RouterObjectFilterTable: public RouterObject
 public:
   RouterObjectFilterTable(Memory& memory);
 
+  bool isGroupAddressInFilterTable(uint16_t groupAddress);
+
   bool isRfSbcRoutingEnabled();
 
   virtual void masterReset(EraseCode eraseCode, uint8_t channel) override;
