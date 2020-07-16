@@ -8,6 +8,8 @@
 #include "callback_property.h"
 #include "function_property.h"
 
+static constexpr uint16_t kFilterTableSize = 65536 / 8; //  Each group address is represented by one bit
+
 enum RouteTableServices
 {
     ClearRoutingTable = 0x01, // no info bytes
@@ -98,9 +100,146 @@ const uint8_t* RouterObject::restore(const uint8_t* buffer)
     return buffer;
 }
 
+void RouterObject::commandClearSetRoutingTable(bool bitIsSet)
+{
+    for (uint16_t i = 0; i < kFilterTableSize; i++)
+    {
+        data()[i] = bitIsSet ? 0xFF : 0x00;
+    }
+}
+
+bool RouterObject::statusClearSetRoutingTable(bool bitIsSet)
+{
+    for (uint16_t i = 0; i < kFilterTableSize; i++)
+    {
+        if (data()[i] != (bitIsSet ? 0xFF : 0x00))
+            return false;
+    }
+    return true;
+}
+
+void RouterObject::commandClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet)
+{
+    uint16_t startOctet = startAddress / 8;
+    uint8_t startBitPosition = startAddress % 8;
+    uint16_t endOctet = endAddress / 8;
+    uint8_t endBitPosition = endAddress % 8;
+
+    if (startOctet == endOctet)
+    {
+        for (uint8_t bitPos = startBitPosition; bitPos <= endBitPosition; bitPos++)
+        {
+            if (bitIsSet)
+                data()[startOctet] |= 1 << bitPos;
+            else
+                data()[startOctet] &= ~(1 << bitPos);
+        }
+        return;
+    }
+
+    for (uint16_t i = startOctet; i <= endOctet; i++)
+    {
+        if (i == startOctet)
+        {
+            for (uint8_t bitPos = startBitPosition; bitPos <= 7; bitPos++)
+            {
+                if (bitIsSet)
+                    data()[i] |= 1 << bitPos;
+                else
+                    data()[i] &= ~(1 << bitPos);
+            }
+        }
+        else if (i == endOctet)
+        {
+            for (uint8_t bitPos = 0; bitPos <= endBitPosition; bitPos++)
+            {
+                if (bitIsSet)
+                    data()[i] |= 1 << bitPos;
+                else
+                    data()[i] &= ~(1 << bitPos);
+            }
+        }
+        else
+        {
+            if (bitIsSet)
+                data()[i] = 0xFF;
+            else
+                data()[i] = 0x00;
+        }
+    }
+}
+
+bool RouterObject::statusClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet)
+{
+    uint16_t startOctet = startAddress / 8;
+    uint8_t startBitPosition = startAddress % 8;
+    uint16_t endOctet = endAddress / 8;
+    uint8_t endBitPosition = endAddress % 8;
+
+    if (startOctet == endOctet)
+    {
+        for (uint8_t bitPos = startBitPosition; bitPos <= endBitPosition; bitPos++)
+        {
+            if (bitIsSet)
+            {
+                if ((data()[startOctet] & (1 << bitPos)) == 0)
+                    return false;
+            }
+            else
+            {
+                if ((data()[startOctet] & (1 << bitPos)) != 0)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    for (uint16_t i = startOctet; i <= endOctet; i++)
+    {
+        if (i == startOctet)
+        {
+            for (uint8_t bitPos = startBitPosition; bitPos <= 7; bitPos++)
+            {
+                if (bitIsSet)
+                {
+                    if ((data()[i] & (1 << bitPos)) == 0)
+                        return false;
+                }
+                else
+                {
+                    if ((data()[i] & (1 << bitPos)) != 0)
+                        return false;
+                }
+            }
+        }
+        else if (i == endOctet)
+        {
+            for (uint8_t bitPos = 0; bitPos <= endBitPosition; bitPos++)
+            {
+                if (bitIsSet)
+                {
+                    if ((data()[i] & (1 << bitPos)) == 0)
+                        return false;
+                }
+                else
+                {
+                    if ((data()[i] & (1 << bitPos)) != 0)
+                        return false;
+                }
+            }
+        }
+        else
+        {
+            if (data()[i] != (bitIsSet ? 0xFF : 0x00))
+                return false;
+        }
+    }
+
+    return true;
+}
+
 void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
-    bool isError = false;
     RouteTableServices srvId = (RouteTableServices) data[1];
 
     // Filter Table Realization Type 3
@@ -116,10 +255,45 @@ void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint
         switch(srvId)
         {
             case ClearRoutingTable:
+                commandClearSetRoutingTable(false);
+                resultData[0] = ReturnCodes::Success;
+                resultData[1] = srvId;
+                resultLength = 2;
+                return;
             case SetRoutingTable:
+                commandClearSetRoutingTable(true);
+                resultData[0] = ReturnCodes::Success;
+                resultData[1] = srvId;
+                resultLength = 2;
+                return;
             case ClearGroupAddress:
-            case SetGroupAddress: break;
-            default: isError = true;
+            {
+                uint16_t startAddress;
+                uint16_t endAddress;
+                popWord(startAddress, &data[2]);
+                popWord(endAddress, &data[4]);
+                commandClearSetGroupAddress(startAddress, endAddress, false);
+                resultData[0] = ReturnCodes::Success;
+                resultData[1] = srvId;
+                pushWord(startAddress, &resultData[2]);
+                pushWord(endAddress, &resultData[4]);
+                resultLength = 6;
+                return;
+            }
+            case SetGroupAddress:
+            {
+                uint16_t startAddress;
+                uint16_t endAddress;
+                popWord(startAddress, &data[2]);
+                popWord(endAddress, &data[4]);
+                commandClearSetGroupAddress(startAddress, endAddress, true);
+                resultData[0] = ReturnCodes::Success;
+                resultData[1] = srvId;
+                pushWord(startAddress, &resultData[2]);
+                pushWord(endAddress, &resultData[4]);
+                resultLength = 6;
+                return;
+            }
         }
     }
     else
@@ -127,19 +301,48 @@ void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint
         switch(srvId)
         {
             case ClearRoutingTable:
+                resultData[0] = statusClearSetRoutingTable(false) ? ReturnCodes::Success : ReturnCodes::GenericError;
+                resultData[1] = srvId;
+                resultLength = 2;
+                return;
             case SetRoutingTable:
+                resultData[0] = statusClearSetRoutingTable(true) ? ReturnCodes::Success : ReturnCodes::GenericError;
+                resultData[1] = srvId;
+                resultLength = 2;
+                return;
             case ClearGroupAddress:
-            case SetGroupAddress: break;
-            default: isError = true;
+            {
+                uint16_t startAddress;
+                uint16_t endAddress;
+                popWord(startAddress, &data[2]);
+                popWord(endAddress, &data[4]);
+                resultData[0] = statusClearSetGroupAddress(startAddress, endAddress, false) ? ReturnCodes::Success : ReturnCodes::GenericError;
+                resultData[1] = srvId;
+                pushWord(startAddress, &resultData[2]);
+                pushWord(endAddress, &resultData[4]);
+                resultLength = 6;
+                return;
+            }
+            case SetGroupAddress:
+            {
+                uint16_t startAddress;
+                uint16_t endAddress;
+                popWord(startAddress, &data[2]);
+                popWord(endAddress, &data[4]);
+                resultData[0] = statusClearSetGroupAddress(startAddress, endAddress, true) ? ReturnCodes::Success : ReturnCodes::GenericError;
+                resultData[1] = srvId;
+                pushWord(startAddress, &resultData[2]);
+                pushWord(endAddress, &resultData[4]);
+                resultLength = 6;
+                return;
+            }
         }
     }
 
-    if (isError)
-    {
-        resultData[0] = ReturnCodes::GenericError;
-        resultData[1] = srvId;
-        resultLength = 2;
-    }
+    // We should not get here
+    resultData[0] = ReturnCodes::GenericError;
+    resultData[1] = srvId;
+    resultLength = 2;
 }
 
 void RouterObject::functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
@@ -174,7 +377,7 @@ void RouterObject::updateMcb()
 {
     uint8_t mcb[propertySize(PID_MCB_TABLE)];
 
-    static constexpr uint32_t segmentSize = 8192;
+    static constexpr uint32_t segmentSize = kFilterTableSize;
     uint16_t crc16 = crc16Ccitt(data(), segmentSize);
 
     pushInt(segmentSize, &mcb[0]); // Segment size

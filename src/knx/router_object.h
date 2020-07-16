@@ -30,6 +30,11 @@ private:
   void functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
   void functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
 
+  void commandClearSetRoutingTable(bool bitIsSet);
+  bool statusClearSetRoutingTable(bool bitIsSet);
+  void commandClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet);
+  bool statusClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet);
+
   void updateMcb();
 
   bool _rfSbcRoutingEnabled = false;
