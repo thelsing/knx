@@ -9,6 +9,18 @@ NetworkLayer::NetworkLayer(DeviceObject &deviceObj, TransportLayer& layer) :
     _transportLayer(layer)
 {
     _hopCount = _deviceObj.defaultHopCount();
+
+    if ((_deviceObj.induvidualAddress() & 0x00FF) == 0x00)
+    {
+        if ((_deviceObj.induvidualAddress() & 0x0F00) == 0x0)
+        {
+            // Device is a backbone coupler -> individual address: x.0.0
+        }
+        else
+        {
+            // Device is a line coupler -> individual address: x.y.0
+        }
+    }
 }
 
 uint8_t NetworkLayer::hopCount() const

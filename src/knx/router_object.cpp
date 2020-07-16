@@ -26,8 +26,8 @@ RouterObject::RouterObject(Memory& memory)
         new DataProperty( PID_MEDIUM_STATUS, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // For now: communication on medium is always possible
         new DataProperty( PID_MAX_APDU_LENGTH_ROUTER, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) 254 ), // For now: fixed size
         new DataProperty( PID_HOP_COUNT, true, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) 5), // TODO: Primary side: 5 for line coupler, 4 for backbone coupler, only exists if secondary is open medium without hop count
-        new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0 ), // Must be set by concrete BAUxxxx
-        new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0),
+        new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0 ), // Must be set by a BAUxxxx
+        new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0), // TODO: improve: move to TableObject once segment size handling is clear
         new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use
         new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
             // Command Callback of PID_ROUTETABLE_CONTROL
@@ -38,7 +38,7 @@ RouterObject::RouterObject(Memory& memory)
             [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 obj->functionRouteTableControl(false, data, length, resultData, resultLength);
             }),
-        new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC,
+        new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC, // TODO: only for RF medium
             // Command Callback of PID_RF_ENABLE_SBC
             [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                 obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
