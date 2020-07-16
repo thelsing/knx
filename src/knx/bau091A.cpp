@@ -18,11 +18,9 @@ Bau091A::Bau091A(Platform& platform)
       _cemiServer(*this)
 #endif
 {
-    _rtObjPrimary.property(PID_MEDIUM)->write((uint8_t) DptMedium::KNX_IP);
-    _rtObjSecondary.property(PID_MEDIUM)->write((uint8_t) DptMedium::KNX_TP1);
-
-    _rtObjPrimary.property(PID_OBJECT_INDEX)->write((uint8_t) 1);
-    _rtObjSecondary.property(PID_OBJECT_INDEX)->write((uint8_t) 2);
+    // Before accessing anything of the two router objects they have to be initialized according to the used media combination
+    _rtObjPrimary.initialize(1, DptMedium::KNX_IP, true, false, 201);
+    _rtObjSecondary.initialize(2, DptMedium::KNX_TP1, false, true, 201);
 
     _netLayer.getEntity(0).dataLinkLayer(_dlLayerPrimary);
     _netLayer.getEntity(1).dataLinkLayer(_dlLayerSecondary);

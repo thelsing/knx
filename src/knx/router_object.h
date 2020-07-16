@@ -12,6 +12,8 @@ class RouterObject : public TableObject
 public:
   RouterObject(Memory& memory);
 
+  void initialize(uint8_t objIndex, DptMedium mediumType, bool useHopCount, bool useTable, uint16_t maxApduSize);
+
   bool isGroupAddressInFilterTable(uint16_t groupAddress);
 
   bool isRfSbcRoutingEnabled();

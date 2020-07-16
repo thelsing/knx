@@ -19,38 +19,76 @@ enum RouteTableServices
 RouterObject::RouterObject(Memory& memory)
     : TableObject(memory)
 {
-    Property* properties[] =
+}
+
+void RouterObject::initialize(uint8_t objIndex, DptMedium mediumType, bool useHopCount, bool useTable, uint16_t maxApduSize)
+{
+    Property* fixedProperties[] =
     {
         new DataProperty( PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) OT_ROUTER ),
-        new DataProperty( PID_OBJECT_INDEX, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0 ), // Must be set by concrete BAUxxxx
-        new DataProperty( PID_MEDIUM_STATUS, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // For now: communication on medium is always possible
-        new DataProperty( PID_MAX_APDU_LENGTH_ROUTER, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) 254 ), // For now: fixed size
-        new DataProperty( PID_HOP_COUNT, true, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) 5), // TODO: Primary side: 5 for line coupler, 4 for backbone coupler, only exists if secondary is open medium without hop count
-        new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0 ), // Must be set by a BAUxxxx
-        new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0), // TODO: improve: move to TableObject once segment size handling is clear
-        new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use
-        new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
-            // Command Callback of PID_ROUTETABLE_CONTROL
-            [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                obj->functionRouteTableControl(true, data, length, resultData, resultLength);
-            },
-            // State Callback of PID_ROUTETABLE_CONTROL
-            [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                obj->functionRouteTableControl(false, data, length, resultData, resultLength);
-            }),
-        new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC, // TODO: only for RF medium
-            // Command Callback of PID_RF_ENABLE_SBC
-            [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
-            },
-            // State Callback of PID_RF_ENABLE_SBC
-            [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
-            }),
+        new DataProperty( PID_OBJECT_INDEX, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0, objIndex ), // Must be set by concrete BAUxxxx!
+        new DataProperty( PID_MEDIUM_STATUS, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // 0 means communication is possible, could be set by datalink layer or bau to 1 (comm impossible)
+        new DataProperty( PID_MAX_APDU_LENGTH_ROUTER, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, maxApduSize ),
+        new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t) mediumType ),
+
     };
 
-    TableObject::initializeProperties(sizeof(properties), properties);
+    size_t allPropertiesCount = sizeof(fixedProperties) / sizeof(Property*);
+    allPropertiesCount += useHopCount ? 1 : 0;
+    allPropertiesCount += useTable ? 1 : 0;
+    allPropertiesCount += (mediumType == DptMedium::KNX_RF) ? 1 : 0;
+
+    Property* allProperties[allPropertiesCount];
+
+    uint8_t i = 0;
+
+    if (useHopCount)
+    {
+        // TODO: Primary side: 5 for line coupler, 4 for backbone coupler, only exists if secondary is open medium without hop count
+        // Do we need to set a default value here or is it written by ETS?
+        allProperties[i++] = new DataProperty( PID_HOP_COUNT, true, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) 5);
+    }
+
+    if (useTable)
+    {
+        Property* tableProperties[] =
+        {
+            new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0), // TODO: improve: move to TableObject once segment size handling is clear
+            new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use
+            new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
+                    // Command Callback of PID_ROUTETABLE_CONTROL
+                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+                        obj->functionRouteTableControl(true, data, length, resultData, resultLength);
+                    },
+                    // State Callback of PID_ROUTETABLE_CONTROL
+                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+                        obj->functionRouteTableControl(false, data, length, resultData, resultLength);
+                    })
+        };
+        memcpy(&allProperties[i], tableProperties, sizeof(tableProperties));
+        i += sizeof(tableProperties) / sizeof(Property*);
+
+    }
+
+    if (mediumType == DptMedium::KNX_RF)
+    {
+        allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC, // TODO: only for RF medium
+                                    // Command Callback of PID_RF_ENABLE_SBC
+                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+                                       obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
+                                    },
+                                    // State Callback of PID_RF_ENABLE_SBC
+                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+                                       obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
+                                    });
+    }
+
+    if (useTable)
+        TableObject::initializeProperties(sizeof(allProperties), allProperties);
+    else
+        InterfaceObject::initializeProperties(sizeof(allProperties), allProperties);
 }
+
 const uint8_t* RouterObject::restore(const uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
