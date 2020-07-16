@@ -41,15 +41,17 @@ void RouterObject::initialize(uint8_t objIndex, DptMedium mediumType, bool useHo
         new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t) mediumType ),
 
     };
+    uint8_t fixesPropertiesCount = sizeof(fixedProperties) / sizeof(Property*);
 
-    size_t allPropertiesCount = sizeof(fixedProperties) / sizeof(Property*);
+    size_t allPropertiesCount = fixesPropertiesCount;
     allPropertiesCount += useHopCount ? 1 : 0;
     allPropertiesCount += useTable ? 1 : 0;
     allPropertiesCount += (mediumType == DptMedium::KNX_RF) ? 1 : 0;
 
     Property* allProperties[allPropertiesCount];
+    memcpy(&allProperties[0], &fixedProperties[0], sizeof(fixedProperties));
 
-    uint8_t i = 0;
+    uint8_t i = fixesPropertiesCount;
 
     if (useHopCount)
     {
