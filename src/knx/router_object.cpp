@@ -8,6 +8,13 @@
 #include "callback_property.h"
 #include "function_property.h"
 
+// Filter Table Realization Type 3
+// The Filter Table Realisation Type 3 shall be organised as a memory mapped bit-field of
+// 65536 bits and thus 8 192 octets. Each bit shall uniquely correspond to one Group Address.
+// The full 16 bit KNX GA encoding range shall be supported.
+//
+// octet_address = GA_value div 8
+// bit_position = GA_value mod 8
 static constexpr uint16_t kFilterTableSize = 65536 / 8; //  Each group address is represented by one bit
 
 enum RouteTableServices
@@ -241,14 +248,6 @@ bool RouterObject::statusClearSetGroupAddress(uint16_t startAddress, uint16_t en
 void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
     RouteTableServices srvId = (RouteTableServices) data[1];
-
-    // Filter Table Realization Type 3
-    // The Filter Table Realisation Type 3 shall be organised as a memory mapped bit-field of
-    // 65536 bits and thus 8 192 octets. Each bit shall uniquely correspond to one Group Address.
-    // The full 16 bit KNX GA encoding range shall be supported.
-    //
-    // octet_address = GA_value div 8
-    // bit_position = GA_value mod 8
 
     if (isCommand)
     {
