@@ -269,6 +269,11 @@ bool RfDataLinkLayer::enabled() const
     return _enabled;
 }
 
+bool RfDataLinkLayer::isOpenMedium() const
+{
+    return true;
+}
+
 void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
 {
     uint16_t crc;

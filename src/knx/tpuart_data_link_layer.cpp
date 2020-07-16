@@ -505,6 +505,11 @@ bool TpUartDataLinkLayer::enabled() const
     return _enabled;
 }
 
+bool TpUartDataLinkLayer::isOpenMedium() const
+{
+    return false;
+}
+
 bool TpUartDataLinkLayer::sendSingleFrameByte()
 {
     uint8_t cmd[2];

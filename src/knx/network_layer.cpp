@@ -1,5 +1,6 @@
 #include "network_layer.h"
 #include "device_object.h"
+#include "data_link_layer.h"
 #include "tpdu.h"
 #include "cemi_frame.h"
 #include "bits.h"
@@ -108,8 +109,10 @@ void NetworkLayer::broadcastIndication(AckType ack, FrameFormat format, NPDU& np
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
 
+    DataLinkLayer& dlLayer = getEntity(npdu.frame().sourceInterface()).dataLinkLayer();
+
     // for closed media like TP1 and IP
-    if (isApciSystemBroadcast(npdu.tpdu().apdu()))
+    if (!dlLayer.isOpenMedium() && isApciSystemBroadcast(npdu.tpdu().apdu()))
     {
         npdu.frame().systemBroadcast(SysBroadcast);
         _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());

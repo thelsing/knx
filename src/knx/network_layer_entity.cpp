@@ -14,6 +14,11 @@ void NetworkLayerEntity::dataLinkLayer(DataLinkLayer& layer)
     _dataLinkLayer = &layer;
 }
 
+DataLinkLayer& NetworkLayerEntity::dataLinkLayer()
+{
+    return *_dataLinkLayer;
+}
+
 void NetworkLayerEntity::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     npdu.frame().sourceInterface(_entityIndex);

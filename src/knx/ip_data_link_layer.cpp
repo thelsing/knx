@@ -99,6 +99,10 @@ bool IpDataLinkLayer::enabled() const
     return _enabled;
 }
 
+bool IpDataLinkLayer::isOpenMedium() const
+{
+    return false;
+}
 
 bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 {

@@ -16,6 +16,7 @@ class NetworkLayerEntity
     NetworkLayerEntity(NetworkLayer &netLayer, uint8_t entityIndex);
 
     void dataLinkLayer(DataLinkLayer& layer);
+    DataLinkLayer& dataLinkLayer();
 
     // from data link layer
     void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,

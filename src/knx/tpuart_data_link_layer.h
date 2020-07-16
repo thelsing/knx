@@ -24,6 +24,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     void loop();
     void enabled(bool value);
     bool enabled() const;
+    virtual bool isOpenMedium() const override;
 
   private:
     bool _enabled = false;
