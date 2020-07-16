@@ -63,7 +63,7 @@ void RouterObject::initialize(uint8_t objIndex, DptMedium mediumType, bool useHo
         Property* tableProperties[] =
         {
             new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0), // TODO: improve: move to TableObject once segment size handling is clear
-            new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use
+            new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use, written by ETS
             new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
                     // Command Callback of PID_ROUTETABLE_CONTROL
                     [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
@@ -76,7 +76,6 @@ void RouterObject::initialize(uint8_t objIndex, DptMedium mediumType, bool useHo
         };
         memcpy(&allProperties[i], tableProperties, sizeof(tableProperties));
         i += sizeof(tableProperties) / sizeof(Property*);
-
     }
 
     if (mediumType == DptMedium::KNX_RF)
