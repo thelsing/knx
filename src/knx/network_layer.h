@@ -7,6 +7,7 @@
 #include "network_layer_entity.h"
 
 class DeviceObject;
+class APDU;
 
 class NetworkLayer
 {
@@ -18,6 +19,7 @@ class NetworkLayer
     virtual NetworkLayerEntity& getEntity(uint8_t interfaceIndex) = 0;
 
     uint8_t hopCount() const;
+    bool isApciSystemBroadcast(APDU& apdu);
 
     // from transport layer
     virtual void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) = 0;

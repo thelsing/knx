@@ -3,6 +3,7 @@
 #include "tpdu.h"
 #include "cemi_frame.h"
 #include "bits.h"
+#include "apdu.h"
 
 NetworkLayer::NetworkLayer(DeviceObject &deviceObj, TransportLayer& layer) :
     _deviceObj(deviceObj),
@@ -26,6 +27,25 @@ NetworkLayer::NetworkLayer(DeviceObject &deviceObj, TransportLayer& layer) :
 uint8_t NetworkLayer::hopCount() const
 {
     return _hopCount;
+}
+
+bool NetworkLayer::isApciSystemBroadcast(APDU& apdu)
+{
+    switch (apdu.type())
+    {
+        // Application Layer Services on System Broadcast communication mode
+        case SystemNetworkParameterRead:
+        case SystemNetworkParameterResponse:
+        case SystemNetworkParameterWrite:
+        // Open media specific Application Layer Services on System Broadcast communication mode
+        case DomainAddressSerialNumberRead:
+        case DomainAddressSerialNumberResponse:
+        case DomainAddressSerialNumberWrite:
+            return true;
+        default:
+            return false;
+    }
+    return false;
 }
 
 void NetworkLayer::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
