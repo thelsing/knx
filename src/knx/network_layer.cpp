@@ -107,6 +107,15 @@ void NetworkLayer::dataConfirm(AckType ack, AddressType addressType, uint16_t de
 void NetworkLayer::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+
+    // for closed media like TP1 and IP
+    if (isApciSystemBroadcast(npdu.tpdu().apdu()))
+    {
+        npdu.frame().systemBroadcast(SysBroadcast);
+        _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
+        return;
+    }
+
     _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
