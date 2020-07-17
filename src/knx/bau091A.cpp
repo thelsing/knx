@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#ifdef USE_IP
+#if defined(USE_IP) && defined (USE_TP)
 
 using namespace std;
 
@@ -26,8 +26,10 @@ Bau091A::Bau091A(Platform& platform)
     _netLayer.getEntity(1).dataLinkLayer(_dlLayerSecondary);
 
 #ifdef USE_CEMI_SERVER
+    _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_IP);
+    _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_TP1);
     _cemiServer.dataLinkLayer(_dlLayerSecondary); // Secondary I/F is the important one!
-    _dlLayer.cemiServer(_cemiServer);
+    _dlLayerSecondary.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
 #endif
 

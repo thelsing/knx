@@ -18,6 +18,7 @@ Bau07B0::Bau07B0(Platform& platform)
 
     _netLayer.getEntity(0).dataLinkLayer(_dlLayer);
 #ifdef USE_CEMI_SERVER
+    _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_TP1);
     _cemiServer.dataLinkLayer(_dlLayer);
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);

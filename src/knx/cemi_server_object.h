@@ -9,5 +9,9 @@ class CemiServerObject: public InterfaceObject
 {
 public:
   CemiServerObject();
+
+  void setMediumTypeAsSupported(DptMedium dptMedium);
+  void clearSupportedMediaTypes();
 };
+
 #endif

@@ -16,7 +16,9 @@ BauSystemBDevice::BauSystemBDevice(Platform& platform) :
 {
     _appLayer.transportLayer(_transLayer);
     _appLayer.associationTableObject(_assocTable);
+#ifdef USE_DATASECURE
     _appLayer.groupAddressTable(_addrTable);
+#endif
     _transLayer.networkLayer(_netLayer);
     _transLayer.groupAddressTable(_addrTable);
 

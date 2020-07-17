@@ -1,6 +1,7 @@
 #include "knx_facade.h"
 
 #include "knx/bau091A.h"
+#include "knx/bau2920.h"
 
 #include "knx/bits.h"
 #include <time.h>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "config.h"
-#ifdef USE_IP
+#if defined(USE_IP) && defined (USE_TP)
 #include "bau_systemB_coupler.h"
 #include "ip_parameter_object.h"
 #include "ip_data_link_layer.h"

@@ -16,6 +16,7 @@ Bau27B0::Bau27B0(Platform& platform)
     _netLayer.getEntity(0).dataLinkLayer(_dlLayer);
     _memory.addSaveRestore(&_rfMediumObj);
 #ifdef USE_CEMI_SERVER
+    _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_RF);
     _cemiServer.dataLinkLayer(_dlLayer);
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
