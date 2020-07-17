@@ -14,14 +14,14 @@
 
 // Normal devices
 #define MASK_VERSION 0x07B0
-//#define MASK_VERSION 0x02B0
-//#define MASK_VERSION 0x05B0
+//#define MASK_VERSION 0x27B0
+//#define MASK_VERSION 0x57B0
 
 // Couplers
 // 0x091A: IP/TP1
-// 0x29B0: TP1/RF
+// 0x2920: TP1/RF
 //#define MASK_VERSION 0x091A
-//#define MASK_VERSION 0x29B0
+//#define MASK_VERSION 0x2920
 
 #define USE_RF
 #define USE_TP
