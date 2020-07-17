@@ -23,6 +23,8 @@ add_executable(knx-linux
         ../../src/knx/bau091A.h
         ../../src/knx/bau27B0.cpp
         ../../src/knx/bau27B0.h
+        ../../src/knx/bau2920.cpp
+        ../../src/knx/bau2920.h
         ../../src/knx/bau57B0.cpp
         ../../src/knx/bau57B0.h
         ../../src/knx/bau_systemB.cpp
