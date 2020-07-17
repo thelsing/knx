@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.7)
-project(knx-linux)
+project(knx-linux-coupler)
 set(LIBRARIES_FROM_REFERENCES "")
 add_executable(knx-linux 
 	../../src/knx/address_table_object.cpp 

@@ -34,6 +34,11 @@ ApplicationLayer& BauSystemBDevice::applicationLayer()
     return _appLayer;
 }
 
+GroupObjectTableObject& BauSystemBDevice::groupObjectTable()
+{
+    return _groupObjTable;
+}
+
 void BauSystemBDevice::loop()
 {
     _transLayer.loop();

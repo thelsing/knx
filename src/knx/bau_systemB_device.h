@@ -22,6 +22,7 @@ class BauSystemBDevice : public BauSystemB
     BauSystemBDevice(Platform& platform);
     virtual void loop() override;
     virtual bool configured() override;
+    GroupObjectTableObject& groupObjectTable();
 
   protected:
     virtual ApplicationLayer& applicationLayer() override;
