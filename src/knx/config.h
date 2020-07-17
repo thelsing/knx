@@ -12,7 +12,17 @@
 #define GPIO_GDO0_PIN 24 // GPIO 24 (GPIO_GEN5) -> WiringPi: 5  -> Pin number on header: 18
 #endif
 
-//#define MEDIUM_TYPE 2
+// Normal devices
+#define MASK_VERSION 0x07B0
+//#define MASK_VERSION 0x02B0
+//#define MASK_VERSION 0x05B0
+
+// Couplers
+// 0x091A: IP/TP1
+// 0x29B0: TP1/RF
+//#define MASK_VERSION 0x091A
+//#define MASK_VERSION 0x29B0
+
 #define USE_RF
 #define USE_TP
 #define USE_IP

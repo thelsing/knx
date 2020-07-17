@@ -30,13 +30,9 @@ bool isSendHidReportPossible()
 {
     return false;
 }
-#if MEDIUM_TYPE == 5
+
 KnxFacade<LinuxPlatform, Bau091A> knx;
-#elif MEDIUM_TYPE == 2
-KnxFacade<LinuxPlatform, Bau2920> knx;
-#else
-#error Only MEDIUM_TYPE IP and RF supported
-#endif
+//KnxFacade<LinuxPlatform, Bau2920> knx;
 
 void appLoop()
 {

@@ -2,10 +2,6 @@
 
 #include "knx/bits.h"
 #include "knx/config.h"
-// Set default medium type to TP if no external definitions was given
-#ifndef MEDIUM_TYPE
-#define MEDIUM_TYPE 0
-#endif
 
 #ifdef ARDUINO_ARCH_SAMD
     #include "samd_platform.h"
@@ -27,6 +23,7 @@
    #include "linux_platform.h"
    #include "knx/bau57B0.h"
    #include "knx/bau27B0.h"
+   #include "knx/bau07B0.h"
    #include "knx/bau091A.h"
 #endif
 
