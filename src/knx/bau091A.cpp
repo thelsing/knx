@@ -12,12 +12,15 @@ Bau091A::Bau091A(Platform& platform)
     : BauSystemBCoupler(platform),
       _ipParameters(_deviceObj, platform),
       _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getEntity(0), _platform),
-      _dlLayerSecondary(_deviceObj, _netLayer.getEntity(1), platform)
+      _dlLayerSecondary(_deviceObj, _netLayer.getEntity(1), platform, (ITpUartCallBacks&) *this)
 #ifdef USE_CEMI_SERVER
       ,
       _cemiServer(*this)
 #endif
 {
+    // TODO: setup callback for address check on TP1 medium which supports ACK
+    //_dlLayerSecondary.setAckRequiredCallback();
+
     // Before accessing anything of the two router objects they have to be initialized according to the used media combination
     _rtObjPrimary.initialize(1, DptMedium::KNX_IP, true, false, 201);
     _rtObjSecondary.initialize(2, DptMedium::KNX_TP1, false, true, 201);
@@ -144,6 +147,27 @@ void Bau091A::loop()
     _dlLayerPrimary.loop();
     _dlLayerSecondary.loop();
     BauSystemBCoupler::loop();
+}
+
+bool Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
+{
+    if (isGrpAddr)
+    {
+        // ACK for broadcasts
+        if (address == 0)
+            return true;
+        // is group address in filter table? ACK if yes.
+        return _rtObjSecondary.isGroupAddressInFilterTable(address);
+    }
+
+    // Also ACK for our own individual address
+    if (address == _deviceObj.induvidualAddress())
+        return true;
+
+    // TODO: ACKs for frames with individual addresses of the sub line (secondary I/F)
+    // Check spec. about his
+
+    return false;
 }
 
 #endif

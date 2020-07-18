@@ -8,7 +8,12 @@
 
 #define MAX_KNX_TELEGRAM_SIZE 263
 
-class AddressTableObject;
+class ITpUartCallBacks
+{
+public:
+    virtual ~ITpUartCallBacks() = default;
+    virtual bool isAckRequired(uint16_t address, bool isGrpAddr) = 0;
+};
 
 class TpUartDataLinkLayer : public DataLinkLayer
 {
@@ -17,9 +22,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
 
   public:
     TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
-                        Platform& platform);
-
-    void groupAddressTable(AddressTableObject& addrTable);
+                        Platform& platform, ITpUartCallBacks& cb);
 
     void loop();
     void enabled(bool value);
@@ -67,6 +70,6 @@ class TpUartDataLinkLayer : public DataLinkLayer
     bool resetChip();
     void stopChip();
 
-    AddressTableObject* _groupAddressTable = nullptr;
+    ITpUartCallBacks& _cb;
 };
 #endif

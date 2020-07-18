@@ -8,7 +8,7 @@
 #include "tpuart_data_link_layer.h"
 #include "cemi_server_object.h"
 
-class Bau091A : public BauSystemBCoupler
+class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks
 {
   public:
     Bau091A(Platform& platform);
@@ -19,6 +19,9 @@ class Bau091A : public BauSystemBCoupler
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
+
+    // For TP1 only
+    virtual bool isAckRequired(uint16_t address, bool isGrpAddr) override;
 
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:

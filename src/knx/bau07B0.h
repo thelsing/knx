@@ -8,7 +8,7 @@
 
 #ifdef USE_TP
 
-class Bau07B0 : public BauSystemBDevice
+class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks
 {
   public:
     Bau07B0(Platform& platform);
@@ -19,6 +19,9 @@ class Bau07B0 : public BauSystemBDevice
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
+
+    // For TP1 only
+    virtual bool isAckRequired(uint16_t address, bool isGrpAddr) override;
 
   private:
     TpUartDataLinkLayer _dlLayer;

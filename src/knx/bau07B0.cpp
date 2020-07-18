@@ -9,13 +9,11 @@ using namespace std;
 
 Bau07B0::Bau07B0(Platform& platform)
     : BauSystemBDevice(platform),
-      _dlLayer(_deviceObj, _netLayer.getEntity(0), _platform)
+      _dlLayer(_deviceObj, _netLayer.getEntity(0), _platform, (ITpUartCallBacks&) *this)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif           
 {
-    _dlLayer.groupAddressTable(_addrTable);
-
     _netLayer.getEntity(0).dataLinkLayer(_dlLayer);
 #ifdef USE_CEMI_SERVER
     _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_TP1);
@@ -126,6 +124,24 @@ void Bau07B0::loop()
 #ifdef USE_CEMI_SERVER    
     _cemiServer.loop();
 #endif    
+}
+
+bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
+{
+    if (isGrpAddr)
+    {
+        // ACK for broadcasts
+        if (address == 0)
+            return true;
+        // is group address in group address table? ACK if yes.
+        return _addrTable.contains(address);
+    }
+
+    // Also ACK for our own individual address
+    if (address == _deviceObj.induvidualAddress())
+        return true;
+
+    return false;
 }
 
 #endif

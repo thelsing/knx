@@ -266,53 +266,16 @@ void TpUartDataLinkLayer::loop()
                 {
                     uint8_t c = 0x10;
 
-                    // TODO: Improve for coupler mode. Use callback from bau to check if we are addressed
                     // The bau knows everything and could either check the address table object (normal device)
                     // or any filter tables (coupler) to see if we are addressed.
-                    if (_groupAddressTable)
-                    {
-                        //check if individual or group address
-                        if ((buffer[6] & 0x80) == 0)
-                        {
-                            //individual
-                            if (_deviceObject.induvidualAddress() == getWord(buffer + 4))
-                            {
-                                c |= 0x01;
-                            }
-                        }
-                        else
-                        {
-                            //group
-                            if (_groupAddressTable->contains(getWord(buffer + 4)) || getWord(buffer + 4) == 0)
-                            {
-                                c |= 0x01;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // TODO: test for only our coupler
 
-                        //individual
-                        //check if individual or group address
-                        if ((buffer[6] & 0x80) == 0)
-                        {
-                            //individual
-                            if (_deviceObject.induvidualAddress() == getWord(buffer + 4))
-                            {
-                                c |= 0x01;
-                            }
-                        }
-                        else
-                        {
-                            // TODO: test for only our coupler
+                    //check if individual or group address
+                    bool isGroupAddress = (buffer[6] & 0x80) != 0;
+                    uint16_t addr = getWord(buffer + 4);
 
-                            //group
-                            if (getWord(buffer + 4) == 0)
-                            {
-                                c |= 0x01;
-                            }
-                        }
+                    if (_cb.isAckRequired(addr, isGroupAddress))
+                    {
+                        c |= 0x01;
                     }
 
                     _platform.writeUart(c);
@@ -446,14 +409,12 @@ void TpUartDataLinkLayer::stopChip()
 }
 
 TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
-                                         NetworkLayerEntity &netLayerEntity, Platform& platform)
-    : DataLinkLayer(devObj, netLayerEntity, platform)
+                                         NetworkLayerEntity &netLayerEntity,
+                                         Platform& platform,
+                                         ITpUartCallBacks& cb)
+    : DataLinkLayer(devObj, netLayerEntity, platform),
+      _cb(cb)
 {
-}
-
-void TpUartDataLinkLayer::groupAddressTable(AddressTableObject &addrTable)
-{
-    _groupAddressTable = &addrTable;
 }
 
 void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
