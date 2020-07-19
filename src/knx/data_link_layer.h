@@ -29,7 +29,7 @@ class DataLinkLayer
     virtual void loop() = 0;
     virtual void enabled(bool value) = 0;
     virtual bool enabled() const = 0;
-    virtual bool isOpenMedium() const = 0;
+    virtual DptMedium mediumType() const = 0;
 
   protected:
     void frameRecieved(CemiFrame& frame);

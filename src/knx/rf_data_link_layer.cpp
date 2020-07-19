@@ -269,9 +269,9 @@ bool RfDataLinkLayer::enabled() const
     return _enabled;
 }
 
-bool RfDataLinkLayer::isOpenMedium() const
+DptMedium RfDataLinkLayer::mediumType() const
 {
-    return true;
+    return DptMedium::KNX_RF;
 }
 
 void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)

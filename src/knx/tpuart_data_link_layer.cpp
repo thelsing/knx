@@ -466,9 +466,9 @@ bool TpUartDataLinkLayer::enabled() const
     return _enabled;
 }
 
-bool TpUartDataLinkLayer::isOpenMedium() const
+DptMedium TpUartDataLinkLayer::mediumType() const
 {
-    return false;
+    return DptMedium::KNX_TP1;
 }
 
 bool TpUartDataLinkLayer::sendSingleFrameByte()

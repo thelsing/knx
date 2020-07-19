@@ -14,7 +14,7 @@ BauSystemBCoupler::BauSystemBCoupler(Platform& platform) :
     _appLayer(*this),
 #endif
     _transLayer(_appLayer),
-    _netLayer(_deviceObj, _transLayer)
+    _netLayer(_deviceObj, _rtObjPrimary, _rtObjSecondary, _transLayer)
 {
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);

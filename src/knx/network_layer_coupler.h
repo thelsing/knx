@@ -8,13 +8,15 @@
 #include "network_layer.h"
 
 class DeviceObject;
+class RouterObject;
 
 class NetworkLayerCoupler : public NetworkLayer
 {
     friend class NetworkLayerEntity;
 
   public:
-    NetworkLayerCoupler(DeviceObject& deviceObj, TransportLayer& layer);
+    NetworkLayerCoupler(DeviceObject& deviceObj, RouterObject& rtObjPrimary,
+                        RouterObject& rtObjSecondary, TransportLayer& layer);
 
     virtual NetworkLayerEntity& getEntity(uint8_t interfaceIndex) override;
 
@@ -39,4 +41,7 @@ class NetworkLayerCoupler : public NetworkLayer
 
     // Support a maximum of two physical interfaces for couplers
     NetworkLayerEntity _netLayerEntities[2];
+
+    RouterObject& _rtObjPrimary;
+    RouterObject& _rtObjSecondary;
 };

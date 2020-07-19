@@ -19,6 +19,11 @@ DataLinkLayer& NetworkLayerEntity::dataLinkLayer()
     return *_dataLinkLayer;
 }
 
+DptMedium NetworkLayerEntity::mediumType() const
+{
+    return _dataLinkLayer->mediumType();
+}
+
 void NetworkLayerEntity::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     npdu.frame().sourceInterface(_entityIndex);

@@ -99,9 +99,9 @@ bool IpDataLinkLayer::enabled() const
     return _enabled;
 }
 
-bool IpDataLinkLayer::isOpenMedium() const
+DptMedium IpDataLinkLayer::mediumType() const
 {
-    return false;
+    return DptMedium::KNX_IP;
 }
 
 bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
