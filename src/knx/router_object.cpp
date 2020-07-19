@@ -30,8 +30,9 @@ RouterObject::RouterObject(Memory& memory)
 {
 }
 
-void RouterObject::initialize(uint8_t objIndex, DptMedium mediumType, bool useHopCount, bool useTable, uint16_t maxApduSize)
+void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium mediumType, bool useHopCount, bool useTable, uint16_t maxApduSize)
 {
+    // These properties are always present
     Property* fixedProperties[] =
     {
         new DataProperty( PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) OT_ROUTER ),
@@ -39,19 +40,53 @@ void RouterObject::initialize(uint8_t objIndex, DptMedium mediumType, bool useHo
         new DataProperty( PID_MEDIUM_STATUS, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // 0 means communication is possible, could be set by datalink layer or bau to 1 (comm impossible)
         new DataProperty( PID_MAX_APDU_LENGTH_ROUTER, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, maxApduSize ),
         new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t) mediumType ),
-
     };
-    uint8_t fixesPropertiesCount = sizeof(fixedProperties) / sizeof(Property*);
+    uint8_t fixedPropertiesCount = sizeof(fixedProperties) / sizeof(Property*);
 
-    size_t allPropertiesCount = fixesPropertiesCount;
+    // Only present if coupler model is 1.x
+    Property* model1xProperties[] =
+    {
+        new DataProperty( PID_MAIN_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // Primary: data individual (connless and connorient) + broadcast
+        new DataProperty( PID_SUB_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // Secondary: data individual (connless and connorient) + broadcast
+        new DataProperty( PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // Primary: data group
+        new DataProperty( PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // Secondary: data group
+    };
+    uint8_t model1xPropertiesCount = sizeof(model1xProperties) / sizeof(Property*);
+
+    Property* tableProperties[] =
+    {
+        new DataProperty( PID_COUPLER_SERVICES_CONTROL, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint8_t) 0), // written by ETS TODO: implement
+        new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0), // TODO: improve: move to TableObject once segment size handling is clear
+        new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use, written by ETS
+        new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
+                // Command Callback of PID_ROUTETABLE_CONTROL
+                [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+                    obj->functionRouteTableControl(true, data, length, resultData, resultLength);
+                },
+                // State Callback of PID_ROUTETABLE_CONTROL
+                [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+                    obj->functionRouteTableControl(false, data, length, resultData, resultLength);
+                })
+    };
+    uint8_t tablePropertiesCount = sizeof(tableProperties) / sizeof(Property*);
+
+    size_t allPropertiesCount = fixedPropertiesCount;
+    allPropertiesCount += (model == CouplerModel::Model_1x) ? model1xPropertiesCount : 0;
     allPropertiesCount += useHopCount ? 1 : 0;
-    allPropertiesCount += useTable ? 1 : 0;
+    allPropertiesCount += useTable ? tablePropertiesCount : 0;
     allPropertiesCount += (mediumType == DptMedium::KNX_RF) ? 1 : 0;
 
     Property* allProperties[allPropertiesCount];
+
     memcpy(&allProperties[0], &fixedProperties[0], sizeof(fixedProperties));
 
-    uint8_t i = fixesPropertiesCount;
+    uint8_t i = fixedPropertiesCount;
+
+    if (model == CouplerModel::Model_1x)
+    {
+        memcpy(&allProperties[i], model1xProperties, sizeof(model1xProperties));
+        i += sizeof(model1xProperties) / sizeof(Property*);
+    }
 
     if (useHopCount)
     {
@@ -62,20 +97,6 @@ void RouterObject::initialize(uint8_t objIndex, DptMedium mediumType, bool useHo
 
     if (useTable)
     {
-        Property* tableProperties[] =
-        {
-            new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0), // TODO: improve: move to TableObject once segment size handling is clear
-            new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use, written by ETS
-            new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
-                    // Command Callback of PID_ROUTETABLE_CONTROL
-                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                        obj->functionRouteTableControl(true, data, length, resultData, resultLength);
-                    },
-                    // State Callback of PID_ROUTETABLE_CONTROL
-                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                        obj->functionRouteTableControl(false, data, length, resultData, resultLength);
-                    })
-        };
         memcpy(&allProperties[i], tableProperties, sizeof(tableProperties));
         i += sizeof(tableProperties) / sizeof(Property*);
     }

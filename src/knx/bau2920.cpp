@@ -22,8 +22,8 @@ Bau2920::Bau2920(Platform& platform)
 #endif
 {
     // Before accessing anything of the two router objects they have to be initialized according to the used media combination
-    _rtObjPrimary.initialize(1, DptMedium::KNX_TP1, true, false, 201);
-    _rtObjSecondary.initialize(2, DptMedium::KNX_RF, false, true, 201);
+    _rtObjPrimary.initialize(CouplerModel::Model_20, 1, DptMedium::KNX_TP1, true, false, 201);
+    _rtObjSecondary.initialize(CouplerModel::Model_20, 2, DptMedium::KNX_RF, false, true, 201);
 
     _netLayer.rtObjPrimary(_rtObjPrimary);
     _netLayer.rtObjSecondary(_rtObjSecondary);

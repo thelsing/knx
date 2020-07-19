@@ -3,6 +3,7 @@
 #include "config.h"
 #if defined(USE_IP) && defined (USE_TP)
 #include "bau_systemB_coupler.h"
+#include "router_object.h"
 #include "ip_parameter_object.h"
 #include "ip_data_link_layer.h"
 #include "tpuart_data_link_layer.h"

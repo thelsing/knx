@@ -7,12 +7,18 @@
 
 class Memory;
 
+enum CouplerModel
+{
+    Model_1x,
+    Model_20
+};
+
 class RouterObject : public TableObject
 {
 public:
   RouterObject(Memory& memory);
 
-  void initialize(uint8_t objIndex, DptMedium mediumType, bool useHopCount, bool useTable, uint16_t maxApduSize);
+  void initialize(CouplerModel model, uint8_t objIndex, DptMedium mediumType, bool useHopCount, bool useTable, uint16_t maxApduSize);
 
   bool isGroupAddressInFilterTable(uint16_t groupAddress);
 

@@ -20,7 +20,7 @@ Bau091A::Bau091A(Platform& platform)
 #endif
 {
     // Before accessing anything of the router object they have to be initialized according to the used medium
-    _rtObjSecondary.initialize(1, DptMedium::KNX_TP1, false, true, 201);
+    _rtObjSecondary.initialize(CouplerModel::Model_1x, 1, DptMedium::KNX_TP1, false, true, 201);
 
     // Mask 091A uses older coupler model 1.x which only uses one router object
     _netLayer.rtObjSecondary(_rtObjSecondary);
