@@ -281,7 +281,7 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
 
     Property* allProperties[allPropertiesCount];
     memcpy(allProperties, properties, propertiesSize);
-    memcpy(allProperties + propertiesSize, ownProperties, sizeof(ownProperties));
+    memcpy(allProperties + propertyCount, ownProperties, sizeof(ownProperties));
 
     InterfaceObject::initializeProperties(sizeof(allProperties), allProperties);
 }
