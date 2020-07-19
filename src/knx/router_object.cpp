@@ -46,10 +46,11 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     // Only present if coupler model is 1.x
     Property* model1xProperties[] =
     {
-        new DataProperty( PID_MAIN_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // Primary: data individual (connless and connorient) + broadcast
-        new DataProperty( PID_SUB_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // Secondary: data individual (connless and connorient) + broadcast
-        new DataProperty( PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // Primary: data group
-        new DataProperty( PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // Secondary: data group
+        // TODO: implement filtering based on this config here
+        new DataProperty( PID_MAIN_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Primary: data individual (connless and connorient) + broadcast
+        new DataProperty( PID_SUB_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Secondary: data individual (connless and connorient) + broadcast
+        new DataProperty( PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Primary: data group
+        new DataProperty( PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Secondary: data group
     };
     uint8_t model1xPropertiesCount = sizeof(model1xProperties) / sizeof(Property*);
 
@@ -85,7 +86,7 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     if (model == CouplerModel::Model_1x)
     {
         memcpy(&allProperties[i], model1xProperties, sizeof(model1xProperties));
-        i += sizeof(model1xProperties) / sizeof(Property*);
+        i += model1xPropertiesCount;
     }
 
     if (useHopCount)
@@ -98,7 +99,7 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     if (useTable)
     {
         memcpy(&allProperties[i], tableProperties, sizeof(tableProperties));
-        i += sizeof(tableProperties) / sizeof(Property*);
+        i += tablePropertiesCount;
     }
 
     if (mediumType == DptMedium::KNX_RF)
@@ -413,13 +414,16 @@ void RouterObject::masterReset(EraseCode eraseCode, uint8_t channel)
 {
     if (eraseCode == FactoryReset)
     {
-        // TODO handle different erase codes
+        // TODO: handle different erase codes
         println("Factory reset of router object with filter table requested.");
     }
 }
 
 bool RouterObject::isGroupAddressInFilterTable(uint16_t groupAddress)
 {
+    if (loadState() != LS_LOADED)
+        return false;
+
     uint8_t filterTableUse = 0x00;
     if (property(PID_FILTER_TABLE_USE)->read(filterTableUse) == 0)
         return false;

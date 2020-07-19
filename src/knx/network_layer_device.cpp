@@ -116,7 +116,10 @@ void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NP
     uint8_t sourceInterfaceIndex = npdu.frame().sourceInterface();
     DptMedium mediumType = getEntity(sourceInterfaceIndex).mediumType();
 
-    // for closed media like TP1 and IP
+    // for closed media like TP1 and IP there is no system broadcast
+    // however we must be able to access those APCI via broadcast mode
+    // so we "translate" it to system broadcast like a coupler does when routing
+    // between closed and open media
     if ( ((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
           isApciSystemBroadcast(npdu.tpdu().apdu()))
     {
