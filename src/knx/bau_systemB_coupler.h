@@ -30,8 +30,6 @@ class BauSystemBCoupler : public BauSystemB
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
 
     Platform& _platform;
-    RouterObject _rtObjPrimary;
-    RouterObject _rtObjSecondary;
 
 #ifdef USE_DATASECURE
     SecureApplicationLayer _appLayer;

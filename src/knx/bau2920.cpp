@@ -8,8 +8,11 @@
 
 using namespace std;
 
+// Mask 0x2920 uses coupler model 2.0
 Bau2920::Bau2920(Platform& platform)
     : BauSystemBCoupler(platform),
+      _rtObjPrimary(memory()),
+      _rtObjSecondary(memory()),
       _rfMediumObject(),
       _dlLayerPrimary(_deviceObj, _netLayer.getEntity(0), _platform, (ITpUartCallBacks&) *this),
       _dlLayerSecondary(_deviceObj, _rfMediumObject, _netLayer.getEntity(1), platform)
@@ -22,6 +25,8 @@ Bau2920::Bau2920(Platform& platform)
     _rtObjPrimary.initialize(1, DptMedium::KNX_TP1, true, false, 201);
     _rtObjSecondary.initialize(2, DptMedium::KNX_RF, false, true, 201);
 
+    _netLayer.rtObjPrimary(_rtObjPrimary);
+    _netLayer.rtObjSecondary(_rtObjSecondary);
     _netLayer.getEntity(0).dataLinkLayer(_dlLayerPrimary);
     _netLayer.getEntity(1).dataLinkLayer(_dlLayerSecondary);
 
@@ -48,15 +53,15 @@ Bau2920::Bau2920(Platform& platform)
     prop->write(1, (uint16_t) OT_DEVICE);
     prop->write(2, (uint16_t) OT_ROUTER);
     prop->write(3, (uint16_t) OT_ROUTER);
-    prop->write(3, (uint16_t) OT_APPLICATION_PROG);
-    prop->write(4, (uint16_t) OT_RF_MEDIUM);
+    prop->write(4, (uint16_t) OT_APPLICATION_PROG);
+    prop->write(5, (uint16_t) OT_RF_MEDIUM);
 #if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
-    prop->write(5, (uint16_t) OT_SECURITY);
-    prop->write(6, (uint16_t) OT_CEMI_SERVER);
+    prop->write(6, (uint16_t) OT_SECURITY);
+    prop->write(7, (uint16_t) OT_CEMI_SERVER);
 #elif defined(USE_DATASECURE)
-    prop->write(5, (uint16_t) OT_SECURITY);
+    prop->write(6, (uint16_t) OT_SECURITY);
 #elif defined(USE_CEMI_SERVER)
-    prop->write(5, (uint16_t) OT_CEMI_SERVER);
+    prop->write(6, (uint16_t) OT_CEMI_SERVER);
 #endif
 }
 
@@ -126,6 +131,8 @@ void Bau2920::doMasterReset(EraseCode eraseCode, uint8_t channel)
     BauSystemBCoupler::doMasterReset(eraseCode, channel);
 
     _rfMediumObject.masterReset(eraseCode, channel);
+    _rtObjPrimary.masterReset(eraseCode, channel);
+    _rtObjSecondary.masterReset(eraseCode, channel);
 }
 
 bool Bau2920::enabled()

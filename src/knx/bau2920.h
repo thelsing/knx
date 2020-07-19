@@ -23,6 +23,8 @@ class Bau2920 : public BauSystemBCoupler
 
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:
+    RouterObject _rtObjPrimary;
+    RouterObject _rtObjSecondary;
     RfMediumObject _rfMediumObject;
     TpUartDataLinkLayer _dlLayerPrimary;
     RfDataLinkLayer _dlLayerSecondary;

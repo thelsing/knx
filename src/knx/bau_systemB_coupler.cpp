@@ -6,15 +6,13 @@
 BauSystemBCoupler::BauSystemBCoupler(Platform& platform) :
     BauSystemB(platform),
     _platform(platform),
-    _rtObjPrimary(memory()),
-    _rtObjSecondary(memory()),
 #ifdef USE_DATASECURE
     _appLayer(_deviceObj, _secIfObj, *this),
 #else
     _appLayer(*this),
 #endif
     _transLayer(_appLayer),
-    _netLayer(_deviceObj, _rtObjPrimary, _rtObjSecondary, _transLayer)
+    _netLayer(_deviceObj, _transLayer)
 {
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);
@@ -57,4 +55,8 @@ bool BauSystemBCoupler::configured()
 void BauSystemBCoupler::doMasterReset(EraseCode eraseCode, uint8_t channel)
 {
     BauSystemB::doMasterReset(eraseCode, channel);
+
+#ifdef USE_DATASECURE
+    _secIfObj.masterReset(eraseCode, channel);
+#endif
 }

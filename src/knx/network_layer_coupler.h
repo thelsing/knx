@@ -15,10 +15,12 @@ class NetworkLayerCoupler : public NetworkLayer
     friend class NetworkLayerEntity;
 
   public:
-    NetworkLayerCoupler(DeviceObject& deviceObj, RouterObject& rtObjPrimary,
-                        RouterObject& rtObjSecondary, TransportLayer& layer);
+    NetworkLayerCoupler(DeviceObject& deviceObj, TransportLayer& layer);
 
     virtual NetworkLayerEntity& getEntity(uint8_t interfaceIndex) override;
+
+    void rtObjPrimary(RouterObject& rtObjPrimary);
+    void rtObjSecondary(RouterObject& rtObjSecondary);
 
     // from transport layer
     virtual void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
@@ -42,6 +44,6 @@ class NetworkLayerCoupler : public NetworkLayer
     // Support a maximum of two physical interfaces for couplers
     NetworkLayerEntity _netLayerEntities[2];
 
-    RouterObject& _rtObjPrimary;
-    RouterObject& _rtObjSecondary;
+    RouterObject* _rtObjPrimary {nullptr};
+    RouterObject* _rtObjSecondary {nullptr};
 };

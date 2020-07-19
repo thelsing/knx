@@ -6,13 +6,9 @@
 #include "bits.h"
 
 NetworkLayerCoupler::NetworkLayerCoupler(DeviceObject &deviceObj,
-                                         RouterObject& rtObjPrimary,
-                                         RouterObject& rtObjSecondary,
                                          TransportLayer& layer) :
     NetworkLayer(deviceObj, layer),
-    _netLayerEntities { {*this, 0}, {*this, 1} },
-    _rtObjPrimary(rtObjPrimary),
-    _rtObjSecondary(rtObjSecondary)
+    _netLayerEntities { {*this, 0}, {*this, 1} }
 {
     if ((_deviceObj.induvidualAddress() & 0x00FF) == 0x00)
     {
@@ -30,6 +26,16 @@ NetworkLayerCoupler::NetworkLayerCoupler(DeviceObject &deviceObj,
 NetworkLayerEntity& NetworkLayerCoupler::getEntity(uint8_t interfaceIndex)
 {
     return _netLayerEntities[interfaceIndex];
+}
+
+void NetworkLayerCoupler::rtObjPrimary(RouterObject& rtObjPrimary)
+{
+    _rtObjPrimary = &rtObjPrimary;
+}
+
+void NetworkLayerCoupler::rtObjSecondary(RouterObject& rtObjSecondary)
+{
+    _rtObjSecondary = &rtObjSecondary;
 }
 
 void NetworkLayerCoupler::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)

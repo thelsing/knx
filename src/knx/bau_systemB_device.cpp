@@ -146,10 +146,6 @@ void BauSystemBDevice::doMasterReset(EraseCode eraseCode, uint8_t channel)
     _assocTable.masterReset(eraseCode, channel);
     _groupObjTable.masterReset(eraseCode, channel);
 #ifdef USE_DATASECURE
-    // If erase code is FactoryReset or FactoryResetWithoutIA, set FDSK as toolkey again
-    // and disable security mode.
-    // FIXME: the A_RestartResponse PDU has still to be sent with the current toolkey.
-    // Idea: use local confirmation of sent A_RestartResponse PDU to trigger writing the FDSK afterwards
     _secIfObj.masterReset(eraseCode, channel);
 #endif
 }
