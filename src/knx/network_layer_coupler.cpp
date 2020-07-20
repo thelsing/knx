@@ -59,7 +59,7 @@ void NetworkLayerCoupler::rtObjSecondary(RouterObject& rtObjSecondary)
     _rtObjSecondary = &rtObjSecondary;
 }
 
-void NetworkLayerCoupler::routeMessage(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority,
+void NetworkLayerCoupler::routeMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority,
                                        SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex)
 {
     if (npdu.hopCount() == 0)
@@ -85,44 +85,111 @@ void NetworkLayerCoupler::routeMessage(AckType ack, AddressType addrType, uint16
 
 void NetworkLayerCoupler::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
-    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+    uint8_t srcIfIndex = npdu.frame().sourceInterface();       // Source interface (0 = primary, 1 = secondary)
+    uint16_t ownSNA = _deviceObj.induvidualAddress() & 0xFF00; // Own subnetwork address (area + line)
+    uint16_t ownAA = _deviceObj.induvidualAddress() & 0xF000;  // Own area address
+    uint16_t ZS = destination & 0xFF00;                        // destination subnetwork address (area + line)
+    uint16_t Z = destination & 0xF000;                         // destination area address
+    uint16_t D = _deviceObj.induvidualAddress() & 0x00FF;      // Own device address (without subnetwork part)
+    uint16_t SD = _deviceObj.induvidualAddress() & 0x0FFF;     // Own device address (with line part, but without area part)
 
-    // Check if received frame is for us, we are a normal device in this case
+    // routing for individual addresses
     if (addrType == InduvidualAddress)
     {
-        if (destination == _deviceObj.induvidualAddress()) // FORWARD_LOCALLY
-        {
-            _transportLayer.dataIndividualIndication(destination, hopType, priority, source, npdu.tpdu());
-            return;
-        }
-
-        // routing for individual addresses
-
         if (_couplerType == LineCoupler)
         {
-            // ZS == own SNA?
-            if ((destination & 0xFF00) != (_deviceObj.induvidualAddress() & 0xFF00))
-                return; // IGNORE_TOTALLY
+            // Main line to sub line routing
+            if (srcIfIndex == 0)
+            {
+                if (ZS != ownSNA)
+                    return; // IGNORE_TOTALLY
 
-            routeMessage(ack, addrType, destination, format, npdu, priority, Broadcast, npdu.frame().sourceInterface());
-            return;
+                if (D == 0)
+                {
+                    // FORWARD_LOCALLY
+                    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+                    _transportLayer.dataIndividualIndication(destination, hopType, priority, source, npdu.tpdu());
+                }
+                else
+                {
+                    routeMsgHopCount(ack, addrType, destination, format, npdu, priority, Broadcast, srcIfIndex);
+                }
+                return;
+            }
+
+            // Sub line to main line routing
+            if (srcIfIndex == 1)
+            {
+                if (ZS != ownSNA)
+                    routeMsgHopCount(ack, addrType, destination, format, npdu, priority, Broadcast, srcIfIndex);
+                else if (D == 0)
+                {
+                    // FORWARD_LOCALLY
+                    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+                    _transportLayer.dataIndividualIndication(destination, hopType, priority, source, npdu.tpdu());
+                }
+                else
+                {
+                    // IGNORE_TOTALLY
+                }
+                return;
+            }
         }
 
         if (_couplerType == BackboneCoupler)
         {
+            // Backbone line to main line routing
+            if (srcIfIndex == 0)
+            {
+                if (Z != ownAA)
+                    return; // IGNORE_TOTALLY
 
-            return;
+                if (SD == 0)
+                {
+                    // FORWARD_LOCALLY
+                    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+                    _transportLayer.dataIndividualIndication(destination, hopType, priority, source, npdu.tpdu());
+                }
+                else
+                {
+                    routeMsgHopCount(ack, addrType, destination, format, npdu, priority, Broadcast, srcIfIndex);
+                }
+                return;
+            }
+
+            // Main line to backbone line routing
+            if (srcIfIndex == 1)
+            {
+                if (Z != ownAA)
+                    routeMsgHopCount(ack, addrType, destination, format, npdu, priority, Broadcast, srcIfIndex);
+                else if(SD == 0)
+                {
+                    // FORWARD_LOCALLY
+                    HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+                    _transportLayer.dataIndividualIndication(destination, hopType, priority, source, npdu.tpdu());
+                }
+                else
+                {
+                    // IGNORE_TOTALLY
+                }
+                return;
+            }
         }
-
-        return;
     }
 
     // routing for group addresses
     if (_rtObjSecondary->isGroupAddressInFilterTable(destination))
     {
-        routeMessage(ack, addrType, destination, format, npdu, priority, Broadcast, npdu.frame().sourceInterface());
+        routeMsgHopCount(ack, addrType, destination, format, npdu, priority, Broadcast, srcIfIndex);
+        return;
     }
-    // else IGNORE_TOTALLY
+    else
+    {
+        // IGNORE_TOTALLY
+        return;
+    }
+
+    println("Unhandled routing case! Should not happen!");
 }
 
 void NetworkLayerCoupler::dataConfirm(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
@@ -166,7 +233,7 @@ void NetworkLayerCoupler::broadcastIndication(AckType ack, FrameFormat format, N
     }
 
     // Route to other interface
-    routeMessage(ack, GroupAddress, 0, format, npdu, priority, Broadcast, npdu.frame().sourceInterface());
+    routeMsgHopCount(ack, GroupAddress, 0, format, npdu, priority, Broadcast, npdu.frame().sourceInterface());
 }
 
 void NetworkLayerCoupler::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
@@ -187,7 +254,7 @@ void NetworkLayerCoupler::systemBroadcastIndication(AckType ack, FrameFormat for
     _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
 
     // Route to other interface
-    routeMessage(ack, GroupAddress, 0, format, npdu, priority, SysBroadcast, npdu.frame().sourceInterface());
+    routeMsgHopCount(ack, GroupAddress, 0, format, npdu, priority, SysBroadcast, npdu.frame().sourceInterface());
 }
 
 void NetworkLayerCoupler::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)

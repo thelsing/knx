@@ -49,7 +49,7 @@ class NetworkLayerCoupler : public NetworkLayer
                                    Priority priority, uint16_t source) override;
     virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status) override;
 
-    void routeMessage(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority,
+    void routeMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority,
                       SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex);
 
     // Support a maximum of two physical interfaces for couplers
