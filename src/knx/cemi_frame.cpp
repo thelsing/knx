@@ -380,14 +380,3 @@ bool CemiFrame::valid() const
 
     return true;
 }
-
-void CemiFrame::sourceInterface(uint8_t index)
-{
-    _sourceInterfaceIndex = index;
-}
-
-uint8_t CemiFrame::sourceInterface()
-{
-    return _sourceInterfaceIndex;
-}
-

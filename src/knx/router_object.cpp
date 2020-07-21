@@ -30,16 +30,34 @@ RouterObject::RouterObject(Memory& memory)
 {
 }
 
-void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium mediumType, bool useHopCount, bool useTable, uint16_t maxApduSize)
+void RouterObject::initialize1x(DptMedium mediumType, uint16_t maxApduSize)
 {
+    // Object index property is not included for coupler model 1.x, so value is "don't care".
+    initialize(CouplerModel::Model_1x, 200, mediumType, RouterObjectType::Single, maxApduSize);
+}
+
+void RouterObject::initialize20(uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize)
+{
+    initialize(CouplerModel::Model_20, objIndex, mediumType, rtType, maxApduSize);
+}
+
+void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize)
+{
+    bool useHopCount = false;
+    bool useTable = true;
+
+    if (model == CouplerModel::Model_20)
+    {
+        useHopCount = (rtType == RouterObjectType::Primary);
+        useTable = (rtType == RouterObjectType::Secondary);
+    }
+
     // These properties are always present
     Property* fixedProperties[] =
     {
         new DataProperty( PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) OT_ROUTER ),
-        new DataProperty( PID_OBJECT_INDEX, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0, objIndex ), // Must be set by concrete BAUxxxx!
         new DataProperty( PID_MEDIUM_STATUS, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // 0 means communication is possible, could be set by datalink layer or bau to 1 (comm impossible)
         new DataProperty( PID_MAX_APDU_LENGTH_ROUTER, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, maxApduSize ),
-        new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t) mediumType ),
     };
     uint8_t fixedPropertiesCount = sizeof(fixedProperties) / sizeof(Property*);
 
@@ -53,6 +71,15 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
         new DataProperty( PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Secondary: data group
     };
     uint8_t model1xPropertiesCount = sizeof(model1xProperties) / sizeof(Property*);
+
+    // Only present if coupler model is 2.0
+    // One router object per interface, currently only TP1/RF coupler specified
+    Property* model20Properties[] =
+    {
+        new DataProperty( PID_OBJECT_INDEX, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0, objIndex ), // Must be set by concrete BAUxxxx!
+        new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t) mediumType ),
+    };
+    uint8_t model20PropertiesCount = sizeof(model20Properties) / sizeof(Property*);
 
     Property* tableProperties[] =
     {
@@ -72,10 +99,10 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     uint8_t tablePropertiesCount = sizeof(tableProperties) / sizeof(Property*);
 
     size_t allPropertiesCount = fixedPropertiesCount;
-    allPropertiesCount += (model == CouplerModel::Model_1x) ? model1xPropertiesCount : 0;
+    allPropertiesCount += (model == CouplerModel::Model_1x) ? model1xPropertiesCount : model20PropertiesCount;
     allPropertiesCount += useHopCount ? 1 : 0;
     allPropertiesCount += useTable ? tablePropertiesCount : 0;
-    allPropertiesCount += ((mediumType == DptMedium::KNX_RF) || (mediumType == DptMedium::KNX_IP)) ? 1 : 0;
+    allPropertiesCount += ((mediumType == DptMedium::KNX_RF) || (mediumType == DptMedium::KNX_IP)) ? 1 : 0; // PID_RF_ENABLE_SBC and PID_IP_ENABLE_SBC
 
     Property* allProperties[allPropertiesCount];
 
@@ -87,6 +114,11 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     {
         memcpy(&allProperties[i], model1xProperties, sizeof(model1xProperties));
         i += model1xPropertiesCount;
+    }
+    else
+    {
+        memcpy(&allProperties[i], model20Properties, sizeof(model20Properties));
+        i += model20PropertiesCount;
     }
 
     if (useHopCount)
@@ -104,7 +136,7 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
 
     if (mediumType == DptMedium::KNX_RF)
     {
-        allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC, // TODO: only for RF medium
+        allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC,
                                     // Command Callback of PID_RF_ENABLE_SBC
                                     [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
                                        obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
@@ -116,14 +148,14 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     }
     else if (mediumType == DptMedium::KNX_IP)
     {
-        allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC, // TODO: only for RF medium
-                                    // Command Callback of PID_RF_ENABLE_SBC
+        allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_IP_ENABLE_SBC,
+                                    // Command Callback of PID_IP_ENABLE_SBC
                                     [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                                       obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
+                                       obj->functionIpEnableSbc(true, data, length, resultData, resultLength);
                                     },
-                                    // State Callback of PID_RF_ENABLE_SBC
+                                    // State Callback of PID_IP_ENABLE_SBC
                                     [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                                       obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
+                                       obj->functionIpEnableSbc(false, data, length, resultData, resultLength);
                                     });
     }
 

@@ -57,9 +57,6 @@ class CemiFrame
     uint16_t destinationAddress() const;
     void destinationAddress(uint16_t value);
 
-    void sourceInterface(uint8_t index);
-    uint8_t sourceInterface();
-
 #ifdef USE_RF
     // only for RF medium
     uint8_t* rfSerialOrDoA() const;

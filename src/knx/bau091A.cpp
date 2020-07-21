@@ -10,7 +10,7 @@ using namespace std;
 
 Bau091A::Bau091A(Platform& platform)
     : BauSystemBCoupler(platform),
-      _rtObjSecondary(memory()),
+      _routerObj(memory()),
       _ipParameters(_deviceObj, platform),
       _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getEntity(0), _platform),
       _dlLayerSecondary(_deviceObj, _netLayer.getEntity(1), platform, (ITpUartCallBacks&) *this)
@@ -20,10 +20,11 @@ Bau091A::Bau091A(Platform& platform)
 #endif
 {
     // Before accessing anything of the router object they have to be initialized according to the used medium
-    _rtObjSecondary.initialize(CouplerModel::Model_1x, 1, DptMedium::KNX_TP1, false, true, 201);
+    // Coupler model 1.x
+    _routerObj.initialize1x(DptMedium::KNX_IP, 220);
 
     // Mask 091A uses older coupler model 1.x which only uses one router object
-    _netLayer.rtObjSecondary(_rtObjSecondary);
+    _netLayer.rtObj(_routerObj);
 
     _netLayer.getEntity(0).dataLinkLayer(_dlLayerPrimary);
     _netLayer.getEntity(1).dataLinkLayer(_dlLayerSecondary);
@@ -36,7 +37,7 @@ Bau091A::Bau091A(Platform& platform)
     _memory.addSaveRestore(&_cemiServerObject);
 #endif
 
-    _memory.addSaveRestore(&_rtObjSecondary);
+    _memory.addSaveRestore(&_routerObj);
 
     _memory.addSaveRestore(&_ipParameters);
 
@@ -68,7 +69,7 @@ InterfaceObject* Bau091A::getInterfaceObject(uint8_t idx)
         case 0:
             return &_deviceObj;
         case 1:
-            return &_rtObjSecondary;
+            return &_routerObj;
         case 2:
             return &_appProgram;
         case 3:
@@ -101,7 +102,7 @@ InterfaceObject* Bau091A::getInterfaceObject(ObjectType objectType, uint8_t obje
         case OT_DEVICE:
             return &_deviceObj;
         case OT_ROUTER:
-            return &_rtObjSecondary;
+            return &_routerObj;
         case OT_APPLICATION_PROG:
             return &_appProgram;
         case OT_IP_PARAMETER:
@@ -125,7 +126,7 @@ void Bau091A::doMasterReset(EraseCode eraseCode, uint8_t channel)
     BauSystemBCoupler::doMasterReset(eraseCode, channel);
 
     _ipParameters.masterReset(eraseCode, channel);
-    _rtObjSecondary.masterReset(eraseCode, channel);
+    _routerObj.masterReset(eraseCode, channel);
 }
 
 bool Bau091A::enabled()
@@ -154,7 +155,7 @@ bool Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
         if (address == 0)
             return true;
         // is group address in filter table? ACK if yes.
-        return _rtObjSecondary.isGroupAddressInFilterTable(address);
+        return _routerObj.isGroupAddressInFilterTable(address);
     }
 
     // Also ACK for our own individual address

@@ -33,15 +33,15 @@ class NetworkLayer
 
     // from entities
     virtual void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
-                                Priority priority, uint16_t source) = 0;
+                                Priority priority, uint16_t source, uint8_t srcIfIdx) = 0;
     virtual void dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority,
-                             uint16_t source, NPDU& npdu, bool status) = 0;
+                             uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) = 0;
     virtual void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                                     Priority priority, uint16_t source) = 0;
-    virtual void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status) = 0;
+                                     Priority priority, uint16_t source, uint8_t srcIfIdx) = 0;
+    virtual void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) = 0;
     virtual void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                                           Priority priority, uint16_t source) = 0;
-    virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status) = 0;
+                                           Priority priority, uint16_t source, uint8_t srcIfIdx) = 0;
+    virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) = 0;
 
   private:
     uint8_t _hopCount; // Network Layer Parameter hop_count for the device's own outgoing frames (default value from PID_ROUTING_COUNT)

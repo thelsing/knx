@@ -13,12 +13,21 @@ enum CouplerModel
     Model_20
 };
 
+enum RouterObjectType
+{
+    Primary,
+    Secondary,
+    Single     // Not used, just a placeholder for better readability for coupler model 1.x
+};
+
 class RouterObject : public TableObject
 {
 public:
   RouterObject(Memory& memory);
 
-  void initialize(CouplerModel model, uint8_t objIndex, DptMedium mediumType, bool useHopCount, bool useTable, uint16_t maxApduSize);
+  void initialize1x(DptMedium mediumType, uint16_t maxApduSize);
+  void initialize20(uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize);
+  void initialize(CouplerModel model, uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize);
 
   bool isGroupAddressInFilterTable(uint16_t groupAddress);
 

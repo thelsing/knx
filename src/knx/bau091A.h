@@ -26,7 +26,7 @@ class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks
 
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:
-    RouterObject _rtObjSecondary;
+    RouterObject _routerObj;
     IpParameterObject _ipParameters;
     IpDataLinkLayer _dlLayerPrimary;
     TpUartDataLinkLayer _dlLayerSecondary;

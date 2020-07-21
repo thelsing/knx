@@ -19,8 +19,9 @@ class NetworkLayerCoupler : public NetworkLayer
 
     virtual NetworkLayerEntity& getEntity(uint8_t interfaceIndex) override;
 
-    void rtObjPrimary(RouterObject& rtObjPrimary);
-    void rtObjSecondary(RouterObject& rtObjSecondary);
+    void rtObjPrimary(RouterObject& rtObjPrimary); // Coupler model 2.0
+    void rtObjSecondary(RouterObject& rtObjSecondary); // Coupler model 2.0
+    void rtObj(RouterObject& rtObj); // Coupler model 1.x
 
     // from transport layer
     virtual void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
@@ -39,18 +40,21 @@ class NetworkLayerCoupler : public NetworkLayer
 
     // from entities
     virtual void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
-                        Priority priority, uint16_t source) override;
+                        Priority priority, uint16_t source, uint8_t srcIfIdx) override;
     virtual void dataConfirm(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, Priority priority,
-                     uint16_t source, NPDU& npdu, bool status) override;
+                     uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
     virtual void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                             Priority priority, uint16_t source) override;
-    virtual void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status) override;
+                             Priority priority, uint16_t source, uint8_t srcIfIdx) override;
+    virtual void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
     virtual void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                                   Priority priority, uint16_t source) override;
-    virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status) override;
+                                   Priority priority, uint16_t source, uint8_t srcIfIdx) override;
+    virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
 
-    void routeMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority,
+    void routeDataIndividual(AckType ack, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIndex);
+    void sendMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority,
                       SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex);
+
+    bool isGroupAddressInFilterTable(uint16_t groupAddress);
 
     // Support a maximum of two physical interfaces for couplers
     NetworkLayerEntity _netLayerEntities[2];

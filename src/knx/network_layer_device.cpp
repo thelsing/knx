@@ -72,7 +72,7 @@ void NetworkLayerDevice::dataSystemBroadcastRequest(AckType ack, HopCountType ho
     _netLayerEntities[0].sendDataRequest(npdu, ack, 0, priority, GroupAddress, broadcastType);
 }
 
-void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
+void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
 
@@ -93,7 +93,7 @@ void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint1
     }
 }
 
-void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
+void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     if (addressType == InduvidualAddress)
@@ -109,12 +109,10 @@ void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint1
     }
 }
 
-void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
+void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
-
-    uint8_t sourceInterfaceIndex = npdu.frame().sourceInterface();
-    DptMedium mediumType = getEntity(sourceInterfaceIndex).mediumType();
+    DptMedium mediumType = getEntity(srcIfIdx).mediumType();
 
     // for closed media like TP1 and IP there is no system broadcast
     // however we must be able to access those APCI via broadcast mode
@@ -131,19 +129,19 @@ void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NP
     _transportLayer.dataBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
-void NetworkLayerDevice::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
+void NetworkLayerDevice::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
 }
 
-void NetworkLayerDevice::systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
+void NetworkLayerDevice::systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
-void NetworkLayerDevice::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status)
+void NetworkLayerDevice::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataSystemBroadcastConfirm(ack, hopType, npdu.tpdu(), priority, status);
