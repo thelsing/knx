@@ -23,6 +23,7 @@ public:
   bool isGroupAddressInFilterTable(uint16_t groupAddress);
 
   bool isRfSbcRoutingEnabled();
+  bool isIpSbcRoutingEnabled();
 
   virtual void masterReset(EraseCode eraseCode, uint8_t channel) override;
 
@@ -35,6 +36,7 @@ private:
   // Function properties
   void functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
   void functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+  void functionIpEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
 
   void commandClearSetRoutingTable(bool bitIsSet);
   bool statusClearSetRoutingTable(bool bitIsSet);
@@ -44,5 +46,6 @@ private:
   void updateMcb();
 
   bool _rfSbcRoutingEnabled = false;
+  bool _ipSbcRoutingEnabled = false;
   uint16_t* _filterTableGroupAddresses = 0;
 };

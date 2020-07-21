@@ -184,11 +184,12 @@ enum PropertyID
     PID_ROUTETABLE_CONTROL = 56,
     PID_COUPLER_SERVICES_CONTROL = 57,
     PID_MAX_APDU_LENGTH_ROUTER = 58,
-    PID_L2_COUPLER_TYPE = 59,
-    PID_HOP_COUNT = 61,
+    PID_L2_COUPLER_TYPE = 59,                   // Only interesting for mask 0x0912 (TP1/TP1 coupler)
+    PID_HOP_COUNT = 61,                         // Only interesting in primary if other medium(secondary) is open medium without hopcount
     PID_MEDIUM = 63,
     PID_FILTER_TABLE_USE = 67,
-    PID_RF_ENABLE_SBC = 112,                    // Exists only if medium for this router object is RF
+    PID_RF_ENABLE_SBC = 112,                    // Exists only if medium for this router object is RF (PDT_FUNCTION)
+    PID_IP_ENABLE_SBC = 120,                    // Exists only if medium for this router object is IP (PDT_FUNCTION)
 };
 
 enum LoadState

@@ -178,6 +178,9 @@ void NetworkLayerCoupler::dataIndication(AckType ack, AddressType addrType, uint
     }
 
     // routing for group addresses
+    // TODO: check new AN189
+    // "AN189 only makes that group messages with hop count 7 cannot bypass the Filter Table unfiltered,
+    // what made the Security Proxy(AN192) useless; now, hc 7 Telegrams are filtered as any other and the value is decremented.
     if (_rtObjSecondary->isGroupAddressInFilterTable(destination))
     {
         routeMsgHopCount(ack, addrType, destination, format, npdu, priority, Broadcast, srcIfIndex);

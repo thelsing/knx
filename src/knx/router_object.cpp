@@ -75,7 +75,7 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     allPropertiesCount += (model == CouplerModel::Model_1x) ? model1xPropertiesCount : 0;
     allPropertiesCount += useHopCount ? 1 : 0;
     allPropertiesCount += useTable ? tablePropertiesCount : 0;
-    allPropertiesCount += (mediumType == DptMedium::KNX_RF) ? 1 : 0;
+    allPropertiesCount += ((mediumType == DptMedium::KNX_RF) || (mediumType == DptMedium::KNX_IP)) ? 1 : 0;
 
     Property* allProperties[allPropertiesCount];
 
@@ -103,6 +103,18 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     }
 
     if (mediumType == DptMedium::KNX_RF)
+    {
+        allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC, // TODO: only for RF medium
+                                    // Command Callback of PID_RF_ENABLE_SBC
+                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+                                       obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
+                                    },
+                                    // State Callback of PID_RF_ENABLE_SBC
+                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+                                       obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
+                                    });
+    }
+    else if (mediumType == DptMedium::KNX_IP)
     {
         allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC, // TODO: only for RF medium
                                     // Command Callback of PID_RF_ENABLE_SBC
@@ -382,6 +394,25 @@ void RouterObject::functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t le
 bool RouterObject::isRfSbcRoutingEnabled()
 {
     return _rfSbcRoutingEnabled;
+}
+
+// TODO: check if IP SBC works the same way, just copied from RF
+void RouterObject::functionIpEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+{
+    if (isCommand)
+    {
+        _ipSbcRoutingEnabled = (data[0] == 1) ? true : false;
+    }
+
+    resultData[0] = ReturnCodes::Success;
+    resultData[1] = _ipSbcRoutingEnabled ? 1 : 0;
+    resultLength = 2;
+}
+
+// TODO: check if IP SBC works the same way, just copied from RF
+bool RouterObject::isIpSbcRoutingEnabled()
+{
+    return _ipSbcRoutingEnabled;
 }
 
 void RouterObject::beforeStateChange(LoadState& newState)
