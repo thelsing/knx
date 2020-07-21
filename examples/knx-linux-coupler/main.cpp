@@ -32,8 +32,8 @@ bool isSendHidReportPossible()
     return false;
 }
 
-KnxFacade<LinuxPlatform, Bau091A> knx;
-//KnxFacade<LinuxPlatform, Bau2920> knx;
+KnxFacade<LinuxPlatform, Bau091A> knx; // IP/TP1 coupler
+//KnxFacade<LinuxPlatform, Bau2920> knx; // TP1/RF coupler
 
 void appLoop()
 {
