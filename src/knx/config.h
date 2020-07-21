@@ -13,7 +13,7 @@
 #endif
 
 // Normal devices
-#define MASK_VERSION 0x07B0
+//#define MASK_VERSION 0x07B0
 //#define MASK_VERSION 0x27B0
 //#define MASK_VERSION 0x57B0
 

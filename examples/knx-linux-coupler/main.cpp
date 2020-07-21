@@ -32,8 +32,13 @@ bool isSendHidReportPossible()
     return false;
 }
 
+#if MASK_VERSION == 0x091A
 KnxFacade<LinuxPlatform, Bau091A> knx; // IP/TP1 coupler
-//KnxFacade<LinuxPlatform, Bau2920> knx; // TP1/RF coupler
+#elif MASK_VERSION == 0x2920
+KnxFacade<LinuxPlatform, Bau2920> knx; // TP1/RF coupler
+#else
+#error Mask version not supported yet!
+#endif
 
 void appLoop()
 {
