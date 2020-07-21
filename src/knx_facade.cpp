@@ -14,7 +14,7 @@
 
 #elif ARDUINO_ARCH_ESP8266
     // predefined global instance for IP only
-    #if MASK_VERSION == 0x07B0
+    #if MASK_VERSION == 0x57B0
         KnxFacade<EspPlatform, Bau57B0> knx;
     #else
         #error Mask version not supported on ARDUINO_ARCH_ESP8266
