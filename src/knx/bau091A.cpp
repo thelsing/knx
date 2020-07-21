@@ -154,16 +154,14 @@ bool Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
         // ACK for broadcasts
         if (address == 0)
             return true;
+
         // is group address in filter table? ACK if yes.
         return _routerObj.isGroupAddressInFilterTable(address);
     }
-
-    // Also ACK for our own individual address
-    if (address == _deviceObj.induvidualAddress())
-        return true;
-
-    // TODO: ACKs for frames with individual addresses of the sub line (secondary I/F)
-    // Check spec. about his
+    else
+    {
+        return _netLayer.isRoutedIndividualAddress(address);
+    }
 
     return false;
 }

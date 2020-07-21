@@ -19,6 +19,8 @@ class NetworkLayerCoupler : public NetworkLayer
 
     virtual NetworkLayerEntity& getEntity(uint8_t interfaceIndex) override;
 
+    bool isRoutedIndividualAddress(uint16_t individualAddress);
+
     void rtObjPrimary(RouterObject& rtObjPrimary); // Coupler model 2.0
     void rtObjSecondary(RouterObject& rtObjSecondary); // Coupler model 2.0
     void rtObj(RouterObject& rtObj); // Coupler model 1.x

@@ -75,6 +75,26 @@ bool NetworkLayerCoupler::isGroupAddressInFilterTable(uint16_t groupAddress)
     }
 }
 
+bool NetworkLayerCoupler::isRoutedIndividualAddress(uint16_t individualAddress)
+{
+    // TODO: ACKs for frames with individual addresses of the sub line (secondary I/F)
+    // Check spec. about his
+    // See PID_MAIN_LCCONFIG/PID_SUB_LCCONFIG: PHYS_IACK
+    // 0 = not used
+    // 1 = normal mode (all frames that will be routed or that are addressed to the Coupler itself will be acknowledged)
+    // 2 = all frames will be acknowledged (useful only to avoid the repetitions of misrouted frames)
+    // 3 = all frames on point-to-point connectionless – or connection-oriented communication mode shall be negatively acknowledge (NACK).
+    //     This shall serve for protection purposes. (It is useful to prevent all parameterisation in one Subnetwork; the Coupler shall be protected
+    //     too. A typical use case is the protection of a Subnetwork that is located outside a building)
+
+    // Also ACK for our own individual address
+    if (individualAddress == _deviceObj.induvidualAddress())
+        return true;
+
+    // use 2 for now
+    return true;
+}
+
 void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, NPDU& npdu, Priority priority,
                                           SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex)
 {
