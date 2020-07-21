@@ -56,10 +56,10 @@ void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
 
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 {
-    bool isRf = _dataLinkLayer->isOpenMedium();
+    bool isRf = _dataLinkLayer->mediumType() == DptMedium::KNX_RF;
     uint8_t data[frame.dataLength() + (isRf ? 10 : 0)];
 
-    if (_dataLinkLayer->isOpenMedium())
+    if (isRf)
     {
         data[0] = L_data_ind;     // Message Code
         data[1] = 0x0A;           // Total additional info length
@@ -90,7 +90,7 @@ void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 
 void CemiServer::frameReceived(CemiFrame& frame)
 {
-    bool isRf = _dataLinkLayer->isOpenMedium();
+    bool isRf = _dataLinkLayer->mediumType() == DptMedium::KNX_RF;
 
     switch(frame.messageCode())
     {
