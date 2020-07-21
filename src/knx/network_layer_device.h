@@ -39,4 +39,6 @@ class NetworkLayerDevice : public NetworkLayer
 
     // Support only a single physical interface for normal devices
     NetworkLayerEntity _netLayerEntities[1];
+
+    static constexpr uint8_t kInterfaceIndex = 0;
 };

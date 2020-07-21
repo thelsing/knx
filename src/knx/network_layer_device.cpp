@@ -6,7 +6,7 @@
 
 NetworkLayerDevice::NetworkLayerDevice(DeviceObject &deviceObj, TransportLayer& layer) :
     NetworkLayer(deviceObj, layer),
-    _netLayerEntities { {*this, 0} }
+    _netLayerEntities { {*this, kInterfaceIndex} }
 {
 }
 
@@ -29,7 +29,7 @@ void NetworkLayerDevice::dataIndividualRequest(AckType ack, uint16_t destination
     //    print.print("-> NL  ");
     //    tpdu.apdu().printPDU();
     //}
-    _netLayerEntities[0].sendDataRequest(npdu, ack, destination, priority, InduvidualAddress, Broadcast);
+    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, priority, InduvidualAddress, Broadcast);
 }
 
 void NetworkLayerDevice::dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -41,7 +41,7 @@ void NetworkLayerDevice::dataGroupRequest(AckType ack, uint16_t destination, Hop
     else
         npdu.hopCount(hopCount());
 
-    _netLayerEntities[0].sendDataRequest(npdu, ack, destination, priority, GroupAddress, Broadcast);
+    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, priority, GroupAddress, Broadcast);
 }
 
 void NetworkLayerDevice::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -53,7 +53,7 @@ void NetworkLayerDevice::dataBroadcastRequest(AckType ack, HopCountType hopType,
     else
         npdu.hopCount(hopCount());
 
-    _netLayerEntities[0].sendDataRequest(npdu, ack, 0, priority, GroupAddress, Broadcast);
+    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, 0, priority, GroupAddress, Broadcast);
 }
 
 void NetworkLayerDevice::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -69,7 +69,7 @@ void NetworkLayerDevice::dataSystemBroadcastRequest(AckType ack, HopCountType ho
     else
         npdu.hopCount(hopCount());
 
-    _netLayerEntities[0].sendDataRequest(npdu, ack, 0, priority, GroupAddress, broadcastType);
+    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, 0, priority, GroupAddress, broadcastType);
 }
 
 void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
