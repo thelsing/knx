@@ -149,6 +149,10 @@ enum ApduType
     SystemNetworkParameterResponse = 0x1c9,
     SystemNetworkParameterWrite = 0x1ca,
     // Open media specific Application Layer Services on System Broadcast communication mode
+    DomainAddressWrite = 0x3e0,
+    DomainAddressRead = 0x3e1,
+    DomainAddressResponse = 0x3e2,
+    DomainAddressSelectiveRead = 0x3e3,
     DomainAddressSerialNumberRead = 0x3ec,
     DomainAddressSerialNumberResponse = 0x3ed,
     DomainAddressSerialNumberWrite = 0x3ee,

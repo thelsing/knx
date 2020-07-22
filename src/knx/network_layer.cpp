@@ -26,15 +26,14 @@ bool NetworkLayer::isApciSystemBroadcast(APDU& apdu)
         case SystemNetworkParameterRead:
         case SystemNetworkParameterResponse:
         case SystemNetworkParameterWrite:
-        //case SystemNetworkParameterInfoReport:
         // Open media specific Application Layer Services on System Broadcast communication mode
         case DomainAddressSerialNumberRead:
         case DomainAddressSerialNumberResponse:
         case DomainAddressSerialNumberWrite:
-        //case DomainAddressRead:
-        //case DomainAddressSelectiveRead:
-        //case DomainAddressResponse:
-        //case DomainAddressWrite:
+        case DomainAddressRead:
+        case DomainAddressSelectiveRead:
+        case DomainAddressResponse:
+        case DomainAddressWrite:
             return true;
         default:
             return false;
