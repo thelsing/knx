@@ -10,6 +10,33 @@ NetworkLayerCoupler::NetworkLayerCoupler(DeviceObject &deviceObj,
     NetworkLayer(deviceObj, layer),
     _netLayerEntities { {*this, kPrimaryIfIndex}, {*this, kSecondaryIfIndex} }
 {
+    _currentAddress = deviceObj.induvidualAddress();
+    evaluateCouplerType();
+}
+
+NetworkLayerEntity& NetworkLayerCoupler::getEntity(uint8_t interfaceIndex)
+{
+    return _netLayerEntities[interfaceIndex];
+}
+
+void NetworkLayerCoupler::rtObj(RouterObject& rtObj)
+{
+    _rtObjPrimary = &rtObj;
+    _rtObjSecondary = nullptr;
+}
+
+void NetworkLayerCoupler::rtObjPrimary(RouterObject& rtObjPrimary)
+{
+    _rtObjPrimary = &rtObjPrimary;
+}
+
+void NetworkLayerCoupler::rtObjSecondary(RouterObject& rtObjSecondary)
+{
+    _rtObjSecondary = &rtObjSecondary;
+}
+
+void NetworkLayerCoupler::evaluateCouplerType()
+{
     // Check coupler mode
     if ((_deviceObj.induvidualAddress() & 0x00FF) == 0x00)
     {
@@ -42,27 +69,6 @@ NetworkLayerCoupler::NetworkLayerCoupler(DeviceObject &deviceObj,
       }
 */
     }
-}
-
-NetworkLayerEntity& NetworkLayerCoupler::getEntity(uint8_t interfaceIndex)
-{
-    return _netLayerEntities[interfaceIndex];
-}
-
-void NetworkLayerCoupler::rtObj(RouterObject& rtObj)
-{
-    _rtObjPrimary = &rtObj;
-    _rtObjSecondary = nullptr;
-}
-
-void NetworkLayerCoupler::rtObjPrimary(RouterObject& rtObjPrimary)
-{
-    _rtObjPrimary = &rtObjPrimary;
-}
-
-void NetworkLayerCoupler::rtObjSecondary(RouterObject& rtObjSecondary)
-{
-    _rtObjSecondary = &rtObjSecondary;
 }
 
 bool NetworkLayerCoupler::isGroupAddressInFilterTable(uint16_t groupAddress)
@@ -138,6 +144,13 @@ void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uin
 // TODO: we could also do the sanity checks here, i.e. check if sourceAddress is really coming in from correct srcIfIdx, etc. (see PID_COUPL_SERV_CONTROL: EN_SNA_INCONSISTENCY_CHECK)
 void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIndex)
 {
+    // TODO: improve: we have to be notified about anything that might affect routing decision
+    // Ugly: we could ALWAYS evaluate coupler type for every received frame
+    if (_currentAddress != _deviceObj.induvidualAddress())
+    {
+        evaluateCouplerType();
+    }
+
     // See KNX spec.: Network Layer (03/03/03) and AN161 (Coupler model 2.0)
     /*
      * C  hop count value contained in the N-protocol header

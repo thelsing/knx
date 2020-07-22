@@ -60,6 +60,7 @@ class NetworkLayerCoupler : public NetworkLayer
     void sendMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, NPDU& npdu, Priority priority,
                       SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex);
 
+    void evaluateCouplerType();
     bool isGroupAddressInFilterTable(uint16_t groupAddress);
 
     // Support a maximum of two physical interfaces for couplers
@@ -69,4 +70,5 @@ class NetworkLayerCoupler : public NetworkLayer
     RouterObject* _rtObjSecondary {nullptr};
 
     CouplerType _couplerType;
+    uint16_t _currentAddress;
 };
