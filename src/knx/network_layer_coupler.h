@@ -58,7 +58,7 @@ class NetworkLayerCoupler : public NetworkLayer
 
     void routeDataIndividual(AckType ack, uint16_t destination, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIndex);
     void sendMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, NPDU& npdu, Priority priority,
-                      SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex);
+                      SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex, uint16_t source);
 
     void evaluateCouplerType();
     bool isGroupAddressInFilterTable(uint16_t groupAddress);

@@ -34,7 +34,7 @@ class NetworkLayerEntity
 
   private:
     // From network layer
-    void sendDataRequest(NPDU& npdu, AckType ack, uint16_t destination, Priority priority, AddressType addrType, SystemBroadcast systemBroadcast);
+    void sendDataRequest(NPDU& npdu, AckType ack, uint16_t destination, uint16_t source, Priority priority, AddressType addrType, SystemBroadcast systemBroadcast);
 
     DataLinkLayer* _dataLinkLayer = 0;
     NetworkLayer& _netLayer;

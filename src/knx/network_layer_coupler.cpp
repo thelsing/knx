@@ -102,7 +102,7 @@ bool NetworkLayerCoupler::isRoutedIndividualAddress(uint16_t individualAddress)
 }
 
 void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, NPDU& npdu, Priority priority,
-                                          SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex)
+                                          SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex, uint16_t source)
 {
     // If we have a frame from open medium on secondary side (e.g. RF) to primary side, then shall use the hop count of the primary router object
     if ((_rtObjPrimary != nullptr) && (_rtObjSecondary != nullptr) && (sourceInterfaceIndex == kSecondaryIfIndex))
@@ -137,7 +137,7 @@ void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uin
 
     // Use other interface
     uint8_t interfaceIndex = (sourceInterfaceIndex == kSecondaryIfIndex) ? kPrimaryIfIndex : kSecondaryIfIndex;
-    _netLayerEntities[interfaceIndex].sendDataRequest(npdu, ack, destination, priority, addrType, broadcastType);
+    _netLayerEntities[interfaceIndex].sendDataRequest(npdu, ack, destination, source, priority, addrType, broadcastType);
 }
 
 // TODO: for later: improve by putting routing algorithms in its own class/functions and only instantiate required algorithm (line vs. coupler)
@@ -164,8 +164,8 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
     uint16_t ownAA = _deviceObj.induvidualAddress() & 0xF000;  // Own area address
     uint16_t ZS = destination & 0xFF00;                        // destination subnetwork address (area + line)
     uint16_t Z = destination & 0xF000;                         // destination area address
-    uint16_t D = _deviceObj.induvidualAddress() & 0x00FF;      // Own device address (without subnetwork part)
-    uint16_t SD = _deviceObj.induvidualAddress() & 0x0FFF;     // Own device address (with line part, but without area part)
+    uint16_t D = destination & 0x00FF;                         // destination device address (without subnetwork part)
+    uint16_t SD = destination & 0x0FFF;                        // destination device address (with line part, but without area part)
 
     if (_couplerType == LineCoupler)
     {
@@ -186,7 +186,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
             }
             else
             {   // ROUTE_XXX
-                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex);
+                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
             }
             return;
         }
@@ -197,7 +197,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
             if (ZS != ownSNA)
             {
                 // ROUTE_XXX
-                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex);
+                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
             }
             else if (D == 0)
             {
@@ -217,7 +217,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
         {
             // if destination is not within our subnet then send via primary interface, else via secondary interface
             uint8_t destIfidx = (ZS != ownSNA) ? kPrimaryIfIndex : kSecondaryIfIndex;
-            _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, priority, AddressType::InduvidualAddress, Broadcast);
+            _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, source, priority, AddressType::InduvidualAddress, Broadcast);
             return;
         }
     }
@@ -242,7 +242,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
             else
             {
                 // ROUTE_XXX
-                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex);
+                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
             }
             return;
         }
@@ -253,7 +253,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
             if (Z != ownAA)
             {
                 // ROUTE_XXX
-                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex);
+                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
             }
             else if(SD == 0)
             {
@@ -273,7 +273,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
         {
             // if destination is not within our area then send via primary interface, else via secondary interface
             uint8_t destIfidx = (Z != ownAA) ? kPrimaryIfIndex : kSecondaryIfIndex;
-            _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, priority, AddressType::InduvidualAddress, Broadcast);
+            _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, source, priority, AddressType::InduvidualAddress, Broadcast);
             return;
         }
     }
@@ -295,7 +295,7 @@ void NetworkLayerCoupler::dataIndication(AckType ack, AddressType addrType, uint
     if (isGroupAddressInFilterTable(destination))
     {
         // ROUTE_XXX
-        sendMsgHopCount(ack, addrType, destination, npdu, priority, Broadcast, srcIfIdx);
+        sendMsgHopCount(ack, addrType, destination, npdu, priority, Broadcast, srcIfIdx, source);
         return;
     }
     else
@@ -345,7 +345,7 @@ void NetworkLayerCoupler::broadcastIndication(AckType ack, FrameFormat format, N
     }
 
     // Route to other interface
-    sendMsgHopCount(ack, GroupAddress, 0, npdu, priority, Broadcast, srcIfIdx);
+    sendMsgHopCount(ack, GroupAddress, 0, npdu, priority, Broadcast, srcIfIdx, source);
 }
 
 void NetworkLayerCoupler::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
@@ -368,7 +368,7 @@ void NetworkLayerCoupler::systemBroadcastIndication(AckType ack, FrameFormat for
         _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
     }
     // Route to other interface
-    sendMsgHopCount(ack, GroupAddress, 0, npdu, priority, SysBroadcast, srcIfIdx);
+    sendMsgHopCount(ack, GroupAddress, 0, npdu, priority, SysBroadcast, srcIfIdx, source);
 }
 
 void NetworkLayerCoupler::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
@@ -411,10 +411,10 @@ void NetworkLayerCoupler::dataGroupRequest(AckType ack, uint16_t destination, Ho
     // If the group address is in the filter table, then we route it to the primary side too
     if (isGroupAddressInFilterTable(destination))
     {
-        _netLayerEntities[kPrimaryIfIndex].sendDataRequest(npdu, ack, destination, priority, GroupAddress, Broadcast);
+        _netLayerEntities[kPrimaryIfIndex].sendDataRequest(npdu, ack, destination, _deviceObj.induvidualAddress(), priority, GroupAddress, Broadcast);
     }
     // We send it to our sub line in any case
-    _netLayerEntities[kSecondaryIfIndex].sendDataRequest(npdu, ack, destination, priority, GroupAddress, Broadcast);
+    _netLayerEntities[kSecondaryIfIndex].sendDataRequest(npdu, ack, destination, _deviceObj.induvidualAddress(), priority, GroupAddress, Broadcast);
 }
 
 void NetworkLayerCoupler::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -426,8 +426,8 @@ void NetworkLayerCoupler::dataBroadcastRequest(AckType ack, HopCountType hopType
     else
         npdu.hopCount(hopCount());
 
-    _netLayerEntities[kPrimaryIfIndex].sendDataRequest(npdu, ack, 0, priority, GroupAddress, Broadcast);
-    _netLayerEntities[kSecondaryIfIndex].sendDataRequest(npdu, ack, 0, priority, GroupAddress, Broadcast);
+    _netLayerEntities[kPrimaryIfIndex].sendDataRequest(npdu, ack, 0, _deviceObj.induvidualAddress(), priority, GroupAddress, Broadcast);
+    _netLayerEntities[kSecondaryIfIndex].sendDataRequest(npdu, ack, 0, _deviceObj.induvidualAddress(), priority, GroupAddress, Broadcast);
 }
 
 void NetworkLayerCoupler::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -439,6 +439,6 @@ void NetworkLayerCoupler::dataSystemBroadcastRequest(AckType ack, HopCountType h
     else
         npdu.hopCount(hopCount());
 
-    _netLayerEntities[kPrimaryIfIndex].sendDataRequest(npdu, ack, 0, priority, GroupAddress, SysBroadcast);
-    _netLayerEntities[kSecondaryIfIndex].sendDataRequest(npdu, ack, 0, priority, GroupAddress, SysBroadcast);
+    _netLayerEntities[kPrimaryIfIndex].sendDataRequest(npdu, ack, 0, _deviceObj.induvidualAddress(), priority, GroupAddress, SysBroadcast);
+    _netLayerEntities[kSecondaryIfIndex].sendDataRequest(npdu, ack, 0, _deviceObj.induvidualAddress(), priority, GroupAddress, SysBroadcast);
 }
