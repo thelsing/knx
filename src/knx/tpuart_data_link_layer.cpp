@@ -119,6 +119,10 @@ void TpUartDataLinkLayer::loop()
                     loadNextTxFrame();
                     _loopState = TX_FRAME;
                 }
+                else if (!_waitConfirm) {
+                    // if idle, state chip to check it is live or not
+                    stateChip();
+                }
             }
             break;
         case TX_FRAME:
@@ -381,6 +385,28 @@ bool TpUartDataLinkLayer::sendFrame(CemiFrame& frame)
 
     addFrameTxQueue(frame);
     return true;
+}
+
+void TpUartDataLinkLayer::stateChip() {
+    // check chip state if enabled and no data received more than 10 seconds
+    if (_enabled && millis() - _lastByteRxTime > 10000) {
+        uint8_t cmd = U_STATE_REQ;
+        _platform.writeUart(cmd);
+        _waitConfirmStartTime = millis();
+        while (true)
+        {
+            int resp = _platform.readUart();
+            // I'm not sure about the possible values of 'resp', so any data from chip is treated to be alive
+            // Sometimes hardare issue would make it seems to be alive, such as Rx Tx connected.
+            if (resp != -1) {
+                break;
+            }
+            else if (millis() - _waitConfirmStartTime > RESET_TIMEOUT) {
+                _enabled = false;
+                break;
+            }
+        }
+    }
 }
 
 bool TpUartDataLinkLayer::resetChip()
