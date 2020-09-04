@@ -111,7 +111,6 @@ add_executable(knx-linux
         ../../src/knx/secure_application_layer.h
         ../../src/knx/security_interface_object.cpp
         ../../src/knx/security_interface_object.h
-        ../../src/knx/simple_functional.h
         ../../src/knx/simple_map.h
         ../../src/knx/save_restore.h
         ../../src/knx/table_object.cpp
