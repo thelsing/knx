@@ -31,7 +31,7 @@
         - make
         - cd ../..
         - echo "building knx-linux-coupler"
-        - cd examples/knx-linux-coupler
+        - cd knx-linux-coupler
         - mkdir -p build
         - cd build
         - cmake ..
