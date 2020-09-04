@@ -1,5 +1,7 @@
+#include "config.h"
+#if MASK_VERSION == 0x27B0
+
 #include "bau27B0.h"
-#ifdef USE_RF
 #include "bits.h"
 #include <string.h>
 #include <stdio.h>

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "config.h"
-#if defined(USE_IP) && defined (USE_TP)
+#if MASK_VERSION == 0x091A
+
 #include "bau_systemB_coupler.h"
 #include "router_object.h"
 #include "ip_parameter_object.h"

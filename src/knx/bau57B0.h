@@ -1,7 +1,8 @@
 #pragma once
 
 #include "config.h"
-#ifdef USE_IP
+#if MASK_VERSION == 0x57B0
+
 #include "bau_systemB_device.h"
 #include "ip_parameter_object.h"
 #include "ip_data_link_layer.h"

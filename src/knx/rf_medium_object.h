@@ -2,6 +2,7 @@
 
 #include "config.h"
 #ifdef USE_RF
+
 #include "interface_object.h"
 
 class RfMediumObject: public InterfaceObject

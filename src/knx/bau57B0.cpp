@@ -1,10 +1,10 @@
 #include "config.h"
+#if MASK_VERSION == 0x57B0
+
 #include "bau57B0.h"
 #include "bits.h"
 #include <string.h>
 #include <stdio.h>
-
-#ifdef USE_IP
 
 using namespace std;
 

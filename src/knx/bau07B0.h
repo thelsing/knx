@@ -1,12 +1,12 @@
 #pragma once
 
 #include "config.h"
+#if MASK_VERSION == 0x07B0
+
 #include "bau_systemB_device.h"
 #include "tpuart_data_link_layer.h"
 #include "cemi_server.h"
 #include "cemi_server_object.h"
-
-#ifdef USE_TP
 
 class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks
 {

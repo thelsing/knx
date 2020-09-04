@@ -1,8 +1,8 @@
 #pragma once
 
 #include "config.h"
-
 #ifdef USE_TP
+
 #include <stdint.h>
 #include "data_link_layer.h"
 

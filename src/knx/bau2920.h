@@ -1,7 +1,8 @@
 #pragma once
 
 #include "config.h"
-#if defined(USE_TP) && defined (USE_RF)
+#if MASK_VERSION == 0x2920
+
 #include "bau_systemB_coupler.h"
 #include "tpuart_data_link_layer.h"
 #include "rf_physical_layer.h"

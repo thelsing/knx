@@ -1,11 +1,11 @@
+#include "config.h"
+#ifdef USE_RF
+
 #include <cstring>
 #include "rf_medium_object.h"
 #include "bits.h"
 #include "data_property.h"
 #include "function_property.h"
-
-#include "config.h"
-#ifdef USE_RF
 
 RfMediumObject::RfMediumObject()
 {

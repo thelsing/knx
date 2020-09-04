@@ -1,7 +1,8 @@
 #pragma once
 
 #include "config.h"
-#ifdef USE_RF
+#if MASK_VERSION == 0x27B0
+
 #include "bau_systemB_device.h"
 #include "rf_medium_object.h"
 #include "rf_physical_layer.h"

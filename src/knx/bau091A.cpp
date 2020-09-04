@@ -1,10 +1,10 @@
 #include "config.h"
+#if MASK_VERSION == 0x091A
+
 #include "bau091A.h"
 #include "bits.h"
 #include <string.h>
 #include <stdio.h>
-
-#if defined(USE_IP) && defined (USE_TP)
 
 using namespace std;
 

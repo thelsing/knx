@@ -13,25 +13,55 @@
 #endif
 
 // Normal devices
+// TP1: 0x07B0
+// RF: 0x27B0
+// IP: 0x57B0
 //#define MASK_VERSION 0x07B0
 //#define MASK_VERSION 0x27B0
 //#define MASK_VERSION 0x57B0
 
 // Couplers
-// 0x091A: IP/TP1
-// 0x2920: TP1/RF
+// IP/TP1: 0x091A
+// TP1/RF: 0x2920
 //#define MASK_VERSION 0x091A
 //#define MASK_VERSION 0x2920
 
+// Data Linklayer Driver Options
+#if MASK_VERSION == 0x07B0
+#define USE_TP
+#endif
+
+#if MASK_VERSION == 0x27B0
 #define USE_RF
+#endif
+
+#if MASK_VERSION == 0x57B0
+#define USE_IP
+#endif
+
+#if MASK_VERSION == 0x091A
 #define USE_TP
 #define USE_IP
+#endif
+
+#if MASK_VERSION == 0x2920
+#define USE_TP
+#define USE_RF
+#endif
+
+// cEMI options
 //#define USE_USB
 //#define USE_CEMI_SERVER
 #ifdef USE_USB
 #define USE_CEMI_SERVER
 #endif
 
+// KNX Data Secure Options
 #define USE_DATASECURE
 
 #endif
+
+#if !defined(MASK_VERSION)
+#error MASK_VERSION must be defined! See config.j for possible values!
+#endif
+

@@ -1,5 +1,7 @@
-#include "tpuart_data_link_layer.h"
+#include "config.h"
 #ifdef USE_TP
+
+#include "tpuart_data_link_layer.h"
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"

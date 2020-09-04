@@ -2,6 +2,7 @@
 
 #include "config.h"
 #ifdef USE_IP
+
 #include <stdint.h>
 #include "data_link_layer.h"
 #include "ip_parameter_object.h"
