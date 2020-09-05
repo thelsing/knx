@@ -10,12 +10,12 @@ using namespace std;
 
 Bau27B0::Bau27B0(Platform& platform)
     : BauSystemBDevice(platform),
-      _dlLayer(_deviceObj, _rfMediumObj, _netLayer.getEntity(0), _platform)
+      _dlLayer(_deviceObj, _rfMediumObj, _netLayer.getInterface(), _platform)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif      
 {
-    _netLayer.getEntity(0).dataLinkLayer(_dlLayer);
+    _netLayer.getInterface().dataLinkLayer(_dlLayer);
     _memory.addSaveRestore(&_rfMediumObj);
 #ifdef USE_CEMI_SERVER
     _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_RF);

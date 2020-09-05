@@ -16,7 +16,7 @@ class NetworkLayerDevice : public NetworkLayer
   public:
     NetworkLayerDevice(DeviceObject& deviceObj, TransportLayer& layer);
 
-    virtual NetworkLayerEntity& getEntity(uint8_t interfaceIndex) override;
+    NetworkLayerEntity& getInterface();
 
     // from transport layer
     virtual void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;

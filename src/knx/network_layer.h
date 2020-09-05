@@ -16,8 +16,6 @@ class NetworkLayer
   public:
     NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer);
 
-    virtual NetworkLayerEntity& getEntity(uint8_t interfaceIndex) = 0;
-
     uint8_t hopCount() const;
     bool isApciSystemBroadcast(APDU& apdu);
 

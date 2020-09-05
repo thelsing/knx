@@ -10,9 +10,9 @@ NetworkLayerDevice::NetworkLayerDevice(DeviceObject &deviceObj, TransportLayer& 
 {
 }
 
-NetworkLayerEntity& NetworkLayerDevice::getEntity(uint8_t interfaceIndex)
+NetworkLayerEntity& NetworkLayerDevice::getInterface()
 {
-    return _netLayerEntities[interfaceIndex];
+    return _netLayerEntities[kInterfaceIndex];
 }
 
 void NetworkLayerDevice::dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -59,7 +59,7 @@ void NetworkLayerDevice::dataBroadcastRequest(AckType ack, HopCountType hopType,
 void NetworkLayerDevice::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
 {
     // for closed media like TP1 and IP
-    bool isClosedMedium = (getEntity(0).mediumType() == DptMedium::KNX_TP1) || (getEntity(0).mediumType() == DptMedium::KNX_IP);
+    bool isClosedMedium = (_netLayerEntities[kInterfaceIndex].mediumType() == DptMedium::KNX_TP1) || (_netLayerEntities[kInterfaceIndex].mediumType() == DptMedium::KNX_IP);
     SystemBroadcast broadcastType = (isClosedMedium && isApciSystemBroadcast(tpdu.apdu()) ? Broadcast : SysBroadcast);
 
     NPDU& npdu = tpdu.frame().npdu();
@@ -112,7 +112,7 @@ void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint1
 void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
-    DptMedium mediumType = getEntity(srcIfIdx).mediumType();
+    DptMedium mediumType = _netLayerEntities[srcIfIdx].mediumType();
 
     // for closed media like TP1 and IP there is no system broadcast
     // however we must be able to access those APCI via broadcast mode

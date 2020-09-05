@@ -14,8 +14,8 @@ Bau2920::Bau2920(Platform& platform)
       _rtObjPrimary(memory()),
       _rtObjSecondary(memory()),
       _rfMediumObject(),
-      _dlLayerPrimary(_deviceObj, _netLayer.getEntity(0), _platform, (ITpUartCallBacks&) *this),
-      _dlLayerSecondary(_deviceObj, _rfMediumObject, _netLayer.getEntity(1), platform)
+      _dlLayerPrimary(_deviceObj, _netLayer.getPrimaryInterface(), _platform, (ITpUartCallBacks&) *this),
+      _dlLayerSecondary(_deviceObj, _rfMediumObject, _netLayer.getSecondaryInterface(), platform)
 #ifdef USE_CEMI_SERVER
       ,
       _cemiServer(*this)
@@ -28,8 +28,8 @@ Bau2920::Bau2920(Platform& platform)
 
     _netLayer.rtObjPrimary(_rtObjPrimary);
     _netLayer.rtObjSecondary(_rtObjSecondary);
-    _netLayer.getEntity(0).dataLinkLayer(_dlLayerPrimary);
-    _netLayer.getEntity(1).dataLinkLayer(_dlLayerSecondary);
+    _netLayer.getPrimaryInterface().dataLinkLayer(_dlLayerPrimary);
+    _netLayer.getSecondaryInterface().dataLinkLayer(_dlLayerSecondary);
 
 #ifdef USE_CEMI_SERVER
     _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_TP1);

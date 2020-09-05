@@ -12,8 +12,8 @@ Bau091A::Bau091A(Platform& platform)
     : BauSystemBCoupler(platform),
       _routerObj(memory()),
       _ipParameters(_deviceObj, platform),
-      _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getEntity(0), _platform),
-      _dlLayerSecondary(_deviceObj, _netLayer.getEntity(1), platform, (ITpUartCallBacks&) *this)
+      _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getPrimaryInterface(), _platform),
+      _dlLayerSecondary(_deviceObj, _netLayer.getSecondaryInterface(), platform, (ITpUartCallBacks&) *this)
 #ifdef USE_CEMI_SERVER
       ,
       _cemiServer(*this)
@@ -26,8 +26,8 @@ Bau091A::Bau091A(Platform& platform)
     // Mask 091A uses older coupler model 1.x which only uses one router object
     _netLayer.rtObj(_routerObj);
 
-    _netLayer.getEntity(0).dataLinkLayer(_dlLayerPrimary);
-    _netLayer.getEntity(1).dataLinkLayer(_dlLayerSecondary);
+    _netLayer.getPrimaryInterface().dataLinkLayer(_dlLayerPrimary);
+    _netLayer.getSecondaryInterface().dataLinkLayer(_dlLayerSecondary);
 
 #ifdef USE_CEMI_SERVER
     _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_IP);

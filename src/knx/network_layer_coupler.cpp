@@ -14,9 +14,14 @@ NetworkLayerCoupler::NetworkLayerCoupler(DeviceObject &deviceObj,
     evaluateCouplerType();
 }
 
-NetworkLayerEntity& NetworkLayerCoupler::getEntity(uint8_t interfaceIndex)
+NetworkLayerEntity& NetworkLayerCoupler::getPrimaryInterface()
 {
-    return _netLayerEntities[interfaceIndex];
+    return _netLayerEntities[0];
+}
+
+NetworkLayerEntity& NetworkLayerCoupler::getSecondaryInterface()
+{
+    return _netLayerEntities[1];
 }
 
 void NetworkLayerCoupler::rtObj(RouterObject& rtObj)
@@ -107,7 +112,7 @@ void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uin
     // If we have a frame from open medium on secondary side (e.g. RF) to primary side, then shall use the hop count of the primary router object
     if ((_rtObjPrimary != nullptr) && (_rtObjSecondary != nullptr) && (sourceInterfaceIndex == kSecondaryIfIndex))
     {
-        DptMedium mediumType = getEntity(kSecondaryIfIndex).mediumType();
+        DptMedium mediumType = getSecondaryInterface().mediumType();
         if (mediumType == DptMedium::KNX_RF) // Probably also KNX_PL110, but this is not specified, PL110 is also an open medium
         {
             uint16_t hopCount = 0;
@@ -337,7 +342,7 @@ void NetworkLayerCoupler::broadcastIndication(AckType ack, FrameFormat format, N
     // Send it to our local stack first
     {
         HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
-        DptMedium mediumType = getEntity(srcIfIdx).mediumType();
+        DptMedium mediumType = _netLayerEntities[srcIfIdx].mediumType();
 
         // for closed media like TP1 and IP
         if ( ((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
