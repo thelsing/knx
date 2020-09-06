@@ -2,10 +2,6 @@
 
 #include "config.h"
 #include "bau.h"
-#include "device_object.h"
-#include "address_table_object.h"
-#include "association_table_object.h"
-#include "group_object_table_object.h"
 #include "security_interface_object.h"
 #include "application_program_object.h"
 #include "application_layer.h"
@@ -20,17 +16,19 @@ class BauSystemB : protected BusAccessUnit
 {
   public:
     BauSystemB(Platform& platform);
-    virtual void loop();
-    DeviceObject& deviceObject();
-    GroupObjectTableObject& groupObjectTable();
+    virtual void loop() = 0;
+    virtual bool configured() = 0;
+    virtual bool enabled() = 0;
+    virtual void enabled(bool value) = 0;
+
     ApplicationProgramObject& parameters();
+    DeviceObject& deviceObject();
+
     Memory& memory();
-    bool configured();
-    bool enabled();
-    void enabled(bool value);
     void readMemory();
     void writeMemory();
     void addSaveRestore(SaveRestore* obj);
+
     bool restartRequest(uint16_t asap, const SecurityControl secCtrl);
     uint8_t checkmasterResetValidity(EraseCode eraseCode, uint8_t channel);
 
@@ -42,7 +40,10 @@ class BauSystemB : protected BusAccessUnit
                             uint8_t* data, uint32_t length) override;
 
   protected:
-    virtual DataLinkLayer& dataLinkLayer() = 0;
+    virtual ApplicationLayer& applicationLayer() = 0;
+    virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
+    virtual InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance) = 0;
+
     void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                uint16_t memoryAddress, uint8_t* data) override;
     void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
@@ -80,26 +81,13 @@ class BauSystemB : protected BusAccessUnit
     void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t newIndividualAddress,
                                                       uint8_t* knxSerialNumber) override;
     void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber) override;
-    void groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
-                                     uint8_t* data, uint8_t dataLength, bool status) override;
-    void groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl, bool status) override;
-    void groupValueReadIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl) override;
-    void groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
-                                       uint8_t* data, uint8_t dataLength) override;
-    void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
-                                   uint8_t* data, uint8_t dataLength) override;
     void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t objectType,
                                               uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength) override;
     void systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t objectType,
                                                 uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status) override;
     void connectConfirm(uint16_t tsap) override;
 
-    virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
-    virtual InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance) = 0;
-    void sendNextGroupTelegram();
-    void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
     void nextRestartState();
-
     virtual void doMasterReset(EraseCode eraseCode, uint8_t channel);
 
     enum RestartState
@@ -110,22 +98,10 @@ class BauSystemB : protected BusAccessUnit
         Restarted
     };
 
-    DeviceObject _deviceObj;
     Memory _memory;
-    AddressTableObject _addrTable;
-    AssociationTableObject _assocTable;
-    GroupObjectTableObject _groupObjTable;
+    DeviceObject _deviceObj;
     ApplicationProgramObject _appProgram;
     Platform& _platform;
-#ifdef USE_DATASECURE
-    SecureApplicationLayer _appLayer;
-    SecurityInterfaceObject _secIfObj;
-#else
-    ApplicationLayer _appLayer;
-#endif
-    TransportLayer _transLayer;
-    NetworkLayer _netLayer;
-    bool _configured = true;
     RestartState _restartState = Idle;
     SecurityControl _restartSecurity;
     uint32_t _restartDelay = 0;

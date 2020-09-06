@@ -1,24 +1,25 @@
 #include "config.h"
+#if MASK_VERSION == 0x57B0
+
 #include "bau57B0.h"
 #include "bits.h"
 #include <string.h>
 #include <stdio.h>
 
-#ifdef USE_IP
-
 using namespace std;
 
 Bau57B0::Bau57B0(Platform& platform)
-    : BauSystemB(platform),
+    : BauSystemBDevice(platform),
       _ipParameters(_deviceObj, platform),
-      _dlLayer(_deviceObj, _addrTable, _ipParameters, _netLayer, _platform)
+      _dlLayer(_deviceObj, _ipParameters, _netLayer.getInterface(), _platform)
 #ifdef USE_CEMI_SERVER
       ,
       _cemiServer(*this)
 #endif
 {
-    _netLayer.dataLinkLayer(_dlLayer);
+    _netLayer.getInterface().dataLinkLayer(_dlLayer);
 #ifdef USE_CEMI_SERVER
+    _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_IP);
     _cemiServer.dataLinkLayer(_dlLayer);
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
@@ -124,9 +125,23 @@ void Bau57B0::doMasterReset(EraseCode eraseCode, uint8_t channel)
     _ipParameters.masterReset(eraseCode, channel);
 }
 
-DataLinkLayer& Bau57B0::dataLinkLayer()
+bool Bau57B0::enabled()
 {
-    return _dlLayer;
+    return _dlLayer.enabled();
+}
+
+void Bau57B0::enabled(bool value)
+{
+    _dlLayer.enabled(value);
+}
+
+void Bau57B0::loop()
+{
+    _dlLayer.loop();
+    BauSystemBDevice::loop();
+#ifdef USE_CEMI_SERVER
+    _cemiServer.loop();
+#endif
 }
 
 #endif

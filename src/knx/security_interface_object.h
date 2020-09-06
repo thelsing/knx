@@ -6,14 +6,10 @@
 #include "interface_object.h"
 #include "knx_types.h"
 
-class SecureApplicationLayer;
-
 class SecurityInterfaceObject: public InterfaceObject
 {
 public:
   SecurityInterfaceObject();
-
-  void secureApplicationLayer(SecureApplicationLayer& secAppLayer);
 
   virtual void masterReset(EraseCode eraseCode, uint8_t channel) override;
 
@@ -39,9 +35,11 @@ public:
   uint16_t saveSize() override;
 
 private:
-  SecureApplicationLayer* _secAppLayer = nullptr;
-
   void setSecurityMode(bool enabled);
+
+  void clearFailureLog();
+  void getFailureCounters(uint8_t* data);
+  uint8_t getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen);
 
   void errorCode(ErrorCode errorCode);
 

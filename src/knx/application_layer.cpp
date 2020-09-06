@@ -10,14 +10,18 @@
 
 const SecurityControl ApplicationLayer::noSecurity {.toolAccess=false, .dataSecurity=DataSecurity::none};
 
-ApplicationLayer::ApplicationLayer(AssociationTableObject& assocTable, BusAccessUnit& bau):
-    _assocTable(assocTable),  _bau(bau)
+ApplicationLayer::ApplicationLayer(BusAccessUnit& bau) : _bau(bau)
 {
 }
 
 void ApplicationLayer::transportLayer(TransportLayer& layer)
 {
     _transportLayer = &layer;
+}
+
+void ApplicationLayer::associationTableObject(AssociationTableObject& assocTable)
+{
+    _assocTable = &assocTable;
 }
 
 #pragma region TL Callbacks
@@ -29,6 +33,9 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
 
 void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
+    if (_assocTable == nullptr)
+        return;
+
     uint8_t len = apdu.length();
     uint8_t dataArray[len];
     uint8_t* data = dataArray;
@@ -45,8 +52,8 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
     }
 
     uint16_t startIdx = 0;
-    int32_t asap = _assocTable.nextAsap(tsap, startIdx);
-    for (; asap != -1; asap = _assocTable.nextAsap(tsap, startIdx))
+    int32_t asap = _assocTable->nextAsap(tsap, startIdx);
+    for (; asap != -1; asap = _assocTable->nextAsap(tsap, startIdx))
     {
         switch (apdu.type())
         {
@@ -135,14 +142,8 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
             break;
         }
         default:
-#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-            // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
-            dataSystemBroadcastIndication(hopType, priority, source, apdu, secCtrl);
-#else
             print("Broadcast-indication: unhandled APDU-Type: ");
             println(apdu.type());
-
-#endif
             break;
     }
 }
@@ -188,14 +189,8 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
             break;
         }
         default:
-#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-            // Make sure we also check if it is a service normally available only on SystemBroadcast on open media
-            dataSystemBroadcastConfirm(hopType, priority, apdu, secCtrl, status);
-#else
             print("Broadcast-confirm: unhandled APDU-Type: ");
             println(apdu.type());
-
-#endif
             break;
     }
 }
@@ -239,11 +234,7 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
             break;
         }
         default:
-#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-            print("Broadcast-indication: unhandled APDU-Type: ");
-#else
             print("SystemBroadcast-indication: unhandled APDU-Type: ");
-#endif
             println(apdu.type());
             break;
     }
@@ -287,11 +278,7 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
             break;
         }
         default:
-#if (MEDIUM_TYPE == 5)||(MEDIUM_TYPE == 0)
-            print("Broadcast-confirm: unhandled APDU-Type: ");
-#else
             print("SystemBroadcast-confirm: unhandled APDU-Type: ");
-#endif
             println(apdu.type());
             break;
     }
@@ -365,12 +352,15 @@ void ApplicationLayer::dataConnectedConfirm(uint16_t tsap, const SecurityControl
 #pragma endregion
 void ApplicationLayer::groupValueReadRequest(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl)
 {
+    if (_assocTable == nullptr)
+        return;
+
     _savedAsapReadRequest = asap;
     CemiFrame frame(1);
     APDU& apdu = frame.apdu();
     apdu.type(GroupValueRead);
     
-    int32_t value = _assocTable.translateAsap(asap);
+    int32_t value = _assocTable->translateAsap(asap);
     if (value < 0)
         return; // there is no tsap in association table for this asap
     
@@ -742,25 +732,6 @@ void ApplicationLayer::memoryExtReadResponse(AckType ack, Priority priority, Hop
     individualSend(ack, hopType, priority, asap, apdu, secCtrl);
 }
 
-uint16_t ApplicationLayer::crc16Ccitt(uint8_t* input, uint16_t length)
-{
-        uint32_t polynom = 0x1021;
-        uint8_t padded[length+2];
-
-        memcpy(padded, input, length);
-        memset(padded+length, 0x00, 2);
-
-        uint32_t result = 0xffff;
-        for (uint32_t i = 0; i < 8 * (uint32_t)sizeof(padded); i++) {
-            result <<= 1;
-            uint32_t nextBit = (padded[i / 8] >> (7 - (i % 8))) & 0x1;
-            result |= nextBit;
-            if ((result & 0x10000) != 0)
-                result ^= polynom;
-        }
-        return result & 0xffff;
-}
-
 void ApplicationLayer::memoryExtWriteResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ReturnCodes code,
                                               uint8_t number, uint32_t memoryAddress, uint8_t * memoryData)
 {
@@ -777,7 +748,7 @@ void ApplicationLayer::memoryExtWriteResponse(AckType ack, Priority priority, Ho
 
     if (withCrc)
     {
-        uint16_t crc = crc16Ccitt(memoryData, number); // TODO
+        uint16_t crc = crc16Ccitt(memoryData, number);
         data[5] = crc >> 8;
         data[6] = crc & 0xFF;
     }
@@ -928,6 +899,9 @@ void ApplicationLayer::propertyExtDataSend(ApduType type, AckType ack, Priority 
 void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
     uint8_t* data,  uint8_t& dataLength)
 {
+    if (_assocTable == nullptr)
+        return;
+
     CemiFrame frame(dataLength + 1);
     APDU& apdu = frame.apdu();
     apdu.type(type);
@@ -943,7 +917,7 @@ void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap,
         memcpy(apdudata + 1, data, dataLength);
     }
     // no need to check if there is a tsap. This is a response, so the read got trough
-    uint16_t tsap = (uint16_t)_assocTable.translateAsap(asap);
+    uint16_t tsap = (uint16_t)_assocTable->translateAsap(asap);
     dataGroupRequest(ack, hopType, priority, tsap, apdu, secCtrl);
     dataGroupIndication(hopType, priority, tsap, apdu, secCtrl);
 }

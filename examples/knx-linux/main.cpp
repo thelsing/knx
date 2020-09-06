@@ -33,12 +33,13 @@ bool isSendHidReportPossible()
 {
     return false;
 }
-#if MEDIUM_TYPE == 5
+
+#if MASK_VERSION == 0x57B0
 KnxFacade<LinuxPlatform, Bau57B0> knx;
-#elif MEDIUM_TYPE == 2
+#elif MASK_VERSION == 0x27B0
 KnxFacade<LinuxPlatform, Bau27B0> knx;
 #else
-#error Only MEDIUM_TYPE IP and RF supported
+#error Mask version not supported yet!
 #endif
 
 long lastsend = 0;

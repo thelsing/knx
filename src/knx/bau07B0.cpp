@@ -1,21 +1,23 @@
+#include "config.h"
+#if MASK_VERSION == 0x07B0
+
 #include "bau07B0.h"
 #include "bits.h"
 #include <string.h>
 #include <stdio.h>
 
-#ifdef USE_TP
-
 using namespace std;
 
 Bau07B0::Bau07B0(Platform& platform)
-    : BauSystemB(platform),
-      _dlLayer(_deviceObj, _addrTable, _netLayer, _platform)
+    : BauSystemBDevice(platform),
+      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&) *this)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif           
 {
-    _netLayer.dataLinkLayer(_dlLayer);
+    _netLayer.getInterface().dataLinkLayer(_dlLayer);
 #ifdef USE_CEMI_SERVER
+    _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_TP1);
     _cemiServer.dataLinkLayer(_dlLayer);
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
@@ -106,17 +108,41 @@ InterfaceObject* Bau07B0::getInterfaceObject(ObjectType objectType, uint8_t obje
     }
 }
 
-DataLinkLayer& Bau07B0::dataLinkLayer()
+bool Bau07B0::enabled()
 {
-    return _dlLayer;
+    return _dlLayer.enabled();
+}
+
+void Bau07B0::enabled(bool value)
+{
+    _dlLayer.enabled(value);
 }
 
 void Bau07B0::loop()
 {
-    ::BauSystemB::loop();
+    _dlLayer.loop();
+    BauSystemBDevice::loop();
 #ifdef USE_CEMI_SERVER    
     _cemiServer.loop();
 #endif    
+}
+
+bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
+{
+    if (isGrpAddr)
+    {
+        // ACK for broadcasts
+        if (address == 0)
+            return true;
+        // is group address in group address table? ACK if yes.
+        return _addrTable.contains(address);
+    }
+
+    // Also ACK for our own individual address
+    if (address == _deviceObj.induvidualAddress())
+        return true;
+
+    return false;
 }
 
 #endif

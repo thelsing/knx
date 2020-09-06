@@ -174,6 +174,22 @@ enum PropertyID
     PID_GO_SECURITY_FLAGS = 61,                 // Defines the required security requirements for each group object
     PID_ROLE_TABLE = 62,                        // Role table
     PID_TOOL_SEQUENCE_NUMBER_SENDING = 250,     // Sequence Number used for the next outgoing secure communication (Tool Access only, non-standardized!)
+
+    /** Router Object */
+    PID_MEDIUM_STATUS = 51,
+    PID_MAIN_LCCONFIG = 52,
+    PID_SUB_LCCONFIG = 53,
+    PID_MAIN_LCGRPCONFIG = 54,
+    PID_SUB_LCGRPCONFIG = 55,
+    PID_ROUTETABLE_CONTROL = 56,
+    PID_COUPLER_SERVICES_CONTROL = 57,
+    PID_MAX_APDU_LENGTH_ROUTER = 58,
+    PID_L2_COUPLER_TYPE = 59,                   // Only interesting for mask 0x0912 (TP1/TP1 coupler)
+    PID_HOP_COUNT = 61,                         // Only interesting in primary if other medium(secondary) is open medium without hopcount
+    PID_MEDIUM = 63,
+    PID_FILTER_TABLE_USE = 67,
+    PID_RF_ENABLE_SBC = 112,                    // Exists only if medium for this router object is RF (PDT_FUNCTION)
+    PID_IP_ENABLE_SBC = 120,                    // Exists only if medium for this router object is IP (PDT_FUNCTION)
 };
 
 enum LoadState

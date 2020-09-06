@@ -73,9 +73,9 @@ bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
     return true;
 }
 
-RfDataLinkLayer::RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj, AddressTableObject& addrTab,
-                                         NetworkLayer& layer, Platform& platform)
-    : DataLinkLayer(devObj, addrTab, layer, platform),
+RfDataLinkLayer::RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj,
+                                         NetworkLayerEntity &netLayerEntity, Platform& platform)
+    : DataLinkLayer(devObj, netLayerEntity, platform),
       _rfMediumObj(rfMediumObj),
       _rfPhy(*this, platform)
 {
@@ -267,6 +267,11 @@ void RfDataLinkLayer::enabled(bool value)
 bool RfDataLinkLayer::enabled() const
 {
     return _enabled;
+}
+
+DptMedium RfDataLinkLayer::mediumType() const
+{
+    return DptMedium::KNX_RF;
 }
 
 void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)

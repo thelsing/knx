@@ -1,5 +1,7 @@
+#include "config.h"
+#if MASK_VERSION == 0x27B0
+
 #include "bau27B0.h"
-#ifdef USE_RF
 #include "bits.h"
 #include <string.h>
 #include <stdio.h>
@@ -7,15 +9,16 @@
 using namespace std;
 
 Bau27B0::Bau27B0(Platform& platform)
-    : BauSystemB(platform),
-      _dlLayer(_deviceObj, _rfMediumObj, _addrTable, _netLayer, _platform)
+    : BauSystemBDevice(platform),
+      _dlLayer(_deviceObj, _rfMediumObj, _netLayer.getInterface(), _platform)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif      
 {
-    _netLayer.dataLinkLayer(_dlLayer);
+    _netLayer.getInterface().dataLinkLayer(_dlLayer);
     _memory.addSaveRestore(&_rfMediumObj);
 #ifdef USE_CEMI_SERVER
+    _cemiServerObject.setMediumTypeAsSupported(DptMedium::KNX_RF);
     _cemiServer.dataLinkLayer(_dlLayer);
     _dlLayer.cemiServer(_cemiServer);
     _memory.addSaveRestore(&_cemiServerObject);
@@ -128,14 +131,20 @@ void Bau27B0::doMasterReset(EraseCode eraseCode, uint8_t channel)
     _rfMediumObj.masterReset(eraseCode, channel);
 }
 
-DataLinkLayer& Bau27B0::dataLinkLayer()
+bool Bau27B0::enabled()
 {
-    return _dlLayer;
+    return _dlLayer.enabled();
+}
+
+void Bau27B0::enabled(bool value)
+{
+    _dlLayer.enabled(value);
 }
 
 void Bau27B0::loop()
 {
-    ::BauSystemB::loop();
+    _dlLayer.loop();
+    BauSystemBDevice::loop();
 #ifdef USE_CEMI_SERVER    
     _cemiServer.loop();
 #endif    

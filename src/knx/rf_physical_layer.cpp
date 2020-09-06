@@ -174,27 +174,6 @@ bool RfPhysicalLayer::manchDecode(uint8_t *encodedData, uint8_t *decodedData)
   return true;
 }
 
-int RfPhysicalLayer::crc16(uint8_t* buffer, int offset, int length)
-{
-        // CRC-16-DNP
-        // generator polynomial = 2^16 + 2^13 + 2^12 + 2^11 + 2^10 + 2^8 + 2^6 + 2^5 + 2^2 + 2^0
-        int pn = 0x13d65; // 1 0011 1101 0110 0101
-
-        // for much data, using a lookup table would be a way faster CRC calculation
-        int crc = 0;
-        for (int i = offset; i < offset + length; i++) {
-            int bite = buffer[i] & 0xff;
-            for (int b = 8; b --> 0;) {
-                bool bit = ((bite >> b) & 1) == 1;
-                bool one = (crc >> 15 & 1) == 1;
-                crc <<= 1;
-                if (one ^ bit)
-                    crc ^= pn;
-            }
-        }
-        return (~crc) & 0xffff;
-}
-
 uint8_t RfPhysicalLayer::sIdle()
 {
     uint8_t marcState;

@@ -56,21 +56,24 @@ void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
 
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 {
-#if MEDIUM_TYPE == 2
+    bool isRf = _dataLinkLayer->mediumType() == DptMedium::KNX_RF;
+    uint8_t data[frame.dataLength() + (isRf ? 10 : 0)];
 
-    uint8_t data[frame.dataLength() + 10];
-    data[0] = L_data_ind;     // Message Code
-    data[1] = 0x0A;           // Total additional info length
-    data[2] = 0x02;           // RF add. info: type
-    data[3] = 0x08;           // RF add. info: length
-    data[4] = frame.rfInfo(); // RF add. info: info field (batt ok, bidir)
-    pushByteArray(frame.rfSerialOrDoA(), 6, &data[5]); // RF add. info:Serial or Domain Address
-    data[11] = frame.rfLfn(); // RF add. info: link layer frame number
-    memcpy(&data[12], &((frame.data())[2]), frame.dataLength() - 2);
-#else
-    uint8_t data[frame.dataLength()];
-    memcpy(&data[0], frame.data(), frame.dataLength());
-#endif
+    if (isRf)
+    {
+        data[0] = L_data_ind;     // Message Code
+        data[1] = 0x0A;           // Total additional info length
+        data[2] = 0x02;           // RF add. info: type
+        data[3] = 0x08;           // RF add. info: length
+        data[4] = frame.rfInfo(); // RF add. info: info field (batt ok, bidir)
+        pushByteArray(frame.rfSerialOrDoA(), 6, &data[5]); // RF add. info:Serial or Domain Address
+        data[11] = frame.rfLfn(); // RF add. info: link layer frame number
+        memcpy(&data[12], &((frame.data())[2]), frame.dataLength() - 2);
+    }
+    else
+    {
+        memcpy(&data[0], frame.data(), frame.dataLength());
+    }
 
     CemiFrame tmpFrame(data, sizeof(data));
 
@@ -87,6 +90,8 @@ void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 
 void CemiServer::frameReceived(CemiFrame& frame)
 {
+    bool isRf = _dataLinkLayer->mediumType() == DptMedium::KNX_RF;
+
     switch(frame.messageCode())
     {
         case L_data_req:
@@ -98,35 +103,36 @@ void CemiServer::frameReceived(CemiFrame& frame)
                 frame.sourceAddress(_clientAddress);
             }
 
-#if MEDIUM_TYPE == 2
-            // Check if we have additional info for RF
-            if (((frame.data())[1] == 0x0A) && // Additional info total length: we only handle one additional info of type RF
-                ((frame.data())[2] == 0x02) && // Additional info type: RF
-                ((frame.data())[3] == 0x08) )  // Additional info length of type RF: 8 bytes (fixed)
+            if (isRf)
             {
-                frame.rfInfo((frame.data())[4]);
-                // Use the values provided in the RF additonal info 
-                if ( ((frame.data())[5] != 0x00) || ((frame.data())[6] != 0x00) || ((frame.data())[7] != 0x00) ||
-                     ((frame.data())[8] != 0x00) || ((frame.data())[9] != 0x00) || ((frame.data())[10] != 0x00) )
+                // Check if we have additional info for RF
+                if (((frame.data())[1] == 0x0A) && // Additional info total length: we only handle one additional info of type RF
+                    ((frame.data())[2] == 0x02) && // Additional info type: RF
+                    ((frame.data())[3] == 0x08) )  // Additional info length of type RF: 8 bytes (fixed)
                 {
-                    frame.rfSerialOrDoA(&((frame.data())[5]));
-                } // else leave the nullptr as it is
-                frame.rfLfn((frame.data())[11]);
-            }
+                    frame.rfInfo((frame.data())[4]);
+                    // Use the values provided in the RF additonal info
+                    if ( ((frame.data())[5] != 0x00) || ((frame.data())[6] != 0x00) || ((frame.data())[7] != 0x00) ||
+                         ((frame.data())[8] != 0x00) || ((frame.data())[9] != 0x00) || ((frame.data())[10] != 0x00) )
+                    {
+                        frame.rfSerialOrDoA(&((frame.data())[5]));
+                    } // else leave the nullptr as it is
+                    frame.rfLfn((frame.data())[11]);
+                }
 
-            // If the cEMI client does not provide a link layer frame number (LFN),
-            // we use our own counter.
-            // Note: There is another link layer frame number counter inside the RF data link layer class!
-            //       That counter is solely for the local application!
-            //       If we set a LFN here, the data link layer counter is NOT used!
-            if (frame.rfLfn() == 0xFF)
-            {
-                // Set Data Link Layer Frame Number
-                frame.rfLfn(_frameNumber);
-                // Link Layer frame number counts 0..7
-                _frameNumber = (_frameNumber + 1) & 0x7;
+                // If the cEMI client does not provide a link layer frame number (LFN),
+                // we use our own counter.
+                // Note: There is another link layer frame number counter inside the RF data link layer class!
+                //       That counter is solely for the local application!
+                //       If we set a LFN here, the data link layer counter is NOT used!
+                if (frame.rfLfn() == 0xFF)
+                {
+                    // Set Data Link Layer Frame Number
+                    frame.rfLfn(_frameNumber);
+                    // Link Layer frame number counts 0..7
+                    _frameNumber = (_frameNumber + 1) & 0x7;
+                }
             }
-#endif
 
             print("L_data_req: src: ");
             print(frame.sourceAddress(), HEX);

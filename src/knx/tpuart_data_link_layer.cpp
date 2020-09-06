@@ -1,5 +1,7 @@
-#include "tpuart_data_link_layer.h"
+#include "config.h"
 #ifdef USE_TP
+
+#include "tpuart_data_link_layer.h"
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
@@ -265,23 +267,19 @@ void TpUartDataLinkLayer::loop()
                 if (!_isEcho)
                 {
                     uint8_t c = 0x10;
-                    //ceck if individual or group address
-                    if ((buffer[6] & 0x80) == 0)
+
+                    // The bau knows everything and could either check the address table object (normal device)
+                    // or any filter tables (coupler) to see if we are addressed.
+
+                    //check if individual or group address
+                    bool isGroupAddress = (buffer[6] & 0x80) != 0;
+                    uint16_t addr = getWord(buffer + 4);
+
+                    if (_cb.isAckRequired(addr, isGroupAddress))
                     {
-                        //individual
-                        if (_deviceObject.induvidualAddress() == getWord(buffer + 4))
-                        {
-                            c |= 0x01;
-                        }
+                        c |= 0x01;
                     }
-                    else
-                    {
-                        //group
-                        if (_groupAddressTable.contains(getWord(buffer + 4)) || getWord(buffer + 4) == 0)
-                        {
-                            c |= 0x01;
-                        }
-                    }
+
                     _platform.writeUart(c);
                 }
             }
@@ -412,9 +410,12 @@ void TpUartDataLinkLayer::stopChip()
 #endif
 }
 
-TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
-                                         NetworkLayer& layer, Platform& platform)
-    : DataLinkLayer(devObj, addrTab, layer, platform)
+TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
+                                         NetworkLayerEntity &netLayerEntity,
+                                         Platform& platform,
+                                         ITpUartCallBacks& cb)
+    : DataLinkLayer(devObj, netLayerEntity, platform),
+      _cb(cb)
 {
 }
 
@@ -465,6 +466,11 @@ void TpUartDataLinkLayer::enabled(bool value)
 bool TpUartDataLinkLayer::enabled() const
 {
     return _enabled;
+}
+
+DptMedium TpUartDataLinkLayer::mediumType() const
+{
+    return DptMedium::KNX_TP1;
 }
 
 bool TpUartDataLinkLayer::sendSingleFrameByte()

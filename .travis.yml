@@ -29,53 +29,13 @@
         - cd build
         - cmake ..
         - make
-
-    # Test build for Arduino platform
-    - language: cpp
-      os: linux
-      env:
-          - ARDUINO_IDE_VERSION="1.8.11"
-      cache:
-        directories:
-          - ~/arduino_ide
-          - ~/.arduino15/packages/
-      git:
-        depth: false
-        quiet: true
-      before_install:
-          - downloadArduinoLib() { wget -O $1.zip $2; unzip -o $1.zip -d $HOME/arduino_ide/libraries; }
-          - source <(curl -SLs "https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh")
-          - downloadArduinoLib FlashStorage "https://github.com/thelsing/FlashStorage/archive/master.zip"
-          - downloadArduinoLib BSEC "https://github.com/BoschSensortec/BSEC-Arduino-library/archive/master.zip"
-          # only default warning level
-          - sed -i 's#compiler.warning_level=all#compiler.warning_level=default#' ~/.arduino15/preferences.txt
-          # changes for bsec lib
-          # samd
-          - ls -l ~/.arduino15/packages/arduino/hardware/samd
-          - sed -ri 's#(recipe.c.combine.pattern=[^$]*\{archive_file\}")( -Wl,--end-group)#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/arduino/hardware/samd/1.8.6/platform.txt
-          - sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/arduino/hardware/samd/1.8.6/platform.txt
-          # esp8266
-          - ls -l ~/.arduino15/packages/esp8266/hardware/esp8266
-          - sed -ri 's#(recipe.c.combine.pattern=[^$]*\{compiler.c.elf.libs\})( -Wl,--end-group  "-L\{build.path\}")#\1 {compiler.libraries.ldflags}\2#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/platform.txt
-          - sed -i 's#compiler.elf2hex.extra_flags=#compiler.elf2hex.extra_flags=\ncompiler.libraries.ldflags=#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/platform.txt
-          - sed -i '/^.*libalgobsec.*$/d' ~/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/tools/sdk/ld/eagle.app.v6.common.ld.h
-          - sed -ri 's#(\*libwps\.a:\(\.literal\.\* \.text\.\*\))#\1\n    *libalgobsec.a:(.literal.* .text.*)#' ~/.arduino15/packages/esp8266/hardware/esp8266/2.7.1/tools/sdk/ld/eagle.app.v6.common.ld.h
-
-          # the HDC100X lib is not properly set up in githup so move things around a bit
-          - rm -rf $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
-          - downloadArduinoLib HDC100X "https://github.com/RFgermany/HDC100X_Arduino_Library/archive/master.zip"
-          - mv $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master/HDC100X/* $HOME/arduino_ide/libraries/HDC100X_Arduino_Library-master
-          #- buildExampleSketch() { arduino --verify --board $BOARD $PWD/examples/$1/$1.ino; }
-
-      install:
-          - arduino --install-library "WiFiManager"
-      script:
-         # - buildExampleSketch knx-demo
-         # - buildExampleSketch knx-sonoffS20
-         # - buildExampleSketch knx-bme680
-         # - buildExampleSketch knx-hdc1008
-          - build_platform zero
-         # - build_platform esp8266
+        - cd ../..
+        - echo "building knx-linux-coupler"
+        - cd knx-linux-coupler
+        - mkdir -p build
+        - cd build
+        - cmake ..
+        - make
 
     # Test build for PlatformIO based projects
     - language: python
@@ -102,6 +62,9 @@
 
         - echo "-------";echo "Compiling example knx-demo";echo "--------";
         - platformio ci --lib="." --project-conf=examples/knx-demo/platformio-ci.ini examples/knx-demo/knx-demo.ino
+
+        - echo "-------";echo "Compiling example knx-demo-coupler";echo "--------";
+        - platformio ci --lib="." --project-conf=examples/knx-demo-coupler/platformio-ci.ini examples/knx-demo-coupler/knx-demo-coupler.ino
 
 notifications:
   email:

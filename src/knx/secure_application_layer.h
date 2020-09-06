@@ -28,11 +28,9 @@ class SecureApplicationLayer :  public ApplicationLayer
      * @param assocTable The AssociationTable is used to translate between asap (i.e. group objects) and group addresses.
      * @param bau methods are called here depending of the content of the APDU
      */
-    SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, AssociationTableObject& assocTable, AddressTableObject& addrTab, BusAccessUnit& bau);
+    SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, BusAccessUnit& bau);
 
-    void clearFailureLog();
-    void getFailureCounters(uint8_t* data);
-    uint8_t getFromFailureLogByIndex(uint8_t index, uint8_t* data, uint8_t maxDataLen);
+    void groupAddressTable(AddressTableObject& addrTable);
 
     // from transport layer
     virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu) override;
@@ -150,5 +148,5 @@ class SecureApplicationLayer :  public ApplicationLayer
 
     SecurityInterfaceObject& _secIfObj;
     DeviceObject& _deviceObj;
-    AddressTableObject& _addrTab;
+    AddressTableObject* _addrTab = nullptr;
 };

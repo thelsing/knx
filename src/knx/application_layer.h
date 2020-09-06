@@ -22,11 +22,13 @@ class ApplicationLayer
      * @param assocTable The AssociationTable is used to translate between asap (i.e. group objects) and group addresses.
      * @param bau methods are called here depending of the content of the APDU
      */
-    ApplicationLayer(AssociationTableObject& assocTable, BusAccessUnit& bau);
+    ApplicationLayer(BusAccessUnit& bau);
     /**
      * Assigns the TransportLayer to which encoded APDU are submitted to.
      */
     void transportLayer(TransportLayer& layer);
+
+    void associationTableObject(AssociationTableObject& assocTable);
 
     // from transport layer
     // Note: without data secure feature, the application layer is just used with SecurtyControl.dataSecurity = none
@@ -199,12 +201,10 @@ class ApplicationLayer
     void individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status);
     void individualSend(AckType ack, HopCountType hopType, Priority priority, uint16_t asap, APDU& apdu, const SecurityControl& secCtrl);
 
-    uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
-
     uint16_t _savedAsapReadRequest;
     uint16_t _savedAsapWriteRequest;
     uint16_t _savedAsapResponse;
-    AssociationTableObject& _assocTable;
+    AssociationTableObject* _assocTable = nullptr;
     BusAccessUnit& _bau;
 
     int32_t _connectedTsap = -1;

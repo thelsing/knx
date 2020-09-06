@@ -2,15 +2,12 @@
 
 #include "knx/bits.h"
 #include "knx/config.h"
-// Set default medium type to TP if no external definitions was given
-#ifndef MEDIUM_TYPE
-#define MEDIUM_TYPE 0
-#endif
 
 #ifdef ARDUINO_ARCH_SAMD
     #include "samd_platform.h"
     #include "knx/bau07B0.h"
     #include "knx/bau27B0.h"
+    #include "knx/bau2920.h"
 #elif ARDUINO_ARCH_ESP8266
    #include "esp_platform.h"
    #include "knx/bau57B0.h"
@@ -19,6 +16,7 @@
    #include "esp32_platform.h"
    #include "knx/bau07B0.h"
    #include "knx/bau57B0.h"
+   #include "knx/bau091A.h"
 #elif ARDUINO_ARCH_STM32
    #include "stm32_platform.h"
    #include "knx/bau07B0.h"
@@ -27,6 +25,9 @@
    #include "linux_platform.h"
    #include "knx/bau57B0.h"
    #include "knx/bau27B0.h"
+   #include "knx/bau07B0.h"
+   #include "knx/bau091A.h"
+   #include "knx/bau2920.h"
 #endif
 
 void buttonUp();
@@ -267,10 +268,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return _bau.parameters().getInt(addr);
     }
 
+#if (MASK_VERSION == 0x07B0) || (MASK_VERSION == 0x27B0) || (MASK_VERSION == 0x57B0)
     GroupObject& getGroupObject(uint16_t goNr)
     {
         return _bau.groupObjectTable().get(goNr);
     }
+#endif
 
     void restart(uint16_t individualAddress)
     {
@@ -319,37 +322,41 @@ template <class P, class B> class KnxFacade : private SaveRestore
 };
 
 #ifdef ARDUINO_ARCH_SAMD
-    // predefined global instance for TP or RF
-    #ifdef MEDIUM_TYPE
-        #if MEDIUM_TYPE == 0
-            extern KnxFacade<SamdPlatform, Bau07B0> knx;
-        #elif MEDIUM_TYPE == 2
-            extern KnxFacade<SamdPlatform, Bau27B0> knx;
-        #else
-            #error "Only TP and RF supported for Arduino SAMD platform!"
-        #endif
+    // predefined global instance for TP or RF or TP/RF coupler
+    #if MASK_VERSION == 0x07B0
+        extern KnxFacade<SamdPlatform, Bau07B0> knx;
+    #elif MASK_VERSION == 0x27B0
+        extern KnxFacade<SamdPlatform, Bau27B0> knx;
+    #elif MASK_VERSION == 0x2920
+        extern KnxFacade<SamdPlatform, Bau2920> knx;
     #else
-        #error "No medium type specified for Arduino_SAMD platform! Please set MEDIUM_TYPE! (TP:0, RF:2, IP:5)"
+        #error "Mask version not supported on ARDUINO_ARCH_SAMD"
     #endif
 #elif ARDUINO_ARCH_ESP8266
     // predefined global instance for IP only
-    extern KnxFacade<EspPlatform, Bau57B0> knx;
-#elif ARDUINO_ARCH_ESP32
-    // predefined global instance for TP or IP
-    #ifdef MEDIUM_TYPE
-        #if MEDIUM_TYPE == 0
-            extern KnxFacade<Esp32Platform, Bau07B0> knx;
-        #elif MEDIUM_TYPE == 5
-            extern KnxFacade<Esp32Platform, Bau57B0> knx;
-        #else
-            #error "Only TP and IP supported for Arduino ESP32 platform!"
-        #endif
+    #if MASK_VERSION == 0x57B0
+        extern KnxFacade<EspPlatform, Bau57B0> knx;
     #else
-        #error "No medium type specified for Arduino ESP32 platform! Please set MEDIUM_TYPE! (TP:0, RF:2, IP:5)"
+        #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
+    #endif
+#elif ARDUINO_ARCH_ESP32
+    // predefined global instance for TP or IP or TP/IP coupler
+    #if MASK_VERSION == 0x07B0
+        extern KnxFacade<Esp32Platform, Bau07B0> knx;
+    #elif MASK_VERSION == 0x57B0
+        extern KnxFacade<Esp32Platform, Bau57B0> knx;
+    #elif MASK_VERSION == 0x091A
+        extern KnxFacade<Esp32Platform, Bau091A> knx;
+    #else
+        #error "Mask version not supported on ARDUINO_ARCH_ESP32"
     #endif
 #elif ARDUINO_ARCH_STM32
     // predefined global instance for TP only
-    extern KnxFacade<Stm32Platform, Bau07B0> knx;
+    #if MASK_VERSION == 0x07B0
+        extern KnxFacade<Stm32Platform, Bau07B0> knx;
+    #else
+        #error Mask version not supported on ARDUINO_ARCH_STM32
+    #endif
 #elif __linux__
     // no predefined global instance
 #endif

@@ -89,4 +89,6 @@ class CemiFrame
     uint8_t  _rfInfo = 0;
     uint8_t  _rfLfn = 0xFF; // RF Data Link layer frame number
  #endif
+
+    uint8_t _sourceInterfaceIndex;
 };

@@ -206,7 +206,6 @@ class RfPhysicalLayer
     void manchEncode(uint8_t *uncodedData, uint8_t *encodedData);
     bool manchDecode(uint8_t *encodedData, uint8_t *decodedData);
 
-    int crc16(uint8_t* buffer, int offset, int length);
     void powerDownCC1101();
     void setOutputPowerLevel(int8_t dBm);
 
