@@ -3,7 +3,6 @@
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
-#include "address_table_object.h"
 #include "cemi_server.h"
 #include "cemi_frame.h"
 
