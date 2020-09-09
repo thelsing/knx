@@ -458,7 +458,7 @@ void LinuxPlatform::setupUart()
     struct termios options;    /* Schnittstellenoptionen */
 
     /* Port oeffnen - read/write, kein "controlling tty", Status von DCD ignorieren */
-    _uartFd = open("/dev/ttyAMA0", O_RDWR | O_NOCTTY | O_NDELAY);
+    _uartFd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY);
     if (_uartFd >= 0)
     {
         /* get the current options */
@@ -500,6 +500,23 @@ void LinuxPlatform::setupUart()
             return;
         }
     }
+}
+
+void printUint64(uint64_t value, int base = DEC)
+  {
+    char buf[8 * sizeof(uint64_t) + 1];
+    char* str = &buf[sizeof(buf) - 1];
+    *str = '\0';
+
+    uint64_t n = value;
+    do {
+      char c = n % base;
+      n /= base;
+
+      *--str = c < 10 ? c + '0' : c + 'A' - 10;
+    } while (n > 0);
+
+     print(str);
 }
 
 void print(const char* s)
@@ -574,6 +591,16 @@ void print(unsigned long num, int base)
         printf("%lX", num);
     else
         printf("%ld", num);
+}
+
+void print(unsigned long long num)
+{
+    printUint64(num);
+}
+
+void print(unsigned long long num, int base)
+{
+    printUint64(num, base);
 }
 
 void print(double num)
@@ -653,6 +680,18 @@ void println(unsigned long num, int base)
         printf("%lX\n", num);
     else
         printf("%ld\n", num);
+}
+
+void println(unsigned long long num)
+{
+    printUint64(num);
+    println("");
+}
+
+void println(unsigned long long num, int base)
+{
+    printUint64(num, base);
+    println("");
 }
 
 void println(double num)
