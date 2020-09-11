@@ -38,6 +38,8 @@ bool isSendHidReportPossible()
 KnxFacade<LinuxPlatform, Bau57B0> knx;
 #elif MASK_VERSION == 0x27B0
 KnxFacade<LinuxPlatform, Bau27B0> knx;
+#elif MASK_VERSION == 0x07B0
+KnxFacade<LinuxPlatform, Bau07B0> knx;
 #else
 #error Mask version not supported yet!
 #endif

@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 2.7)
 project(knx-linux-coupler)
 set(LIBRARIES_FROM_REFERENCES "")
-add_executable(knx-linux 
-	../../src/knx/address_table_object.cpp 
+
+set(SOURCES
+        ../../src/knx/address_table_object.cpp
 	../../src/knx/address_table_object.h
         ../../src/knx/aes.c
         ../../src/knx/aes.h
@@ -130,9 +131,18 @@ add_executable(knx-linux
         fdsk.cpp
         fdsk.h
 	main.cpp)
-target_link_libraries(knx-linux  "${LIBRARIES_FROM_REFERENCES}")
+
 include_directories(../../src)
+
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -g -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -g -O0")
-set_property(TARGET knx-linux PROPERTY CXX_STANDARD 11)
-add_definitions(-DMASK_VERSION=0x091A)
+
+add_executable(knx-linux-iptp ${SOURCES})
+target_link_libraries(knx-linux-iptp  "${LIBRARIES_FROM_REFERENCES}")
+set_property(TARGET knx-linux-iptp PROPERTY CXX_STANDARD 11)
+target_compile_definitions(knx-linux-iptp PUBLIC -DMASK_VERSION=0x091A)
+
+add_executable(knx-linux-tprf ${SOURCES})
+target_link_libraries(knx-linux-tprf  "${LIBRARIES_FROM_REFERENCES}")
+set_property(TARGET knx-linux-tprf PROPERTY CXX_STANDARD 11)
+target_compile_definitions(knx-linux-tprf PUBLIC -DMASK_VERSION=0x2920)
