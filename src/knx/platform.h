@@ -14,6 +14,7 @@ class Platform
 {
   public:
     virtual ~Platform() {}
+
     // ip config
     virtual uint32_t currentIpAddress();
     virtual uint32_t currentSubnetMask();

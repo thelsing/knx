@@ -42,6 +42,8 @@
     #endif
 #elif __linux__
     // no predefined global instance
+#else // Non-Arduino platforms
+    // no predefined global instance
 #endif
 
 #ifndef ICACHE_RAM_ATTR
@@ -49,7 +51,10 @@
 #endif
 ICACHE_RAM_ATTR void buttonUp()
 {
-    #ifndef __linux__
+    #if !defined(__linux__) && (defined(ARDUINO_ARCH_STM32) || \
+                                defined(ARDUINO_ARCH_ESP32) || \
+                                defined(ARDUINO_ARCH_ESP8266) || \
+                                defined(ARDUINO_ARCH_SAMD))
     static uint32_t lastpressed=0;
     if (millis() - lastpressed > 200){
         knx._toogleProgMode = true;

@@ -20,9 +20,17 @@
 #elif ARDUINO_ARCH_STM32
    #include "stm32_platform.h"
    #include "knx/bau07B0.h"
-#else
+#elif __linux__
    #define LED_BUILTIN 0
    #include "linux_platform.h"
+   #include "knx/bau57B0.h"
+   #include "knx/bau27B0.h"
+   #include "knx/bau07B0.h"
+   #include "knx/bau091A.h"
+   #include "knx/bau2920.h"
+#else
+   #define LED_BUILTIN 0
+   #include "cc1310_platform.h"
    #include "knx/bau57B0.h"
    #include "knx/bau27B0.h"
    #include "knx/bau07B0.h"
@@ -358,5 +366,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         #error Mask version not supported on ARDUINO_ARCH_STM32
     #endif
 #elif __linux__
+    // no predefined global instance
+#else // Non-Arduino platforms
     // no predefined global instance
 #endif

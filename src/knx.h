@@ -142,7 +142,7 @@ BauSystemBDevice<--KnxFacade
 knx-->Platform
 @enduml
 
-/** \page Classdiagramm KNX coupler
+* \page Classdiagramm KNX coupler
  * This diagramm shows the most important classes of a KNX coupler.
 @startuml
 
