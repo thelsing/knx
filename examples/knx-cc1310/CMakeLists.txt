@@ -13,7 +13,6 @@ include(cc13xx)
 
 # Find dependencies
 find_package(SimpleLinkCC13X0SDK_nortos REQUIRED)
-find_package(Xdctools REQUIRED)
 
 #
 # Target
@@ -34,7 +33,6 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/../../src/knx"
     "${CMAKE_CURRENT_SOURCE_DIR}/RTT"
     ${SimpleLinkCC13X0SDK_INCLUDE_DIRS}
-    ${Xdctools_INCLUDE_DIRS}
 )
 
 add_definitions(-DMASK_VERSION=0x07B0 -Wno-unknown-pragmas)
