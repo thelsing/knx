@@ -1,1 +1,11 @@
-cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-arm-none-eabi.cmake ..
+#!/bin/bash
+
+[ -d build ] || mkdir build
+
+cd build
+
+#create Makefile
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+
+#Run make
+cmake --build . -j4

@@ -2,8 +2,14 @@
 ## KNX for CC1310
 ##
 
-project(knx-cc1310 C CXX ASM)
 cmake_minimum_required(VERSION 3.12)
+
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/toolchain-arm-none-eabi.cmake")
+endif()    
+
+
+project(knx-cc1310 C CXX ASM)
 
 # Generate a "compile_commands.json" file containing the exact compiler calls for all translation units of the project in machine-readable form.
 # Useful for C/CPP extension of VS code
