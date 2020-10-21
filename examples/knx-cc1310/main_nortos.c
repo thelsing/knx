@@ -43,6 +43,7 @@
 
 /* Example/Board Header files */
 #include <ti/drivers/Board.h>
+#include <ti/drivers/Power.h>
 #include <ti/drivers/NVS.h>
 #include <ti/drivers/UART.h>
 #include <ti/drivers/pin/PINCC26XX.h>
@@ -82,10 +83,11 @@ void *mainThread(void *arg0)
  */
 int main(void)
 {
+    // Setup RTT config for debug output
     SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL);
-
     SEGGER_RTT_WriteString(0, "System startup.\r\n");
 
+    // Make sure that compiled objects match the linked SDK library version
     DRIVERLIB_ASSERT_CURR_RELEASE();
 
     // Enable flash cache
@@ -93,10 +95,16 @@ int main(void)
     // Configure round robin arbitration and prefetching
     VIMSConfigure(VIMS_BASE, true, true);
 
+    /* Set config parameters for NoRTOS */
+    NoRTOS_Config config;
+    NoRTOS_getConfig(&config);
+    config.idleCallback = Power_idleFunc;
+    NoRTOS_setConfig(&config);
+
     // set LF clock source needed for low power deepSleep() function further below
     //OSCClockSourceSet(OSC_SRC_CLK_LF, USE_32KHZ_XTAL_AS_LF_CLOCK ? OSC_XOSC_LF : OSC_RCOSC_LF);
 
-    // Call driver init functions
+    // Call driver init functions before starting NoRTOS/RTOS
     Board_init();
 
     // TI Drivers init before starting NoRTOS/RTOS
@@ -106,7 +114,8 @@ int main(void)
     //SPI_init();
     //TRNG_init();
 
-    // Start NoRTOS
+    // Start NoRTOS (this just enables the HwI globally and returns immediately as
+    //               we are not using RTOS here)
     NoRTOS_start();
 
     // Call mainThread function
