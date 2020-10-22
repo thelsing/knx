@@ -47,3 +47,26 @@ uint32_t ApplicationProgramObject::getInt(uint32_t addr)
 {
     return ::getInt(TableObject::data() + addr);
 }
+
+double ApplicationProgramObject::getFloat(uint32_t addr, ParameterFloatEncodings encoding)
+{
+    uint8_t buffer[8];
+    switch (encoding)
+    {
+        case Float_Enc_DPT9:
+            memcpyInverted(buffer, TableObject::data() + addr, 2);
+            return Decode_DPT9_Float(*(uint16_t*)buffer);
+            break;
+        case Float_Enc_IEEE754Single:
+            memcpyInverted(buffer, TableObject::data() + addr, 4);
+            return *(float*)(buffer);
+            break;
+        case Float_Enc_IEEE754Double:
+            memcpyInverted(buffer, TableObject::data() + addr, 8);
+            return *(double*)(buffer);
+            break;
+        default:
+            return 0;
+            break;
+    }
+}

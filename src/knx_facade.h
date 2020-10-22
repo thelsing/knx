@@ -268,6 +268,14 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return _bau.parameters().getInt(addr);
     }
 
+    double paramFloat(uint32_t addr, ParameterFloatEncodings enc)
+    {
+        if (!_bau.configured())
+            return 0;
+
+        return _bau.parameters().getFloat(addr, enc);
+    }
+    
 #if (MASK_VERSION == 0x07B0) || (MASK_VERSION == 0x27B0) || (MASK_VERSION == 0x57B0)
     GroupObject& getGroupObject(uint16_t goNr)
     {
