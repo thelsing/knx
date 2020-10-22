@@ -14,7 +14,7 @@
         #error Mask version not supported on ARDUINO_ARCH_SAMD
     #endif
 
-#elif ARDUINO_ARCH_ESP8266
+#elif defined(ARDUINO_ARCH_ESP8266)
     // predefined global instance for IP only
     #if MASK_VERSION == 0x57B0
         KnxFacade<EspPlatform, Bau57B0> knx;
@@ -22,7 +22,7 @@
         #error Mask version not supported on ARDUINO_ARCH_ESP8266
     #endif
 
-#elif ARDUINO_ARCH_ESP32
+#elif defined(ARDUINO_ARCH_ESP32)
     // predefined global instance for TP or IP or TP/IP coupler
     #if MASK_VERSION == 0x07B0
         KnxFacade<Esp32Platform, Bau07B0> knx;
@@ -34,13 +34,13 @@
         #error Mask version not supported on ARDUINO_ARCH_ESP8266
     #endif
 
-#elif ARDUINO_ARCH_STM32
+#elif defined(ARDUINO_ARCH_STM32)
     #if MASK_VERSION == 0x07B0
         KnxFacade<Stm32Platform, Bau07B0> knx;
     #else
         #error Mask version not supported on ARDUINO_ARCH_STM32
     #endif
-#elif __linux__
+#elif defined(__linux__)
     // no predefined global instance
 #endif
 

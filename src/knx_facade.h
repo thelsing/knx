@@ -8,16 +8,16 @@
     #include "knx/bau07B0.h"
     #include "knx/bau27B0.h"
     #include "knx/bau2920.h"
-#elif ARDUINO_ARCH_ESP8266
+#elif defined(ARDUINO_ARCH_ESP8266)
    #include "esp_platform.h"
    #include "knx/bau57B0.h"
-#elif ARDUINO_ARCH_ESP32
+#elif defined(ARDUINO_ARCH_ESP32)
    #define LED_BUILTIN 13
    #include "esp32_platform.h"
    #include "knx/bau07B0.h"
    #include "knx/bau57B0.h"
    #include "knx/bau091A.h"
-#elif ARDUINO_ARCH_STM32
+#elif defined(ARDUINO_ARCH_STM32)
    #include "stm32_platform.h"
    #include "knx/bau07B0.h"
 #else
@@ -332,14 +332,14 @@ template <class P, class B> class KnxFacade : private SaveRestore
     #else
         #error "Mask version not supported on ARDUINO_ARCH_SAMD"
     #endif
-#elif ARDUINO_ARCH_ESP8266
+#elif defined(ARDUINO_ARCH_ESP8266)
     // predefined global instance for IP only
     #if MASK_VERSION == 0x57B0
         extern KnxFacade<EspPlatform, Bau57B0> knx;
     #else
         #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
     #endif
-#elif ARDUINO_ARCH_ESP32
+#elif defined(ARDUINO_ARCH_ESP32)
     // predefined global instance for TP or IP or TP/IP coupler
     #if MASK_VERSION == 0x07B0
         extern KnxFacade<Esp32Platform, Bau07B0> knx;
@@ -350,13 +350,13 @@ template <class P, class B> class KnxFacade : private SaveRestore
     #else
         #error "Mask version not supported on ARDUINO_ARCH_ESP32"
     #endif
-#elif ARDUINO_ARCH_STM32
+#elif defined(ARDUINO_ARCH_STM32)
     // predefined global instance for TP only
     #if MASK_VERSION == 0x07B0
         extern KnxFacade<Stm32Platform, Bau07B0> knx;
     #else
         #error Mask version not supported on ARDUINO_ARCH_STM32
     #endif
-#elif __linux__
+#elif defined(__linux__)
     // no predefined global instance
 #endif
