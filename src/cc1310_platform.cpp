@@ -76,8 +76,14 @@ CC1310Platform::~CC1310Platform()
 {
 }
 
-void CC1310Platform::earlyInit() 
+void CC1310Platform::init() 
 {
+    // TI Drivers init
+    // According to SDK docs it is safe to call them AFTER NoRTOS_Start()
+    // If RTOS is used and multiple thread use the same driver, then the init shall be performed before BIOS_Start()
+    UART_init();
+    NVS_init();
+
     // Init UART
     InitUART();
 

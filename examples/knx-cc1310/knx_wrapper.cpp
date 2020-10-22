@@ -10,7 +10,7 @@ void setup()
     pKnx = new KnxFacade<CC1310Platform, Bau07B0>;
     KnxFacade<CC1310Platform, Bau07B0> &knx = *pKnx;
 
-    knx.platform().earlyInit();
+    knx.platform().init();
 
     knx.readMemory();
 

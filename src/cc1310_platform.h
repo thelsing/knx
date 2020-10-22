@@ -14,7 +14,7 @@ class CC1310Platform : public Platform
     CC1310Platform();
     virtual ~CC1310Platform();
 
-    void earlyInit();
+    void init();
 
     // basic stuff
     virtual void restart() final;

@@ -107,13 +107,6 @@ int main(void)
     // Call driver init functions before starting NoRTOS/RTOS
     Board_init();
 
-    // TI Drivers init before starting NoRTOS/RTOS
-    UART_init();
-    NVS_init();
-    //I2C_init();
-    //SPI_init();
-    //TRNG_init();
-
     // Start NoRTOS (this just enables the HwI globally and returns immediately as
     //               we are not using RTOS here)
     NoRTOS_start();
