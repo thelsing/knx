@@ -3,6 +3,8 @@
     # Test build for Linux platform
     - language: cpp
       os: linux
+      python:
+        - "3.8"
       addons:
         apt:
           sources:
