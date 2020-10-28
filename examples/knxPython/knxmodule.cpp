@@ -28,7 +28,7 @@ static void loop()
     while (running)
     {
         bau->loop();
-        platform->mdelay(100);
+        delayMicroseconds(100);
     }
 }
 
