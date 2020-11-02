@@ -3,12 +3,12 @@
 
 #include "knx_wrapper.h"
 
-KnxFacade<CC1310Platform, Bau07B0> *pKnx = nullptr;
+KnxFacade<CC1310Platform, Bau27B0> *pKnx = nullptr;
 
 void setup()
 {
-    pKnx = new KnxFacade<CC1310Platform, Bau07B0>;
-    KnxFacade<CC1310Platform, Bau07B0> &knx = *pKnx;
+    pKnx = new KnxFacade<CC1310Platform, Bau27B0>;
+    KnxFacade<CC1310Platform, Bau27B0> &knx = *pKnx;
 
     knx.platform().init();
 
@@ -28,7 +28,7 @@ void setup()
 
 void loop()
 {
-    KnxFacade<CC1310Platform, Bau07B0> &knx = *pKnx;
+    KnxFacade<CC1310Platform, Bau27B0> &knx = *pKnx;
 
     knx.loop();
 }
