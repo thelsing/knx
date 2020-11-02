@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef DeviceFamily_CC13X0
+
 #include <ti/drivers/NVS.h>
 #include <ti/drivers/UART.h>
 #include <ti/drivers/dpl/ClockP.h>
@@ -41,3 +43,5 @@ class CC1310Platform : public Platform
     UART_Handle uart;
     NVS_Handle nvsHandle;
 };
+
+#endif //DeviceFamily_CC13X0

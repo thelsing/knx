@@ -1,3 +1,5 @@
+#ifdef DeviceFamily_CC13X0
+
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
@@ -567,3 +569,5 @@ void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode)
     IntMasterEnable();
 #endif
 }
+
+#endif // DeviceFamily_CC13X0
