@@ -5,6 +5,17 @@
 
 KnxFacade<CC1310Platform, Bau27B0> *pKnx = nullptr;
 
+void buttonUp()
+{
+    static uint32_t lastpressed=0;
+    if (millis() - lastpressed > 200)
+    {
+        KnxFacade<CC1310Platform, Bau27B0> &knx = *pKnx;
+        knx._toogleProgMode = true;
+        lastpressed = millis();
+    }
+}
+
 void setup()
 {
     pKnx = new KnxFacade<CC1310Platform, Bau27B0>;
