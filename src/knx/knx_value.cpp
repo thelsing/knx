@@ -522,8 +522,9 @@ struct tm KNXValue::timeValue() const
         case StringType:
         {
             time_t timeVal = ulongValue();
-            struct tm* timePtr = gmtime(&timeVal);
-            return *timePtr;
+            struct tm timeStruct;
+            gmtime_r(&timeVal, &timeStruct);
+            return timeStruct;
         }
     }
     struct tm tmp = {0};

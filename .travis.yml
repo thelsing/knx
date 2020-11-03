@@ -9,6 +9,7 @@
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
+            - python3.7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       cache:
@@ -23,15 +24,6 @@
       install:
       
       script:
-        - echo "building knx-linux"
-        - cd examples/knx-linux
-        - mkdir -p build
-        - cd build
-        - cmake ..
-        - make
-        - cd ../..
-        - echo "building knx-linux-coupler"
-        - cd knx-linux-coupler
         - mkdir -p build
         - cd build
         - cmake ..

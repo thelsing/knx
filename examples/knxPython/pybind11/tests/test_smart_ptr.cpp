@@ -27,7 +27,8 @@ namespace pybind11 { namespace detail {
     struct holder_helper<ref<T>> {
         static const T *get(const ref<T> &p) { return p.get_ptr(); }
     };
-}}
+} // namespace detail
+} // namespace pybind11
 
 // The following is not required anymore for std::shared_ptr, but it should compile without error:
 PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
@@ -97,9 +98,9 @@ TEST_SUBMODULE(smart_ptr, m) {
     class MyObject1 : public Object {
     public:
         MyObject1(int value) : value(value) { print_created(this, toString()); }
-        std::string toString() const { return "MyObject1[" + std::to_string(value) + "]"; }
+        std::string toString() const override { return "MyObject1[" + std::to_string(value) + "]"; }
     protected:
-        virtual ~MyObject1() { print_destroyed(this); }
+        ~MyObject1() override { print_destroyed(this); }
     private:
         int value;
     };
@@ -127,6 +128,7 @@ TEST_SUBMODULE(smart_ptr, m) {
     // Object managed by a std::shared_ptr<>
     class MyObject2 {
     public:
+        MyObject2(const MyObject2 &) = default;
         MyObject2(int value) : value(value) { print_created(this, toString()); }
         std::string toString() const { return "MyObject2[" + std::to_string(value) + "]"; }
         virtual ~MyObject2() { print_destroyed(this); }
@@ -145,6 +147,7 @@ TEST_SUBMODULE(smart_ptr, m) {
     // Object managed by a std::shared_ptr<>, additionally derives from std::enable_shared_from_this<>
     class MyObject3 : public std::enable_shared_from_this<MyObject3> {
     public:
+        MyObject3(const MyObject3 &) = default;
         MyObject3(int value) : value(value) { print_created(this, toString()); }
         std::string toString() const { return "MyObject3[" + std::to_string(value) + "]"; }
         virtual ~MyObject3() { print_destroyed(this); }
@@ -183,6 +186,32 @@ TEST_SUBMODULE(smart_ptr, m) {
     py::class_<MyObject4, std::unique_ptr<MyObject4, py::nodelete>>(m, "MyObject4")
         .def(py::init<int>())
         .def_readwrite("value", &MyObject4::value);
+
+    // test_unique_deleter
+    // Object with std::unique_ptr<T, D> where D is not matching the base class
+    // Object with a protected destructor
+    class MyObject4a {
+    public:
+        MyObject4a(int i) {
+            value = i;
+            print_created(this);
+        };
+        int value;
+    protected:
+        virtual ~MyObject4a() { print_destroyed(this); }
+    };
+    py::class_<MyObject4a, std::unique_ptr<MyObject4a, py::nodelete>>(m, "MyObject4a")
+        .def(py::init<int>())
+        .def_readwrite("value", &MyObject4a::value);
+
+    // Object derived but with public destructor and no Deleter in default holder
+    class MyObject4b : public MyObject4a {
+    public:
+        MyObject4b(int i) : MyObject4a(i) { print_created(this); }
+        ~MyObject4b() override { print_destroyed(this); }
+    };
+    py::class_<MyObject4b, MyObject4a>(m, "MyObject4b")
+        .def(py::init<int>());
 
     // test_large_holder
     class MyObject5 { // managed by huge_unique_ptr
@@ -248,6 +277,8 @@ TEST_SUBMODULE(smart_ptr, m) {
 
     // Issue #865: shared_from_this doesn't work with virtual inheritance
     struct SharedFromThisVBase : std::enable_shared_from_this<SharedFromThisVBase> {
+        SharedFromThisVBase() = default;
+        SharedFromThisVBase(const SharedFromThisVBase &) = default;
         virtual ~SharedFromThisVBase() = default;
     };
     struct SharedFromThisVirt : virtual SharedFromThisVBase {};
@@ -261,7 +292,8 @@ TEST_SUBMODULE(smart_ptr, m) {
         ~C() { print_destroyed(this); }
     };
     py::class_<C, custom_unique_ptr<C>>(m, "TypeWithMoveOnlyHolder")
-        .def_static("make", []() { return custom_unique_ptr<C>(new C); });
+        .def_static("make", []() { return custom_unique_ptr<C>(new C); })
+        .def_static("make_as_object", []() { return py::cast(custom_unique_ptr<C>(new C)); });
 
     // test_holder_with_addressof_operator
     struct TypeForHolderWithAddressOf {
@@ -306,7 +338,11 @@ TEST_SUBMODULE(smart_ptr, m) {
 
     // test_shared_ptr_gc
     // #187: issue involving std::shared_ptr<> return value policy & garbage collection
-    struct ElementBase { virtual void foo() { } /* Force creation of virtual table */ };
+    struct ElementBase {
+        virtual ~ElementBase() = default; /* Force creation of virtual table */
+        ElementBase() = default;
+        ElementBase(const ElementBase&) = delete;
+    };
     py::class_<ElementBase, std::shared_ptr<ElementBase>>(m, "ElementBase");
 
     struct ElementA : ElementBase {
