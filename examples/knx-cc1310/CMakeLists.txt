@@ -166,8 +166,6 @@ set(${PROJECT_NAME}_SOURCES
     ./RTT/SEGGER_RTT.c
     ./RTT/SEGGER_RTT.h
     ./RTT/SEGGER_RTT_ASM_ARMv7M.S
-    ./RFQueue.c
-    ./RFQueue.h
     ./smartrf_settings/smartrf_settings.c
     ./smartrf_settings/smartrf_settings.h
     ./CC1310_LAUNCHXL_fxns.c

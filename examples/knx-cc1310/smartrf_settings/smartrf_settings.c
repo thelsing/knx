@@ -5,23 +5,20 @@
 //
 //*********************************************************************************
 
-
 //*********************************************************************************
 // Parameter summary
-// Address: off
-// Address0: 0xAA 
-// Address1: 0xBB 
+// Address: on
+// Address0: 0x44FF
 // Frequency: 868.29999 MHz
 // Data Format: Serial mode disable 
 // Deviation: 50.000 kHz
-// Packet Length Config: Variable 
-// Max Packet Length: 128
-// Packet Length: 20
+// Max Packet Length: unlimited packet length mode
 // RX Filter BW: 196 kHz
 // Symbol Rate: 32.76825 kBaud
 // Sync Word Length: 24 Bits
 // TX Power: 14 dBm (requires define CCFG_FORCE_VDDR_HH = 1 in ccfg.c, see CC13xx/CC26xx Technical Reference Manual)
 // Whitening: No whitening 
+// FEC mode: manchester code
 
 #include <ti/devices/DeviceFamily.h>
 #include DeviceFamily_constructPath(driverlib/rf_mailbox.h)
@@ -182,47 +179,6 @@ rfc_CMD_PROP_TX_t RF_cmdPropTx =
     .pPkt = 0, // INSERT APPLICABLE POINTER: (uint8_t*)&xxx
 };
 
-// CMD_PROP_RX
-rfc_CMD_PROP_RX_t RF_cmdPropRx =
-{
-    .commandNo = 0x3802,
-    .status = 0x0000,
-    .pNextOp = 0, // INSERT APPLICABLE POINTER: (uint8_t*)&xxx
-    .startTime = 0x00000000,
-    .startTrigger.triggerType = 0x0,
-    .startTrigger.bEnaCmd = 0x0,
-    .startTrigger.triggerNo = 0x0,
-    .startTrigger.pastTrig = 0x0,
-    .condition.rule = 0x1,
-    .condition.nSkip = 0x0,
-    .pktConf.bFsOff = 0x0,
-    .pktConf.bRepeatOk = 0x0,
-    .pktConf.bRepeatNok = 0x0,
-    .pktConf.bUseCrc = 0x1,
-    .pktConf.bVarLen = 0x1,
-    .pktConf.bChkAddress = 0x0,
-    .pktConf.endType = 0x0,
-    .pktConf.filterOp = 0x0,
-    .rxConf.bAutoFlushIgnored = 0x0,
-    .rxConf.bAutoFlushCrcErr = 0x0,
-    .rxConf.bIncludeHdr = 0x1,
-    .rxConf.bIncludeCrc = 0x0,
-    .rxConf.bAppendRssi = 0x0,
-    .rxConf.bAppendTimestamp = 0x0,
-    .rxConf.bAppendStatus = 0x1,
-    .syncWord = 0x547696,
-    .maxPktLen = 0x80, // MAKE SURE DATA ENTRY IS LARGE ENOUGH
-    .address0 = 0xAA,
-    .address1 = 0xBB,
-    .endTrigger.triggerType = 0x1,
-    .endTrigger.bEnaCmd = 0x0,
-    .endTrigger.triggerNo = 0x0,
-    .endTrigger.pastTrig = 0x0,
-    .endTime = 0x00000000,
-    .pQueue = 0, // INSERT APPLICABLE POINTER: (dataQueue_t*)&xxx
-    .pOutput = 0, // INSERT APPLICABLE POINTER: (uint8_t*)&xxx
-};
-
 // CMD_PROP_RX_ADV
 rfc_CMD_PROP_RX_ADV_t RF_cmdPropRxAdv =
 {
@@ -239,11 +195,11 @@ rfc_CMD_PROP_RX_ADV_t RF_cmdPropRxAdv =
     .pktConf.bFsOff = 0x0,
     .pktConf.bRepeatOk = 0x0,
     .pktConf.bRepeatNok = 0x0,
-    .pktConf.bUseCrc = 0x0,
+    .pktConf.bUseCrc = 0x0, // CRC engine cannot be used
     .pktConf.bCrcIncSw = 0x0,
     .pktConf.bCrcIncHdr = 0x1,
     .pktConf.endType = 0x0,
-    .pktConf.filterOp = 0x1,
+    .pktConf.filterOp = 0x0,
     .rxConf.bAutoFlushIgnored = 0x0,
     .rxConf.bAutoFlushCrcErr = 0x0,
     .rxConf.bIncludeHdr = 0x1,
@@ -251,16 +207,16 @@ rfc_CMD_PROP_RX_ADV_t RF_cmdPropRxAdv =
     .rxConf.bAppendRssi = 0x0,
     .rxConf.bAppendTimestamp = 0x0,
     .rxConf.bAppendStatus = 0x0,
-    .syncWord0 = 0x547696,
+    .syncWord0 = 0x547696, // KNX-RF syncword
     .syncWord1 = 0,
     .maxPktLen = 0,
-    .hdrConf.numHdrBits = 8,
+    .hdrConf.numHdrBits = 8, // One length byte in header
     .hdrConf.lenPos = 0,
-    .hdrConf.numLenBits = 8,
-    .addrConf.addrType = 0,
-    .addrConf.addrSize = 0,
+    .hdrConf.numLenBits = 8, // Header length is just the length byte
+    .addrConf.addrType = 0, // Address bytes AFTER header
+    .addrConf.addrSize = 2, // use the two fixed bytes (0x44 and 0xff) after the length byte as address bytes
     .addrConf.addrPos = 0,
-    .addrConf.numAddr = 1,
+    .addrConf.numAddr = 1, // just the two fixed bytes are used as one address
     .lenOffset = 0,
     .endTrigger.triggerType = 0x1,
     .endTrigger.bEnaCmd = 0x0,
@@ -272,29 +228,30 @@ rfc_CMD_PROP_RX_ADV_t RF_cmdPropRxAdv =
     .pOutput = 0, // INSERT APPLICABLE POINTER: (uint8_t*)&xxx
 };
 
-// CMD_TX_TEST
-rfc_CMD_TX_TEST_t RF_cmdTxTest =
-{
-    .commandNo = 0x0808,
-    .status = 0x0000,
-    .pNextOp = 0, // INSERT APPLICABLE POINTER: (uint8_t*)&xxx
-    .startTime = 0x00000000,
-    .startTrigger.triggerType = 0x0,
-    .startTrigger.bEnaCmd = 0x0,
-    .startTrigger.triggerNo = 0x0,
-    .startTrigger.pastTrig = 0x0,
-    .condition.rule = 0x1,
-    .condition.nSkip = 0x0,
-    .config.bUseCw = 0x0,
-    .config.bFsOff = 0x1,
-    .config.whitenMode = 0x2,
-    .__dummy0 = 0x00,
-    .txWord = 0xABCD,
-    .__dummy1 = 0x00,
-    .endTrigger.triggerType = 0x1,
-    .endTrigger.bEnaCmd = 0x0,
-    .endTrigger.triggerNo = 0x0,
-    .endTrigger.pastTrig = 0x0,
-    .syncWord = 0x930B51DE,
-    .endTime = 0x00000000,
+// TX Power table
+// The RF_TxPowerTable_DEFAULT_PA_ENTRY macro is defined in RF.h and requires the following arguments:
+// RF_TxPowerTable_DEFAULT_PA_ENTRY(bias, gain, boost coefficient)
+// See the Technical Reference Manual for further details about the "txPower" Command field.
+// The PA settings require the CCFG_FORCE_VDDR_HH = 0 unless stated otherwise.
+const RF_TxPowerTable_Entry PROP_RF_txPowerTable[] = 
+{ 
+    {-10, RF_TxPowerTable_DEFAULT_PA_ENTRY(0, 3, 0, 4) },
+    {0, RF_TxPowerTable_DEFAULT_PA_ENTRY(1, 1, 0, 0) },
+    {1, RF_TxPowerTable_DEFAULT_PA_ENTRY(3, 3, 0, 8) },
+    {2, RF_TxPowerTable_DEFAULT_PA_ENTRY(2, 1, 0, 8) },
+    {3, RF_TxPowerTable_DEFAULT_PA_ENTRY(4, 3, 0, 10) },
+    {4, RF_TxPowerTable_DEFAULT_PA_ENTRY(5, 3, 0, 12) },
+    {5, RF_TxPowerTable_DEFAULT_PA_ENTRY(6, 3, 0, 12) },
+    {6, RF_TxPowerTable_DEFAULT_PA_ENTRY(7, 3, 0, 14) },
+    {7, RF_TxPowerTable_DEFAULT_PA_ENTRY(9, 3, 0, 16) },
+    {8, RF_TxPowerTable_DEFAULT_PA_ENTRY(11, 3, 0, 18) },
+    {9, RF_TxPowerTable_DEFAULT_PA_ENTRY(13, 3, 0, 22) },
+    {10, RF_TxPowerTable_DEFAULT_PA_ENTRY(19, 3, 0, 28) },
+    {11, RF_TxPowerTable_DEFAULT_PA_ENTRY(26, 3, 0, 40) },
+    {12, RF_TxPowerTable_DEFAULT_PA_ENTRY(24, 0, 0, 92) },
+    {13, RF_TxPowerTable_DEFAULT_PA_ENTRY(63, 0, 0, 83) }, // The original PA value (12.5 dBm) have been rounded to an integer value.
+    {14, RF_TxPowerTable_DEFAULT_PA_ENTRY(63, 0, 1, 83) }, // This setting requires CCFG_FORCE_VDDR_HH = 1.
+    RF_TxPowerTable_TERMINATION_ENTRY
 };
+
+const uint8_t PROP_RF_txPowerTableSize = sizeof(PROP_RF_txPowerTable)/sizeof(RF_TxPowerTable_Entry);

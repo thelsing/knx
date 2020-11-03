@@ -404,28 +404,6 @@ void RfPhysicalLayer::showRegisterSettings()
     printHex("", Patable_verify, 8);
 }
 
-uint16_t RfPhysicalLayer::packetSize (uint8_t lField)
-{
-  uint16_t nrBytes;
-  uint8_t  nrBlocks;
-  
-  // The 2 first blocks contains 25 bytes when excluding CRC and the L-field
-  // The other blocks contains 16 bytes when excluding the CRC-fields
-  // Less than 26 (15 + 10) 
-  if ( lField < 26 ) 
-    nrBlocks = 2;
-  else 
-    nrBlocks = (((lField - 26) / 16) + 3);
-  
-  // Add all extra fields, excluding the CRC fields
-  nrBytes = lField + 1;
-
-  // Add the CRC fields, each block has 2 CRC bytes
-  nrBytes += (2 * nrBlocks);
-      
-  return nrBytes;
-}
-
 void RfPhysicalLayer::loop()
 {
     switch (_loopState)
@@ -452,7 +430,7 @@ void RfPhysicalLayer::loop()
             _rfDataLinkLayer.loadNextTxFrame(&sendBuffer, &sendBufferLength);
 
             // Calculate total number of bytes in the KNX RF packet from L-field
-            pktLen = packetSize(sendBuffer[0]);
+            pktLen = PACKET_SIZE(sendBuffer[0]);
             // Check for valid length
             if ((pktLen == 0) || (pktLen > 290))
             {
@@ -658,7 +636,7 @@ void RfPhysicalLayer::loop()
                             break;
                         }
                         // Get bytes to receive from L-field, multiply by 2 because of manchester code
-                        pktLen = 2 * packetSize(packet[0]);
+                        pktLen = 2 * PACKET_SIZE(packet[0]);
 
                         // - Length mode - 
                         if (pktLen < 256)
@@ -751,7 +729,7 @@ void RfPhysicalLayer::loop()
 
         case RX_END:
         {
-            uint16_t pLen = packetSize(packet[0]);
+            uint16_t pLen = PACKET_SIZE(packet[0]);
             // Decode the first block (always 10 bytes + 2 bytes CRC)
             bool decodeOk = true;
             for (uint16_t i = 1; i < pLen; i++)

@@ -182,6 +182,9 @@ extern void delayMicroseconds (unsigned int howLong);
 #define TX_ACTIVE 4
 #define TX_END 5
 
+// Calculate the real packet size out of the L-field of FT3 frame data. See KNX-RF spec. 3.2.5 Data Link Layer frame format
+#define PACKET_SIZE(lField) ((((lField - 10 /*size of first pkt*/))/16 + 2 /*CRC in first pkt */) * 2 /*to bytes*/ +lField + 1 /*size of len byte*/)
+
 class RfDataLinkLayer;
 
 class RfPhysicalLayer
@@ -208,8 +211,6 @@ class RfPhysicalLayer
 
     void powerDownCC1101();
     void setOutputPowerLevel(int8_t dBm);
-
-    uint16_t packetSize (uint8_t lField);
 
     uint8_t sIdle();
     uint8_t sReceive();

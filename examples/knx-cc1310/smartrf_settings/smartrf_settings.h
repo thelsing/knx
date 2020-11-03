@@ -14,6 +14,10 @@
 #include DeviceFamily_constructPath(driverlib/rf_prop_cmd.h)
 #include <ti/drivers/rf/RF.h>
 
+// RF Core TX power
+extern const RF_TxPowerTable_Entry PROP_RF_txPowerTable[];
+extern const uint8_t PROP_RF_txPowerTableSize;
+
 // TI-RTOS RF Mode Object
 extern RF_Mode RF_prop;
 
@@ -21,8 +25,6 @@ extern RF_Mode RF_prop;
 extern rfc_CMD_PROP_RADIO_DIV_SETUP_t RF_cmdPropRadioDivSetup;
 extern rfc_CMD_FS_t RF_cmdFs;
 extern rfc_CMD_PROP_TX_t RF_cmdPropTx;
-extern rfc_CMD_PROP_RX_t RF_cmdPropRx;
-extern rfc_CMD_PROP_RX_ADV_t RF_pCmdPropRxAdv;
-extern rfc_CMD_TX_TEST_t RF_cmdTxTest;
+extern rfc_CMD_PROP_RX_ADV_t RF_cmdPropRxAdv;
 
 #endif // _SMARTRF_SETTINGS_H_
