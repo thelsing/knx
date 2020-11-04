@@ -1,7 +1,11 @@
 #include "config.h"
 #ifdef USE_RF
 
-#include "rf_physical_layer.h"
+#if defined(DeviceFamily_CC13X0)
+  #include "rf_physical_layer_cc1310.h"
+#else
+  #include "rf_physical_layer_cc1101.h"
+#endif
 #include "rf_data_link_layer.h"
 
 #include "bits.h"

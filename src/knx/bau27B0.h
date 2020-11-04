@@ -5,7 +5,11 @@
 
 #include "bau_systemB_device.h"
 #include "rf_medium_object.h"
-#include "rf_physical_layer.h"
+#if defined(DeviceFamily_CC13X0)
+  #include "rf_physical_layer_cc1310.h"
+#else
+  #include "rf_physical_layer_cc1101.h"
+#endif
 #include "rf_data_link_layer.h"
 #include "cemi_server.h"
 #include "cemi_server_object.h"

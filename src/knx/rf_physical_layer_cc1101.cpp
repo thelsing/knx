@@ -1,7 +1,7 @@
 #include "config.h"
 #ifdef USE_RF
 
-#include "rf_physical_layer.h"
+#include "rf_physical_layer_cc1101.h"
 #include "rf_data_link_layer.h"
 
 #include "bits.h"
@@ -15,7 +15,7 @@
 #define ABS(x)    ((x > 0) ? (x) : (-x))
 
 // Table for encoding 4-bit data into a 8-bit Manchester encoding.
-const uint8_t RfPhysicalLayer::manchEncodeTab[16] =   {0xAA,  // 0x0 Manchester encoded
+const uint8_t RfPhysicalLayerCC1101::manchEncodeTab[16] =   {0xAA,  // 0x0 Manchester encoded
                                                        0xA9,  // 0x1 Manchester encoded
                                                        0xA6,  // 0x2 Manchester encoded
                                                        0xA5,  // 0x3 Manchester encoded
@@ -34,7 +34,7 @@ const uint8_t RfPhysicalLayer::manchEncodeTab[16] =   {0xAA,  // 0x0 Manchester 
 
 // Table for decoding 4-bit Manchester encoded data into 2-bit
 // data. 0xFF indicates invalid Manchester encoding
-const uint8_t RfPhysicalLayer::manchDecodeTab[16] = {0xFF, //  Manchester encoded 0x0 decoded
+const uint8_t RfPhysicalLayerCC1101::manchDecodeTab[16] = {0xFF, //  Manchester encoded 0x0 decoded
                                                      0xFF, //  Manchester encoded 0x1 decoded
                                                      0xFF, //  Manchester encoded 0x2 decoded
                                                      0xFF, //  Manchester encoded 0x3 decoded
@@ -78,7 +78,7 @@ const uint8_t RfPhysicalLayer::manchDecodeTab[16] = {0xFF, //  Manchester encode
 // Device address = 0
 // GDO0 signal selection = ( 6) Asserts when sync word has been sent / received, and de-asserts at the end of the packet
 // GDO2 signal selection = ( 0) Asserts when RX FiFO threshold
-const uint8_t RfPhysicalLayer::cc1101_2FSK_32_7_kb[CFG_REGISTER] = {
+const uint8_t RfPhysicalLayerCC1101::cc1101_2FSK_32_7_kb[CFG_REGISTER] = {
                                         0x00,  // IOCFG2        GDO2 Output Pin Configuration
                                         0x2E,  // IOCFG1        GDO1 Output Pin Configuration
                                         0x06,  // IOCFG0        GDO0 Output Pin Configuration
@@ -129,15 +129,15 @@ const uint8_t RfPhysicalLayer::cc1101_2FSK_32_7_kb[CFG_REGISTER] = {
 };
 
                                     //Patable index: -30  -20- -15  -10   0    5    7    10 dBm
-const uint8_t RfPhysicalLayer::paTablePower868[8] = {0x03,0x17,0x1D,0x26,0x50,0x86,0xCD,0xC0};
+const uint8_t RfPhysicalLayerCC1101::paTablePower868[8] = {0x03,0x17,0x1D,0x26,0x50,0x86,0xCD,0xC0};
 
-RfPhysicalLayer::RfPhysicalLayer(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
+RfPhysicalLayerCC1101::RfPhysicalLayerCC1101(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
     : _rfDataLinkLayer(rfDataLinkLayer),
       _platform(platform)
 {
 }
 
-void RfPhysicalLayer::manchEncode(uint8_t *uncodedData, uint8_t *encodedData)
+void RfPhysicalLayerCC1101::manchEncode(uint8_t *uncodedData, uint8_t *encodedData)
 {
   uint8_t  data0, data1;
 
@@ -150,7 +150,7 @@ void RfPhysicalLayer::manchEncode(uint8_t *uncodedData, uint8_t *encodedData)
   *(encodedData + 1) = manchEncodeTab[data0];
 }
 
-bool RfPhysicalLayer::manchDecode(uint8_t *encodedData, uint8_t *decodedData)
+bool RfPhysicalLayerCC1101::manchDecode(uint8_t *encodedData, uint8_t *decodedData)
 {
   uint8_t data0, data1, data2, data3;
 
@@ -174,7 +174,7 @@ bool RfPhysicalLayer::manchDecode(uint8_t *encodedData, uint8_t *decodedData)
   return true;
 }
 
-uint8_t RfPhysicalLayer::sIdle()
+uint8_t RfPhysicalLayerCC1101::sIdle()
 {
     uint8_t marcState;
     uint32_t timeStart;
@@ -200,7 +200,7 @@ uint8_t RfPhysicalLayer::sIdle()
     return true;
 }
 
-uint8_t RfPhysicalLayer::sReceive()
+uint8_t RfPhysicalLayerCC1101::sReceive()
 {
     uint8_t marcState;
     uint32_t timeStart;
@@ -226,7 +226,7 @@ uint8_t RfPhysicalLayer::sReceive()
     return true;
 }
 
-void RfPhysicalLayer::spiWriteRegister(uint8_t spi_instr, uint8_t value)
+void RfPhysicalLayerCC1101::spiWriteRegister(uint8_t spi_instr, uint8_t value)
 {
      uint8_t tbuf[2] = {0};
      tbuf[0] = spi_instr | WRITE_SINGLE_BYTE;
@@ -237,7 +237,7 @@ void RfPhysicalLayer::spiWriteRegister(uint8_t spi_instr, uint8_t value)
      digitalWrite(SPI_SS_PIN, HIGH);
 }
 
-uint8_t RfPhysicalLayer::spiReadRegister(uint8_t spi_instr)
+uint8_t RfPhysicalLayerCC1101::spiReadRegister(uint8_t spi_instr)
 {
      uint8_t value;
      uint8_t rbuf[2] = {0};
@@ -252,7 +252,7 @@ uint8_t RfPhysicalLayer::spiReadRegister(uint8_t spi_instr)
      return value;
 }
 
-uint8_t RfPhysicalLayer::spiWriteStrobe(uint8_t spi_instr)
+uint8_t RfPhysicalLayerCC1101::spiWriteStrobe(uint8_t spi_instr)
 {
      uint8_t tbuf[1] = {0};
      tbuf[0] = spi_instr;
@@ -263,7 +263,7 @@ uint8_t RfPhysicalLayer::spiWriteStrobe(uint8_t spi_instr)
      return tbuf[0];
 }
 
-void RfPhysicalLayer::spiReadBurst(uint8_t spi_instr, uint8_t *pArr, uint8_t len)
+void RfPhysicalLayerCC1101::spiReadBurst(uint8_t spi_instr, uint8_t *pArr, uint8_t len)
 {
      uint8_t rbuf[len + 1];
      rbuf[0] = spi_instr | READ_BURST;
@@ -277,7 +277,7 @@ void RfPhysicalLayer::spiReadBurst(uint8_t spi_instr, uint8_t *pArr, uint8_t len
      }
 }
 
-void RfPhysicalLayer::spiWriteBurst(uint8_t spi_instr, const uint8_t *pArr, uint8_t len)
+void RfPhysicalLayerCC1101::spiWriteBurst(uint8_t spi_instr, const uint8_t *pArr, uint8_t len)
 {
      uint8_t tbuf[len + 1];
      tbuf[0] = spi_instr | WRITE_BURST;
@@ -291,7 +291,7 @@ void RfPhysicalLayer::spiWriteBurst(uint8_t spi_instr, const uint8_t *pArr, uint
      digitalWrite(SPI_SS_PIN, HIGH);
 }
 
-void RfPhysicalLayer::powerDownCC1101()
+void RfPhysicalLayerCC1101::powerDownCC1101()
 {
     // Set IDLE state first
     sIdle();
@@ -300,7 +300,7 @@ void RfPhysicalLayer::powerDownCC1101()
     spiWriteStrobe(SPWD);               
 }
 
-void RfPhysicalLayer::setOutputPowerLevel(int8_t dBm)
+void RfPhysicalLayerCC1101::setOutputPowerLevel(int8_t dBm)
 {
     uint8_t pa = 0xC0;
 
@@ -316,7 +316,7 @@ void RfPhysicalLayer::setOutputPowerLevel(int8_t dBm)
     spiWriteRegister(FREND0, pa);
 }
 
-bool RfPhysicalLayer::InitChip()
+bool RfPhysicalLayerCC1101::InitChip()
 {
     // Setup SPI and GPIOs
     _platform.setupSpi();
@@ -382,14 +382,14 @@ bool RfPhysicalLayer::InitChip()
     return true;
 }
 
-void RfPhysicalLayer::stopChip()
+void RfPhysicalLayerCC1101::stopChip()
 {
     powerDownCC1101();
 
     _platform.closeSpi();
 }
 
-void RfPhysicalLayer::showRegisterSettings()
+void RfPhysicalLayerCC1101::showRegisterSettings()
 {
     uint8_t config_reg_verify[CFG_REGISTER];
     uint8_t Patable_verify[CFG_REGISTER];
@@ -404,7 +404,7 @@ void RfPhysicalLayer::showRegisterSettings()
     printHex("", Patable_verify, 8);
 }
 
-void RfPhysicalLayer::loop()
+void RfPhysicalLayerCC1101::loop()
 {
     switch (_loopState)
     {

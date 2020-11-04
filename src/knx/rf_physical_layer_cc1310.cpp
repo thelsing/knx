@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "rf_physical_layer.h"
+#include "rf_physical_layer_cc1310.h"
 #include "rf_data_link_layer.h"
 
 #include <ti/devices/DeviceFamily.h>
@@ -36,39 +36,47 @@ static rfc_propRxOutput_t rxStatistics;
 
 static uint8_t packetLength;
 static uint8_t* packetDataPointer;
-static int32_t packetStartTime;
+static int32_t packetStartTime = 0;
 
-static volatile int rf_done, rf_err, err;
-int8_t len1, len2;
+static volatile bool rfDone = false;
+static volatile int rfErr = 0;
+static volatile int err;
 
 static void RxCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 {
-    if (e & RF_EventNDataWritten)
+    if ((e & RF_EventNDataWritten) /*&& (packetStartTime == 0)*/)
     {
+        // pDataEntry->rxData contains the first byte of the received packet.
+        // Just get the address to get the start address of the receive buffer
         uint8_t *pData = &pDataEntry->rxData;
+
         if ((pData[1] != 0x44) || (pData[2] != 0xFF)) 
         {
            // cancel early because it does not seem to be KNX RF packet
-           RF_cancelCmd(rfHandle, rxCommandHandle, 0 /*stop gracefully*/);
+           RF_cancelCmd(rfHandle, rxCommandHandle, 0 /* force abort RF */);
            return;
         }
-        //uint8_t len = rxBuffer[sizeof(rfc_dataEntryPartial_t) + 0];
+
         uint8_t len = pDataEntry->rxData;
         struct rfc_CMD_PROP_SET_LEN_s RF_cmdPropSetLen =
         {
-            .commandNo = CMD_PROP_SET_LEN,    // command identifier
-            .rxLen   = (uint16_t)PACKET_SIZE(len)
+            .commandNo = CMD_PROP_SET_LEN,        // command identifier
+            .rxLen   = (uint16_t)PACKET_SIZE(len) // packet length to set
         };
 
-        len1=len; len2 = RF_cmdPropSetLen.rxLen;
         //RF_runImmediateCmd(rfHandle, (uint32_t*)&RF_cmdPropSetLen); // for length > 255
-        RF_runDirectCmd(rfHandle, (uint32_t)&RF_cmdPropSetLen);
+        RF_Stat status = RF_runDirectCmd(rfHandle, (uint32_t)&RF_cmdPropSetLen);
+        if (status != RF_StatCmdDoneSuccess)
+        {
+            println("RF CMD_PROP_SET_LEN failed!");
+        }
+
         packetStartTime = millis();
     }
     else if (e & RF_TERMINATION_EVENT_MASK) 
     {
-        rf_done = true;
-        rf_err = e & (RF_EventCmdStopped | RF_EventCmdAborted | RF_EventCmdCancelled);
+        rfDone = true;
+        rfErr = e & (RF_EventCmdStopped | RF_EventCmdAborted | RF_EventCmdCancelled);
     }
 
     else /* unknown reason - should not occure */
@@ -79,13 +87,12 @@ static void RxCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 }
 
 
-RfPhysicalLayer::RfPhysicalLayer(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
-    : _rfDataLinkLayer(rfDataLinkLayer),
-      _platform(platform)
-{
+RfPhysicalLayerCC1310::RfPhysicalLayerCC1310(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
+    : RfPhysicalLayer(rfDataLinkLayer, platform)
+{      
 }
 
-void RfPhysicalLayer::setOutputPowerLevel(int8_t dBm)
+void RfPhysicalLayerCC1310::setOutputPowerLevel(int8_t dBm)
 {
     RF_TxPowerTable_Entry *rfPowerTable = NULL;
     RF_TxPowerTable_Value newValue;
@@ -127,14 +134,14 @@ void RfPhysicalLayer::setOutputPowerLevel(int8_t dBm)
 }
 
 
-bool RfPhysicalLayer::InitChip()
+bool RfPhysicalLayerCC1310::InitChip()
 {
     RF_Params rfParams;
     RF_Params_init(&rfParams);
 
     pDataEntry->length = 255;
     pDataEntry->config.type = DATA_ENTRY_TYPE_PARTIAL; // --> DATA_ENTRY_TYPE_PARTIAL adds a 12 Byte Header
-    pDataEntry-> config.irqIntv = 12; // KNX-RF first block consists of 12 bytes (one length byte, 0x44, 0xFF, one RFinfo byte, six Serial/DoA bytes, two CRC bytes)
+    pDataEntry-> config.irqIntv = 3; // KNX-RF first block consists of 12 bytes (one length byte, 0x44, 0xFF, one RFinfo byte, six Serial/DoA bytes, two CRC bytes)
     pDataEntry-> config.lenSz  = 0; // no length indicator at beginning of data entry
     pDataEntry->status = DATA_ENTRY_PENDING;
     pDataEntry->pNextEntry = (uint8_t*)pDataEntry;
@@ -154,11 +161,11 @@ bool RfPhysicalLayer::InitChip()
     rfHandle = RF_open(&rfObject, &RF_prop, (RF_RadioSetup*)&RF_cmdPropRadioDivSetup, &rfParams);
 
     /* Set the frequency */
-    RF_postCmd(rfHandle, (RF_Op*)&RF_cmdFs, RF_PriorityNormal, NULL, 0);
+    RF_runCmd(rfHandle, (RF_Op*)&RF_cmdFs, RF_PriorityNormal, NULL, 0);
     return true;
 }
 
-void RfPhysicalLayer::stopChip()
+void RfPhysicalLayerCC1310::stopChip()
 {
     RF_cancelCmd(rfHandle, rxCommandHandle, 0 /* do not stop gracefully, instead hard abort RF */);
     RF_pendCmd(rfHandle, rxCommandHandle, RF_TERMINATION_EVENT_MASK);
@@ -166,7 +173,7 @@ void RfPhysicalLayer::stopChip()
     RF_close(rfHandle);
 }
 
-void RfPhysicalLayer::loop()
+void RfPhysicalLayerCC1310::loop()
 {
     switch (_loopState)
     {
@@ -175,10 +182,14 @@ void RfPhysicalLayer::loop()
             println("TX_START...");
             _rfDataLinkLayer.loadNextTxFrame(&sendBuffer, &sendBufferLength);
             pktLen = PACKET_SIZE(sendBuffer[0]);
+
             if (pktLen != sendBufferLength)
             {
-                printf("Error: SendBuffer[0]=%d, SendBufferLength=%d PACKET_SIZE=%d\n", sendBuffer[0], sendBufferLength, PACKET_SIZE(sendBuffer[0]));
+                print("Error TX: SendBuffer[0]=");println(sendBuffer[0]);
+                print("Error TX: SendBufferLength=");println(sendBufferLength);
+                print("Error TX: PACKET_SIZE=");println(PACKET_SIZE(sendBuffer[0]));
             }
+
             // Calculate total number of bytes in the KNX RF packet from L-field
             // Check for valid length
             if ((pktLen == 0) || (pktLen > 290)) 
@@ -193,16 +204,16 @@ void RfPhysicalLayer::loop()
                 break;
             }
 
-             RF_cmdPropTx.pktLen = pktLen;
-             RF_cmdPropTx.pPkt = sendBuffer;
-             RF_cmdPropTx.startTrigger.triggerType = TRIG_NOW;
-             RF_EventMask res = RF_runCmd(rfHandle, (RF_Op*)&RF_cmdPropTx, RF_PriorityNormal, NULL, RF_TERMINATION_EVENT_MASK);
+            RF_cmdPropTx.pktLen = pktLen;
+            RF_cmdPropTx.pPkt = sendBuffer;
+            RF_cmdPropTx.startTrigger.triggerType = TRIG_NOW;
+            RF_EventMask result = RF_runCmd(rfHandle, (RF_Op*)&RF_cmdPropTx, RF_PriorityNormal, NULL, RF_TERMINATION_EVENT_MASK);
 
             delete sendBuffer;
 
-            if (res != RF_EventLastCmdDone) 
+            if (result != RF_EventLastCmdDone) 
             {
-                 printf("Unexpected result command %llu\n", res);
+                print("Unexpected result command: ");println(result, HEX);
             }
 
             _loopState = RX_START;
@@ -211,81 +222,78 @@ void RfPhysicalLayer::loop()
 
         case RX_START:
         {
-             rf_done = rf_err = false;
-             err = 0;
+            packetStartTime = 0;
+            rfDone = false;
+            rfErr = 0;
+            err = 0;
+            pDataEntry->status = DATA_ENTRY_PENDING;
 
-             rxCommandHandle = RF_postCmd(rfHandle, (RF_Op*)&RF_cmdPropRxAdv, RF_PriorityNormal, &RxCallback, IRQ_RX_N_DATA_WRITTEN);
-             if (rxCommandHandle == RF_ALLOC_ERROR) 
-             {
-                 println("Error: nRF_pendCmd() failed");
-                 return;
-             }
+            rxCommandHandle = RF_postCmd(rfHandle, (RF_Op*)&RF_cmdPropRxAdv, RF_PriorityNormal, &RxCallback, IRQ_RX_N_DATA_WRITTEN);
+            if (rxCommandHandle == RF_ALLOC_ERROR) 
+            {
+                println("Error: nRF_pendCmd() failed");
+                return;
+            }
             _loopState = RX_ACTIVE;
         }
         break;
 
         case RX_ACTIVE:
         {
-            if (!_rfDataLinkLayer.isTxQueueEmpty() && !syncStart)  
+            if (!_rfDataLinkLayer.isTxQueueEmpty())  
             {
                 RF_cancelCmd(rfHandle, rxCommandHandle, RF_ABORT_GRACEFULLY);
                 RF_pendCmd(rfHandle, rxCommandHandle, RF_TERMINATION_EVENT_MASK);
-                pDataEntry->status = DATA_ENTRY_PENDING;
                 _loopState = TX_START;
                 break;
             }
 
             // Check if we have an incomplete packet reception
-            if (!rf_done && syncStart && (millis() - packetStartTime > RX_PACKET_TIMEOUT)) 
+            if (!rfDone && ((packetStartTime > 0) && (millis() - packetStartTime > RX_PACKET_TIMEOUT)))
             {
                 println("RX packet timeout!");
                 RF_cancelCmd(rfHandle, rxCommandHandle, RF_ABORT_GRACEFULLY);
                 RF_pendCmd(rfHandle, rxCommandHandle, RF_TERMINATION_EVENT_MASK);
-                pDataEntry->status = DATA_ENTRY_PENDING;
                 _loopState = RX_START;
                 break;
             }
-            else if (rf_done) 
+            else if (rfDone) 
             {
-                RF_EventMask res = RF_pendCmd(rfHandle, rxCommandHandle, RF_TERMINATION_EVENT_MASK);
-                if (res == RF_EventCmdCancelled || res == RF_EventCmdStopped || res == RF_EventCmdAborted) 
+                RF_EventMask result = RF_pendCmd(rfHandle, rxCommandHandle, RF_TERMINATION_EVENT_MASK);
+                if ((result & RF_EventCmdCancelled) || (result & RF_EventCmdStopped) || (result & RF_EventCmdAborted)) 
                 {
                     println("RF terminated because of RF_flushCmd() or RF_cancelCmd()");
                 }
-                else if (res != RF_EventLastCmdDone) 
+                else if ((result & RF_EventLastCmdDone) != RF_EventLastCmdDone) 
                 {
-                    //printf("Unexpected Rx result command %llu\n", res);
-                    print("Unexpected Rx result command: ");
-                    println(res, HEX);
+                    print("Unexpected Rx result command: ");println(result, HEX);
                 }
-                else if (rf_err) 
+                else if (rfErr) 
                 {
                     println("Rx is no KNX frame");
                 } 
                 else 
                 {
-                    //printf("len1=%d, len1=%d, frags=%d, err=%d\n", len1, len2, frags, err);
-                    print("nRxOk = ");println(rxStatistics.nRxOk);           //!<        Number of packets that have been received with payload, CRC OK and not ignored
-                    print("nRxNok = ");println(rxStatistics.nRxNok);         //!<        Number of packets that have been received with CRC error
-                    print("nRxIgnored = ");println(rxStatistics.nRxIgnored); //!<        Number of packets that have been received with CRC OK and ignored due to address mismatch
-                    print("nRxStopped = ");println(rxStatistics.nRxStopped); //!<        Number of packets not received due to illegal length or address mismatch with pktConf.filterOp = 1
-                    print("nRxBufFull = ");println(rxStatistics.nRxBufFull); //!<        Number of packets that have been received and discarded due to lack of buffer space
-                    print("lastRssi = ");println(rxStatistics.lastRssi);     //!<        RSSI of last received packet
+                    print("nRxOk = ");println(rxStatistics.nRxOk);           // Number of packets that have been received with payload, CRC OK and not ignored
+                    print("nRxNok = ");println(rxStatistics.nRxNok);         // Number of packets that have been received with CRC error
+                    print("nRxIgnored = ");println(rxStatistics.nRxIgnored); // Number of packets that have been received with CRC OK and ignored due to address mismatch
+                    print("nRxStopped = ");println(rxStatistics.nRxStopped); // Number of packets not received due to illegal length or address mismatch with pktConf.filterOp = 1
+                    print("nRxBufFull = ");println(rxStatistics.nRxBufFull); // Number of packets that have been received and discarded due to lack of buffer space
+                    print("lastRssi = ");println(rxStatistics.lastRssi);     // RSSI of last received packet
 
                     // add CRC sizes for received blocks, but do not add the length of the L-field (1 byte) itself
                     packetLength = PACKET_SIZE(pDataEntry->rxData); 
                     packetDataPointer = (uint8_t *) &pDataEntry->rxData;
 
-                    if (packetLength+1 != pDataEntry->nextIndex) 
+                    if (packetLength != (pDataEntry->nextIndex - 1)) 
                     {
-                        //printf("Size mismatch: %d %d\n", packetLength, *(uint8_t *)(&(currentDataEntry->data)+2));
-                        //printf("Size mismatch: %d %d\n", packetLength, pDataEntry->nextIndex);
-                        println("Size mismatch");
+                        println("Mismatch between packetLength and pDataEntry->nextIndex: ");
+                        print("packetLength = ");print(packetLength);
+                        print(", pDataEntry->nextIndex = ");println(pDataEntry->nextIndex);
                     }
 
                     printHex("RX: ", packetDataPointer, packetLength);
                     _rfDataLinkLayer.frameBytesReceived(packetDataPointer, packetLength);
-                    pDataEntry->status = DATA_ENTRY_PENDING;
                 }
                 _loopState = RX_START;
             }
