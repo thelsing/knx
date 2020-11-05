@@ -44,7 +44,7 @@ static volatile int err;
 
 static void RxCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 {
-    if ((e & RF_EventNDataWritten) /*&& (packetStartTime == 0)*/)
+    if ((e & RF_EventNDataWritten) && (packetStartTime == 0))
     {
         // pDataEntry->rxData contains the first byte of the received packet.
         // Just get the address to get the start address of the receive buffer
@@ -179,9 +179,12 @@ void RfPhysicalLayerCC1310::loop()
     {
     case TX_START:
         {
+            uint8_t *sendBuffer {nullptr};
+            uint16_t sendBufferLength {0};
+
             println("TX_START...");
             _rfDataLinkLayer.loadNextTxFrame(&sendBuffer, &sendBufferLength);
-            pktLen = PACKET_SIZE(sendBuffer[0]);
+            uint16_t pktLen = PACKET_SIZE(sendBuffer[0]);
 
             if (pktLen != sendBufferLength)
             {
@@ -274,25 +277,27 @@ void RfPhysicalLayerCC1310::loop()
                 } 
                 else 
                 {
-                    print("nRxOk = ");println(rxStatistics.nRxOk);           // Number of packets that have been received with payload, CRC OK and not ignored
-                    print("nRxNok = ");println(rxStatistics.nRxNok);         // Number of packets that have been received with CRC error
-                    print("nRxIgnored = ");println(rxStatistics.nRxIgnored); // Number of packets that have been received with CRC OK and ignored due to address mismatch
-                    print("nRxStopped = ");println(rxStatistics.nRxStopped); // Number of packets not received due to illegal length or address mismatch with pktConf.filterOp = 1
-                    print("nRxBufFull = ");println(rxStatistics.nRxBufFull); // Number of packets that have been received and discarded due to lack of buffer space
-                    print("lastRssi = ");println(rxStatistics.lastRssi);     // RSSI of last received packet
-
                     // add CRC sizes for received blocks, but do not add the length of the L-field (1 byte) itself
                     packetLength = PACKET_SIZE(pDataEntry->rxData); 
                     packetDataPointer = (uint8_t *) &pDataEntry->rxData;
 
+                    // Sanity check: the partial data entry index points to the next free location in the partial RX buffer
                     if (packetLength != (pDataEntry->nextIndex - 1)) 
                     {
                         println("Mismatch between packetLength and pDataEntry->nextIndex: ");
                         print("packetLength = ");print(packetLength);
                         print(", pDataEntry->nextIndex = ");println(pDataEntry->nextIndex);
                     }
-
-                    printHex("RX: ", packetDataPointer, packetLength);
+                    /*
+                    print("nRxOk = ");println(rxStatistics.nRxOk);           // Number of packets that have been received with payload, CRC OK and not ignored
+                    print("nRxNok = ");println(rxStatistics.nRxNok);         // Number of packets that have been received with CRC error
+                    print("nRxIgnored = ");println(rxStatistics.nRxIgnored); // Number of packets that have been received with CRC OK and ignored due to address mismatch
+                    print("nRxStopped = ");println(rxStatistics.nRxStopped); // Number of packets not received due to illegal length or address mismatch with pktConf.filterOp = 1
+                    print("nRxBufFull = ");println(rxStatistics.nRxBufFull); // Number of packets that have been received and discarded due to lack of buffer space
+                    */
+                   
+                    print("RSSI: ");print(rxStatistics.lastRssi);     // RSSI of last received packet
+                    printHex(" - RX: ", packetDataPointer, packetLength);
                     _rfDataLinkLayer.frameBytesReceived(packetDataPointer, packetLength);
                 }
                 _loopState = RX_START;

@@ -15,7 +15,8 @@
 #include "knx/bits.h"
 #include "cc1310_platform.h"
 
-#define printf(args...) (SEGGER_RTT_printf(0, args))
+//#define printf(args...) (SEGGER_RTT_printf(0, args))
+#define PRINT_RTT
 
 volatile uint32_t CC1310Platform::msCounter = 0;
 
@@ -64,8 +65,8 @@ void CC1310Platform::InitNVS()
 
     NVS_Attrs attrs;
     NVS_getAttrs(nvsHandle, &attrs);
-    printf("NVS flash size: %d\r\n", attrs.regionSize);
-    printf("NVS flash sector size: %d\r\n", attrs.sectorSize);
+    print("NVS flash size: "); println((int)attrs.regionSize);
+    print("NVS flash sector size: "); println((int)attrs.sectorSize);
 }
 
 CC1310Platform::CC1310Platform()
@@ -99,9 +100,12 @@ void CC1310Platform::init()
 uint8_t* CC1310Platform::getEepromBuffer(uint16_t size)
 {
     if(size > EEPROM_EMULATION_SIZE)
+    {
         fatalError();
-#if 1
+    }
+
     NVS_read(nvsHandle, 0, (void *) _NVS_buffer, size);
+
     for (int i=0; i<size; i++)
     {
         if (_NVS_buffer[i] != 0)
@@ -109,7 +113,7 @@ uint8_t* CC1310Platform::getEepromBuffer(uint16_t size)
             return _NVS_buffer;
         }
     }
-#endif
+
     memset(_NVS_buffer, 0xff, size);
 
     return _NVS_buffer;
@@ -118,18 +122,19 @@ uint8_t* CC1310Platform::getEepromBuffer(uint16_t size)
 void CC1310Platform::commitToEeprom()
 {
     println("CC1310Platform::commitToEeprom() ...");
-#if 1
-    int_fast16_t res = NVS_write(nvsHandle, 0, (void *)_NVS_buffer, EEPROM_EMULATION_SIZE, NVS_WRITE_ERASE | NVS_WRITE_POST_VERIFY);
-    if (res != NVS_STATUS_SUCCESS)
+
+    int_fast16_t result = NVS_write(nvsHandle, 0, (void *)_NVS_buffer, EEPROM_EMULATION_SIZE, NVS_WRITE_ERASE | NVS_WRITE_POST_VERIFY);
+
+    if (result != NVS_STATUS_SUCCESS)
     {
-        printf("Error writing to NVS, ret = %d\n", res);
+        print("Error writing to NVS, result: "); println(result);
     }
     else
     {
-        println("NVS successfully written\n");
+        println("NVS successfully written");
     }
+
     delay(500);
-#endif
 }
 
 void CC1310Platform::restart()
@@ -143,7 +148,6 @@ void CC1310Platform::fatalError()
     println("A fatal error occured. Stopped.");
     while(true) 
     {}
-    //restart();
 }
 
 uint32_t CC1310Platform::millis()
@@ -181,58 +185,65 @@ void delayMicroseconds (unsigned int howLong)
     ClockP_usleep(howLong);
 }
 
-#if 0
-/* Buffer size for string operations (e.g. snprintf())*/
-#define MAX_STRBUF_SIZE 100
-
-int UART_printf(const char * fmt, ...)
+size_t write(uint8_t c)
 {
-    char s[MAX_STRBUF_SIZE];
-    va_list ap;
-    va_start(ap, fmt);
-    int n = vsnprintf(s, sizeof(s), fmt, ap);
-    va_end(ap);
-    if (uart)
+#if defined(PRINT_UART)
+    uint8_t buffer[1] = {c};
+    return UART_write(uart, buffer, sizeof(buffer));
+#elif defined (PRINT_RTT)    
+    return SEGGER_RTT_PutChar(0, (char)c);
+#else
+    return 1;    
+#endif
+}
+
+#if 0
+size_t write(const uint8_t *buffer, size_t size)
+{
+    size_t n = 0;
+    while (size--) 
     {
-        UART_write(uart, s, strlen(s));
+        if (write(*buffer++)) 
+        {
+            n++;
+        }
+        else 
+        {
+            break;
+        }
     }
     return n;
 }
-
-void print(const char* s) 
+#else
+size_t write(const uint8_t *buffer, size_t size)
 {
-    if (uart)
-    {
-        UART_write(uart, s, strlen(s));
-    }
-}
-
-void print(int num, int base)
-{
-    char s[MAX_STRBUF_SIZE];
-    if (base == HEX)
-        snprintf(s, sizeof(s),"%X", num);
-    else
-        snprintf(s, sizeof(s),"%d", num);
-    if (uart)
-    {
-        UART_write(uart, s, strlen(s));
-    }
+#if defined(PRINT_UART)
+    return UART_write(uart, buffer, size);
+#elif defined (PRINT_RTT)    
+    return SEGGER_RTT_Write(0, buffer, size);
+#else
+    return size;    
+#endif
 }
 #endif
 
-/*
-int printf(const char * fmt, ...)
+size_t write(const char *buffer, size_t size) 
 {
-    char s[MAX_STRBUF_SIZE];
-    va_list ap;
-    va_start(ap, fmt);
-    int n = vsnprintf(s, sizeof(s), fmt, ap);
-    va_end(ap);
-    SEGGER_RTT_printf(0, s, strlen(s));
-    return n;
+    return write((const uint8_t *)buffer, size);
 }
-*/
+
+void print(const char* s)
+{
+    if (s == NULL) 
+    {
+        return;
+    }
+    write(s, strlen(s));
+}
+void print(char c)
+{
+    write(c);
+}
 
 void printUint64(uint64_t value, int base = DEC)
   {
@@ -251,6 +262,106 @@ void printUint64(uint64_t value, int base = DEC)
      print(str);
 }
 
+void print(long long num, int base)
+{
+    if (base == 0) 
+    {
+        write(num);
+        return;
+    }
+    else if (base == 10) 
+    {
+        if (num < 0) 
+        {
+            print('-');
+            num = -num;
+            printUint64(num, 10);
+            return;
+        }
+        printUint64(num, 10);
+        return;
+    } 
+    else 
+    {
+        printUint64(num, base);
+        return;
+    }
+}
+
+void print(unsigned long long num, int base)
+{
+    if (base == 0) 
+    {
+        write(num);
+        return;
+    }
+    else 
+    {
+        printUint64(num, base);   
+        return;
+    }
+}
+
+void print(unsigned char num, int base)
+{
+    print((unsigned long long)num, base);
+}
+
+void print(int num, int base)
+{
+    print((long long)num, base);
+}
+
+void print(unsigned int num, int base)
+{
+    print((unsigned long long)num, base);
+}
+
+void print(long num, int base)
+{
+    print((long long)num, base);
+}
+
+void print(unsigned long num, int base)
+{
+    print((unsigned long long)num, base);
+}
+
+void print(unsigned char num)
+{
+    print(num, DEC);
+}
+
+void print(int num)
+{
+    print(num, DEC);
+}
+
+void print(unsigned int num)
+{
+    print(num, DEC);
+}
+
+void print(long num)
+{
+    print(num, DEC);
+}
+
+void print(unsigned long num)
+{
+    print(num, DEC);
+}
+
+void print(long long num)
+{
+    print(num, DEC);
+}
+
+void print(unsigned long long num)
+{
+    print(num, DEC);
+}
+
 void printFloat(double number, uint8_t digits)
 {
     if (std::isnan(number)) 
@@ -265,12 +376,12 @@ void printFloat(double number, uint8_t digits)
     }
     if (number > 4294967040.0) 
     {
-        print ("ovf");  // constant determined empirically
+        print("ovf");  // constant determined empirically
         return;
     }
     if (number <-4294967040.0)
     {
-        print ("ovf");  // constant determined empirically
+        print("ovf");  // constant determined empirically
         return;
     } 
 
@@ -291,7 +402,7 @@ void printFloat(double number, uint8_t digits)
     // Extract the integer part of the number and print it
     unsigned long int_part = (unsigned long)number;
     double remainder = number - (double)int_part;
-    print(int_part);
+    printUint64(int_part);
 
     // Print the decimal point, but only if there are digits beyond
     if (digits > 0) 
@@ -304,107 +415,30 @@ void printFloat(double number, uint8_t digits)
     {
         remainder *= 10.0;
         unsigned int toPrint = (unsigned int)(remainder);
-        print(toPrint);
+        printUint64(toPrint);
         remainder -= toPrint;
     }
 }
 
-void print(const char* s)
+void print(double num, int digits = 2)
 {
-    printf("%s", s);
-}
-void print(char c)
-{
-    printf("%c", c);
+    printFloat(num, digits);
 }
 
-void print(unsigned char num)
+void println(void)
 {
-    print(num, DEC);
-}
-
-void print(unsigned char num, int base)
-{
-    if (base == HEX)
-        printf("%X", num);
-    else
-        printf("%d", num);
-}
-
-void print(int num)
-{
-    print(num, DEC);
-}
-
-void print(int num, int base)
-{
-    if (base == HEX)
-        printf("%X", num);
-    else
-        printf("%d", num);
-}
-
-void print(unsigned int num)
-{
-    print(num, DEC);
-}
-
-void print(unsigned int num, int base)
-{
-    if (base == HEX)
-        printf("%X", num);
-    else
-        printf("%d", num);
-}
-
-void print(long num)
-{
-    print(num, DEC);
-}
-
-void print(long num, int base)
-{
-    if (base == HEX)
-        printf("%lX", num);
-    else
-        printf("%ld", num);
-}
-
-void print(unsigned long num)
-{
-    print(num, DEC);
-}
-
-void print(unsigned long num, int base)
-{
-    if (base == HEX)
-        printf("%lX", num);
-    else
-        printf("%ld", num);
-}
-
-void print(unsigned long long num)
-{
-    printUint64(num);
-}
-
-void print(unsigned long long num, int base)
-{
-    printUint64(num, base);
-}
-
-void print(double num)
-{
-    printf("%f", num);
+    print("\r\n");
 }
 
 void println(const char* s)
 {
-    printf("%s\n", s);
+    print(s);
+    println();
 }
 void println(char c)
 {
-    printf("%c\n", c);
+    print(c);
+    println();
 }
 
 void println(unsigned char num)
@@ -414,10 +448,8 @@ void println(unsigned char num)
 
 void println(unsigned char num, int base)
 {
-    if (base == HEX)
-        printf("%X\n", num);
-    else
-        printf("%d\n", num);
+    print(num, base);
+    println();
 }
 
 void println(int num)
@@ -427,10 +459,8 @@ void println(int num)
 
 void println(int num, int base)
 {
-    if (base == HEX)
-        printf("%X\n", num);
-    else
-        printf("%d\n", num);
+    print(num, base);
+    println();
 }
 
 void println(unsigned int num)
@@ -440,10 +470,8 @@ void println(unsigned int num)
 
 void println(unsigned int num, int base)
 {
-    if (base == HEX)
-        printf("%X\n", num);
-    else
-        printf("%d\n", num);
+    print(num, base);
+    println();
 }
 
 void println(long num)
@@ -453,10 +481,8 @@ void println(long num)
 
 void println(long num, int base)
 {
-    if (base == HEX)
-        printf("%lX\n", num);
-    else
-        printf("%ld\n", num);
+    print(num, base);
+    println();
 }
 
 void println(unsigned long num)
@@ -466,37 +492,31 @@ void println(unsigned long num)
 
 void println(unsigned long num, int base)
 {
-    if (base == HEX)
-        printf("%lX\n", num);
-    else
-        printf("%ld\n", num);
+    print(num, base);
+    println();
 }
 
 void println(unsigned long long num)
 {
-    printUint64(num);
-    println("");
+    println(num, DEC);
 }
 
 void println(unsigned long long num, int base)
 {
     printUint64(num, base);
-    println("");
+    println();
+}
+
+void println(double num, int digits = 2)
+{
+    print(num, digits);
+    println();
 }
 
 void println(double num)
 {
-    printf("%f\n", num);
-}
-
-void println(double num, int places)
-{
-    printf("%f\n", num);
-}
-
-void println(void)
-{
-    printf("\n");
+    // default: print 10 digits
+    println(num, 10);
 }
 
 uint32_t digitalRead(uint32_t dwPin)
