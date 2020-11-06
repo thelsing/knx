@@ -187,7 +187,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             // Get data link layer frame number (LFN field) from L/NPCI.LFN (bit 3..1)
             uint8_t lfn = (_buffer[8] & 0x0E) >> 1;
             // Get address type from L/NPCI.LFN (bit 7)
-            AddressType addressType = (_buffer[8] & 0x80) ? GroupAddress:InduvidualAddress;
+            AddressType addressType = (_buffer[8] & 0x80) ? GroupAddress:IndividualAddress;
             // Get routing counter from L/NPCI.LFN (bit 6..4) and map to hop count in Ctrl2.b6-4
             uint8_t hopCount = (_buffer[8] & 0x70) >> 4;
             // Get AddrExtensionType from L/NPCI.LFN (bit 7) and map to system broadcast flag in Ctrl1.b4

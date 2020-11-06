@@ -198,7 +198,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
             }
             else
             {   // ROUTE_XXX
-                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
+                sendMsgHopCount(ack, AddressType::IndividualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
             }
             return;
         }
@@ -209,7 +209,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
             if (ZS != ownSNA)
             {
                 // ROUTE_XXX
-                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
+                sendMsgHopCount(ack, AddressType::IndividualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
             }
             else if (D == 0)
             {
@@ -229,7 +229,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
         {
             // if destination is not within our subnet then send via primary interface, else via secondary interface
             uint8_t destIfidx = (ZS != ownSNA) ? kPrimaryIfIndex : kSecondaryIfIndex;
-            _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, source, priority, AddressType::InduvidualAddress, Broadcast);
+            _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, source, priority, AddressType::IndividualAddress, Broadcast);
             return;
         }
     }
@@ -254,7 +254,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
             else
             {
                 // ROUTE_XXX
-                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
+                sendMsgHopCount(ack, AddressType::IndividualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
             }
             return;
         }
@@ -265,7 +265,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
             if (Z != ownAA)
             {
                 // ROUTE_XXX
-                sendMsgHopCount(ack, AddressType::InduvidualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
+                sendMsgHopCount(ack, AddressType::IndividualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
             }
             else if(SD == 0)
             {
@@ -285,7 +285,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
         {
             // if destination is not within our area then send via primary interface, else via secondary interface
             uint8_t destIfidx = (Z != ownAA) ? kPrimaryIfIndex : kSecondaryIfIndex;
-            _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, source, priority, AddressType::InduvidualAddress, Broadcast);
+            _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, source, priority, AddressType::IndividualAddress, Broadcast);
             return;
         }
     }
@@ -294,7 +294,7 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
 void NetworkLayerCoupler::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
     // routing for individual addresses
-    if (addrType == InduvidualAddress)
+    if (addrType == IndividualAddress)
     {
         routeDataIndividual(ack, destination, npdu, priority, source, srcIfIdx);
         return;
@@ -326,7 +326,7 @@ void NetworkLayerCoupler::dataConfirm(AckType ack, AddressType addrType, uint16_
     // Check if received frame is an echo from our sent frame, we are a normal device in this case
     if (source == _deviceObj.individualAddress())
     {
-        if (addrType == InduvidualAddress)
+        if (addrType == IndividualAddress)
         {
             _transportLayer.dataIndividualConfirm(ack, destination, hopType, priority, npdu.tpdu(), status);
             return;

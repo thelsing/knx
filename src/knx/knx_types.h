@@ -22,7 +22,7 @@ enum AckType
 
 enum AddressType
 {
-    InduvidualAddress = 0,
+    IndividualAddress = 0,
     GroupAddress = 0x80,
 };
 

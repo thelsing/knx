@@ -380,7 +380,7 @@ void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hop
     {
         apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(destination);
-        apdu.frame().addressType(InduvidualAddress);
+        apdu.frame().addressType(IndividualAddress);
 
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -403,7 +403,7 @@ void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priori
     {
         apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(_transportLayer->getConnectionAddress());
-        apdu.frame().addressType(InduvidualAddress);
+        apdu.frame().addressType(IndividualAddress);
 
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
