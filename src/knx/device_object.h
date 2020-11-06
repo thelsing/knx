@@ -15,7 +15,7 @@ public:
     uint16_t induvidualAddress();
     void induvidualAddress(uint16_t value);
 
-    void induvidualAddressDuplication(bool value);
+    void individualAddressDuplication(bool value);
     bool verifyMode();
     void verifyMode(bool value);
     bool progMode();

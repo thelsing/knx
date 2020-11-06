@@ -103,7 +103,7 @@ void DataLinkLayer::frameReceived(CemiFrame& frame)
 #endif
 
     if (source == ownAddr)
-        _deviceObject.induvidualAddressDuplication(true);
+        _deviceObject.individualAddressDuplication(true);
 
     if (addrType == GroupAddress && destination == 0)
     {

@@ -129,7 +129,7 @@ void DeviceObject::induvidualAddress(uint16_t value)
 #define SAFE_STATE    0x8
 
 
-void DeviceObject::induvidualAddressDuplication(bool value)
+void DeviceObject::individualAddressDuplication(bool value)
 {
     Property* prop = property(PID_DEVICE_CONTROL);
     uint8_t data;
