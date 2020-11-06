@@ -58,7 +58,7 @@ void IpDataLinkLayer::loop()
         case RoutingIndication:
         {
             KnxIpRoutingIndication routingIndication(buffer, len);
-            frameRecieved(routingIndication.frame());
+            frameReceived(routingIndication.frame());
             break;
         }
         case SearchRequest:

@@ -25,7 +25,7 @@ void DataLinkLayer::dataRequestFromTunnel(CemiFrame& frame)
     frame.messageCode(L_data_ind);
     
     // Send to local stack
-    frameRecieved(frame);
+    frameReceived(frame);
 
     // Send to KNX medium
     sendFrame(frame);
@@ -82,7 +82,7 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
     frame.messageCode(backupMsgCode);
 }
 
-void DataLinkLayer::frameRecieved(CemiFrame& frame)
+void DataLinkLayer::frameReceived(CemiFrame& frame)
 {
     AckType ack = frame.ack();
     AddressType addrType = frame.addressType();

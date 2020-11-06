@@ -233,7 +233,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             print(" data: ");
             printHex(" data: ", _buffer, newLength);
 */
-            frameRecieved(frame);
+            frameReceived(frame);
         }
     }
 }
