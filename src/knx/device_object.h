@@ -12,8 +12,8 @@ public:
     const uint8_t* restore(const uint8_t* buffer) override;
     uint16_t saveSize() override;
 
-    uint16_t induvidualAddress();
-    void induvidualAddress(uint16_t value);
+    uint16_t individualAddress();
+    void individualAddress(uint16_t value);
 
     void individualAddressDuplication(bool value);
     bool verifyMode();

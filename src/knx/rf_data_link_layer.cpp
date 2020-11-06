@@ -246,7 +246,7 @@ void RfDataLinkLayer::enabled(bool value)
         {
             _enabled = true;
             print("ownaddr ");
-            println(_deviceObject.induvidualAddress(), HEX);
+            println(_deviceObject.individualAddress(), HEX);
         }
         else
         {

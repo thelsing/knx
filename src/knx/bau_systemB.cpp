@@ -441,7 +441,7 @@ void BauSystemB::individualAddressReadIndication(HopCountType hopType, const Sec
 void BauSystemB::individualAddressWriteIndication(HopCountType hopType, const SecurityControl &secCtrl, uint16_t newaddress)
 {
     if (_deviceObj.progMode())
-        _deviceObj.induvidualAddress(newaddress);
+        _deviceObj.individualAddress(newaddress);
 }
 
 void BauSystemB::individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint16_t newIndividualAddress,
@@ -450,7 +450,7 @@ void BauSystemB::individualAddressSerialNumberWriteIndication(Priority priority,
     // If the received serial number matches our serial number
     // then store the received new individual address in the device object
     if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
-        _deviceObj.induvidualAddress(newIndividualAddress);
+        _deviceObj.individualAddress(newIndividualAddress);
 }
 
 void BauSystemB::individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber)

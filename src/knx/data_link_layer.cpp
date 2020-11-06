@@ -91,7 +91,7 @@ void DataLinkLayer::frameReceived(CemiFrame& frame)
     FrameFormat type = frame.frameType();
     Priority priority = frame.priority();
     NPDU& npdu = frame.npdu();
-    uint16_t ownAddr = _deviceObject.induvidualAddress();
+    uint16_t ownAddr = _deviceObject.individualAddress();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
 #ifdef USE_CEMI_SERVER
