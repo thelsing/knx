@@ -126,7 +126,7 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
     frame.sourceAddress(sourceAddr);
     frame.addressType(addrType);
     frame.priority(priority);
-    frame.repetition(RepititionAllowed);
+    frame.repetition(RepetitionAllowed);
     frame.systemBroadcast(systemBroadcast);
 
     if (npdu.octetCount() <= 15)

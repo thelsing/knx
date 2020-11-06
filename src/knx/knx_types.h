@@ -95,7 +95,7 @@ enum Repetition
 {
     NoRepitiion = 0,
     WasRepeated = 0,
-    RepititionAllowed = 0x20,
+    RepetitionAllowed = 0x20,
     WasNotRepeated = 0x20,
 };
 
