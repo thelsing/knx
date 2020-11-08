@@ -206,5 +206,5 @@ target_link_libraries(${PROJECT_NAME}
     c
 )
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC -DDeviceFamily_CC13X0 -DRF_SINGLEMODE)
+target_compile_definitions(${PROJECT_NAME} PUBLIC -DDeviceFamily_CC13X0 -DRF_SINGLEMODE -DKNX_FLASH_SIZE=2048)
 

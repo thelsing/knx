@@ -18,24 +18,34 @@
 //#define printf(args...) (SEGGER_RTT_printf(0, args))
 #define PRINT_RTT
 
-volatile uint32_t CC1310Platform::msCounter = 0;
+static uint8_t serialNumber[6];
+// KNX_FLASH_SIZE shall be defined in CMakeLists.txt for example. It is also used in class Memory in memory.cpp
+static uint8_t NVS_buffer[KNX_FLASH_SIZE];
 
-void CC1310Platform::clk0Fxn(uintptr_t arg0)
+static UART_Handle uart;
+
+static NVS_Handle nvsHandle;
+
+static ClockP_Handle clk0Handle;
+static ClockP_Struct clk0Struct;
+static volatile uint32_t msCounter = 0;
+
+static void clk0Fxn(uintptr_t arg0)
 {
     msCounter++;
 }
 
-void CC1310Platform::msClockInit()
+static void msClockInit()
 {
     ClockP_Params clkParams;
     ClockP_Params_init(&clkParams);
     clkParams.period = 1000/ClockP_tickPeriod;
     clkParams.startFlag = true;
-    ClockP_construct(&clk0Struct, (ClockP_Fxn)CC1310Platform::clk0Fxn, 1000/ClockP_tickPeriod, &clkParams);
+    ClockP_construct(&clk0Struct, (ClockP_Fxn)clk0Fxn, 1000/ClockP_tickPeriod, &clkParams);
     clk0Handle = ClockP_handle(&clk0Struct);
 }
 
-void CC1310Platform::InitUART()
+static void InitUART()
 {
      UART_Params uartParams;
      UART_Params_init(&uartParams);
@@ -52,7 +62,7 @@ void CC1310Platform::InitUART()
      }
  }
 
-void CC1310Platform::InitNVS()
+static void InitNVS()
 {
     NVS_Params nvsParams;
     NVS_Params_init(&nvsParams);
@@ -69,92 +79,6 @@ void CC1310Platform::InitNVS()
     print("NVS flash sector size: "); println((int)attrs.sectorSize);
 }
 
-CC1310Platform::CC1310Platform()
-{
-    // build serialNumber from IEEE MAC Address (MAC is 8 bytes, serialNumber 6 bytes only)
-    *(uint32_t*)(_serialNumber+2) = HWREG(FCFG1_BASE+FCFG1_O_MAC_15_4_0) ^ HWREG(FCFG1_BASE+FCFG1_O_MAC_15_4_1);  // make a 6 byte hash from 8 bytes    
-}
-
-CC1310Platform::~CC1310Platform()
-{
-}
-
-void CC1310Platform::init() 
-{
-    // TI Drivers init
-    // According to SDK docs it is safe to call them AFTER NoRTOS_Start()
-    // If RTOS is used and multiple thread use the same driver, then the init shall be performed before BIOS_Start()
-    UART_init();
-    NVS_init();
-
-    // Init UART
-    InitUART();
-
-    // tick Period on this controller 10us so we use our own millisecond clock
-    msClockInit();
-
-    // Init flash
-    InitNVS();
-}
-
-uint8_t* CC1310Platform::getEepromBuffer(uint16_t size)
-{
-    if(size > EEPROM_EMULATION_SIZE)
-    {
-        fatalError();
-    }
-
-    NVS_read(nvsHandle, 0, (void *) _NVS_buffer, size);
-
-    for (int i=0; i<size; i++)
-    {
-        if (_NVS_buffer[i] != 0)
-        {
-            return _NVS_buffer;
-        }
-    }
-
-    memset(_NVS_buffer, 0xff, size);
-
-    return _NVS_buffer;
-}
-
-void CC1310Platform::commitToEeprom()
-{
-    println("CC1310Platform::commitToEeprom() ...");
-
-    int_fast16_t result = NVS_write(nvsHandle, 0, (void *)_NVS_buffer, EEPROM_EMULATION_SIZE, NVS_WRITE_ERASE | NVS_WRITE_POST_VERIFY);
-
-    if (result != NVS_STATUS_SUCCESS)
-    {
-        print("Error writing to NVS, result: "); println(result);
-    }
-    else
-    {
-        println("NVS successfully written");
-    }
-
-    delay(500);
-}
-
-void CC1310Platform::restart()
-{
-    println("System restart.");
-    SysCtrlSystemReset();
-}
-
-void CC1310Platform::fatalError()
-{
-    println("A fatal error occured. Stopped.");
-    while(true) 
-    {}
-}
-
-uint32_t CC1310Platform::millis()
-{
-    return msCounter;
-}
-
 void sleep(uint32_t sec)
 {
     ClockP_sleep(sec);
@@ -167,10 +91,10 @@ void usleep(uint32_t usec)
 
 uint32_t millis()
 {
-    return CC1310Platform::millis();
     // we use our own ms clock because the Os tick counter has counts 10us ticks and following calculation would not wrap correctly at 32bit boundary
     //return Clock_getTicks() * (uint64_t) Clock_tickPeriod / 1000; // rtos
     //return ClockP_getTicks( * (uint64_t) Clock_tickPeriod / 1000); //nortos
+    return msCounter;
 }
 
 void delay(uint32_t ms)
@@ -327,41 +251,6 @@ void print(unsigned long num, int base)
     print((unsigned long long)num, base);
 }
 
-void print(unsigned char num)
-{
-    print(num, DEC);
-}
-
-void print(int num)
-{
-    print(num, DEC);
-}
-
-void print(unsigned int num)
-{
-    print(num, DEC);
-}
-
-void print(long num)
-{
-    print(num, DEC);
-}
-
-void print(unsigned long num)
-{
-    print(num, DEC);
-}
-
-void print(long long num)
-{
-    print(num, DEC);
-}
-
-void print(unsigned long long num)
-{
-    print(num, DEC);
-}
-
 void printFloat(double number, uint8_t digits)
 {
     if (std::isnan(number)) 
@@ -441,20 +330,10 @@ void println(char c)
     println();
 }
 
-void println(unsigned char num)
-{
-    println(num, DEC);
-}
-
 void println(unsigned char num, int base)
 {
     print(num, base);
     println();
-}
-
-void println(int num)
-{
-    println(num, DEC);
 }
 
 void println(int num, int base)
@@ -463,20 +342,10 @@ void println(int num, int base)
     println();
 }
 
-void println(unsigned int num)
-{
-    println(num, DEC);
-}
-
 void println(unsigned int num, int base)
 {
     print(num, base);
     println();
-}
-
-void println(long num)
-{
-    println(num, DEC);
 }
 
 void println(long num, int base)
@@ -485,20 +354,10 @@ void println(long num, int base)
     println();
 }
 
-void println(unsigned long num)
-{
-    println(num, DEC);
-}
-
 void println(unsigned long num, int base)
 {
     print(num, base);
     println();
-}
-
-void println(unsigned long long num)
-{
-    println(num, DEC);
 }
 
 void println(unsigned long long num, int base)
@@ -588,6 +447,87 @@ void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode)
     IntEnable(INT_AON_GPIO_EDGE);
     IntMasterEnable();
 #endif
+}
+
+CC1310Platform::CC1310Platform()
+{
+    // build serialNumber from IEEE MAC Address (MAC is 8 bytes, serialNumber 6 bytes only)
+    *(uint32_t*)(serialNumber+2) = HWREG(FCFG1_BASE+FCFG1_O_MAC_15_4_0) ^ HWREG(FCFG1_BASE+FCFG1_O_MAC_15_4_1);  // make a 6 byte hash from 8 bytes    
+}
+
+CC1310Platform::~CC1310Platform()
+{
+}
+
+void CC1310Platform::init() 
+{
+    // TI Drivers init
+    // According to SDK docs it is safe to call them AFTER NoRTOS_Start()
+    // If RTOS is used and multiple thread use the same driver, then the init shall be performed before BIOS_Start()
+    UART_init();
+    NVS_init();
+
+    // Init UART
+    InitUART();
+
+    // tick Period on this controller 10us so we use our own millisecond clock
+    msClockInit();
+
+    // Init flash
+    InitNVS();
+}
+
+uint8_t* CC1310Platform::getEepromBuffer(uint16_t size)
+{
+    if(size > KNX_FLASH_SIZE)
+    {
+        fatalError();
+    }
+
+    NVS_read(nvsHandle, 0, (void *) NVS_buffer, size);
+
+    for (int i=0; i<size; i++)
+    {
+        if (NVS_buffer[i] != 0)
+        {
+            return NVS_buffer;
+        }
+    }
+
+    memset(NVS_buffer, 0xff, size);
+
+    return NVS_buffer;
+}
+
+void CC1310Platform::commitToEeprom()
+{
+    println("CC1310Platform::commitToEeprom() ...");
+
+    int_fast16_t result = NVS_write(nvsHandle, 0, (void *)NVS_buffer, KNX_FLASH_SIZE, NVS_WRITE_ERASE | NVS_WRITE_POST_VERIFY);
+
+    if (result != NVS_STATUS_SUCCESS)
+    {
+        print("Error writing to NVS, result: "); println(result);
+    }
+    else
+    {
+        println("NVS successfully written");
+    }
+
+    delay(500);
+}
+
+void CC1310Platform::restart()
+{
+    println("System restart.");
+    SysCtrlSystemReset();
+}
+
+void CC1310Platform::fatalError()
+{
+    println("A fatal error occured. Stopped.");
+    while(true) 
+    {}
 }
 
 #endif // DeviceFamily_CC13X0
