@@ -237,9 +237,6 @@ class RfPhysicalLayerCC1101 : public RfPhysicalLayer
     uint8_t prevStatusGDO0 {0}; // for edge detection during polling
     uint8_t prevStatusGDO2 {0}; // for edge detection during polling
     uint32_t packetStartTime {0};
-
-    RfDataLinkLayer& _rfDataLinkLayer;
-    Platform& _platform;
 };
 
 #endif // USE_RF

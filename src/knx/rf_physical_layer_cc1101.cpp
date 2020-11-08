@@ -134,8 +134,7 @@ const uint8_t RfPhysicalLayerCC1101::cc1101_2FSK_32_7_kb[CFG_REGISTER] = {
 const uint8_t RfPhysicalLayerCC1101::paTablePower868[8] = {0x03,0x17,0x1D,0x26,0x50,0x86,0xCD,0xC0};
 
 RfPhysicalLayerCC1101::RfPhysicalLayerCC1101(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
-    : _rfDataLinkLayer(rfDataLinkLayer),
-      _platform(platform)
+    : RfPhysicalLayer(rfDataLinkLayer, platform)
 {
 }
 
