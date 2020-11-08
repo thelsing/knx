@@ -85,7 +85,7 @@ int main(void)
 {
     // Setup RTT config for debug output
     SEGGER_RTT_ConfigUpBuffer(0, NULL, NULL, 0, SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL);
-    SEGGER_RTT_WriteString(0, "System startup.\r\n");
+    SEGGER_RTT_WriteString(0, "\r\nSystem startup.\r\n");
 
     // Make sure that compiled objects match the linked SDK library version
     DRIVERLIB_ASSERT_CURR_RELEASE();

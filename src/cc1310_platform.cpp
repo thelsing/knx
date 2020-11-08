@@ -69,7 +69,7 @@ static void InitNVS()
     nvsHandle = NVS_open(Board_NVSINTERNAL, &nvsParams);
     if (nvsHandle == NULL) 
     {
-        print("NVS_open() failed.\n");
+        println("NVS_open() failed.");
         return;
     }
 
