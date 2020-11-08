@@ -28,14 +28,14 @@
         - mkdir -p build
         - cd build
         - cmake ..
-        - make
+        - cmake --build .
         - cd ../..
         - echo "building knx-linux-coupler"
         - cd knx-linux-coupler
         - mkdir -p build
         - cd build
         - cmake ..
-        - make
+        - cmake --build .
 
     # Test build for CC13x0 platform
     - language: cpp
@@ -57,7 +57,10 @@
       script:
         - echo "building knx-cc1310"
         - cd examples/knx-cc1310
-        - ./build.sh
+        - mkdir -p build
+        - cd build
+        - cmake -DCMAKE_BUILD_TYPE=Debug ..
+        - cmake --build .
 
     # Test build for PlatformIO based projects
     - language: python
