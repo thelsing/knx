@@ -3,9 +3,9 @@
 #include <cstddef>
 #include <cstdint>
 
-#ifdef __linux__
+#if defined(__linux__)
 #include <arpa/inet.h>
-#elif ARDUINO_ARCH_SAMD || ARDUINO_ARCH_STM32
+#elif defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_STM32) || defined (DeviceFamily_CC13X0)
 #define getbyte(x,n) (*(((uint8_t*)&(x))+n))
 #define htons(x)  ( (getbyte(x,0)<<8) | getbyte(x,1) ) 
 #define htonl(x) ( (getbyte(x,0)<<24) | (getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
@@ -13,12 +13,12 @@
 #define ntohl(x) htonl(x)
 #endif
 
-#if ARDUINO_ARCH_SAMD || ARDUINO_ARCH_STM32
+#if defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_STM32)
 #include <Arduino.h>
-#elif ARDUINO_ARCH_ESP8266
+#elif defined(ARDUINO_ARCH_ESP8266)
 #include <Arduino.h>
 #include <user_interface.h>
-#elif ARDUINO_ARCH_ESP32
+#elif defined(ARDUINO_ARCH_ESP32)
 #include <Arduino.h>
 #include <esp_wifi.h>
 #else // Non-Arduino platforms
