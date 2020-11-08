@@ -46,48 +46,50 @@ static volatile int err;
 
 static void RxCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 {
-    if ((e & RF_EventNDataWritten) && (packetStartTime == 0))
+    if (e & RF_EventNDataWritten)
     {
-        // pDataEntry->rxData contains the first byte of the received packet.
-        // Just get the address to get the start address of the receive buffer
-        uint8_t *pData = &pDataEntry->rxData;
-
-        if ((pData[1] != 0x44) || (pData[2] != 0xFF)) 
+        // Make sure sure we are at the beginning of the packet
+        if (packetStartTime == 0)
         {
-           // cancel early because it does not seem to be KNX RF packet
-           RF_cancelCmd(rfHandle, rxCommandHandle, 0 /* force abort RF */);
-           return;
+            packetStartTime = millis();
+        
+            // pDataEntry->rxData contains the first byte of the received packet.
+            // Just get the address to get the start address of the receive buffer
+            uint8_t *pData = &pDataEntry->rxData;
+
+            if ((pData[1] != 0x44) || (pData[2] != 0xFF)) 
+            {
+            // cancel early because it does not seem to be KNX RF packet
+            RF_cancelCmd(rfHandle, rxCommandHandle, 0 /* force abort RF */);
+            return;
+            }
+
+            uint8_t len = pDataEntry->rxData;
+            struct rfc_CMD_PROP_SET_LEN_s RF_cmdPropSetLen =
+            {
+                .commandNo = CMD_PROP_SET_LEN,        // command identifier
+                .rxLen   = (uint16_t)PACKET_SIZE(len) // packet length to set
+            };
+
+            //RF_runImmediateCmd(rfHandle, (uint32_t*)&RF_cmdPropSetLen); // for length > 255
+            RF_Stat status = RF_runDirectCmd(rfHandle, (uint32_t)&RF_cmdPropSetLen);
+            if (status != RF_StatCmdDoneSuccess)
+            {
+                println("RF CMD_PROP_SET_LEN failed!");
+            }
         }
-
-        uint8_t len = pDataEntry->rxData;
-        struct rfc_CMD_PROP_SET_LEN_s RF_cmdPropSetLen =
-        {
-            .commandNo = CMD_PROP_SET_LEN,        // command identifier
-            .rxLen   = (uint16_t)PACKET_SIZE(len) // packet length to set
-        };
-
-        //RF_runImmediateCmd(rfHandle, (uint32_t*)&RF_cmdPropSetLen); // for length > 255
-        RF_Stat status = RF_runDirectCmd(rfHandle, (uint32_t)&RF_cmdPropSetLen);
-        if (status != RF_StatCmdDoneSuccess)
-        {
-            println("RF CMD_PROP_SET_LEN failed!");
-        }
-
-        packetStartTime = millis();
     }
     else if (e & RF_TERMINATION_EVENT_MASK) 
     {
         rfDone = true;
         rfErr = e & (RF_EventCmdStopped | RF_EventCmdAborted | RF_EventCmdCancelled);
     }
-
     else /* unknown reason - should not occure */
     {
         pDataEntry->status = DATA_ENTRY_PENDING;
         err++;
     }
 }
-
 
 RfPhysicalLayerCC1310::RfPhysicalLayerCC1310(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
     : RfPhysicalLayer(rfDataLinkLayer, platform)
