@@ -1,5 +1,7 @@
 #pragma once
 
+#ifndef DeviceFamily_CC13X0
+
 #include "config.h"
 #ifdef USE_RF
 
@@ -240,4 +242,6 @@ class RfPhysicalLayerCC1101 : public RfPhysicalLayer
     Platform& _platform;
 };
 
-#endif
+#endif // USE_RF
+
+#endif // DeviceFamily_CC13X0

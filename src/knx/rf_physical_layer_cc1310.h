@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef DeviceFamily_CC13X0
+
 #include "config.h"
 #ifdef USE_RF
 
@@ -34,4 +36,6 @@ class RfPhysicalLayerCC1310 : public RfPhysicalLayer
     uint8_t _loopState = RX_START;
 };
 
-#endif
+#endif // USE_RF
+
+#endif // DeviceFamily_CC13X0

@@ -1,3 +1,5 @@
+#ifndef DeviceFamily_CC13X0
+
 #include "config.h"
 #ifdef USE_RF
 
@@ -754,4 +756,6 @@ void RfPhysicalLayerCC1101::loop()
     }
 }
 
-#endif
+#endif // USE_RF
+
+#endif // DeviceFamily_CC13X0
