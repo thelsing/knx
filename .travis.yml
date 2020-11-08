@@ -39,6 +39,7 @@
 
     # Test build for CC13x0 platform
     - language: minimal
+      dist: focal
       os: linux
       addons:
         apt:
