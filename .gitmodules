@@ -1,4 +1,0 @@
-[submodule "knxPython/pybind11"]
-	path = knxPython/pybind11
-	url = https://github.com/pybind/pybind11.git
-	branch = stable

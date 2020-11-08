@@ -28,7 +28,7 @@ static void loop()
     while (running)
     {
         bau->loop();
-        platform->mdelay(100);
+        delayMicroseconds(100);
     }
 }
 
@@ -51,7 +51,8 @@ static void Prepare(std::vector<std::string> args)
     argv = std::vector<const char*>(argsVector.size());
     std::transform(argsVector.begin(), argsVector.end(), argv.begin(), StdStringCStrFunctor());
 
-    platform = new LinuxPlatform(argv.size(), const_cast<char**>(argv.data()));
+    platform = new LinuxPlatform();
+    platform->cmdLineArgs(argv.size(), const_cast<char**>(argv.data()));
     bau = new Bau57B0(*platform);
 }
 
