@@ -5,7 +5,7 @@
 
 #ifdef __linux__
 #include <arpa/inet.h>
-#else
+#elif ARDUINO_ARCH_SAMD || ARDUINO_ARCH_STM32
 #define getbyte(x,n) (*(((uint8_t*)&(x))+n))
 #define htons(x)  ( (getbyte(x,0)<<8) | getbyte(x,1) ) 
 #define htonl(x) ( (getbyte(x,0)<<24) | (getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
