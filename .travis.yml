@@ -37,6 +37,28 @@
         - cmake ..
         - make
 
+    # Test build for CC13x0 platform
+    - language: cpp
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-arm-none-eabi
+      cache:
+        directories:
+      git:
+        depth: false
+        quiet: true
+
+      install:
+      
+      script:
+        - echo "building knx-cc1310"
+        - cd examples/knx-cc1310
+        - ./build.sh
+
     # Test build for PlatformIO based projects
     - language: python
       python:
