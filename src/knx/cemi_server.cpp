@@ -18,7 +18,7 @@ CemiServer::CemiServer(BauSystemB& bau)
 {
     // The cEMI server will hand out the device address + 1 to the cEMI client (e.g. ETS),
     // so that the device and the cEMI client/server connection(tunnel) can operate simultaneously.
-    _clientAddress = _bau.deviceObject().induvidualAddress() + 1;
+    _clientAddress = _bau.deviceObject().individualAddress() + 1;
 }
 
 void CemiServer::dataLinkLayer(DataLinkLayer& layer)

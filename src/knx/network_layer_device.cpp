@@ -29,7 +29,7 @@ void NetworkLayerDevice::dataIndividualRequest(AckType ack, uint16_t destination
     //    print.print("-> NL  ");
     //    tpdu.apdu().printPDU();
     //}
-    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, _deviceObj.induvidualAddress(), priority, InduvidualAddress, Broadcast);
+    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, _deviceObj.individualAddress(), priority, IndividualAddress, Broadcast);
 }
 
 void NetworkLayerDevice::dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -41,7 +41,7 @@ void NetworkLayerDevice::dataGroupRequest(AckType ack, uint16_t destination, Hop
     else
         npdu.hopCount(hopCount());
 
-    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, _deviceObj.induvidualAddress(), priority, GroupAddress, Broadcast);
+    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, _deviceObj.individualAddress(), priority, GroupAddress, Broadcast);
 }
 
 void NetworkLayerDevice::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -53,7 +53,7 @@ void NetworkLayerDevice::dataBroadcastRequest(AckType ack, HopCountType hopType,
     else
         npdu.hopCount(hopCount());
 
-    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, 0, _deviceObj.induvidualAddress(), priority, GroupAddress, Broadcast);
+    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, 0, _deviceObj.individualAddress(), priority, GroupAddress, Broadcast);
 }
 
 void NetworkLayerDevice::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu)
@@ -69,16 +69,16 @@ void NetworkLayerDevice::dataSystemBroadcastRequest(AckType ack, HopCountType ho
     else
         npdu.hopCount(hopCount());
 
-    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, 0, _deviceObj.induvidualAddress(), priority, GroupAddress, broadcastType);
+    _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, 0, _deviceObj.individualAddress(), priority, GroupAddress, broadcastType);
 }
 
 void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
 
-    if (addrType == InduvidualAddress)
+    if (addrType == IndividualAddress)
     {
-        if (destination != _deviceObj.induvidualAddress())
+        if (destination != _deviceObj.individualAddress())
             return;
 
         _transportLayer.dataIndividualIndication(destination, hopType, priority, source, npdu.tpdu());
@@ -96,7 +96,7 @@ void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint1
 void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
-    if (addressType == InduvidualAddress)
+    if (addressType == IndividualAddress)
     {
         _transportLayer.dataIndividualConfirm(ack, destination, hopType, priority, npdu.tpdu(), status);
         return;

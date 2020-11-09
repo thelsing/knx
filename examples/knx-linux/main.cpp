@@ -97,7 +97,7 @@ void setup()
     srand((unsigned int)time(NULL));
     knx.readMemory();
 
-    if (knx.induvidualAddress() == 0)
+    if (knx.individualAddress() == 0)
         knx.progMode(true);
 
     if (knx.configured())
