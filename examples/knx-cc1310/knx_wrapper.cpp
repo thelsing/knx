@@ -29,7 +29,7 @@ void setup()
 
     knx.readMemory();
 
-    if (knx.induvidualAddress() == 0)
+    if (knx.individualAddress() == 0)
         knx.progMode(true);
 
     if (knx.configured())
