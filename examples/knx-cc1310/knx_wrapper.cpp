@@ -21,6 +21,10 @@ void setup()
     pKnx = new KnxFacade<CC1310Platform, Bau27B0>;
     KnxFacade<CC1310Platform, Bau27B0> &knx = *pKnx;
 
+    // see GPIO_PinConfig gpioPinConfigs[]
+    knx.buttonPin(0);
+    knx.ledPinActiveOn(HIGH);
+
     knx.platform().init();
 
     knx.readMemory();

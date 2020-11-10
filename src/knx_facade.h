@@ -34,7 +34,7 @@
    #include "knx/bau2920.h"
    void buttonUp();
 #else
-   #define LED_BUILTIN 0
+   #define LED_BUILTIN 5 // see GPIO_PinConfig gpioPinConfigs[]
    #include "cc1310_platform.h"
    #include "knx/bau27B0.h"
    #include "knx/bau07B0.h"

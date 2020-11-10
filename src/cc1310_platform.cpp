@@ -7,6 +7,7 @@
 
 #include <ti/devices/DeviceFamily.h>
 #include DeviceFamily_constructPath(driverlib/sys_ctrl.h)
+#include <ti/drivers/GPIO.h>
 
 #include "SEGGER_RTT.h"
 
@@ -35,7 +36,7 @@ static void clk0Fxn(uintptr_t arg0)
     msCounter++;
 }
 
-static void msClockInit()
+static void setupClock()
 {
     ClockP_Params clkParams;
     ClockP_Params_init(&clkParams);
@@ -45,7 +46,16 @@ static void msClockInit()
     clk0Handle = ClockP_handle(&clk0Struct);
 }
 
-static void InitUART()
+static void setupGPIO()
+{
+    /* Configure the LED and button pins */
+    GPIO_setConfig(Board_GPIO_LED0, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
+    GPIO_setConfig(Board_GPIO_LED1, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
+    GPIO_setConfig(Board_GPIO_BUTTON0, GPIO_CFG_IN_PU | GPIO_CFG_IN_INT_FALLING);
+    GPIO_setConfig(Board_GPIO_BUTTON1, GPIO_CFG_IN_PU | GPIO_CFG_IN_INT_FALLING);
+}
+
+static void setupUART()
 {
      UART_Params uartParams;
      UART_Params_init(&uartParams);
@@ -62,7 +72,7 @@ static void InitUART()
      }
  }
 
-static void InitNVS()
+static void setupNVS()
 {
     NVS_Params nvsParams;
     NVS_Params_init(&nvsParams);
@@ -77,6 +87,20 @@ static void InitNVS()
     NVS_getAttrs(nvsHandle, &attrs);
     print("NVS flash size: "); println((int)attrs.regionSize);
     print("NVS flash sector size: "); println((int)attrs.sectorSize);
+
+    if (GPIO_read(Board_GPIO_BUTTON1) == 0)
+    {
+        println("Button1 is pressed. Erasing flash...");
+        int_fast16_t result = NVS_erase(nvsHandle, 0, attrs.regionSize);
+        if (result != NVS_STATUS_SUCCESS)
+        {
+            print("Error erasing NVS, result: "); println(result);
+        }
+        else
+        {
+            println("NVS successfully erased.");
+        }
+    }
 }
 
 void sleep(uint32_t sec)
@@ -380,73 +404,60 @@ void println(double num)
 
 uint32_t digitalRead(uint32_t dwPin)
 {
-#if 0
-    if (dwPin == IOID_UNUSED)
-        return -1;
-    return GPIO_readDio(dwPin);
-#endif
-return -1;
+    print("ignoring digitalRead: pin: ");print(dwPin);
+    println(", returning 0");
+    return 0;
 }
 
-void digitalWrite(unsigned long port, unsigned long value)
+void digitalWrite(unsigned long pin, unsigned long value)
 {
-#if 0
-    if (port == IOID_UNUSED)
-        return;
-    GPIO_writeDio(port, value);
-#endif
-}
-
-#define IOC_STD_INPUT           (IOC_CURRENT_2MA | IOC_STRENGTH_AUTO |      \
-                                 IOC_NO_IOPULL | IOC_SLEW_DISABLE |         \
-                                 IOC_HYST_DISABLE | IOC_NO_EDGE |           \
-                                 IOC_INT_DISABLE | IOC_IOMODE_NORMAL |      \
-                                 IOC_NO_WAKE_UP | IOC_INPUT_ENABLE )
-
-#define IOC_PULLUP_INPUT        (IOC_CURRENT_2MA | IOC_STRENGTH_AUTO |      \
-                                 IOC_IOPULL_UP | IOC_SLEW_DISABLE |         \
-                                 IOC_HYST_DISABLE | IOC_NO_EDGE |           \
-                                 IOC_INT_DISABLE | IOC_IOMODE_NORMAL |      \
-                                 IOC_NO_WAKE_UP | IOC_INPUT_ENABLE )
-
-void pinMode(unsigned long port, unsigned long value)
-{
-#if 0
-    if (port == IOID_UNUSED)
-        return;
-
-    switch (value) {
-    case OUTPUT:
-        //GPIO_setConfig(port, GPIO_CFG_OUT_STD);
-        IOCPortConfigureSet(port, IOC_PORT_GPIO, IOC_STD_OUTPUT);
-        //GPIO_setOutputEnableDio(IOID_7, GPIO_OUTPUT_ENABLE);
-        break;
-    case INPUT:
-        //GPIO_setConfig(port, GPIO_CFG_IN_NOPULL);
-        IOCPortConfigureSet(port, IOC_PORT_GPIO, IOC_STD_INPUT);
-        //GPIO_setOutputEnableDio(IOID_7, GPIO_OUTPUT_DISABLE);
-    case INPUT_PULLUP:
-        //GPIO_setConfig(port, GPIO_CFG_IN_PU);
-        IOCPortConfigureSet(port, IOC_PORT_GPIO, IOC_PULLUP_INPUT);
-        break;
+    if (pin == Board_GPIO_LED0)
+    {
+        if (value > 0)
+        {
+            GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_ON);
+        }
+        else
+        {
+            GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_OFF);
+        }
     }
-#endif
+    else
+    {
+        print("dummy digitalWrite: pin: ");print(pin);
+        print(", value: ");println(value, HEX);
+    }
+}
+
+void pinMode(unsigned long pin, unsigned long mode)
+{
+    print("ignoring pinMode: pin: ");print(pin);
+    print(", mode: ");println(mode, HEX);
 }
 
 typedef void (*IsrFuncPtr)();
+static IsrFuncPtr gpioCallback;
+static void gpioButtonFxn0(uint_least8_t index)
+{
+    gpioCallback();
+}
 
 void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode) 
 {
-#if 0
-    if (pin == IOID_UNUSED)
-        return;
-    println("attachInterrupt() - untested!");
-    //IOCPortConfigureSet(port, IOC_PORT_GPIO, IOC_PULLUP_INPUT|IOC_RISING_EDGE|IOC_INT_ENABLE);
-    IOCIOModeSet(pin, IOC_RISING_EDGE|IOC_INT_ENABLE);
-    IntRegister(INT_AON_GPIO_EDGE, callback);
-    IntEnable(INT_AON_GPIO_EDGE);
-    IntMasterEnable();
-#endif
+    if (pin == Board_GPIO_BUTTON0)
+    {
+        gpioCallback = callback;
+        /* install Button callback */
+        GPIO_setCallback(Board_GPIO_BUTTON0, gpioButtonFxn0);
+
+        /* Enable interrupts */
+        GPIO_enableInt(Board_GPIO_BUTTON0);
+    }
+    else
+    {
+        print("dummy attachInterrupt: pin: ");print(pin);
+        print(", mode: ");println(mode, HEX);
+    }
 }
 
 CC1310Platform::CC1310Platform()
@@ -464,17 +475,21 @@ void CC1310Platform::init()
     // TI Drivers init
     // According to SDK docs it is safe to call them AFTER NoRTOS_Start()
     // If RTOS is used and multiple thread use the same driver, then the init shall be performed before BIOS_Start()
+    GPIO_init();
     UART_init();
     NVS_init();
 
+    // Init GPIO
+    setupGPIO();
+
     // Init UART
-    InitUART();
+    setupUART();
 
     // tick Period on this controller 10us so we use our own millisecond clock
-    msClockInit();
+    setupClock();
 
     // Init flash
-    InitNVS();
+    setupNVS();
 }
 
 uint8_t* CC1310Platform::getEepromBuffer(uint16_t size)
@@ -519,15 +534,26 @@ void CC1310Platform::commitToEeprom()
 
 void CC1310Platform::restart()
 {
-    println("System restart.");
+    println("System restart in 500ms.");
+    delay(500);
     SysCtrlSystemReset();
+    // Should neber be reached!
+    fatalError();
 }
 
 void CC1310Platform::fatalError()
 {
     println("A fatal error occured. Stopped.");
     while(true) 
-    {}
+    {
+        /* Turn on user LED */
+        GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_OFF);
+        GPIO_write(Board_GPIO_LED1, Board_GPIO_LED_ON);
+        delay(500);
+        GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_ON);
+        GPIO_write(Board_GPIO_LED1, Board_GPIO_LED_OFF);
+        delay(500);
+    }
 }
 
 #endif // DeviceFamily_CC13X0
