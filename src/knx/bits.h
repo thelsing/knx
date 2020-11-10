@@ -74,9 +74,7 @@ void println(unsigned long long, int = DEC);
 void println(double);
 void println(void);
 
-
-
-void printHex(const char* suffix, const uint8_t *data, size_t length);
+void printHex(const char* suffix, const uint8_t *data, size_t length, bool newline = true);
 
 const uint8_t* popByte(uint8_t& b, const uint8_t* data);
 const uint8_t* popWord(uint16_t& w, const uint8_t* data);
@@ -88,7 +86,6 @@ uint8_t* pushInt(uint32_t i, uint8_t* data);
 uint8_t* pushByteArray(const uint8_t* src, uint32_t size, uint8_t* data);
 uint16_t getWord(const uint8_t* data);
 uint32_t getInt(const uint8_t* data);
-void printHex(const char* suffix, const uint8_t *data, size_t length);
 
 void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
 uint64_t sixBytesToUInt64(uint8_t* data);
