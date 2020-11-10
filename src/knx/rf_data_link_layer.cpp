@@ -98,9 +98,16 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
         return;
     }
 
+#if defined(DeviceFamily_CC13X0)
+        // Small optimization:
+        // We do not calculate the CRC16-DNP again for the first block.
+        // It was already done in the CC13x0 RX driver during reception.
+        // Also the two fixed bytes 0x44 and 0xFF are also there.
+        // So if we get here we can assume a valid block 1
+#else        
     // CRC16-DNP of first block is always located here
     uint16_t block1Crc = rfPacketBuf[10] << 8 | rfPacketBuf[11];
-
+    
     // If the checksum was ok and the other
     // two constant header bytes match the KNX-RF spec. (C-field: 0x44 and ESC-field: 0xFF)...
     // then we seem to have a valid first block of an KNX RF frame.
@@ -108,6 +115,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
     if ((rfPacketBuf[1] == 0x44) &&
         (rfPacketBuf[2] == 0xFF) &&
         (crc16Dnp(rfPacketBuf, 10) == block1Crc))
+#endif        
     {
         // bytes left from the remaining block(s)
         uint16_t bytesLeft = length - 12;
