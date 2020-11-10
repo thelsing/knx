@@ -424,7 +424,7 @@ void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
     //printHex("=>", buffer, length);
     CemiFrame frame(buffer, length);
 
-    frameRecieved(frame);
+    frameReceived(frame);
 }
 
 void TpUartDataLinkLayer::dataConBytesReceived(uint8_t* buffer, uint16_t length, bool success)
@@ -444,7 +444,7 @@ void TpUartDataLinkLayer::enabled(bool value)
         {
             _enabled = true;
             print("ownaddr ");
-            println(_deviceObject.induvidualAddress(), HEX);
+            println(_deviceObject.individualAddress(), HEX);
         }
         else
         {

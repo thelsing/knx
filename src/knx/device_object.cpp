@@ -113,12 +113,12 @@ uint16_t DeviceObject::saveSize()
     return 2 + InterfaceObject::saveSize();
 }
 
-uint16_t DeviceObject::induvidualAddress()
+uint16_t DeviceObject::individualAddress()
 {
     return _ownAddress;
 }
 
-void DeviceObject::induvidualAddress(uint16_t value)
+void DeviceObject::individualAddress(uint16_t value)
 {
     _ownAddress = value;
 }
@@ -129,7 +129,7 @@ void DeviceObject::induvidualAddress(uint16_t value)
 #define SAFE_STATE    0x8
 
 
-void DeviceObject::induvidualAddressDuplication(bool value)
+void DeviceObject::individualAddressDuplication(bool value)
 {
     Property* prop = property(PID_DEVICE_CONTROL);
     uint8_t data;

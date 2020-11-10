@@ -171,9 +171,9 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _bau.writeMemory();
     }
 
-    uint16_t induvidualAddress()
+    uint16_t individualAddress()
     {
-        return _bau.deviceObject().induvidualAddress();
+        return _bau.deviceObject().individualAddress();
     }
 
     void loop()

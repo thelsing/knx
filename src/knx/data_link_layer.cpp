@@ -25,7 +25,7 @@ void DataLinkLayer::dataRequestFromTunnel(CemiFrame& frame)
     frame.messageCode(L_data_ind);
     
     // Send to local stack
-    frameRecieved(frame);
+    frameReceived(frame);
 
     // Send to KNX medium
     sendFrame(frame);
@@ -82,7 +82,7 @@ void DataLinkLayer::dataConReceived(CemiFrame& frame, bool success)
     frame.messageCode(backupMsgCode);
 }
 
-void DataLinkLayer::frameRecieved(CemiFrame& frame)
+void DataLinkLayer::frameReceived(CemiFrame& frame)
 {
     AckType ack = frame.ack();
     AddressType addrType = frame.addressType();
@@ -91,7 +91,7 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
     FrameFormat type = frame.frameType();
     Priority priority = frame.priority();
     NPDU& npdu = frame.npdu();
-    uint16_t ownAddr = _deviceObject.induvidualAddress();
+    uint16_t ownAddr = _deviceObject.individualAddress();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
 #ifdef USE_CEMI_SERVER
@@ -103,7 +103,7 @@ void DataLinkLayer::frameRecieved(CemiFrame& frame)
 #endif
 
     if (source == ownAddr)
-        _deviceObject.induvidualAddressDuplication(true);
+        _deviceObject.individualAddressDuplication(true);
 
     if (addrType == GroupAddress && destination == 0)
     {
@@ -126,7 +126,7 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
     frame.sourceAddress(sourceAddr);
     frame.addressType(addrType);
     frame.priority(priority);
-    frame.repetition(RepititionAllowed);
+    frame.repetition(RepetitionAllowed);
     frame.systemBroadcast(systemBroadcast);
 
     if (npdu.octetCount() <= 15)

@@ -219,12 +219,12 @@ void CemiFrame::frameType(FrameFormat type)
 
 Repetition CemiFrame::repetition() const
 {
-    return (Repetition)(_ctrl1[0] & RepititionAllowed);
+    return (Repetition)(_ctrl1[0] & RepetitionAllowed);
 }
 
 void CemiFrame::repetition(Repetition rep)
 {
-    _ctrl1[0] &= ~RepititionAllowed;
+    _ctrl1[0] &= ~RepetitionAllowed;
     _ctrl1[0] |= rep;
 }
 
