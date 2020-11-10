@@ -62,7 +62,6 @@ class RfDataLinkLayer : public DataLinkLayer
     void loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBufferLength);
     bool sendFrame(CemiFrame& frame);
     void frameBytesReceived(uint8_t* buffer, uint16_t length);
-    uint16_t calcCrcRF(uint8_t* buffer, uint32_t offset, uint32_t len);
 };
 
 #endif

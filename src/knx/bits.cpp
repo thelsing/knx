@@ -135,3 +135,24 @@ uint16_t crc16Ccitt(uint8_t* input, uint16_t length)
         }
         return result & 0xffff;
 }
+
+uint16_t crc16Dnp(uint8_t* input, uint16_t length)
+{
+        // CRC-16-DNP
+        // generator polynomial = 2^16 + 2^13 + 2^12 + 2^11 + 2^10 + 2^8 + 2^6 + 2^5 + 2^2 + 2^0
+        uint32_t pn = 0x13d65; // 1 0011 1101 0110 0101
+
+        // for much data, using a lookup table would be a way faster CRC calculation
+        uint32_t crc = 0;
+        for (uint32_t i = 0; i < length; i++) {
+            uint8_t bite = input[i] & 0xff;
+            for (uint8_t b = 8; b --> 0;) {
+                bool bit = ((bite >> b) & 1) == 1;
+                bool one = (crc >> 15 & 1) == 1;
+                crc <<= 1;
+                if (one ^ bit)
+                    crc ^= pn;
+            }
+        }
+        return (~crc) & 0xffff;
+}

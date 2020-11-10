@@ -85,27 +85,6 @@ RfDataLinkLayer::RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumO
 {
 }
 
-uint16_t RfDataLinkLayer::calcCrcRF(uint8_t* buffer, uint32_t offset, uint32_t len)
-{
-        // CRC-16-DNP
-        // generator polynomial = 2^16 + 2^13 + 2^12 + 2^11 + 2^10 + 2^8 + 2^6 + 2^5 + 2^2 + 2^0
-        uint32_t pn = 0x13d65; // 1 0011 1101 0110 0101
-
-        // for much data, using a lookup table would be a way faster CRC calculation
-        uint32_t crc = 0;
-        for (uint32_t i = offset; i < offset + len; i++) {
-            uint8_t bite = buffer[i] & 0xff;
-            for (uint8_t b = 8; b --> 0;) {
-                bool bit = ((bite >> b) & 1) == 1;
-                bool one = (crc >> 15 & 1) == 1;
-                crc <<= 1;
-                if (one ^ bit)
-                    crc ^= pn;
-            }
-        }
-        return (~crc) & 0xffff;
-}
-
 void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
 {
     // RF data link layer frame format
@@ -128,7 +107,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
     // The first block basically contains the RF-info field and the KNX SN/Domain address.
     if ((rfPacketBuf[1] == 0x44) &&
         (rfPacketBuf[2] == 0xFF) &&
-        (calcCrcRF(rfPacketBuf, 0, 10) == block1Crc))
+        (crc16Dnp(rfPacketBuf, 10) == block1Crc))
     {
         // bytes left from the remaining block(s)
         uint16_t bytesLeft = length - 12;
@@ -151,7 +130,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
         {
             // Get CRC16 from end of the block
             blockCrc = pRfPacketBuf[16] << 8 | pRfPacketBuf[17];
-            if (calcCrcRF(pRfPacketBuf, 0, 16) == blockCrc)
+            if (crc16Dnp(pRfPacketBuf, 16) == blockCrc)
             {
                 // Copy only the payload without the checksums
                 memcpy(pBuffer, pRfPacketBuf, 16);
@@ -169,7 +148,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
 
         // Now process the last block
         blockCrc = pRfPacketBuf[bytesLeft - 2] << 8 | pRfPacketBuf[bytesLeft - 1];
-        crcOk = crcOk && (calcCrcRF(&pRfPacketBuf[0], 0, bytesLeft -2) == blockCrc);
+        crcOk = crcOk && (crc16Dnp(&pRfPacketBuf[0], bytesLeft -2) == blockCrc);
 
         // If all checksums were ok, then...
         if (crcOk)
@@ -290,7 +269,7 @@ void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
 
     // Generate CRC16-DNP over the first block of data
     pushByteArray(frame.rfSerialOrDoA(), 6, &data[4]);
-    crc = calcCrcRF(&data[0], 0, 10);
+    crc = crc16Dnp(&data[0], 10);
     pushWord(crc, &data[10]);
 
     // Put the complete KNX telegram into a temporary buffer
@@ -304,7 +283,7 @@ void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
     while (bytesLeft > 16)
     {
         memcpy(pData, pBuffer, 16);
-        crc = calcCrcRF(pData, 0, 16);
+        crc = crc16Dnp(pData, 16);
         pushWord(crc, &pData[16]);
 
         pBuffer += 16;
@@ -315,7 +294,7 @@ void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
     // Copy remaining bytes of last block. Could be less than 16 bytes
     memcpy(pData, pBuffer, bytesLeft);
     // And add last CRC
-    crc = calcCrcRF(pData, 0, bytesLeft);
+    crc = crc16Dnp(pData, bytesLeft);
     pushWord(crc, &pData[bytesLeft]);
 }
 

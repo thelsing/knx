@@ -94,3 +94,4 @@ void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
 uint64_t sixBytesToUInt64(uint8_t* data);
 
 uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
+uint16_t crc16Dnp(uint8_t* input, uint16_t length);
