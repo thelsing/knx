@@ -2,6 +2,7 @@
   include:
     # Test build for Linux platform
     - language: cpp
+      dist: focal
       os: linux
       addons:
         apt:
@@ -9,7 +10,7 @@
             - ubuntu-toolchain-r-test
           packages:
             - g++-7
-            - python3.7
+            - python3.8
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
       cache:
@@ -27,7 +28,44 @@
         - mkdir -p build
         - cd build
         - cmake ..
-        - make
+        - cmake --build .
+
+    # Test build for CC13x0 platform
+    - language: cpp
+      dist: focal
+      os: linux
+      addons:
+        apt:
+          sources:
+          packages:
+            - cmake
+            - binutils-arm-none-eabi
+            - gcc-arm-none-eabi
+            - libnewlib-arm-none-eabi
+            - libstdc++-arm-none-eabi-newlib
+      env:
+        - MATRIX_EVAL="CC=arm-none-eabi-gcc && CXX=arm-none-eabi-g++"
+      cache:
+        directories:
+      git:
+        depth: false
+        quiet: true
+
+      before_install:
+        - eval "${MATRIX_EVAL}"
+
+      install:
+
+      before_script:
+        - arm-none-eabi-gcc --version
+
+      script:
+        - echo "building knx-cc1310"
+        - cd examples/knx-cc1310
+        - mkdir -p build
+        - cd build
+        - cmake -DCMAKE_BUILD_TYPE=Debug ..
+        - cmake --build .
 
     # Test build for PlatformIO based projects
     - language: python

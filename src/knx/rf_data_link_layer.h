@@ -8,13 +8,15 @@
 
 #define MAX_KNX_TELEGRAM_SIZE 263
 
-class RfPhysicalLayer;
 class RfMediumObject;
 
 class RfDataLinkLayer : public DataLinkLayer
 {
-    friend class RfPhysicalLayer;
-
+#if defined(DeviceFamily_CC13X0)
+    friend class RfPhysicalLayerCC1310;
+#else
+    friend class RfPhysicalLayerCC1101;
+#endif    
     using DataLinkLayer::_deviceObject;
     using DataLinkLayer::_platform;
 
@@ -49,15 +51,17 @@ class RfDataLinkLayer : public DataLinkLayer
     } _tx_queue;
 
     RfMediumObject& _rfMediumObj;
-    RfPhysicalLayer _rfPhy;
-
+#if defined(DeviceFamily_CC13X0)
+    RfPhysicalLayerCC1310 _rfPhy;
+#else
+    RfPhysicalLayerCC1101 _rfPhy;
+#endif
     void fillRfFrame(CemiFrame& frame, uint8_t* data);
     void addFrameTxQueue(CemiFrame& frame);
     bool isTxQueueEmpty();
     void loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBufferLength);
     bool sendFrame(CemiFrame& frame);
     void frameBytesReceived(uint8_t* buffer, uint16_t length);
-    uint16_t calcCrcRF(uint8_t* buffer, uint32_t offset, uint32_t len);
 };
 
 #endif

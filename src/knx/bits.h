@@ -3,9 +3,25 @@
 #include <cstddef>
 #include <cstdint>
 
-#ifdef __linux__
+#if defined(__linux__)
 #include <arpa/inet.h>
+#elif defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_STM32) || defined (DeviceFamily_CC13X0)
+#define getbyte(x,n) (*(((uint8_t*)&(x))+n))
+#define htons(x)  ( (getbyte(x,0)<<8) | getbyte(x,1) ) 
+#define htonl(x) ( (getbyte(x,0)<<24) | (getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
+#define ntohs(x) htons(x)
+#define ntohl(x) htonl(x)
+#endif
 
+#if defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_STM32)
+#include <Arduino.h>
+#elif defined(ARDUINO_ARCH_ESP8266)
+#include <Arduino.h>
+#include <user_interface.h>
+#elif defined(ARDUINO_ARCH_ESP32)
+#include <Arduino.h>
+#include <esp_wifi.h>
+#else // Non-Arduino platforms
 #define lowByte(val) ((val)&255)
 #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
 #define bitRead(val, bitno) (((val) >> (bitno)) & 1)
@@ -33,22 +49,6 @@ void digitalWrite(uint32_t dwPin, uint32_t dwVal);
 uint32_t digitalRead(uint32_t dwPin);
 typedef void (*voidFuncPtr)(void);
 void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
-
-#elif ARDUINO_ARCH_SAMD || ARDUINO_ARCH_STM32
-#include <Arduino.h>
-
-#define getbyte(x,n) (*(((uint8_t*)&(x))+n))
-#define htons(x)  ( (getbyte(x,0)<<8) | getbyte(x,1) ) 
-#define htonl(x) ( (getbyte(x,0)<<24) | (getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
-#define ntohs(x) htons(x)
-#define ntohl(x) htonl(x)
-
-#elif ARDUINO_ARCH_ESP8266
-#include <Arduino.h>
-#include <user_interface.h>
-#elif ARDUINO_ARCH_ESP32
-#include <Arduino.h>
-#include <esp_wifi.h>
 #endif
 
 void print(const char[]);
@@ -58,6 +58,7 @@ void print(int, int = DEC);
 void print(unsigned int, int = DEC);
 void print(long, int = DEC);
 void print(unsigned long, int = DEC);
+void print(long long, int = DEC);
 void print(unsigned long long, int = DEC);
 void print(double);
 
@@ -68,13 +69,12 @@ void println(int, int = DEC);
 void println(unsigned int, int = DEC);
 void println(long, int = DEC);
 void println(unsigned long, int = DEC);
+void println(long long, int = DEC);
 void println(unsigned long long, int = DEC);
 void println(double);
 void println(void);
 
-
-
-void printHex(const char* suffix, const uint8_t *data, size_t length);
+void printHex(const char* suffix, const uint8_t *data, size_t length, bool newline = true);
 
 const uint8_t* popByte(uint8_t& b, const uint8_t* data);
 const uint8_t* popWord(uint16_t& w, const uint8_t* data);
@@ -86,9 +86,9 @@ uint8_t* pushInt(uint32_t i, uint8_t* data);
 uint8_t* pushByteArray(const uint8_t* src, uint32_t size, uint8_t* data);
 uint16_t getWord(const uint8_t* data);
 uint32_t getInt(const uint8_t* data);
-void printHex(const char* suffix, const uint8_t *data, size_t length);
 
 void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
 uint64_t sixBytesToUInt64(uint8_t* data);
 
 uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
+uint16_t crc16Dnp(uint8_t* input, uint16_t length);
