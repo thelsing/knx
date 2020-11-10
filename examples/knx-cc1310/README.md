@@ -1,2 +1,3 @@
-KNX example for Texas Instruments Launchpad XL CC1310
+Example for Texas Instruments LaunchPad LAUNCHXL-CC1310
 ===
+
