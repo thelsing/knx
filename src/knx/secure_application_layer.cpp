@@ -307,7 +307,7 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
-        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(_addrTab->getGroupAddress(tsap));
         apdu.frame().addressType(GroupAddress);
 
@@ -330,7 +330,7 @@ void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopT
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
-        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(0x0000);
         apdu.frame().addressType(GroupAddress);
         apdu.frame().systemBroadcast(Broadcast);
@@ -354,7 +354,7 @@ void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountTyp
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
-        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(0x0000);
         apdu.frame().addressType(GroupAddress);
         apdu.frame().systemBroadcast(SysBroadcast);
@@ -378,9 +378,9 @@ void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hop
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
-        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(destination);
-        apdu.frame().addressType(InduvidualAddress);
+        apdu.frame().addressType(IndividualAddress);
 
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -401,9 +401,9 @@ void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priori
 
     if (secCtrl.dataSecurity != DataSecurity::none)
     {
-        apdu.frame().sourceAddress(_deviceObj.induvidualAddress());
+        apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(_transportLayer->getConnectionAddress());
-        apdu.frame().addressType(InduvidualAddress);
+        apdu.frame().addressType(IndividualAddress);
 
         uint16_t secureApduLength = apdu.length() + 3 + 6 + 4; // 3(TPCI,APCI,SCF) + sizeof(seqNum) + apdu.length() + 4
         CemiFrame secureFrame(secureApduLength);
@@ -568,7 +568,7 @@ uint64_t SecureApplicationLayer::lastValidSequenceNumber(bool toolAccess, uint16
     if (toolAccess)
     {
         // TODO: check if we really have to support multiple tools at the same time
-        if (srcAddr == _deviceObj.induvidualAddress())
+        if (srcAddr == _deviceObj.individualAddress())
             return _sequenceNumberToolAccess;
         return _lastValidSequenceNumberTool;
     }
@@ -621,7 +621,7 @@ void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGro
     print("sendSyncRequest: TPCI: ");
     println(tpci, HEX);
 
-    if(secure(request.data() + APDU_LPDU_DIFF, kSecureSyncRequest, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl, systemBcast))
+    if(secure(request.data() + APDU_LPDU_DIFF, kSecureSyncRequest, _deviceObj.individualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl, systemBcast))
     {
         println("SyncRequest: ");
         request.apdu().printPDU();
@@ -681,7 +681,7 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
     print("sendSyncResponse: TPCI: ");
     println(tpci, HEX);
 
-    if(secure(response.data() + APDU_LPDU_DIFF, kSecureSyncResponse, _deviceObj.induvidualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl, systemBcast))
+    if(secure(response.data() + APDU_LPDU_DIFF, kSecureSyncResponse, _deviceObj.individualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl, systemBcast))
     {
         _lastSyncRes = millis();
 
@@ -823,7 +823,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
 
     if (service == kSecureDataPdu)
     {
-        if (srcAddr != _deviceObj.induvidualAddress())
+        if (srcAddr != _deviceObj.individualAddress())
         {
             uint64_t expectedSeqNumber = lastValidSequenceNumber(toolAccess, srcAddr) + 1;
 
@@ -847,7 +847,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
         if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
         {
             uint8_t emptySerialNumber[6] = {0};
-            if (systemBroadcast || dstAddr != _deviceObj.induvidualAddress() || !memcmp(knxSerialNumber, emptySerialNumber, 6))
+            if (systemBroadcast || dstAddr != _deviceObj.individualAddress() || !memcmp(knxSerialNumber, emptySerialNumber, 6))
                 return false;
         }
 
@@ -970,7 +970,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
 
         // prevent a sync.req sent by us to trigger sync notification, this happens if we provide our own tool key
         // for decryption above
-        if (syncReq && (srcAddr == _deviceObj.induvidualAddress()))
+        if (syncReq && (srcAddr == _deviceObj.individualAddress()))
             return false;
 
         if (syncReq)
@@ -986,7 +986,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
         }
         else
         {
-            if (srcAddr == _deviceObj.induvidualAddress())
+            if (srcAddr == _deviceObj.individualAddress())
             {
                 print("Update our next ");
                 print(toolAccess ? "tool access" : "");

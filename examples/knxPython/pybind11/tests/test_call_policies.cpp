@@ -8,7 +8,6 @@
 */
 
 #include "pybind11_tests.h"
-#include "constructor_stats.h"
 
 struct CustomGuard {
     static bool enabled;
@@ -37,6 +36,8 @@ TEST_SUBMODULE(call_policies, m) {
     class Child {
     public:
         Child() { py::print("Allocating child."); }
+        Child(const Child &) = default;
+        Child(Child &&) = default;
         ~Child() { py::print("Releasing child."); }
     };
     py::class_<Child>(m, "Child")
@@ -45,6 +46,7 @@ TEST_SUBMODULE(call_policies, m) {
     class Parent {
     public:
         Parent() { py::print("Allocating parent."); }
+        Parent(const Parent& parent) = default;
         ~Parent() { py::print("Releasing parent."); }
         void addChild(Child *) { }
         Child *returnChild() { return new Child(); }
@@ -59,21 +61,6 @@ TEST_SUBMODULE(call_policies, m) {
         .def("returnChildKeepAlive", &Parent::returnChild, py::keep_alive<1, 0>())
         .def("returnNullChildKeepAliveChild", &Parent::returnNullChild, py::keep_alive<1, 0>())
         .def("returnNullChildKeepAliveParent", &Parent::returnNullChild, py::keep_alive<0, 1>());
-
-    // test_keep_alive_single
-    m.def("add_patient", [](py::object /*nurse*/, py::object /*patient*/) { }, py::keep_alive<1, 2>());
-    m.def("get_patients", [](py::object nurse) {
-        py::list patients;
-        for (PyObject *p : pybind11::detail::get_internals().patients[nurse.ptr()])
-            patients.append(py::reinterpret_borrow<py::object>(p));
-        return patients;
-    });
-    m.def("refcount", [](py::handle h) {
-#ifdef PYPY_VERSION
-        ConstructorStats::gc(); // PyPy doesn't update ref counts until GC occurs
-#endif
-        return h.ref_count();
-    });
 
 #if !defined(PYPY_VERSION)
     // test_alive_gc

@@ -75,7 +75,7 @@ void setup(void)
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
 
-    if (knx.induvidualAddress() == 0)
+    if (knx.individualAddress() == 0)
       knx.progMode(true);
 
 

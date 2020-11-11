@@ -46,7 +46,7 @@ With reference counting
 Convenience classes for specific Python types
 =============================================
 
-.. doxygenclass:: module
+.. doxygenclass:: module_
     :members:
 
 .. doxygengroup:: pytypes
@@ -85,6 +85,21 @@ Python built-in functions
 
 .. doxygengroup:: python_builtins
     :members:
+
+Inheritance
+===========
+
+See :doc:`/classes` and :doc:`/advanced/classes` for more detail.
+
+.. doxygendefine:: PYBIND11_OVERRIDE
+
+.. doxygendefine:: PYBIND11_OVERRIDE_PURE
+
+.. doxygendefine:: PYBIND11_OVERRIDE_NAME
+
+.. doxygendefine:: PYBIND11_OVERRIDE_PURE_NAME
+
+.. doxygenfunction:: get_override
 
 Exceptions
 ==========

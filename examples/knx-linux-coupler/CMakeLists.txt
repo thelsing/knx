@@ -104,7 +104,8 @@ set(SOURCES
 	../../src/knx/rf_data_link_layer.h
 	../../src/knx/rf_medium_object.cpp
 	../../src/knx/rf_medium_object.h
-	../../src/knx/rf_physical_layer.cpp
+        ../../src/knx/rf_physical_layer_cc1101.cpp
+        ../../src/knx/rf_physical_layer_cc1101.h
 	../../src/knx/rf_physical_layer.h
         ../../src/knx/router_object.cpp
         ../../src/knx/router_object.h

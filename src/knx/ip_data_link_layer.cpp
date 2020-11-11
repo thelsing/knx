@@ -58,7 +58,7 @@ void IpDataLinkLayer::loop()
         case RoutingIndication:
         {
             KnxIpRoutingIndication routingIndication(buffer, len);
-            frameRecieved(routingIndication.frame());
+            frameReceived(routingIndication.frame());
             break;
         }
         case SearchRequest:
@@ -79,7 +79,7 @@ void IpDataLinkLayer::loop()
 void IpDataLinkLayer::enabled(bool value)
 {
 //    _print("own address: ");
-//    _println(_deviceObject.induvidualAddress());
+//    _println(_deviceObject.individualAddress());
     if (value && !_enabled)
     {
         _platform.setupMultiCast(_ipParameters.propertyValue<uint32_t>(PID_ROUTING_MULTICAST_ADDRESS), KNXIP_MULTICAST_PORT);

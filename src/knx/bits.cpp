@@ -8,7 +8,7 @@ const uint8_t* popByte(uint8_t& b, const uint8_t* data)
     return data;
 }
 
-void printHex(const char* suffix, const uint8_t *data, size_t length)
+void printHex(const char* suffix, const uint8_t *data, size_t length, bool newline)
 {
     print(suffix);
     for (size_t i = 0; i < length; i++) {
@@ -16,7 +16,10 @@ void printHex(const char* suffix, const uint8_t *data, size_t length)
         print(data[i], HEX);
         print(" ");
     }
-    println();
+    if (newline)
+    {
+        println();
+    }
 }
 
 const uint8_t* popWord(uint16_t& w, const uint8_t* data)
@@ -134,4 +137,25 @@ uint16_t crc16Ccitt(uint8_t* input, uint16_t length)
                 result ^= polynom;
         }
         return result & 0xffff;
+}
+
+uint16_t crc16Dnp(uint8_t* input, uint16_t length)
+{
+        // CRC-16-DNP
+        // generator polynomial = 2^16 + 2^13 + 2^12 + 2^11 + 2^10 + 2^8 + 2^6 + 2^5 + 2^2 + 2^0
+        uint32_t pn = 0x13d65; // 1 0011 1101 0110 0101
+
+        // for much data, using a lookup table would be a way faster CRC calculation
+        uint32_t crc = 0;
+        for (uint32_t i = 0; i < length; i++) {
+            uint8_t bite = input[i] & 0xff;
+            for (uint8_t b = 8; b --> 0;) {
+                bool bit = ((bite >> b) & 1) == 1;
+                bool one = (crc >> 15 & 1) == 1;
+                crc <<= 1;
+                if (one ^ bit)
+                    crc ^= pn;
+            }
+        }
+        return (~crc) & 0xffff;
 }

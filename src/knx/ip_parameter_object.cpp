@@ -26,12 +26,12 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
                     return 1;
                 }
                 // TODO: get property of deviceobject and use it
-                pushWord(io->_deviceObject.induvidualAddress(), data);
+                pushWord(io->_deviceObject.individualAddress(), data);
                 return 1;
             },
             [](IpParameterObject* io, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t 
             { 
-                io->_deviceObject.induvidualAddress(getWord(data));
+                io->_deviceObject.individualAddress(getWord(data));
                 return 1; 
             }),
         new DataProperty(PID_IP_ASSIGNMENT_METHOD, true, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv3),

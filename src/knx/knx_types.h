@@ -22,7 +22,7 @@ enum AckType
 
 enum AddressType
 {
-    InduvidualAddress = 0,
+    IndividualAddress = 0,
     GroupAddress = 0x80,
 };
 
@@ -95,7 +95,7 @@ enum Repetition
 {
     NoRepitiion = 0,
     WasRepeated = 0,
-    RepititionAllowed = 0x20,
+    RepetitionAllowed = 0x20,
     WasNotRepeated = 0x20,
 };
 
