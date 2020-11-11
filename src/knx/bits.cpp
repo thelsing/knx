@@ -107,31 +107,6 @@ uint64_t sixBytesToUInt64(uint8_t* data)
     return l;
 }
 
-const uint16_t eMask = 0x7800; //01111000 00000000
-const uint16_t mMask = 0x87FF; //10000111 11111111
-const uint16_t sMask = 0x8000; //10000000 00000000
-
-float Decode_DPT9_Float(uint16_t n)
-{
-    uint16_t e = n & eMask;
-    uint16_t m = n & mMask;
-    int16_t sm = m;
-    if (m & sMask)
-    {
-        m = (~m & mMask) + 1;
-        sm = -(int)m;
-    }
-    return (0.01 * (float)sm) * pow(2, e);
-}
-
-void memcpyInverted(uint8_t* dst, uint8_t* src, size_t length)
-{
-    for (int i = 0; i < length; i++)
-    {
-        dst[i] = src[length - i - 1];
-    }
-}
-
 // The CRC of the Memory Control Block Table Property is a CRC16-CCITT with the following
 // parameters:
 // Width = 16 bit

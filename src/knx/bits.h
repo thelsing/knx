@@ -92,13 +92,3 @@ void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
 uint64_t sixBytesToUInt64(uint8_t* data);
 
 uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
-
-enum ParameterFloatEncodings
-{
-    Float_Enc_DPT9 = 0,          // 2 Byte. See Chapter 3.7.2 section 3.10 (Datapoint Types “2-Octet Float Value”)
-    Float_Enc_IEEE754Single = 1, // 4 Byte. C++ float
-    Float_Enc_IEEE754Double = 2, // 8 Byte. C++ double
-};
-
-float Decode_DPT9_Float(uint16_t n);
-void memcpyInverted(uint8_t* dst, uint8_t* src, size_t length);

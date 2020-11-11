@@ -2,6 +2,7 @@
 #include "bits.h"
 #include "data_property.h"
 #include "callback_property.h"
+#include "dptconvert.h"
 #include <cstring>
 
 ApplicationProgramObject::ApplicationProgramObject(Memory& memory)
@@ -54,16 +55,13 @@ double ApplicationProgramObject::getFloat(uint32_t addr, ParameterFloatEncodings
     switch (encoding)
     {
         case Float_Enc_DPT9:
-            memcpyInverted(buffer, TableObject::data() + addr, 2);
-            return Decode_DPT9_Float(*(uint16_t*)buffer);
+            return float16FromPayload(TableObject::data() + addr, 0);
             break;
         case Float_Enc_IEEE754Single:
-            memcpyInverted(buffer, TableObject::data() + addr, 4);
-            return *(float*)(buffer);
+            return float32FromPayload(TableObject::data() + addr, 0);
             break;
         case Float_Enc_IEEE754Double:
-            memcpyInverted(buffer, TableObject::data() + addr, 8);
-            return *(double*)(buffer);
+            return float64FromPayload(TableObject::data() + addr, 0);
             break;
         default:
             return 0;
