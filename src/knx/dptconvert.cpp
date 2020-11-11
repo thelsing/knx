@@ -1713,6 +1713,17 @@ int32_t signed32FromPayload(const uint8_t* payload, int index)
 {
     return (int32_t)unsigned32FromPayload(payload, index);
 }
+uint64_t unsigned64FromPayload(const uint8_t* payload, int index)
+{
+	return ((((uint64_t)payload[index]) << 56) & 0xFF00000000000000) |
+		((((uint64_t)payload[index + 1]) << 48) & 0x00FF000000000000) |
+		((((uint64_t)payload[index + 2]) << 40) & 0x0000FF0000000000) |
+		((((uint64_t)payload[index + 3]) << 32) & 0x000000FF00000000) |
+		((((uint64_t)payload[index + 4]) << 24) & 0x00000000FF000000) |
+		((((uint64_t)payload[index + 5]) << 16) & 0x0000000000FF0000) |
+		((((uint64_t)payload[index + 6]) << 8) & 0x000000000000FF00) |
+		(((uint64_t)payload[index + 7]) & 0x00000000000000FF);
+}
 double float16FromPayload(const uint8_t* payload, int index)
 {
     uint16_t mantissa = unsigned16FromPayload(payload, index) & 0x87FF;
@@ -1725,6 +1736,12 @@ float float32FromPayload(const uint8_t* payload, int index)
 {
     union { float f; uint32_t i; } area;
     area.i = unsigned32FromPayload(payload, index);
+	return area.f;
+}
+double float64FromPayload(const uint8_t* payload, int index)
+{
+	union { double f; uint64_t i; } area;
+	area.i = unsigned64FromPayload(payload, index);
     return area.f;
 }
 int64_t signed64FromPayload(const uint8_t* payload, int index)

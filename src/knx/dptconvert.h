@@ -127,8 +127,10 @@ uint16_t unsigned16FromPayload(const uint8_t* payload, int index);
 int16_t signed16FromPayload(const uint8_t* payload, int index);
 uint32_t unsigned32FromPayload(const uint8_t* payload, int index);
 int32_t signed32FromPayload(const uint8_t* payload, int index);
+uint64_t unsigned64FromPayload(const uint8_t* payload, int index);
 double float16FromPayload(const uint8_t* payload, int index);
 float float32FromPayload(const uint8_t* payload, int index);
+double float64FromPayload(const uint8_t* payload, int index);
 int64_t signed64FromPayload(const uint8_t* payload, int index);
 uint8_t bcdFromPayload(const uint8_t* payload, int index);
 

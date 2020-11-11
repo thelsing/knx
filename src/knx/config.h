@@ -62,6 +62,6 @@
 #endif
 
 #if !defined(MASK_VERSION)
-#error MASK_VERSION must be defined! See config.j for possible values!
+#error MASK_VERSION must be defined! See config.h for possible values!
 #endif
 

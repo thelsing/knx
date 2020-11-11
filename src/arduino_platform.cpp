@@ -1,5 +1,5 @@
 #include "arduino_platform.h"
-#include <knx/bits.h>
+#include "knx/bits.h"
 
 #include <Arduino.h>
 #include <SPI.h>
