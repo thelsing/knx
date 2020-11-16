@@ -139,7 +139,7 @@ bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
     }
 
     // Also ACK for our own individual address or broadcast
-    if (individualAddress == _deviceObj.individualAddress() || individualAddress == 0)
+    if (address  == _deviceObj.individualAddress() || address == 0)
         return true;
 
     return false;
