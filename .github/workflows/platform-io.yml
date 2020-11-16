@@ -6,9 +6,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        example: [path/to/test/file.c, examples/file.ino, path/to/test/directory]
+#    strategy:
+#      matrix:
+#        example: [path/to/test/file.c, examples/file.ino, path/to/test/directory]
 
     steps:
     - uses: actions/checkout@v1
