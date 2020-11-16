@@ -138,8 +138,8 @@ bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
         return _addrTable.contains(address);
     }
 
-    // Also ACK for our own individual address
-    if (address == _deviceObj.individualAddress())
+    // Also ACK for our own individual address or broadcast
+    if (individualAddress == _deviceObj.individualAddress() || individualAddress == 0)
         return true;
 
     return false;
