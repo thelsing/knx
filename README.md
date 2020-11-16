@@ -1,4 +1,4 @@
-knx  [![Build Status](https://travis-ci.org/thelsing/knx.svg?branch=master)](https://travis-ci.org/thelsing/knx)
+knx
 ===
 
 
