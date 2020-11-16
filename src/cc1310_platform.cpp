@@ -17,7 +17,8 @@
 #include "cc1310_platform.h"
 
 //#define printf(args...) (SEGGER_RTT_printf(0, args))
-#define PRINT_RTT
+//#define PRINT_RTT
+#define PRINT_UART
 
 static uint8_t serialNumber[6];
 // KNX_FLASH_SIZE shall be defined in CMakeLists.txt for example. It is also used in class Memory in memory.cpp
