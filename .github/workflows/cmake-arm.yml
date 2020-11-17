@@ -1,4 +1,4 @@
-name: CMake
+name: CMake-ARM
 
 on: [push, pull_request]
 
