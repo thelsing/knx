@@ -51,7 +51,6 @@ uint32_t ApplicationProgramObject::getInt(uint32_t addr)
 
 double ApplicationProgramObject::getFloat(uint32_t addr, ParameterFloatEncodings encoding)
 {
-    uint8_t buffer[8];
     switch (encoding)
     {
         case Float_Enc_DPT9:
