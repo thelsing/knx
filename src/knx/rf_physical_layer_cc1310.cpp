@@ -99,9 +99,7 @@ static void RxCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
     {
         if (e & RF_EventCmdAborted)
         {
-            packetStartTime = 0;
             println("RX ABORT");
-            return;
         }
 
         rfDone = true;
