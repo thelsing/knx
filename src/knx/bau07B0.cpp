@@ -137,7 +137,7 @@ bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
         // is group address in group address table? ACK if yes.
         return _addrTable.contains(address);
     }
-  
+
     // Also ACK for our own individual address or broadcast
     if (address  == _deviceObj.individualAddress())
         return true;
