@@ -98,8 +98,8 @@ bool NetworkLayerCoupler::isRoutedIndividualAddress(uint16_t individualAddress)
     //     This shall serve for protection purposes. (It is useful to prevent all parameterisation in one Subnetwork; the Coupler shall be protected
     //     too. A typical use case is the protection of a Subnetwork that is located outside a building)
 
-    // Also ACK for our own individual address or broadcast
-    if (individualAddress == _deviceObj.individualAddress() || individualAddress == 0)
+    // Also ACK for our own individual address
+    if (individualAddress == _deviceObj.individualAddress())
         return true;
 
     // use 2 for now
