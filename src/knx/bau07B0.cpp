@@ -142,6 +142,11 @@ bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
     if (address  == _deviceObj.individualAddress())
         return true;
 
+    if (address == 0)
+    {
+        println("Invalid broadcast detected: destination address is 0, but address type is \"individual\"");
+    }
+
     return false;
 }
 
