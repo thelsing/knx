@@ -272,7 +272,7 @@ void TpUartDataLinkLayer::loop()
                     // or any filter tables (coupler) to see if we are addressed.
 
                     //check if individual or group address
-                    bool isGroupAddress = (buffer[6] & 0x80) != 0;
+                    bool isGroupAddress = (buffer[1] & 0x80) != 0;
                     uint16_t addr = getWord(buffer + 4);
 
                     if (_cb.isAckRequired(addr, isGroupAddress))
