@@ -137,10 +137,15 @@ bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
         // is group address in group address table? ACK if yes.
         return _addrTable.contains(address);
     }
-
+  
     // Also ACK for our own individual address or broadcast
-    if (address  == _deviceObj.individualAddress() || address == 0)
+    if (address  == _deviceObj.individualAddress())
         return true;
+
+    if (address == 0)
+    {
+        println("Invalid broadcast detected: destination address is 0, but address type is \"individual\"");
+    }
 
     return false;
 }
