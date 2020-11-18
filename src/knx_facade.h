@@ -355,6 +355,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
     // predefined global instance for IP only
     #if MASK_VERSION == 0x57B0
         extern KnxFacade<EspPlatform, Bau57B0> knx;
+    #elif MASK_VERSION == 0x27B0
+        extern KnxFacade<SamdPlatform, Bau27B0> knx;
+    #elif MASK_VERSION == 0x091A
+        extern KnxFacade<SamdPlatform, Bau2920> knx;
     #else
         #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
     #endif
