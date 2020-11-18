@@ -15,9 +15,13 @@
     #endif
 
 #elif defined(ARDUINO_ARCH_ESP8266)
-    // predefined global instance for IP only
-    #if MASK_VERSION == 0x57B0
+    // predefined global instance for TP or IP or TP/IP coupler
+    #if MASK_VERSION == 0x07B0
+        KnxFacade<EspPlatform, Bau07B0> knx;
+    #elif MASK_VERSION == 0x57B0
         KnxFacade<EspPlatform, Bau57B0> knx;
+    #elif MASK_VERSION == 0x091A
+        KnxFacade<EspPlatform, Bau091A> knx;
     #else
         #error Mask version not supported on ARDUINO_ARCH_ESP8266
     #endif

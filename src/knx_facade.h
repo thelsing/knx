@@ -2,43 +2,32 @@
 
 #include "knx/bits.h"
 #include "knx/config.h"
+#include "knx/bau07B0.h"
+#include "knx/bau091A.h"
+#include "knx/bau27B0.h"
+#include "knx/bau2920.h"
+#include "knx/bau57B0.h"
 
 #ifdef ARDUINO_ARCH_SAMD
     #include "samd_platform.h"
-    #include "knx/bau07B0.h"
-    #include "knx/bau27B0.h"
-    #include "knx/bau2920.h"
     void buttonUp();
 #elif defined(ARDUINO_ARCH_ESP8266)
    #include "esp_platform.h"
-   #include "knx/bau57B0.h"
    void buttonUp();
 #elif defined(ARDUINO_ARCH_ESP32)
    #define LED_BUILTIN 13
    #include "esp32_platform.h"
-   #include "knx/bau07B0.h"
-   #include "knx/bau57B0.h"
-   #include "knx/bau091A.h"
    void buttonUp();
 #elif defined(ARDUINO_ARCH_STM32)
    #include "stm32_platform.h"
-   #include "knx/bau07B0.h"
    void buttonUp();
 #elif __linux__
    #define LED_BUILTIN 0
    #include "linux_platform.h"
-   #include "knx/bau57B0.h"
-   #include "knx/bau27B0.h"
-   #include "knx/bau07B0.h"
-   #include "knx/bau091A.h"
-   #include "knx/bau2920.h"
    void buttonUp();
 #else
    #define LED_BUILTIN 5 // see GPIO_PinConfig gpioPinConfigs[]
    #include "cc1310_platform.h"
-   #include "knx/bau27B0.h"
-   #include "knx/bau07B0.h"
-   #include "knx/bau2920.h"
    extern void buttonUp();
 #endif
 
@@ -352,13 +341,13 @@ template <class P, class B> class KnxFacade : private SaveRestore
         #error "Mask version not supported on ARDUINO_ARCH_SAMD"
     #endif
 #elif defined(ARDUINO_ARCH_ESP8266)
-    // predefined global instance for IP only
-    #if MASK_VERSION == 0x57B0
+    // predefined global instance for TP or IP or TP/IP coupler
+    #if MASK_VERSION == 0x07B0
+        extern KnxFacade<EspPlatform, Bau07B0> knx;
+    #elif MASK_VERSION == 0x57B0
         extern KnxFacade<EspPlatform, Bau57B0> knx;
-    #elif MASK_VERSION == 0x27B0
-        extern KnxFacade<SamdPlatform, Bau27B0> knx;
     #elif MASK_VERSION == 0x091A
-        extern KnxFacade<SamdPlatform, Bau2920> knx;
+        extern KnxFacade<EspPlatform, Bau091A> knx;
     #else
         #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
     #endif
