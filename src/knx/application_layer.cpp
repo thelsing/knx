@@ -8,7 +8,7 @@
 #include "bits.h"
 #include <stdio.h>
 
-const SecurityControl ApplicationLayer::noSecurity {.toolAccess=false, .dataSecurity=DataSecurity::none};
+const SecurityControl ApplicationLayer::noSecurity {.toolAccess=false, .dataSecurity=DataSecurity::None};
 
 ApplicationLayer::ApplicationLayer(BusAccessUnit& bau) : _bau(bau)
 {

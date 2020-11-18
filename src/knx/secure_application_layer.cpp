@@ -305,7 +305,7 @@ void SecureApplicationLayer::dataGroupRequest(AckType ack, HopCountType hopType,
 
     println("dataGroupRequest");
 
-    if (secCtrl.dataSecurity != DataSecurity::none)
+    if (secCtrl.dataSecurity != DataSecurity::None)
     {
         apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(_addrTab->getGroupAddress(tsap));
@@ -328,7 +328,7 @@ void SecureApplicationLayer::dataBroadcastRequest(AckType ack, HopCountType hopT
 {
     println("dataBroadcastRequest");
 
-    if (secCtrl.dataSecurity != DataSecurity::none)
+    if (secCtrl.dataSecurity != DataSecurity::None)
     {
         apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(0x0000);
@@ -352,7 +352,7 @@ void SecureApplicationLayer::dataSystemBroadcastRequest(AckType ack, HopCountTyp
 {
     println("dataSystemBroadcastRequest");
 
-    if (secCtrl.dataSecurity != DataSecurity::none)
+    if (secCtrl.dataSecurity != DataSecurity::None)
     {
         apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(0x0000);
@@ -376,7 +376,7 @@ void SecureApplicationLayer::dataIndividualRequest(AckType ack, HopCountType hop
 {
     println("dataIndividualRequest");
 
-    if (secCtrl.dataSecurity != DataSecurity::none)
+    if (secCtrl.dataSecurity != DataSecurity::None)
     {
         apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(destination);
@@ -399,7 +399,7 @@ void SecureApplicationLayer::dataConnectedRequest(uint16_t tsap, Priority priori
 {
     println("dataConnectedRequest");
 
-    if (secCtrl.dataSecurity != DataSecurity::none)
+    if (secCtrl.dataSecurity != DataSecurity::None)
     {
         apdu.frame().sourceAddress(_deviceObj.individualAddress());
         apdu.frame().destinationAddress(_transportLayer->getConnectionAddress());
@@ -593,7 +593,7 @@ void SecureApplicationLayer::updateLastValidSequence(bool toolAccess, uint16_t r
 
 void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, bool systemBcast)
 {
-    if (secCtrl.dataSecurity != DataSecurity::authConf)
+    if (secCtrl.dataSecurity != DataSecurity::AuthConf)
     {
         println("sync.req is always sent with auth+conf!");
         return;
@@ -655,7 +655,7 @@ void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGro
 
 void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGroupAddr, const SecurityControl &secCtrl, uint64_t remoteNextSeqNum, bool systemBcast)
 {
-    if (secCtrl.dataSecurity != DataSecurity::authConf)
+    if (secCtrl.dataSecurity != DataSecurity::AuthConf)
     {
         println("sync.res is always sent with auth+conf!");
         return;
@@ -797,7 +797,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
     }
 
     secCtrl.toolAccess = toolAccess;
-    secCtrl.dataSecurity = authOnly ? DataSecurity::auth : DataSecurity::authConf;
+    secCtrl.dataSecurity = authOnly ? DataSecurity::Auth : DataSecurity::AuthConf;
 
     bool syncReq = service == kSecureSyncRequest;
     bool syncRes = service == kSecureSyncResponse;
@@ -1052,7 +1052,7 @@ bool SecureApplicationLayer::secure(uint8_t* buffer, uint16_t service, uint16_t 
                                     uint8_t* apdu, uint16_t apduLength, const SecurityControl& secCtrl, bool systemBcast)
 {
     bool toolAccess = secCtrl.toolAccess;
-    bool confidentiality = secCtrl.dataSecurity == DataSecurity::authConf;
+    bool confidentiality = secCtrl.dataSecurity == DataSecurity::AuthConf;
 
     if (toolAccess)
     {

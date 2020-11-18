@@ -550,10 +550,10 @@ DataSecurity SecurityInterfaceObject::getGroupObjectSecurity(uint16_t index)
         // write access flags, approved spec. AN158, p.97
         bool conf = (data[0] & 2) == 2;
         bool auth = (data[0] & 1) == 1;
-        return conf ? DataSecurity::authConf : auth ? DataSecurity::auth : DataSecurity::none;
+        return conf ? DataSecurity::AuthConf : auth ? DataSecurity::Auth : DataSecurity::None;
     }
 
-    return DataSecurity::none;
+    return DataSecurity::None;
 }
 
 #endif

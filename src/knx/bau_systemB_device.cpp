@@ -79,7 +79,7 @@ void BauSystemBDevice::sendNextGroupTelegram()
         // Get security flags from Security Interface Object for this group object
         goSecurity.dataSecurity = _secIfObj.getGroupObjectSecurity(asap);
 #else
-        goSecurity.dataSecurity = DataSecurity::none;
+        goSecurity.dataSecurity = DataSecurity::None;
 #endif
 
         if (flag == WriteRequest && go.transmitEnable())

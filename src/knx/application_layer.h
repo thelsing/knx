@@ -31,7 +31,7 @@ class ApplicationLayer
     void associationTableObject(AssociationTableObject& assocTable);
 
     // from transport layer
-    // Note: without data secure feature, the application layer is just used with SecurtyControl.dataSecurity = none
+    // Note: without data secure feature, the application layer is just used with SecurtyControl.dataSecurity = None
     // hooks that can be implemented by derived class (e.g. SecureApplicationLayer)
 
 #pragma region Transport - Layer - Callbacks

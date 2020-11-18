@@ -204,9 +204,9 @@ enum ApduType
 
 enum DataSecurity
 {
-    none,
-    auth,
-    authConf
+    None,
+    Auth,
+    AuthConf
 };
 
 struct SecurityControl
