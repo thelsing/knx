@@ -34,7 +34,7 @@ void setup()
 
     if (knx.configured())
     {
-        printf("configured %d\n", knx.paramByte(5));
+        println("configured");
     }
     else
         println("not configured");
