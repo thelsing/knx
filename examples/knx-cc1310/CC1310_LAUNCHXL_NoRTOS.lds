@@ -34,8 +34,8 @@
  *  Default Linker script for the Texas Instruments CC1310
  */
 
-STACKSIZE = 4096+1024;
-HEAPSIZE = 2048;
+STACKSIZE = 4096;
+HEAPSIZE = 4096;
 
 MEMORY
 {
