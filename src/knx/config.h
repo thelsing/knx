@@ -57,7 +57,8 @@
 #endif
 
 // KNX Data Secure Options
-#define USE_DATASECURE
+// Define via a compiler -D flag if required
+// #define USE_DATASECURE
 
 #endif
 
