@@ -20,7 +20,7 @@ enum ComFlag
 class GroupObject;
 
 #ifndef HAS_FUNCTIONAL
-# if defined(__linux__) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32)
+# if defined(__linux__) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32) || defined (ARDUINO_ARCH_SAMD)
 #  define HAS_FUNCTIONAL    1
 # else
 #  define HAS_FUNCTIONAL   0
