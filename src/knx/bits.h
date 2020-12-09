@@ -99,3 +99,11 @@ enum ParameterFloatEncodings
     Float_Enc_IEEE754Single = 1, // 4 Byte. C++ float
     Float_Enc_IEEE754Double = 2, // 8 Byte. C++ double
 };
+
+
+#if defined(ARDUINO_ARCH_SAMD)
+// temporary undef until framework-arduino-samd > 1.8.9 is released. See https://github.com/arduino/ArduinoCore-samd/pull/399 for a PR should will probably address this
+#undef max
+#undef min
+// end of temporary undef
+#endif
