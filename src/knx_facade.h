@@ -294,7 +294,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
     B& _bau;
     uint32_t _ledPinActiveOn = LOW;
     uint32_t _ledPin = LED_BUILTIN;
-    uint32_t _buttonPinInterruptOn = RISING;
+    PinStatus _buttonPinInterruptOn = RISING;
     uint32_t _buttonPin = 0;
     SaveRestoreCallback _saveCallback = 0;
     SaveRestoreCallback _restoreCallback = 0;
