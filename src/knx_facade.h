@@ -222,7 +222,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         pinMode(_buttonPin, INPUT_PULLUP);
 
-        attachInterrupt(_buttonPin, buttonUp, _buttonPinInterruptOn);
+        // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
+        #if (ARDUINO_API_VERSION >= 10200)
+            attachInterrupt(_buttonPin, buttonUp, (PinStatus)_buttonPinInterruptOn);
+        #else
+            attachInterrupt(_buttonPin, buttonUp, _buttonPinInterruptOn);
+        #endif
         enabled(true);
     }
 
