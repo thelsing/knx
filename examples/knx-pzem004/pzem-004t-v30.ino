@@ -15,12 +15,6 @@ void SERCOM1_Handler()
   Serial2.IrqHandler();
 }
 
-//Blinking live LED
-const uint8_t ledPin =  LED_BUILTIN;// the number of the LED pin
-bool ledState = LOW;             // ledState used to set the LED
-unsigned long previousMillis = 0;        // will store last time LED was updated
-const long interval = 2000;           // interval at which to blink (milliseconds)
-
 //PZEM stuff
 #define PZEM004_NO_SWSERIAL
 #define PZEM_DEFAULT_ADDR 0xF8
@@ -30,6 +24,7 @@ const uint8_t physicalCount = 6; // voltage,current,power_factor,power,energy,fr
 //knx stuff
 #define goReset knx.getGroupObject(1)
 #define goDateTime knx.getGroupObject(2)
+#define goProgMode knx.getGroupObject(9)
 
 const uint8_t ets_startupTimeout[7] = {0, 1, 2, 3, 4, 5, 6};
 const int ets_timePeriod[7] = {0, 1, 5, 15, 1 * 60, 5 * 60, 15 * 60};
@@ -38,6 +33,7 @@ const uint8_t ets_percentCycle[6] = {0, 5, 10, 15, 20, 30}; //need knxprod updat
 int percentCycle = 0; // better to define a global or read knx.paramByte each time... ?
 unsigned long timePeriod = 0; // same here,
 uint8_t resetFlag = 0;    // and here...
+bool progMode = true;
 
 // Issue on https://github.com/mandulaj/PZEM-004T-v30/issues/43
 PZEM004Tv30 pzem(Serial2, PZEM_DEFAULT_ADDR);
@@ -90,6 +86,10 @@ struct Physical {
 } Physical[physicalCount];
 
 
+void callBackProgMode(GroupObject& go){ 
+    progMode = (bool)go.value();
+}
+
 // callback from reset-GO
 void resetCallback(GroupObject& go)
 {
@@ -127,6 +127,9 @@ void setup() {
         goReset.dataPointType(DPT_Trigger);
         goDateTime.dataPointType(DPT_DateTime);
 
+        goProgMode.dataPointType(DPT_Trigger);
+        goProgMode.callback(callBackProgMode);
+
         uint8_t GOaddr = 3;
         Physical[0].init(GOaddr, DPT_Value_Electric_Potential); // voltage
         Physical[1].init(GOaddr += 1, DPT_Value_Electric_Current);
@@ -151,30 +154,25 @@ void setup() {
 void loop() {
     knx.loop();
 
-    if (!knx.configured()) {
-      return;
-    }
-    unsigned long currentMillis = millis();
-
-    if (currentMillis - previousMillis >= interval) { // I love blinking LED state...
-        previousMillis = currentMillis;
-        if (ledState == LOW) {
-        ledState = HIGH;
-        } else {
-        ledState = LOW;
-        }
-        digitalWrite(ledPin, ledState);
-    }
-    for (uint8_t i=0; i< physicalCount; i++)
+    if (knx.configured() && !progMode)
     {
-        if (currentMillis - Physical[i].lastUpdate >= interval)
+        unsigned long currentMillis = millis();
+
+        for (uint8_t i=0; i< physicalCount; i++)
         {
-            float isanValue = refreshValue(i);
-            if(!isnan(isanValue))
+            if (currentMillis - Physical[i].lastUpdate >= 1000)
             {
-                Physical[i].loop(isanValue);
+                float isanValue = refreshValue(i);
+                if(!isnan(isanValue))
+                {
+                    Physical[i].loop(isanValue);
+                }
             }
         }
+    }
+    else if (progMode)
+    {
+        prodModeLoop();
     }
 }
 
@@ -206,4 +204,24 @@ float refreshValue(uint8_t physicalNumber){
 
 void resetEnergy(){
    pzem.resetEnergy();
+}
+
+void prodModeLoop(){ // run Only if progMode triggered ( at start or callback)
+
+    const uint32_t timerProgMode = ( 15 * 60 * 1000 ) ; // 15min
+    static uint32_t timerProgPrevMillis = 0;
+    
+    if (!knx.progMode() )
+    {
+        knx.progMode(true);
+        timerProgPrevMillis = millis();
+    }
+    else
+    {
+        if (millis() - timerProgPrevMillis > timerProgMode) {
+            knx.progMode(false);
+            goProgMode.value(false);
+            progMode = 0;
+        }
+    }
 }
