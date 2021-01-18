@@ -32,13 +32,18 @@
 #endif
 
 typedef uint8_t* (*SaveRestoreCallback)(uint8_t* buffer);
+typedef void (*IsrFunctionPtr)();
  
 template <class P, class B> class KnxFacade : private SaveRestore
 {
-    friend void buttonUp();
-
   public:
     KnxFacade() : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
+    {
+        manufacturerId(0xfa);
+        _bau.addSaveRestore(this);
+    }
+
+    KnxFacade(HardwareSerial* s) : _platformPtr(new P(s)), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
     {
         manufacturerId(0xfa);
         _bau.addSaveRestore(this);
@@ -87,6 +92,14 @@ template <class P, class B> class KnxFacade : private SaveRestore
     void progMode(bool value)
     {
         _bau.deviceObject().progMode(value);
+    }
+
+    /**
+     * To be called by ISR handling on button press.
+     */
+    void toggleProgMode()
+    {
+        _toggleProgMode = true;
     }
 
     bool configured()
@@ -181,10 +194,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
                 digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
             }
         }
-        if (_toogleProgMode)
+        if (_toggleProgMode)
         {
             progMode(!progMode());
-            _toogleProgMode = false;
+            _toggleProgMode = false;
         }
         _bau.loop();
     }
@@ -216,19 +229,28 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
     void start()
     {
-        pinMode(_ledPin, OUTPUT);
+        pinMode(ledPin(), OUTPUT);
 
-        digitalWrite(_ledPin, HIGH - _ledPinActiveOn);
+        digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
 
-        pinMode(_buttonPin, INPUT_PULLUP);
+        pinMode(buttonPin(), INPUT_PULLUP);
 
-        // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
-        #if (ARDUINO_API_VERSION >= 10200)
-            attachInterrupt(_buttonPin, buttonUp, (PinStatus)_buttonPinInterruptOn);
-        #else
-            attachInterrupt(_buttonPin, buttonUp, _buttonPinInterruptOn);
-        #endif
+        if (_progButtonISRFuncPtr)
+        {
+            // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
+            #if (ARDUINO_API_VERSION >= 10200)
+                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)_buttonPinInterruptOn);
+            #else
+                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, _buttonPinInterruptOn);
+            #endif
+        }
+
         enabled(true);
+    }
+
+    void setProgButtonISRFunction(IsrFunctionPtr progButtonISRFuncPtr)
+    {
+        _progButtonISRFuncPtr = progButtonISRFuncPtr;
     }
 
     void setSaveCallback(SaveRestoreCallback func)
@@ -303,9 +325,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
     uint32_t _buttonPin = 0;
     SaveRestoreCallback _saveCallback = 0;
     SaveRestoreCallback _restoreCallback = 0;
-    bool _toogleProgMode = false;
+    volatile bool _toggleProgMode = false;
     bool _progLedState = false;
     uint16_t _saveSize = 0;
+    IsrFunctionPtr _progButtonISRFuncPtr = 0;
 
     uint8_t* save(uint8_t* buffer)
     {

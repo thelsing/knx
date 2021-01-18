@@ -2,6 +2,7 @@
 
 #include "knx/bits.h"
 
+#ifdef KNX_FACADE_AUTO_BUILD
 #ifdef ARDUINO_ARCH_SAMD
     // predefined global instance for TP or RF or TP/RF coupler
     #if MASK_VERSION == 0x07B0
@@ -61,7 +62,7 @@ ICACHE_RAM_ATTR void buttonUp()
 {
     static uint32_t lastpressed=0;
     if (millis() - lastpressed > 200){
-        knx._toogleProgMode = true;
+        knx.toggleProgMode();
         lastpressed = millis();
     }
 }
@@ -71,3 +72,7 @@ void buttonUp()
     // no de-bounce on linux platform, just satisfy the compiler
 }
 #endif
+
+knx.setProgButtonISRFunction(buttonUp);
+
+#endif // KNX_FACADE_AUTO_BUILD
