@@ -2,6 +2,7 @@
 #include <PZEM004Tv30.h>
 #include "wiring_private.h" // pinPeripheral() function
 
+#include <TimeLib.h>
 
 //Sercom Stuff
 #define PIN_SERIAL2_RX       (34ul)               // Pin description number for PIO_SERCOM on D12 (34ul)
@@ -19,25 +20,30 @@ void SERCOM1_Handler()
 #define PZEM004_NO_SWSERIAL
 #define PZEM_DEFAULT_ADDR 0xF8
 
-const uint8_t physicalCount = 6; // voltage,current,power_factor,power,energy,frequency
 
 //knx stuff
 #define goReset knx.getGroupObject(1)
 #define goDateTime knx.getGroupObject(2)
 #define goProgMode knx.getGroupObject(9)
 
+// Global Const
+const uint16_t ets_timePeriod[7] = {0, 1, 5, 15, 1 * 60, 5 * 60, 15 * 60};
 const uint8_t ets_startupTimeout[7] = {0, 1, 2, 3, 4, 5, 6};
-const int ets_timePeriod[7] = {0, 1, 5, 15, 1 * 60, 5 * 60, 15 * 60};
 const uint8_t ets_percentCycle[6] = {0, 5, 10, 15, 20, 30}; //need knxprod update... ?
 
-int percentCycle = 0; // better to define a global or read knx.paramByte each time... ?
-unsigned long timePeriod = 0; // same here,
-uint8_t resetFlag = 0;    // and here...
+const uint8_t ledPin =  LED_BUILTIN;// the number of the LED pin
+const uint8_t physicalCount = 6; // voltage,current,power_factor,power,energy,frequency
+
+// Global Variable
+uint8_t percentCycle = 0; // better to define a global or read knx.paramByte each time... ?
+uint32_t timePeriod = 0; // same here,
+uint8_t resetPeriod = 0; //same here ...
+uint8_t resetEnergy = 0;    // and here... disabled/day/week/month
+
 bool progMode = true;
 
 // Issue on https://github.com/mandulaj/PZEM-004T-v30/issues/43
 PZEM004Tv30 pzem(Serial2, PZEM_DEFAULT_ADDR);
-
 
 struct Physical {
     void init(uint8_t GOaddr, Dpt type_dpt){
@@ -45,57 +51,128 @@ struct Physical {
       _dpt = type_dpt;
     }
   
-    void loop(float value){
-      unsigned long currentMillis = millis();
-      
+    void loop(){
+//      unsigned long currentMillis = millis();
       // Delta Change update as defined in ETS
-
-      int deltaPercent = ( 100 * ( value - lastValue ) / value );
+      int32_t deltaPercent = ( 100 * ( _value - _lastValue ) / _value );
       if ( percentCycle != 0 && abs(deltaPercent) >= percentCycle )
       {
-          trigger = true;
+          _trigger = true;
+          _lastValue = _value;
       }
 
       // Refresh groupAddress value as defined in ETS since last update
-      if ( timePeriod != 0 && currentMillis - lastUpdate >= timePeriod )
+      if ( timePeriod != 0 && millis() - _lastMillis >= timePeriod )
       {
-          trigger = true;
+          _trigger = true;
       }
 
       // UpdateGO but send to bus only if triggered by time or value change percentage
-      if (trigger){
-          knx.getGroupObject(_GOaddr).value(value, _dpt);
-          lastUpdate = millis();
-          trigger = false;
+      if (_trigger){
+          knx.getGroupObject(_GOaddr).value(_value, _dpt);
+          _lastMillis = millis();
+          _trigger = false;
       }else{
-          knx.getGroupObject(_GOaddr).valueNoSend(value, _dpt);
+          knx.getGroupObject(_GOaddr).valueNoSend(_value, _dpt);
       }
-      lastValue = value;
+    }
+
+    void setValue(float value){
+        if (value != _value)
+        {
+            _value = value;
+        }
     }
 
   private:
-    uint8_t _GOaddr;
     Dpt _dpt;
-    bool trigger = false;
+    float _value = 0;
+    float _lastValue = 0;
+    uint32_t _lastMillis = 0;
+    uint8_t _GOaddr;
+    bool _trigger = false;
+
 //    bool isUpdated = false;
 
   public:
-    float lastValue = 0;
-    unsigned long lastUpdate = 0;
   
 } Physical[physicalCount];
+
+
+class Blinker
+{
+  private:
+    uint8_t ledPin_;      // the number of the LED pin
+    uint32_t OnTime = 1000;     // milliseconds of on-time
+    uint32_t OffTime = 1000;    // milliseconds of off-time
+    bool ledState = LOW;                 // ledState used to set the LED
+    uint32_t previousMillis;   // will store last time LED was updated
+
+    void setOutput(bool state_, uint32_t currentMillis_){
+        ledState = state_;
+        previousMillis = currentMillis_;
+        digitalWrite(ledPin_, state_);
+    }
+
+  public:
+    Blinker(uint8_t pin)
+    {
+        ledPin_ = pin;
+        pinMode(ledPin_, OUTPUT);
+        previousMillis = 0;
+    }
+  
+    void set(uint32_t on, uint32_t off){
+        OnTime = on;
+        OffTime = off;
+    }
+  
+    void loop(){
+        uint32_t currentMillis = millis();
+         
+        if((ledState == HIGH) && (currentMillis - previousMillis >= OnTime))
+        {
+            setOutput(LOW, currentMillis);
+        }
+        else if ((ledState == LOW) && (currentMillis - previousMillis >= OffTime))
+        {
+            setOutput(HIGH, currentMillis);
+        }
+    }
+};
+
+Blinker led = Blinker(ledPin);
 
 
 void callBackProgMode(GroupObject& go){ 
     progMode = (bool)go.value();
 }
 
-// callback from reset-GO
+void callBackDateTime(GroupObject& go){
+    static uint32_t lastUpdate = 0;
+    const uint32_t interval = (1000 * 60 * 60 * 24); // 1day
+
+    struct tm myTime;
+    myTime = go.value();
+    unsigned short tmp_sec = myTime.tm_sec;
+    unsigned short tmp_min = myTime.tm_min;
+    unsigned short tmp_hour = myTime.tm_hour;
+    unsigned short tmp_mday = myTime.tm_mday;
+    unsigned short tmp_month = myTime.tm_mon;
+    unsigned short tmp_year = myTime.tm_year;
+
+    if (millis() - lastUpdate >= interval && !timeStatus() == timeSet)
+    {
+        setTime(tmp_hour, tmp_min, tmp_sec, tmp_mday, tmp_month, tmp_year);
+        lastUpdate = millis();
+    }
+}
+
 void resetCallback(GroupObject& go)
 {
     if (go.value())
     {
-        pzem.resetEnergy();
+        resetEnergy = true;
         goReset.value(false);
     }
 }
@@ -112,6 +189,7 @@ void setup() {
   randomSeed(millis());
 
   knx.readMemory();
+//   led.set(5000, 5000);
 
     if (knx.configured())
     {
@@ -121,10 +199,11 @@ void setup() {
         percentCycle = ets_percentCycle[knx.paramByte(1)];
         timePeriod = ets_timePeriod[knx.paramByte(2)] * 1000;
         
-        resetFlag = knx.paramByte(3);
+        resetPeriod = knx.paramByte(3);
 
         goReset.callback(resetCallback);
         goReset.dataPointType(DPT_Trigger);
+        
         goDateTime.dataPointType(DPT_DateTime);
 
         goProgMode.dataPointType(DPT_Trigger);
@@ -137,6 +216,7 @@ void setup() {
         Physical[3].init(GOaddr += 1, DPT_Value_Power);
         Physical[4].init(GOaddr += 1, DPT_Value_Energy);
         Physical[5].init(GOaddr += 1, DPT_Value_Frequency);
+        led.set(2000, 1000);
     }
 
     // is the led active on HIGH or low? Default is LOW
@@ -152,22 +232,17 @@ void setup() {
 }
 
 void loop() {
+    
     knx.loop();
 
     if (knx.configured() && !progMode)
     {
-        unsigned long currentMillis = millis();
+        refreshValueLoop();
+        resetEnergyLoop();
 
         for (uint8_t i=0; i< physicalCount; i++)
         {
-            if (currentMillis - Physical[i].lastUpdate >= 1000)
-            {
-                float isanValue = refreshValue(i);
-                if(!isnan(isanValue))
-                {
-                    Physical[i].loop(isanValue);
-                }
-            }
+             Physical[i].loop();
         }
     }
     else if (progMode)
@@ -176,45 +251,95 @@ void loop() {
     }
 }
 
-float refreshValue(uint8_t physicalNumber){
-    float valueTemp;
-    switch (physicalNumber) {           //maybe a pointer or reference could be nicer...
-        case 0:
-            valueTemp = pzem.voltage();
-            return valueTemp;
-        case 1:
-            valueTemp = pzem.current();
-            return valueTemp;
-        case 2:
-            valueTemp = pzem.pf();
-            return valueTemp;
-        case 3:
-            valueTemp = pzem.power();
-            return valueTemp;
-        case 4:
-            valueTemp = pzem.energy();
-            return valueTemp;
-        case 5:
-            valueTemp = pzem.frequency();
-            return valueTemp;
+void refreshValueLoop(){
+    static const uint16_t pzemInterval = 500;           // interval at which to blink (milliseconds)
+    static uint32_t lastPzemUpdate = 0;
+
+    if (millis() - lastPzemUpdate >= pzemInterval)
+    {
+        for (uint8_t i=0; i< physicalCount; i++)
+        {
+            float isaValue;
+            switch (i) {           //maybe a pointer or reference could be nicer...
+                case 0:
+                    isaValue = pzem.voltage();
+                    break;
+                case 1:
+                    isaValue = pzem.current();
+                    break;
+                case 2:
+                    isaValue = pzem.pf();
+                    break;
+                case 3:
+                    isaValue = pzem.power();
+                    break;
+                case 4:
+                    isaValue = pzem.energy();
+                    break;
+                case 5:
+                    isaValue = pzem.frequency();
+                    break;
+                default:
+                    break;
+            }
+            if(!isnan(isaValue))
+            {
+                Physical[i].setValue(isaValue);
+            }
+        }
+    }
+}
+
+void resetEnergyLoop(){
+    static time_t lastTime;
+    time_t samdTime = now();
+
+    if (timeStatus() == timeSet)
+    {
+        switch (resetPeriod)
+        {
+        case 1: //day
+            if (day(samdTime) != day(lastTime))
+            {
+                lastTime = samdTime;
+                pzem.resetEnergy();
+            }
+            break;
+        case 2: //week
+            if (weekday(samdTime) != weekday(lastTime) && weekday(samdTime) == 2) //monday
+            {
+                lastTime = samdTime;
+                pzem.resetEnergy();
+            }
+            break;
+        case 3: // month
+            if (month(samdTime) != month(lastTime))
+            {
+                lastTime = samdTime;
+                pzem.resetEnergy();
+            }
+            break;
+        case 4: // year
+            if (year(samdTime) != year(lastTime))
+            {
+                lastTime = samdTime;
+                pzem.resetEnergy();
+            }
         default:
             break;
         }
-}
-
-void resetEnergy(){
-   pzem.resetEnergy();
+    }
 }
 
 void prodModeLoop(){ // run Only if progMode triggered ( at start or callback)
-
-    const uint32_t timerProgMode = ( 15 * 60 * 1000 ) ; // 15min
     static uint32_t timerProgPrevMillis = 0;
+    const uint32_t timerProgMode = ( 15 * 60 * 1000 ) ; // 15min
     
-    if (!knx.progMode() )
+    if (!knx.progMode())
     {
         knx.progMode(true);
         timerProgPrevMillis = millis();
+        led.set(500, 250);
     }
     else
     {
