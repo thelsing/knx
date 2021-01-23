@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<KNX xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" CreatedBy="KNX MT" ToolVersion="5.6.407.26745" xmlns="http://knx.org/xml/project/11">
+  <ManufacturerData>
+    <Manufacturer RefId="M-00FA">
+      <Catalog>
+        <CatalogSection Id="M-00FA_CS-1" Name="Geräte" Number="1" DefaultLanguage="en-US">
+          <CatalogItem Id="M-00FA_H-12288-1_HP-1074-0B-0000_CI-EC05-1" Name="KNX to 433mhz (DIO)" Number="1" ProductRefId="M-00FA_H-12288-1_P-EC05" Hardware2ProgramRefId="M-00FA_H-12288-1_HP-1074-0B-0000" DefaultLanguage="en-US" />
+        </CatalogSection>
+      </Catalog>
+      <ApplicationPrograms>
+        <ApplicationProgram Id="M-00FA_A-1074-0B-0000" ApplicationNumber="4212" ApplicationVersion="11" ProgramType="ApplicationProgram" MaskVersion="MV-07B0" Name="SAMD-DIO" LoadProcedureStyle="MergedProcedure" PeiType="0" DefaultLanguage="en-US" DynamicTableManagement="false" Linkable="false" MinEtsVersion="4.0">
+          <Static>
+            <Code>
+              <RelativeSegment Id="M-00FA_A-1074-0B-0000_RS-04-00000" Name="Parameters" Offset="0" Size="34" LoadStateMachine="4" />
+            </Code>
+            <ParameterTypes>
+              <ParameterType Id="M-00FA_A-1074-0B-0000_PT-StartupTimeout" Name="StartupTimeout">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Disabled" Value="0" Id="M-00FA_A-1074-0B-0000_PT-StartupTimeout_EN-0" />
+                  <Enumeration Text="1 s" Value="1" Id="M-00FA_A-1074-0B-0000_PT-StartupTimeout_EN-1" />
+                  <Enumeration Text="2 s" Value="2" Id="M-00FA_A-1074-0B-0000_PT-StartupTimeout_EN-2" />
+                  <Enumeration Text="3 s" Value="3" Id="M-00FA_A-1074-0B-0000_PT-StartupTimeout_EN-3" />
+                  <Enumeration Text="4 s" Value="4" Id="M-00FA_A-1074-0B-0000_PT-StartupTimeout_EN-4" />
+                  <Enumeration Text="5 s" Value="5" Id="M-00FA_A-1074-0B-0000_PT-StartupTimeout_EN-5" />
+                  <Enumeration Text="6 s" Value="6" Id="M-00FA_A-1074-0B-0000_PT-StartupTimeout_EN-6" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="M-00FA_A-1074-0B-0000_PT-TimeCycle" Name="TimeCycle">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Disabled" Value="0" Id="M-00FA_A-1074-0B-0000_PT-TimeCycle_EN-0" />
+                  <Enumeration Text="1 sec" Value="1" Id="M-00FA_A-1074-0B-0000_PT-TimeCycle_EN-1" />
+                  <Enumeration Text="5 sec" Value="2" Id="M-00FA_A-1074-0B-0000_PT-TimeCycle_EN-2" />
+                  <Enumeration Text="15 sec" Value="3" Id="M-00FA_A-1074-0B-0000_PT-TimeCycle_EN-3" />
+                  <Enumeration Text="1 min" Value="4" Id="M-00FA_A-1074-0B-0000_PT-TimeCycle_EN-4" />
+                  <Enumeration Text="5 min" Value="5" Id="M-00FA_A-1074-0B-0000_PT-TimeCycle_EN-5" />
+                  <Enumeration Text="15 min" Value="6" Id="M-00FA_A-1074-0B-0000_PT-TimeCycle_EN-6" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="M-00FA_A-1074-0B-0000_PT-pulseValue" Name="pulseValue">
+                <TypeNumber SizeInBit="32" Type="signedInt" minInclusive="-2147483648" maxInclusive="2147483647" />
+              </ParameterType>
+            </ParameterTypes>
+            <Parameters>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-1" Name="startupTimeout" ParameterType="M-00FA_A-1074-0B-0000_PT-StartupTimeout" Text="Startup delaytime" Value="1">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="0" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-2" Name="timeCycleRefresh" ParameterType="M-00FA_A-1074-0B-0000_PT-TimeCycle" Text="refresh period" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="1" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-3" Name="value1" ParameterType="M-00FA_A-1074-0B-0000_PT-pulseValue" Text="Button 1 On" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="2" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-4" Name="value2" ParameterType="M-00FA_A-1074-0B-0000_PT-pulseValue" Text="Button 1 Off" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="6" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-5" Name="value3" ParameterType="M-00FA_A-1074-0B-0000_PT-pulseValue" Text="Button 2 On" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="10" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-6" Name="value4" ParameterType="M-00FA_A-1074-0B-0000_PT-pulseValue" Text="Button 2 Off" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="14" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-7" Name="value5" ParameterType="M-00FA_A-1074-0B-0000_PT-pulseValue" Text="Button 3 On" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="18" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-8" Name="value6" ParameterType="M-00FA_A-1074-0B-0000_PT-pulseValue" Text="Button 3 Off" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="22" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-9" Name="value7" ParameterType="M-00FA_A-1074-0B-0000_PT-pulseValue" Text="Shift On All" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="26" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-1074-0B-0000_P-10" Name="value8" ParameterType="M-00FA_A-1074-0B-0000_PT-pulseValue" Text="Shift Off All" Value="0">
+                <Memory CodeSegment="M-00FA_A-1074-0B-0000_RS-04-00000" Offset="30" BitOffset="0" />
+              </Parameter>
+            </Parameters>
+            <ParameterRefs>
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-1_R-1" RefId="M-00FA_A-1074-0B-0000_P-1" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-2_R-2" RefId="M-00FA_A-1074-0B-0000_P-2" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-3_R-3" RefId="M-00FA_A-1074-0B-0000_P-3" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-4_R-4" RefId="M-00FA_A-1074-0B-0000_P-4" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-5_R-5" RefId="M-00FA_A-1074-0B-0000_P-5" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-6_R-6" RefId="M-00FA_A-1074-0B-0000_P-6" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-7_R-7" RefId="M-00FA_A-1074-0B-0000_P-7" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-8_R-8" RefId="M-00FA_A-1074-0B-0000_P-8" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-9_R-9" RefId="M-00FA_A-1074-0B-0000_P-9" />
+              <ParameterRef Id="M-00FA_A-1074-0B-0000_P-10_R-10" RefId="M-00FA_A-1074-0B-0000_P-10" />
+            </ParameterRefs>
+            <ComObjectTable>
+              <ComObject Id="M-00FA_A-1074-0B-0000_O-1" Name="trigger value 1" Text="trigger value 1" Number="1" FunctionText="get/set button 1" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
+              <ComObject Id="M-00FA_A-1074-0B-0000_O-2" Name="trigger value 2" Text="trigger value 2" Number="2" FunctionText="get/set button 2" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
+              <ComObject Id="M-00FA_A-1074-0B-0000_O-3" Name="trigger value 3" Text="trigger value 3" Number="3" FunctionText="get/set button 3" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
+              <ComObject Id="M-00FA_A-1074-0B-0000_O-4" Name="trigger value 4" Text="trigger value 4" Number="4" FunctionText="get/set All buttons" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
+              <ComObject Id="M-00FA_A-1074-0B-0000_O-5" Name="trigger progMode" Text="trigger progMode" Number="5" FunctionText="put device in ETS programmation" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
+            </ComObjectTable>
+            <ComObjectRefs>
+              <ComObjectRef Id="M-00FA_A-1074-0B-0000_O-1_R-1" RefId="M-00FA_A-1074-0B-0000_O-1" />
+              <ComObjectRef Id="M-00FA_A-1074-0B-0000_O-2_R-2" RefId="M-00FA_A-1074-0B-0000_O-2" />
+              <ComObjectRef Id="M-00FA_A-1074-0B-0000_O-3_R-3" RefId="M-00FA_A-1074-0B-0000_O-3" />
+              <ComObjectRef Id="M-00FA_A-1074-0B-0000_O-4_R-4" RefId="M-00FA_A-1074-0B-0000_O-4" />
+              <ComObjectRef Id="M-00FA_A-1074-0B-0000_O-5_R-5" RefId="M-00FA_A-1074-0B-0000_O-5" />
+            </ComObjectRefs>
+            <AddressTable MaxEntries="65000" />
+            <AssociationTable MaxEntries="65000" />
+            <LoadProcedures>
+              <LoadProcedure MergeId="2">
+                <LdCtrlRelSegment LsmIdx="4" Size="34" Mode="0" Fill="0" AppliesTo="full" />
+              </LoadProcedure>
+              <LoadProcedure MergeId="4">
+                <LdCtrlWriteRelMem ObjIdx="4" Offset="0" Size="34" Verify="true" />
+              </LoadProcedure>
+            </LoadProcedures>
+            <Options />
+          </Static>
+          <Dynamic>
+            <ChannelIndependentBlock>
+              <ParameterBlock Id="M-00FA_A-1074-0B-0000_PB-1" Name="ParameterPage" Text="Common Parameters">
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-1_R-1" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-2_R-2" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-3_R-3" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-4_R-4" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-5_R-5" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-6_R-6" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-7_R-7" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-8_R-8" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-9_R-9" />
+                <ParameterRefRef RefId="M-00FA_A-1074-0B-0000_P-10_R-10" />
+                <ComObjectRefRef RefId="M-00FA_A-1074-0B-0000_O-1_R-1" />
+                <ComObjectRefRef RefId="M-00FA_A-1074-0B-0000_O-2_R-2" />
+                <ComObjectRefRef RefId="M-00FA_A-1074-0B-0000_O-3_R-3" />
+                <ComObjectRefRef RefId="M-00FA_A-1074-0B-0000_O-4_R-4" />
+                <ComObjectRefRef RefId="M-00FA_A-1074-0B-0000_O-5_R-5" />
+              </ParameterBlock>
+            </ChannelIndependentBlock>
+          </Dynamic>
+        </ApplicationProgram>
+      </ApplicationPrograms>
+      <Hardware>
+        <Hardware Id="M-00FA_H-12288-1" Name="SAMD21-KNXto433" SerialNumber="12288" VersionNumber="1" BusCurrent="10" HasIndividualAddress="true" HasApplicationProgram="true">
+          <Products>
+            <Product Id="M-00FA_H-12288-1_P-EC05" Text="KNX to 433mhz (DIO)" OrderNumber="EC05" IsRailMounted="false" DefaultLanguage="en-US">
+              <RegistrationInfo RegistrationStatus="Registered" />
+            </Product>
+          </Products>
+          <Hardware2Programs>
+            <Hardware2Program Id="M-00FA_H-12288-1_HP-1074-0B-0000" MediumTypes="MT-0">
+              <ApplicationProgramRef RefId="M-00FA_A-1074-0B-0000" />
+              <RegistrationInfo RegistrationStatus="Registered" RegistrationNumber="0001/111" />
+            </Hardware2Program>
+          </Hardware2Programs>
+        </Hardware>
+      </Hardware>
+    </Manufacturer>
+  </ManufacturerData>
+</KNX>
