@@ -52,17 +52,17 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _bau.addSaveRestore(this);
     }
 
+    KnxFacade(B& bau) : _bau(bau)
+    {
+        manufacturerId(0xfa);
+        _bau.addSaveRestore(this);
+    }
+
     KnxFacade(IsrFunctionPtr buttonISRFunction) : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
     {
         manufacturerId(0xfa);
         _bau.addSaveRestore(this);
         setButtonISRFunction(buttonISRFunction);
-    }
-
-    KnxFacade(HardwareSerial* s) : _platformPtr(new P(s)), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
-    {
-        manufacturerId(0xfa);
-        _bau.addSaveRestore(this);
     }
 
     virtual ~KnxFacade()
@@ -72,12 +72,6 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         if (_platformPtr)
             delete _platformPtr;
-    }
-
-    KnxFacade(B& bau) : _bau(bau)
-    {
-        manufacturerId(0xfa);
-        _bau.addSaveRestore(this);
     }
 
     P& platform()
