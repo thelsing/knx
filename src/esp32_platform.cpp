@@ -58,10 +58,9 @@ void Esp32Platform::closeMultiCast()
 bool Esp32Platform::sendBytesMultiCast(uint8_t * buffer, uint16_t len)
 {
     //printHex("<- ",buffer, len);
-    int result = 0;
-    result = _udp.beginMulticastPacket();
-    result = _udp.write(buffer, len);
-    result = _udp.endPacket();
+    _udp.beginMulticastPacket();
+    _udp.write(buffer, len);
+    _udp.endPacket();
     return true;
 }
 
