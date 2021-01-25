@@ -12,9 +12,9 @@
 #define goReset knx.getGroupObject(4)
 
 // If you don't want a global knx object, for example because you want
-// to more finely grained control it's construction this is an example
-// of how to do so. In your pio file set KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-// and then you can DIY a knx object as follows. In this case we use 
+// to more finely control it's construction, this is an example
+// of how to do so. Define KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+// and then you can DIY a knx object as shown below. In this case we use 
 // the ESP32's secondary UART and late-bind the ISR function in setup().
 Esp32Platform knxPlatform(&Serial2);
 Bau07B0 knxBau(knxPlatform);

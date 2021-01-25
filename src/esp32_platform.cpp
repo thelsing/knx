@@ -10,7 +10,7 @@ Esp32Platform::Esp32Platform() : ArduinoPlatform(&Serial1)
 {
 }
 
-Esp32Platform::Esp32Platform( HardwareSerial* s) : ArduinoPlatform(s)
+Esp32Platform::Esp32Platform(HardwareSerial* s) : ArduinoPlatform(s)
 {
 }
 
