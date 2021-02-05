@@ -61,10 +61,9 @@ void EspPlatform::closeMultiCast()
 bool EspPlatform::sendBytesMultiCast(uint8_t * buffer, uint16_t len)
 {
     //printHex("<- ",buffer, len);
-    int result = 0;
-    result = _udp.beginPacketMulticast(_mulitcastAddr, _mulitcastPort, WiFi.localIP());
-    result = _udp.write(buffer, len);
-    result = _udp.endPacket();
+    _udp.beginPacketMulticast(_mulitcastAddr, _mulitcastPort, WiFi.localIP());
+    _udp.write(buffer, len);
+    _udp.endPacket();
     return true;
 }
 
