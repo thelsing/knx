@@ -1,12 +1,10 @@
-#include "cemi_server_object.h"
-
 #include "config.h"
-#include "bits.h"
-#include "data_property.h"
+#ifdef USE_CEMI_SERVER
 
 #include <cstring>
-
-#ifdef USE_CEMI_SERVER
+#include "cemi_server_object.h"
+#include "bits.h"
+#include "data_property.h"
 
 CemiServerObject::CemiServerObject()
 {

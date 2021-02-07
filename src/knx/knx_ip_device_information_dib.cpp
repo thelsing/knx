@@ -1,5 +1,4 @@
 #include "knx_ip_device_information_dib.h"
-
 #include "bits.h"
 
 #ifdef USE_IP

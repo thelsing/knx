@@ -1,5 +1,4 @@
 #include "knx_ip_routing_indication.h"
-
 #include <cstring>
 
 #ifdef USE_IP

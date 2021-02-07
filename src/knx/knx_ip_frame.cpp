@@ -1,10 +1,9 @@
 #include "knx_ip_frame.h"
 
-#include "bits.h"
+#ifdef USE_IP
 
 #include <cstring>
-
-#ifdef USE_IP
+#include "bits.h"
 
 #define KNXIP_HEADER_LEN 0x6
 #define KNXIP_PROTOCOL_VERSION 0x10

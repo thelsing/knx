@@ -1,5 +1,4 @@
 #include "property.h"
-
 #include "bits.h"
 
 #include <cstring>

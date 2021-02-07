@@ -2,9 +2,7 @@
 #if MASK_VERSION == 0x07B0
 
 #include "bau07B0.h"
-
 #include "bits.h"
-
 #include <string.h>
 #include <stdio.h>
 

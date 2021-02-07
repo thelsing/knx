@@ -1,12 +1,10 @@
 #include "transport_layer.h"
-
 #include "apdu.h"
 #include "cemi_frame.h"
 #include "network_layer.h"
 #include "application_layer.h"
 #include "platform.h"
 #include "bits.h"
-
 #include <stdio.h>
 
 TransportLayer::TransportLayer(ApplicationLayer& layer): _savedFrame(0),

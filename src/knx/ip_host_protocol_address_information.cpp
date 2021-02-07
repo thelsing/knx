@@ -1,9 +1,6 @@
 #include "ip_host_protocol_address_information.h"
-
 #include "bits.h"
-
 #ifdef USE_IP
-
 IpHostProtocolAddressInformation::IpHostProtocolAddressInformation(uint8_t* data)
     : _data(data)
 {}

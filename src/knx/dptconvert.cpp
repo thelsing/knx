@@ -1,7 +1,5 @@
 #include "dptconvert.h"
-
 #include "bits.h"
-
 #include <cmath>
 #include <cstdlib>
 #include <cstring>

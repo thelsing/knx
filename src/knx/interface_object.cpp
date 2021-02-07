@@ -1,8 +1,7 @@
-#include "interface_object.h"
-
-#include "data_property.h"
-
 #include <cstring>
+
+#include "interface_object.h"
+#include "data_property.h"
 
 InterfaceObject::~InterfaceObject()
 {

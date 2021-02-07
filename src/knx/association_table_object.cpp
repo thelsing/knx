@@ -1,9 +1,8 @@
-#include "association_table_object.h"
+#include <cstring>
 
+#include "association_table_object.h"
 #include "bits.h"
 #include "data_property.h"
-
-#include <cstring>
 
 using namespace std;
 
