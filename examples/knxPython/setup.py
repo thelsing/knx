@@ -71,7 +71,7 @@ setup(
     author_email='thomas.kunze@gmx.com',
     description='Lib to implement knx-devices',
     long_description_content_type="text/markdown",
-    long_description=open("README.md").read(),
+    long_description=open("../../README.md").read(),
     ext_modules=[CMakeExtension('knx')],
     packages=find_packages(),
     license="GPL3",

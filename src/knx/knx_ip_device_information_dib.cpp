@@ -2,6 +2,7 @@
 
 #include "bits.h"
 
+#ifdef USE_IP
 KnxIpDeviceInformationDIB::KnxIpDeviceInformationDIB(uint8_t* data) : KnxIpDIB(data)
 {}
 
@@ -99,3 +100,4 @@ void KnxIpDeviceInformationDIB::friendlyName(const uint8_t* value)
 {
     pushByteArray(value, LEN_FRIENDLY_NAME, _data + 24);
 }
+#endif

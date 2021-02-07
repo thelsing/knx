@@ -1,0 +1,75 @@
+#pragma once
+
+#include <stdint.h>
+#include "knx_types.h"
+#include "npdu.h"
+#include "transport_layer.h"
+#include "network_layer_entity.h"
+#include "network_layer.h"
+
+class DeviceObject;
+class RouterObject;
+
+class NetworkLayerCoupler : public NetworkLayer
+{
+    friend class NetworkLayerEntity;
+
+  public:
+    NetworkLayerCoupler(DeviceObject& deviceObj, TransportLayer& layer);
+
+    NetworkLayerEntity& getPrimaryInterface();
+    NetworkLayerEntity& getSecondaryInterface();
+
+    bool isRoutedIndividualAddress(uint16_t individualAddress);
+
+    void rtObjPrimary(RouterObject& rtObjPrimary); // Coupler model 2.0
+    void rtObjSecondary(RouterObject& rtObjSecondary); // Coupler model 2.0
+    void rtObj(RouterObject& rtObj); // Coupler model 1.x
+
+    // from transport layer
+    virtual void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+    virtual void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+    virtual void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+    virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+
+  private:
+    enum CouplerType
+    {
+        LineCoupler,
+        BackboneCoupler,
+        TP1Bridge,
+        TP1Repeater
+    };
+
+    static constexpr uint8_t kPrimaryIfIndex = 0;
+    static constexpr uint8_t kSecondaryIfIndex = 1;
+    static constexpr uint8_t kLocalIfIndex = 99;
+
+    // from entities
+    virtual void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
+                        Priority priority, uint16_t source, uint8_t srcIfIdx) override;
+    virtual void dataConfirm(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, Priority priority,
+                     uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
+    virtual void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+                             Priority priority, uint16_t source, uint8_t srcIfIdx) override;
+    virtual void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
+    virtual void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+                                   Priority priority, uint16_t source, uint8_t srcIfIdx) override;
+    virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
+
+    void routeDataIndividual(AckType ack, uint16_t destination, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIndex);
+    void sendMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, NPDU& npdu, Priority priority,
+                      SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex, uint16_t source);
+
+    void evaluateCouplerType();
+    bool isGroupAddressInFilterTable(uint16_t groupAddress);
+
+    // Support a maximum of two physical interfaces for couplers
+    NetworkLayerEntity _netLayerEntities[2];
+
+    RouterObject* _rtObjPrimary {nullptr};
+    RouterObject* _rtObjSecondary {nullptr};
+
+    CouplerType _couplerType;
+    uint16_t _currentAddress;
+};

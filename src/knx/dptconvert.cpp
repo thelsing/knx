@@ -418,11 +418,11 @@ int busValueToUnsigned8(const uint8_t* payload, size_t payload_length, const Dpt
     switch (datatype.subGroup)
     {
         case 1:
-            value = (uint8_t)(unsigned8FromPayload(payload, 0) * 100.0 / 255.0);
+            value = (uint8_t)round(unsigned8FromPayload(payload, 0) * 100.0 / 255.0);
             return true;
 
         case 3:
-            value = (uint8_t)unsigned8FromPayload(payload, 0) * 360.0 / 255.0;
+            value = (uint8_t)round(unsigned8FromPayload(payload, 0) * 360.0 / 255.0);
             return true;
 
         case 6:
@@ -1045,7 +1045,7 @@ int valueToBusValueSigned8(const KNXValue& value, uint8_t* payload, size_t paylo
     if ((int64_t)value < INT64_C(-128) || (int64_t)value > INT64_C(127))
         return false;
 
-    signed8ToPayload(payload, 0, payload_length, (uint64_t)value, 0xFF);
+    signed8ToPayload(payload, payload_length, 0, (uint64_t)value, 0xFF);
     return true;
 }
 
@@ -1715,6 +1715,17 @@ int32_t signed32FromPayload(const uint8_t* payload, int index)
 {
     return (int32_t)unsigned32FromPayload(payload, index);
 }
+uint64_t unsigned64FromPayload(const uint8_t* payload, int index)
+{
+	return ((((uint64_t)payload[index]) << 56) & 0xFF00000000000000) |
+		((((uint64_t)payload[index + 1]) << 48) & 0x00FF000000000000) |
+		((((uint64_t)payload[index + 2]) << 40) & 0x0000FF0000000000) |
+		((((uint64_t)payload[index + 3]) << 32) & 0x000000FF00000000) |
+		((((uint64_t)payload[index + 4]) << 24) & 0x00000000FF000000) |
+		((((uint64_t)payload[index + 5]) << 16) & 0x0000000000FF0000) |
+		((((uint64_t)payload[index + 6]) << 8) & 0x000000000000FF00) |
+		(((uint64_t)payload[index + 7]) & 0x00000000000000FF);
+}
 double float16FromPayload(const uint8_t* payload, int index)
 {
     uint16_t mantissa = unsigned16FromPayload(payload, index) & 0x87FF;
@@ -1725,8 +1736,15 @@ double float16FromPayload(const uint8_t* payload, int index)
 }
 float float32FromPayload(const uint8_t* payload, int index)
 {
-    uint32_t area = unsigned32FromPayload(payload, index);
-    return *((float*)&area);
+    union { float f; uint32_t i; } area;
+    area.i = unsigned32FromPayload(payload, index);
+	return area.f;
+}
+double float64FromPayload(const uint8_t* payload, int index)
+{
+	union { double f; uint64_t i; } area;
+	area.i = unsigned64FromPayload(payload, index);
+    return area.f;
 }
 int64_t signed64FromPayload(const uint8_t* payload, int index)
 {
@@ -1817,8 +1835,9 @@ void float16ToPayload(uint8_t* payload, size_t payload_length, int index, double
 }
 void float32ToPayload(uint8_t* payload, size_t payload_length, int index, double value, uint32_t mask)
 {
-    float num = value;
-    unsigned32ToPayload(payload, payload_length, index, *((uint32_t*)&num), mask);
+    union { float f; uint32_t i; } num;
+    num.f = value;
+    unsigned32ToPayload(payload, payload_length, index, num.i, mask);
 }
 void signed64ToPayload(uint8_t* payload, size_t payload_length, int index, int64_t value, uint64_t mask)
 {

@@ -12,10 +12,10 @@ public:
     const uint8_t* restore(const uint8_t* buffer) override;
     uint16_t saveSize() override;
 
-    uint16_t induvidualAddress();
-    void induvidualAddress(uint16_t value);
+    uint16_t individualAddress();
+    void individualAddress(uint16_t value);
 
-    void induvidualAddressDuplication(bool value);
+    void individualAddressDuplication(bool value);
     bool verifyMode();
     void verifyMode(bool value);
     bool progMode();
@@ -36,6 +36,7 @@ public:
     void maxApduLength(uint16_t value);
     const uint8_t* rfDomainAddress();
     void rfDomainAddress(uint8_t* value);
+    uint8_t defaultHopCount();
 private:
     uint8_t _prgMode = 0;
     uint16_t _ownAddress = 0;

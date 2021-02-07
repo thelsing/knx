@@ -14,6 +14,8 @@
 #include <sched.h>
 #include <sys/mman.h>
 
+#include "fdsk.h"
+
 volatile sig_atomic_t loopActive = 1;
 void signalHandler(int sig)
 {
@@ -31,12 +33,15 @@ bool isSendHidReportPossible()
 {
     return false;
 }
-#if MEDIUM_TYPE == 5
+
+#if MASK_VERSION == 0x57B0
 KnxFacade<LinuxPlatform, Bau57B0> knx;
-#elif MEDIUM_TYPE == 2
+#elif MASK_VERSION == 0x27B0
 KnxFacade<LinuxPlatform, Bau27B0> knx;
+#elif MASK_VERSION == 0x07B0
+KnxFacade<LinuxPlatform, Bau07B0> knx;
 #else
-#error Only MEDIUM_TYPE IP and RF supported
+#error Mask version not supported yet!
 #endif
 
 long lastsend = 0;
@@ -92,7 +97,7 @@ void setup()
     srand((unsigned int)time(NULL));
     knx.readMemory();
 
-    if (knx.induvidualAddress() == 0)
+    if (knx.individualAddress() == 0)
         knx.progMode(true);
 
     if (knx.configured())
@@ -118,6 +123,14 @@ void setup()
 int main(int argc, char **argv)
 {
     printf("main() start.\n");
+
+    uint8_t serialNumber[] = { 0x00, 0xFA, 0x01, 0x02, 0x03, 0x04};
+    uint8_t key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+
+    FdskCalculator calc;
+    char fdskString[42]; // 6 * 6 chars + 5 dashes + nullbyte = 42
+    calc.snprintFdsk(fdskString, sizeof(fdskString), serialNumber, key);
+    printf("FDSK: %s\n", fdskString);
 
     // Prevent swapping of this process
     struct sched_param sp;

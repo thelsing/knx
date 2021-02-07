@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<KNX xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" CreatedBy="KNX MT" ToolVersion="5.6.407.26745" xmlns="http://knx.org/xml/project/11">
+  <ManufacturerData>
+    <Manufacturer RefId="M-00FA">
+      <Catalog>
+        <CatalogSection Id="M-00FA_CS-1" Name="Geräte" Number="1" DefaultLanguage="en-US">
+          <CatalogItem Id="M-00FA_H-01248-1_HP-01B7-09-0000_CI-EC01-1" Name="PZEM004t" Number="1" ProductRefId="M-00FA_H-01248-1_P-EC01" Hardware2ProgramRefId="M-00FA_H-01248-1_HP-01B7-09-0000" DefaultLanguage="en-US" />
+        </CatalogSection>
+      </Catalog>
+      <ApplicationPrograms>
+        <ApplicationProgram Id="M-00FA_A-01B7-09-0000" ApplicationNumber="439" ApplicationVersion="9" ProgramType="ApplicationProgram" MaskVersion="MV-07B0" Name="SAMD-PZEM004T" LoadProcedureStyle="MergedProcedure" PeiType="0" DefaultLanguage="en-US" DynamicTableManagement="false" Linkable="false" MinEtsVersion="4.0">
+          <Static>
+            <Code>
+              <RelativeSegment Id="M-00FA_A-01B7-09-0000_RS-04-00000" Name="Parameters" Offset="0" Size="5" LoadStateMachine="4" />
+            </Code>
+            <ParameterTypes>
+              <ParameterType Id="M-00FA_A-01B7-09-0000_PT-StartupTimeout" Name="StartupTimeout">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="0 s" Value="0" Id="M-00FA_A-01B7-09-0000_PT-StartupTimeout_EN-0" />
+                  <Enumeration Text="1 s" Value="1" Id="M-00FA_A-01B7-09-0000_PT-StartupTimeout_EN-1" />
+                  <Enumeration Text="2 s" Value="2" Id="M-00FA_A-01B7-09-0000_PT-StartupTimeout_EN-2" />
+                  <Enumeration Text="3 s" Value="3" Id="M-00FA_A-01B7-09-0000_PT-StartupTimeout_EN-3" />
+                  <Enumeration Text="4 s" Value="4" Id="M-00FA_A-01B7-09-0000_PT-StartupTimeout_EN-4" />
+                  <Enumeration Text="5 s" Value="5" Id="M-00FA_A-01B7-09-0000_PT-StartupTimeout_EN-5" />
+                  <Enumeration Text="6 s" Value="6" Id="M-00FA_A-01B7-09-0000_PT-StartupTimeout_EN-6" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="M-00FA_A-01B7-09-0000_PT-TimeCycle" Name="TimeCycle">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Disabled" Value="0" Id="M-00FA_A-01B7-09-0000_PT-TimeCycle_EN-0" />
+                  <Enumeration Text="1 sec" Value="1" Id="M-00FA_A-01B7-09-0000_PT-TimeCycle_EN-1" />
+                  <Enumeration Text="5 sec" Value="2" Id="M-00FA_A-01B7-09-0000_PT-TimeCycle_EN-2" />
+                  <Enumeration Text="15 sec" Value="3" Id="M-00FA_A-01B7-09-0000_PT-TimeCycle_EN-3" />
+                  <Enumeration Text="1 min" Value="4" Id="M-00FA_A-01B7-09-0000_PT-TimeCycle_EN-4" />
+                  <Enumeration Text="5 min" Value="5" Id="M-00FA_A-01B7-09-0000_PT-TimeCycle_EN-5" />
+                  <Enumeration Text="15 min" Value="6" Id="M-00FA_A-01B7-09-0000_PT-TimeCycle_EN-6" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="M-00FA_A-01B7-09-0000_PT-PercentChange" Name="PercentChange">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Disabled" Value="0" Id="M-00FA_A-01B7-09-0000_PT-PercentChange_EN-0" />
+                  <Enumeration Text="1 %" Value="1" Id="M-00FA_A-01B7-09-0000_PT-PercentChange_EN-1" />
+                  <Enumeration Text="5 %" Value="2" Id="M-00FA_A-01B7-09-0000_PT-PercentChange_EN-2" />
+                  <Enumeration Text="10 %" Value="3" Id="M-00FA_A-01B7-09-0000_PT-PercentChange_EN-3" />
+                  <Enumeration Text="15 %" Value="4" Id="M-00FA_A-01B7-09-0000_PT-PercentChange_EN-4" />
+                  <Enumeration Text="20 %" Value="5" Id="M-00FA_A-01B7-09-0000_PT-PercentChange_EN-5" />
+                  <Enumeration Text="30 %" Value="6" Id="M-00FA_A-01B7-09-0000_PT-PercentChange_EN-6" />
+                  <Enumeration Text="50 %" Value="7" Id="M-00FA_A-01B7-09-0000_PT-PercentChange_EN-7" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="M-00FA_A-01B7-09-0000_PT-SwitchOnOff" Name="SwitchOnOff">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Disabled" Value="0" Id="M-00FA_A-01B7-09-0000_PT-SwitchOnOff_EN-0" />
+                  <Enumeration Text="Enabled" Value="1" Id="M-00FA_A-01B7-09-0000_PT-SwitchOnOff_EN-1" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="M-00FA_A-01B7-09-0000_PT-EnergyReset" Name="EnergyReset">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Disabled" Value="0" Id="M-00FA_A-01B7-09-0000_PT-EnergyReset_EN-0" />
+                  <Enumeration Text="Daily Reset" Value="1" Id="M-00FA_A-01B7-09-0000_PT-EnergyReset_EN-1" />
+                  <Enumeration Text="Monthly Reset" Value="2" Id="M-00FA_A-01B7-09-0000_PT-EnergyReset_EN-2" />
+                  <Enumeration Text="Annually Reset" Value="3" Id="M-00FA_A-01B7-09-0000_PT-EnergyReset_EN-3" />
+                </TypeRestriction>
+              </ParameterType>
+            </ParameterTypes>
+            <Parameters>
+              <Parameter Id="M-00FA_A-01B7-09-0000_P-1" Name="startupTimeout" ParameterType="M-00FA_A-01B7-09-0000_PT-StartupTimeout" Text="Startup delaytime" Value="0">
+                <Memory CodeSegment="M-00FA_A-01B7-09-0000_RS-04-00000" Offset="0" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-01B7-09-0000_P-2" Name="Percent Send" ParameterType="M-00FA_A-01B7-09-0000_PT-PercentChange" Text="Send actual value if changed" Value="0">
+                <Memory CodeSegment="M-00FA_A-01B7-09-0000_RS-04-00000" Offset="1" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-01B7-09-0000_P-3" Name="Refresh Time" ParameterType="M-00FA_A-01B7-09-0000_PT-TimeCycle" Text="Send actual value cyclically" Value="0">
+                <Memory CodeSegment="M-00FA_A-01B7-09-0000_RS-04-00000" Offset="2" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-01B7-09-0000_P-4" Name="Enable Reset" ParameterType="M-00FA_A-01B7-09-0000_PT-EnergyReset" Text="Enable daily reset (need datetime Group Address set)" Value="0">
+                <Memory CodeSegment="M-00FA_A-01B7-09-0000_RS-04-00000" Offset="3" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-01B7-09-0000_P-5" Name="Enable ProdMode" ParameterType="M-00FA_A-01B7-09-0000_PT-SwitchOnOff" Text="Enable ProgMode at startup for 5min" Value="0">
+                <Memory CodeSegment="M-00FA_A-01B7-09-0000_RS-04-00000" Offset="4" BitOffset="0" />
+              </Parameter>
+            </Parameters>
+            <ParameterRefs>
+              <ParameterRef Id="M-00FA_A-01B7-09-0000_P-1_R-1" RefId="M-00FA_A-01B7-09-0000_P-1" />
+              <ParameterRef Id="M-00FA_A-01B7-09-0000_P-2_R-2" RefId="M-00FA_A-01B7-09-0000_P-2" />
+              <ParameterRef Id="M-00FA_A-01B7-09-0000_P-3_R-3" RefId="M-00FA_A-01B7-09-0000_P-3" />
+              <ParameterRef Id="M-00FA_A-01B7-09-0000_P-4_R-4" RefId="M-00FA_A-01B7-09-0000_P-4" />
+              <ParameterRef Id="M-00FA_A-01B7-09-0000_P-5_R-5" RefId="M-00FA_A-01B7-09-0000_P-5" />
+            </ParameterRefs>
+            <ComObjectTable>
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-1" Name="Counter reset" Text="Counter reset" Number="1" FunctionText="Manual Energy counter Reset" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-2" Name="Date Time" Text="Date Time" Number="2" FunctionText="dateTime" ObjectSize="8 Bytes" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-3" Name="Voltage" Text="Voltage" Number="3" FunctionText="Transmit Voltage value" ObjectSize="4 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Enabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-4" Name="Current" Text="Current" Number="4" FunctionText="Transmit Current value" ObjectSize="4 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Enabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-5" Name="Power Factor" Text="Power Factor" Number="5" FunctionText="Transmit Power Factor" ObjectSize="4 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Enabled" ReadOnInitFlag="Disabled" DatapointType="" />
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-6" Name="Active Power" Text="Active Power" Number="6" FunctionText="Transmit Power value" ObjectSize="4 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Enabled" ReadOnInitFlag="Disabled" />
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-7" Name="Active Energy" Text="Active Energy" Number="7" FunctionText="Transmit Energy value" ObjectSize="4 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Enabled" ReadOnInitFlag="Disabled" />
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-8" Name="Frequency" Text="Frequency" Number="8" FunctionText="Transmit Frequency" ObjectSize="4 Bytes" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Enabled" ReadOnInitFlag="Disabled" />
+              <ComObject Id="M-00FA_A-01B7-09-0000_O-9" Name="ProgMode" Text="ProgMode" Number="9" FunctionText="Start device programmation mode for ETS" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" />
+            </ComObjectTable>
+            <ComObjectRefs>
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-1_R-1" RefId="M-00FA_A-01B7-09-0000_O-1" />
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-2_R-2" RefId="M-00FA_A-01B7-09-0000_O-2" />
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-3_R-3" RefId="M-00FA_A-01B7-09-0000_O-3" />
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-4_R-4" RefId="M-00FA_A-01B7-09-0000_O-4" />
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-5_R-5" RefId="M-00FA_A-01B7-09-0000_O-5" />
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-6_R-6" RefId="M-00FA_A-01B7-09-0000_O-6" />
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-7_R-7" RefId="M-00FA_A-01B7-09-0000_O-7" />
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-8_R-8" RefId="M-00FA_A-01B7-09-0000_O-8" />
+              <ComObjectRef Id="M-00FA_A-01B7-09-0000_O-9_R-9" RefId="M-00FA_A-01B7-09-0000_O-9" />
+            </ComObjectRefs>
+            <AddressTable MaxEntries="65000" />
+            <AssociationTable MaxEntries="65000" />
+            <LoadProcedures>
+              <LoadProcedure MergeId="2">
+                <LdCtrlRelSegment LsmIdx="4" Size="5" Mode="0" Fill="0" AppliesTo="full" />
+              </LoadProcedure>
+              <LoadProcedure MergeId="4">
+                <LdCtrlWriteRelMem ObjIdx="4" Offset="0" Size="5" Verify="true" />
+              </LoadProcedure>
+            </LoadProcedures>
+            <Options />
+          </Static>
+          <Dynamic>
+            <ChannelIndependentBlock>
+              <ParameterBlock Id="M-00FA_A-01B7-09-0000_PB-1" Name="ParameterPage" Text="Common Parameters">
+                <ParameterRefRef RefId="M-00FA_A-01B7-09-0000_P-1_R-1" />
+                <ParameterRefRef RefId="M-00FA_A-01B7-09-0000_P-2_R-2" />
+                <ParameterRefRef RefId="M-00FA_A-01B7-09-0000_P-3_R-3" />
+                <ParameterRefRef RefId="M-00FA_A-01B7-09-0000_P-4_R-4" />
+                <ParameterRefRef RefId="M-00FA_A-01B7-09-0000_P-5_R-5" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-1_R-1" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-2_R-2" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-3_R-3" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-4_R-4" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-5_R-5" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-6_R-6" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-7_R-7" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-8_R-8" />
+                <ComObjectRefRef RefId="M-00FA_A-ABCE-20-0000_O-9_R-9" />
+              </ParameterBlock>
+            </ChannelIndependentBlock>
+          </Dynamic>
+        </ApplicationProgram>
+      </ApplicationPrograms>
+      <Hardware>
+        <Hardware Id="M-00FA_H-01248-1" Name="PZEM-004t gateway" SerialNumber="01248" VersionNumber="1" BusCurrent="10" HasIndividualAddress="true" HasApplicationProgram="true">
+          <Products>
+            <Product Id="M-00FA_H-01248-1_P-EC01" Text="PZEM004t" OrderNumber="EC01" IsRailMounted="false" DefaultLanguage="en-US">
+              <RegistrationInfo RegistrationStatus="Registered" />
+            </Product>
+          </Products>
+          <Hardware2Programs>
+            <Hardware2Program Id="M-00FA_H-01248-1_HP-01B7-09-0000" MediumTypes="MT-0">
+              <ApplicationProgramRef RefId="M-00FA_A-01B7-09-0000" />
+              <RegistrationInfo RegistrationStatus="Registered" RegistrationNumber="0001/19" />
+            </Hardware2Program>
+          </Hardware2Programs>
+        </Hardware>
+      </Hardware>
+    </Manufacturer>
+  </ManufacturerData>
+</KNX>

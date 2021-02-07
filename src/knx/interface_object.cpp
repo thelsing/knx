@@ -12,54 +12,6 @@ InterfaceObject::~InterfaceObject()
 
 void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access)
 {
-    PropertyDescription* descriptions = propertyDescriptions();
-    uint8_t count = propertyDescriptionCount();
-
-    numberOfElements = 0;
-    if (descriptions == nullptr || count == 0)
-        return readPropertyDescription2(propertyId, propertyIndex, writeEnable, type, numberOfElements, access);
-
-    PropertyDescription* desc = nullptr;
-
-    // from KNX spec. 03.03.07 Application Layer (page 56) - 3.4.3.3  A_PropertyDescription_Read-service
-    // Summary: either propertyId OR propertyIndex, but not both at the same time
-    if (propertyId != 0)
-    {
-        for (uint8_t i = 0; i < count; i++)
-        {
-            PropertyDescription d = descriptions[i];
-            if (d.Id != propertyId)
-                continue;
-
-            desc = &d;
-            propertyIndex = i;
-            break;
-        }
-    }
-    else
-    {
-        // If propertyId is zero, propertyIndex shall be used.
-        // Response: propertyIndex of received A_PropertyDescription_Read
-        if (propertyIndex < count)
-        {
-            desc = &descriptions[propertyIndex];
-        }
-    }
-
-    if (desc != nullptr)
-    {
-        propertyId = desc->Id;
-        writeEnable = desc->WriteEnable;
-        type = desc->Type;
-        numberOfElements = desc->MaxElements;
-        access = desc->Access;
-    }
-    else
-        return readPropertyDescription2(propertyId, propertyIndex, writeEnable, type, numberOfElements, access);
-}
-
-void InterfaceObject::readPropertyDescription2(uint8_t& propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access)
-{
     uint8_t count = _propertyCount;
 
     numberOfElements = 0;
@@ -103,6 +55,12 @@ void InterfaceObject::readPropertyDescription2(uint8_t& propertyId, uint8_t& pro
     }
 }
 
+void InterfaceObject::masterReset(EraseCode eraseCode, uint8_t channel)
+{
+    // every interface object shall implement this
+    // However, for the time being we provide an empty default implementation
+}
+
 void InterfaceObject::readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data)
 {
     Property* prop = property(id);
@@ -138,16 +96,29 @@ uint8_t InterfaceObject::propertySize(PropertyID id)
     return prop->ElementSize();
 }
 
-uint8_t InterfaceObject::propertyDescriptionCount()
+void InterfaceObject::command(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
-    return 0;
+    Property* prop = property(id);
+    if (prop == nullptr)
+    {
+        resultLength = 0;
+        return;;
+    }
+
+    prop->command(data, length, resultData, resultLength);
 }
 
-PropertyDescription* InterfaceObject::propertyDescriptions()
+void InterfaceObject::state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
-    return nullptr;
-}
+    Property* prop = property(id);
+    if (prop == nullptr)
+    {
+        resultLength = 0;
+        return;;
+    }
 
+    prop->state(data, length, resultData, resultLength);
+}
 
 void InterfaceObject::initializeProperties(size_t propertiesSize, Property** properties)
 {
@@ -225,4 +196,10 @@ const uint8_t* InterfaceObject::propertyData(PropertyID id)
 {
     DataProperty* prop = (DataProperty*)property(id);
     return prop->data();
+}
+
+const uint8_t* InterfaceObject::propertyData(PropertyID id, uint16_t elementIndex)
+{
+    DataProperty* prop = (DataProperty*)property(id);
+    return prop->data(elementIndex);
 }

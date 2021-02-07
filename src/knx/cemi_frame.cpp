@@ -221,12 +221,12 @@ void CemiFrame::frameType(FrameFormat type)
 
 Repetition CemiFrame::repetition() const
 {
-    return (Repetition)(_ctrl1[0] & RepititionAllowed);
+    return (Repetition)(_ctrl1[0] & RepetitionAllowed);
 }
 
 void CemiFrame::repetition(Repetition rep)
 {
-    _ctrl1[0] &= ~RepititionAllowed;
+    _ctrl1[0] &= ~RepetitionAllowed;
     _ctrl1[0] |= rep;
 }
 
@@ -325,9 +325,9 @@ uint8_t* CemiFrame::rfSerialOrDoA() const
     return _rfSerialOrDoA;
 }
 
-void CemiFrame::rfSerialOrDoA(uint8_t* rfSerialOrDoA)
+void CemiFrame::rfSerialOrDoA(const uint8_t* rfSerialOrDoA)
 {
-    _rfSerialOrDoA = rfSerialOrDoA;
+    _rfSerialOrDoA = (uint8_t*)rfSerialOrDoA;
 }
 
 uint8_t CemiFrame::rfInfo() const
@@ -368,7 +368,7 @@ APDU& CemiFrame::apdu()
 bool CemiFrame::valid() const
 {
     uint8_t addInfoLen = _data[1];
-    uint8_t apduLen = _data[1 + _data[1] + NPDU_LPDU_DIFF];
+    uint8_t apduLen = _data[_data[1] + NPDU_LPDU_DIFF];
 
     if (_length != 0 && _length != (addInfoLen + apduLen + NPDU_LPDU_DIFF + 2))
         return false;

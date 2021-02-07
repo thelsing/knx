@@ -2,41 +2,67 @@
 
 #include "knx/bits.h"
 #include "knx/config.h"
-// Set default medium type to TP if no external definitions was given
-#ifndef MEDIUM_TYPE
-#define MEDIUM_TYPE 0
-#endif
+#include "knx/bau07B0.h"
+#include "knx/bau091A.h"
+#include "knx/bau27B0.h"
+#include "knx/bau2920.h"
+#include "knx/bau57B0.h"
 
 #ifdef ARDUINO_ARCH_SAMD
     #include "samd_platform.h"
-    #include "knx/bau07B0.h"
-    #include "knx/bau27B0.h"
-#elif ARDUINO_ARCH_ESP8266
-   #include "esp_platform.h"
-   #include "knx/bau57B0.h"
-#elif ARDUINO_ARCH_ESP32
-   #define LED_BUILTIN 13
-   #include "esp32_platform.h"
-   #include "knx/bau57B0.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        void buttonUp();
+    #endif
+#elif defined(ARDUINO_ARCH_ESP8266)
+    #include "esp_platform.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        void buttonUp();
+    #endif
+#elif defined(ARDUINO_ARCH_ESP32)
+    #define LED_BUILTIN 13
+    #include "esp32_platform.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        void buttonUp();
+    #endif
+#elif defined(ARDUINO_ARCH_STM32)
+    #include "stm32_platform.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        void buttonUp();
+    #endif
+#elif __linux__
+    #define LED_BUILTIN 0
+    #include "linux_platform.h"
 #else
-   #define LED_BUILTIN 0
-   #include "linux_platform.h"
-   #include "knx/bau57B0.h"
-   #include "knx/bau27B0.h"
+    #define LED_BUILTIN 5 // see GPIO_PinConfig gpioPinConfigs[]
+    #include "cc1310_platform.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        extern void buttonUp();
+    #endif
 #endif
 
-void buttonUp();
 typedef uint8_t* (*SaveRestoreCallback)(uint8_t* buffer);
-
+typedef void (*IsrFunctionPtr)();
+ 
 template <class P, class B> class KnxFacade : private SaveRestore
 {
-    friend void buttonUp();
-
   public:
     KnxFacade() : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
     {
         manufacturerId(0xfa);
         _bau.addSaveRestore(this);
+    }
+
+    KnxFacade(B& bau) : _bau(bau)
+    {
+        manufacturerId(0xfa);
+        _bau.addSaveRestore(this);
+    }
+
+    KnxFacade(IsrFunctionPtr buttonISRFunction) : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
+    {
+        manufacturerId(0xfa);
+        _bau.addSaveRestore(this);
+        setButtonISRFunction(buttonISRFunction);
     }
 
     virtual ~KnxFacade()
@@ -46,12 +72,6 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         if (_platformPtr)
             delete _platformPtr;
-    }
-
-    KnxFacade(B& bau) : _bau(bau)
-    {
-        manufacturerId(0xfa);
-        _bau.addSaveRestore(this);
     }
 
     P& platform()
@@ -82,6 +102,14 @@ template <class P, class B> class KnxFacade : private SaveRestore
     void progMode(bool value)
     {
         _bau.deviceObject().progMode(value);
+    }
+
+    /**
+     * To be called by ISR handling on button press.
+     */
+    void toggleProgMode()
+    {
+        _toggleProgMode = true;
     }
 
     bool configured()
@@ -155,9 +183,9 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _bau.writeMemory();
     }
 
-    uint16_t induvidualAddress()
+    uint16_t individualAddress()
     {
-        return _bau.deviceObject().induvidualAddress();
+        return _bau.deviceObject().individualAddress();
     }
 
     void loop()
@@ -176,10 +204,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
                 digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
             }
         }
-        if (_toogleProgMode)
+        if (_toggleProgMode)
         {
             progMode(!progMode());
-            _toogleProgMode = false;
+            _toggleProgMode = false;
         }
         _bau.loop();
     }
@@ -194,12 +222,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _bau.deviceObject().bauNumber(value);
     }
 
-    void orderNumber(const char* value)
+    void orderNumber(const uint8_t* value)
     {
         _bau.deviceObject().orderNumber(value);
     }
 
-    void hardwareType(uint8_t* value)
+    void hardwareType(const uint8_t* value)
     {
         _bau.deviceObject().hardwareType(value);
     }
@@ -211,14 +239,28 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
     void start()
     {
-        pinMode(_ledPin, OUTPUT);
+        pinMode(ledPin(), OUTPUT);
 
-        digitalWrite(_ledPin, HIGH - _ledPinActiveOn);
+        digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
 
-        pinMode(_buttonPin, INPUT_PULLUP);
+        pinMode(buttonPin(), INPUT_PULLUP);
 
-        attachInterrupt(_buttonPin, buttonUp, _buttonPinInterruptOn);
+        if (_progButtonISRFuncPtr)
+        {
+            // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
+            #if (ARDUINO_API_VERSION >= 10200)
+                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)_buttonPinInterruptOn);
+            #else
+                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, _buttonPinInterruptOn);
+            #endif
+        }
+
         enabled(true);
+    }
+
+    void setButtonISRFunction(IsrFunctionPtr progButtonISRFuncPtr)
+    {
+        _progButtonISRFuncPtr = progButtonISRFuncPtr;
     }
 
     void setSaveCallback(SaveRestoreCallback func)
@@ -263,10 +305,20 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return _bau.parameters().getInt(addr);
     }
 
+    double paramFloat(uint32_t addr, ParameterFloatEncodings enc)
+    {
+        if (!_bau.configured())
+            return 0;
+
+        return _bau.parameters().getFloat(addr, enc);
+    }
+    
+#if (MASK_VERSION == 0x07B0) || (MASK_VERSION == 0x27B0) || (MASK_VERSION == 0x57B0)
     GroupObject& getGroupObject(uint16_t goNr)
     {
         return _bau.groupObjectTable().get(goNr);
     }
+#endif
 
     void restart(uint16_t individualAddress)
     {
@@ -283,9 +335,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
     uint32_t _buttonPin = 0;
     SaveRestoreCallback _saveCallback = 0;
     SaveRestoreCallback _restoreCallback = 0;
-    bool _toogleProgMode = false;
+    volatile bool _toggleProgMode = false;
     bool _progLedState = false;
     uint16_t _saveSize = 0;
+    IsrFunctionPtr _progButtonISRFuncPtr = 0;
 
     uint8_t* save(uint8_t* buffer)
     {
@@ -314,25 +367,48 @@ template <class P, class B> class KnxFacade : private SaveRestore
     }
 };
 
-#ifdef ARDUINO_ARCH_SAMD
-    // predefined global instance for TP or RF
-    #ifdef MEDIUM_TYPE
-        #if MEDIUM_TYPE == 0
+#ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+    #ifdef ARDUINO_ARCH_SAMD
+        // predefined global instance for TP or RF or TP/RF coupler
+        #if MASK_VERSION == 0x07B0
             extern KnxFacade<SamdPlatform, Bau07B0> knx;
-        #elif MEDIUM_TYPE == 2
+        #elif MASK_VERSION == 0x27B0
             extern KnxFacade<SamdPlatform, Bau27B0> knx;
+        #elif MASK_VERSION == 0x2920
+            extern KnxFacade<SamdPlatform, Bau2920> knx;
         #else
-            #error "Only TP and RF supported for Arduino SAMD platform!"
+            #error "Mask version not supported on ARDUINO_ARCH_SAMD"
         #endif
-    #else
-        #error "No medium type specified for Arduino_SAMD platform! Please set MEDIUM_TYPE! (TP:0, RF:2, IP:5)"
+    #elif defined(ARDUINO_ARCH_ESP8266)
+        // predefined global instance for TP or IP or TP/IP coupler
+        #if MASK_VERSION == 0x07B0
+            extern KnxFacade<EspPlatform, Bau07B0> knx;
+        #elif MASK_VERSION == 0x57B0
+            extern KnxFacade<EspPlatform, Bau57B0> knx;
+        #elif MASK_VERSION == 0x091A
+            extern KnxFacade<EspPlatform, Bau091A> knx;
+        #else
+            #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
+        #endif
+    #elif defined(ARDUINO_ARCH_ESP32)
+        // predefined global instance for TP or IP or TP/IP coupler
+        #if MASK_VERSION == 0x07B0
+            extern KnxFacade<Esp32Platform, Bau07B0> knx;
+        #elif MASK_VERSION == 0x57B0
+            extern KnxFacade<Esp32Platform, Bau57B0> knx;
+        #elif MASK_VERSION == 0x091A
+            extern KnxFacade<Esp32Platform, Bau091A> knx;
+        #else
+            #error "Mask version not supported on ARDUINO_ARCH_ESP32"
+        #endif
+    #elif defined(ARDUINO_ARCH_STM32)
+        // predefined global instance for TP only
+        #if MASK_VERSION == 0x07B0
+            extern KnxFacade<Stm32Platform, Bau07B0> knx;
+        #else
+            #error "Mask version not supported on ARDUINO_ARCH_STM32"
+        #endif
+    #else // Non-Arduino platforms and Linux platform
+        // no predefined global instance
     #endif
-#elif ARDUINO_ARCH_ESP8266
-    // predefined global instance for IP only
-    extern KnxFacade<EspPlatform, Bau57B0> knx;
-#elif ARDUINO_ARCH_ESP32
-    // predefined global instance for IP only
-    extern KnxFacade<Esp32Platform, Bau57B0> knx;
-#elif __linux__
-    // no predefined global instance
-#endif
+#endif // KNX_NO_AUTOMATIC_GLOBAL_INSTANCE

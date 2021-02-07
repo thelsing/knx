@@ -1,5 +1,7 @@
-#include "tpuart_data_link_layer.h"
+#include "config.h"
+#ifdef USE_TP
 
+#include "tpuart_data_link_layer.h"
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
@@ -8,8 +10,6 @@
 
 #include <stdio.h>
 #include <string.h>
-
-#ifdef USE_TP
 
 // NCN5120
 //#define NCN5120
@@ -93,6 +93,16 @@ void TpUartDataLinkLayer::loop()
     _receiveBuffer[1] = 0;
     uint8_t* buffer = _receiveBuffer + 2;
     uint8_t rxByte;
+
+    if (!_enabled)
+    {
+        if (millis() - _lastResetChipTime > 1000)
+        { 
+            //reset chip every 1 seconds
+            _lastResetChipTime = millis();
+            _enabled = resetChip();
+        }
+    }
 
     if (!_enabled)
         return;
@@ -237,7 +247,7 @@ void TpUartDataLinkLayer::loop()
                 //Destination Address + payload available
                 _xorSum ^= rxByte;
                 //check if echo
-                if (!((buffer[0] ^ _sendBuffer[0]) & ~0x20) && !memcmp(buffer + _convert + 1, _sendBuffer + 1, 5))
+                if (_sendBuffer != nullptr && (!((buffer[0] ^ _sendBuffer[0]) & ~0x20) && !memcmp(buffer + _convert + 1, _sendBuffer + 1, 5)))
                 { //ignore repeated bit of control byte
                     _isEcho = true;
                 }
@@ -257,23 +267,19 @@ void TpUartDataLinkLayer::loop()
                 if (!_isEcho)
                 {
                     uint8_t c = 0x10;
-                    //ceck if individual or group address
-                    if ((buffer[6] & 0x80) == 0)
+
+                    // The bau knows everything and could either check the address table object (normal device)
+                    // or any filter tables (coupler) to see if we are addressed.
+
+                    //check if individual or group address
+                    bool isGroupAddress = (buffer[1] & 0x80) != 0;
+                    uint16_t addr = getWord(buffer + 4);
+
+                    if (_cb.isAckRequired(addr, isGroupAddress))
                     {
-                        //individual
-                        if (_deviceObject.induvidualAddress() == getWord(buffer + 4))
-                        {
-                            c |= 0x01;
-                        }
+                        c |= 0x01;
                     }
-                    else
-                    {
-                        //group
-                        if (_groupAddressTable.contains(getWord(buffer + 4)) || getWord(buffer + 4) == 0)
-                        {
-                            c |= 0x01;
-                        }
-                    }
+
                     _platform.writeUart(c);
                 }
             }
@@ -404,9 +410,12 @@ void TpUartDataLinkLayer::stopChip()
 #endif
 }
 
-TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab,
-                                         NetworkLayer& layer, Platform& platform)
-    : DataLinkLayer(devObj, addrTab, layer, platform)
+TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
+                                         NetworkLayerEntity &netLayerEntity,
+                                         Platform& platform,
+                                         ITpUartCallBacks& cb)
+    : DataLinkLayer(devObj, netLayerEntity, platform),
+      _cb(cb)
 {
 }
 
@@ -415,7 +424,7 @@ void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
     //printHex("=>", buffer, length);
     CemiFrame frame(buffer, length);
 
-    frameRecieved(frame);
+    frameReceived(frame);
 }
 
 void TpUartDataLinkLayer::dataConBytesReceived(uint8_t* buffer, uint16_t length, bool success)
@@ -431,14 +440,16 @@ void TpUartDataLinkLayer::enabled(bool value)
     {
         _platform.setupUart();
 
-        if (resetChip()){
+        if (resetChip())
+        {
             _enabled = true;
             print("ownaddr ");
-            println(_deviceObject.induvidualAddress(), HEX);
+            println(_deviceObject.individualAddress(), HEX);
         }
-        else{
-        	_enabled = false;
-        	println("ERROR, TPUART not responding");
+        else
+        {
+            _enabled = false;
+            println("ERROR, TPUART not responding");
         }
         return;
     }
@@ -455,6 +466,11 @@ void TpUartDataLinkLayer::enabled(bool value)
 bool TpUartDataLinkLayer::enabled() const
 {
     return _enabled;
+}
+
+DptMedium TpUartDataLinkLayer::mediumType() const
+{
+    return DptMedium::KNX_TP1;
 }
 
 bool TpUartDataLinkLayer::sendSingleFrameByte()
@@ -538,4 +554,4 @@ void TpUartDataLinkLayer::loadNextTxFrame()
     }
     delete tx_frame;
 }
-#endif
+#endif

@@ -19,7 +19,7 @@ uint8_t DataProperty::read(uint16_t start, uint8_t count, uint8_t* data) const
     start -= 1;
 
     // data is already big enough to hold the data
-    memcpy(data, _data + start, count * ElementSize());
+    memcpy(data, _data + (start * ElementSize()), count * ElementSize()); 
 
     return count;
 }
@@ -67,7 +67,7 @@ uint8_t DataProperty::write(uint16_t start, uint8_t count, const uint8_t* data)
         _currentElements = start + count;
     }
 
-    memcpy(_data + start, data, count * ElementSize());
+    memcpy(_data + (start * ElementSize()), data, count * ElementSize());
 
     return count;
 }
@@ -151,4 +151,14 @@ uint8_t* DataProperty::save(uint8_t* buffer)
 const uint8_t* DataProperty::data()
 {
     return _data;
+}
+
+const uint8_t* DataProperty::data(uint16_t elementIndex)
+{
+    if ((elementIndex == 0) || (elementIndex > _currentElements))
+        return nullptr;
+
+    elementIndex -= 1; // Starting from 0
+    uint16_t offset = elementIndex * ElementSize();
+    return _data + offset;
 }

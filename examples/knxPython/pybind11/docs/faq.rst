@@ -4,9 +4,13 @@ Frequently asked questions
 "ImportError: dynamic module does not define init function"
 ===========================================================
 
-You are likely using an incompatible version of Python (for instance, the
-extension library was compiled against Python 2, while the interpreter is
-running on top of some version of Python 3, or vice versa).
+1. Make sure that the name specified in PYBIND11_MODULE is identical to the
+filename of the extension library (without suffixes such as .so)
+
+2. If the above did not fix the issue, you are likely using an incompatible
+version of Python (for instance, the extension library was compiled against
+Python 2, while the interpreter is running on top of some version of Python
+3, or vice versa).
 
 "Symbol not found: ``__Py_ZeroStruct`` / ``_PyInstanceMethod_Type``"
 ========================================================================
@@ -23,17 +27,7 @@ The Python interpreter immediately crashes when importing my module
 
 See the first answer.
 
-CMake doesn't detect the right Python version
-=============================================
-
-The CMake-based build system will try to automatically detect the installed
-version of Python and link against that. When this fails, or when there are
-multiple versions of Python and it finds the wrong one, delete
-``CMakeCache.txt`` and then invoke CMake as follows:
-
-.. code-block:: bash
-
-    cmake -DPYTHON_EXECUTABLE:FILEPATH=<path-to-python-executable> .
+.. _faq_reference_arguments:
 
 Limitations involving reference arguments
 =========================================
@@ -94,8 +88,8 @@ following example:
 
 .. code-block:: cpp
 
-    void init_ex1(py::module &);
-    void init_ex2(py::module &);
+    void init_ex1(py::module_ &);
+    void init_ex2(py::module_ &);
     /* ... */
 
     PYBIND11_MODULE(example, m) {
@@ -108,7 +102,7 @@ following example:
 
 .. code-block:: cpp
 
-    void init_ex1(py::module &m) {
+    void init_ex1(py::module_ &m) {
         m.def("add", [](int a, int b) { return a + b; });
     }
 
@@ -116,7 +110,7 @@ following example:
 
 .. code-block:: cpp
 
-    void init_ex2(py::module &m) {
+    void init_ex2(py::module_ &m) {
         m.def("sub", [](int a, int b) { return a - b; });
     }
 
@@ -228,49 +222,110 @@ In addition to decreasing binary size, ``-fvisibility=hidden`` also avoids
 potential serious issues when loading multiple modules and is required for
 proper pybind operation.  See the previous FAQ entry for more details.
 
-Another aspect that can require a fair bit of code are function signature
-descriptions. pybind11 automatically generates human-readable function
-signatures for docstrings, e.g.:
-
-.. code-block:: none
-
-     |  __init__(...)
-     |      __init__(*args, **kwargs)
-     |      Overloaded function.
-     |
-     |      1. __init__(example.Example1) -> NoneType
-     |
-     |      Docstring for overload #1 goes here
-     |
-     |      2. __init__(example.Example1, int) -> NoneType
-     |
-     |      Docstring for overload #2 goes here
-     |
-     |      3. __init__(example.Example1, example.Example1) -> NoneType
-     |
-     |      Docstring for overload #3 goes here
-
-
-In C++11 mode, these are generated at run time using string concatenation,
-which can amount to 10-20% of the size of the resulting binary. If you can,
-enable C++14 language features (using ``-std=c++14`` for GCC/Clang), in which
-case signatures are efficiently pre-generated at compile time. Unfortunately,
-Visual Studio's C++14 support (``constexpr``) is not good enough as of April
-2016, so it always uses the more expensive run-time approach.
-
-Working with ancient Visual Studio 2009 builds on Windows
+Working with ancient Visual Studio 2008 builds on Windows
 =========================================================
 
 The official Windows distributions of Python are compiled using truly
 ancient versions of Visual Studio that lack good C++11 support. Some users
 implicitly assume that it would be impossible to load a plugin built with
 Visual Studio 2015 into a Python distribution that was compiled using Visual
-Studio 2009. However, no such issue exists: it's perfectly legitimate to
+Studio 2008. However, no such issue exists: it's perfectly legitimate to
 interface DLLs that are built with different compilers and/or C libraries.
 Common gotchas to watch out for involve not ``free()``-ing memory region
 that that were ``malloc()``-ed in another shared library, using data
 structures with incompatible ABIs, and so on. pybind11 is very careful not
 to make these types of mistakes.
+
+How can I properly handle Ctrl-C in long-running functions?
+===========================================================
+
+Ctrl-C is received by the Python interpreter, and holds it until the GIL
+is released, so a long-running function won't be interrupted.
+
+To interrupt from inside your function, you can use the ``PyErr_CheckSignals()``
+function, that will tell if a signal has been raised on the Python side.  This
+function merely checks a flag, so its impact is negligible. When a signal has
+been received, you must either explicitly interrupt execution by throwing
+``py::error_already_set`` (which will propagate the existing
+``KeyboardInterrupt``), or clear the error (which you usually will not want):
+
+.. code-block:: cpp
+
+    PYBIND11_MODULE(example, m)
+    {
+        m.def("long running_func", []()
+        {
+            for (;;) {
+                if (PyErr_CheckSignals() != 0)
+                    throw py::error_already_set();
+                // Long running iteration
+            }
+        });
+    }
+
+CMake doesn't detect the right Python version
+=============================================
+
+The CMake-based build system will try to automatically detect the installed
+version of Python and link against that. When this fails, or when there are
+multiple versions of Python and it finds the wrong one, delete
+``CMakeCache.txt`` and then add ``-DPYTHON_EXECUTABLE=$(which python)`` to your
+CMake configure line. (Replace ``$(which python)`` with a path to python if
+your prefer.)
+
+You can alternatively try ``-DPYBIND11_FINDPYTHON=ON``, which will activate the
+new CMake FindPython support instead of pybind11's custom search. Requires
+CMake 3.12+, and 3.15+ or 3.18.2+ are even better. You can set this in your
+``CMakeLists.txt`` before adding or finding pybind11, as well.
+
+Inconsistent detection of Python version in CMake and pybind11
+==============================================================
+
+The functions ``find_package(PythonInterp)`` and ``find_package(PythonLibs)``
+provided by CMake for Python version detection are modified by pybind11 due to
+unreliability and limitations that make them unsuitable for pybind11's needs.
+Instead pybind11 provides its own, more reliable Python detection CMake code.
+Conflicts can arise, however, when using pybind11 in a project that *also* uses
+the CMake Python detection in a system with several Python versions installed.
+
+This difference may cause inconsistencies and errors if *both* mechanisms are
+used in the same project. Consider the following CMake code executed in a
+system with Python 2.7 and 3.x installed:
+
+.. code-block:: cmake
+
+    find_package(PythonInterp)
+    find_package(PythonLibs)
+    find_package(pybind11)
+
+It will detect Python 2.7 and pybind11 will pick it as well.
+
+In contrast this code:
+
+.. code-block:: cmake
+
+    find_package(pybind11)
+    find_package(PythonInterp)
+    find_package(PythonLibs)
+
+will detect Python 3.x for pybind11 and may crash on
+``find_package(PythonLibs)`` afterwards.
+
+There are three possible solutions:
+
+1. Avoid using ``find_package(PythonInterp)`` and ``find_package(PythonLibs)``
+   from CMake and rely on pybind11 in detecting Python version. If this is not
+   possible, the CMake machinery should be called *before* including pybind11.
+2. Set ``PYBIND11_FINDPYTHON`` to ``True`` or use ``find_package(Python
+   COMPONENTS Interpreter Development)`` on modern CMake (3.12+, 3.15+ better,
+   3.18.2+ best). Pybind11 in these cases uses the new CMake FindPython instead
+   of the old, deprecated search tools, and these modules are much better at
+   finding the correct Python.
+3. Set ``PYBIND11_NOPYTHON`` to ``TRUE``. Pybind11 will not search for Python.
+   However, you will have to use the target-based system, and do more setup
+   yourself, because it does not know about or include things that depend on
+   Python, like ``pybind11_add_module``. This might be ideal for integrating
+   into an existing system, like scikit-build's Python helpers.
 
 How to cite this project?
 =========================
@@ -286,4 +341,3 @@ discourse:
        note = {https://github.com/pybind/pybind11},
        title = {pybind11 -- Seamless operability between C++11 and Python}
     }
-

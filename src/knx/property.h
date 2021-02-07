@@ -86,6 +86,8 @@ enum PropertyID
     PID_VERSION = 25,
     PID_MCB_TABLE = 27,
     PID_ERROR_CODE = 28,
+    PID_OBJECT_INDEX = 29,
+    PID_DOWNLOAD_COUNTER = 30,
     
     /** Properties in the Device Object */
     PID_ROUTING_COUNT = 51,
@@ -158,6 +160,36 @@ enum PropertyID
     PID_MAX_INTERFACE_APDU_LENGTH = 68,
     PID_MAX_LOCAL_APDU_LENGTH = 69,
 
+    /** Security Interface Object */
+    PID_SECURITY_MODE = 51,                     // Enable and disable the Security Mode
+    PID_P2P_KEY_TABLE = 52,                     // Security keys used for securing point-to-point and broadcast communication
+    PID_GRP_KEY_TABLE = 53,                     // Security keys used for securing standard mode group communication
+    PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE = 54, // IAs and last valid sequence numbers of communication partners with secure links
+    PID_SECURITY_FAILURES_LOG = 55,             // Provides security failure information
+    PID_TOOL_KEY = 56,                          // Stores the security information for the central MaC in S-Mode and Ctrl-Mode
+    PID_SECURITY_REPORT = 57,                   // KNX Data Security-related status and diagnostic information
+    PID_SECURITY_REPORT_CONTROL = 58,           // Control the spontaneous communication of the security report through DMP_InterfaceObject-InfoReport_RCl
+    PID_SEQUENCE_NUMBER_SENDING = 59,           // Sequence Number used for the next outgoing secure communication
+    PID_ZONE_KEY_TABLE = 60,                    // Security keys used for securing zone addressing communication
+    PID_GO_SECURITY_FLAGS = 61,                 // Defines the required security requirements for each group object
+    PID_ROLE_TABLE = 62,                        // Role table
+    PID_TOOL_SEQUENCE_NUMBER_SENDING = 250,     // Sequence Number used for the next outgoing secure communication (Tool Access only, non-standardized!)
+
+    /** Router Object */
+    PID_MEDIUM_STATUS = 51,
+    PID_MAIN_LCCONFIG = 52,
+    PID_SUB_LCCONFIG = 53,
+    PID_MAIN_LCGRPCONFIG = 54,
+    PID_SUB_LCGRPCONFIG = 55,
+    PID_ROUTETABLE_CONTROL = 56,
+    PID_COUPLER_SERVICES_CONTROL = 57,
+    PID_MAX_APDU_LENGTH_ROUTER = 58,
+    PID_L2_COUPLER_TYPE = 59,                   // Only interesting for mask 0x0912 (TP1/TP1 coupler)
+    PID_HOP_COUNT = 61,                         // Only interesting in primary if other medium(secondary) is open medium without hopcount
+    PID_MEDIUM = 63,
+    PID_FILTER_TABLE_USE = 67,
+    PID_RF_ENABLE_SBC = 112,                    // Exists only if medium for this router object is RF (PDT_FUNCTION)
+    PID_IP_ENABLE_SBC = 120,                    // Exists only if medium for this router object is IP (PDT_FUNCTION)
 };
 
 enum LoadState
@@ -238,6 +270,8 @@ class Property : public SaveRestore
     uint8_t ElementSize() const;
     virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) const = 0;
     virtual uint8_t write(uint16_t start, uint8_t count, const uint8_t* data) = 0;
+    virtual void command(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+    virtual void state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
     uint8_t read(uint8_t& value) const;
     uint8_t read(uint16_t& value) const;
     uint8_t read(uint32_t& value) const;

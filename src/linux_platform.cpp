@@ -31,6 +31,7 @@
 #include <netdb.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <termios.h>
 
 #include <sys/ioctl.h>        // Needed for SPI port
 #include <linux/spi/spidev.h> // Needed for SPI port
@@ -399,6 +400,124 @@ std::string LinuxPlatform::flashFilePath()
     return _flashFilePath;
 }
 
+
+
+size_t LinuxPlatform::readBytesUart(uint8_t *buffer, size_t length)
+{
+    return read(_uartFd, buffer, length);
+}
+
+int LinuxPlatform::readUart()
+{
+    uint8_t x ;
+
+    if (read(_uartFd, &x, 1) != 1)
+    {
+        return -1;
+    }
+
+    return ((int)x) & 0xFF ;
+}
+
+size_t LinuxPlatform::writeUart(const uint8_t *buffer, size_t size)
+{
+    return write(_uartFd, buffer, size) ;
+}
+
+size_t LinuxPlatform::writeUart(const uint8_t data)
+{
+    return write(_uartFd, &data, 1) ;
+}
+
+int LinuxPlatform::uartAvailable()
+{
+    int result ;
+
+     if (ioctl(_uartFd, FIONREAD, &result) == -1)
+     {
+        return -1;
+     }
+
+     return result ;
+}
+
+void LinuxPlatform::closeUart()
+{
+    if (_uartFd >= 0)
+    {
+        close(_uartFd);
+    }
+}
+
+void LinuxPlatform::setupUart()
+{
+    /*
+    * 19200,8E1, no handshake
+    */
+    struct termios options;    /* Schnittstellenoptionen */
+
+    /* Port oeffnen - read/write, kein "controlling tty", Status von DCD ignorieren */
+    _uartFd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY);
+    if (_uartFd >= 0)
+    {
+        /* get the current options */
+        fcntl(_uartFd, F_SETFL, 0);
+        if (tcgetattr(_uartFd, &options) != 0)
+        {
+            close(_uartFd);
+            _uartFd = -1;
+            return;
+        }
+        memset(&options, 0, sizeof(options)); /* Structur loeschen, ggf. vorher sichern
+                                             und bei Programmende wieder restaurieren */
+        /* Baudrate setzen */
+        cfsetispeed(&options, B19200);
+        cfsetospeed(&options, B19200);
+
+        /* setze Optionen */
+        options.c_cflag |= PARENB;          /* Enable Paritybit */
+        options.c_cflag &= ~PARODD;         /* Even parity */
+        options.c_cflag &= ~CSTOPB;         /* 1 Stoppbit */
+        options.c_cflag &= ~CSIZE;          /* 8 Datenbits */
+        options.c_cflag |= CS8;
+
+        /* 19200 bps, 8 Datenbits, CD-Signal ignorieren, Lesen erlauben */
+        options.c_cflag |= (CLOCAL | CREAD);
+
+        /* Kein Echo, keine Steuerzeichen, keine Interrupts */
+        options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+        options.c_iflag = IGNPAR;           /* Parity-Fehler ignorieren */
+        options.c_oflag &= ~OPOST;          /* setze "raw" Input */
+        options.c_cc[VMIN]  = 0;            /* warten auf min. 0 Zeichen */
+        options.c_cc[VTIME] = 10;           /* Timeout 1 Sekunde */
+        tcflush(_uartFd,TCIOFLUSH);         /* Puffer leeren */
+
+        if (tcsetattr(_uartFd, TCSAFLUSH, &options) != 0)
+        {
+            close(_uartFd);
+            _uartFd = -1;
+            return;
+        }
+    }
+}
+
+void printUint64(uint64_t value, int base = DEC)
+  {
+    char buf[8 * sizeof(uint64_t) + 1];
+    char* str = &buf[sizeof(buf) - 1];
+    *str = '\0';
+
+    uint64_t n = value;
+    do {
+      char c = n % base;
+      n /= base;
+
+      *--str = c < 10 ? c + '0' : c + 'A' - 10;
+    } while (n > 0);
+
+     print(str);
+}
+
 void print(const char* s)
 {
     printf("%s", s);
@@ -471,6 +590,16 @@ void print(unsigned long num, int base)
         printf("%lX", num);
     else
         printf("%ld", num);
+}
+
+void print(unsigned long long num)
+{
+    printUint64(num);
+}
+
+void print(unsigned long long num, int base)
+{
+    printUint64(num, base);
 }
 
 void print(double num)
@@ -550,6 +679,18 @@ void println(unsigned long num, int base)
         printf("%lX\n", num);
     else
         printf("%ld\n", num);
+}
+
+void println(unsigned long long num)
+{
+    printUint64(num);
+    println("");
+}
+
+void println(unsigned long long num, int base)
+{
+    printUint64(num, base);
+    println("");
 }
 
 void println(double num)

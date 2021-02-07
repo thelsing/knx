@@ -9,6 +9,10 @@
 #define MAXSAVE 5
 #define MAXTABLEOBJ 4
 
+#ifndef KNX_FLASH_SIZE
+# define KNX_FLASH_SIZE 1024
+#endif
+
 class MemoryBlock
 {
   public:
@@ -59,5 +63,5 @@ public:
     uint8_t _tableObjCount = 0;
     MemoryBlock* _freeList = nullptr;
     MemoryBlock* _usedList = nullptr;
-    uint16_t _metadataSize = 0;
+    uint16_t _metadataSize = 4 + LEN_HARDWARE_TYPE; // accounting for 2x pushWord and pushByteArray of length LEN_HARDWARE_TYPE
 };

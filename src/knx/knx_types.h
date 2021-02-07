@@ -22,7 +22,7 @@ enum AckType
 
 enum AddressType
 {
-    InduvidualAddress = 0,
+    IndividualAddress = 0,
     GroupAddress = 0x80,
 };
 
@@ -66,11 +66,36 @@ enum cEmiErrorCode
     Value_temp_not_writeable = 0x0A, // The Property exists but can at this moment not be written with a new value (W)
 };
 
+// Unified return codes for KNX services and functions
+// Note, that several older KNX services and functions do not use these return codes.
+enum ReturnCodes
+{
+    // Generic positive return codes
+    Success = 0x00,                 // service, function or command executed sucessfully
+    SuccessWithCrc = 0x01,          // positive message confirmation, CRC over original data
+    // Generic negative return codes
+    MemoryError = 0xF1,             // memory cannot be accessed or only with fault(s)
+    InvalidCommand = 0xF2,          // server does not support the requested command. ets: also non-existing or protected resource
+    ImpossibleCommand = 0xF3,       // command cannot be executed because a dependency is not fulfilled
+    ExceedsMaxApduLength  = 0xF4,   // data will not fit into a frame supported by this server
+    DataOverflow  = 0xF5,           // attempt to write data beyond what is reserved for the addressed resource
+    OutOfMinRange = 0xF6,           // write value below minimum supported value
+    OutOfMaxRange = 0xF7,           // write value exceeds maximum supported value
+    DataVoid = 0xF8,                // request contains invalid data
+    TemporarilyNotAvailable = 0xF9, // data access not possible at this time
+    AccessWriteOnly = 0xFA,         // read access to write-only resource
+    AccessReadOnly = 0xFB,          // write access to read-only resource
+    AccessDenied = 0xFC,            // access to recource is not allowed because of authorization/security
+    AddressVoid = 0xFD,             // resource is not present, address does not exist
+    DataTypeConflict = 0xFE,        // write access with wrong datatype (datapoint length)
+    GenericError = 0xFF             // service, function or command failed
+};
+
 enum Repetition
 {
     NoRepitiion = 0,
     WasRepeated = 0,
-    RepititionAllowed = 0x20,
+    RepetitionAllowed = 0x20,
     WasNotRepeated = 0x20,
 };
 
@@ -124,12 +149,30 @@ enum ApduType
     SystemNetworkParameterResponse = 0x1c9,
     SystemNetworkParameterWrite = 0x1ca,
     // Open media specific Application Layer Services on System Broadcast communication mode
+    DomainAddressWrite = 0x3e0,
+    DomainAddressRead = 0x3e1,
+    DomainAddressResponse = 0x3e2,
+    DomainAddressSelectiveRead = 0x3e3,
     DomainAddressSerialNumberRead = 0x3ec,
     DomainAddressSerialNumberResponse = 0x3ed,
     DomainAddressSerialNumberWrite = 0x3ee,
     
     // Application Layer Services on Point-to-point Connection-Oriented Communication Mode (mandatory)
     // Application Layer Services on Point-to-point Connectionless Communication Mode (either optional or mandatory)
+    PropertyValueExtRead = 0x1CC,
+    PropertyValueExtResponse = 0x1CD,
+    PropertyValueExtWriteCon = 0x1CE,
+    PropertyValueExtWriteConResponse = 0x1CF,
+    PropertyValueExtWriteUnCon = 0x1D0,
+    PropertyExtDescriptionRead = 0x1D2,
+    PropertyExtDescriptionResponse = 0x1D3,
+    FunctionPropertyExtCommand = 0x1D4,
+    FunctionPropertyExtState = 0x1D5,
+    FunctionPropertyExtStateResponse = 0x1D6,
+    MemoryExtWrite = 0x1FB,
+    MemoryExtWriteResponse = 0x1FC,
+    MemoryExtRead = 0x1FD,
+    MemoryExtReadResponse = 0x1FE,
     MemoryRead = 0x200,
     MemoryResponse = 0x240,
     MemoryWrite = 0x280,
@@ -138,9 +181,13 @@ enum ApduType
     UserMemoryWrite = 0x2C2,
     UserManufacturerInfoRead = 0x2C5,
     UserManufacturerInfoResponse = 0x2C6,
+    FunctionPropertyCommand = 0x2C7,
+    FunctionPropertyState = 0x2C8,
+    FunctionPropertyStateResponse = 0x2C9,
     DeviceDescriptorRead = 0x300,
     DeviceDescriptorResponse = 0x340,
     Restart = 0x380,
+    RestartMasterReset = 0x381,
     AuthorizeRequest = 0x3d1,
     AuthorizeResponse = 0x3d2,
     KeyWrite = 0x3d3,
@@ -150,4 +197,48 @@ enum ApduType
     PropertyValueWrite = 0x3d7,
     PropertyDescriptionRead = 0x3d8,
     PropertyDescriptionResponse = 0x3d9,
+
+    // Secure Service
+    SecureService = 0x3F1
+};
+
+enum DataSecurity
+{
+    None,
+    Auth,
+    AuthConf
+};
+
+struct SecurityControl
+{
+    bool toolAccess;
+    DataSecurity dataSecurity;
+};
+
+enum RestartType
+{
+    BasicRestart = 0x0,
+    MasterReset = 0x1
+};
+
+enum EraseCode
+{
+    Void = 0x00,
+    ConfirmedRestart = 0x01,
+    FactoryReset = 0x02,
+    ResetIA = 0x03,
+    ResetAP = 0x04,
+    ResetParam = 0x05,
+    ResetLinks = 0x06,
+    FactoryResetWithoutIA = 0x07
+};
+
+enum DptMedium
+{
+    // DPT_Medium (20.1004), range 0-255
+    // All other values are reserved.
+    KNX_TP1 = 0x00,
+    KNX_PL110 = 0x01,
+    KNX_RF = 0x02,
+    KNX_IP = 0x05
 };

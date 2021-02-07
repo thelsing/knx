@@ -39,9 +39,9 @@ void setup()
     {
         // register callback for reset GO
         goSwitch.callback(switchCallback);
-        goSwitch.dataPointType(Dpt(1, 0));
-        goBlock.dataPointType(Dpt(1, 0));
-        goStatus.dataPointType(Dpt(1, 0));
+        goSwitch.dataPointType(Dpt(1, 1));
+        goBlock.dataPointType(Dpt(1, 3));
+        goStatus.dataPointType(Dpt(1, 2));
     }
     
     // start the framework. Will get wifi first.

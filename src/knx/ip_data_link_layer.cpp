@@ -1,9 +1,11 @@
+#include "config.h"
+#ifdef USE_IP
+
 #include "ip_data_link_layer.h"
 
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
-#include "address_table_object.h"
 #include "knx_ip_routing_indication.h"
 #include "knx_ip_search_request.h"
 #include "knx_ip_search_response.h"
@@ -11,15 +13,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef USE_IP
-
 #define KNXIP_HEADER_LEN 0x6
 #define KNXIP_PROTOCOL_VERSION 0x10
 
 #define MIN_LEN_CEMI 10
 
-IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, IpParameterObject& ipParam, 
-    NetworkLayer& layer, Platform& platform) : DataLinkLayer(devObj, addrTab, layer, platform), _ipParameters(ipParam)
+IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam,
+    NetworkLayerEntity &netLayerEntity, Platform& platform) : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam)
 {
 }
 
@@ -58,7 +58,7 @@ void IpDataLinkLayer::loop()
         case RoutingIndication:
         {
             KnxIpRoutingIndication routingIndication(buffer, len);
-            frameRecieved(routingIndication.frame());
+            frameReceived(routingIndication.frame());
             break;
         }
         case SearchRequest:
@@ -79,7 +79,7 @@ void IpDataLinkLayer::loop()
 void IpDataLinkLayer::enabled(bool value)
 {
 //    _print("own address: ");
-//    _println(_deviceObject.induvidualAddress());
+//    _println(_deviceObject.individualAddress());
     if (value && !_enabled)
     {
         _platform.setupMultiCast(_ipParameters.propertyValue<uint32_t>(PID_ROUTING_MULTICAST_ADDRESS), KNXIP_MULTICAST_PORT);
@@ -100,6 +100,10 @@ bool IpDataLinkLayer::enabled() const
     return _enabled;
 }
 
+DptMedium IpDataLinkLayer::mediumType() const
+{
+    return DptMedium::KNX_IP;
+}
 
 bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 {

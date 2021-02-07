@@ -4,38 +4,43 @@
 #include "knx_types.h"
 #include "npdu.h"
 #include "transport_layer.h"
-class DataLinkLayer;
+#include "network_layer_entity.h"
+
+class DeviceObject;
+class APDU;
 
 class NetworkLayer
 {
+    friend class NetworkLayerEntity;
+
   public:
-    NetworkLayer(TransportLayer& layer);
+    NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer);
 
-    void dataLinkLayer(DataLinkLayer& layer);
     uint8_t hopCount() const;
-    void hopCount(uint8_t value);
-
-    // from data link layer
-    void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
-                        Priority priority, uint16_t source);
-    void dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority,
-                     uint16_t source, NPDU& npdu, bool status);
-    void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                             Priority priority, uint16_t source);
-    void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status);
-    void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                                   Priority priority, uint16_t source);
-    void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status);
+    bool isApciSystemBroadcast(APDU& apdu);
 
     // from transport layer
-    void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu);
-    void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu);
-    void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu);
-    void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu);
+    virtual void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) = 0;
+    virtual void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) = 0;
+    virtual void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) = 0;
+    virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) = 0;
+
+  protected:
+    DeviceObject& _deviceObj;
+    TransportLayer& _transportLayer;
+
+    // from entities
+    virtual void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
+                                Priority priority, uint16_t source, uint8_t srcIfIdx) = 0;
+    virtual void dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority,
+                             uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) = 0;
+    virtual void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+                                     Priority priority, uint16_t source, uint8_t srcIfIdx) = 0;
+    virtual void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) = 0;
+    virtual void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+                                           Priority priority, uint16_t source, uint8_t srcIfIdx) = 0;
+    virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) = 0;
 
   private:
-    void sendDataRequest(TPDU& tpdu, HopCountType hopType, AckType ack, uint16_t destination, Priority priority, AddressType addrType);
-    uint8_t _hopCount = 6;
-    DataLinkLayer* _dataLinkLayer = 0;
-    TransportLayer& _transportLayer;
+    uint8_t _hopCount; // Network Layer Parameter hop_count for the device's own outgoing frames (default value from PID_ROUTING_COUNT)
 };

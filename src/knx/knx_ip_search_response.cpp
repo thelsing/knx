@@ -1,5 +1,4 @@
 #include "knx_ip_search_response.h"
-
 #ifdef USE_IP
 
 #define SERVICE_FAMILIES 2
@@ -23,8 +22,8 @@ KnxIpSearchResponse::KnxIpSearchResponse(IpParameterObject& parameters, DeviceOb
     _deviceInfo.indiviudalAddress(parameters.propertyValue<uint16_t>(PID_KNX_INDIVIDUAL_ADDRESS));
     _deviceInfo.projectInstallationIdentifier(parameters.propertyValue<uint16_t>(PID_PROJECT_INSTALLATION_ID));
     _deviceInfo.serialNumber(deviceObject.propertyData(PID_SERIAL_NUMBER));
-    //_deviceInfo.routingMulticastAddress(parameters.propertyValue<uint32_t>(PID_ROUTING_MULTICAST_ADDRESS));
-    _deviceInfo.routingMulticastAddress(0);
+    _deviceInfo.routingMulticastAddress(parameters.propertyValue<uint32_t>(PID_ROUTING_MULTICAST_ADDRESS));
+    //_deviceInfo.routingMulticastAddress(0);
 
     uint8_t mac_address[LEN_MAC_ADDRESS] = {0};
     Property* prop = parameters.property(PID_MAC_ADDRESS);

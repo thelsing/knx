@@ -8,7 +8,7 @@ class EspPlatform : public ArduinoPlatform
 {
   public:
     EspPlatform();
-    EspPlatform( HardwareSerial* s);
+    EspPlatform(HardwareSerial* s);
 
     // ip stuff
     uint32_t currentIpAddress() override;

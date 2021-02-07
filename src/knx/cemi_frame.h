@@ -60,7 +60,7 @@ class CemiFrame
 #ifdef USE_RF
     // only for RF medium
     uint8_t* rfSerialOrDoA() const;
-    void rfSerialOrDoA(uint8_t* rfSerialOrDoA);
+    void rfSerialOrDoA(const uint8_t* rfSerialOrDoA);
     uint8_t rfInfo() const;
     void rfInfo(uint8_t rfInfo);
     uint8_t rfLfn() const;
@@ -89,4 +89,6 @@ class CemiFrame
     uint8_t  _rfInfo = 0;
     uint8_t  _rfLfn = 0xFF; // RF Data Link layer frame number
  #endif
+
+    uint8_t _sourceInterfaceIndex;
 };
