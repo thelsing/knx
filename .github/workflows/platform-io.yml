@@ -1,0 +1,30 @@
+name: PlatformIO CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        example: [path/to/test/file.c, examples/file.ino, path/to/test/directory]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python
+      uses: actions/setup-python@v1
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install platformio
+    - name: Build knx-usb
+      run: platformio ci --lib="." --project-conf=examples/knx-usb/platformio-ci.ini examples/knx-usb/src/main.cpp
+    - name: Build knx-demo
+      run: platformio ci --lib="." --project-conf=examples/knx-demo/platformio-ci.ini examples/knx-demo/knx-demo.ino
+    - name: Build knx-demo-coupler
+      run: platformio ci --lib="." --project-conf=examples/knx-demo-coupler/platformio-ci.ini examples/knx-demo-coupler/knx-demo-coupler.ino
+ #   - name: Run PlatformIO
+ #     run: pio ci --board=<ID_1> --board=<ID_2> --board=<ID_N>
+ #     env:
+ #       PLATFORMIO_CI_SRC: ${{ matrix.example }}

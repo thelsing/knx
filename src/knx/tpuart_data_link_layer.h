@@ -1,23 +1,33 @@
 #pragma once
 
+#include "config.h"
+#ifdef USE_TP
+
 #include <stdint.h>
 #include "data_link_layer.h"
 
 #define MAX_KNX_TELEGRAM_SIZE 263
 
+class ITpUartCallBacks
+{
+public:
+    virtual ~ITpUartCallBacks() = default;
+    virtual bool isAckRequired(uint16_t address, bool isGrpAddr) = 0;
+};
+
 class TpUartDataLinkLayer : public DataLinkLayer
 {
     using DataLinkLayer::_deviceObject;
-    using DataLinkLayer::_groupAddressTable;
     using DataLinkLayer::_platform;
 
   public:
-    TpUartDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, NetworkLayer& layer,
-                        Platform& platform);
+    TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
+                        Platform& platform, ITpUartCallBacks& cb);
 
     void loop();
     void enabled(bool value);
     bool enabled() const;
+    virtual DptMedium mediumType() const override;
 
   private:
     bool _enabled = false;
@@ -35,6 +45,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     uint8_t _xorSum = 0;
     uint32_t _lastByteRxTime;
     uint32_t _waitConfirmStartTime;
+    uint32_t _lastResetChipTime = 0;
 
     struct _tx_queue_frame_t
     {
@@ -58,4 +69,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     void dataConBytesReceived(uint8_t* buffer, uint16_t length, bool success);
     bool resetChip();
     void stopChip();
+
+    ITpUartCallBacks& _cb;
 };
+#endif

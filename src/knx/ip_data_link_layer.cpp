@@ -1,10 +1,14 @@
+#include "config.h"
+#ifdef USE_IP
+
 #include "ip_data_link_layer.h"
 
 #include "bits.h"
 #include "platform.h"
 #include "device_object.h"
-#include "address_table_object.h"
-#include "cemi_frame.h"
+#include "knx_ip_routing_indication.h"
+#include "knx_ip_search_request.h"
+#include "knx_ip_search_response.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -12,32 +16,21 @@
 #define KNXIP_HEADER_LEN 0x6
 #define KNXIP_PROTOCOL_VERSION 0x10
 
-#define ROUTING_INDICATION 0x0530
-
-#define KNXIP_MULTICAST_PORT 3671
 #define MIN_LEN_CEMI 10
 
-IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, AddressTableObject& addrTab, IpParameterObject& ipParam, 
-    NetworkLayer& layer, Platform& platform) : DataLinkLayer(devObj, addrTab, layer, platform), _ipParameters(ipParam)
+IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam,
+    NetworkLayerEntity &netLayerEntity, Platform& platform) : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam)
 {
 }
 
 bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
 {
-    uint16_t length = frame.totalLenght() + KNXIP_HEADER_LEN;
-    uint8_t* buffer = new uint8_t[length];
-    buffer[0] = KNXIP_HEADER_LEN;
-    buffer[1] = KNXIP_PROTOCOL_VERSION;
-    pushWord(ROUTING_INDICATION, buffer + 2);
-    pushWord(length, buffer + 4);
-
-    memcpy(buffer + KNXIP_HEADER_LEN, frameData(frame), frame.totalLenght());
+    KnxIpRoutingIndication packet(frame);
     
-    bool success = sendBytes(buffer, length);
+    bool success = sendBytes(packet.data(), packet.totalLength());
     // only send 50 packet per second: see KNX 3.2.6 p.6
     delay(20);
     dataConReceived(frame, success);
-    delete[] buffer;
     return success;
 }
 
@@ -47,7 +40,7 @@ void IpDataLinkLayer::loop()
         return;
 
     uint8_t buffer[512];
-    int len = _platform.readBytes(buffer, 512);
+    int len = _platform.readBytesMultiCast(buffer, 512);
     if (len <= 0)
         return;
 
@@ -60,24 +53,36 @@ void IpDataLinkLayer::loop()
 
     uint16_t code;
     popWord(code, buffer + 2);
-    if (code != ROUTING_INDICATION) // only routing indication for now
-        return;
-    
-    if (len < MIN_LEN_CEMI)
-        return;
+    switch ((KnxIpServiceType)code)
+    {
+        case RoutingIndication:
+        {
+            KnxIpRoutingIndication routingIndication(buffer, len);
+            frameReceived(routingIndication.frame());
+            break;
+        }
+        case SearchRequest:
+        {
+            KnxIpSearchRequest searchRequest(buffer, len);
+            KnxIpSearchResponse searchResponse(_ipParameters, _deviceObject);
 
-    //TODO: Check correct length (additions Info + apdu length)
-    CemiFrame frame(buffer + KNXIP_HEADER_LEN, len - KNXIP_HEADER_LEN);
-    frameRecieved(frame);
+            auto hpai = searchRequest.hpai();
+            _platform.sendBytesUniCast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
+            break;
+        }
+        default:
+            print("Unhandled service identifier: ");
+            println(code, HEX);
+    }
 }
 
 void IpDataLinkLayer::enabled(bool value)
 {
 //    _print("own address: ");
-//    _println(_deviceObject.induvidualAddress());
+//    _println(_deviceObject.individualAddress());
     if (value && !_enabled)
     {
-        _platform.setupMultiCast(_ipParameters.multicastAddress(), KNXIP_MULTICAST_PORT);
+        _platform.setupMultiCast(_ipParameters.propertyValue<uint32_t>(PID_ROUTING_MULTICAST_ADDRESS), KNXIP_MULTICAST_PORT);
         _enabled = true;
         return;
     }
@@ -95,11 +100,16 @@ bool IpDataLinkLayer::enabled() const
     return _enabled;
 }
 
+DptMedium IpDataLinkLayer::mediumType() const
+{
+    return DptMedium::KNX_IP;
+}
 
 bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
 {
     if (!_enabled)
         return false;
 
-    return _platform.sendBytes(bytes, length);
+    return _platform.sendBytesMultiCast(bytes, length);
 }
+#endif

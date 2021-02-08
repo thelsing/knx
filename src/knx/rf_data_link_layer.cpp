@@ -1,6 +1,11 @@
-#if MEDIUM_TYPE == 2
+#include "config.h"
+#ifdef USE_RF
 
-#include "rf_physical_layer.h"
+#if defined(DeviceFamily_CC13X0)
+  #include "rf_physical_layer_cc1310.h"
+#else
+  #include "rf_physical_layer_cc1101.h"
+#endif
 #include "rf_data_link_layer.h"
 
 #include "bits.h"
@@ -23,30 +28,40 @@ void RfDataLinkLayer::loop()
 
 bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
 {
-    if (!_enabled)
-        return false;
-
-    // Depending on this flag, use either KNX Serial Number
-    // or the RF domain address that was programmed by ETS
-    if (frame.systemBroadcast() == SysBroadcast)
+    // If no serial number of domain address was set,
+    // use our own SN/DoA
+    if (frame.rfSerialOrDoA() == nullptr)
     {
-        uint8_t knxSerialNumber[6];
-        pushWord(_deviceObject.manufacturerId(), &knxSerialNumber[0]);
-        pushInt(_deviceObject.bauNumber(), &knxSerialNumber[2]);
-        frame.rfSerialOrDoA(&knxSerialNumber[0]);
-    }
-    else
-    {
-        frame.rfSerialOrDoA(_rfMediumObj.rfDomainAddress());
+        // Depending on this flag, use either KNX Serial Number
+        // or the RF domain address that was programmed by ETS
+        if (frame.systemBroadcast() == SysBroadcast)
+        {
+            frame.rfSerialOrDoA((uint8_t*)_deviceObject.propertyData(PID_SERIAL_NUMBER));
+        }
+        else
+        {
+            frame.rfSerialOrDoA(_rfMediumObj.rfDomainAddress());
+        }
     }
 
-    // Set Data Link Layer Frame Number
-    frame.rfLfn(_frameNumber);
-    // Link Layer frame number counts 0..7
-    _frameNumber = (_frameNumber + 1) & 0x7; 
+    // If Link Layer frame is set to 0xFF,
+    // use our own counter
+    if (frame.rfLfn() == 0xFF)
+    {
+        // Set Data Link Layer Frame Number
+        frame.rfLfn(_frameNumber);
+        // Link Layer frame number counts 0..7
+        _frameNumber = (_frameNumber + 1) & 0x7;
+    }
 
     // bidirectional device, battery is ok, signal strength indication is void (no measurement)
-    frame.rfInfo(0x02); 
+    frame.rfInfo(0x02);
+
+    if (!_enabled)
+    {
+        dataConReceived(frame, false);
+        return false;
+    }
 
     // TODO: Is queueing really required?
     // According to the spec. the upper layer may only send a new L_Data.req if it received
@@ -62,33 +77,12 @@ bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
     return true;
 }
 
-RfDataLinkLayer::RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj, AddressTableObject& addrTab,
-                                         NetworkLayer& layer, Platform& platform)
-    : DataLinkLayer(devObj, addrTab, layer, platform),
+RfDataLinkLayer::RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj,
+                                         NetworkLayerEntity &netLayerEntity, Platform& platform)
+    : DataLinkLayer(devObj, netLayerEntity, platform),
       _rfMediumObj(rfMediumObj),
       _rfPhy(*this, platform)
 {
-}
-
-uint16_t RfDataLinkLayer::calcCrcRF(uint8_t* buffer, uint32_t offset, uint32_t len)
-{
-        // CRC-16-DNP
-        // generator polynomial = 2^16 + 2^13 + 2^12 + 2^11 + 2^10 + 2^8 + 2^6 + 2^5 + 2^2 + 2^0
-        uint32_t pn = 0x13d65; // 1 0011 1101 0110 0101
-
-        // for much data, using a lookup table would be a way faster CRC calculation
-        uint32_t crc = 0;
-        for (uint32_t i = offset; i < offset + len; i++) {
-            uint8_t bite = buffer[i] & 0xff;
-            for (uint8_t b = 8; b --> 0;) {
-                bool bit = ((bite >> b) & 1) == 1;
-                bool one = (crc >> 15 & 1) == 1;
-                crc <<= 1;
-                if (one ^ bit)
-                    crc ^= pn;
-            }
-        }
-        return (~crc) & 0xffff;
 }
 
 void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
@@ -104,16 +98,24 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
         return;
     }
 
+#if defined(DeviceFamily_CC13X0)
+        // Small optimization:
+        // We do not calculate the CRC16-DNP again for the first block.
+        // It was already done in the CC13x0 RX driver during reception.
+        // Also the two fixed bytes 0x44 and 0xFF are also there.
+        // So if we get here we can assume a valid block 1
+#else        
     // CRC16-DNP of first block is always located here
     uint16_t block1Crc = rfPacketBuf[10] << 8 | rfPacketBuf[11];
-
+    
     // If the checksum was ok and the other
     // two constant header bytes match the KNX-RF spec. (C-field: 0x44 and ESC-field: 0xFF)...
     // then we seem to have a valid first block of an KNX RF frame.
     // The first block basically contains the RF-info field and the KNX SN/Domain address.
     if ((rfPacketBuf[1] == 0x44) &&
         (rfPacketBuf[2] == 0xFF) &&
-        (calcCrcRF(rfPacketBuf, 0, 10) == block1Crc))
+        (crc16Dnp(rfPacketBuf, 10) == block1Crc))
+#endif        
     {
         // bytes left from the remaining block(s)
         uint16_t bytesLeft = length - 12;
@@ -136,7 +138,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
         {
             // Get CRC16 from end of the block
             blockCrc = pRfPacketBuf[16] << 8 | pRfPacketBuf[17];
-            if (calcCrcRF(pRfPacketBuf, 0, 16) == blockCrc)
+            if (crc16Dnp(pRfPacketBuf, 16) == blockCrc)
             {
                 // Copy only the payload without the checksums
                 memcpy(pBuffer, pRfPacketBuf, 16);
@@ -154,7 +156,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
 
         // Now process the last block
         blockCrc = pRfPacketBuf[bytesLeft - 2] << 8 | pRfPacketBuf[bytesLeft - 1];
-        crcOk = crcOk && (calcCrcRF(&pRfPacketBuf[0], 0, bytesLeft -2) == blockCrc);
+        crcOk = crcOk && (crc16Dnp(&pRfPacketBuf[0], bytesLeft -2) == blockCrc);
 
         // If all checksums were ok, then...
         if (crcOk)
@@ -166,7 +168,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             // Prepare CEMI by writing/overwriting certain fields in the buffer (contiguous frame without CRC checksums)
             // See 3.6.3 p.79: L_Data services for KNX RF asynchronous frames 
             // For now we do not use additional info, but use normal method arguments for CEMI
-            _buffer[0] = 0x29;  // L_data.ind
+            _buffer[0] = (uint8_t) L_data_ind;  // L_data.ind
             _buffer[1] = 0;     // Additional info length (spec. says that local dev management is not required to use AddInfo internally)
             _buffer[2] = 0;     // CTRL1 field (will be set later, this is the field we reserved space for)
             _buffer[3] &= 0x0F; // CTRL2 field (take only RFCtrl.b3..0, b7..4 shall always be 0 for asynchronous KNX RF)
@@ -176,7 +178,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             // Get data link layer frame number (LFN field) from L/NPCI.LFN (bit 3..1)
             uint8_t lfn = (_buffer[8] & 0x0E) >> 1;
             // Get address type from L/NPCI.LFN (bit 7)
-            AddressType addressType = (_buffer[8] & 0x80) ? GroupAddress:InduvidualAddress;
+            AddressType addressType = (_buffer[8] & 0x80) ? GroupAddress:IndividualAddress;
             // Get routing counter from L/NPCI.LFN (bit 6..4) and map to hop count in Ctrl2.b6-4
             uint8_t hopCount = (_buffer[8] & 0x70) >> 4;
             // Get AddrExtensionType from L/NPCI.LFN (bit 7) and map to system broadcast flag in Ctrl1.b4
@@ -190,7 +192,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             // then we received the domain address and not the KNX serial number
             if (systemBroadcast == Broadcast)
             {
-                // Check if  the received RF domain address matches the one stored in the RF medium object
+                // Check if the received RF domain address matches the one stored in the RF medium object
                 // If it does not match then skip the remaining processing
                 if (memcmp(_rfMediumObj.rfDomainAddress(), &rfPacketBuf[4], 6))
                 {
@@ -222,7 +224,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             print(" data: ");
             printHex(" data: ", _buffer, newLength);
 */
-            frameRecieved(frame);
+            frameReceived(frame);
         }
     }
 }
@@ -235,7 +237,7 @@ void RfDataLinkLayer::enabled(bool value)
         {
             _enabled = true;
             print("ownaddr ");
-            println(_deviceObject.induvidualAddress(), HEX);
+            println(_deviceObject.individualAddress(), HEX);
         }
         else
         {
@@ -258,6 +260,11 @@ bool RfDataLinkLayer::enabled() const
     return _enabled;
 }
 
+DptMedium RfDataLinkLayer::mediumType() const
+{
+    return DptMedium::KNX_RF;
+}
+
 void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
 {
     uint16_t crc;
@@ -270,7 +277,7 @@ void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
 
     // Generate CRC16-DNP over the first block of data
     pushByteArray(frame.rfSerialOrDoA(), 6, &data[4]);
-    crc = calcCrcRF(&data[0], 0, 10);
+    crc = crc16Dnp(&data[0], 10);
     pushWord(crc, &data[10]);
 
     // Put the complete KNX telegram into a temporary buffer
@@ -284,7 +291,7 @@ void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
     while (bytesLeft > 16)
     {
         memcpy(pData, pBuffer, 16);
-        crc = calcCrcRF(pData, 0, 16);
+        crc = crc16Dnp(pData, 16);
         pushWord(crc, &pData[16]);
 
         pBuffer += 16;
@@ -295,7 +302,7 @@ void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
     // Copy remaining bytes of last block. Could be less than 16 bytes
     memcpy(pData, pBuffer, bytesLeft);
     // And add last CRC
-    crc = calcCrcRF(pData, 0, bytesLeft);
+    crc = crc16Dnp(pData, bytesLeft);
     pushWord(crc, &pData[bytesLeft]);
 }
 
@@ -366,4 +373,4 @@ void RfDataLinkLayer::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuffer
     delete tx_frame;
 }
 
-#endif // #if MEDIUM_TYPE == 2
+#endif

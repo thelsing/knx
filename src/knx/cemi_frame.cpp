@@ -69,9 +69,9 @@ Control Field 1
 */ 
 
 CemiFrame::CemiFrame(uint8_t* data, uint16_t length)
-    : _npdu(data + NPDU_LPDU_DIFF, *this), 
-      _tpdu(data + TPDU_LPDU_DIFF, *this), 
-      _apdu(data + APDU_LPDU_DIFF, *this)
+    : _npdu(data + data[1] + NPDU_LPDU_DIFF, *this), 
+      _tpdu(data + data[1] + TPDU_LPDU_DIFF, *this), 
+      _apdu(data + data[1] + APDU_LPDU_DIFF, *this)
 {
     _data = data;
     _ctrl1 = data + data[1] + CEMI_HEADER_SIZE;
@@ -160,6 +160,8 @@ void CemiFrame::fillTelegramTP(uint8_t* data)
     data[len - 1] = calcCrcTP(data, len - 1);
 }
 
+#ifdef USE_RF
+
 uint16_t CemiFrame::telegramLengthtRF() const
 {
     return totalLenght() - 3;
@@ -182,6 +184,16 @@ void CemiFrame::fillTelegramRF(uint8_t* data)
     memcpy(data + 6, _ctrl1 + 7, len - 6); // APDU
 
     //printHex("cEMI_fill: ", &data[0], len);
+}
+#endif
+uint8_t* CemiFrame::data()
+{
+    return _data;
+}
+
+uint16_t CemiFrame::dataLength()
+{
+    return _length;
 }
 
 uint8_t CemiFrame::calcCrcTP(uint8_t * buffer, uint16_t len)
@@ -207,12 +219,12 @@ void CemiFrame::frameType(FrameFormat type)
 
 Repetition CemiFrame::repetition() const
 {
-    return (Repetition)(_ctrl1[0] & RepititionAllowed);
+    return (Repetition)(_ctrl1[0] & RepetitionAllowed);
 }
 
 void CemiFrame::repetition(Repetition rep)
 {
-    _ctrl1[0] &= ~RepititionAllowed;
+    _ctrl1[0] &= ~RepetitionAllowed;
     _ctrl1[0] |= rep;
 }
 
@@ -246,6 +258,17 @@ AckType CemiFrame::ack() const
 void CemiFrame::ack(AckType value)
 {
     _ctrl1[0] &= ~AckRequested;
+    _ctrl1[0] |= value;
+}
+
+Confirm CemiFrame::confirm() const
+{
+    return (Confirm)(_ctrl1[0] & ConfirmError);
+}
+
+void CemiFrame::confirm(Confirm value)
+{
+    _ctrl1[0] &= ~ConfirmError;
     _ctrl1[0] |= value;
 }
 
@@ -294,15 +317,15 @@ void CemiFrame::destinationAddress(uint16_t value)
 {
     pushWord(value, _ctrl1 + 4);
 }
-
+#ifdef USE_RF
 uint8_t* CemiFrame::rfSerialOrDoA() const
 {
     return _rfSerialOrDoA;
 }
 
-void CemiFrame::rfSerialOrDoA(uint8_t* rfSerialOrDoA)
+void CemiFrame::rfSerialOrDoA(const uint8_t* rfSerialOrDoA)
 {
-    _rfSerialOrDoA = rfSerialOrDoA;
+    _rfSerialOrDoA = (uint8_t*)rfSerialOrDoA;
 }
 
 uint8_t CemiFrame::rfInfo() const
@@ -324,7 +347,7 @@ void CemiFrame::rfLfn(uint8_t rfLfn)
 {
     _rfLfn = rfLfn;
 }
-
+#endif
 NPDU& CemiFrame::npdu()
 {
     return _npdu;
@@ -343,7 +366,7 @@ APDU& CemiFrame::apdu()
 bool CemiFrame::valid() const
 {
     uint8_t addInfoLen = _data[1];
-    uint8_t apduLen = _data[1 + _data[1] + NPDU_LPDU_DIFF];
+    uint8_t apduLen = _data[_data[1] + NPDU_LPDU_DIFF];
 
     if (_length != 0 && _length != (addInfoLen + apduLen + NPDU_LPDU_DIFF + 2))
         return false;

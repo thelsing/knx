@@ -5,6 +5,7 @@
 #include "npdu.h"
 #include "tpdu.h"
 #include "apdu.h"
+#include "config.h"
 
 #define NPDU_LPDU_DIFF 8
 #define TPDU_NPDU_DIFF 1
@@ -32,6 +33,8 @@ class CemiFrame
     void fillTelegramTP(uint8_t* data);
     uint16_t telegramLengthtRF() const;
     void fillTelegramRF(uint8_t* data);
+    uint8_t* data();
+    uint16_t dataLength();
 
     FrameFormat frameType() const;
     void frameType(FrameFormat value);
@@ -43,6 +46,8 @@ class CemiFrame
     void priority(Priority value);
     AckType ack() const;
     void ack(AckType value);
+    Confirm confirm() const;
+    void confirm(Confirm value);
     AddressType addressType() const;
     void addressType(AddressType value);
     uint8_t hopCount() const;
@@ -52,14 +57,15 @@ class CemiFrame
     uint16_t destinationAddress() const;
     void destinationAddress(uint16_t value);
 
+#ifdef USE_RF
     // only for RF medium
     uint8_t* rfSerialOrDoA() const;
-    void rfSerialOrDoA(uint8_t* rfSerialOrDoA);
+    void rfSerialOrDoA(const uint8_t* rfSerialOrDoA);
     uint8_t rfInfo() const;
     void rfInfo(uint8_t rfInfo);
     uint8_t rfLfn() const;
     void rfLfn(uint8_t rfInfo);
-
+#endif
     NPDU& npdu();
     TPDU& tpdu();
     APDU& apdu();
@@ -76,8 +82,13 @@ class CemiFrame
     APDU _apdu;
     uint16_t _length = 0; // only set if created from byte array
 
-    // nly for RF medium
+#ifdef USE_RF
+    // FIXME: integrate this propery in _data
+    // only for RF medium
     uint8_t* _rfSerialOrDoA = 0;
     uint8_t  _rfInfo = 0;
-    uint8_t  _rfLfn = 0; // RF Data Link layer frame number
+    uint8_t  _rfLfn = 0xFF; // RF Data Link layer frame number
+ #endif
+
+    uint8_t _sourceInterfaceIndex;
 };

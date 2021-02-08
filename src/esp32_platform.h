@@ -6,11 +6,9 @@
 
 class Esp32Platform : public ArduinoPlatform
 {
-    using ArduinoPlatform::_mulitcastAddr;
-    using ArduinoPlatform::_mulitcastPort;
 public:
     Esp32Platform();
-    Esp32Platform( HardwareSerial* s);
+    Esp32Platform(HardwareSerial* s);
 
     // ip stuff
     uint32_t currentIpAddress() override;
@@ -24,8 +22,8 @@ public:
     //multicast
     void setupMultiCast(uint32_t addr, uint16_t port) override;
     void closeMultiCast() override;
-    bool sendBytes(uint8_t* buffer, uint16_t len) override;
-    int readBytes(uint8_t* buffer, uint16_t maxLen) override;
+    bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
+    int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
     
     //memory
     uint8_t* getEepromBuffer(uint16_t size);

@@ -3,27 +3,21 @@
 #include "group_object_table_object.h"
 #include "group_object.h"
 #include "bits.h"
+#include "data_property.h"
 
-GroupObjectTableObject::GroupObjectTableObject(Platform& platform)
-    : TableObject(platform)
+GroupObjectTableObject::GroupObjectTableObject(Memory& memory)
+    : TableObject(memory)
 {
+    Property* properties[]
+    {
+        new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_GRP_OBJ_TABLE)
+    };
+    TableObject::initializeProperties(sizeof(properties), properties);
 }
 
 GroupObjectTableObject::~GroupObjectTableObject()
 {
     freeGroupObjects();
-}
-
-void GroupObjectTableObject::readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data)
-{
-    switch (id)
-    {
-    case PID_OBJECT_TYPE:
-        pushWord(OT_GRP_OBJ_TABLE, data);
-        break;
-    default:
-        TableObject::readProperty(id, start, count, data);
-    }
 }
 
 uint16_t GroupObjectTableObject::entryCount()
@@ -34,21 +28,12 @@ uint16_t GroupObjectTableObject::entryCount()
     return ntohs(_tableData[0]);
 }
 
-
-
 GroupObject& GroupObjectTableObject::get(uint16_t asap)
 {
     return _groupObjects[asap - 1];
 }
 
-
-uint8_t* GroupObjectTableObject::save(uint8_t* buffer)
-{
-    return TableObject::save(buffer);
-}
-
-
-uint8_t* GroupObjectTableObject::restore(uint8_t* buffer)
+const uint8_t* GroupObjectTableObject::restore(const uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
 
@@ -131,26 +116,6 @@ bool GroupObjectTableObject::initGroupObjects()
     }
 
     return true;
-}
-
-static PropertyDescription _propertyDescriptions[] = 
-{
-    { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 },
-    { PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3 },
-    { PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0 },
-    { PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0 },
-};
-static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
-
-uint8_t GroupObjectTableObject::propertyCount()
-{
-    return _propertyCount;
-}
-
-
-PropertyDescription* GroupObjectTableObject::propertyDescriptions()
-{
-    return _propertyDescriptions;
 }
 
 void GroupObjectTableObject::freeGroupObjects()

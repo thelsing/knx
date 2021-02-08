@@ -2,35 +2,30 @@
 
 #include "interface_object.h"
 
+#define LEN_HARDWARE_TYPE 6
+
 class DeviceObject: public InterfaceObject
 {
 public:
-    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    void writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count);
-    uint8_t propertySize(PropertyID id);
-    uint8_t* save(uint8_t* buffer);
-    uint8_t* restore(uint8_t* buffer);
-    void readPropertyDescription(uint8_t propertyId, uint8_t& propertyIndex, bool& writeEnable, uint8_t& type, uint16_t& numberOfElements, uint8_t& access);
+    DeviceObject();
+    uint8_t* save(uint8_t* buffer) override;
+    const uint8_t* restore(const uint8_t* buffer) override;
+    uint16_t saveSize() override;
 
+    uint16_t individualAddress();
+    void individualAddress(uint16_t value);
 
-    uint16_t induvidualAddress();
-    void induvidualAddress(uint16_t value);
-    bool userStopped();
-    void userStopped(bool value);
-    bool induvidualAddressDuplication();
-    void induvidualAddressDuplication(bool value);
+    void individualAddressDuplication(bool value);
     bool verifyMode();
     void verifyMode(bool value);
-    bool safeState();
-    void safeState(bool value);
     bool progMode();
     void progMode(bool value);
     uint16_t manufacturerId();
     void manufacturerId(uint16_t value);
     uint32_t bauNumber();
     void bauNumber(uint32_t value);
-    const char* orderNumber();
-    void orderNumber(const char* value);
+    const uint8_t* orderNumber();
+    void orderNumber(const uint8_t* value);
     const uint8_t* hardwareType();
     void hardwareType(const uint8_t* value);
     uint16_t version();
@@ -39,22 +34,10 @@ public:
     void maskVersion(uint16_t value);
     uint16_t maxApduLength();
     void maxApduLength(uint16_t value);
-    const uint32_t* ifObj();
-    void ifObj(const uint32_t* value);
-protected:
-    uint8_t propertyCount();
-    PropertyDescription* propertyDescriptions();
+    const uint8_t* rfDomainAddress();
+    void rfDomainAddress(uint8_t* value);
+    uint8_t defaultHopCount();
 private:
-    uint8_t _deviceControl = 0;
-    uint8_t _routingCount = 0;
     uint8_t _prgMode = 0;
     uint16_t _ownAddress = 0;
-    uint16_t _manufacturerId = 0xfa; //Default to KNXA
-    uint32_t _bauNumber = 0;
-    char _orderNumber[10] = "";
-    uint8_t _hardwareType[6] = { 0, 0, 0, 0, 0, 0};
-    uint16_t _version = 0;
-    uint16_t _maskVersion = 0x0000;
-    uint16_t _maxApduLength = 254;
-    const uint32_t* _ifObjs;
 };

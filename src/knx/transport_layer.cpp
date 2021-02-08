@@ -7,8 +7,8 @@
 #include "bits.h"
 #include <stdio.h>
 
-TransportLayer::TransportLayer(ApplicationLayer& layer, AddressTableObject& gat): _savedFrame(0), 
-    _savedFrameConnecting(0), _applicationLayer(layer), _groupAddressTable(gat)
+TransportLayer::TransportLayer(ApplicationLayer& layer): _savedFrame(0),
+    _savedFrameConnecting(0), _applicationLayer(layer)
 {
     _currentState = Closed;
 }
@@ -16,6 +16,11 @@ TransportLayer::TransportLayer(ApplicationLayer& layer, AddressTableObject& gat)
 void TransportLayer::networkLayer(NetworkLayer& layer)
 {
     _networkLayer = &layer;
+}
+
+void TransportLayer::groupAddressTable(AddressTableObject &addrTable)
+{
+    _groupAddressTable = &addrTable;
 }
 
 void TransportLayer::dataIndividualIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
@@ -210,6 +215,8 @@ void TransportLayer::dataIndividualIndication(uint16_t destination, HopCountType
             case Connecting:
                 A10(source);
                 break;
+            default: /* do nothing */
+                break;
             }
         }
         break;
@@ -351,12 +358,18 @@ void TransportLayer::dataIndividualConfirm(AckType ack, uint16_t destination, Ho
         //E24
         //A0: do nothing
         break;
+    default:
+        break;
+        /* DataGroup and DataBroadcast should not appear here. If they do ignore them. */
     }
 }
 
 void TransportLayer::dataGroupIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
 {
-    uint16_t tsap = _groupAddressTable.getTsap(destination);
+    if (_groupAddressTable == nullptr)
+        return;
+
+    uint16_t tsap = _groupAddressTable->getTsap(destination);
     if (tsap == 0)
         return;
     
@@ -390,7 +403,10 @@ void TransportLayer::dataSystemBroadcastConfirm(AckType ack, HopCountType hopTyp
 
 void TransportLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu)
 {
-    uint16_t groupAdress = _groupAddressTable.getGroupAddress(tsap);
+    if (_groupAddressTable == nullptr)
+        return;
+
+    uint16_t groupAdress = _groupAddressTable->getGroupAddress(tsap);
     TPDU& tpdu = apdu.frame().tpdu();
     _networkLayer->dataGroupRequest(ack, groupAdress, hopType, priority, tpdu);
 }
@@ -525,7 +541,19 @@ void TransportLayer::ackTimeoutIndication()
     }
 }
 
+// Note: we should probably also add the TSAP as argument if would support multiple concurrent connections
+uint8_t TransportLayer::getTpciSeqNum()
+{
+    // Return seqNum that would be used for sending next frame
+    // together with the TPDU type.
+    return ((_seqNoSend & 0xF) << 2);
+}
 
+// Note: we should probably also add the TSAP as argument if would support multiple concurrent connections
+uint16_t TransportLayer::getConnectionAddress()
+{
+    return _connectionAddress;
+}
 
 void TransportLayer::loop()
 {

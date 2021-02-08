@@ -5,19 +5,15 @@
 class AssociationTableObject : public TableObject
 {
   public:
-    AssociationTableObject(Platform& platform);
-    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
+    AssociationTableObject(Memory& memory);
 
-    uint8_t* save(uint8_t* buffer);
-    uint8_t* restore(uint8_t* buffer);
+    const uint8_t* restore(const uint8_t* buffer) override;
 
     int32_t translateAsap(uint16_t asap);
     int32_t nextAsap(uint16_t tsap, uint16_t& startIdx);
 
   protected:
-    void beforeStateChange(LoadState& newState);
-    uint8_t propertyCount();
-    PropertyDescription* propertyDescriptions();
+    void beforeStateChange(LoadState& newState) override;
 
   private:
     uint16_t entryCount();

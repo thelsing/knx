@@ -1,128 +1,60 @@
+#include "config.h"
+#ifdef USE_RF
+
 #include <cstring>
 #include "rf_medium_object.h"
 #include "bits.h"
+#include "data_property.h"
+#include "function_property.h"
 
-void RfMediumObject::readProperty(PropertyID propertyId, uint32_t start, uint32_t& count, uint8_t* data)
+RfMediumObject::RfMediumObject()
 {
-    switch (propertyId)
+    uint8_t rfDomainAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // see KNX RF S-Mode AN160 p.11
+    Property* properties[] =
     {
-        case PID_OBJECT_TYPE:
-            pushWord(OT_RF_MEDIUM, data);
-            break;
-        case PID_RF_MULTI_TYPE:
-            data[0] = 0x00; // KNX RF ready only
-            break;
-        case PID_RF_DOMAIN_ADDRESS:
-            pushByteArray((uint8_t*)_rfDomainAddress, 6, data);
-            break;
-        case PID_RF_RETRANSMITTER:
-            data[0] = 0x00; // No KNX RF retransmitter
-            break;
-        case PID_RF_BIDIR_TIMEOUT: // PDT_FUNCTION
-            data[0] = 0x00; // success
-            data[1] = 0xFF; // permanent bidirectional device
-            data[2] = 0xFF; // permanent bidirectional device
-            break;
-        case PID_RF_DIAG_SA_FILTER_TABLE: // PDT_GENERIC_03[]
-            pushByteArray((uint8_t*)_rfDiagSourceAddressFilterTable, 24, data);
-            break;
-        case PID_RF_DIAG_BUDGET_TABLE:
-            pushByteArray((uint8_t*)_rfDiagLinkBudgetTable, 24, data);
-            break;
-        case PID_RF_DIAG_PROBE: // PDT_FUNCTION
-            // Not supported yet
-            break;
-        default:
-            count = 0;
-    }
+        new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_RF_MEDIUM),
+        new DataProperty(PID_RF_MULTI_TYPE, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv2, (uint8_t)0x00),
+        new DataProperty(PID_RF_RETRANSMITTER, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint8_t)0x00),
+        new DataProperty(PID_RF_DOMAIN_ADDRESS, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv2, rfDomainAddress),
+        new FunctionProperty<RfMediumObject>(this, PID_RF_BIDIR_TIMEOUT, 
+            [](RfMediumObject* io, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+            {
+                resultData[0] = 0x00; // success
+                resultData[1] = 0xFF; // permanent bidirectional device
+                resultData[2] = 0xFF; // permanent bidirectional device
+                resultLength = 3;
+            }, 
+            [](RfMediumObject* io, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+            {
+                resultData[0] = 0x00; // success
+                resultData[1] = 0xFF; // permanent bidirectional device
+                resultData[2] = 0xFF; // permanent bidirectional device
+                resultLength = 3;
+            }), 
+/*      This properties are used in NMP_LinkBudget_Measure to diagnose the Link Budget of the communication.
+        This in not implemented yet.
+        new DataProperty(PID_RF_DIAG_SA_FILTER_TABLE, true, PDT_GENERIC_03, 8, ReadLv3 | WriteLv3),
+        new DataProperty(PID_RF_DIAG_BUDGET_TABLE, false, PDT_GENERIC_03, 8, ReadLv3 | WriteLv0),
+        new FunctionProperty<RfMediumObject>(this, PID_RF_DIAG_PROBE, 
+            [](RfMediumObject* io, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+            {
+            }, 
+            [](RfMediumObject* io, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
+            {
+            }), */
+    };
+    initializeProperties(sizeof(properties), properties);
 }
 
-void RfMediumObject::writeProperty(PropertyID id, uint8_t start, uint8_t* data, uint8_t count)
+const uint8_t* RfMediumObject::rfDomainAddress()
 {
-    switch (id)
-    {
-        case PID_RF_DOMAIN_ADDRESS:
-            for (uint8_t i = start; i < start + count; i++)
-                _rfDomainAddress[i-1] = data[i - start];
-        break;
-        case PID_RF_BIDIR_TIMEOUT: // PDT_FUNCTION
-            // Not supported yet (permanent bidir device)
-        break;
-        case PID_RF_DIAG_SA_FILTER_TABLE:
-            for (uint8_t i = start; i < start + count; i++)
-                _rfDiagSourceAddressFilterTable[i-1] = data[i - start];
-        break;
-        case PID_RF_DIAG_BUDGET_TABLE:
-            for (uint8_t i = start; i < start + count; i++)
-                _rfDiagLinkBudgetTable[i-1] = data[i - start];
-        break;
-        case PID_RF_DIAG_PROBE:
-            // Not supported yet
-        break;
-        default:
-        break;
-    }
+    DataProperty* prop = (DataProperty*)property(PID_RF_DOMAIN_ADDRESS);
+    return prop->data();
 }
 
-uint8_t RfMediumObject::propertySize(PropertyID id)
+void RfMediumObject::rfDomainAddress(const uint8_t* value)
 {
-    switch (id)
-    {
-    case PID_RF_MULTI_TYPE:
-    case PID_RF_RETRANSMITTER:
-        return 1;
-    case PID_OBJECT_TYPE:
-        return 2;
-    case PID_RF_DOMAIN_ADDRESS:
-        return 6;
-    case PID_RF_DIAG_SA_FILTER_TABLE:
-    case PID_RF_DIAG_BUDGET_TABLE:
-        return 24;
-    // case PID_RF_BIDIR_TIMEOUT: ?
-    // case PID_RF_DIAG_PROBE: ?
-    default:
-        break;
-    }
-    return 0;
+    Property* prop = property(PID_RF_DOMAIN_ADDRESS);
+    prop->write(value);
 }
-
-uint8_t* RfMediumObject::save(uint8_t* buffer)
-{
-    buffer = pushByteArray((uint8_t*)_rfDomainAddress, 6, buffer);
-    return buffer;
-}
-
-uint8_t* RfMediumObject::restore(uint8_t* buffer)
-{
-    buffer = popByteArray((uint8_t*)_rfDomainAddress, 6, buffer);
-    return buffer;
-}
-
-uint8_t* RfMediumObject::rfDomainAddress()
-{
-    return _rfDomainAddress;
-}
-
-void RfMediumObject::rfDomainAddress(uint8_t* value)
-{
-    pushByteArray(value, 6, _rfDomainAddress);
-}
-
-static PropertyDescription _propertyDescriptions[] = 
-{
-    { PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0 },
-    { PID_RF_MULTI_TYPE, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0 },
-    { PID_RF_RETRANSMITTER, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0 },
-    { PID_RF_DOMAIN_ADDRESS, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv0 }
-};
-static uint8_t _propertyCount = sizeof(_propertyDescriptions) / sizeof(PropertyDescription);
-
-uint8_t RfMediumObject::propertyCount()
-{
-    return _propertyCount;
-}
-
-PropertyDescription* RfMediumObject::propertyDescriptions()
-{
-    return _propertyDescriptions;
-}
+#endif

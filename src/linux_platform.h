@@ -13,8 +13,6 @@ extern int gpio_unexport(int pin);
 
 class LinuxPlatform: public Platform
 {
-    using Platform::_memoryReference;
-    using Platform::memoryReference;
 public:
     LinuxPlatform();
     virtual ~LinuxPlatform();
@@ -24,30 +22,32 @@ public:
     std::string flashFilePath();
     void flashFilePath(const std::string path);
 
-    // ip stuff
-    uint32_t currentIpAddress() override;
-    uint32_t currentSubnetMask() override;
-    uint32_t currentDefaultGateway() override;
-    void macAddress(uint8_t* addr) override;
-
     // basic stuff
     void restart() override;
     void fatalError() override;
 
+    // ip config
+    uint32_t currentIpAddress() override;
+    uint32_t currentSubnetMask() override;
+    uint32_t currentDefaultGateway() override;
+    void macAddress(uint8_t* data) override;
+    
+
     //multicast
     void setupMultiCast(uint32_t addr, uint16_t port) override;
     void closeMultiCast() override;
-    bool sendBytes(uint8_t* buffer, uint16_t len) override;
-    int readBytes(uint8_t* buffer, uint16_t maxLen) override;
-    
-    //uart
+    bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
+    int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
+    bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
+
+    //UART
     void setupUart() override;
     void closeUart() override;
     int uartAvailable() override;
     size_t writeUart(const uint8_t data) override;
-    size_t writeUart(const uint8_t *buffer, size_t size) override;
+    size_t writeUart(const uint8_t* buffer, size_t size) override;
     int readUart() override;
-    size_t readBytesUart(uint8_t *buffer, size_t length) override;
+    size_t readBytesUart(uint8_t* buffer, size_t length) override;
 
     //spi
     void setupSpi() override;
@@ -57,21 +57,25 @@ public:
     //memory
     uint8_t* getEepromBuffer(uint16_t size) override;
     void commitToEeprom() override;
-    uint8_t* allocMemory(size_t size) override;
-    void freeMemory(uint8_t* ptr) override;
     void cmdlineArgs(int argc, char** argv);
 
   private:
     uint32_t _multicastAddr = -1;
-    uint16_t _port = -1;
-    int _socketFd = -1;
+    uint16_t _multicastPort = -1;
+    int _multicastSocketFd = -1;
+
     void doMemoryMapping();
     uint8_t* _mappedFile = 0;
     int _fd = -1;
     int _spiFd = -1;
-    uint8_t* _currentMaxMem = 0;
+    int _uartFd = -1;
     std::string _flashFilePath = "flash.bin";
     char** _args = 0;
+
+    uint8_t _macAddress[6] = {0, 0, 0, 0, 0, 0};
+    uint32_t _ipAddress = 0;
+    uint32_t _netmask = 0;
+    uint32_t _defaultGateway = 0;
 };
 
 #endif

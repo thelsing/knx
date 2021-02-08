@@ -16,8 +16,9 @@ enum StateType { Closed, OpenIdle, OpenWait, Connecting };
 class TransportLayer
 {
 public:
-    TransportLayer(ApplicationLayer& layer, AddressTableObject& gat);
+    TransportLayer(ApplicationLayer& layer);
     void networkLayer(NetworkLayer& layer);
+    void groupAddressTable(AddressTableObject& addrTable);
 
 #pragma region from network layer
     void dataIndividualIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
@@ -56,6 +57,9 @@ public:
     void disconnectRequest(uint16_t tsap, Priority priority);
     // apdu must be valid until it was confirmed
     void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu);
+
+    uint8_t getTpciSeqNum();
+    uint16_t getConnectionAddress();
 #pragma endregion
 
 #pragma region other
@@ -112,6 +116,6 @@ private:
     uint8_t _maxRepCount = 3;
 #pragma endregion
     ApplicationLayer& _applicationLayer;
-    AddressTableObject& _groupAddressTable;
+    AddressTableObject* _groupAddressTable;
     NetworkLayer* _networkLayer;
 };

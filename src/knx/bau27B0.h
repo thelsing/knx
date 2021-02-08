@@ -1,32 +1,46 @@
 #pragma once
 
-#include "bau_systemB.h"
-#include "rf_medium_object.h"
-#include "rf_physical_layer.h"
-#include "rf_data_link_layer.h"
+#include "config.h"
+#if MASK_VERSION == 0x27B0
 
-class Bau27B0 : public BauSystemB
+#include "bau_systemB_device.h"
+#include "rf_medium_object.h"
+#if defined(DeviceFamily_CC13X0)
+  #include "rf_physical_layer_cc1310.h"
+#else
+  #include "rf_physical_layer_cc1101.h"
+#endif
+#include "rf_data_link_layer.h"
+#include "cemi_server.h"
+#include "cemi_server_object.h"
+
+class Bau27B0 : public BauSystemBDevice
 {
   public:
     Bau27B0(Platform& platform);
+    virtual void loop() override;
+    virtual bool enabled() override;
+    virtual void enabled(bool value) override;
 
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
-    uint8_t* descriptor();
-    DataLinkLayer& dataLinkLayer();
+    InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
 
+    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:
     RfDataLinkLayer _dlLayer;
     RfMediumObject _rfMediumObj;
+#ifdef USE_CEMI_SERVER
+    CemiServer _cemiServer;
+    CemiServerObject _cemiServerObject;
+#endif
 
-    uint8_t _descriptor[2] = {0x27, 0xB0};
-    const uint32_t _ifObjs[7] = { 6, // length
-                                  OT_DEVICE, OT_ADDR_TABLE, OT_ASSOC_TABLE, OT_GRP_OBJ_TABLE, OT_APPLICATION_PROG, OT_RF_MEDIUM};
-
-    void domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint8_t* rfDoA,
-                                                  uint8_t* knxSerialNumber);
-    void domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber);
-    void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, uint16_t newIndividualAddress,
-                                                      uint8_t* knxSerialNumber);
-    void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, uint8_t* knxSerialNumber);
+    void domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, const uint8_t* rfDoA,
+                                                  const uint8_t* knxSerialNumber) override;
+    void domainAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, const uint8_t* knxSerialNumber) override;
+    void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber) override;
+    void domainAddressSerialNumberWriteLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, const uint8_t* rfDoA,
+                                                    const uint8_t* knxSerialNumber, bool status) override;
+    void domainAddressSerialNumberReadLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, const uint8_t* knxSerialNumber, bool status) override;
 };
+#endif

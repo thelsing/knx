@@ -15,12 +15,11 @@ class AddressTableObject : public TableObject
     /**
      * The contructor.
      * 
-     * @param platform This parameter is only passed to the custructor of TableObject an not used by this class.
+     * @param memory This parameter is only passed to the custructor of TableObject an not used by this class.
      */
-    AddressTableObject(Platform& platform);
-    void readProperty(PropertyID id, uint32_t start, uint32_t& count, uint8_t* data);
-    uint8_t* save(uint8_t* buffer);
-    uint8_t* restore(uint8_t* buffer);
+    AddressTableObject(Memory& memory);
+    const uint8_t* restore(const uint8_t* buffer) override;
+
     /**
      * returns the number of group addresses of the object.
      */
@@ -51,9 +50,7 @@ class AddressTableObject : public TableObject
     bool contains(uint16_t groupAddress);
 
   protected:
-    virtual void beforeStateChange(LoadState& newState);
-    uint8_t propertyCount();
-    PropertyDescription* propertyDescriptions();
+    virtual void beforeStateChange(LoadState& newState) override;
 
   private:
     uint16_t* _groupAddresses = 0;
