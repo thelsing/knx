@@ -11,7 +11,7 @@ void buttonUp()
     if (millis() - lastpressed > 200)
     {
         KnxFacade<CC1310Platform, Bau27B0> &knx = *pKnx;
-        knx._toogleProgMode = true;
+        knx.toggleProgMode();
         lastpressed = millis();
     }
 }

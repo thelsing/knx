@@ -12,11 +12,12 @@ ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial) : _knxSerial(knxSeri
 
 void ArduinoPlatform::fatalError()
 {
-    const int period = 200;
     while (true)
     {
 #ifdef LED_BUILTIN
-        if ((millis() % period) > (period / 2))
+        static const long LED_BLINK_PERIOD = 200;
+
+        if ((millis() % LED_BLINK_PERIOD) > (LED_BLINK_PERIOD / 2))
             digitalWrite(LED_BUILTIN, HIGH);
         else
             digitalWrite(LED_BUILTIN, LOW);

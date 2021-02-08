@@ -2,10 +2,6 @@
 #include <string.h>
 #include "bits.h"
 
-#ifndef KNX_FLASH_SIZE
-# define KNX_FLASH_SIZE 8192
-#endif
-
 Memory::Memory(Platform& platform, DeviceObject& deviceObject)
     : _platform(platform), _deviceObject(deviceObject)
 {
