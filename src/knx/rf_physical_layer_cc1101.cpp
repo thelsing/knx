@@ -12,10 +12,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MIN(a, b) ((a < b) ? (a) : (b))
-#define MAX(a, b) ((a > b) ? (a) : (b))
-#define ABS(x)    ((x > 0) ? (x) : (-x))
-
 // Table for encoding 4-bit data into a 8-bit Manchester encoding.
 const uint8_t RfPhysicalLayerCC1101::manchEncodeTab[16] =   {0xAA,  // 0x0 Manchester encoded
                                                        0xA9,  // 0x1 Manchester encoded
