@@ -38,7 +38,7 @@ const uint8_t physicalCount = 6; // voltage,current,power_factor,power,energy,fr
 uint8_t percentCycle = 0; // better to define a global or read knx.paramByte each time... ?
 uint32_t timePeriod = 0; // same here,
 uint8_t resetPeriod = 0; //same here ...
-uint8_t resetEnergy = 0;    // and here... disabled/day/week/month
+//uint8_t resetEnergy = 0;    // and here... disabled/day/week/month
 
 bool progMode = true;
 
@@ -54,11 +54,10 @@ struct Physical {
     void loop(){
 //      unsigned long currentMillis = millis();
       // Delta Change update as defined in ETS
-      int32_t deltaPercent = ( 100 * ( _value - _lastValue ) / _value );
+      float deltaPercent = ( 100 * ( _value - _lastValue ) / _value );
       if ( percentCycle != 0 && abs(deltaPercent) >= percentCycle )
       {
           _trigger = true;
-          _lastValue = _value;
       }
 
       // Refresh groupAddress value as defined in ETS since last update
@@ -70,6 +69,7 @@ struct Physical {
       // UpdateGO but send to bus only if triggered by time or value change percentage
       if (_trigger){
           knx.getGroupObject(_GOaddr).value(_value, _dpt);
+          _lastValue = _value;
           _lastMillis = millis();
           _trigger = false;
       }else{
@@ -143,7 +143,6 @@ class Blinker
 
 Blinker led = Blinker(ledPin);
 
-
 void callBackProgMode(GroupObject& go){ 
     progMode = (bool)go.value();
 }
@@ -172,7 +171,7 @@ void resetCallback(GroupObject& go)
 {
     if (go.value())
     {
-        resetEnergy = true;
+        pzem.resetEnergy();
         goReset.value(false);
     }
 }
@@ -181,7 +180,7 @@ void setup() {
   pinPeripheral(PIN_SERIAL2_RX, PIO_SERCOM);
   pinPeripheral(PIN_SERIAL2_TX, PIO_SERCOM);
 
-  SerialUSB.begin(9600);
+//  SerialUSB.begin(9600);
   Serial2.begin(9600);
 
   ArduinoPlatform::SerialDebug = &SerialUSB;
@@ -238,12 +237,17 @@ void loop() {
     if (knx.configured() && !progMode)
     {
         refreshValueLoop();
-        resetEnergyLoop();
 
         for (uint8_t i=0; i< physicalCount; i++)
         {
              Physical[i].loop();
         }
+
+        if (timeStatus() == timeSet && resetPeriod != 0)
+        {
+           resetEnergyLoop();
+        }
+    
     }
     else if (progMode)
     {
@@ -257,7 +261,7 @@ void refreshValueLoop(){
 
     if (millis() - lastPzemUpdate >= pzemInterval)
     {
-        for (uint8_t i=0; i< physicalCount; i++)
+        for (uint8_t i=0; i < physicalCount; i++)
         {
             float isaValue;
             switch (i) {           //maybe a pointer or reference could be nicer...
@@ -282,11 +286,18 @@ void refreshValueLoop(){
                 default:
                     break;
             }
+            
             if(!isnan(isaValue))
             {
                 Physical[i].setValue(isaValue);
             }
+            else
+            {
+                Physical[i].setValue(-1);
+            }
         }
+        lastPzemUpdate = millis();
+        led.set(500, 1000);
     }
 }
 
@@ -339,14 +350,14 @@ void prodModeLoop(){ // run Only if progMode triggered ( at start or callback)
     {
         knx.progMode(true);
         timerProgPrevMillis = millis();
-        led.set(500, 250);
+        led.set(50, 100);
     }
     else
     {
         if (millis() - timerProgPrevMillis > timerProgMode) {
             knx.progMode(false);
             goProgMode.value(false);
-            progMode = 0;
+            progMode = false;
         }
     }
 }
