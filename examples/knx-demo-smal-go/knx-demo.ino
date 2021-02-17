@@ -7,6 +7,9 @@
 /*****************************************
  * changes necessary for SMALL_GROUPOBJECT
  * are commented with //** 
+ * This project can be used with any
+ * of the knxprod files of the original
+ * knx-demo project.
  *****************************************/
 
 // create named references for easy access to group objects
