@@ -502,6 +502,7 @@ void LinuxPlatform::setupUart()
     }
 }
 
+#ifndef KNX_NO_PRINT
 void printUint64(uint64_t value, int base = DEC)
   {
     char buf[8 * sizeof(uint64_t) + 1];
@@ -708,6 +709,7 @@ void println(void)
 {
     printf("\n");
 }
+#endif // KNX_NO_PRINT
 
 void pinMode(uint32_t dwPin, uint32_t dwMode)
 {
