@@ -2,7 +2,9 @@
 #include "knx/bits.h"
 
 #include <Arduino.h>
+#ifndef KNX_NO_SPI
 #include <SPI.h>
+#endif
 
 Stream* ArduinoPlatform::SerialDebug = &Serial;
 
@@ -94,6 +96,7 @@ size_t ArduinoPlatform::readBytesUart(uint8_t *buffer, size_t length)
     return length;
 }
 
+#ifndef KNX_NO_SPI
 void ArduinoPlatform::setupSpi()
 {
     SPI.begin();
@@ -111,6 +114,7 @@ int ArduinoPlatform::readWriteSpi(uint8_t *data, size_t len)
     SPI.transfer(data, len);
     return 0;
 }
+#endif
 
 #ifndef KNX_NO_PRINT
 void printUint64(uint64_t value, int base = DEC)
