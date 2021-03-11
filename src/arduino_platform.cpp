@@ -112,6 +112,7 @@ int ArduinoPlatform::readWriteSpi(uint8_t *data, size_t len)
     return 0;
 }
 
+#ifndef KNX_NO_PRINT
 void printUint64(uint64_t value, int base = DEC)
   {
     char buf[8 * sizeof(uint64_t) + 1];
@@ -284,3 +285,4 @@ void println(void)
 {
     ArduinoPlatform::SerialDebug->println();
 }
+#endif // KNX_NO_PRINT
