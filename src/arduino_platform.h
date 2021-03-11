@@ -24,10 +24,11 @@ class ArduinoPlatform : public Platform
     virtual size_t readBytesUart(uint8_t* buffer, size_t length);
 
     //spi
+#ifndef KNX_NO_SPI
     void setupSpi() override;
     void closeSpi() override;
     int readWriteSpi (uint8_t *data, size_t len) override;
-
+#endif
     static Stream* SerialDebug;
 
   protected:

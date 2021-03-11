@@ -187,7 +187,7 @@ KNXValue& KNXValue::operator=(const int16_t value)
 
 KNXValue& KNXValue::operator=(const int32_t value)
 {
-    _value.boolValue = value;
+    _value.intValue = value;
     _type = IntType;
     return *this;
 }
