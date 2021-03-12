@@ -6,12 +6,11 @@
 #include <Arduino.h>
 #include <FlashAsEEPROM.h>
 
-SamdPlatform::SamdPlatform() : ArduinoPlatform(&Serial1)
+SamdPlatform::SamdPlatform()
 {
-}
-
-SamdPlatform::SamdPlatform( HardwareSerial* s) : ArduinoPlatform(s)
-{
+#ifndef KNX_NO_DEFAULT_UART
+    _knxSerial = &Serial1;
+#endif
 }
 
 void SamdPlatform::restart()

@@ -5,7 +5,6 @@ class Stm32Platform : public ArduinoPlatform
 {
 public:
     Stm32Platform();
-    Stm32Platform( HardwareSerial* s);
     ~Stm32Platform();
 
     // basic stuff

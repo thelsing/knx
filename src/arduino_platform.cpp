@@ -6,9 +6,11 @@
 #include <SPI.h>
 #endif
 
+#ifndef KNX_NO_PRINT
 Stream* ArduinoPlatform::SerialDebug = &Serial;
+#endif
 
-ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial) : _knxSerial(knxSerial)
+ArduinoPlatform::ArduinoPlatform() : _knxSerial(nullptr)
 {
 }
 
@@ -29,7 +31,8 @@ void ArduinoPlatform::fatalError()
 
 void ArduinoPlatform::knxUart( HardwareSerial* serial )
 {
-    closeUart();
+    if (_knxSerial)
+        closeUart();
     _knxSerial = serial;
     setupUart();
 }

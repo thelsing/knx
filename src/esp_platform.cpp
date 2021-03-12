@@ -7,12 +7,11 @@
 
 #include "knx/bits.h"
 
-EspPlatform::EspPlatform() : ArduinoPlatform(&Serial)
+EspPlatform::EspPlatform()
 {
-}
-
-EspPlatform::EspPlatform( HardwareSerial* s) : ArduinoPlatform(s)
-{
+#ifndef KNX_NO_DEFAULT_UART
+    _knxSerial = &Serial;
+#endif
 }
 
 uint32_t EspPlatform::currentIpAddress()
