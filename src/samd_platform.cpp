@@ -7,10 +7,10 @@
 #include <FlashAsEEPROM.h>
 
 SamdPlatform::SamdPlatform()
-{
 #ifndef KNX_NO_DEFAULT_UART
-    _knxSerial = &Serial1;
+    : ArduinoPlatform(&Serial1)
 #endif
+{
 }
 
 void SamdPlatform::restart()

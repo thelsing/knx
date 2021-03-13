@@ -8,10 +8,10 @@
 #include "knx/bits.h"
 
 EspPlatform::EspPlatform()
-{
 #ifndef KNX_NO_DEFAULT_UART
-    _knxSerial = &Serial;
+    : ArduinoPlatform(&Serial)
 #endif
+{
 }
 
 uint32_t EspPlatform::currentIpAddress()

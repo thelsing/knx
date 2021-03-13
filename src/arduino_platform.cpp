@@ -14,6 +14,10 @@ ArduinoPlatform::ArduinoPlatform() : _knxSerial(nullptr)
 {
 }
 
+ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial) : _knxSerial(knxSerial)
+{
+}
+
 void ArduinoPlatform::fatalError()
 {
     while (true)

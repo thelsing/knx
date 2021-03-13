@@ -6,6 +6,7 @@ class ArduinoPlatform : public Platform
 {
   public:
     ArduinoPlatform();
+    ArduinoPlatform(HardwareSerial* knxSerial);
 
     // basic stuff
     void fatalError();

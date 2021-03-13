@@ -5,10 +5,10 @@
 #include "knx/bits.h"
 
 Stm32Platform::Stm32Platform()
-{
 #ifndef KNX_NO_DEFAULT_UART
-    _knxSerial = &Serial2;
+    : ArduinoPlatform(&Serial2)
 #endif
+{
 }
 
 Stm32Platform::~Stm32Platform()
