@@ -13,6 +13,10 @@ SamdPlatform::SamdPlatform()
 {
 }
 
+SamdPlatform::SamdPlatform( HardwareSerial* s) : ArduinoPlatform(s)
+{
+}
+
 void SamdPlatform::restart()
 {
     println("restart");

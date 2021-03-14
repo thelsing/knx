@@ -11,6 +11,10 @@ Stm32Platform::Stm32Platform()
 {
 }
 
+Stm32Platform::Stm32Platform( HardwareSerial* s) : ArduinoPlatform(s)
+{
+}
+
 Stm32Platform::~Stm32Platform()
 {
     delete [] _eepromPtr;

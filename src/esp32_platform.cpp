@@ -13,6 +13,10 @@ Esp32Platform::Esp32Platform()
 {
 }
 
+Esp32Platform::Esp32Platform(HardwareSerial* s) : ArduinoPlatform(s)
+{
+}
+
 uint32_t Esp32Platform::currentIpAddress()
 {
     return WiFi.localIP();
