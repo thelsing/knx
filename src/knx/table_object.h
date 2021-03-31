@@ -28,7 +28,7 @@ class TableObject: public InterfaceObject
     uint8_t* save(uint8_t* buffer) override;
     const uint8_t* restore(const uint8_t* buffer) override;
     uint16_t saveSize() override;
-protected:
+	protected:
     /**
      * This method is called before the interface object enters a new ::LoadState.
      * If there is a error changing the state newState should be set to ::LS_ERROR and errorCode() 
@@ -47,7 +47,8 @@ protected:
     void errorCode(ErrorCode errorCode);
 
     void initializeProperties(size_t propertiesSize, Property** properties) override;
-
+   	static uint16_t Crc16Citt(uint8_t* data, uint16_t length);
+   	
   private:
     uint32_t tableReference();
     bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
@@ -68,4 +69,5 @@ protected:
     LoadState _state = LS_UNLOADED;
     Memory& _memory;
     uint8_t *_data = 0;
+    uint16_t _crc = 0;
 };
