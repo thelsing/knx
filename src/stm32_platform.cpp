@@ -4,7 +4,10 @@
 #include <stm32_eeprom.h>
 #include "knx/bits.h"
 
-Stm32Platform::Stm32Platform() : ArduinoPlatform(&Serial2)
+Stm32Platform::Stm32Platform()
+#ifndef KNX_NO_DEFAULT_UART
+    : ArduinoPlatform(&Serial2)
+#endif
 {
 }
 

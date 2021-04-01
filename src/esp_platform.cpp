@@ -7,7 +7,10 @@
 
 #include "knx/bits.h"
 
-EspPlatform::EspPlatform() : ArduinoPlatform(&Serial)
+EspPlatform::EspPlatform()
+#ifndef KNX_NO_DEFAULT_UART
+    : ArduinoPlatform(&Serial)
+#endif
 {
 }
 

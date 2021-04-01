@@ -6,7 +6,10 @@
 
 #include "knx/bits.h"
 
-Esp32Platform::Esp32Platform() : ArduinoPlatform(&Serial1)
+Esp32Platform::Esp32Platform()
+#ifndef KNX_NO_DEFAULT_UART
+    : ArduinoPlatform(&Serial1)
+#endif
 {
 }
 

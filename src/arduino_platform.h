@@ -2,11 +2,10 @@
 
 #include "Arduino.h"
 
-extern Stream& _serialDBG;
-
 class ArduinoPlatform : public Platform
 {
   public:
+    ArduinoPlatform();
     ArduinoPlatform(HardwareSerial* knxSerial);
 
     // basic stuff
@@ -29,7 +28,9 @@ class ArduinoPlatform : public Platform
     void closeSpi() override;
     int readWriteSpi (uint8_t *data, size_t len) override;
 #endif
+#ifndef KNX_NO_PRINT
     static Stream* SerialDebug;
+#endif
 
   protected:
     HardwareSerial* _knxSerial;
