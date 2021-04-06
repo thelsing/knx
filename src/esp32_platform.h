@@ -16,6 +16,9 @@ public:
     uint32_t currentDefaultGateway() override;
     void macAddress(uint8_t* addr) override;
 
+    // unique serial number
+    uint32_t uniqueSerialNumber() override;
+
     // basic stuff
     void restart();
 

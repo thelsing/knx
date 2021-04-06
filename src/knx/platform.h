@@ -20,6 +20,9 @@ class Platform
     virtual uint32_t currentDefaultGateway();
     virtual void macAddress(uint8_t* data);
 
+    // unique serial number
+    virtual uint32_t uniqueSerialNumber();
+
     // basic stuff
     virtual void restart() = 0;
     virtual void fatalError() = 0;

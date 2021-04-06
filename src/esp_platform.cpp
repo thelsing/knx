@@ -38,6 +38,15 @@ void EspPlatform::macAddress(uint8_t * addr)
     wifi_get_macaddr(STATION_IF, addr);
 }
 
+uint32_t EspPlatform::uniqueSerialNumber()
+{
+    uint32_t chipid = ESP.getChipId();
+    
+    Serial.printf("uniqueSerialNumber: %0X\n", chipId);
+
+    return chipId;
+}
+
 void EspPlatform::restart()
 {
     println("restart");
