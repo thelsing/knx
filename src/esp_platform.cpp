@@ -44,7 +44,7 @@ uint32_t EspPlatform::uniqueSerialNumber()
     
     Serial.printf("uniqueSerialNumber: %0X\n", chipid);
 
-    return chipId;
+    return chipid;
 }
 
 void EspPlatform::restart()
