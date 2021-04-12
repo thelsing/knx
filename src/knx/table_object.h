@@ -68,4 +68,5 @@ class TableObject: public InterfaceObject
     LoadState _state = LS_UNLOADED;
     Memory& _memory;
     uint8_t *_data = 0;
+    uint32_t _size = 0;
 };
