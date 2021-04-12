@@ -11,16 +11,7 @@ ApplicationProgramObject::ApplicationProgramObject(Memory& memory)
     Property* properties[] =
     {
         new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_APPLICATION_PROG),
-        new CallbackProperty<ApplicationProgramObject>(this, PID_PROG_VERSION, true, PDT_GENERIC_05, 1, ReadLv3 | WriteLv3,
-            [](ApplicationProgramObject* io, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
-                pushByteArray(io->_programVersion, 5, data);
-                return 1;
-            },
-            [](ApplicationProgramObject* io, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t 
-            { 
-                memcpy(io->_programVersion, data, 5);
-                return 1;
-            }),
+        new DataProperty(PID_PROG_VERSION, true, PDT_GENERIC_05, 1, ReadLv3 | WriteLv3),
         new CallbackProperty<ApplicationProgramObject>(this, PID_PEI_TYPE, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0,
             [](ApplicationProgramObject* io, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
                 if(start == 0)
@@ -40,6 +31,7 @@ ApplicationProgramObject::ApplicationProgramObject(Memory& memory)
 
 uint8_t* ApplicationProgramObject::save(uint8_t* buffer)
 {
+    property(PID_PROG_VERSION)->read(_programVersion);
     buffer = pushByteArray(_programVersion, 5, buffer);
 
     return TableObject::save(buffer);
@@ -48,6 +40,7 @@ uint8_t* ApplicationProgramObject::save(uint8_t* buffer)
 const uint8_t* ApplicationProgramObject::restore(const uint8_t* buffer)
 {
     buffer = popByteArray(_programVersion, 5, buffer);
+    property(PID_PROG_VERSION)->write(_programVersion);
 
     return TableObject::restore(buffer);
 }

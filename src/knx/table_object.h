@@ -47,7 +47,6 @@ class TableObject: public InterfaceObject
     void errorCode(ErrorCode errorCode);
 
     void initializeProperties(size_t propertiesSize, Property** properties) override;
-   	static uint16_t Crc16Citt(uint8_t* data, uint16_t length);
    	
   private:
     uint32_t tableReference();
@@ -69,5 +68,4 @@ class TableObject: public InterfaceObject
     LoadState _state = LS_UNLOADED;
     Memory& _memory;
     uint8_t *_data = 0;
-    uint16_t _crc = 0;
 };
