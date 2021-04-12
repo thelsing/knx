@@ -8,6 +8,9 @@ public:
     Stm32Platform( HardwareSerial* s);
     ~Stm32Platform();
 
+    // unique serial number
+    uint32_t uniqueSerialNumber() override;
+
     // basic stuff
     void restart();
     

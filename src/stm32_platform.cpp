@@ -20,6 +20,15 @@ Stm32Platform::~Stm32Platform()
     delete [] _eepromPtr;
 }
 
+uint32_t Stm32Platform::uniqueSerialNumber()
+{
+    uint32_t uniqueId = HAL_GetUIDw0() ^ HAL_GetUIDw1() ^ HAL_GetUIDw2();
+
+    printf("uniqueSerialNumber: %0X", uniqueId);
+
+    return uniqueId;
+}
+
 void Stm32Platform::restart()
 {
     NVIC_SystemReset();

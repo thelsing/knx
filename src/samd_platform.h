@@ -10,6 +10,9 @@ public:
     SamdPlatform();
     SamdPlatform( HardwareSerial* s);
 
+    // unique serial number
+    uint32_t uniqueSerialNumber() override;
+
     void restart();
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();

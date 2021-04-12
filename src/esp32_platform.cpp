@@ -37,6 +37,18 @@ void Esp32Platform::macAddress(uint8_t * addr)
     esp_wifi_get_mac(WIFI_IF_STA, addr);
 }
 
+uint32_t Esp32Platform::uniqueSerialNumber()
+{
+    uint64_t chipid = ESP.getEfuseMac();
+    uint32_t upperId = (chipid >> 32) & 0xFFFFFFFF;
+    uint32_t lowerId = (chipid & 0xFFFFFFFF);
+    uint32_t uniqueId = (upperId ^ lowerId);
+    
+    Serial.printf("uniqueSerialNumber: %0X ^ %0X ==> %0X\n", upperId, lowerId, uniqueId);
+
+    return uniqueId;
+}
+
 void Esp32Platform::restart()
 {
     println("restart");
