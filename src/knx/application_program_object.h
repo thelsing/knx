@@ -15,7 +15,4 @@ class ApplicationProgramObject : public TableObject
     uint16_t getWord(uint32_t addr);
     uint32_t getInt(uint32_t addr);
     double getFloat(uint32_t addr, ParameterFloatEncodings encoding);
-    
-	private:
-    uint8_t _programVersion[5] = { 0, 0, 0, 0, 0};
 };
