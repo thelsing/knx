@@ -68,5 +68,11 @@ class TableObject: public InterfaceObject
     LoadState _state = LS_UNLOADED;
     Memory& _memory;
     uint8_t *_data = 0;
+
+    /**
+     * used to store size of data() in allocTable(), needed for calculation of crc in PID_MCB_TABLE.
+     * This value is also saved and restored.
+     * The size of the memory block cannot be used because it is changed during alignment to page size.
+     */
     uint32_t _size = 0;
 };
