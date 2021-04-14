@@ -29,6 +29,29 @@ ApplicationProgramObject::ApplicationProgramObject(Memory& memory)
     TableObject::initializeProperties(sizeof(properties), properties);
 }
 
+uint8_t* ApplicationProgramObject::save(uint8_t* buffer)
+{
+    uint8_t programVersion[5];
+    property(PID_PROG_VERSION)->read(programVersion);
+    buffer = pushByteArray(programVersion, 5, buffer);
+
+    return TableObject::save(buffer);
+}
+
+const uint8_t* ApplicationProgramObject::restore(const uint8_t* buffer)
+{
+    uint8_t programVersion[5];
+    buffer = popByteArray(programVersion, 5, buffer);
+    property(PID_PROG_VERSION)->write(programVersion);
+
+    return TableObject::restore(buffer);
+}
+
+uint16_t ApplicationProgramObject::saveSize()
+{
+    return TableObject::saveSize() + 5; // sizeof(programVersion)
+}
+
 uint8_t * ApplicationProgramObject::data(uint32_t addr)
 {
     return TableObject::data() + addr;

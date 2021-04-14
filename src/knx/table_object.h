@@ -28,7 +28,7 @@ class TableObject: public InterfaceObject
     uint8_t* save(uint8_t* buffer) override;
     const uint8_t* restore(const uint8_t* buffer) override;
     uint16_t saveSize() override;
-protected:
+	protected:
     /**
      * This method is called before the interface object enters a new ::LoadState.
      * If there is a error changing the state newState should be set to ::LS_ERROR and errorCode() 
@@ -47,7 +47,7 @@ protected:
     void errorCode(ErrorCode errorCode);
 
     void initializeProperties(size_t propertiesSize, Property** properties) override;
-
+   	
   private:
     uint32_t tableReference();
     bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
@@ -68,4 +68,11 @@ protected:
     LoadState _state = LS_UNLOADED;
     Memory& _memory;
     uint8_t *_data = 0;
+
+    /**
+     * used to store size of data() in allocTable(), needed for calculation of crc in PID_MCB_TABLE.
+     * This value is also saved and restored.
+     * The size of the memory block cannot be used because it is changed during alignment to page size.
+     */
+    uint32_t _size = 0;
 };

@@ -84,7 +84,6 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     Property* tableProperties[] =
     {
         new DataProperty( PID_COUPLER_SERVICES_CONTROL, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint8_t) 0), // written by ETS TODO: implement
-        new DataProperty( PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0), // TODO: improve: move to TableObject once segment size handling is clear
         new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use, written by ETS
         new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
                 // Command Callback of PID_ROUTETABLE_CONTROL
@@ -452,25 +451,7 @@ void RouterObject::beforeStateChange(LoadState& newState)
     if (newState != LS_LOADED)
         return;
 
-    // calculate crc16-ccitt for PID_MCB_TABLE
-    updateMcb();
-
     _filterTableGroupAddresses = (uint16_t*)data();
-}
-
-void RouterObject::updateMcb()
-{
-    uint8_t mcb[propertySize(PID_MCB_TABLE)];
-
-    static constexpr uint32_t segmentSize = kFilterTableSize;
-    uint16_t crc16 = crc16Ccitt(data(), segmentSize);
-
-    pushInt(segmentSize, &mcb[0]); // Segment size
-    pushByte(0x00, &mcb[4]);       // CRC control byte -> 0: always valid -> according to coupler spec. it shall always be a valid CRC
-    pushByte(0xFF, &mcb[5]);       // Read access 4 bits + Write access 4 bits (unknown: value taken from real coupler device)
-    pushWord(crc16, &mcb[6]);      // CRC-16 CCITT of filter table
-
-    property(PID_MCB_TABLE)->write(mcb);
 }
 
 void RouterObject::masterReset(EraseCode eraseCode, uint8_t channel)
