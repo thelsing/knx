@@ -40,7 +40,8 @@
     #endif
 #endif
 
-typedef uint8_t* (*SaveRestoreCallback)(uint8_t* buffer);
+typedef const uint8_t* (*RestoreCallback)(const uint8_t* buffer);
+typedef uint8_t* (*SaveCallback)(uint8_t* buffer);
 typedef void (*IsrFunctionPtr)();
  
 template <class P, class B> class KnxFacade : private SaveRestore
@@ -266,12 +267,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _progButtonISRFuncPtr = progButtonISRFuncPtr;
     }
 
-    void setSaveCallback(SaveRestoreCallback func)
+    void setSaveCallback(SaveCallback func)
     {
         _saveCallback = func;
     }
 
-    void setRestoreCallback(SaveRestoreCallback func)
+    void setRestoreCallback(RestoreCallback func)
     {
         _restoreCallback = func;
     }
@@ -336,8 +337,8 @@ template <class P, class B> class KnxFacade : private SaveRestore
     uint32_t _ledPin = LED_BUILTIN;
     uint32_t _buttonPinInterruptOn = RISING;
     uint32_t _buttonPin = 0;
-    SaveRestoreCallback _saveCallback = 0;
-    SaveRestoreCallback _restoreCallback = 0;
+    SaveCallback _saveCallback = 0;
+    RestoreCallback _restoreCallback = 0;
     volatile bool _toggleProgMode = false;
     bool _progLedState = false;
     uint16_t _saveSize = 0;
@@ -351,7 +352,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return buffer;
     }
 
-    uint8_t* restore(uint8_t* buffer)
+    const uint8_t* restore(const uint8_t* buffer)
     {
         if (_restoreCallback != 0)
             return _restoreCallback(buffer);
