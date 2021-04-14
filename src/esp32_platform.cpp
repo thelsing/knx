@@ -104,6 +104,7 @@ uint8_t * Esp32Platform::getEepromBuffer(uint16_t size)
 
 void Esp32Platform::commitToEeprom()
 {
+    EEPROM.getDataPtr(); // trigger dirty flag in EEPROM lib to make sure data will be written to flash
     EEPROM.commit();
 }
 
