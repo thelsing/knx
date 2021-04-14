@@ -25,7 +25,7 @@
 void checkIaqSensorStatus(void);
 void errLeds(void);
 uint8_t* saveBme680State(uint8_t* buffer);
-uint8_t* loadBme680State(uint8_t* buffer);
+const uint8_t* loadBme680State(const uint8_t* buffer);
 void triggerCallback(GroupObject& go);
 void updateState();
 
@@ -214,7 +214,7 @@ void errLeds(void)
     delay(100);
 }
 
-uint8_t* loadBme680State(uint8_t* buffer)
+const uint8_t* loadBme680State(const uint8_t* buffer)
 {
     // Existing state in EEPROM
     Serial.println("Reading state from EEPROM");
