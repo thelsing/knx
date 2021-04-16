@@ -34,11 +34,7 @@ uint32_t SamdPlatform::uniqueSerialNumber()
       #define SERIAL_NUMBER_WORD_3	*(volatile uint32_t*)(0x0080A048)
     #endif
 
-    uint32_t uniqueId = SERIAL_NUMBER_WORD_0 ^ SERIAL_NUMBER_WORD_1 ^ SERIAL_NUMBER_WORD_2 ^ SERIAL_NUMBER_WORD_3;
-
-    printf("uniqueSerialNumber: %0X\n", uniqueId);
-
-    return uniqueId;
+    return SERIAL_NUMBER_WORD_0 ^ SERIAL_NUMBER_WORD_1 ^ SERIAL_NUMBER_WORD_2 ^ SERIAL_NUMBER_WORD_3;
 }
 
 void SamdPlatform::restart()
