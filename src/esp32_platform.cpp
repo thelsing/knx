@@ -42,11 +42,7 @@ uint32_t Esp32Platform::uniqueSerialNumber()
     uint64_t chipid = ESP.getEfuseMac();
     uint32_t upperId = (chipid >> 32) & 0xFFFFFFFF;
     uint32_t lowerId = (chipid & 0xFFFFFFFF);
-    uint32_t uniqueId = (upperId ^ lowerId);
-    
-    Serial.printf("uniqueSerialNumber: %0X ^ %0X ==> %0X\n", upperId, lowerId, uniqueId);
-
-    return uniqueId;
+    return (upperId ^ lowerId);
 }
 
 void Esp32Platform::restart()

@@ -40,11 +40,7 @@ void EspPlatform::macAddress(uint8_t * addr)
 
 uint32_t EspPlatform::uniqueSerialNumber()
 {
-    uint32_t chipid = ESP.getChipId();
-    
-    Serial.printf("uniqueSerialNumber: %0X\n", chipid);
-
-    return chipid;
+    return ESP.getChipId();
 }
 
 void EspPlatform::restart()
