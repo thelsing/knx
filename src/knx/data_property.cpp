@@ -49,7 +49,7 @@ uint8_t DataProperty::write(uint16_t start, uint8_t count, const uint8_t* data)
     start -= 1;
     if (start + count > _currentElements)
     {
-        //reallocate memory for _data
+        // reallocate memory for _data
         uint8_t* oldData = _data;
         size_t oldDataSize = _currentElements * ElementSize();
 

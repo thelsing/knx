@@ -66,7 +66,7 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
             case GroupValueWrite:
                 _bau.groupValueWriteIndication(asap, priority, hopType, secCtrl, data, len);
             default:
-                /* other apdutypes ar not valid here. If the appear do nothing */
+                /* other apdutypes are not valid here. If they appear do nothing */
                 break;
         }
     }
@@ -908,7 +908,7 @@ void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap,
     uint8_t* apdudata = apdu.data();
     if (dataLength == 0)
     {
-        // data size is six bit or less. So store int first byte
+        // data size is six bit or less. So store in first byte
         *apdudata &= ~0x3f;
         *apdudata |= (*data & 0x3f);
     }
@@ -916,7 +916,7 @@ void ApplicationLayer::groupValueSend(ApduType type, AckType ack, uint16_t asap,
     {
         memcpy(apdudata + 1, data, dataLength);
     }
-    // no need to check if there is a tsap. This is a response, so the read got trough
+    // no need to check if there is a tsap. This is a response, so the read got through
     uint16_t tsap = (uint16_t)_assocTable->translateAsap(asap);
     dataGroupRequest(ack, hopType, priority, tsap, apdu, secCtrl);
     dataGroupIndication(hopType, priority, tsap, apdu, secCtrl);
@@ -1129,7 +1129,7 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             _bau.keyWriteAppLayerConfirm(priority, hopType, tsap, secCtrl, data[1]);
             break;
         default:
-            print("Indiviual-indication: unhandled APDU-Type: ");
+            print("Individual-indication: unhandled APDU-Type: ");
             println(apdu.type());
     }
 }
@@ -1240,7 +1240,7 @@ void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Prio
             _bau.keyWriteResponseConfirm(ack, priority, hopType, tsap, secCtrl, data[1], status);
             break;
         default:
-            print("Indiviual-confirm: unhandled APDU-Type: ");
+            print("Individual-confirm: unhandled APDU-Type: ");
             println(apdu.type());
     }
 }
