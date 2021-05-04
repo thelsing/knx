@@ -8,6 +8,10 @@
 #include "knx/bau2920.h"
 #include "knx/bau57B0.h"
 
+#ifndef USERDATA_SAVE_SIZE
+#define USERDATA_SAVE_SIZE 0
+#endif
+
 #ifdef ARDUINO_ARCH_SAMD
     #include "samd_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
@@ -341,7 +345,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
     RestoreCallback _restoreCallback = 0;
     volatile bool _toggleProgMode = false;
     bool _progLedState = false;
-    uint16_t _saveSize = 0;
+    uint16_t _saveSize = USERDATA_SAVE_SIZE;
     IsrFunctionPtr _progButtonISRFuncPtr = 0;
 
     uint8_t* save(uint8_t* buffer)
