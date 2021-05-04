@@ -2,9 +2,9 @@
 
 #include "table_object.h"
 /**
- * This class represents the group address table. It provides a mapping between tranport layer 
+ * This class represents the group address table. It provides a mapping between transport layer 
  * service access points (TSAP) and group addresses. The TSAP can be imagined as an index to the array 
- * of group adresses.
+ * of group addresses.
  * 
  * See section 4.10 of @cite knx:3/5/1 for further details.
  * It implements realisation type 7 (see section 4.10.7 of @cite knx:3/5/1). 
@@ -13,9 +13,9 @@ class AddressTableObject : public TableObject
 {
   public:
     /**
-     * The contructor.
+     * The constructor.
      * 
-     * @param memory This parameter is only passed to the custructor of TableObject an not used by this class.
+     * @param memory This parameter is only passed to the constructor of TableObject and is not used by this class.
      */
     AddressTableObject(Memory& memory);
     const uint8_t* restore(const uint8_t* buffer) override;
@@ -35,7 +35,7 @@ class AddressTableObject : public TableObject
     /**
      * Get the TSAP mapped to a group address.
      * 
-     * @param groupAddress the group address of whicht to get the TSAP for.
+     * @param groupAddress the group address of which to get the TSAP for.
      * 
      * @return the TSAP if found or zero if no tsap was found.
      */

@@ -19,7 +19,7 @@ KnxIpSearchResponse::KnxIpSearchResponse(IpParameterObject& parameters, DeviceOb
     _deviceInfo.code(DEVICE_INFO);
     _deviceInfo.medium(0x20); //KNX-IP FIXME get this value from somewhere else
     _deviceInfo.status(deviceObject.progMode());
-    _deviceInfo.indiviudalAddress(parameters.propertyValue<uint16_t>(PID_KNX_INDIVIDUAL_ADDRESS));
+    _deviceInfo.individualAddress(parameters.propertyValue<uint16_t>(PID_KNX_INDIVIDUAL_ADDRESS));
     _deviceInfo.projectInstallationIdentifier(parameters.propertyValue<uint16_t>(PID_PROJECT_INSTALLATION_ID));
     _deviceInfo.serialNumber(deviceObject.propertyData(PID_SERIAL_NUMBER));
     _deviceInfo.routingMulticastAddress(parameters.propertyValue<uint32_t>(PID_ROUTING_MULTICAST_ADDRESS));

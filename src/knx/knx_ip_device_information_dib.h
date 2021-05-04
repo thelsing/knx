@@ -16,12 +16,12 @@ class KnxIpDeviceInformationDIB : public KnxIpDIB
     uint8_t status() const;
     void status(uint8_t value);
     uint16_t individualAddress() const;
-    void indiviudalAddress(uint16_t value);
+    void individualAddress(uint16_t value);
     uint16_t projectInstallationIdentifier() const;
     void projectInstallationIdentifier(uint16_t value);
     const uint8_t* serialNumber() const;
     void serialNumber(const uint8_t* value);
-    uint32_t routingMulicastAddress() const;
+    uint32_t routingMulticastAddress() const;
     void routingMulticastAddress(uint32_t value);
     const uint8_t* macAddress() const;
     void macAddress(const uint8_t* value);
