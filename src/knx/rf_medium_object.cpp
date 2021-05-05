@@ -31,7 +31,7 @@ RfMediumObject::RfMediumObject()
                 resultData[2] = 0xFF; // permanent bidirectional device
                 resultLength = 3;
             }), 
-/*      This properties are used in NMP_LinkBudget_Measure to diagnose the Link Budget of the communication.
+/*      These properties are used in NMP_LinkBudget_Measure to diagnose the Link Budget of the communication.
         This in not implemented yet.
         new DataProperty(PID_RF_DIAG_SA_FILTER_TABLE, true, PDT_GENERIC_03, 8, ReadLv3 | WriteLv3),
         new DataProperty(PID_RF_DIAG_BUDGET_TABLE, false, PDT_GENERIC_03, 8, ReadLv3 | WriteLv0),

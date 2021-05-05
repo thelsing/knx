@@ -62,7 +62,7 @@ uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channe
         case EraseCode::ResetIA:
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
-            println("ResetAP requested. Not implemented yet.");
+            println("ResetIA requested. Not implemented yet.");
             return successCode;
         }
         case EraseCode::ResetLinks:
@@ -515,7 +515,7 @@ void BauSystemB::nextRestartState()
             }
             break;
         case Restarted:
-            /* restart is finished, we send a discommect */
+            /* restart is finished, we send a disconnect */
             if (millis() - _restartDelay > 30)
             {
                 applicationLayer().disconnectRequest(SystemPriority);

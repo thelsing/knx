@@ -35,7 +35,7 @@ uint16_t KnxIpDeviceInformationDIB::individualAddress() const
 }
 
 
-void KnxIpDeviceInformationDIB::indiviudalAddress(uint16_t value)
+void KnxIpDeviceInformationDIB::individualAddress(uint16_t value)
 {
     pushWord(value, _data + 4);
 }
@@ -65,7 +65,7 @@ void KnxIpDeviceInformationDIB::serialNumber(const uint8_t* value)
 }
 
 
-uint32_t KnxIpDeviceInformationDIB::routingMulicastAddress() const
+uint32_t KnxIpDeviceInformationDIB::routingMulticastAddress() const
 {
     return getInt(_data + 14);
 }

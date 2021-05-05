@@ -132,8 +132,8 @@ void RfPhysicalLayerCC1310::setOutputPowerLevel(int8_t dBm)
         rfPowerTableSize = PROP_RF_txPowerTableSize;
     }
 
-    //if max power is requested then the CCFG_FORCE_VDDR_HH must be set in
-    //the ccfg
+    // if max power is requested then the CCFG_FORCE_VDDR_HH must be set in
+    // the ccfg
 #if (CCFG_FORCE_VDDR_HH != 0x1)
     if((newValue.paType == RF_TxPowerTable_DefaultPA) &&
        (dBm == rfPowerTable[rfPowerTableSize-2].power))
