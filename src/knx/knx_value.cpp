@@ -343,7 +343,11 @@ uint64_t KNXValue::ulongValue() const
         case DoubleType:
             return (uint64_t)_value.doubleValue;
         case StringType:
+#ifndef KNX_NO_STRTOx_CONVERSION
             return (uint64_t)strtoul(_value.stringValue, NULL, 0);
+#else
+            return 0;
+#endif
     }
     return 0;
 }
@@ -444,7 +448,11 @@ int64_t KNXValue::longValue() const
         case DoubleType:
             return (int64_t)_value.doubleValue;
         case StringType:
+#ifndef KNX_NO_STRTOx_CONVERSION
             return strtol(_value.stringValue, NULL, 0);
+#else
+            return 0;
+#endif
     }
     return 0;
 }
@@ -476,7 +484,11 @@ double KNXValue::doubleValue() const
         case LongType:
             return _value.longValue;
         case StringType:
+#ifndef KNX_NO_STRTOx_CONVERSION
             return strtod(_value.stringValue, NULL);
+#else
+            return 0;
+#endif
     }
     return 0;
 }
