@@ -39,5 +39,5 @@ public:
     uint8_t defaultHopCount();
 private:
     uint8_t _prgMode = 0;
-    uint16_t _ownAddress = 0;
+    uint16_t _ownAddress = 65535; // 15.15.255;
 };
