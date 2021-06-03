@@ -92,6 +92,18 @@ int EspPlatform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen)
     return len;
 }
 
+bool EspPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
+{
+    IPAddress ucastaddr(htonl(addr));
+    println("sendBytesUniCast endPacket fail");
+    if(_udp.beginPacket(ucastaddr, port) == 1) {
+        _udp.write(buffer, len);
+        if(_udp.endPacket() == 0) println("sendBytesUniCast endPacket fail");
+    }
+    else println("sendBytesUniCast beginPacket fail");
+    return true;
+}
+
 uint8_t * EspPlatform::getEepromBuffer(uint16_t size)
 {
     EEPROM.begin(size);
