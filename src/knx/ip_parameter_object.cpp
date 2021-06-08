@@ -46,7 +46,7 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
                     return 1;
                 }
 
-                pushInt(io->_platform.currentIpAddress(), data);
+                pushInt(htonl(io->_platform.currentIpAddress()), data);
                 return 1;
             }),
         new CallbackProperty<IpParameterObject>(this, PID_CURRENT_SUBNET_MASK, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0,
@@ -59,7 +59,7 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
                     return 1;
                 }
 
-                pushInt(io->_platform.currentSubnetMask(), data);
+                pushInt(htonl(io->_platform.currentSubnetMask()), data);
                 return 1;
             }),
         new CallbackProperty<IpParameterObject>(this, PID_CURRENT_DEFAULT_GATEWAY, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0,
@@ -72,7 +72,7 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
                     return 1;
                 }
 
-                pushInt(io->_platform.currentDefaultGateway(), data);
+                pushInt(htonl(io->_platform.currentDefaultGateway()), data);
                 return 1;
             }),
         new DataProperty(PID_IP_ADDRESS, true, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv3),
