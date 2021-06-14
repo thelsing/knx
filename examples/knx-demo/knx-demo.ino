@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <knx.h>
 
-#if defined ARDUINO_ARCH_ESP8266 || defined ARDUINO_ARCH_ESP32
+#if MASK_VERSION != 0x07B0 && (defined ARDUINO_ARCH_ESP8266 || defined ARDUINO_ARCH_ESP32)
 #include <WiFiManager.h>
 #endif
 
@@ -60,7 +60,7 @@ void setup()
 
     randomSeed(millis());
 
-#if defined ARDUINO_ARCH_ESP8266 || defined ARDUINO_ARCH_ESP32
+#if MASK_VERSION != 0x07B0 && (defined ARDUINO_ARCH_ESP8266 || defined ARDUINO_ARCH_ESP32)
     WiFiManager wifiManager;
     wifiManager.autoConnect("knx-demo");
 #endif
