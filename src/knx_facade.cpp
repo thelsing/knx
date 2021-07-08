@@ -7,7 +7,8 @@
     #if (defined(ARDUINO_ARCH_STM32) || \
         defined(ARDUINO_ARCH_ESP32) || \
         defined(ARDUINO_ARCH_ESP8266) || \
-        defined(ARDUINO_ARCH_SAMD))
+        defined(ARDUINO_ARCH_SAMD) || \
+		defined(ARDUINO_ARCH_RP2040))
 
         // Only ESP8266 and ESP32 have this define. For all other platforms this is just empty.
         #ifndef ICACHE_RAM_ATTR
@@ -34,6 +35,17 @@
             KnxFacade<SamdPlatform, Bau2920> knx(buttonUp);
         #else
             #error "Mask version not supported on ARDUINO_ARCH_SAMD"
+        #endif
+    #elif defined(ARDUINO_ARCH_RP2040)
+        // predefined global instance for TP or RF or TP/RF coupler
+        #if MASK_VERSION == 0x07B0
+            KnxFacade<RP2040ArduinoPlatform, Bau07B0> knx(buttonUp);
+        #elif MASK_VERSION == 0x27B0
+            KnxFacade<RP2040ArduinoPlatform, Bau27B0> knx(buttonUp);
+        #elif MASK_VERSION == 0x2920
+            KnxFacade<RP2040ArduinoPlatform, Bau2920> knx(buttonUp);
+        #else
+            #error "Mask version not supported on ARDUINO_ARCH_RP2040"
         #endif
 
     #elif defined(ARDUINO_ARCH_ESP8266)
