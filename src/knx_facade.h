@@ -13,6 +13,11 @@
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         void buttonUp();
     #endif
+#elif defined(ARDUINO_ARCH_RP2040)
+    #include "rp2040_arduino_platform.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        void buttonUp();
+    #endif
 #elif defined(ARDUINO_ARCH_ESP8266)
     #include "esp_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
@@ -378,6 +383,17 @@ template <class P, class B> class KnxFacade : private SaveRestore
             extern KnxFacade<SamdPlatform, Bau2920> knx;
         #else
             #error "Mask version not supported on ARDUINO_ARCH_SAMD"
+        #endif
+    #elif defined(ARDUINO_ARCH_RP2040)
+        // predefined global instance for TP or RF or TP/RF coupler
+        #if MASK_VERSION == 0x07B0
+            extern KnxFacade<RP2040ArduinoPlatform, Bau07B0> knx;
+        #elif MASK_VERSION == 0x27B0
+            extern KnxFacade<RP2040ArduinoPlatform, Bau27B0> knx;
+        #elif MASK_VERSION == 0x2920
+            extern KnxFacade<RP2040ArduinoPlatform, Bau2920> knx;
+        #else
+            #error "Mask version not supported on ARDUINO_ARCH_RP2040"
         #endif
     #elif defined(ARDUINO_ARCH_ESP8266)
         // predefined global instance for TP or IP or TP/IP coupler
