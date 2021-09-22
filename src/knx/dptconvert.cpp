@@ -55,7 +55,7 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         if (datatype.mainGroup == 8 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
             return busValueToTimeDelta(payload, payload_length, datatype, value);
         // DPT 9.* - 16 Bit Float
-        if (datatype.mainGroup == 9 && ((datatype.subGroup >= 1 && datatype.subGroup <= 11 && datatype.subGroup != 9) || (datatype.subGroup >= 20 && datatype.subGroup <= 28)) && !datatype.index)
+        if (datatype.mainGroup == 9 && ((datatype.subGroup >= 1 && datatype.subGroup <= 11) || (datatype.subGroup >= 20 && datatype.subGroup <= 29)) && !datatype.index)
             return busValueToFloat16(payload, payload_length, datatype, value);
         // DPT 10.* - Time and Weekday
         if (datatype.mainGroup == 10 && datatype.subGroup == 1 && datatype.index <= 1)
@@ -172,7 +172,7 @@ int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_len
     if (datatype.mainGroup == 8 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
         return valueToBusValueTimeDelta(value, payload, payload_length, datatype);
     // DPT 9.* - 16 Bit Float
-    if (datatype.mainGroup == 9 && ((datatype.subGroup >= 1 && datatype.subGroup <= 11 && datatype.subGroup != 9) || (datatype.subGroup >= 20 && datatype.subGroup <= 28)) && !datatype.index)
+    if (datatype.mainGroup == 9 && ((datatype.subGroup >= 1 && datatype.subGroup <= 11 ) || (datatype.subGroup >= 20 && datatype.subGroup <= 29)) && !datatype.index)
         return valueToBusValueFloat16(value, payload, payload_length, datatype);
     // DPT 10.* - Time and Weekday
     if (datatype.mainGroup == 10 && datatype.subGroup == 1 && datatype.index <= 1)
