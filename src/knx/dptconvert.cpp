@@ -126,6 +126,9 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         // DPT 239.* - Flagged Scaling
         if (datatype.mainGroup == 239 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToFlaggedScaling(payload, payload_length, datatype, value);
+        // DPT 251.600 - RGBW
+        if (datatype.mainGroup == 251 && datatype.subGroup == 600 && datatype.index <= 1)
+            return busValueToRGBW(payload, payload_length, datatype, value);
     }
     return false;
 }
@@ -243,6 +246,9 @@ int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_len
     // DPT 239.* - Flagged Scaling
     if (datatype.mainGroup == 239 && datatype.subGroup == 1 && datatype.index <= 1)
         return valueToBusValueFlaggedScaling(value, payload, payload_length, datatype);
+    // DPT 251.600 - RGBW
+    if (datatype.mainGroup == 251 && datatype.subGroup == 600 && datatype.index <= 1)
+        return valueToBusValueRGBW(value, payload, payload_length, datatype);
     return false;
 }
 
@@ -799,6 +805,24 @@ int busValueToRGB(const uint8_t* payload, size_t payload_length, const Dpt& data
     uint32_t rgb = unsigned16FromPayload(payload, 0) * 256 + unsigned8FromPayload(payload, 2);
     value = rgb;
     return true;
+}
+
+int busValueToRGBW(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
+{
+    ASSERT_PAYLOAD(6);
+    switch (datatype.index) {
+        case 0: // The RGBW value
+            {
+                uint32_t rgbw = (unsigned32FromPayload(payload, 0) >> 8)
+                                + (unsigned8FromPayload(payload, 3) << 24);
+                value = rgbw;
+            }
+            return true;
+        case 1: // The mask bits only
+            value = unsigned8FromPayload(payload,5); 
+            return true;
+    }
+    return false;
 }
 
 int busValueToFlaggedScaling(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
@@ -1514,6 +1538,26 @@ int valueToBusValueRGB(const KNXValue& value, uint8_t* payload, size_t payload_l
 
     unsigned16ToPayload(payload, payload_length, 0, rgb / 256, 0xffff);
     unsigned8ToPayload(payload, payload_length, 2, rgb % 256, 0xff);
+    return true;
+}
+
+int valueToBusValueRGBW(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
+{
+    switch(datatype.index)
+    {
+        case 0: // RGBW
+            {
+                uint32_t rgbw = (uint32_t)value;
+                unsigned16ToPayload(payload, payload_length, 0, rgbw >> 8, 0xffff); // RG
+                unsigned8ToPayload(payload, payload_length, 2, rgbw, 0xff); // B
+                unsigned8ToPayload(payload, payload_length, 3, rgbw >> 24, 0xff);  // W
+            }
+            break;
+        case 1: // Mask bits
+            unsigned8ToPayload(payload, payload_length, 5, (uint8_t)value, 0xff);
+            break;
+
+    }
     return true;
 }
 
