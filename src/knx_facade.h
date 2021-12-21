@@ -294,6 +294,14 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return _bau.parameters().data(addr);
     }
 
+    bool paramBit(uint32_t addr, uint8_t shift)
+    {
+        if (!_bau.configured())
+            return 0;
+   
+        return (bool) ((_bau.parameters().getByte(addr) >> (7-shift)) & 0x01); 
+    }
+
     uint8_t paramByte(uint32_t addr)
     {
         if (!_bau.configured())
@@ -301,7 +309,17 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         return _bau.parameters().getByte(addr);
     }
+    
+    int8_t paramSignedByte(uint32_t addr)
+    {
+        if (!_bau.configured())
+            return 0;
 
+        return (int8_t) bau.parameters().getByte(addr);
+    }
+    
+    
+ 
     uint16_t paramWord(uint32_t addr)
     {
         if (!_bau.configured())
