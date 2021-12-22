@@ -24,12 +24,6 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         // DPT 3.* - Step Control
         if (datatype.mainGroup == 3 && datatype.subGroup >= 7 && datatype.subGroup <= 8 && datatype.index <= 1)
             return busValueToStepControl(payload, payload_length, datatype, value);
-        // DPT 4.* - Character// DPT 2.* - Binary Control
-        if (datatype.mainGroup == 2 && datatype.subGroup >= 1 && datatype.subGroup <= 12 && datatype.index <= 1)
-            return busValueToBinaryControl(payload, payload_length, datatype, value);
-        // DPT 3.* - Step Control
-        if (datatype.mainGroup == 3 && datatype.subGroup >= 7 && datatype.subGroup <= 8 && datatype.index <= 1)
-            return busValueToStepControl(payload, payload_length, datatype, value);
         // DPT 4.* - Character
         if (datatype.mainGroup == 4 && datatype.subGroup >= 1 && datatype.subGroup <= 2 && !datatype.index)
             return busValueToCharacter(payload, payload_length, datatype, value);
