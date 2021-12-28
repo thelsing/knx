@@ -31,16 +31,15 @@ class TpUartDataLinkLayer : public DataLinkLayer
 
   private:
     bool _enabled = false;
-    bool _waitConfirm = false;
     uint8_t* _sendBuffer = 0;
     uint16_t _sendBufferLength = 0;
     uint8_t _receiveBuffer[MAX_KNX_TELEGRAM_SIZE];
-    uint8_t _loopState = 0;
+    uint8_t _txState = 0;
+    uint8_t _rxState = 0;
     uint16_t _RxByteCnt = 0;
     uint16_t _TxByteCnt = 0;
     uint8_t _oldIdx = 0;
     bool _isEcho = false;
-    bool _isAddressed = false;
     bool _convert = false;
     uint8_t _xorSum = 0;
     uint32_t _lastByteRxTime;
