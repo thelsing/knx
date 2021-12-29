@@ -797,8 +797,6 @@ int busValueToRGB(const uint8_t* payload, size_t payload_length, const Dpt& data
 {
     ASSERT_PAYLOAD(3);
     uint32_t rgb = unsigned16FromPayload(payload, 0) * 256 + unsigned8FromPayload(payload, 2);
-    if (rgb > 16777215)
-        return false;
     value = rgb;
     return true;
 }
@@ -886,7 +884,7 @@ int valueToBusValueStepControl(const KNXValue& value, uint8_t* payload, size_t p
 
 int valueToBusValueCharacter(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
-    if ((uint64_t)value < INT64_C(0) || (uint64_t)value > INT64_C(255) || (datatype.subGroup == 1 && (uint64_t)value > INT64_C(127)))
+    if ((uint64_t)value > INT64_C(255) || (datatype.subGroup == 1 && (uint64_t)value > INT64_C(127)))
         return false;
     unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0xFF);
     return true;
@@ -1153,7 +1151,7 @@ int valueToBusValueAccess(const KNXValue& value, uint8_t* payload, size_t payloa
             break;
         case 5:
         {
-            if ((uint64_t)value < INT64_C(0) || (uint64_t)value > INT64_C(15))
+            if ((uint64_t)value > INT64_C(15))
                 return false;
             bcdToPayload(payload, payload_length, 7, (uint64_t)value);
             break;
@@ -1444,7 +1442,7 @@ int valueToBusValueScaling(const KNXValue& value, uint8_t* payload, size_t paylo
         {
             uint32_t duration = value;
 
-            if (duration < INT64_C(0) || duration > INT64_C(65535))
+            if (duration > INT64_C(65535))
                 return false;
 
             ENSURE_PAYLOAD(3);
@@ -1471,7 +1469,7 @@ int valueToBusValueTariff(const KNXValue& value, uint8_t* payload, size_t payloa
         {
             uint32_t duration = value;
 
-            if (duration < INT64_C(0) || duration > INT64_C(65535))
+            if (duration > INT64_C(65535))
                 return false;
 
             ENSURE_PAYLOAD(3);

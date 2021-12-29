@@ -25,7 +25,7 @@ uint16_t AssociationTableObject::entryCount()
 
 uint16_t AssociationTableObject::getTSAP(uint16_t idx)
 {
-    if (idx < 0 || idx >= entryCount())
+    if (idx >= entryCount())
         return 0;
 
     return ntohs(_tableData[2 * idx + 1]);
@@ -33,7 +33,7 @@ uint16_t AssociationTableObject::getTSAP(uint16_t idx)
 
 uint16_t AssociationTableObject::getASAP(uint16_t idx)
 {
-    if (idx < 0 || idx >= entryCount())
+    if (idx >= entryCount())
         return 0;
 
     return ntohs(_tableData[2 * idx + 2]);
