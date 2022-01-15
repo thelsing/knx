@@ -153,8 +153,8 @@ int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_len
     // DPT 6.020 - Status with Mode
     if (datatype.mainGroup == 6 && datatype.subGroup == 20 && datatype.index <= 5)
         return valueToBusValueStatusAndMode(value, payload, payload_length, datatype);
-    // DPT 7.001/7.010/7.011/7.012/7.013 - Unsigned 16 Bit Integer
-    if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13)) && !datatype.index)
+    // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
+    if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || datatype.subGroup == 600) && !datatype.index)
         return valueToBusValueUnsigned16(value, payload, payload_length, datatype);
     // DPT 7.002-DPT 7.007 - Time Period
     if (datatype.mainGroup == 7 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
