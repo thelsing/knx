@@ -113,13 +113,14 @@ void TpUartDataLinkLayer::loop()
     if (!_enabled)
         return;
 
+    // Signals to communicate from rx part with the tx part
+    bool isEchoComplete = false;    // Flag that a complete echo is received
+    uint8_t dataConnMsg = 0;  // The DATA_CONN message just seen or 0
     do {
         _receiveBuffer[0] = 0x29;
         _receiveBuffer[1] = 0;
         uint8_t* buffer = _receiveBuffer + 2;
         uint8_t rxByte;
-        bool isEchoComplete = false;    // Flag that a complete echo is received
-        bool dataConnMsg = 0;  // The DATA_CONN message just seen or 0
         bool isEOP = (millis() - _lastByteRxTime > EOP_TIMEOUT); // Flag that an EOP gap is seen
         switch (_rxState)
         {
@@ -356,74 +357,74 @@ void TpUartDataLinkLayer::loop()
             default:
                 break;
         }
-
-        // Check for spurios DATA_CONN message
-        if (dataConnMsg && _txState != TX_WAIT_CONN && _txState != TX_WAIT_ECHO) {
-            println("got unexpected L_DATA_CON");
-        }
-
-        switch (_txState)
-        {
-            case TX_IDLE:
-                if (!isTxQueueEmpty())
-                {
-                    loadNextTxFrame();
-                    _txState = TX_FRAME;
-#ifdef DBG_TRACE
-                    println("TX_FRAME");
-#endif
-                }
-                break;
-            case TX_FRAME:
-                if (sendSingleFrameByte() == false)
-                {
-                    _waitConfirmStartTime = millis();
-                    _txState = TX_WAIT_ECHO;
-#ifdef DBG_TRACE
-                    println("TX_WAIT_ECHO");
-#endif
-                }
-                break;
-            case TX_WAIT_ECHO:
-            case TX_WAIT_CONN:
-                if (isEchoComplete)
-                {
-                    _txState = TX_WAIT_CONN;
-#ifdef DBG_TRACE
-                    println("TX_WAIT_CONN");
-#endif
-                }
-                else if (dataConnMsg)
-                {
-                    bool waitEcho = (_txState == TX_WAIT_ECHO);
-                    if (waitEcho) {
-                        println("L_DATA_CON without echo");
-                    }
-                    dataConBytesReceived(_receiveBuffer, _RxByteCnt + 2, !waitEcho && ((dataConnMsg & SUCCESS) > 0));
-                    delete[] _sendBuffer;
-                    _sendBuffer = 0;
-                    _sendBufferLength = 0;
-                    _txState = TX_IDLE;
-                }
-                else if (millis() - _waitConfirmStartTime > CONFIRM_TIMEOUT)
-                {
-                    println("L_DATA_CON not received within expected time");
-                    uint8_t cemiBuffer[MAX_KNX_TELEGRAM_SIZE];
-                    cemiBuffer[0] = 0x29;
-                    cemiBuffer[1] = 0;
-                    memcpy((cemiBuffer + 2), _sendBuffer, _sendBufferLength);
-                    dataConBytesReceived(cemiBuffer, _sendBufferLength + 2, false);
-                    delete[] _sendBuffer;
-                    _sendBuffer = 0;
-                    _sendBufferLength = 0;
-                    _txState = TX_IDLE;
-#ifdef DBG_TRACE
-                    println("TX_IDLE");
-#endif
-                }
-                break;
-        }
     } while (_rxState == RX_L_DATA);
+
+    // Check for spurios DATA_CONN message
+    if (dataConnMsg && _txState != TX_WAIT_CONN && _txState != TX_WAIT_ECHO) {
+        println("got unexpected L_DATA_CON");
+    }
+
+    switch (_txState)
+    {
+        case TX_IDLE:
+            if (!isTxQueueEmpty())
+            {
+                loadNextTxFrame();
+                _txState = TX_FRAME;
+#ifdef DBG_TRACE
+                println("TX_FRAME");
+#endif
+            }
+            break;
+        case TX_FRAME:
+            if (sendSingleFrameByte() == false)
+            {
+                _waitConfirmStartTime = millis();
+                _txState = TX_WAIT_ECHO;
+#ifdef DBG_TRACE
+                println("TX_WAIT_ECHO");
+#endif
+            }
+            break;
+        case TX_WAIT_ECHO:
+        case TX_WAIT_CONN:
+            if (isEchoComplete)
+            {
+                _txState = TX_WAIT_CONN;
+#ifdef DBG_TRACE
+                println("TX_WAIT_CONN");
+#endif
+            }
+            else if (dataConnMsg)
+            {
+                bool waitEcho = (_txState == TX_WAIT_ECHO);
+                if (waitEcho) {
+                    println("L_DATA_CON without echo");
+                }
+                dataConBytesReceived(_receiveBuffer, _RxByteCnt + 2, !waitEcho && ((dataConnMsg & SUCCESS) > 0));
+                delete[] _sendBuffer;
+                _sendBuffer = 0;
+                _sendBufferLength = 0;
+                _txState = TX_IDLE;
+            }
+            else if (millis() - _waitConfirmStartTime > CONFIRM_TIMEOUT)
+            {
+                println("L_DATA_CON not received within expected time");
+                uint8_t cemiBuffer[MAX_KNX_TELEGRAM_SIZE];
+                cemiBuffer[0] = 0x29;
+                cemiBuffer[1] = 0;
+                memcpy((cemiBuffer + 2), _sendBuffer, _sendBufferLength);
+                dataConBytesReceived(cemiBuffer, _sendBufferLength + 2, false);
+                delete[] _sendBuffer;
+                _sendBuffer = 0;
+                _sendBufferLength = 0;
+                _txState = TX_IDLE;
+#ifdef DBG_TRACE
+                println("TX_IDLE");
+#endif
+            }
+            break;
+    }
 }
 
 bool TpUartDataLinkLayer::sendFrame(CemiFrame& frame)
