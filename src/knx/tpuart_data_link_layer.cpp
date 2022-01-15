@@ -568,6 +568,7 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
         _TxByteCnt = 0;
         return false;
     }
+    return true;
 }
 
 void TpUartDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
