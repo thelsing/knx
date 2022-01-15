@@ -560,9 +560,10 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
 
         _platform.writeUart(cmd, 2);
         _TxByteCnt++;
-        return true;
     }
-    else
+    
+    // Check for last byte send
+    if (_TxByteCnt >= _sendBufferLength)
     {
         _TxByteCnt = 0;
         return false;
