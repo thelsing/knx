@@ -1589,7 +1589,6 @@ int valueToBusValueActiveEnergy(const KNXValue& value, uint8_t* payload, size_t 
     {
         case 0:
         {
-
             if ((int64_t)value < INT64_C(-2147483648) || (int64_t)value > INT64_C(2147483647))
                 return false;
             ENSURE_PAYLOAD(6);
