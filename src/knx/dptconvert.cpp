@@ -813,8 +813,7 @@ int busValueToRGBW(const uint8_t* payload, size_t payload_length, const Dpt& dat
     switch (datatype.index) {
         case 0: // The RGBW value
             {
-                uint32_t rgbw = (unsigned32FromPayload(payload, 0) >> 8)
-                                + (unsigned8FromPayload(payload, 3) << 24);
+                uint32_t rgbw = unsigned32FromPayload(payload, 0);
                 value = rgbw;
             }
             return true;
@@ -1548,13 +1547,11 @@ int valueToBusValueRGBW(const KNXValue& value, uint8_t* payload, size_t payload_
         case 0: // RGBW
             {
                 uint32_t rgbw = (uint32_t)value;
-                unsigned16ToPayload(payload, payload_length, 0, rgbw >> 8, 0xffff); // RG
-                unsigned8ToPayload(payload, payload_length, 2, rgbw, 0xff); // B
-                unsigned8ToPayload(payload, payload_length, 3, rgbw >> 24, 0xff);  // W
+                unsigned32ToPayload(payload, payload_length, 0, rgbw, 0xffffffff); // RGBW
             }
             break;
         case 1: // Mask bits
-            unsigned8ToPayload(payload, payload_length, 5, (uint8_t)value, 0xff);
+            unsigned8ToPayload(payload, payload_length, 5, (uint8_t)value, 0x0f);
             break;
 
     }
