@@ -43,6 +43,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     bool _convert = false;
     uint8_t _xorSum = 0;
     uint32_t _lastByteRxTime;
+    uint32_t _lastByteTxTime;
     uint32_t _waitConfirmStartTime;
     uint32_t _lastResetChipTime = 0;
 
