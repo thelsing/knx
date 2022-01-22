@@ -89,18 +89,23 @@ enum {
 //rx states
 enum {
     RX_WAIT_START,
+    RX_L_ADDR,
     RX_L_DATA,
     RX_WAIT_EOP
 };
 
 #define EOP_TIMEOUT           2   //milli seconds; end of layer-2 packet gap
+#define EOPR_TIMEOUT          8   //ms; relaxed EOP timeout; usally to trigger after NAK
 #define CONFIRM_TIMEOUT       500  //milli seconds
 #define RESET_TIMEOUT         100 //milli seconds
-#define TX_THROTTLE_TIME      1 //milli seconds
+#define TX_TIMEPAUSE            0 // 0 means 1 milli seconds
+
+// If this threshold is reached loop() goes into 
+// "hog mode" where it stays in loop() while L2 address reception
+#define HOGMODE_THRESHOLD       3 // milli seconds
 
 void TpUartDataLinkLayer::loop()
 {
-
     if (!_enabled)
     {
         if (millis() - _lastResetChipTime > 1000)
@@ -117,12 +122,29 @@ void TpUartDataLinkLayer::loop()
     // Signals to communicate from rx part with the tx part
     bool isEchoComplete = false;    // Flag that a complete echo is received
     uint8_t dataConnMsg = 0;  // The DATA_CONN message just seen or 0
+
+#ifdef KNX_WAIT_FOR_ADDR
+    // After seeing a L2 packet start, stay in loop until address bytes are
+    // received and the AK/NAK packet is sent
+    bool stayInRx = true;
+#elif defined(KNX_AUTO_ADAPT)
+    // After seeing a L2 packet start, stay in loop until address bytes are
+    // received and the AK/NAK packet is sent, when last loop call delayed
+    // by more than HOGMODE_THRESHOLD
+    bool stayInRx = millis() - _lastLoopTime > HOGMODE_THRESHOLD;
+    _lastLoopTime = millis();
+#else
+    // After seeing a L2 packet start, leave loop and hope the loop
+    // is called early enough to do further processings
+    bool stayInRx = false;
+#endif
+
+    // Loop as long we are in the receive phase for the L2 address
     do {
         _receiveBuffer[0] = 0x29;
         _receiveBuffer[1] = 0;
         uint8_t* buffer = _receiveBuffer + 2;
         uint8_t rxByte;
-        bool isEOP = (millis() - _lastByteRxTime > EOP_TIMEOUT); // Flag that an EOP gap is seen
         switch (_rxState)
         {
             case RX_WAIT_START:
@@ -143,7 +165,7 @@ void TpUartDataLinkLayer::loop()
                         _xorSum ^= rxByte;
                         _RxByteCnt++; //convert to L_DATA_EXTENDED
                         _convert = true;
-                        _rxState = RX_L_DATA;
+                        _rxState = RX_L_ADDR;
 #ifdef DBG_TRACE
                         println("RLS");
 #endif
@@ -154,7 +176,7 @@ void TpUartDataLinkLayer::loop()
                         buffer[_RxByteCnt++] = rxByte;
                         _xorSum ^= rxByte;
                         _convert = false;
-                        _rxState = RX_L_DATA;
+                        _rxState = RX_L_ADDR;
 #ifdef DBG_TRACE
                         println("RLX");
 #endif
@@ -232,11 +254,11 @@ void TpUartDataLinkLayer::loop()
                     }
                 }
                 break;
-            case RX_L_DATA:
-                if (isEOP)
+            case RX_L_ADDR:
+                if (millis() - _lastByteRxTime > EOPR_TIMEOUT)
                 {
                     _rxState = RX_WAIT_START;
-                    print("EOP inside RX_L_DATA");
+                    print("EOPR inside RX_L_ADDR");
                     printHex(" => ", buffer, _RxByteCnt);
                     break;
                 }
@@ -247,20 +269,12 @@ void TpUartDataLinkLayer::loop()
 #ifdef DBG_TRACE
                 print(rxByte, HEX);
 #endif
-                if (_RxByteCnt == MAX_KNX_TELEGRAM_SIZE)
-                {
-                    _rxState = RX_WAIT_EOP;
-                    println("invalid telegram size");
-                }
-                else
-                {
-                    buffer[_RxByteCnt++] = rxByte;
-                }
+                buffer[_RxByteCnt++] = rxByte;
+                _xorSum ^= rxByte;
 
                 if (_RxByteCnt == 7)
                 {
                     //Destination Address + payload available
-                    _xorSum ^= rxByte;
                     //check if echo
                     if (_sendBuffer != nullptr && (!((buffer[0] ^ _sendBuffer[0]) & ~0x20) && !memcmp(buffer + _convert + 1, _sendBuffer + 1, 5)))
                     { //ignore repeated bit of control byte
@@ -299,8 +313,28 @@ void TpUartDataLinkLayer::loop()
                         // We don't have to update _lastByteTxTime because after ACK the timing is not so tight
                         _platform.writeUart(c);
                     }
+                    _rxState = RX_L_DATA;
                 }
-                else if (_RxByteCnt == buffer[6] + 7 + 2)
+                break;
+            case RX_L_DATA:
+                if (!_platform.uartAvailable())
+                    break;
+                _lastByteRxTime = millis();
+                rxByte = _platform.readUart();
+#ifdef DBG_TRACE
+                print(rxByte, HEX);
+#endif
+                if (_RxByteCnt == MAX_KNX_TELEGRAM_SIZE)
+                {
+                    _rxState = RX_WAIT_EOP;
+                    println("invalid telegram size");
+                }
+                else
+                {
+                    buffer[_RxByteCnt++] = rxByte;
+                }
+
+                if (_RxByteCnt == buffer[6] + 7 + 2)
                 {
                     //complete Frame received, payloadLength+1 for TCPI +1 for CRC
                     if (rxByte == (uint8_t)(~_xorSum))
@@ -339,7 +373,7 @@ void TpUartDataLinkLayer::loop()
                 }
                 break;
             case RX_WAIT_EOP:
-                if (isEOP)
+                if (millis() - _lastByteRxTime > EOP_TIMEOUT)
                 {
                     _RxByteCnt = 0;
                     _rxState = RX_WAIT_START;
@@ -359,7 +393,7 @@ void TpUartDataLinkLayer::loop()
             default:
                 break;
         }
-    } while (_rxState == RX_L_DATA);
+    } while (_rxState == RX_L_ADDR && (stayInRx || _platform.uartAvailable()));
 
     // Check for spurios DATA_CONN message
     if (dataConnMsg && _txState != TX_WAIT_CONN && _txState != TX_WAIT_ECHO) {
@@ -379,7 +413,7 @@ void TpUartDataLinkLayer::loop()
             }
             break;
         case TX_FRAME:
-            if (millis() - _lastByteTxTime >= TX_THROTTLE_TIME)
+            if (millis() - _lastByteTxTime > TX_TIMEPAUSE)
             {
                 if (sendSingleFrameByte() == false)
                 {
