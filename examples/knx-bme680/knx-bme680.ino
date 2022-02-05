@@ -53,13 +53,16 @@ void setup(void)
     wifiManager.autoConnect("knx-bme680");
     #endif
 
+    // set save and restore callbacks
+    knx.setSaveCallback(saveBme680State);
+    knx.setRestoreCallback(loadBme680State);
+    
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
 
     // register callback for reset GO
     if(knx.configured())
         goTriggerSample.callback(triggerCallback);
-
 
     // Configure Wire pins before this call if needed.
     Wire.begin();
@@ -87,9 +90,6 @@ void setup(void)
         BSEC_OUTPUT_GAS_PERCENTAGE
     };
 
-    knx.setSaveCallback(saveBme680State);
-    knx.setRestoreCallback(loadBme680State);
-    
     if (knx.configured())
     {
         cyclSend = knx.paramInt(0);

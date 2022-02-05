@@ -78,6 +78,7 @@ int busValueToScaling(const uint8_t* payload, size_t payload_length, const Dpt& 
 int busValueToTariff(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
 int busValueToLocale(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
 int busValueToRGB(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
+int busValueToRGBW(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
 int busValueToFlaggedScaling(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
 int busValueToActiveEnergy(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
 
@@ -116,6 +117,7 @@ int valueToBusValueScaling(const KNXValue& value, uint8_t* payload, size_t paylo
 int valueToBusValueTariff(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
 int valueToBusValueLocale(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
 int valueToBusValueRGB(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
+int valueToBusValueRGBW(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
 int valueToBusValueFlaggedScaling(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
 int valueToBusValueActiveEnergy(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
 

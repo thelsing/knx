@@ -24,12 +24,6 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         // DPT 3.* - Step Control
         if (datatype.mainGroup == 3 && datatype.subGroup >= 7 && datatype.subGroup <= 8 && datatype.index <= 1)
             return busValueToStepControl(payload, payload_length, datatype, value);
-        // DPT 4.* - Character// DPT 2.* - Binary Control
-        if (datatype.mainGroup == 2 && datatype.subGroup >= 1 && datatype.subGroup <= 12 && datatype.index <= 1)
-            return busValueToBinaryControl(payload, payload_length, datatype, value);
-        // DPT 3.* - Step Control
-        if (datatype.mainGroup == 3 && datatype.subGroup >= 7 && datatype.subGroup <= 8 && datatype.index <= 1)
-            return busValueToStepControl(payload, payload_length, datatype, value);
         // DPT 4.* - Character
         if (datatype.mainGroup == 4 && datatype.subGroup >= 1 && datatype.subGroup <= 2 && !datatype.index)
             return busValueToCharacter(payload, payload_length, datatype, value);
@@ -42,8 +36,8 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         // DPT 6.020 - Status with Mode
         if (datatype.mainGroup == 6 && datatype.subGroup == 20 && datatype.index <= 5)
             return busValueToStatusAndMode(payload, payload_length, datatype, value);
-        // DPT 7.001/7.010/7.011/7.012/7.013 - Unsigned 16 Bit Integer
-        if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13)) && !datatype.index)
+        // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
+        if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || (datatype.subGroup == 600)) && !datatype.index)
             return busValueToUnsigned16(payload, payload_length, datatype, value);
         // DPT 7.002-DPT 7.007 - Time Period
         if (datatype.mainGroup == 7 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
@@ -132,6 +126,9 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         // DPT 239.* - Flagged Scaling
         if (datatype.mainGroup == 239 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToFlaggedScaling(payload, payload_length, datatype, value);
+        // DPT 251.600 - RGBW
+        if (datatype.mainGroup == 251 && datatype.subGroup == 600 && datatype.index <= 1)
+            return busValueToRGBW(payload, payload_length, datatype, value);
     }
     return false;
 }
@@ -159,8 +156,8 @@ int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_len
     // DPT 6.020 - Status with Mode
     if (datatype.mainGroup == 6 && datatype.subGroup == 20 && datatype.index <= 5)
         return valueToBusValueStatusAndMode(value, payload, payload_length, datatype);
-    // DPT 7.001/7.010/7.011/7.012/7.013 - Unsigned 16 Bit Integer
-    if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13)) && !datatype.index)
+    // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
+    if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || datatype.subGroup == 600) && !datatype.index)
         return valueToBusValueUnsigned16(value, payload, payload_length, datatype);
     // DPT 7.002-DPT 7.007 - Time Period
     if (datatype.mainGroup == 7 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
@@ -249,6 +246,9 @@ int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_len
     // DPT 239.* - Flagged Scaling
     if (datatype.mainGroup == 239 && datatype.subGroup == 1 && datatype.index <= 1)
         return valueToBusValueFlaggedScaling(value, payload, payload_length, datatype);
+    // DPT 251.600 - RGBW
+    if (datatype.mainGroup == 251 && datatype.subGroup == 600 && datatype.index <= 1)
+        return valueToBusValueRGBW(value, payload, payload_length, datatype);
     return false;
 }
 
@@ -803,10 +803,25 @@ int busValueToRGB(const uint8_t* payload, size_t payload_length, const Dpt& data
 {
     ASSERT_PAYLOAD(3);
     uint32_t rgb = unsigned16FromPayload(payload, 0) * 256 + unsigned8FromPayload(payload, 2);
-    if (rgb > 16777215)
-        return false;
     value = rgb;
     return true;
+}
+
+int busValueToRGBW(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
+{
+    ASSERT_PAYLOAD(6);
+    switch (datatype.index) {
+        case 0: // The RGBW value
+            {
+                uint32_t rgbw = unsigned32FromPayload(payload, 0);
+                value = rgbw;
+            }
+            return true;
+        case 1: // The mask bits only
+            value = unsigned8FromPayload(payload,5); 
+            return true;
+    }
+    return false;
 }
 
 int busValueToFlaggedScaling(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
@@ -892,7 +907,7 @@ int valueToBusValueStepControl(const KNXValue& value, uint8_t* payload, size_t p
 
 int valueToBusValueCharacter(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
-    if ((uint64_t)value < INT64_C(0) || (uint64_t)value > INT64_C(255) || (datatype.subGroup == 1 && (uint64_t)value > INT64_C(127)))
+    if ((uint64_t)value > INT64_C(255) || (datatype.subGroup == 1 && (uint64_t)value > INT64_C(127)))
         return false;
     unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0xFF);
     return true;
@@ -1159,7 +1174,7 @@ int valueToBusValueAccess(const KNXValue& value, uint8_t* payload, size_t payloa
             break;
         case 5:
         {
-            if ((uint64_t)value < INT64_C(0) || (uint64_t)value > INT64_C(15))
+            if ((uint64_t)value > INT64_C(15))
                 return false;
             bcdToPayload(payload, payload_length, 7, (uint64_t)value);
             break;
@@ -1450,7 +1465,7 @@ int valueToBusValueScaling(const KNXValue& value, uint8_t* payload, size_t paylo
         {
             uint32_t duration = value;
 
-            if (duration < INT64_C(0) || duration > INT64_C(65535))
+            if (duration > INT64_C(65535))
                 return false;
 
             ENSURE_PAYLOAD(3);
@@ -1477,7 +1492,7 @@ int valueToBusValueTariff(const KNXValue& value, uint8_t* payload, size_t payloa
         {
             uint32_t duration = value;
 
-            if (duration < INT64_C(0) || duration > INT64_C(65535))
+            if (duration > INT64_C(65535))
                 return false;
 
             ENSURE_PAYLOAD(3);
@@ -1525,6 +1540,24 @@ int valueToBusValueRGB(const KNXValue& value, uint8_t* payload, size_t payload_l
     return true;
 }
 
+int valueToBusValueRGBW(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
+{
+    switch(datatype.index)
+    {
+        case 0: // RGBW
+            {
+                uint32_t rgbw = (uint32_t)value;
+                unsigned32ToPayload(payload, payload_length, 0, rgbw, 0xffffffff); // RGBW
+            }
+            break;
+        case 1: // Mask bits
+            unsigned8ToPayload(payload, payload_length, 5, (uint8_t)value, 0x0f);
+            break;
+
+    }
+    return true;
+}
+
 int valueToBusValueFlaggedScaling(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
     switch (datatype.index)
@@ -1553,7 +1586,6 @@ int valueToBusValueActiveEnergy(const KNXValue& value, uint8_t* payload, size_t 
     {
         case 0:
         {
-
             if ((int64_t)value < INT64_C(-2147483648) || (int64_t)value > INT64_C(2147483647))
                 return false;
             ENSURE_PAYLOAD(6);

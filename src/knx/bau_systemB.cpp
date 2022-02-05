@@ -483,7 +483,7 @@ bool BauSystemB::restartRequest(uint16_t asap, const SecurityControl secCtrl)
 
 void BauSystemB::connectConfirm(uint16_t tsap)
 {
-    if (_restartState == Connecting && tsap >= 0)
+    if (_restartState == Connecting)
     {
         /* restart connection is confirmed, go to the next state */
         _restartState = Connected;

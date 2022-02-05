@@ -294,6 +294,40 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return _bau.parameters().data(addr);
     }
 
+    // paramBit(address, shift)
+    // get state of a parameter as a boolean like "enable/disable", ...
+    // Declaration in XML file:
+    // ...
+    // <ParameterType Id="M-00FA_A-0066-EA-0001_PT-toggle" Name="toggle">
+    //   <TypeRestriction Base="Value" SizeInBit="1">
+    //     <Enumeration Text="Désactivé" Value="0" Id="M-00FA_A-0066-EA-0001_PT-toggle_EN-0"/>
+    //     <Enumeration Text="Activé" Value="1" Id="M-00FA_A-0066-EA-0001_PT-toggle_EN-1"/>
+    //  </TypeRestriction>
+    // </ParameterType>
+    // ...
+    // <Parameter Id="M-00FA_A-0066-EA-0001_P-2" Name="Input 1" ParameterType="M-00FA_A-0066-EA-0001_PT-toggle" Text="Input 1" Value="1">
+    //   <Memory CodeSegment="M-00FA_A-0066-EA-0001_RS-04-00000" Offset="1" BitOffset="0"/>
+    // </Parameter>
+    // <Parameter Id="M-00FA_A-0066-EA-0001_P-3" Name="Input 2" ParameterType="M-00FA_A-0066-EA-0001_PT-toggle" Text="Input 2" Value="1">
+    //   <Memory CodeSegment="M-00FA_A-0066-EA-0001_RS-04-00000" Offset="1" BitOffset="1"/>
+    // </Parameter>
+    // <Parameter Id="M-00FA_A-0066-EA-0001_P-4" Name="Inout 3" ParameterType="M-00FA_A-0066-EA-0001_PT-toggle" Text="Input 3" Value="1">
+    //   <Memory CodeSegment="M-00FA_A-0066-EA-0001_RS-04-00000" Offset="1" BitOffset="2"/>
+    // </Parameter>
+    // ...
+    // Usage in code :
+    //   if ( knx.paramBit(1,1))
+    //   {
+    //      //do somthings ....
+    //   }
+    bool paramBit(uint32_t addr, uint8_t shift)
+    {
+        if (!_bau.configured())
+            return 0;
+   
+        return (bool) ((_bau.parameters().getByte(addr) >> (7-shift)) & 0x01); 
+    }
+
     uint8_t paramByte(uint32_t addr)
     {
         if (!_bau.configured())
@@ -301,7 +335,20 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         return _bau.parameters().getByte(addr);
     }
+    
+    // Same usage than paramByte(addresse) for signed parameters
+    // Declaration in XML file
+    // <ParameterType Id="M-00FA_A-0066-EA-0001_PT-delta" Name="delta">
+    //   <TypeNumber SizeInBit="8" Type="signedInt" minInclusive="-10" maxInclusive="10"/>
+    // </ParameterType>
+    int8_t paramSignedByte(uint32_t addr)
+    {
+        if (!_bau.configured())
+            return 0;
 
+        return (int8_t) _bau.parameters().getByte(addr);
+    }
+ 
     uint16_t paramWord(uint32_t addr)
     {
         if (!_bau.configured())

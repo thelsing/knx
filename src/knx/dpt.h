@@ -357,6 +357,7 @@
 #define DPT_FlaggedScaling Dpt(239, 1)
 #define DPT_CombinedPosition Dpt(240, 800)
 #define DPT_StatusSAB Dpt(241, 800)
+#define DPT_Colour_RGBW Dpt(251, 600)
 
 class Dpt
 {

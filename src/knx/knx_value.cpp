@@ -318,7 +318,7 @@ uint64_t KNXValue::ulongValue() const
     switch (_type)
     {
         case ULongType:
-            return _value.uintValue;
+            return _value.ulongValue;
         case BoolType:
             return _value.boolValue ? 1 : 0;
         case UCharType:

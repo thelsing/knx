@@ -1,7 +1,7 @@
 #include "stm32_platform.h"
 
 #ifdef ARDUINO_ARCH_STM32
-#include <stm32_eeprom.h>
+#include <EEPROM.h>
 #include "knx/bits.h"
 
 Stm32Platform::Stm32Platform()
