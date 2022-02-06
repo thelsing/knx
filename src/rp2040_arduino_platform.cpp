@@ -16,7 +16,7 @@ For more, use or own emulation (maybe with littlefs)
 #include "rp2040_arduino_platform.h"
 
 #ifdef ARDUINO_ARCH_RP2040
-#include <knx/bits.h>
+#include "knx/bits.h"
 
 #include <Arduino.h>
 
@@ -24,6 +24,7 @@ For more, use or own emulation (maybe with littlefs)
 #include <EEPROM.h>             // EEPROM emulation in flash, part of Earl E Philhowers Pi Pico Arduino support 
 #include <pico/unique_id.h>     // from Pico SDK
 #include <hardware/watchdog.h>  // from Pico SDK
+#include <hardware/flash.h>     // from Pico SDK
 
 
 RP2040ArduinoPlatform::RP2040ArduinoPlatform()
@@ -76,6 +77,56 @@ uint8_t * RP2040ArduinoPlatform::getEepromBuffer(uint16_t size)
 void RP2040ArduinoPlatform::commitToEeprom()
 {
     EEPROM.commit();
+}
+
+
+size_t RP2040ArduinoPlatform::flashEraseBlockSize()
+{
+    return 16; // 16 pages x 256byte/page = 4096byte
+}
+
+size_t RP2040ArduinoPlatform::flashPageSize()
+{
+    return 256;
+}
+
+uint8_t* RP2040ArduinoPlatform::userFlashStart()
+{
+    // TODO
+    // XIP_BASE + KNX_FLASH_OFFSET
+    return nullptr;
+}
+
+size_t RP2040ArduinoPlatform::userFlashSizeEraseBlocks()
+{
+    if(KNX_FLASH_SIZE <= 0)
+        return 0;
+    else
+        return ( (KNX_FLASH_SIZE - 1) / (flashPageSize() * flashEraseBlockSize())) + 1;
+}
+
+void RP2040ArduinoPlatform::flashErase(uint16_t eraseBlockNum)
+{
+    noInterrupts();
+    rp2040.idleOtherCore();
+
+    // TODO: calculate position in flash
+    flash_range_erase (0x100, flashPageSize() * flashEraseBlockSize());
+
+    rp2040.resumeOtherCore();
+    interrupts();
+}
+
+void RP2040ArduinoPlatform::flashWritePage(uint16_t pageNumber, uint8_t* data)
+{
+    noInterrupts();
+    rp2040.idleOtherCore();
+
+    // TODO: calculate position in flash
+    flash_range_program(0x100, data, flashPageSize());
+
+    rp2040.resumeOtherCore();
+    interrupts();
 }
 #endif
 

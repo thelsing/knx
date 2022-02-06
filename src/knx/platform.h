@@ -59,9 +59,12 @@ class Platform
   protected:
         // Flash memory
     
-    virtual size_t flashEraseBlockSize(); // in pages
-    virtual size_t flashPageSize();       // in bytes
-    virtual uint8_t* userFlashStart();   // start of user flash aligned to start of an erase block
+    // size of one EraseBlock in pages
+    virtual size_t flashEraseBlockSize();
+    // size of one flash page in bytes
+    virtual size_t flashPageSize();
+    // start of user flash aligned to start of an erase block
+    virtual uint8_t* userFlashStart();
     virtual size_t userFlashSizeEraseBlocks(); // in eraseBlocks
     virtual void flashErase(uint16_t eraseBlockNum); //relativ to userFlashStart
     virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); //write a single page to flash (pageNumber relative to userFashStart
@@ -73,7 +76,9 @@ class Platform
     uint32_t bufferedEraseBlockStart();
     uint32_t bufferedEraseBlockEnd();
     int32_t getEraseBlockNumberOf(uint32_t relativeAddress);
+    // writes _eraseblockBuffer to flash
     void writeBufferedEraseBlock();
+    // copies a EraseBlock into the _eraseblockBuffer
     void bufferEraseBlock(uint32_t eraseBlockNumber);
 
     // in theory we would have to use this buffer for memory reads too,
