@@ -135,7 +135,7 @@ void Platform::commitNonVolatileMemory()
 {
     if(_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
     {
-        writeBufferedEraseBlock(_bufferedEraseblockNumber);
+        writeBufferedEraseBlock();
         
         // _bufferedEraseblockNumber = -1;  // does that make sense?
     }
@@ -198,9 +198,11 @@ void Platform::writeBufferedEraseBlock()
     if(_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
     {
         flashErase(_bufferedEraseblockNumber);
-        for(int i = 0; i< ; i++)
-        {   // ToDo
-            flashWritePage();
+        for(int i = 0; i < flashEraseBlockSize(); i++)
+        {   
+            int32_t pageNumber = _bufferedEraseblockNumber * flashEraseBlockSize() + i;
+            uint8_t *data = _eraseblockBuffer + flashPageSize() * i;
+            flashWritePage(pageNumber, data);
         }
         _bufferedEraseblockDirty = false;
     }

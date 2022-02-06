@@ -92,9 +92,7 @@ size_t RP2040ArduinoPlatform::flashPageSize()
 
 uint8_t* RP2040ArduinoPlatform::userFlashStart()
 {
-    // TODO
-    // XIP_BASE + KNX_FLASH_OFFSET
-    return nullptr;
+    return (uint8_t*)XIP_BASE + KNX_FLASH_OFFSET;
 }
 
 size_t RP2040ArduinoPlatform::userFlashSizeEraseBlocks()
@@ -110,8 +108,7 @@ void RP2040ArduinoPlatform::flashErase(uint16_t eraseBlockNum)
     noInterrupts();
     rp2040.idleOtherCore();
 
-    // TODO: calculate position in flash
-    flash_range_erase (0x100, flashPageSize() * flashEraseBlockSize());
+    flash_range_erase (KNX_FLASH_OFFSET + eraseBlockNum * flashPageSize() * flashEraseBlockSize(), flashPageSize() * flashEraseBlockSize());
 
     rp2040.resumeOtherCore();
     interrupts();
@@ -122,11 +119,27 @@ void RP2040ArduinoPlatform::flashWritePage(uint16_t pageNumber, uint8_t* data)
     noInterrupts();
     rp2040.idleOtherCore();
 
-    // TODO: calculate position in flash
-    flash_range_program(0x100, data, flashPageSize());
+    flash_range_program(KNX_FLASH_OFFSET + pageNumber * flashPageSize(), data, flashPageSize());
 
     rp2040.resumeOtherCore();
     interrupts();
+}
+
+void RP2040ArduinoPlatform::writeBufferedEraseBlock()
+{
+    if(_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
+    {
+        noInterrupts();
+        rp2040.idleOtherCore();
+
+        flash_range_erase (KNX_FLASH_OFFSET + _bufferedEraseblockNumber * flashPageSize() * flashEraseBlockSize(), flashPageSize() * flashEraseBlockSize());
+        flash_range_program(KNX_FLASH_OFFSET + _bufferedEraseblockNumber * flashPageSize() * flashEraseBlockSize(), _eraseblockBuffer, flashPageSize() * flashEraseBlockSize());
+
+        rp2040.resumeOtherCore();
+        interrupts();
+
+        _bufferedEraseblockDirty = false;
+    }
 }
 #endif
 

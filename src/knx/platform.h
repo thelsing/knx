@@ -57,7 +57,7 @@ class Platform
     void NonVolatileMemoryType(NvMemoryType type);
 
   protected:
-        // Flash memory
+    // Flash memory
     
     // size of one EraseBlock in pages
     virtual size_t flashEraseBlockSize();
@@ -65,19 +65,21 @@ class Platform
     virtual size_t flashPageSize();
     // start of user flash aligned to start of an erase block
     virtual uint8_t* userFlashStart();
-    virtual size_t userFlashSizeEraseBlocks(); // in eraseBlocks
-    virtual void flashErase(uint16_t eraseBlockNum); //relativ to userFlashStart
-    virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); //write a single page to flash (pageNumber relative to userFashStart
+    // size of the user flash in EraseBlocks
+    virtual size_t userFlashSizeEraseBlocks();
+    //relativ to userFlashStart
+    virtual void flashErase(uint16_t eraseBlockNum);
+    //write a single page to flash (pageNumber relative to userFashStart
+    virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); 
     
     NvMemoryType _memoryType = Eeprom;
 
-  private:
     void loadEraseblockContaining(uint32_t relativeAddress);
     uint32_t bufferedEraseBlockStart();
     uint32_t bufferedEraseBlockEnd();
     int32_t getEraseBlockNumberOf(uint32_t relativeAddress);
     // writes _eraseblockBuffer to flash
-    void writeBufferedEraseBlock();
+    virtual void writeBufferedEraseBlock();
     // copies a EraseBlock into the _eraseblockBuffer
     void bufferEraseBlock(uint32_t eraseBlockNumber);
 

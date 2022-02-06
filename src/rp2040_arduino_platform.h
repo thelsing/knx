@@ -26,13 +26,21 @@ public:
     void commitToEeprom();
 
 
-
-    size_t flashEraseBlockSize(); // in bytes
-    size_t flashPageSize();       // in bytes
-    uint8_t* userFlashStart();   // start of user flash aligned to start of an erase block
-    size_t userFlashSizeEraseBlocks(); // in eraseBlocks
-    void flashErase(uint16_t eraseBlockNum); //relativ to userFlashStart
-    void flashWritePage(uint16_t pageNumber, uint8_t* data); //write a single page to flash (pageNumber relative to userFashStart
+    // size of one EraseBlock in pages
+    virtual size_t flashEraseBlockSize();
+    // size of one flash page in bytes
+    virtual size_t flashPageSize();
+    // start of user flash aligned to start of an erase block
+    virtual uint8_t* userFlashStart();
+    // size of the user flash in EraseBlocks
+    virtual size_t userFlashSizeEraseBlocks();
+    //relativ to userFlashStart
+    virtual void flashErase(uint16_t eraseBlockNum);
+    //write a single page to flash (pageNumber relative to userFashStart
+    virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); 
+    
+    // writes _eraseblockBuffer to flash - overrides Plattform::writeBufferedEraseBlock()
+    void writeBufferedEraseBlock();
 };
 
 #endif
