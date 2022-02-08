@@ -139,7 +139,8 @@ void Memory::writeMemory()
         else
             bufferPos = pushWord(0, bufferPos);
 
-        bufferPos = _tableObjects[i]->save(buffer);
+        //bufferPos = _tableObjects[i]->save(buffer);
+        flashPos = _platform.writeNonVolatileMemory(flashPos, buffer, bufferPos - buffer);
     }
     
     _platform.commitNonVolatileMemory();

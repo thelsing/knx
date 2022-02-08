@@ -137,7 +137,9 @@ void Platform::commitNonVolatileMemory()
     {
         writeBufferedEraseBlock();
         
-        // _bufferedEraseblockNumber = -1;  // does that make sense?
+        free(_eraseblockBuffer);
+        _eraseblockBuffer = nullptr;
+        _bufferedEraseblockNumber = -1;  // does that make sense?
     }
 }
 
@@ -150,7 +152,7 @@ uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buf
         uint32_t end = bufferedEraseBlockEnd();
 
         ptrdiff_t offset = relativeAddress - start;
-        ptrdiff_t length = end - relativeAddress;
+        ptrdiff_t length = min(end - relativeAddress, size);
         memcpy(_eraseblockBuffer + offset, buffer, length);
         _bufferedEraseblockDirty = true;
 
@@ -170,7 +172,7 @@ void Platform::loadEraseblockContaining(uint32_t relativeAddress)
         fatalError();
     }
 
-    if (blockNum != _bufferedEraseblockNumber)
+    if (blockNum != _bufferedEraseblockNumber && _bufferedEraseblockNumber >= 0)
         writeBufferedEraseBlock();
 
     bufferEraseBlock(blockNum);
@@ -211,6 +213,13 @@ void Platform::writeBufferedEraseBlock()
 
 void Platform::bufferEraseBlock(uint32_t eraseBlockNumber)
 {
+    if(_bufferedEraseblockNumber == eraseBlockNumber)
+        return;
+    
+    if(_eraseblockBuffer == nullptr)
+    {
+        _eraseblockBuffer = (uint8_t*)malloc(flashEraseBlockSize() * flashPageSize());
+    }
     memcpy(_eraseblockBuffer, userFlashStart() + eraseBlockNumber * flashEraseBlockSize() * flashPageSize(), flashEraseBlockSize() * flashPageSize());
 
     _bufferedEraseblockNumber = eraseBlockNumber;
