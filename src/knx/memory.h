@@ -31,6 +31,7 @@ public:
     virtual ~Memory();
     void readMemory();
     void writeMemory();
+    void saveMemory();
     void addSaveRestore(SaveRestore* obj);
     void addSaveRestore(TableObject* obj);
 

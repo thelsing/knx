@@ -112,9 +112,15 @@ void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, 
     uint16_t memoryAddress, uint8_t * data)
 {
     _memory.writeMemory(memoryAddress, number, data);
-
+    Serial.println("memoryWriteIndication");
     if (_deviceObj.verifyMode())
-        memoryReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress);
+        memoryReadIndicationP(priority, hopType, asap, secCtrl, number, memoryAddress, data);
+}
+
+void BauSystemB::memoryReadIndicationP(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+    uint16_t memoryAddress, uint8_t * data)
+{
+    applicationLayer().memoryReadResponse(AckRequested, priority, hopType, asap, secCtrl, number, memoryAddress, data);
 }
 
 void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
@@ -206,6 +212,12 @@ void BauSystemB::propertyDescriptionReadIndication(Priority priority, HopCountTy
 void BauSystemB::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
+    Serial.print("propertyValueWriteIndication: ");
+    Serial.println(propertyId);
+    if(propertyId == 5 && objectIndex == 3)
+    {
+        Serial.println("gotcha");
+    }
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
         obj->writeProperty((PropertyID)propertyId, startIndex, data, numberOfElements);
@@ -245,6 +257,11 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
     }
     else
         elementCount = 0;
+
+    if(objectIndex == 1 && propertyId == 27)
+    {
+        Serial.print(" ");
+    }
 
     uint8_t data[size];
     if(obj)

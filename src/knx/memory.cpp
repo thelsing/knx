@@ -146,6 +146,11 @@ void Memory::writeMemory()
     _platform.commitNonVolatileMemory();
 }
 
+void Memory::saveMemory()
+{
+    _platform.commitNonVolatileMemory();
+}
+
 void Memory::addSaveRestore(SaveRestore* obj)
 {
     if (_saveCount >= MAXSAVE - 1)
