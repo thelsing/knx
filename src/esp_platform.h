@@ -16,6 +16,9 @@ class EspPlatform : public ArduinoPlatform
     uint32_t currentDefaultGateway() override;
     void macAddress(uint8_t* addr) override;
 
+    // unique serial number
+    uint32_t uniqueSerialNumber() override;
+
     // basic stuff
     void restart();
 
@@ -25,13 +28,16 @@ class EspPlatform : public ArduinoPlatform
     bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
     int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
    
+    //unicast 
+    bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
+    
     //memory
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();
 private:
     WiFiUDP _udp;
-	uint32_t _mulitcastAddr;
-    uint16_t _mulitcastPort;
+    uint32_t _multicastAddr;
+    uint16_t _multicastPort;
 };
 
 #endif

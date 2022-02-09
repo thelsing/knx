@@ -82,7 +82,7 @@ int FdskCalculator::toBase32(uint8_t* in, long length, uint8_t*& out, bool usePa
     int next = 1;
     int bitsLeft = 8;
 
-    while (count < bufSize && (bitsLeft > 0 || next < length))
+    while (bitsLeft > 0 || next < length)
     {
       if (bitsLeft < 5)
       {

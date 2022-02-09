@@ -31,6 +31,8 @@ uint8_t* TableObject::save(uint8_t* buffer)
 {
     buffer = pushByte(_state, buffer);
 
+    buffer = pushInt(_size, buffer);
+
     if (_data)
         buffer = pushInt(_memory.toRelative(_data), buffer);
     else
@@ -45,6 +47,8 @@ const uint8_t* TableObject::restore(const uint8_t* buffer)
     uint8_t state = 0;
     buffer = popByte(state, buffer);
     _state = (LoadState)state;
+
+    buffer = popInt(_size, buffer);
 
     uint32_t relativeAddress = 0;
     buffer = popInt(relativeAddress, buffer);
@@ -79,6 +83,8 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
 
     if (doFill)
         memset(_data, fillByte, size);
+
+    _size = size;
 
     return true;
 }
@@ -229,7 +235,7 @@ void TableObject::errorCode(ErrorCode errorCode)
 
 uint16_t TableObject::saveSize()
 {
-    return 5 + InterfaceObject::saveSize();
+    return 5 + InterfaceObject::saveSize() + sizeof(_size);
 }
 
 void TableObject::initializeProperties(size_t propertiesSize, Property** properties)
@@ -265,6 +271,21 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
                     pushInt(0, data);
                 else
                     pushInt(obj->tableReference(), data);
+                return 1;
+            }),
+        new CallbackProperty<TableObject>(this, PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0,
+            [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+                if (obj->_state != LS_LOADED)
+                    return 0; // need to check return code for invalid
+                
+                uint32_t segmentSize = obj->_size;
+                uint16_t crc16 = crc16Ccitt(obj->data(), segmentSize); 
+
+                pushInt(segmentSize, data);     // Segment size
+                pushByte(0x00, data + 4);       // CRC control byte -> 0: always valid
+                pushByte(0xFF, data + 5);       // Read access 4 bits + Write access 4 bits
+                pushWord(crc16, data + 6);      // CRC-16 CCITT of data
+    
                 return 1;
             }),
         new DataProperty(PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t)E_NO_FAULT)

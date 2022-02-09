@@ -1,10 +1,13 @@
 #include "stm32_platform.h"
 
 #ifdef ARDUINO_ARCH_STM32
-#include <stm32_eeprom.h>
+#include <EEPROM.h>
 #include "knx/bits.h"
 
-Stm32Platform::Stm32Platform() : ArduinoPlatform(&Serial2)
+Stm32Platform::Stm32Platform()
+#ifndef KNX_NO_DEFAULT_UART
+    : ArduinoPlatform(&Serial2)
+#endif
 {
 }
 
@@ -15,6 +18,11 @@ Stm32Platform::Stm32Platform( HardwareSerial* s) : ArduinoPlatform(s)
 Stm32Platform::~Stm32Platform()
 {
     delete [] _eepromPtr;
+}
+
+uint32_t Stm32Platform::uniqueSerialNumber()
+{
+    return HAL_GetUIDw0() ^ HAL_GetUIDw1() ^ HAL_GetUIDw2();
 }
 
 void Stm32Platform::restart()

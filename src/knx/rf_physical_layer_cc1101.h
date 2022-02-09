@@ -21,19 +21,19 @@ extern void delayMicroseconds (unsigned int howLong);
 
 /*----------------------[CC1101 - misc]---------------------------------------*/
 #define CRYSTAL_FREQUENCY         26000000
-#define CFG_REGISTER              0x2F  //47 registers
-#define FIFOBUFFER                0x42  //size of Fifo Buffer +2 for rssi and lqi
-#define RSSI_OFFSET_868MHZ        0x4E  //dec = 74
-#define TX_RETRIES_MAX            0x05  //tx_retries_max
-#define ACK_TIMEOUT               250   //ACK timeout in ms
-#define CC1101_COMPARE_REGISTER   0x00  //register compare 0=no compare 1=compare
-#define BROADCAST_ADDRESS         0x00  //broadcast address
+#define CFG_REGISTER              0x2F  // 47 registers
+#define FIFOBUFFER                0x42  // size of Fifo Buffer +2 for rssi and lqi
+#define RSSI_OFFSET_868MHZ        0x4E  // dec = 74
+#define TX_RETRIES_MAX            0x05  // tx_retries_max
+#define ACK_TIMEOUT               250   // ACK timeout in ms
+#define CC1101_COMPARE_REGISTER   0x00  // register compare 0=no compare 1=compare
+#define BROADCAST_ADDRESS         0x00  // broadcast address
 #define CC1101_FREQ_315MHZ        0x01
 #define CC1101_FREQ_434MHZ        0x02
 #define CC1101_FREQ_868MHZ        0x03
 #define CC1101_FREQ_915MHZ        0x04
-#define CC1101_TEMP_ADC_MV        3.225 //3.3V/1023 . mV pro digit
-#define CC1101_TEMP_CELS_CO       2.47  //Temperature coefficient 2.47mV per Grad Celsius
+#define CC1101_TEMP_ADC_MV        3.225 // 3.3V/1023 . mV pro digit
+#define CC1101_TEMP_CELS_CO       2.47  // Temperature coefficient 2.47mV per Grad Celsius
 
 /*---------------------------[CC1101 - R/W offsets]---------------------------*/
 #define WRITE_SINGLE_BYTE   0x00
@@ -43,12 +43,12 @@ extern void delayMicroseconds (unsigned int howLong);
 /*---------------------------[END R/W offsets]--------------------------------*/
 
 /*------------------------[CC1101 - FIFO commands]----------------------------*/
-#define TXFIFO_BURST        0x7F    //write burst only
-#define TXFIFO_SINGLE_BYTE  0x3F    //write single only
-#define RXFIFO_BURST        0xFF    //read burst only
-#define RXFIFO_SINGLE_BYTE  0xBF    //read single only
-#define PATABLE_BURST       0x7E    //power control read/write
-#define PATABLE_SINGLE_BYTE 0xFE    //power control read/write
+#define TXFIFO_BURST        0x7F    // write burst only
+#define TXFIFO_SINGLE_BYTE  0x3F    // write single only
+#define RXFIFO_BURST        0xFF    // read burst only
+#define RXFIFO_SINGLE_BYTE  0xBF    // read single only
+#define PATABLE_BURST       0x7E    // power control read/write
+#define PATABLE_SINGLE_BYTE 0xFE    // power control read/write
 /*---------------------------[END FIFO commands]------------------------------*/
 
 /*----------------------[CC1101 - config register]----------------------------*/

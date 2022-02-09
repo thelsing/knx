@@ -16,6 +16,9 @@ public:
     uint32_t currentDefaultGateway() override;
     void macAddress(uint8_t* addr) override;
 
+    // unique serial number
+    uint32_t uniqueSerialNumber() override;
+
     // basic stuff
     void restart();
 
@@ -25,6 +28,9 @@ public:
     bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
     int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
     
+    //unicast 
+    bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
+
     //memory
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();

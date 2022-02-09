@@ -63,6 +63,7 @@ typedef void (*voidFuncPtr)(void);
 void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 #endif
 
+#ifndef KNX_NO_PRINT
 void print(const char[]);
 void print(char);
 void print(unsigned char, int = DEC);
@@ -87,6 +88,11 @@ void println(double);
 void println(void);
 
 void printHex(const char* suffix, const uint8_t *data, size_t length, bool newline = true);
+#else
+#define print(...)      do {} while(0)
+#define println(...)    do {} while(0)
+#define printHex(...)   do {} while(0)
+#endif
 
 const uint8_t* popByte(uint8_t& b, const uint8_t* data);
 const uint8_t* popWord(uint16_t& w, const uint8_t* data);

@@ -25,7 +25,7 @@
 void checkIaqSensorStatus(void);
 void errLeds(void);
 uint8_t* saveBme680State(uint8_t* buffer);
-uint8_t* loadBme680State(uint8_t* buffer);
+const uint8_t* loadBme680State(const uint8_t* buffer);
 void triggerCallback(GroupObject& go);
 void updateState();
 
@@ -53,13 +53,16 @@ void setup(void)
     wifiManager.autoConnect("knx-bme680");
     #endif
 
+    // set save and restore callbacks
+    knx.setSaveCallback(saveBme680State);
+    knx.setRestoreCallback(loadBme680State);
+    
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
 
     // register callback for reset GO
     if(knx.configured())
         goTriggerSample.callback(triggerCallback);
-
 
     // Configure Wire pins before this call if needed.
     Wire.begin();
@@ -87,9 +90,6 @@ void setup(void)
         BSEC_OUTPUT_GAS_PERCENTAGE
     };
 
-    knx.setSaveCallback(saveBme680State);
-    knx.setRestoreCallback(loadBme680State);
-    
     if (knx.configured())
     {
         cyclSend = knx.paramInt(0);
@@ -214,7 +214,7 @@ void errLeds(void)
     delay(100);
 }
 
-uint8_t* loadBme680State(uint8_t* buffer)
+const uint8_t* loadBme680State(const uint8_t* buffer)
 {
     // Existing state in EEPROM
     Serial.println("Reading state from EEPROM");

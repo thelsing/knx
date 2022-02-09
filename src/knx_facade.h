@@ -8,6 +8,10 @@
 #include "knx/bau2920.h"
 #include "knx/bau57B0.h"
 
+#ifndef USERDATA_SAVE_SIZE
+#define USERDATA_SAVE_SIZE 0
+#endif
+
 #ifdef ARDUINO_ARCH_SAMD
     #include "samd_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
@@ -45,7 +49,8 @@
     #endif
 #endif
 
-typedef uint8_t* (*SaveRestoreCallback)(uint8_t* buffer);
+typedef const uint8_t* (*RestoreCallback)(const uint8_t* buffer);
+typedef uint8_t* (*SaveCallback)(uint8_t* buffer);
 typedef void (*IsrFunctionPtr)();
  
 template <class P, class B> class KnxFacade : private SaveRestore
@@ -54,18 +59,21 @@ template <class P, class B> class KnxFacade : private SaveRestore
     KnxFacade() : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
     {
         manufacturerId(0xfa);
+        bauNumber(platform().uniqueSerialNumber());
         _bau.addSaveRestore(this);
     }
 
     KnxFacade(B& bau) : _bau(bau)
     {
         manufacturerId(0xfa);
+        bauNumber(platform().uniqueSerialNumber());
         _bau.addSaveRestore(this);
     }
 
     KnxFacade(IsrFunctionPtr buttonISRFunction) : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
     {
         manufacturerId(0xfa);
+        bauNumber(platform().uniqueSerialNumber());
         _bau.addSaveRestore(this);
         setButtonISRFunction(buttonISRFunction);
     }
@@ -226,7 +234,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
     {
         _bau.deviceObject().bauNumber(value);
     }
-
+    
     void orderNumber(const uint8_t* value)
     {
         _bau.deviceObject().orderNumber(value);
@@ -236,7 +244,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
     {
         _bau.deviceObject().hardwareType(value);
     }
-
+    
     void version(uint16_t value)
     {
         _bau.deviceObject().version(value);
@@ -268,12 +276,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _progButtonISRFuncPtr = progButtonISRFuncPtr;
     }
 
-    void setSaveCallback(SaveRestoreCallback func)
+    void setSaveCallback(SaveCallback func)
     {
         _saveCallback = func;
     }
 
-    void setRestoreCallback(SaveRestoreCallback func)
+    void setRestoreCallback(RestoreCallback func)
     {
         _restoreCallback = func;
     }
@@ -286,6 +294,40 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return _bau.parameters().data(addr);
     }
 
+    // paramBit(address, shift)
+    // get state of a parameter as a boolean like "enable/disable", ...
+    // Declaration in XML file:
+    // ...
+    // <ParameterType Id="M-00FA_A-0066-EA-0001_PT-toggle" Name="toggle">
+    //   <TypeRestriction Base="Value" SizeInBit="1">
+    //     <Enumeration Text="Désactivé" Value="0" Id="M-00FA_A-0066-EA-0001_PT-toggle_EN-0"/>
+    //     <Enumeration Text="Activé" Value="1" Id="M-00FA_A-0066-EA-0001_PT-toggle_EN-1"/>
+    //  </TypeRestriction>
+    // </ParameterType>
+    // ...
+    // <Parameter Id="M-00FA_A-0066-EA-0001_P-2" Name="Input 1" ParameterType="M-00FA_A-0066-EA-0001_PT-toggle" Text="Input 1" Value="1">
+    //   <Memory CodeSegment="M-00FA_A-0066-EA-0001_RS-04-00000" Offset="1" BitOffset="0"/>
+    // </Parameter>
+    // <Parameter Id="M-00FA_A-0066-EA-0001_P-3" Name="Input 2" ParameterType="M-00FA_A-0066-EA-0001_PT-toggle" Text="Input 2" Value="1">
+    //   <Memory CodeSegment="M-00FA_A-0066-EA-0001_RS-04-00000" Offset="1" BitOffset="1"/>
+    // </Parameter>
+    // <Parameter Id="M-00FA_A-0066-EA-0001_P-4" Name="Inout 3" ParameterType="M-00FA_A-0066-EA-0001_PT-toggle" Text="Input 3" Value="1">
+    //   <Memory CodeSegment="M-00FA_A-0066-EA-0001_RS-04-00000" Offset="1" BitOffset="2"/>
+    // </Parameter>
+    // ...
+    // Usage in code :
+    //   if ( knx.paramBit(1,1))
+    //   {
+    //      //do somthings ....
+    //   }
+    bool paramBit(uint32_t addr, uint8_t shift)
+    {
+        if (!_bau.configured())
+            return 0;
+   
+        return (bool) ((_bau.parameters().getByte(addr) >> (7-shift)) & 0x01); 
+    }
+
     uint8_t paramByte(uint32_t addr)
     {
         if (!_bau.configured())
@@ -293,7 +335,20 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         return _bau.parameters().getByte(addr);
     }
+    
+    // Same usage than paramByte(addresse) for signed parameters
+    // Declaration in XML file
+    // <ParameterType Id="M-00FA_A-0066-EA-0001_PT-delta" Name="delta">
+    //   <TypeNumber SizeInBit="8" Type="signedInt" minInclusive="-10" maxInclusive="10"/>
+    // </ParameterType>
+    int8_t paramSignedByte(uint32_t addr)
+    {
+        if (!_bau.configured())
+            return 0;
 
+        return (int8_t) _bau.parameters().getByte(addr);
+    }
+ 
     uint16_t paramWord(uint32_t addr)
     {
         if (!_bau.configured())
@@ -338,11 +393,11 @@ template <class P, class B> class KnxFacade : private SaveRestore
     uint32_t _ledPin = LED_BUILTIN;
     uint32_t _buttonPinInterruptOn = RISING;
     uint32_t _buttonPin = 0;
-    SaveRestoreCallback _saveCallback = 0;
-    SaveRestoreCallback _restoreCallback = 0;
+    SaveCallback _saveCallback = 0;
+    RestoreCallback _restoreCallback = 0;
     volatile bool _toggleProgMode = false;
     bool _progLedState = false;
-    uint16_t _saveSize = 0;
+    uint16_t _saveSize = USERDATA_SAVE_SIZE;
     IsrFunctionPtr _progButtonISRFuncPtr = 0;
 
     uint8_t* save(uint8_t* buffer)
@@ -353,7 +408,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         return buffer;
     }
 
-    uint8_t* restore(uint8_t* buffer)
+    const uint8_t* restore(const uint8_t* buffer)
     {
         if (_restoreCallback != 0)
             return _restoreCallback(buffer);

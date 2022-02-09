@@ -187,7 +187,7 @@ KNXValue& KNXValue::operator=(const int16_t value)
 
 KNXValue& KNXValue::operator=(const int32_t value)
 {
-    _value.boolValue = value;
+    _value.intValue = value;
     _type = IntType;
     return *this;
 }
@@ -318,7 +318,7 @@ uint64_t KNXValue::ulongValue() const
     switch (_type)
     {
         case ULongType:
-            return _value.uintValue;
+            return _value.ulongValue;
         case BoolType:
             return _value.boolValue ? 1 : 0;
         case UCharType:
@@ -343,7 +343,11 @@ uint64_t KNXValue::ulongValue() const
         case DoubleType:
             return (uint64_t)_value.doubleValue;
         case StringType:
+#ifndef KNX_NO_STRTOx_CONVERSION
             return (uint64_t)strtoul(_value.stringValue, NULL, 0);
+#else
+            return 0;
+#endif
     }
     return 0;
 }
@@ -444,7 +448,11 @@ int64_t KNXValue::longValue() const
         case DoubleType:
             return (int64_t)_value.doubleValue;
         case StringType:
+#ifndef KNX_NO_STRTOx_CONVERSION
             return strtol(_value.stringValue, NULL, 0);
+#else
+            return 0;
+#endif
     }
     return 0;
 }
@@ -476,7 +484,11 @@ double KNXValue::doubleValue() const
         case LongType:
             return _value.longValue;
         case StringType:
+#ifndef KNX_NO_STRTOx_CONVERSION
             return strtod(_value.stringValue, NULL);
+#else
+            return 0;
+#endif
     }
     return 0;
 }

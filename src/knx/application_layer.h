@@ -11,7 +11,7 @@ class TransportLayer;
  * This is an implementation of the application layer as specified in @cite knx:3/5/1.
  * It provides methods for the BusAccessUnit to do different things and translates this 
  * call to an APDU and calls the correct method of the TransportLayer. 
- * It also takes calls from TransportLayer, decodes the submitted APDU and calls the coresponding
+ * It also takes calls from TransportLayer, decodes the submitted APDU and calls the corresponding
  * methods of the BusAccessUnit class.
  */
 class ApplicationLayer
@@ -31,12 +31,12 @@ class ApplicationLayer
     void associationTableObject(AssociationTableObject& assocTable);
 
     // from transport layer
-    // Note: without data secure feature, the application layer is just used with SecurtyControl.dataSecurity = None
+    // Note: without data secure feature, the application layer is just used with SecurityControl.dataSecurity = None
     // hooks that can be implemented by derived class (e.g. SecureApplicationLayer)
 
 #pragma region Transport - Layer - Callbacks
     /**
-     * Somebody send us an APDU via multicast communiation. See 3.2 of @cite knx:3/3/4. 
+     * Somebody send us an APDU via multicast communication. See 3.2 of @cite knx:3/3/4. 
      * See also ApplicationLayer::dataGroupConfirm and TransportLayer::dataGroupRequest.
      * This method is called by the TransportLayer.
      * 
@@ -51,7 +51,7 @@ class ApplicationLayer
      */
     virtual void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu);
     /**
-     * Report the status of an APDU that we sent via multicast communiation back to us. See 3.2 of @cite knx:3/3/4. 
+     * Report the status of an APDU that we sent via multicast communication back to us. See 3.2 of @cite knx:3/3/4. 
      * See also ApplicationLayer::dataGroupConfirm and TransportLayer::dataGroupRequest. This method is called by 
      * the TransportLayer.
      * 

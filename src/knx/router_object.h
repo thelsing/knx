@@ -52,8 +52,6 @@ private:
   void commandClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet);
   bool statusClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet);
 
-  void updateMcb();
-
   bool _rfSbcRoutingEnabled = false;
   bool _ipSbcRoutingEnabled = false;
   uint16_t* _filterTableGroupAddresses = 0;

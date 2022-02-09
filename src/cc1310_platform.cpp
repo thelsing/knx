@@ -134,6 +134,7 @@ void delayMicroseconds (unsigned int howLong)
     ClockP_usleep(howLong);
 }
 
+#ifndef KNX_NO_PRINT
 size_t write(uint8_t c)
 {
 #if defined(PRINT_UART)
@@ -402,6 +403,7 @@ void println(double num)
     // default: print 10 digits
     println(num, 10);
 }
+#endif // KNX_NO_PRINT
 
 uint32_t digitalRead(uint32_t dwPin)
 {

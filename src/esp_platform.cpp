@@ -7,7 +7,10 @@
 
 #include "knx/bits.h"
 
-EspPlatform::EspPlatform() : ArduinoPlatform(&Serial)
+EspPlatform::EspPlatform()
+#ifndef KNX_NO_DEFAULT_UART
+    : ArduinoPlatform(&Serial)
+#endif
 {
 }
 
@@ -35,6 +38,11 @@ void EspPlatform::macAddress(uint8_t * addr)
     wifi_get_macaddr(STATION_IF, addr);
 }
 
+uint32_t EspPlatform::uniqueSerialNumber()
+{
+    return ESP.getChipId();
+}
+
 void EspPlatform::restart()
 {
     println("restart");
@@ -43,9 +51,9 @@ void EspPlatform::restart()
 
 void EspPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 {
-    _mulitcastAddr = htonl(addr);
-    _mulitcastPort = port;
-    IPAddress mcastaddr(_mulitcastAddr);
+    _multicastAddr = htonl(addr);
+    _multicastPort = port;
+    IPAddress mcastaddr(_multicastAddr);
     
     Serial.printf("setup multicast addr: %s port: %d ip: %s\n", mcastaddr.toString().c_str(), port,
         WiFi.localIP().toString().c_str());
@@ -61,7 +69,7 @@ void EspPlatform::closeMultiCast()
 bool EspPlatform::sendBytesMultiCast(uint8_t * buffer, uint16_t len)
 {
     //printHex("<- ",buffer, len);
-    _udp.beginPacketMulticast(_mulitcastAddr, _mulitcastPort, WiFi.localIP());
+    _udp.beginPacketMulticast(_multicastAddr, _multicastPort, WiFi.localIP());
     _udp.write(buffer, len);
     _udp.endPacket();
     return true;
@@ -82,6 +90,18 @@ int EspPlatform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen)
     _udp.read(buffer, len);
     //printHex("-> ", buffer, len);
     return len;
+}
+
+bool EspPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
+{
+    IPAddress ucastaddr(htonl(addr));
+    println("sendBytesUniCast endPacket fail");
+    if(_udp.beginPacket(ucastaddr, port) == 1) {
+        _udp.write(buffer, len);
+        if(_udp.endPacket() == 0) println("sendBytesUniCast endPacket fail");
+    }
+    else println("sendBytesUniCast beginPacket fail");
+    return true;
 }
 
 uint8_t * EspPlatform::getEepromBuffer(uint16_t size)

@@ -2,9 +2,17 @@
 #include "knx/bits.h"
 
 #include <Arduino.h>
+#ifndef KNX_NO_SPI
 #include <SPI.h>
+#endif
 
+#ifndef KNX_NO_PRINT
 Stream* ArduinoPlatform::SerialDebug = &Serial;
+#endif
+
+ArduinoPlatform::ArduinoPlatform() : _knxSerial(nullptr)
+{
+}
 
 ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial) : _knxSerial(knxSerial)
 {
@@ -27,7 +35,8 @@ void ArduinoPlatform::fatalError()
 
 void ArduinoPlatform::knxUart( HardwareSerial* serial )
 {
-    closeUart();
+    if (_knxSerial)
+        closeUart();
     _knxSerial = serial;
     setupUart();
 }
@@ -94,6 +103,7 @@ size_t ArduinoPlatform::readBytesUart(uint8_t *buffer, size_t length)
     return length;
 }
 
+#ifndef KNX_NO_SPI
 void ArduinoPlatform::setupSpi()
 {
     SPI.begin();
@@ -111,7 +121,9 @@ int ArduinoPlatform::readWriteSpi(uint8_t *data, size_t len)
     SPI.transfer(data, len);
     return 0;
 }
+#endif
 
+#ifndef KNX_NO_PRINT
 void printUint64(uint64_t value, int base = DEC)
   {
     char buf[8 * sizeof(uint64_t) + 1];
@@ -284,3 +296,4 @@ void println(void)
 {
     ArduinoPlatform::SerialDebug->println();
 }
+#endif // KNX_NO_PRINT

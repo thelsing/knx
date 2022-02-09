@@ -10,7 +10,7 @@
 #define MAXTABLEOBJ 4
 
 #ifndef KNX_FLASH_SIZE
-# define KNX_FLASH_SIZE 1024
+#define KNX_FLASH_SIZE 1024
 #endif
 
 class MemoryBlock

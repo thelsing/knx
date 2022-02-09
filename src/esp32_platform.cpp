@@ -6,7 +6,10 @@
 
 #include "knx/bits.h"
 
-Esp32Platform::Esp32Platform() : ArduinoPlatform(&Serial1)
+Esp32Platform::Esp32Platform()
+#ifndef KNX_NO_DEFAULT_UART
+    : ArduinoPlatform(&Serial1)
+#endif
 {
 }
 
@@ -32,6 +35,14 @@ uint32_t Esp32Platform::currentDefaultGateway()
 void Esp32Platform::macAddress(uint8_t * addr)
 {
     esp_wifi_get_mac(WIFI_IF_STA, addr);
+}
+
+uint32_t Esp32Platform::uniqueSerialNumber()
+{
+    uint64_t chipid = ESP.getEfuseMac();
+    uint32_t upperId = (chipid >> 32) & 0xFFFFFFFF;
+    uint32_t lowerId = (chipid & 0xFFFFFFFF);
+    return (upperId ^ lowerId);
 }
 
 void Esp32Platform::restart()
@@ -81,6 +92,18 @@ int Esp32Platform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen)
     return len;
 }
 
+bool Esp32Platform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
+{
+    IPAddress ucastaddr(htonl(addr));
+    println("sendBytesUniCast endPacket fail");
+    if(_udp.beginPacket(ucastaddr, port) == 1) {
+        _udp.write(buffer, len);
+        if(_udp.endPacket() == 0) println("sendBytesUniCast endPacket fail");
+    }
+    else println("sendBytesUniCast beginPacket fail");
+    return true;
+}
+
 uint8_t * Esp32Platform::getEepromBuffer(uint16_t size)
 {
     EEPROM.begin(size);
@@ -89,6 +112,7 @@ uint8_t * Esp32Platform::getEepromBuffer(uint16_t size)
 
 void Esp32Platform::commitToEeprom()
 {
+    EEPROM.getDataPtr(); // trigger dirty flag in EEPROM lib to make sure data will be written to flash
     EEPROM.commit();
 }
 
