@@ -3,10 +3,11 @@
 Plattform for Raspberry Pi Pico and other RP2040 boards
 
 made to work with arduino-pico - "Raspberry Pi Pico Arduino core, for all RP2040 boards"
-by Earl E. Philhower III https://github.com/earlephilhower/arduino-pico
-tested with V1.9.1
+by Earl E. Philhower III https://github.com/earlephilhower/arduino-pico V1.11.0
 
-by SirSydom <com@sirsydom.de> 2021
+by SirSydom <com@sirsydom.de> 2021-2022
+
+RTTI must be set to enabled in the board options
 
 A maximum of 4kB emulated EEPROM is supported.
 For more, use or own emulation (maybe with littlefs)
@@ -16,7 +17,7 @@ For more, use or own emulation (maybe with littlefs)
 #include "rp2040_arduino_platform.h"
 
 #ifdef ARDUINO_ARCH_RP2040
-#include <knx/bits.h>
+#include "knx/bits.h"
 
 #include <Arduino.h>
 
@@ -35,6 +36,19 @@ RP2040ArduinoPlatform::RP2040ArduinoPlatform()
 
 RP2040ArduinoPlatform::RP2040ArduinoPlatform( HardwareSerial* s) : ArduinoPlatform(s)
 {
+}
+
+void RP2040ArduinoPlatform::setupUart()
+{
+    SerialUART* serial = dynamic_cast<SerialUART*>(_knxSerial);
+    if(serial)
+    {
+        serial->setPollingMode();
+    }
+
+    _knxSerial->begin(19200, SERIAL_8E1);
+    while (!_knxSerial) 
+        ;
 }
 
 uint32_t RP2040ArduinoPlatform::uniqueSerialNumber()
