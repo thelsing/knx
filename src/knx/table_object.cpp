@@ -83,14 +83,9 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
 
     if (doFill)
     {
-        //memset(_data, fillByte, size);
-        Serial.print("allocTable doFill: ");
-        Serial.print(fillByte);
-        Serial.print(" ");
-        Serial.println(size);
-        
+        uint32_t addr = _memory.toRelative(_data);
         for(int i = 0; i< size;i++)
-            _memory.writeMemory(_memory.toRelative(_data)+i, 1, &fillByte);
+            _memory.writeMemory(addr+i, 1, &fillByte);
     }
 
     _size = size;
@@ -303,7 +298,6 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
     //TODO: missing
 
     //      23 PID_TABLE 3 / (3)
-    //      27 PID_MCB_TABLE 3 / 3
 
     uint8_t ownPropertiesCount = sizeof(ownProperties) / sizeof(Property*);
 

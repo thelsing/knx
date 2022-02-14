@@ -82,11 +82,11 @@ void GroupObjectTableObject::beforeStateChange(LoadState& newState)
 
     _tableData = (uint16_t*)data();
 
-    /*if (!initGroupObjects())
+    if (!initGroupObjects())
     {
         newState = LS_ERROR;
         TableObject::errorCode(E_SOFTWARE_FAULT);
-    }*/
+    }
 }
 
 bool GroupObjectTableObject::initGroupObjects()

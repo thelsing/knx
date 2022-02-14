@@ -82,7 +82,6 @@ void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint1
             return;
 
         _transportLayer.dataIndividualIndication(destination, hopType, priority, source, npdu.tpdu());
-        Serial.println("NL:dI");
         return;
     }
 
