@@ -55,17 +55,16 @@ class Platform
     virtual void commitNonVolatileMemory();
     // address is relative to start of nonvolatile memory
     virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size);
+    // size of one flash page in bytes
+    virtual size_t flashPageSize();
+
 
     NvMemoryType NonVolatileMemoryType();
     void NonVolatileMemoryType(NvMemoryType type);
 
   protected:
-    // Flash memory
-    
     // size of one EraseBlock in pages
     virtual size_t flashEraseBlockSize();
-    // size of one flash page in bytes
-    virtual size_t flashPageSize();
     // start of user flash aligned to start of an erase block
     virtual uint8_t* userFlashStart();
     // size of the user flash in EraseBlocks

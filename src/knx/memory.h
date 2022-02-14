@@ -46,7 +46,7 @@ public:
     void addToUsedList(MemoryBlock* block);
     void removeFromUsedList(MemoryBlock* block);
     void addToFreeList(MemoryBlock* block);
-//    uint16_t alignToPageSize(size_t size);
+    uint16_t alignToPageSize(size_t size);
     MemoryBlock* removeFromList(MemoryBlock* head, MemoryBlock* item);
     MemoryBlock* findBlockInList(MemoryBlock* head, uint8_t* address);
     void addNewUsedBlock(uint8_t* address, size_t size);

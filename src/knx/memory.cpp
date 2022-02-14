@@ -25,8 +25,7 @@ void Memory::readMemory()
 
     printHex("RESTORED ", flashStart, _metadataSize);
 
-    //uint16_t metadataBlockSize = alignToPageSize(_metadataSize);
-    uint16_t metadataBlockSize = _metadataSize;
+    uint16_t metadataBlockSize = alignToPageSize(_metadataSize);
 
     _freeList = new MemoryBlock(flashStart + metadataBlockSize, flashSize - metadataBlockSize);
 
@@ -175,7 +174,7 @@ void Memory::addSaveRestore(TableObject* obj)
 uint8_t* Memory::allocMemory(size_t size)
 {
     // always allocate aligned to pagesize
-    //size = alignToPageSize(size);
+    size = alignToPageSize(size);
 
     MemoryBlock* freeBlock = _freeList;
     MemoryBlock* blockToUse = nullptr;
@@ -375,12 +374,12 @@ void Memory::addToFreeList(MemoryBlock* block)
     }
 }
 
-//uint16_t Memory::alignToPageSize(size_t size)
-//{
-//    size_t pageSize = _platform.flashPageSize();
-//    // pagesize should be a multiply of two
-//    return (size + pageSize - 1) & (-1*pageSize);
-//}
+uint16_t Memory::alignToPageSize(size_t size)
+{
+    size_t pageSize = _platform.flashPageSize();
+    // pagesize should be a multiply of two
+    return (size + pageSize - 1) & (-1*pageSize);
+}
 
 MemoryBlock* Memory::findBlockInList(MemoryBlock* head, uint8_t* address)
 {
