@@ -50,6 +50,11 @@ class Platform
     virtual void closeSpi();
     virtual int readWriteSpi(uint8_t *data, size_t len);
 
+    //Memory
+
+    virtual uint8_t* getEepromBuffer(uint16_t size);
+    virtual void commitToEeprom();
+
     virtual uint8_t* getNonVolatileMemoryStart();
     virtual size_t getNonVolatileMemorySize();
     virtual void commitNonVolatileMemory();
@@ -57,7 +62,6 @@ class Platform
     virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size);
     // size of one flash page in bytes
     virtual size_t flashPageSize();
-
 
     NvMemoryType NonVolatileMemoryType();
     void NonVolatileMemoryType(NvMemoryType type);

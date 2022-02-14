@@ -6,10 +6,12 @@ made to work with arduino-pico - "Raspberry Pi Pico Arduino core, for all RP2040
 by Earl E. Philhower III https://github.com/earlephilhower/arduino-pico
 tested with V1.9.1
 
-by SirSydom <com@sirsydom.de> 2021
+by SirSydom <com@sirsydom.de> 2021-2022
 
-A maximum of 4kB emulated EEPROM is supported.
-For more, use or own emulation (maybe with littlefs)
+Uses direct flash reading/writing.
+Size ist defined by KNX_FLASH_SIZE (default 4k).
+Offset in Flash is defined by KNX_FLASH_OFFSET (default 1,5MiB / 0x180000).
+EEPROM Emulation from arduino-pico core (max 4k) can be use by defining USE_RP2040_EEPROM_EMULATION
 
 ----------------------------------------------------*/
 
@@ -32,10 +34,16 @@ RP2040ArduinoPlatform::RP2040ArduinoPlatform()
     : ArduinoPlatform(&Serial1)
 #endif
 {
+    #ifndef USE_RP2040_EEPROM_EMULATION
+    _memoryType = Flash;
+    #endif
 }
 
 RP2040ArduinoPlatform::RP2040ArduinoPlatform( HardwareSerial* s) : ArduinoPlatform(s)
 {
+    #ifndef USE_RP2040_EEPROM_EMULATION
+    _memoryType = Flash;
+    #endif
 }
 
 uint32_t RP2040ArduinoPlatform::uniqueSerialNumber()
@@ -54,6 +62,10 @@ void RP2040ArduinoPlatform::restart()
     println("restart");
     watchdog_reboot(0,0,0);
 }
+
+#ifdef USE_RP2040_EEPROM_EMULATION
+
+#pragma warning "Using EEPROM Simulation"
 
 uint8_t * RP2040ArduinoPlatform::getEepromBuffer(uint16_t size)
 {
@@ -79,6 +91,7 @@ void RP2040ArduinoPlatform::commitToEeprom()
     EEPROM.commit();
 }
 
+#else
 
 size_t RP2040ArduinoPlatform::flashEraseBlockSize()
 {
@@ -141,6 +154,7 @@ void RP2040ArduinoPlatform::writeBufferedEraseBlock()
         _bufferedEraseblockDirty = false;
     }
 }
+#endif
 #endif
 
 

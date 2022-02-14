@@ -107,7 +107,8 @@ size_t Platform::flashEraseBlockSize()
 
 size_t Platform::flashPageSize()
 {
-    return 0;
+    // align to 32bit as default for Eeprom Emulation plattforms
+    return 4;
 }
 
 uint8_t *Platform::userFlashStart()
@@ -126,46 +127,76 @@ void Platform::flashErase(uint16_t eraseBlockNum)
 void Platform::flashWritePage(uint16_t pageNumber, uint8_t* data)
 {}
 
+uint8_t * Platform::getEepromBuffer(uint16_t size)
+{
+    return nullptr;
+}
+
+void Platform::commitToEeprom()
+{}
+
 uint8_t* Platform::getNonVolatileMemoryStart()
 {
-    return userFlashStart();
+    if(_memoryType == Flash)
+        return userFlashStart();
+    else
+        return getEepromBuffer(KNX_FLASH_SIZE);
 }
 
 size_t Platform::getNonVolatileMemorySize()
 {
-    return userFlashSizeEraseBlocks() * flashEraseBlockSize() * flashPageSize();
+    if(_memoryType == Flash)
+        return userFlashSizeEraseBlocks() * flashEraseBlockSize() * flashPageSize();
+    else
+        return KNX_FLASH_SIZE;
+
 }
 
 void Platform::commitNonVolatileMemory()
 {
-    if(_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
+    if(_memoryType == Flash)
     {
-        writeBufferedEraseBlock();
-        
-        free(_eraseblockBuffer);
-        _eraseblockBuffer = nullptr;
-        _bufferedEraseblockNumber = -1;  // does that make sense?
+        if(_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
+        {
+            writeBufferedEraseBlock();
+            
+            free(_eraseblockBuffer);
+            _eraseblockBuffer = nullptr;
+            _bufferedEraseblockNumber = -1;  // does that make sense?
+        }
+    }
+    else
+    {
+        commitToEeprom();
     }
 }
 
 uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size)
 {
-    while (size > 0)
+    if(_memoryType == Flash)
     {
-        loadEraseblockContaining(relativeAddress);
-        uint32_t start = bufferedEraseBlockStart();
-        uint32_t end = bufferedEraseBlockEnd();
+        while (size > 0)
+        {
+            loadEraseblockContaining(relativeAddress);
+            uint32_t start = bufferedEraseBlockStart();
+            uint32_t end = bufferedEraseBlockEnd();
 
-        ptrdiff_t offset = relativeAddress - start;
-        ptrdiff_t length = min(end - relativeAddress, size);
-        memcpy(_eraseblockBuffer + offset, buffer, length);
-        _bufferedEraseblockDirty = true;
+            ptrdiff_t offset = relativeAddress - start;
+            ptrdiff_t length = min(end - relativeAddress, size);
+            memcpy(_eraseblockBuffer + offset, buffer, length);
+            _bufferedEraseblockDirty = true;
 
-        relativeAddress += length;
-        buffer += length;
-        size -= length;
+            relativeAddress += length;
+            buffer += length;
+            size -= length;
+        }
+        return relativeAddress;
     }
-    return relativeAddress;
+    else
+    {
+        memcpy(getEepromBuffer(KNX_FLASH_SIZE)+relativeAddress, buffer, size);
+        return relativeAddress+size;
+    }
 }
 
 void Platform::loadEraseblockContaining(uint32_t relativeAddress)

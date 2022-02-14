@@ -12,6 +12,7 @@
 #define KNX_FLASH_SIZE 1024
 #endif
 
+
 class RP2040ArduinoPlatform : public ArduinoPlatform
 {
 public:
@@ -22,9 +23,11 @@ public:
     uint32_t uniqueSerialNumber(); //override; 
 
     void restart();
+
+    #ifdef USE_RP2040_EEPROM_EMULATION
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();
-
+    #else
 
     // size of one EraseBlock in pages
     virtual size_t flashEraseBlockSize();
@@ -41,6 +44,7 @@ public:
     
     // writes _eraseblockBuffer to flash - overrides Plattform::writeBufferedEraseBlock()
     void writeBufferedEraseBlock();
+    #endif
 };
 
 #endif
