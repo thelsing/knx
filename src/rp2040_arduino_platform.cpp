@@ -1,17 +1,19 @@
 /*-----------------------------------------------------
 
 Plattform for Raspberry Pi Pico and other RP2040 boards
+by SirSydom <com@sirsydom.de> 2021-2022
 
 made to work with arduino-pico - "Raspberry Pi Pico Arduino core, for all RP2040 boards"
-by Earl E. Philhower III https://github.com/earlephilhower/arduino-pico
-tested with V1.9.1
+by Earl E. Philhower III https://github.com/earlephilhower/arduino-pico V1.11.0
 
-by SirSydom <com@sirsydom.de> 2021-2022
+
+RTTI must be set to enabled in the board options
 
 Uses direct flash reading/writing.
 Size ist defined by KNX_FLASH_SIZE (default 4k).
 Offset in Flash is defined by KNX_FLASH_OFFSET (default 1,5MiB / 0x180000).
 EEPROM Emulation from arduino-pico core (max 4k) can be use by defining USE_RP2040_EEPROM_EMULATION
+
 
 ----------------------------------------------------*/
 
@@ -44,6 +46,19 @@ RP2040ArduinoPlatform::RP2040ArduinoPlatform( HardwareSerial* s) : ArduinoPlatfo
     #ifndef USE_RP2040_EEPROM_EMULATION
     _memoryType = Flash;
     #endif
+}
+
+void RP2040ArduinoPlatform::setupUart()
+{
+    SerialUART* serial = dynamic_cast<SerialUART*>(_knxSerial);
+    if(serial)
+    {
+        serial->setPollingMode();
+    }
+
+    _knxSerial->begin(19200, SERIAL_8E1);
+    while (!_knxSerial) 
+        ;
 }
 
 uint32_t RP2040ArduinoPlatform::uniqueSerialNumber()

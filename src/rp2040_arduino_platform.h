@@ -19,6 +19,8 @@ public:
     RP2040ArduinoPlatform();
     RP2040ArduinoPlatform( HardwareSerial* s);
 
+    void setupUart();
+
     // unique serial number
     uint32_t uniqueSerialNumber(); //override; 
 
