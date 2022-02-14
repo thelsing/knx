@@ -183,7 +183,9 @@ uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buf
             uint32_t end = bufferedEraseBlockEnd();
 
             ptrdiff_t offset = relativeAddress - start;
-            ptrdiff_t length = std::min(end - relativeAddress, (uint32_t)size);
+            ptrdiff_t length = end - relativeAddress;
+            if(length > size)
+                length = size;
             memcpy(_eraseblockBuffer + offset, buffer, length);
             _bufferedEraseblockDirty = true;
 
