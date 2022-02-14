@@ -113,10 +113,10 @@ void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, 
 {
     _memory.writeMemory(memoryAddress, number, data);
     if (_deviceObj.verifyMode())
-        memoryReadIndicationP(priority, hopType, asap, secCtrl, number, memoryAddress, data);
+        memoryReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress, data);
 }
 
-void BauSystemB::memoryReadIndicationP(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
     uint16_t memoryAddress, uint8_t * data)
 {
     applicationLayer().memoryReadResponse(AckRequested, priority, hopType, asap, secCtrl, number, memoryAddress, data);

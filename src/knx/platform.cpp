@@ -3,6 +3,7 @@
 #include "bits.h"
 
 #include <cstring>
+#include <cstdlib>
 
 NvMemoryType Platform::NonVolatileMemoryType()
 {

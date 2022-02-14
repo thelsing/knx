@@ -4,6 +4,10 @@
 #include <stddef.h>
 #include "save_restore.h"
 
+#ifndef KNX_FLASH_SIZE
+#define KNX_FLASH_SIZE 1024
+#endif
+
 enum NvMemoryType
 {
     Eeprom,
