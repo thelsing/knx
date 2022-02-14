@@ -82,7 +82,16 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
         return false;
 
     if (doFill)
-        memset(_data, fillByte, size);
+    {
+        //memset(_data, fillByte, size);
+        Serial.print("allocTable doFill: ");
+        Serial.print(fillByte);
+        Serial.print(" ");
+        Serial.println(size);
+        
+        for(int i = 0; i< size;i++)
+            _memory.writeMemory(_memory.toRelative(_data)+i, 1, &fillByte);
+    }
 
     _size = size;
 
@@ -139,6 +148,7 @@ void TableObject::loadEventLoading(const uint8_t* data)
         case LE_START_LOADING:
             break;
         case LE_LOAD_COMPLETED:
+            _memory.saveMemory();
             loadState(LS_LOADED);
             break;
         case LE_UNLOAD:

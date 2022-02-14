@@ -138,6 +138,9 @@ size_t Platform::getNonVolatileMemorySize()
 
 void Platform::commitNonVolatileMemory()
 {
+    Serial.println("commitNonVolatileMemory");
+
+
     if(_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
     {
         writeBufferedEraseBlock();
