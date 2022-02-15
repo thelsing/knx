@@ -56,19 +56,27 @@ class Platform
 
     //Memory
 
+    // --- Legacy support only. Do not use for new plattforms ---
+    // --- can be remove if all plattforms have been changed to support the NonVolatileMemory functions
     virtual uint8_t* getEepromBuffer(uint16_t size);
     virtual void commitToEeprom();
+      // -------------------------------------------------------------------------------------------------------
 
     virtual uint8_t* getNonVolatileMemoryStart();
     virtual size_t getNonVolatileMemorySize();
     virtual void commitNonVolatileMemory();
     // address is relative to start of nonvolatile memory
     virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size);
-    // size of one flash page in bytes
-    virtual size_t flashPageSize();
 
     NvMemoryType NonVolatileMemoryType();
     void NonVolatileMemoryType(NvMemoryType type);
+
+  // --- Overwrite these methods in the device-plattform to use flash memory handling by the knx stack ---
+  // --- also set _memoryType = Flash in the device-plattform's contructor
+  // --- optional: overwrite writeBufferedEraseBlock() in the device-plattform to reduce overhead when flashing multiple pages
+
+    // size of one flash page in bytes
+    virtual size_t flashPageSize();
 
   protected:
     // size of one EraseBlock in pages
@@ -81,6 +89,10 @@ class Platform
     virtual void flashErase(uint16_t eraseBlockNum);
     //write a single page to flash (pageNumber relative to userFashStart
     virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); 
+
+
+  // -------------------------------------------------------------------------------------------------------
+
     
     NvMemoryType _memoryType = Eeprom;
 

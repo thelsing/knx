@@ -44,7 +44,7 @@ public:
     //write a single page to flash (pageNumber relative to userFashStart
     virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); 
     
-    // writes _eraseblockBuffer to flash - overrides Plattform::writeBufferedEraseBlock()
+    // writes _eraseblockBuffer to flash - overrides Plattform::writeBufferedEraseBlock() for performance optimization only
     void writeBufferedEraseBlock();
     #endif
 };
