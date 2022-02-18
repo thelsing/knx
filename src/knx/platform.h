@@ -97,8 +97,6 @@ class Platform
     NvMemoryType _memoryType = Eeprom;
 
     void loadEraseblockContaining(uint32_t relativeAddress);
-    uint32_t bufferedEraseBlockStart();
-    uint32_t bufferedEraseBlockEnd();
     int32_t getEraseBlockNumberOf(uint32_t relativeAddress);
     // writes _eraseblockBuffer to flash
     virtual void writeBufferedEraseBlock();
