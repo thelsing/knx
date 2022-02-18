@@ -6,10 +6,11 @@
 
 #ifndef KNX_FLASH_OFFSET
 #define KNX_FLASH_OFFSET 0x180000   // 1.5MiB
+#pragma warning "KNX_FLASH_OFFSET not defined, using 0x180000"
 #endif
 
-#ifndef KNX_FLASH_SIZE
-#define KNX_FLASH_SIZE 1024
+#ifdef USE_RP2040_LARGE_EEPROM_EMULATION
+#define USE_RP2040_EEPROM_EMULATION
 #endif
 
 
@@ -29,6 +30,11 @@ public:
     #ifdef USE_RP2040_EEPROM_EMULATION
     uint8_t* getEepromBuffer(uint16_t size);
     void commitToEeprom();
+
+    #ifdef USE_RP2040_LARGE_EEPROM_EMULATION
+    uint8_t _rambuff[KNX_FLASH_SIZE];
+    bool _rambuff_initialized = false;
+    #endif
     #else
 
     // size of one EraseBlock in pages

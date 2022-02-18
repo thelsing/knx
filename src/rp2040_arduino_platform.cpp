@@ -10,9 +10,12 @@ by Earl E. Philhower III https://github.com/earlephilhower/arduino-pico V1.11.0
 RTTI must be set to enabled in the board options
 
 Uses direct flash reading/writing.
-Size ist defined by KNX_FLASH_SIZE (default 4k).
-Offset in Flash is defined by KNX_FLASH_OFFSET (default 1,5MiB / 0x180000).
+Size ist defined by KNX_FLASH_SIZE (default 4k) - must be a multiple of 4096.
+Offset in Flash is defined by KNX_FLASH_OFFSET (default 1,5MiB / 0x180000) - must be a multiple of 4096.
+
 EEPROM Emulation from arduino-pico core (max 4k) can be use by defining USE_RP2040_EEPROM_EMULATION
+
+A RAM-buffered Flash can be use by defining USE_RP2040_LARGE_EEPROM_EMULATION
 
 
 ----------------------------------------------------*/
@@ -29,6 +32,16 @@ EEPROM Emulation from arduino-pico core (max 4k) can be use by defining USE_RP20
 #include <pico/unique_id.h>     // from Pico SDK
 #include <hardware/watchdog.h>  // from Pico SDK
 #include <hardware/flash.h>     // from Pico SDK
+
+#define FLASHPTR ((uint8_t*)XIP_BASE + KNX_FLASH_OFFSET)
+
+#if KNX_FLASH_SIZE%4096
+#error "KNX_FLASH_SIZE must be multiple of 4096"
+#endif
+
+#if KNX_FLASH_SIZE%4096
+#error "KNX_FLASH_OFFSET must be multiple of 4096"
+#endif
 
 
 RP2040ArduinoPlatform::RP2040ArduinoPlatform()
@@ -82,6 +95,43 @@ void RP2040ArduinoPlatform::restart()
 
 #pragma warning "Using EEPROM Simulation"
 
+#ifdef USE_RP2040_LARGE_EEPROM_EMULATION
+
+uint8_t * RP2040ArduinoPlatform::getEepromBuffer(uint16_t size)
+{
+    if(size%4096)
+    {
+        println("KNX_FLASH_SIZE must be a multiple of 4096");
+        fatalError();
+    }
+    
+    if(!_rambuff_initialized)
+    {
+        memcpy(_rambuff, FLASHPTR, KNX_FLASH_SIZE);
+        _rambuff_initialized = true;
+    }
+    
+    return _rambuff;
+}
+
+void RP2040ArduinoPlatform::commitToEeprom()
+{
+    noInterrupts();
+    rp2040.idleOtherCore();
+
+    //ToDo: write block-by-block to prevent writing of untouched blocks
+    if(memcmp(_rambuff, FLASHPTR, KNX_FLASH_SIZE))
+    {
+        flash_range_erase (KNX_FLASH_OFFSET, KNX_FLASH_SIZE);
+        flash_range_program(KNX_FLASH_OFFSET, _rambuff, KNX_FLASH_SIZE);
+    }
+
+    rp2040.resumeOtherCore();
+    interrupts();
+}
+
+#else
+
 uint8_t * RP2040ArduinoPlatform::getEepromBuffer(uint16_t size)
 {
     if(size > 4096)
@@ -105,6 +155,8 @@ void RP2040ArduinoPlatform::commitToEeprom()
 {
     EEPROM.commit();
 }
+
+#endif
 
 #else
 
