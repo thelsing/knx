@@ -179,8 +179,8 @@ uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buf
         while (size > 0)
         {
             loadEraseblockContaining(relativeAddress);
-            uint32_t start = bufferedEraseBlockStart();
-            uint32_t end = bufferedEraseBlockEnd();
+            uint32_t start = _bufferedEraseblockNumber * (flashEraseBlockSize() * flashPageSize());
+            uint32_t end = start +  (flashEraseBlockSize() * flashPageSize());
 
             ptrdiff_t offset = relativeAddress - start;
             ptrdiff_t length = end - relativeAddress;
@@ -216,17 +216,6 @@ void Platform::loadEraseblockContaining(uint32_t relativeAddress)
 
     bufferEraseBlock(blockNum);
 }
-
-uint32_t Platform::bufferedEraseBlockStart()
-{
-    return  _bufferedEraseblockNumber * (flashEraseBlockSize() * flashPageSize());
-}
-
-uint32_t Platform::bufferedEraseBlockEnd()
-{
-    return (_bufferedEraseblockNumber + 1) * (flashEraseBlockSize() * flashPageSize()) -1;
-}
-
 
 int32_t Platform::getEraseBlockNumberOf(uint32_t relativeAddress)
 {
