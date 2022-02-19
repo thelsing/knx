@@ -28,7 +28,9 @@
         void buttonUp();
     #endif
 #elif defined(ARDUINO_ARCH_ESP32)
+#if !defined(LED_BUILTIN)
     #define LED_BUILTIN 13
+#endif
     #include "esp32_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         void buttonUp();
@@ -39,10 +41,14 @@
         void buttonUp();
     #endif
 #elif __linux__
+#if !defined(LED_BUILTIN)
     #define LED_BUILTIN 0
+#endif
     #include "linux_platform.h"
 #else
+#if !defined(LED_BUILTIN)
     #define LED_BUILTIN 5 // see GPIO_PinConfig gpioPinConfigs[]
+ #endif   
     #include "cc1310_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         extern void buttonUp();
@@ -52,7 +58,9 @@
 typedef const uint8_t* (*RestoreCallback)(const uint8_t* buffer);
 typedef uint8_t* (*SaveCallback)(uint8_t* buffer);
 typedef void (*IsrFunctionPtr)();
- 
+typedef void (*ProgLedOnCallback)();
+typedef void (*ProgLedOffCallback)();
+
 template <class P, class B> class KnxFacade : private SaveRestore
 {
   public:
@@ -158,6 +166,16 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _ledPin = value;
     }
 
+    void setProgLedOffCallback(ProgLedOffCallback progLedOffCallback)
+    {
+        _progLedOffCallback = progLedOffCallback;
+    }
+
+    void setProgLedOnCallback(ProgLedOnCallback progLedOnCallback)
+    {
+        _progLedOnCallback = progLedOnCallback;
+    }
+
     /**
      * returns RISING if interrupt is created in a rising signal, FALLING otherwise
      */
@@ -209,12 +227,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
             if (_progLedState)
             {
                 println("progmode on");
-                digitalWrite(ledPin(), _ledPinActiveOn);
+                progLedOn();
             }
             else
             {
                 println("progmode off");
-                digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
+                progLedOff();
             }
         }
         if (_toggleProgMode)
@@ -252,10 +270,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
     void start()
     {
-        pinMode(ledPin(), OUTPUT);
+        if (_progLedOffCallback == 0 || _progLedOnCallback == 0)
+            pinMode(ledPin(), OUTPUT);
 
-        digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
-
+        progLedOff();
         pinMode(buttonPin(), INPUT_PULLUP);
 
         if (_progButtonISRFuncPtr)
@@ -389,6 +407,8 @@ template <class P, class B> class KnxFacade : private SaveRestore
     P* _platformPtr = 0;
     B* _bauPtr = 0;
     B& _bau;
+    ProgLedOnCallback _progLedOnCallback = 0;
+    ProgLedOffCallback _progLedOffCallback = 0;
     uint32_t _ledPinActiveOn = LOW;
     uint32_t _ledPin = LED_BUILTIN;
     uint32_t _buttonPinInterruptOn = RISING;
@@ -424,6 +444,22 @@ template <class P, class B> class KnxFacade : private SaveRestore
     void saveSize(uint16_t size)
     {
         _saveSize = size;
+    }
+
+    void progLedOn()
+    {
+        if (_progLedOnCallback == 0)
+            digitalWrite(ledPin(), _ledPinActiveOn);
+        else
+            _progLedOnCallback();
+    }
+
+    void progLedOff()
+    {
+        if (_progLedOffCallback == 0)
+            digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
+        else
+            _progLedOffCallback();
     }
 };
 
