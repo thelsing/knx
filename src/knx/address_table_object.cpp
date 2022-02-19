@@ -36,9 +36,28 @@ uint16_t AddressTableObject::getGroupAddress(uint16_t tsap)
 uint16_t AddressTableObject::getTsap(uint16_t addr)
 {
     uint16_t size = entryCount();
+    #ifdef USE_BINSEARCH
+    addr = htons(addr);
+
+    uint16_t low,high,i;
+    low = 0;
+    high = size-1;
+
+    while(low <= high)
+    {
+        i = (low+high)/2;
+        if (_groupAddresses[i] == addr)
+            return i;
+        if(addr < _groupAddresses[i])
+            high = i - 1;
+        else
+            low = i + 1 ;
+    }
+    #else
     for (uint16_t i = 1; i <= size; i++)
         if (ntohs(_groupAddresses[i]) == addr)
             return i;
+    #endif
     return 0;
 }
 
@@ -58,10 +77,28 @@ const uint8_t* AddressTableObject::restore(const uint8_t* buffer)
 bool AddressTableObject::contains(uint16_t addr)
 {
     uint16_t size = entryCount();
+    #ifdef USE_BINSEARCH
+    addr = htons(addr);
+
+    uint16_t low,high,i;
+    low = 0;
+    high = size-1;
+
+    while(low <= high)
+    {
+        i = (low+high)/2;
+        if (_groupAddresses[i] == addr)
+            return true;
+        if(addr < _groupAddresses[i])
+            high = i - 1;
+        else
+            low = i + 1 ;
+    }
+    #else
     for (uint16_t i = 1; i <= size; i++)
         if (ntohs(_groupAddresses[i]) == addr)
             return true;
-
+    #endif
     return false;
 }
 
