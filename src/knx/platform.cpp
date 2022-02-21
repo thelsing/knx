@@ -150,7 +150,6 @@ size_t Platform::getNonVolatileMemorySize()
         return userFlashSizeEraseBlocks() * flashEraseBlockSize() * flashPageSize();
     else
         return KNX_FLASH_SIZE;
-
 }
 
 void Platform::commitNonVolatileMemory()
