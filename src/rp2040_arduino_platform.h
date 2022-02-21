@@ -23,7 +23,7 @@ public:
     void setupUart();
 
     // unique serial number
-    uint32_t uniqueSerialNumber(); //override; 
+    uint32_t uniqueSerialNumber() override; 
 
     void restart();
 

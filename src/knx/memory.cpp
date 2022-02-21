@@ -92,7 +92,7 @@ void Memory::readMemory()
 void Memory::writeMemory()
 {
     // first get the necessary size of the writeBuffer
-    size_t writeBufferSize = 16;
+    size_t writeBufferSize = _metadataSize;
     for (int i = 0; i < _saveCount; i++)
         writeBufferSize = MAX(writeBufferSize, _saveRestores[i]->saveSize());
 
@@ -375,7 +375,7 @@ void Memory::addToFreeList(MemoryBlock* block)
 
 uint16_t Memory::alignToPageSize(size_t size)
 {
-    size_t pageSize = _platform.flashPageSize();
+    size_t pageSize = 4; //_platform.flashPageSize(); // align to 32bit for now, as aligning to flash-page-size causes side effects in programming
     // pagesize should be a multiply of two
     return (size + pageSize - 1) & (-1*pageSize);
 }

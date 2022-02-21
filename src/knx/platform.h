@@ -57,11 +57,13 @@ class Platform
 
     //Memory
 
-    // --- Legacy support only. Do not use for new plattforms ---
-    // --- can be remove if all plattforms have been changed to support the NonVolatileMemory functions
+    // --- Overwrite these methods in the device-plattform to use the EEPROM Emulation API for UserMemory ----
+    //
+    // --- changes to the UserMemory are written directly into the address space starting at getEepromBuffer
+    // --- commitToEeprom must save this to a non-volatile area if neccessary
     virtual uint8_t* getEepromBuffer(uint16_t size);
     virtual void commitToEeprom();
-      // -------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------
 
     virtual uint8_t* getNonVolatileMemoryStart();
     virtual size_t getNonVolatileMemorySize();
