@@ -28,8 +28,10 @@ class Memory
 {
 public:
     Memory(Platform& platform, DeviceObject& deviceObject);
+    virtual ~Memory();
     void readMemory();
     void writeMemory();
+    void saveMemory();
     void addSaveRestore(SaveRestore* obj);
     void addSaveRestore(TableObject* obj);
 
@@ -49,13 +51,17 @@ public:
     MemoryBlock* findBlockInList(MemoryBlock* head, uint8_t* address);
     void addNewUsedBlock(uint8_t* address, size_t size);
 
+    void readEraseBlockToBuffer(uint32_t blockNum);
+    uint8_t* eraseBlockStart(uint32_t blockNum);
+    uint8_t* eraseBlockEnd(uint32_t blockNum);
+    void saveBufferdEraseBlock();
+
     Platform& _platform;
     DeviceObject& _deviceObject;
     SaveRestore* _saveRestores[MAXSAVE] = {0};
     TableObject* _tableObjects[MAXTABLEOBJ] = {0};
     uint8_t _saveCount = 0;
     uint8_t _tableObjCount = 0;
-    uint8_t* _data = nullptr;
     MemoryBlock* _freeList = nullptr;
     MemoryBlock* _usedList = nullptr;
     uint16_t _metadataSize = 4 + LEN_HARDWARE_TYPE; // accounting for 2x pushWord and pushByteArray of length LEN_HARDWARE_TYPE

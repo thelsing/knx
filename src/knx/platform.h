@@ -4,6 +4,11 @@
 #include <stddef.h>
 #include "save_restore.h"
 
+#ifndef KNX_FLASH_SIZE
+#define KNX_FLASH_SIZE 1024
+#pragma warning "KNX_FLASH_SIZE not defined, using 1024"
+#endif
+
 enum NvMemoryType
 {
     Eeprom,
@@ -49,21 +54,62 @@ class Platform
     virtual void setupSpi();
     virtual void closeSpi();
     virtual int readWriteSpi(uint8_t *data, size_t len);
-#if 0
-    // Flash memory
-    virtual size_t flashEraseBlockSize(); // in pages
-    virtual size_t flashPageSize();       // in bytes
-    virtual uint8_t* userFlashStart();   // start of user flash aligned to start of an erase block
-    virtual size_t userFlashSizeEraseBlocks(); // in eraseBlocks
-    virtual void flashErase(uint16_t eraseBlockNum); //relativ to userFlashStart
-    virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); //write a single page to flash (pageNumber relative to userFashStart
-#endif
-    virtual uint8_t* getEepromBuffer(uint16_t size) = 0;
-    virtual void commitToEeprom() = 0;
+
+    //Memory
+
+    // --- Overwrite these methods in the device-plattform to use the EEPROM Emulation API for UserMemory ----
+    //
+    // --- changes to the UserMemory are written directly into the address space starting at getEepromBuffer
+    // --- commitToEeprom must save this to a non-volatile area if neccessary
+    virtual uint8_t* getEepromBuffer(uint16_t size);
+    virtual void commitToEeprom();
+    // -------------------------------------------------------------------------------------------------------
+
+    virtual uint8_t* getNonVolatileMemoryStart();
+    virtual size_t getNonVolatileMemorySize();
+    virtual void commitNonVolatileMemory();
+    // address is relative to start of nonvolatile memory
+    virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size);
 
     NvMemoryType NonVolatileMemoryType();
     void NonVolatileMemoryType(NvMemoryType type);
 
+  // --- Overwrite these methods in the device-plattform to use flash memory handling by the knx stack ---
+  // --- also set _memoryType = Flash in the device-plattform's contructor
+  // --- optional: overwrite writeBufferedEraseBlock() in the device-plattform to reduce overhead when flashing multiple pages
+
+    // size of one flash page in bytes
+    virtual size_t flashPageSize();
+
   protected:
+    // size of one EraseBlock in pages
+    virtual size_t flashEraseBlockSize();
+    // start of user flash aligned to start of an erase block
+    virtual uint8_t* userFlashStart();
+    // size of the user flash in EraseBlocks
+    virtual size_t userFlashSizeEraseBlocks();
+    //relativ to userFlashStart
+    virtual void flashErase(uint16_t eraseBlockNum);
+    //write a single page to flash (pageNumber relative to userFashStart
+    virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); 
+
+
+  // -------------------------------------------------------------------------------------------------------
+
+    
     NvMemoryType _memoryType = Eeprom;
+
+    void loadEraseblockContaining(uint32_t relativeAddress);
+    int32_t getEraseBlockNumberOf(uint32_t relativeAddress);
+    // writes _eraseblockBuffer to flash
+    virtual void writeBufferedEraseBlock();
+    // copies a EraseBlock into the _eraseblockBuffer
+    void bufferEraseBlock(uint32_t eraseBlockNumber);
+
+    // in theory we would have to use this buffer for memory reads too,
+    // but because ets always restarts the device after programming it
+    // we can ignore this issue
+    uint8_t* _eraseblockBuffer = nullptr;
+    int32_t _bufferedEraseblockNumber = -1;
+    bool _bufferedEraseblockDirty = false;
 };

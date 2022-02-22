@@ -48,6 +48,8 @@ class BauSystemB : protected BusAccessUnit
                                uint16_t memoryAddress, uint8_t* data) override;
     void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                               uint16_t memoryAddress) override;
+    void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                              uint16_t memoryAddress, uint8_t * data);
     void memoryExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                   uint32_t memoryAddress, uint8_t* data) override;
     void memoryExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
