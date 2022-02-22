@@ -594,7 +594,7 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
         }
 
         if (_TxByteCnt != _sendBufferLength - 1)
-            cmd[0] = U_L_DATA_START_CONT_REQ | _TxByteCnt;
+            cmd[0] = U_L_DATA_START_CONT_REQ | (_TxByteCnt % 64);
         else
             cmd[0] = U_L_DATA_END_REQ | _TxByteCnt;
 
