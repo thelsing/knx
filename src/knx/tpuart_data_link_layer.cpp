@@ -579,7 +579,8 @@ DptMedium TpUartDataLinkLayer::mediumType() const
 bool TpUartDataLinkLayer::sendSingleFrameByte()
 {
     uint8_t cmd[2];
-    uint8_t idx = _TxByteCnt / 64;
+
+    uint8_t idx = _TxByteCnt >> 6;
 
     if (_sendBuffer == NULL)
         return false;
@@ -594,9 +595,9 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
         }
 
         if (_TxByteCnt != _sendBufferLength - 1)
-            cmd[0] = U_L_DATA_START_CONT_REQ | _TxByteCnt;
+            cmd[0] = U_L_DATA_START_CONT_REQ | (_TxByteCnt & 0x3F);
         else
-            cmd[0] = U_L_DATA_END_REQ | _TxByteCnt;
+            cmd[0] = U_L_DATA_END_REQ | (_TxByteCnt & 0x3F);
 
         cmd[1] = _sendBuffer[_TxByteCnt];
 #ifdef DBG_TRACE
