@@ -261,7 +261,7 @@ void TpUartDataLinkLayer::loop()
                     if (millis() - _lastByteRxTime > EOPR_TIMEOUT)
                     {
                         _rxState = RX_WAIT_START;
-                        print("EOPR inside RX_L_ADDR");
+                        println("EOPR inside RX_L_ADDR");
                         break;
                     }
                     if (!_platform.uartAvailable())
