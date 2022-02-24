@@ -31,6 +31,9 @@
 #define U_STOP_MODE_REQ      0x0E
 #define U_EXIT_STOP_MODE_REQ 0x0F
 #define U_ACK_REQ            0x10 //-0x17
+#define U_ACK_REQ_NACK       0x04
+#define U_ACK_REQ_BUSY       0x02
+#define U_ACK_REQ_ADRESSED   0x01
 #define U_CONFIGURE_REQ      0x18
 #define U_INT_REG_WR_REQ     0x28
 #define U_INT_REG_RD_REQ     0x38
@@ -294,7 +297,7 @@ void TpUartDataLinkLayer::loop()
 
                         if (!_isEcho)
                         {
-                            uint8_t c = 0x10;
+                            uint8_t c = U_ACK_REQ;
 
                             // The bau knows everything and could either check the address table object (normal device)
                             // or any filter tables (coupler) to see if we are addressed.
@@ -305,11 +308,11 @@ void TpUartDataLinkLayer::loop()
 
                             if (_cb.isAckRequired(addr, isGroupAddress))
                             {
-                                c |= 0x01;
+                                c |= U_ACK_REQ_ADRESSED;
                             }
 
                             // Hint: We can send directly here, this doesn't disturb other transmissions
-                            // We don't have to update _lastByteTxTime because after ACK the timing is not so tight
+                            // We don't have to update _lastByteTxTime because after U_ACK_REQ the timing is not so tight
                             _platform.writeUart(c);
                         }
                         _rxState = RX_L_DATA;
