@@ -103,9 +103,22 @@ enum {
 #define RESET_TIMEOUT         100 //milli seconds
 #define TX_TIMEPAUSE            0 // 0 means 1 milli seconds
 
+#define OVERRUN_COUNT           7 //bytes; max. allowed bytes in receive buffer (on start) to see it as overrun
+
 // If this threshold is reached loop() goes into 
 // "hog mode" where it stays in loop() while L2 address reception
 #define HOGMODE_THRESHOLD       3 // milli seconds
+
+void TpUartDataLinkLayer::enterRxWaitEOP()
+{
+    // Flush input
+    while (_platform.uartAvailable())
+    {
+        _platform.readUart();
+    }
+    _lastByteRxTime = millis();
+    _rxState = RX_WAIT_EOP;
+}
 
 void TpUartDataLinkLayer::loop()
 {
@@ -153,6 +166,12 @@ void TpUartDataLinkLayer::loop()
                 case RX_WAIT_START:
                     if (_platform.uartAvailable())
                     {
+                        if (_platform.uartAvailable() > OVERRUN_COUNT)
+                        {
+                            print("input buffer overrun: "); println(_platform.uartAvailable());
+                            enterRxWaitEOP();
+                            break;
+                        }
                         rxByte = _platform.readUart();
 #ifdef DBG_TRACE
                         print(rxByte, HEX);
@@ -261,7 +280,7 @@ void TpUartDataLinkLayer::loop()
                     if (millis() - _lastByteRxTime > EOPR_TIMEOUT)
                     {
                         _rxState = RX_WAIT_START;
-                        println("EOPR inside RX_L_ADDR");
+                        println("EOPR @ RX_L_ADDR");
                         break;
                     }
                     if (!_platform.uartAvailable())
@@ -328,8 +347,8 @@ void TpUartDataLinkLayer::loop()
 #endif
                     if (_RxByteCnt == MAX_KNX_TELEGRAM_SIZE)
                     {
-                        _rxState = RX_WAIT_EOP;
                         println("invalid telegram size");
+                        enterRxWaitEOP();
                     }
                     else
                     {
@@ -358,7 +377,18 @@ void TpUartDataLinkLayer::loop()
                             {
                                 _receiveBuffer[0] = 0x29;
                                 _receiveBuffer[1] = 0;
+#ifdef DBG_TRACE
+                                unsigned long runTime = millis();
+#endif
                                 frameBytesReceived(_receiveBuffer, _RxByteCnt + 2);
+#ifdef DBG_TRACE
+                                runTime = millis() - runTime;
+                                if (runTime > (OVERRUN_COUNT*14)/10)
+                                {
+                                    // complain when the runtime was long than the OVERRUN_COUNT allows
+                                    print("processing received frame took: "); print(runTime); println(" ms");
+                                }
+#endif
                             }
                             _rxState = RX_WAIT_START;
 #ifdef DBG_TRACE
@@ -368,7 +398,7 @@ void TpUartDataLinkLayer::loop()
                         else
                         {
                             println("frame with invalid crc ignored");
-                            _rxState = RX_WAIT_EOP;
+                            enterRxWaitEOP();
                         }
                     }
                     else
@@ -379,20 +409,18 @@ void TpUartDataLinkLayer::loop()
                 case RX_WAIT_EOP:
                     if (millis() - _lastByteRxTime > EOP_TIMEOUT)
                     {
-                        _RxByteCnt = 0;
+                        // found a gap
                         _rxState = RX_WAIT_START;
 #ifdef DBG_TRACE
                         println("RX_WAIT_START");
 #endif
                         break;
                     }
-                    if (!_platform.uartAvailable())
-                        break;
-                    _lastByteRxTime = millis();
-                    rxByte = _platform.readUart();
-#ifdef DBG_TRACE
-                    print(rxByte, HEX);
-#endif
+                    if (_platform.uartAvailable())
+                    {
+                        _platform.readUart();
+                        _lastByteRxTime = millis();
+                    }
                     break;
                 default:
                     break;
