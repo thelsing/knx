@@ -77,7 +77,14 @@ void RP2040ArduinoPlatform::setupUart()
 uint32_t RP2040ArduinoPlatform::uniqueSerialNumber()
 {
     pico_unique_board_id_t id;      // 64Bit unique serial number from the QSPI flash
-    pico_get_unique_board_id(&id);
+
+    noInterrupts();
+    rp2040.idleOtherCore();
+
+    flash_get_unique_id(id.id);         //pico_get_unique_board_id(&id);
+
+    rp2040.resumeOtherCore();
+    interrupts();
 
     // use lower 4 byte and convert to unit32_t
     uint32_t uid = ((uint32_t)(id.id[4]) << 24) | ((uint32_t)(id.id[5]) << 16) | ((uint32_t)(id.id[6]) << 8) | (uint32_t)(id.id[7]);
