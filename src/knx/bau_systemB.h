@@ -38,6 +38,8 @@ class BauSystemB : protected BusAccessUnit
     void propertyValueWrite(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
                             uint8_t& numberOfElements, uint16_t startIndex,
                             uint8_t* data, uint32_t length) override;
+    void addBeforeRestartCallback(beforeRestartCallback func);
+    beforeRestartCallback getBeforeRestartCallback();
 
   protected:
     virtual ApplicationLayer& applicationLayer() = 0;
@@ -107,4 +109,5 @@ class BauSystemB : protected BusAccessUnit
     RestartState _restartState = Idle;
     SecurityControl _restartSecurity;
     uint32_t _restartDelay = 0;
+    beforeRestartCallback _beforeRestart = 0;
 };

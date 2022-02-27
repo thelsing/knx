@@ -400,7 +400,18 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
     void restart(uint16_t individualAddress)
     {
-        _bau.restartRequest(individualAddress);
+        SecurityControl sc = {false, None};
+        _bau.restartRequest(individualAddress, sc);
+    }
+
+    void addBeforeRestartCallback(beforeRestartCallback func)
+    {
+        _bau.addBeforeRestartCallback(func);
+    }
+
+    beforeRestartCallback getBeforeRestartCallback()
+    {
+        return _bau.getBeforeRestartCallback();
     }
 
   private:

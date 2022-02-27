@@ -19,7 +19,8 @@ AddressTableObject::AddressTableObject(Memory& memory)
 
 uint16_t AddressTableObject::entryCount()
 {
-    if (loadState() != LS_LOADED)
+    // after programming without GA the module hangs
+    if (loadState() != LS_LOADED || _groupAddresses[0] == 0xFFFF)
         return 0;
 
     return ntohs(_groupAddresses[0]);
@@ -67,6 +68,7 @@ bool AddressTableObject::contains(uint16_t addr)
 
 void AddressTableObject::beforeStateChange(LoadState& newState)
 {
+    TableObject::beforeStateChange(newState);
     if (newState != LS_LOADED)
         return;
 

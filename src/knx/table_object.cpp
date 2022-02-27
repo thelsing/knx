@@ -6,12 +6,38 @@
 #include "callback_property.h"
 #include "data_property.h"
 
+beforeTablesUnloadCallback TableObject::_beforeTablesUnload = 0;
+uint8_t TableObject::_tableUnloadCount = 0;
+
+void TableObject::addBeforeTablesUnloadCallback(beforeTablesUnloadCallback func)
+{
+    _beforeTablesUnload = func;
+}
+
+beforeTablesUnloadCallback TableObject::getBeforeTablesUnloadCallback()
+{
+    return _beforeTablesUnload;
+}
+
 TableObject::TableObject(Memory& memory)
     : _memory(memory)
 {}
 
 TableObject::~TableObject()
 {}
+
+void TableObject::beforeStateChange(LoadState& newState)
+{
+    if (newState == LS_LOADED && _tableUnloadCount > 0)
+        _tableUnloadCount--;
+    if (_tableUnloadCount > 0)
+        return;
+    if (newState == LS_UNLOADED) {
+        _tableUnloadCount++;
+        if (_beforeTablesUnload != 0)
+            _beforeTablesUnload();
+    }
+}
 
 LoadState TableObject::loadState()
 {
