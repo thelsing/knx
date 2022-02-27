@@ -37,30 +37,51 @@ void Memory::readMemory()
 
     uint16_t version = 0;
     buffer = popWord(version, buffer);
-    
-    
-    
-    if (_deviceObject.manufacturerId() != manufacturerId
-       || _deviceObject.version() != version
-       || memcmp(_deviceObject.hardwareType(), hardwareType, LEN_HARDWARE_TYPE) != 0)
+
+    VersionCheckResult versionCheck = FlashAllInvalid;
+
+    // first check correct format of deviceObject-API
+    if (_deviceObject.apiVersion == version) 
     {
-        println("saved memory doesn't match manufacturerId, version or hardwaretype");
-        print("manufacturerId: ");
-        print(manufacturerId, HEX);
-        print(" ");
-        println(_deviceObject.manufacturerId(), HEX);
-        print("version: ");
-        print(version, HEX);
-        print(" ");
-        println(_deviceObject.version(), HEX);
-        print("hardwareType: ");
-        printHex("", hardwareType, LEN_HARDWARE_TYPE);
-        print(" ");
-        printHex("", _deviceObject.hardwareType(), LEN_HARDWARE_TYPE);
+        if (_versionCheckCallback != 0) {
+            versionCheck = _versionCheckCallback(manufacturerId, hardwareType);
+            // callback should provide infomation about version check failure reasons
+        }
+        else if (_deviceObject.manufacturerId() == manufacturerId &&
+                 memcmp(_deviceObject.hardwareType(), hardwareType, LEN_HARDWARE_TYPE) == 0) 
+        {
+            versionCheck = FlashValid;
+        } 
+        else 
+        {
+            println("manufacturerId or hardwareType are different");
+            print("expexted manufacturerId: ");
+            print(_deviceObject.manufacturerId(), HEX);
+            print(", stored manufacturerId: ");
+            println(manufacturerId, HEX);
+            print("expexted hardwareType: ");
+            printHex("", _deviceObject.hardwareType(), LEN_HARDWARE_TYPE);
+            print(", stored hardwareType: ");
+            printHex("", hardwareType, LEN_HARDWARE_TYPE);
+            println("");
+        }
+    } 
+    else 
+    {
+        println("DataObject api changed, any data stored in flash is invalid.");
+        print("expexted DataObject api version: ");
+        print(_deviceObject.apiVersion, HEX);
+        print(", stored api version: ");
+        println(version, HEX);
+    }
+
+    if (versionCheck == FlashAllInvalid)
+    {
+        println("ETS has to reprogram PA and application!");
         return;
     }
 
-    println("manufacturerId, version and hardwareType matches");
+    println("restoring data from flash...");
     print("saverestores ");
     println(_saveCount);
     for (int i = 0; i < _saveCount; i++)
@@ -70,6 +91,11 @@ void Memory::readMemory()
         buffer = _saveRestores[i]->restore(buffer);
     }
     println("restored saveRestores");
+    if (versionCheck == FlashTablesInvalid) 
+    {
+        println("TableObjects are referring to an older firmware version and are not loaded");
+        return;
+    }
     print("tableObjs ");
     println(_tableObjCount);
     for (int i = 0; i < _tableObjCount; i++)
@@ -105,7 +131,7 @@ void Memory::writeMemory()
 
     bufferPos = pushWord(_deviceObject.manufacturerId(), bufferPos);
     bufferPos = pushByteArray(_deviceObject.hardwareType(), LEN_HARDWARE_TYPE, bufferPos);
-    bufferPos = pushWord(_deviceObject.version(), bufferPos);
+    bufferPos = pushWord(_deviceObject.apiVersion, bufferPos);
 
     flashPos = _platform.writeNonVolatileMemory(flashPos, buffer, bufferPos - buffer);
 
@@ -450,4 +476,14 @@ void Memory::addNewUsedBlock(uint8_t* address, size_t size)
 
     MemoryBlock* newUsedBlock = new MemoryBlock(address, size);
     addToUsedList(newUsedBlock);
+}
+
+void Memory::addVersionCheckCallback(versionCheckCallback func)
+{
+    _versionCheckCallback = func;
+}
+
+versionCheckCallback Memory::getVersionCheckCallback()
+{
+    return _versionCheckCallback;
 }
