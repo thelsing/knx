@@ -3,6 +3,9 @@
 #include "interface_object.h"
 
 class Memory;
+
+typedef void (*BeforeTablesUnloadCallback)();
+
 /**
  * This class provides common functionality for interface objects that are configured by ETS with MemorWrite.
  */
@@ -28,14 +31,18 @@ class TableObject: public InterfaceObject
     uint8_t* save(uint8_t* buffer) override;
     const uint8_t* restore(const uint8_t* buffer) override;
     uint16_t saveSize() override;
-	protected:
+
+    static void beforeTablesUnloadCallback(BeforeTablesUnloadCallback func);
+    static BeforeTablesUnloadCallback beforeTablesUnloadCallback();
+
+  protected:
     /**
      * This method is called before the interface object enters a new ::LoadState.
      * If there is a error changing the state newState should be set to ::LS_ERROR and errorCode() 
      * to a reason for the failure.
      */
-    virtual void beforeStateChange(LoadState& newState) {}
-    
+    virtual void beforeStateChange(LoadState& newState);
+
     /**
      * returns the internal data of the interface object. This pointer belongs to the TableObject class and 
      * must not be freed.
@@ -47,7 +54,9 @@ class TableObject: public InterfaceObject
     void errorCode(ErrorCode errorCode);
 
     void initializeProperties(size_t propertiesSize, Property** properties) override;
-   	
+
+    static BeforeTablesUnloadCallback _beforeTablesUnload;
+
   private:
     uint32_t tableReference();
     bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
@@ -68,6 +77,7 @@ class TableObject: public InterfaceObject
     LoadState _state = LS_UNLOADED;
     Memory& _memory;
     uint8_t *_data = 0;
+    static uint8_t _tableUnloadCount;
 
     /**
      * used to store size of data() in allocTable(), needed for calculation of crc in PID_MCB_TABLE.

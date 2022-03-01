@@ -152,6 +152,8 @@ void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopTyp
     if (restartType == RestartType::BasicRestart)
     {
         println("Basic restart requested");
+        if (_beforeRestart != 0)
+            _beforeRestart();
     }
     else if (restartType == RestartType::MasterReset)
     {
@@ -610,4 +612,14 @@ void BauSystemB::propertyValueWrite(ObjectType objectType, uint8_t objectInstanc
 Memory& BauSystemB::memory()
 {
     return _memory;
+}
+
+void BauSystemB::beforeRestartCallback(BeforeRestartCallback func)
+{
+    _beforeRestart = func;
+}
+
+BeforeRestartCallback BauSystemB::beforeRestartCallback()
+{
+    return _beforeRestart;
 }
