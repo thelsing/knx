@@ -614,12 +614,12 @@ Memory& BauSystemB::memory()
     return _memory;
 }
 
-void BauSystemB::addBeforeRestartCallback(beforeRestartCallback func)
+void BauSystemB::beforeRestartCallback(BeforeRestartCallback func)
 {
     _beforeRestart = func;
 }
 
-beforeRestartCallback BauSystemB::getBeforeRestartCallback()
+BeforeRestartCallback BauSystemB::beforeRestartCallback()
 {
     return _beforeRestart;
 }

@@ -339,11 +339,11 @@ void BusAccessUnit::propertyValueWrite(ObjectType objectType, uint8_t objectInst
 {
 }
 
-void BusAccessUnit::addBeforeRestartCallback(beforeRestartCallback func)
+void BusAccessUnit::beforeRestartCallback(BeforeRestartCallback func)
 {
 }
 
-beforeRestartCallback BusAccessUnit::getBeforeRestartCallback()
+BeforeRestartCallback BusAccessUnit::beforeRestartCallback()
 {
     return 0;
 }

@@ -6,15 +6,15 @@
 #include "callback_property.h"
 #include "data_property.h"
 
-beforeTablesUnloadCallback TableObject::_beforeTablesUnload = 0;
+BeforeTablesUnloadCallback TableObject::_beforeTablesUnload = 0;
 uint8_t TableObject::_tableUnloadCount = 0;
 
-void TableObject::addBeforeTablesUnloadCallback(beforeTablesUnloadCallback func)
+void TableObject::beforeTablesUnloadCallback(BeforeTablesUnloadCallback func)
 {
     _beforeTablesUnload = func;
 }
 
-beforeTablesUnloadCallback TableObject::getBeforeTablesUnloadCallback()
+BeforeTablesUnloadCallback TableObject::beforeTablesUnloadCallback()
 {
     return _beforeTablesUnload;
 }

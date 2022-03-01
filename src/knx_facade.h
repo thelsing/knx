@@ -404,14 +404,14 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _bau.restartRequest(individualAddress, sc);
     }
 
-    void addBeforeRestartCallback(beforeRestartCallback func)
+    void beforeRestartCallback(BeforeRestartCallback func)
     {
-        _bau.addBeforeRestartCallback(func);
+        _bau.beforeRestartCallback(func);
     }
 
-    beforeRestartCallback getBeforeRestartCallback()
+    BeforeRestartCallback beforeRestartCallback()
     {
-        return _bau.getBeforeRestartCallback();
+        return _bau.beforeRestartCallback();
     }
 
   private:

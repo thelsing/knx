@@ -4,7 +4,7 @@
 
 class Memory;
 
-typedef void (*beforeTablesUnloadCallback)();
+typedef void (*BeforeTablesUnloadCallback)();
 
 /**
  * This class provides common functionality for interface objects that are configured by ETS with MemorWrite.
@@ -32,8 +32,8 @@ class TableObject: public InterfaceObject
     const uint8_t* restore(const uint8_t* buffer) override;
     uint16_t saveSize() override;
 
-    static void addBeforeTablesUnloadCallback(beforeTablesUnloadCallback func);
-    static beforeTablesUnloadCallback getBeforeTablesUnloadCallback();
+    static void beforeTablesUnloadCallback(BeforeTablesUnloadCallback func);
+    static BeforeTablesUnloadCallback beforeTablesUnloadCallback();
 
   protected:
     /**
@@ -55,7 +55,7 @@ class TableObject: public InterfaceObject
 
     void initializeProperties(size_t propertiesSize, Property** properties) override;
 
-    static beforeTablesUnloadCallback _beforeTablesUnload;
+    static BeforeTablesUnloadCallback _beforeTablesUnload;
 
   private:
     uint32_t tableReference();
