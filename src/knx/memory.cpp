@@ -30,10 +30,10 @@ void Memory::readMemory()
     _freeList = new MemoryBlock(flashStart + metadataBlockSize, flashSize - metadataBlockSize);
 
     uint16_t version = 0;
-    const uint8_t* buffer = popWord(version, buffer);
+    const uint8_t* buffer = popWord(version, flashStart);
 
     uint16_t manufacturerId = 0;
-    buffer = popWord(manufacturerId, flashStart);
+    buffer = popWord(manufacturerId, buffer);
 
     uint8_t hardwareType[LEN_HARDWARE_TYPE] = {0};
     buffer = popByteArray(hardwareType, LEN_HARDWARE_TYPE, buffer);
