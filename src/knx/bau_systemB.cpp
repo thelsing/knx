@@ -614,6 +614,16 @@ Memory& BauSystemB::memory()
     return _memory;
 }
 
+void BauSystemB::versionCheckCallback(VersionCheckCallback func)
+{
+    _memory.versionCheckCallback(func);
+}
+
+VersionCheckCallback BauSystemB::versionCheckCallback()
+{
+    return _memory.versionCheckCallback();
+}
+
 void BauSystemB::beforeRestartCallback(BeforeRestartCallback func)
 {
     _beforeRestart = func;

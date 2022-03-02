@@ -24,6 +24,15 @@ class MemoryBlock
     MemoryBlock* next = nullptr;
 };
 
+enum VersionCheckResult
+{
+    FlashAllInvalid = 0,   //!< All flash content is not valid for this firmware, we delete it
+    FlashTablesInvalid = 1,//!< All table objects are invalid for this firmware, device object and saveRestores are OK
+    FlashValid = 2         //!< Flash content is valid and will be used
+};
+
+typedef VersionCheckResult (*VersionCheckCallback)(uint16_t manufacturerId, uint8_t* hardwareType, uint16_t version);
+
 class Memory
 {
 public:
@@ -41,6 +50,9 @@ public:
     uint8_t* toAbsolute(uint32_t relativeAddress);
     uint32_t toRelative(uint8_t* absoluteAddress);
 
+    void versionCheckCallback(VersionCheckCallback func);
+    VersionCheckCallback versionCheckCallback();
+
   private:
     void removeFromFreeList(MemoryBlock* block);
     void addToUsedList(MemoryBlock* block);
@@ -56,6 +68,7 @@ public:
     uint8_t* eraseBlockEnd(uint32_t blockNum);
     void saveBufferdEraseBlock();
 
+    VersionCheckCallback _versionCheckCallback = 0;
     Platform& _platform;
     DeviceObject& _deviceObject;
     SaveRestore* _saveRestores[MAXSAVE] = {0};
@@ -64,5 +77,5 @@ public:
     uint8_t _tableObjCount = 0;
     MemoryBlock* _freeList = nullptr;
     MemoryBlock* _usedList = nullptr;
-    uint16_t _metadataSize = 4 + LEN_HARDWARE_TYPE; // accounting for 2x pushWord and pushByteArray of length LEN_HARDWARE_TYPE
+    uint16_t _metadataSize = 6 + LEN_HARDWARE_TYPE; // accounting for 3x pushWord and pushByteArray of length LEN_HARDWARE_TYPE
 };
