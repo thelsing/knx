@@ -612,12 +612,12 @@ Memory& BauSystemB::memory()
     return _memory;
 }
 
-void BauSystemB::addVersionCheckCallback(versionCheckCallback func)
+void BauSystemB::versionCheckCallback(VersionCheckCallback func)
 {
-    _memory.addVersionCheckCallback(func);
+    _memory.versionCheckCallback(func);
 }
 
-versionCheckCallback BauSystemB::getVersionCheckCallback()
+VersionCheckCallback BauSystemB::versionCheckCallback()
 {
-    return _memory.getVersionCheckCallback();
+    return _memory.versionCheckCallback();
 }

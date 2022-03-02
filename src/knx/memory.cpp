@@ -29,19 +29,22 @@ void Memory::readMemory()
 
     _freeList = new MemoryBlock(flashStart + metadataBlockSize, flashSize - metadataBlockSize);
 
+    uint16_t version = 0;
+    const uint8_t* buffer = popWord(version, buffer);
+
     uint16_t manufacturerId = 0;
-    const uint8_t* buffer = popWord(manufacturerId, flashStart);
+    buffer = popWord(manufacturerId, flashStart);
 
     uint8_t hardwareType[LEN_HARDWARE_TYPE] = {0};
     buffer = popByteArray(hardwareType, LEN_HARDWARE_TYPE, buffer);
 
-    uint16_t version = 0;
-    buffer = popWord(version, buffer);
+    uint16_t apiVersion = 0;
+    buffer = popWord(apiVersion, buffer);
 
     VersionCheckResult versionCheck = FlashAllInvalid;
 
     // first check correct format of deviceObject-API
-    if (_deviceObject.apiVersion == version) 
+    if (_deviceObject.apiVersion == apiVersion) 
     {
         if (_versionCheckCallback != 0) {
             versionCheck = _versionCheckCallback(manufacturerId, hardwareType);
@@ -50,7 +53,13 @@ void Memory::readMemory()
         else if (_deviceObject.manufacturerId() == manufacturerId &&
                  memcmp(_deviceObject.hardwareType(), hardwareType, LEN_HARDWARE_TYPE) == 0) 
         {
-            versionCheck = FlashValid;
+            if (_deviceObject.version() == version) {
+                versionCheck = FlashValid;
+            } 
+            else
+            {
+                versionCheck = FlashTablesInvalid;
+            }
         } 
         else 
         {
@@ -72,7 +81,7 @@ void Memory::readMemory()
         print("expexted DataObject api version: ");
         print(_deviceObject.apiVersion, HEX);
         print(", stored api version: ");
-        println(version, HEX);
+        println(apiVersion, HEX);
     }
 
     if (versionCheck == FlashAllInvalid)
@@ -129,9 +138,10 @@ void Memory::writeMemory()
     uint32_t flashPos = 0;
     uint8_t* bufferPos = buffer;
 
+    bufferPos = pushWord(_deviceObject.apiVersion, bufferPos);
     bufferPos = pushWord(_deviceObject.manufacturerId(), bufferPos);
     bufferPos = pushByteArray(_deviceObject.hardwareType(), LEN_HARDWARE_TYPE, bufferPos);
-    bufferPos = pushWord(_deviceObject.apiVersion, bufferPos);
+    bufferPos = pushWord(_deviceObject.version(), bufferPos);
 
     flashPos = _platform.writeNonVolatileMemory(flashPos, buffer, bufferPos - buffer);
 
@@ -478,12 +488,12 @@ void Memory::addNewUsedBlock(uint8_t* address, size_t size)
     addToUsedList(newUsedBlock);
 }
 
-void Memory::addVersionCheckCallback(versionCheckCallback func)
+void Memory::versionCheckCallback(VersionCheckCallback func)
 {
     _versionCheckCallback = func;
 }
 
-versionCheckCallback Memory::getVersionCheckCallback()
+VersionCheckCallback Memory::versionCheckCallback()
 {
     return _versionCheckCallback;
 }
