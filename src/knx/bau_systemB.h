@@ -40,6 +40,8 @@ class BauSystemB : protected BusAccessUnit
                             uint8_t* data, uint32_t length) override;
     void versionCheckCallback(VersionCheckCallback func);
     VersionCheckCallback versionCheckCallback();
+    void beforeRestartCallback(BeforeRestartCallback func);
+    BeforeRestartCallback beforeRestartCallback();
 
   protected:
     virtual ApplicationLayer& applicationLayer() = 0;
@@ -109,4 +111,5 @@ class BauSystemB : protected BusAccessUnit
     RestartState _restartState = Idle;
     SecurityControl _restartSecurity;
     uint32_t _restartDelay = 0;
+    BeforeRestartCallback _beforeRestart = 0;
 };

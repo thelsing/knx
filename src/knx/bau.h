@@ -3,6 +3,8 @@
 #include "knx_types.h"
 #include "interface_object.h"
 
+typedef void (*BeforeRestartCallback)(void);
+
 class BusAccessUnit
 {
   public:
@@ -161,4 +163,6 @@ class BusAccessUnit
     virtual void propertyValueWrite(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
                                     uint8_t& numberOfElements, uint16_t startIndex,
                                     uint8_t* data, uint32_t length);
+    virtual void beforeRestartCallback(BeforeRestartCallback func);
+    virtual BeforeRestartCallback beforeRestartCallback();
 };

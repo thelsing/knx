@@ -77,6 +77,7 @@ void GroupObjectTableObject::groupObjects(GroupObject * objs, uint16_t size)
 
 void GroupObjectTableObject::beforeStateChange(LoadState& newState)
 {
+    TableObject::beforeStateChange(newState);
     if (newState != LS_LOADED)
         return;
 

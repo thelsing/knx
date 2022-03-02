@@ -60,6 +60,7 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
 
 void AssociationTableObject::beforeStateChange(LoadState& newState)
 {
+    TableObject::beforeStateChange(newState);
     if (newState != LS_LOADED)
         return;
 
