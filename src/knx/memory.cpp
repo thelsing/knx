@@ -47,7 +47,7 @@ void Memory::readMemory()
     if (_deviceObject.apiVersion == apiVersion) 
     {
         if (_versionCheckCallback != 0) {
-            versionCheck = _versionCheckCallback(manufacturerId, hardwareType);
+            versionCheck = _versionCheckCallback(manufacturerId, hardwareType, version);
             // callback should provide infomation about version check failure reasons
         }
         else if (_deviceObject.manufacturerId() == manufacturerId &&
