@@ -69,8 +69,15 @@ void BauSystemBDevice::sendNextGroupTelegram()
         if (flag != ReadRequest && flag != WriteRequest)
             continue;
 
+#ifdef INTERNAL_GROUPOBJECT
+        if (flag == WriteRequest)
+            GroupObject::processClassCallback(go);
+#endif
         if (!go.communicationEnable())
+        {
+            go.commFlag(Ok);
             continue;
+        }
 
         SecurityControl goSecurity;
         goSecurity.toolAccess = false; // Secured group communication never uses the toolkey. ETS knows all keys, also the group keys.
@@ -113,7 +120,10 @@ void BauSystemBDevice::updateGroupObject(GroupObject & go, uint8_t * data, uint8
 
     memcpy(goData, data, length);
 
-    go.commFlag(Updated);
+#ifdef INTERNAL_GROUPOBJECT
+    if (go.commFlag() != WriteRequest)
+    {
+#endif
 #ifdef SMALL_GROUPOBJECT
     GroupObject::processClassCallback(go);
 #else
@@ -121,6 +131,10 @@ void BauSystemBDevice::updateGroupObject(GroupObject & go, uint8_t * data, uint8
     if (handler)
         handler(go);
 #endif
+#ifdef INTERNAL_GROUPOBJECT
+    }
+#endif
+    go.commFlag(Updated);
 }
 
 bool BauSystemBDevice::configured()
