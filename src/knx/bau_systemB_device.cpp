@@ -70,8 +70,16 @@ void BauSystemBDevice::sendNextGroupTelegram()
             continue;
 
 #ifdef INTERNAL_GROUPOBJECT
-        if (flag == WriteRequest)
+        if (flag == WriteRequest) 
+        {
+#ifdef SMALL_GROUPOBJECT
             GroupObject::processClassCallback(go);
+#else
+            GroupObjectUpdatedHandler handler = go.callback();
+            if (handler)
+                handler(go);
+#endif
+        }
 #endif
         if (!go.communicationEnable())
         {
