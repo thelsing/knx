@@ -12,7 +12,7 @@ GroupObjectTableObject* GroupObject::_table = 0;
 GroupObject::GroupObject()
 {
     _data = 0;
-    _commFlag = Ok;
+    _commFlag = Uninitialized;
     _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT
     _updateHandler = 0;
