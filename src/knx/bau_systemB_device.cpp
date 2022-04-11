@@ -69,7 +69,6 @@ void BauSystemBDevice::sendNextGroupTelegram()
         if (flag != ReadRequest && flag != WriteRequest)
             continue;
 
-#ifdef INTERNAL_GROUPOBJECT
         if (flag == WriteRequest) 
         {
 #ifdef SMALL_GROUPOBJECT
@@ -80,7 +79,6 @@ void BauSystemBDevice::sendNextGroupTelegram()
                 handler(go);
 #endif
         }
-#endif
         if (!go.communicationEnable())
         {
             go.commFlag(Ok);
@@ -128,20 +126,16 @@ void BauSystemBDevice::updateGroupObject(GroupObject & go, uint8_t * data, uint8
 
     memcpy(goData, data, length);
 
-#ifdef INTERNAL_GROUPOBJECT
     if (go.commFlag() != WriteRequest)
     {
-#endif
 #ifdef SMALL_GROUPOBJECT
-    GroupObject::processClassCallback(go);
+       GroupObject::processClassCallback(go);
 #else
-    GroupObjectUpdatedHandler handler = go.callback();
-    if (handler)
-        handler(go);
+        GroupObjectUpdatedHandler handler = go.callback();
+        if (handler)
+            handler(go);
 #endif
-#ifdef INTERNAL_GROUPOBJECT
     }
-#endif
     go.commFlag(Updated);
 }
 
