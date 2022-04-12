@@ -106,8 +106,12 @@ bool Esp32Platform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buff
 
 uint8_t * Esp32Platform::getEepromBuffer(uint16_t size)
 {
-    EEPROM.begin(size);
-    return EEPROM.getDataPtr();
+    uint8_t * eepromptr = EEPROM.getDataPtr();
+    if(eepromptr == nullptr) {
+        EEPROM.begin(KNX_FLASH_SIZE);
+        eepromptr = EEPROM.getDataPtr();
+    }
+    return eepromptr;
 }
 
 void Esp32Platform::commitToEeprom()
