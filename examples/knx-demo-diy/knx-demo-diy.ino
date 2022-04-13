@@ -18,7 +18,7 @@
 // the ESP32's secondary UART and late-bind the ISR function in setup().
 Esp32Platform knxPlatform(&Serial2);
 Bau07B0 knxBau(knxPlatform);
-KnxFacade<Esp32Platform, Bau07B0> knx(knxBau);
+KnxFacade<Esp32Platform, Bau07B0> knx(&knxPlatform, knxBau);
 
 ICACHE_RAM_ATTR void myButtonPressed()
 {
