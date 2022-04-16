@@ -108,7 +108,7 @@ uint8_t * EspPlatform::getEepromBuffer(uint16_t size)
 {
     uint8_t * eepromptr = EEPROM.getDataPtr();
     if(eepromptr == nullptr) {
-        EEPROM.begin(KNX_FLASH_SIZE);
+        EEPROM.begin(size);
         eepromptr = EEPROM.getDataPtr();
     }
     return eepromptr;
