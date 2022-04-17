@@ -124,21 +124,19 @@ uint64_t sixBytesToUInt64(uint8_t* data)
 
 uint16_t crc16Ccitt(uint8_t* input, uint16_t length)
 {
-        uint32_t polynom = 0x1021;
-        uint8_t padded[length+2];
+    uint32_t polynom = 0x1021;
 
-        memcpy(padded, input, length);
-        memset(padded+length, 0x00, 2);
-
-        uint32_t result = 0xffff;
-        for (uint32_t i = 0; i < 8 * (uint32_t)sizeof(padded); i++) {
-            result <<= 1;
-            uint32_t nextBit = (padded[i / 8] >> (7 - (i % 8))) & 0x1;
-            result |= nextBit;
-            if ((result & 0x10000) != 0)
-                result ^= polynom;
-        }
-        return result & 0xffff;
+    uint32_t result = 0xffff;
+    for (uint32_t i = 0; i < 8 * ((uint32_t)length + 2); i++)
+    {
+        result <<= 1;
+        uint32_t nextBit;
+        nextBit = ((i / 8) < length) ? ((input[i / 8] >> (7 - (i % 8))) & 0x1) : 0;
+        result |= nextBit;
+        if ((result & 0x10000) != 0)
+            result ^= polynom;
+    }
+    return result & 0xffff;
 }
 
 uint16_t crc16Dnp(uint8_t* input, uint16_t length)
