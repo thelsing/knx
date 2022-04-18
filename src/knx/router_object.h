@@ -34,12 +34,12 @@ public:
   bool isRfSbcRoutingEnabled();
   bool isIpSbcRoutingEnabled();
 
-  virtual void masterReset(EraseCode eraseCode, uint8_t channel) override;
+  void masterReset(EraseCode eraseCode, uint8_t channel) override;
 
   const uint8_t* restore(const uint8_t* buffer) override;
 
 protected:
-  virtual void beforeStateChange(LoadState& newState) override;
+  void beforeStateChange(LoadState& newState) override;
 
 private:
   // Function properties

@@ -50,7 +50,7 @@ class AddressTableObject : public TableObject
     bool contains(uint16_t groupAddress);
 
   protected:
-    virtual void beforeStateChange(LoadState& newState) override;
+    void beforeStateChange(LoadState& newState) override;
 
   private:
     uint16_t* _groupAddresses = 0;
