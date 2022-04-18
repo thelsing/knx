@@ -71,7 +71,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _bau.addSaveRestore(this);
     }
 
-    KnxFacade(P* platformPtr, B& bau) : _platformPtr(platformPtr), _bau(bau)
+    KnxFacade(B& bau) : _bau(bau)
     {
         manufacturerId(0xfa);
         bauNumber(platform().uniqueSerialNumber());
