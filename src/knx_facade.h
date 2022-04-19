@@ -73,6 +73,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
     KnxFacade(B& bau) : _bau(bau)
     {
+        _platformPtr = static_cast<P*>(&bau.platform());
         manufacturerId(0xfa);
         bauNumber(platform().uniqueSerialNumber());
         _bau.addSaveRestore(this);

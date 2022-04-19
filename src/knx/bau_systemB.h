@@ -21,6 +21,7 @@ class BauSystemB : protected BusAccessUnit
     virtual bool enabled() = 0;
     virtual void enabled(bool value) = 0;
 
+    Platform& platform();
     ApplicationProgramObject& parameters();
     DeviceObject& deviceObject();
 

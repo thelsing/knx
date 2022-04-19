@@ -31,6 +31,11 @@ void BauSystemB::writeMemory()
     _memory.writeMemory();
 }
 
+Platform& BauSystemB::platform()
+{
+    return _platform;
+}
+
 ApplicationProgramObject& BauSystemB::parameters()
 {
     return _appProgram;
