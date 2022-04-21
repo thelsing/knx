@@ -128,15 +128,19 @@ void BauSystemBDevice::updateGroupObject(GroupObject & go, uint8_t * data, uint8
 
     if (go.commFlag() != WriteRequest)
     {
+        go.commFlag(Updated);
 #ifdef SMALL_GROUPOBJECT
-       GroupObject::processClassCallback(go);
+        GroupObject::processClassCallback(go);
 #else
         GroupObjectUpdatedHandler handler = go.callback();
         if (handler)
             handler(go);
 #endif
     }
-    go.commFlag(Updated);
+    else
+    {
+        go.commFlag(Updated);
+    }
 }
 
 bool BauSystemBDevice::configured()
