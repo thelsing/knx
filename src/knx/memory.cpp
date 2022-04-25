@@ -162,7 +162,6 @@ void Memory::writeMemory()
         //save to size of the memoryblock for tableobject too, so that we can rebuild the usedList and freeList
         if (_tableObjects[i]->_data != nullptr)
         {
-
             MemoryBlock* block = findBlockInList(_usedList, _tableObjects[i]->_data);
             if (block == nullptr)
             {

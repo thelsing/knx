@@ -135,7 +135,6 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
 
 int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
-
     if (datatype.mainGroup == 1 && datatype.subGroup >= 1 && datatype.subGroup <= 23 && datatype.subGroup != 20 && !datatype.index)
         return valueToBusValueBinary(value, payload, payload_length, datatype);
     // DPT 2.* - Binary Control
@@ -1553,7 +1552,6 @@ int valueToBusValueRGBW(const KNXValue& value, uint8_t* payload, size_t payload_
         case 1: // Mask bits
             unsigned8ToPayload(payload, payload_length, 5, (uint8_t)value, 0x0f);
             break;
-
     }
     return true;
 }

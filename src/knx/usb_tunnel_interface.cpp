@@ -63,7 +63,6 @@ void UsbTunnelInterface::loop()
 		handleHidReportRxQueue();
 		rxHaveCompletePacket = false;
 	}
-
 }
 
 /* USB TX */
@@ -136,7 +135,6 @@ void UsbTunnelInterface::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuf
 	}
 	println("");
 #endif
-
 }
 
 void UsbTunnelInterface::sendKnxHidReport(ProtocolIdType protId, ServiceIdType servId, uint8_t* data, uint16_t length)

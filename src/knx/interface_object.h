@@ -188,7 +188,6 @@ class InterfaceObject : public SaveRestore
     uint16_t saveSize() override;
 
   protected:
-
     /**
      * Intializes the Property-array the the supplied values.
      */

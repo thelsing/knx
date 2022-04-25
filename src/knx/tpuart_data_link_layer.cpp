@@ -616,7 +616,6 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
 
 void TpUartDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
 {
-
     _tx_queue_frame_t* tx_frame = new _tx_queue_frame_t;
     tx_frame->length = frame.telegramLengthtTP();
     tx_frame->data = new uint8_t[tx_frame->length];

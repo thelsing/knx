@@ -490,7 +490,6 @@ uint16_t SecurityInterfaceObject::getNumberOfElements(PropertyID propId)
 
 uint64_t SecurityInterfaceObject::getLastValidSequenceNumber(uint16_t deviceAddr)
 {
-
     // Get number of entries for this property
     uint16_t numElements = getNumberOfElements(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE);
 
