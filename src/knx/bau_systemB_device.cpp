@@ -23,9 +23,9 @@ BauSystemBDevice::BauSystemBDevice(Platform& platform) :
     _transLayer.groupAddressTable(_addrTable);
 
     _memory.addSaveRestore(&_deviceObj);
+    _memory.addSaveRestore(&_groupObjTable); // changed order for better memory management
     _memory.addSaveRestore(&_addrTable);
     _memory.addSaveRestore(&_assocTable);
-    _memory.addSaveRestore(&_groupObjTable);
 #ifdef USE_DATASECURE
     _memory.addSaveRestore(&_secIfObj);
 #endif
