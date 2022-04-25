@@ -21,7 +21,6 @@ BauSystemBCoupler::BauSystemBCoupler(Platform& platform) :
 #ifdef USE_DATASECURE
     _memory.addSaveRestore(&_secIfObj);
 #endif
-
 }
 
 ApplicationLayer& BauSystemBCoupler::applicationLayer()

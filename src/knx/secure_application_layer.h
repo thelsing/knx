@@ -21,7 +21,6 @@ class BusAccessUnit;
  */
 class SecureApplicationLayer :  public ApplicationLayer
 {
-
   public:
     /**
      * The constructor.
@@ -56,8 +55,6 @@ class SecureApplicationLayer :  public ApplicationLayer
      void dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu, const SecurityControl& secCtrl) override; // apdu must be valid until it was confirmed
 
   private:
-
-
     enum class AddrType : uint8_t
     {
         group,

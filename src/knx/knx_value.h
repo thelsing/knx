@@ -49,7 +49,6 @@ class KNXValue
     KNXValue& operator=(const float value);
 
   private:
-    
     bool boolValue() const;
     uint8_t ucharValue() const;
     uint16_t ushortValue() const;
