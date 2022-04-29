@@ -44,8 +44,7 @@ uint8_t * Stm32Platform::getEepromBuffer(uint16_t size)
         _eepromPtr = new uint8_t[size];
         eeprom_buffer_fill();
         for (uint16_t i = 0; i < size; ++i)
-            _eepromPtr[i] = eeprom_buffered_read_byte(i);
-        
+            _eepromPtr[i] = eeprom_buffered_read_byte(i);   
     }
     
     return _eepromPtr;
