@@ -264,9 +264,9 @@ template <class P, class B> class KnxFacade : private SaveRestore
         {
             // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
             #if (ARDUINO_API_VERSION >= 10200)
-                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)_buttonPinInterruptOn);
+                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
             #else
-                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, _buttonPinInterruptOn);
+                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
             #endif
         }
 
