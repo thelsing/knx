@@ -177,24 +177,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _progLedOnCallback = progLedOnCallback;
     }
 
-    /**
-     * returns RISING if interrupt is created in a rising signal, FALLING otherwise
-     */
-    uint32_t buttonPinInterruptOn()
-    {
-        return _buttonPinInterruptOn;
-    }
-
-    /**
-     * Sets if the programming button creates a RISING or a FALLING signal. 
-     * 
-     * Set to RISING for GPIO--BUTTON--VDD or to FALLING for GPIO--BUTTON--GND
-     */
-    void buttonPinInterruptOn(uint32_t value)
-    {
-        _buttonPinInterruptOn = value;
-    }
-
+  
     uint32_t buttonPin()
     {
         return _buttonPin;
@@ -281,9 +264,9 @@ template <class P, class B> class KnxFacade : private SaveRestore
         {
             // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
             #if (ARDUINO_API_VERSION >= 10200)
-                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)_buttonPinInterruptOn);
+                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
             #else
-                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, _buttonPinInterruptOn);
+                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
             #endif
         }
 
@@ -423,7 +406,6 @@ template <class P, class B> class KnxFacade : private SaveRestore
     ProgLedOffCallback _progLedOffCallback = 0;
     uint32_t _ledPinActiveOn = LOW;
     uint32_t _ledPin = LED_BUILTIN;
-    uint32_t _buttonPinInterruptOn = RISING;
     uint32_t _buttonPin = 0;
     SaveCallback _saveCallback = 0;
     RestoreCallback _restoreCallback = 0;
