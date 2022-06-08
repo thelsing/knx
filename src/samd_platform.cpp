@@ -12,9 +12,13 @@
 #error "KNX_FLASH_SIZE must be multiple of 1024"
 #endif
 
+#ifndef KNX_SERIAL
+#define KNX_SERIAL Serial1
+#endif
+
 SamdPlatform::SamdPlatform()
 #ifndef KNX_NO_DEFAULT_UART
-    : ArduinoPlatform(&Serial1)
+    : ArduinoPlatform(&KNX_SERIAL)
 #endif
 {
 #ifndef USE_SAMD_EEPROM_EMULATION

@@ -43,10 +43,13 @@ A RAM-buffered Flash can be use by defining USE_RP2040_LARGE_EEPROM_EMULATION
 #error "KNX_FLASH_OFFSET must be multiple of 4096"
 #endif
 
+#ifndef KNX_SERIAL
+#define KNX_SERIAL Serial1
+#endif
 
 RP2040ArduinoPlatform::RP2040ArduinoPlatform()
 #ifndef KNX_NO_DEFAULT_UART
-    : ArduinoPlatform(&Serial1)
+    : ArduinoPlatform(&KNX_SERIAL)
 #endif
 {
     #ifndef USE_RP2040_EEPROM_EMULATION
