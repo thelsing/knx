@@ -60,6 +60,11 @@ void Stm32Platform::commitToEeprom()
         return;
     for (uint16_t i = 0; i < _eepromSize; ++i)
         eeprom_buffered_write_byte(i, _eepromPtr[i]);
+    // For some GD32 chips, the flash needs to be unlocked twice
+    // and the first call will fail. If the first call is
+    // successful, the second one (inside eeprom_buffer_flush)
+    // does nothing.
+    HAL_FLASH_Unlock();
     eeprom_buffer_flush();
 }
 
