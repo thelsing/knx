@@ -2,6 +2,10 @@
 
 #include "Arduino.h"
 
+#ifndef KNX_DEBUG_SERIAL
+#define KNX_DEBUG_SERIAL Serial
+#endif
+
 class ArduinoPlatform : public Platform
 {
   public:

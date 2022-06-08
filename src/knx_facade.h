@@ -48,11 +48,18 @@
 #else
 #if !defined(LED_BUILTIN)
     #define LED_BUILTIN 5 // see GPIO_PinConfig gpioPinConfigs[]
- #endif   
+#endif
     #include "cc1310_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         extern void buttonUp();
     #endif
+#endif
+
+#ifndef KNX_LED
+    #define KNX_LED LED_BUILTIN
+#endif
+#ifndef KNX_BUTTON
+    #define KNX_BUTTON 0
 #endif
 
 typedef const uint8_t* (*RestoreCallback)(const uint8_t* buffer);
@@ -405,8 +412,8 @@ template <class P, class B> class KnxFacade : private SaveRestore
     ProgLedOnCallback _progLedOnCallback = 0;
     ProgLedOffCallback _progLedOffCallback = 0;
     uint32_t _ledPinActiveOn = LOW;
-    uint32_t _ledPin = LED_BUILTIN;
-    uint32_t _buttonPin = 0;
+    uint32_t _ledPin = KNX_LED;
+    uint32_t _buttonPin = KNX_BUTTON;
     SaveCallback _saveCallback = 0;
     RestoreCallback _restoreCallback = 0;
     volatile bool _toggleProgMode = false;
