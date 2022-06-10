@@ -1,0 +1,2198 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<KNX xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" CreatedBy="KNX MT" ToolVersion="5.1.255.16695" xmlns="http://knx.org/xml/project/14">
+  <ManufacturerData>
+    <Manufacturer RefId="M-00FA">
+      <Catalog>
+        <CatalogSection Id="M-00FA_CS-1" Name="Geräte" Number="1" DefaultLanguage="en-US">
+          <CatalogItem Id="M-00FA_H-2023-1_HP-0000-00-0000_CI-H8I8O-1" Name="H8I8O" Number="1" ProductRefId="M-00FA_H-2023-1_P-H8I8O" Hardware2ProgramRefId="M-00FA_H-2023-1_HP-0000-00-0000" DefaultLanguage="en-US" />
+        </CatalogSection>
+      </Catalog>
+      <ApplicationPrograms>
+        <ApplicationProgram Id="M-00FA_A-0000-00-0000" ApplicationNumber="2023" ApplicationVersion="1" ProgramType="ApplicationProgram" MaskVersion="MV-07B0" Name="H8I8O" LoadProcedureStyle="MergedProcedure" PeiType="0" DefaultLanguage="en-US" DynamicTableManagement="false" Linkable="false" MinEtsVersion="4.0" MaxSecurityIndividualAddressEntries="32" MaxSecurityGroupKeyTableEntries="50">
+          <Static>
+            <Code>
+              <RelativeSegment Id="M-00FA_A-0000-00-0000_RS-04-00000" Name="Parameters" Size="20" LoadStateMachine="4" Offset="0" />
+            </Code>
+            <ParameterTypes>
+              <ParameterType Id="M-00FA_A-0000-00-0000_PT-Pin" Name="Pin">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Default" Value="0" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-0" />
+                  <Enumeration Text="DI1" Value="1" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-1" />
+                  <Enumeration Text="DI2" Value="2" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-2" />
+                  <Enumeration Text="DI3" Value="3" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-3" />
+                  <Enumeration Text="DI4" Value="4" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-4" />
+                  <Enumeration Text="DI5" Value="5" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-5" />
+                  <Enumeration Text="DI6" Value="6" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-6" />
+                  <Enumeration Text="DI7" Value="7" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-7" />
+                  <Enumeration Text="DI8" Value="8" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-8" />
+                  <Enumeration Text="DIAUX" Value="9" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-9" />
+                  <Enumeration Text="DO1" Value="10" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-10" />
+                  <Enumeration Text="DO2" Value="11" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-11" />
+                  <Enumeration Text="DO3" Value="12" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-12" />
+                  <Enumeration Text="DO4" Value="13" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-13" />
+                  <Enumeration Text="DO5" Value="14" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-14" />
+                  <Enumeration Text="DO6" Value="15" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-15" />
+                  <Enumeration Text="DO7" Value="16" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-16" />
+                  <Enumeration Text="DO8" Value="17" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-17" />
+                  <Enumeration Text="DOAUX" Value="18" Id="M-00FA_A-0000-00-0000_PT-Pin_EN-18" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="M-00FA_A-0000-00-0000_PT-Mode" Name="Mode">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Disabled" Value="0" Id="M-00FA_A-0000-00-0000_PT-Mode_EN-0" />
+                  <Enumeration Text="Input" Value="1" Id="M-00FA_A-0000-00-0000_PT-Mode_EN-1" />
+                  <Enumeration Text="Input (Toggle, startup: 0)" Value="2" Id="M-00FA_A-0000-00-0000_PT-Mode_EN-2" />
+                  <Enumeration Text="Input (Toggle, startup: 1)" Value="3" Id="M-00FA_A-0000-00-0000_PT-Mode_EN-3" />
+                  <Enumeration Text="Output (default: 0)" Value="4" Id="M-00FA_A-0000-00-0000_PT-Mode_EN-4" />
+                  <Enumeration Text="Output (default: 1)" Value="5" Id="M-00FA_A-0000-00-0000_PT-Mode_EN-5" />
+                </TypeRestriction>
+              </ParameterType>
+              <ParameterType Id="M-00FA_A-0000-00-0000_PT-ModeFull" Name="ModeFull">
+                <TypeRestriction Base="Value" SizeInBit="8">
+                  <Enumeration Text="Disabled" Value="0" Id="M-00FA_A-0000-00-0000_PT-ModeFull_EN-0" />
+                  <Enumeration Text="Input" Value="1" Id="M-00FA_A-0000-00-0000_PT-ModeFull_EN-1" />
+                  <Enumeration Text="Input (Toggle, startup: inactive)" Value="2" Id="M-00FA_A-0000-00-0000_PT-ModeFull_EN-2" />
+                  <Enumeration Text="Input (Toggle, startup: active)" Value="3" Id="M-00FA_A-0000-00-0000_PT-ModeFull_EN-3" />
+                  <Enumeration Text="Output (default: On)" Value="4" Id="M-00FA_A-0000-00-0000_PT-ModeFull_EN-4" />
+                  <Enumeration Text="Output (default: Off)" Value="5" Id="M-00FA_A-0000-00-0000_PT-ModeFull_EN-5" />
+                  <Enumeration Text="PWM Output (default: On)" Value="6" Id="M-00FA_A-0000-00-0000_PT-ModeFull_EN-6" />
+                  <Enumeration Text="PWM Output (default: Off)" Value="7" Id="M-00FA_A-0000-00-0000_PT-ModeFull_EN-7" />
+                </TypeRestriction>
+              </ParameterType>
+            </ParameterTypes>
+            <Parameters>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-1" Name="ProgButton" ParameterType="M-00FA_A-0000-00-0000_PT-Pin" Text="Programming Button" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="0" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-2" Name="ProgLED" ParameterType="M-00FA_A-0000-00-0000_PT-Pin" Text="Programming LED" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="1" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-3" Name="DI1" ParameterType="M-00FA_A-0000-00-0000_PT-Mode" Text="DI1" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="2" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-4" Name="DI2" ParameterType="M-00FA_A-0000-00-0000_PT-Mode" Text="DI2" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="3" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-5" Name="DI3" ParameterType="M-00FA_A-0000-00-0000_PT-Mode" Text="DI3" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="4" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-6" Name="DI4" ParameterType="M-00FA_A-0000-00-0000_PT-Mode" Text="DI4" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="5" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-7" Name="DI5" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DI5" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="6" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-8" Name="DI6" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DI6" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="7" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-9" Name="DI7" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DI7" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="8" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-10" Name="DI8" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DI8" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="9" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-11" Name="DIAUX" ParameterType="M-00FA_A-0000-00-0000_PT-Mode" Text="DIAUX" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="10" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-12" Name="DO1" ParameterType="M-00FA_A-0000-00-0000_PT-Mode" Text="DO1" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="11" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-13" Name="DO2" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DO2" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="12" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-14" Name="DO3" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DO3" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="13" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-15" Name="DO4" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DO4" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="14" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-16" Name="DO5" ParameterType="M-00FA_A-0000-00-0000_PT-Mode" Text="DO5" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="15" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-17" Name="DO6" ParameterType="M-00FA_A-0000-00-0000_PT-Mode" Text="DO6" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="16" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-18" Name="DO7" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DO7" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="17" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-19" Name="DO8" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DO8" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="18" BitOffset="0" />
+              </Parameter>
+              <Parameter Id="M-00FA_A-0000-00-0000_P-20" Name="DOAUX" ParameterType="M-00FA_A-0000-00-0000_PT-ModeFull" Text="DOAUX" Value="0">
+                <Memory CodeSegment="M-00FA_A-0000-00-0000_RS-04-00000" Offset="19" BitOffset="0" />
+              </Parameter>
+            </Parameters>
+            <ParameterRefs>
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-1_R-1" RefId="M-00FA_A-0000-00-0000_P-1" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-2_R-2" RefId="M-00FA_A-0000-00-0000_P-2" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-3_R-3" RefId="M-00FA_A-0000-00-0000_P-3" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-4_R-4" RefId="M-00FA_A-0000-00-0000_P-4" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-5_R-5" RefId="M-00FA_A-0000-00-0000_P-5" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-6_R-6" RefId="M-00FA_A-0000-00-0000_P-6" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-7_R-7" RefId="M-00FA_A-0000-00-0000_P-7" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-8_R-8" RefId="M-00FA_A-0000-00-0000_P-8" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-9_R-9" RefId="M-00FA_A-0000-00-0000_P-9" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-10_R-10" RefId="M-00FA_A-0000-00-0000_P-10" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-11_R-11" RefId="M-00FA_A-0000-00-0000_P-11" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-12_R-12" RefId="M-00FA_A-0000-00-0000_P-12" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-13_R-13" RefId="M-00FA_A-0000-00-0000_P-13" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-14_R-14" RefId="M-00FA_A-0000-00-0000_P-14" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-15_R-15" RefId="M-00FA_A-0000-00-0000_P-15" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-16_R-16" RefId="M-00FA_A-0000-00-0000_P-16" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-17_R-17" RefId="M-00FA_A-0000-00-0000_P-17" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-18_R-18" RefId="M-00FA_A-0000-00-0000_P-18" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-19_R-19" RefId="M-00FA_A-0000-00-0000_P-19" />
+              <ParameterRef Id="M-00FA_A-0000-00-0000_P-20_R-20" RefId="M-00FA_A-0000-00-0000_P-20" />
+            </ParameterRefs>
+            <ComObjectTable>
+              <ComObject Id="M-00FA_A-0000-00-0000_O-1" Name="inputOnOff1" Text="DI1 Input" Number="1" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-2" Name="inputOnOff2" Text="DI2 Input" Number="2" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-3" Name="inputOnOff3" Text="DI3 Input" Number="3" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-4" Name="inputOnOff4" Text="DI4 Input" Number="4" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-5" Name="inputOnOff5" Text="DI5 Input" Number="5" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-6" Name="inputOnOff6" Text="DI6 Input" Number="6" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-7" Name="inputOnOff7" Text="DI7 Input" Number="7" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-8" Name="inputOnOff8" Text="DI8 Input" Number="8" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-9" Name="inputOnOff9" Text="DIAUX Input" Number="9" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-10" Name="inputOnOff10" Text="DO1 Input" Number="10" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-11" Name="inputOnOff11" Text="DO2 Input" Number="11" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-12" Name="inputOnOff12" Text="DO3 Input" Number="12" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-13" Name="inputOnOff13" Text="DO4 Input" Number="13" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-14" Name="inputOnOff14" Text="DO5 Input" Number="14" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-15" Name="inputOnOff15" Text="DO6 Input" Number="15" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-16" Name="inputOnOff16" Text="DO7 Input" Number="16" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-17" Name="inputOnOff17" Text="DO8 Input" Number="17" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-18" Name="inputOnOff18" Text="DOAUX Input" Number="18" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-19" Name="outputOnOff1" Text="DI1 Output" Number="19" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-20" Name="outputOnOff2" Text="DI2 Output" Number="20" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-21" Name="outputOnOff3" Text="DI3 Output" Number="21" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-22" Name="outputOnOff4" Text="DI4 Output" Number="22" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-23" Name="outputOnOff5" Text="DI5 Output" Number="23" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-24" Name="outputOnOff6" Text="DI6 Output" Number="24" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-25" Name="outputOnOff7" Text="DI7 Output" Number="25" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-26" Name="outputOnOff8" Text="DI8 Output" Number="26" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-27" Name="outputOnOff9" Text="DIAUX Output" Number="27" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-28" Name="outputOnOff10" Text="DO1 Output" Number="28" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-29" Name="outputOnOff11" Text="DO2 Output" Number="29" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-30" Name="outputOnOff12" Text="DO3 Output" Number="30" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-31" Name="outputOnOff13" Text="DO4 Output" Number="31" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-32" Name="outputOnOff14" Text="DO5 Output" Number="32" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-33" Name="outputOnOff15" Text="DO6 Output" Number="33" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-34" Name="outputOnOff16" Text="DO7 Output" Number="34" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-35" Name="outputOnOff17" Text="DO8 Output" Number="35" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-36" Name="outputOnOff18" Text="DOAUX Output" Number="36" FunctionText="" ObjectSize="1 Bit" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-37" Name="outputScaling1" Text="DI1 PWM Output" Number="37" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-38" Name="outputScaling2" Text="DI2 PWM Output" Number="38" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-39" Name="outputScaling3" Text="DI3 PWM Output" Number="39" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-40" Name="outputScaling4" Text="DI4 PWM Output" Number="40" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-41" Name="outputScaling5" Text="DI5 PWM Output" Number="41" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-42" Name="outputScaling6" Text="DI6 PWM Output" Number="42" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-43" Name="outputScaling7" Text="DI7 PWM Output" Number="43" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-44" Name="outputScaling8" Text="DI8 PWM Output" Number="44" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-45" Name="outputScaling9" Text="DIAUX PWM Output" Number="45" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-46" Name="outputScaling10" Text="DO1 PWM Output" Number="46" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-47" Name="outputScaling11" Text="DO2 PWM Output" Number="47" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-48" Name="outputScaling12" Text="DO3 PWM Output" Number="48" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-49" Name="outputScaling13" Text="DO4 PWM Output" Number="49" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-50" Name="outputScaling14" Text="DO5 PWM Output" Number="50" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-51" Name="outputScaling15" Text="DO6 PWM Output" Number="51" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-52" Name="outputScaling16" Text="DO7 PWM Output" Number="52" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-53" Name="outputScaling17" Text="DO8 PWM Output" Number="53" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-54" Name="outputScaling18" Text="DOAUX PWM Output" Number="54" FunctionText="" ObjectSize="1 Byte" ReadFlag="Disabled" WriteFlag="Enabled" CommunicationFlag="Enabled" TransmitFlag="Disabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-55" Name="outputOnOffStatus1" Text="DI1 Output Status" Number="55" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-56" Name="outputOnOffStatus2" Text="DI2 Output Status" Number="56" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-57" Name="outputOnOffStatus3" Text="DI3 Output Status" Number="57" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-58" Name="outputOnOffStatus4" Text="DI4 Output Status" Number="58" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-59" Name="outputOnOffStatus5" Text="DI5 Output Status" Number="59" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-60" Name="outputOnOffStatus6" Text="DI6 Output Status" Number="60" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-61" Name="outputOnOffStatus7" Text="DI7 Output Status" Number="61" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-62" Name="outputOnOffStatus8" Text="DI8 Output Status" Number="62" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-63" Name="outputOnOffStatus9" Text="DIAUX Output Status" Number="63" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-64" Name="outputOnOffStatus10" Text="DO1 Output Status" Number="64" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-65" Name="outputOnOffStatus11" Text="DO2 Output Status" Number="65" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-66" Name="outputOnOffStatus12" Text="DO3 Output Status" Number="66" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-67" Name="outputOnOffStatus13" Text="DO4 Output Status" Number="67" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-68" Name="outputOnOffStatus14" Text="DO5 Output Status" Number="68" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-69" Name="outputOnOffStatus15" Text="DO6 Output Status" Number="69" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-70" Name="outputOnOffStatus16" Text="DO7 Output Status" Number="70" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-71" Name="outputOnOffStatus17" Text="DO8 Output Status" Number="71" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-72" Name="outputOnOffStatus18" Text="DOAUX Output Status" Number="72" FunctionText="" ObjectSize="1 Bit" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-1-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-73" Name="outputScalingStatus1" Text="DI1 PWM Output Status" Number="73" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-74" Name="outputScalingStatus2" Text="DI2 PWM Output Status" Number="74" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-75" Name="outputScalingStatus3" Text="DI3 PWM Output Status" Number="75" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-76" Name="outputScalingStatus4" Text="DI4 PWM Output Status" Number="76" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-77" Name="outputScalingStatus5" Text="DI5 PWM Output Status" Number="77" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-78" Name="outputScalingStatus6" Text="DI6 PWM Output Status" Number="78" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-79" Name="outputScalingStatus7" Text="DI7 PWM Output Status" Number="79" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-80" Name="outputScalingStatus8" Text="DI8 PWM Output Status" Number="80" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-81" Name="outputScalingStatus9" Text="DIAUX PWM Output Status" Number="81" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-82" Name="outputScalingStatus10" Text="DO1 PWM Output Status" Number="82" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-83" Name="outputScalingStatus11" Text="DO2 PWM Output Status" Number="83" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-84" Name="outputScalingStatus12" Text="DO3 PWM Output Status" Number="84" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-85" Name="outputScalingStatus13" Text="DO4 PWM Output Status" Number="85" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-86" Name="outputScalingStatus14" Text="DO5 PWM Output Status" Number="86" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-87" Name="outputScalingStatus15" Text="DO6 PWM Output Status" Number="87" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-88" Name="outputScalingStatus16" Text="DO7 PWM Output Status" Number="88" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-89" Name="outputScalingStatus17" Text="DO8 PWM Output Status" Number="89" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+              <ComObject Id="M-00FA_A-0000-00-0000_O-90" Name="outputScalingStatus18" Text="DOAUX PWM Output Status" Number="90" FunctionText="" ObjectSize="1 Byte" ReadFlag="Enabled" WriteFlag="Disabled" CommunicationFlag="Enabled" TransmitFlag="Enabled" UpdateFlag="Disabled" ReadOnInitFlag="Disabled" DatapointType="DPST-5-1" />
+            </ComObjectTable>
+            <ComObjectRefs>
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-1_R-1" RefId="M-00FA_A-0000-00-0000_O-1" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-2_R-2" RefId="M-00FA_A-0000-00-0000_O-2" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-3_R-3" RefId="M-00FA_A-0000-00-0000_O-3" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-4_R-4" RefId="M-00FA_A-0000-00-0000_O-4" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-5_R-5" RefId="M-00FA_A-0000-00-0000_O-5" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-6_R-6" RefId="M-00FA_A-0000-00-0000_O-6" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-7_R-7" RefId="M-00FA_A-0000-00-0000_O-7" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-8_R-8" RefId="M-00FA_A-0000-00-0000_O-8" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-9_R-9" RefId="M-00FA_A-0000-00-0000_O-9" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-10_R-10" RefId="M-00FA_A-0000-00-0000_O-10" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-11_R-11" RefId="M-00FA_A-0000-00-0000_O-11" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-12_R-12" RefId="M-00FA_A-0000-00-0000_O-12" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-13_R-13" RefId="M-00FA_A-0000-00-0000_O-13" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-14_R-14" RefId="M-00FA_A-0000-00-0000_O-14" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-15_R-15" RefId="M-00FA_A-0000-00-0000_O-15" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-16_R-16" RefId="M-00FA_A-0000-00-0000_O-16" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-17_R-17" RefId="M-00FA_A-0000-00-0000_O-17" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-18_R-18" RefId="M-00FA_A-0000-00-0000_O-18" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-19_R-19" RefId="M-00FA_A-0000-00-0000_O-19" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-20_R-20" RefId="M-00FA_A-0000-00-0000_O-20" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-21_R-21" RefId="M-00FA_A-0000-00-0000_O-21" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-22_R-22" RefId="M-00FA_A-0000-00-0000_O-22" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-23_R-23" RefId="M-00FA_A-0000-00-0000_O-23" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-24_R-24" RefId="M-00FA_A-0000-00-0000_O-24" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-25_R-25" RefId="M-00FA_A-0000-00-0000_O-25" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-26_R-26" RefId="M-00FA_A-0000-00-0000_O-26" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-27_R-27" RefId="M-00FA_A-0000-00-0000_O-27" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-28_R-28" RefId="M-00FA_A-0000-00-0000_O-28" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-29_R-29" RefId="M-00FA_A-0000-00-0000_O-29" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-30_R-30" RefId="M-00FA_A-0000-00-0000_O-30" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-31_R-31" RefId="M-00FA_A-0000-00-0000_O-31" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-32_R-32" RefId="M-00FA_A-0000-00-0000_O-32" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-33_R-33" RefId="M-00FA_A-0000-00-0000_O-33" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-34_R-34" RefId="M-00FA_A-0000-00-0000_O-34" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-35_R-35" RefId="M-00FA_A-0000-00-0000_O-35" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-36_R-36" RefId="M-00FA_A-0000-00-0000_O-36" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-37_R-37" RefId="M-00FA_A-0000-00-0000_O-37" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-38_R-38" RefId="M-00FA_A-0000-00-0000_O-38" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-39_R-39" RefId="M-00FA_A-0000-00-0000_O-39" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-40_R-40" RefId="M-00FA_A-0000-00-0000_O-40" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-41_R-41" RefId="M-00FA_A-0000-00-0000_O-41" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-42_R-42" RefId="M-00FA_A-0000-00-0000_O-42" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-43_R-43" RefId="M-00FA_A-0000-00-0000_O-43" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-44_R-44" RefId="M-00FA_A-0000-00-0000_O-44" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-45_R-45" RefId="M-00FA_A-0000-00-0000_O-45" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-46_R-46" RefId="M-00FA_A-0000-00-0000_O-46" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-47_R-47" RefId="M-00FA_A-0000-00-0000_O-47" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-48_R-48" RefId="M-00FA_A-0000-00-0000_O-48" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-49_R-49" RefId="M-00FA_A-0000-00-0000_O-49" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-50_R-50" RefId="M-00FA_A-0000-00-0000_O-50" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-51_R-51" RefId="M-00FA_A-0000-00-0000_O-51" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-52_R-52" RefId="M-00FA_A-0000-00-0000_O-52" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-53_R-53" RefId="M-00FA_A-0000-00-0000_O-53" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-54_R-54" RefId="M-00FA_A-0000-00-0000_O-54" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-55_R-55" RefId="M-00FA_A-0000-00-0000_O-55" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-56_R-56" RefId="M-00FA_A-0000-00-0000_O-56" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-57_R-57" RefId="M-00FA_A-0000-00-0000_O-57" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-58_R-58" RefId="M-00FA_A-0000-00-0000_O-58" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-59_R-59" RefId="M-00FA_A-0000-00-0000_O-59" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-60_R-60" RefId="M-00FA_A-0000-00-0000_O-60" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-61_R-61" RefId="M-00FA_A-0000-00-0000_O-61" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-62_R-62" RefId="M-00FA_A-0000-00-0000_O-62" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-63_R-63" RefId="M-00FA_A-0000-00-0000_O-63" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-64_R-64" RefId="M-00FA_A-0000-00-0000_O-64" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-65_R-65" RefId="M-00FA_A-0000-00-0000_O-65" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-66_R-66" RefId="M-00FA_A-0000-00-0000_O-66" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-67_R-67" RefId="M-00FA_A-0000-00-0000_O-67" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-68_R-68" RefId="M-00FA_A-0000-00-0000_O-68" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-69_R-69" RefId="M-00FA_A-0000-00-0000_O-69" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-70_R-70" RefId="M-00FA_A-0000-00-0000_O-70" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-71_R-71" RefId="M-00FA_A-0000-00-0000_O-71" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-72_R-72" RefId="M-00FA_A-0000-00-0000_O-72" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-73_R-73" RefId="M-00FA_A-0000-00-0000_O-73" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-74_R-74" RefId="M-00FA_A-0000-00-0000_O-74" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-75_R-75" RefId="M-00FA_A-0000-00-0000_O-75" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-76_R-76" RefId="M-00FA_A-0000-00-0000_O-76" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-77_R-77" RefId="M-00FA_A-0000-00-0000_O-77" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-78_R-78" RefId="M-00FA_A-0000-00-0000_O-78" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-79_R-79" RefId="M-00FA_A-0000-00-0000_O-79" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-80_R-80" RefId="M-00FA_A-0000-00-0000_O-80" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-81_R-81" RefId="M-00FA_A-0000-00-0000_O-81" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-82_R-82" RefId="M-00FA_A-0000-00-0000_O-82" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-83_R-83" RefId="M-00FA_A-0000-00-0000_O-83" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-84_R-84" RefId="M-00FA_A-0000-00-0000_O-84" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-85_R-85" RefId="M-00FA_A-0000-00-0000_O-85" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-86_R-86" RefId="M-00FA_A-0000-00-0000_O-86" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-87_R-87" RefId="M-00FA_A-0000-00-0000_O-87" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-88_R-88" RefId="M-00FA_A-0000-00-0000_O-88" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-89_R-89" RefId="M-00FA_A-0000-00-0000_O-89" />
+              <ComObjectRef Id="M-00FA_A-0000-00-0000_O-90_R-90" RefId="M-00FA_A-0000-00-0000_O-90" />
+            </ComObjectRefs>
+            <AddressTable MaxEntries="65535" />
+            <AssociationTable MaxEntries="65535" />
+            <LoadProcedures>
+              <LoadProcedure MergeId="2">
+                <LdCtrlRelSegment AppliesTo="full" LsmIdx="4" Size="20" Mode="1" Fill="0" />
+                <LdCtrlRelSegment AppliesTo="par" LsmIdx="4" Size="20" Mode="0" Fill="0" />
+              </LoadProcedure>
+              <LoadProcedure MergeId="4">
+                <LdCtrlWriteRelMem AppliesTo="full,par" ObjIdx="4" Offset="0" Size="20" Verify="true" />
+              </LoadProcedure>
+              <LoadProcedure MergeId="7">
+                <LdCtrlLoadImageProp ObjIdx="4" PropId="27" />
+              </LoadProcedure>
+            </LoadProcedures>
+            <Options />
+          </Static>
+          <Dynamic>
+            <ChannelIndependentBlock>
+              <ParameterBlock Id="M-00FA_A-0000-00-0000_PB-1" Name="ParameterPage" Text="General Configuration">
+                <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-1_R-1" />
+                <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-2_R-2" />
+              </ParameterBlock>
+            </ChannelIndependentBlock>
+            <Channel Name="DI" Text="DI" Number="1" Id="M-00FA_A-0000-00-0000_CH-1">
+              <ParameterBlock Id="M-00FA_A-0000-00-0000_PB-2" Name="DI" Text="Input Pins">
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;1">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;1">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-3_R-3" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-3_R-3">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-19_R-19" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-55_R-55" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-37_R-37" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-73_R-73" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;1">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-3_R-3" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-3_R-3">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-19_R-19" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-55_R-55" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-37_R-37" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-73_R-73" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;1">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;1">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-3_R-3" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-3_R-3">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-19_R-19" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-55_R-55" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-37_R-37" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-73_R-73" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;1">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-3_R-3" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-3_R-3">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-1_R-1" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-19_R-19" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-55_R-55" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-37_R-37" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-73_R-73" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;2">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;2">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-4_R-4" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-4_R-4">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-20_R-20" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-56_R-56" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-38_R-38" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-74_R-74" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;2">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-4_R-4" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-4_R-4">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-20_R-20" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-56_R-56" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-38_R-38" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-74_R-74" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;2">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;2">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-4_R-4" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-4_R-4">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-20_R-20" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-56_R-56" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-38_R-38" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-74_R-74" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;2">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-4_R-4" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-4_R-4">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-2_R-2" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-20_R-20" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-56_R-56" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-38_R-38" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-74_R-74" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;3">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;3">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-5_R-5" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-5_R-5">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-21_R-21" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-57_R-57" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-39_R-39" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-75_R-75" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;3">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-5_R-5" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-5_R-5">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-21_R-21" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-57_R-57" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-39_R-39" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-75_R-75" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;3">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;3">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-5_R-5" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-5_R-5">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-21_R-21" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-57_R-57" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-39_R-39" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-75_R-75" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;3">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-5_R-5" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-5_R-5">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-3_R-3" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-21_R-21" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-57_R-57" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-39_R-39" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-75_R-75" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;4">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;4">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-6_R-6" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-6_R-6">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-22_R-22" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-58_R-58" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-40_R-40" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-76_R-76" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;4">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-6_R-6" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-6_R-6">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-22_R-22" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-58_R-58" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-40_R-40" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-76_R-76" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;4">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;4">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-6_R-6" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-6_R-6">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-22_R-22" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-58_R-58" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-40_R-40" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-76_R-76" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;4">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-6_R-6" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-6_R-6">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-4_R-4" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-22_R-22" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-58_R-58" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-40_R-40" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-76_R-76" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;5">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;5">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-7_R-7" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-7_R-7">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-23_R-23" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-59_R-59" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-41_R-41" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-77_R-77" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;5">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-7_R-7" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-7_R-7">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-23_R-23" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-59_R-59" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-41_R-41" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-77_R-77" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;5">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;5">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-7_R-7" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-7_R-7">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-23_R-23" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-59_R-59" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-41_R-41" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-77_R-77" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;5">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-7_R-7" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-7_R-7">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-5_R-5" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-23_R-23" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-59_R-59" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-41_R-41" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-77_R-77" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;6">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;6">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-8_R-8" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-8_R-8">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-24_R-24" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-60_R-60" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-42_R-42" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-78_R-78" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;6">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-8_R-8" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-8_R-8">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-24_R-24" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-60_R-60" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-42_R-42" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-78_R-78" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;6">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;6">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-8_R-8" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-8_R-8">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-24_R-24" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-60_R-60" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-42_R-42" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-78_R-78" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;6">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-8_R-8" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-8_R-8">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-6_R-6" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-24_R-24" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-60_R-60" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-42_R-42" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-78_R-78" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;7">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;7">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-9_R-9" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-9_R-9">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-25_R-25" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-61_R-61" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-43_R-43" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-79_R-79" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;7">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-9_R-9" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-9_R-9">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-25_R-25" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-61_R-61" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-43_R-43" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-79_R-79" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;7">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;7">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-9_R-9" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-9_R-9">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-25_R-25" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-61_R-61" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-43_R-43" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-79_R-79" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;7">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-9_R-9" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-9_R-9">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-7_R-7" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-25_R-25" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-61_R-61" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-43_R-43" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-79_R-79" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;8">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;8">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-10_R-10" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-10_R-10">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-26_R-26" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-62_R-62" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-44_R-44" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-80_R-80" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;8">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-10_R-10" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-10_R-10">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-26_R-26" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-62_R-62" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-44_R-44" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-80_R-80" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;8">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;8">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-10_R-10" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-10_R-10">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-26_R-26" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-62_R-62" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-44_R-44" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-80_R-80" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;8">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-10_R-10" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-10_R-10">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-8_R-8" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-26_R-26" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-62_R-62" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-44_R-44" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-80_R-80" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;9">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;9">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-11_R-11" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-11_R-11">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-27_R-27" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-63_R-63" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-45_R-45" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-81_R-81" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;9">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-11_R-11" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-11_R-11">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-27_R-27" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-63_R-63" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-45_R-45" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-81_R-81" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;9">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;9">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-11_R-11" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-11_R-11">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-27_R-27" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-63_R-63" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-45_R-45" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-81_R-81" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;9">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-11_R-11" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-11_R-11">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-9_R-9" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-27_R-27" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-63_R-63" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-45_R-45" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-81_R-81" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+              </ParameterBlock>
+            </Channel>
+            <Channel Name="DO" Text="DO" Number="2" Id="M-00FA_A-0000-00-0000_CH-2">
+              <ParameterBlock Id="M-00FA_A-0000-00-0000_PB-3" Name="DO" Text="Output Pins">
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;10">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;10">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-12_R-12" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-12_R-12">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-28_R-28" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-64_R-64" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-46_R-46" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-82_R-82" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;10">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-12_R-12" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-12_R-12">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-28_R-28" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-64_R-64" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-46_R-46" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-82_R-82" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;10">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;10">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-12_R-12" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-12_R-12">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-28_R-28" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-64_R-64" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-46_R-46" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-82_R-82" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;10">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-12_R-12" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-12_R-12">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-10_R-10" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-28_R-28" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-64_R-64" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-46_R-46" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-82_R-82" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;11">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;11">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-13_R-13" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-13_R-13">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-29_R-29" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-65_R-65" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-47_R-47" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-83_R-83" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;11">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-13_R-13" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-13_R-13">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-29_R-29" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-65_R-65" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-47_R-47" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-83_R-83" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;11">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;11">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-13_R-13" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-13_R-13">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-29_R-29" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-65_R-65" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-47_R-47" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-83_R-83" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;11">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-13_R-13" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-13_R-13">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-11_R-11" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-29_R-29" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-65_R-65" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-47_R-47" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-83_R-83" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;12">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;12">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-14_R-14" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-14_R-14">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-30_R-30" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-66_R-66" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-48_R-48" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-84_R-84" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;12">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-14_R-14" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-14_R-14">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-30_R-30" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-66_R-66" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-48_R-48" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-84_R-84" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;12">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;12">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-14_R-14" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-14_R-14">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-30_R-30" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-66_R-66" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-48_R-48" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-84_R-84" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;12">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-14_R-14" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-14_R-14">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-12_R-12" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-30_R-30" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-66_R-66" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-48_R-48" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-84_R-84" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;13">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;13">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-15_R-15" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-15_R-15">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-31_R-31" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-67_R-67" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-49_R-49" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-85_R-85" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;13">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-15_R-15" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-15_R-15">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-31_R-31" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-67_R-67" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-49_R-49" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-85_R-85" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;13">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;13">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-15_R-15" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-15_R-15">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-31_R-31" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-67_R-67" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-49_R-49" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-85_R-85" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;13">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-15_R-15" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-15_R-15">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-13_R-13" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-31_R-31" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-67_R-67" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-49_R-49" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-85_R-85" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;14">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;14">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-16_R-16" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-16_R-16">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-32_R-32" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-68_R-68" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-50_R-50" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-86_R-86" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;14">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-16_R-16" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-16_R-16">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-32_R-32" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-68_R-68" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-50_R-50" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-86_R-86" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;14">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;14">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-16_R-16" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-16_R-16">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-32_R-32" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-68_R-68" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-50_R-50" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-86_R-86" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;14">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-16_R-16" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-16_R-16">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-14_R-14" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-32_R-32" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-68_R-68" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-50_R-50" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-86_R-86" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;15">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;15">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-17_R-17" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-17_R-17">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-33_R-33" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-69_R-69" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-51_R-51" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-87_R-87" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;15">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-17_R-17" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-17_R-17">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-33_R-33" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-69_R-69" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-51_R-51" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-87_R-87" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;15">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;15">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-17_R-17" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-17_R-17">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-33_R-33" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-69_R-69" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-51_R-51" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-87_R-87" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;15">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-17_R-17" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-17_R-17">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-15_R-15" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-33_R-33" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-69_R-69" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-51_R-51" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-87_R-87" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;16">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;16">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-18_R-18" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-18_R-18">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-34_R-34" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-70_R-70" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-52_R-52" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-88_R-88" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;16">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-18_R-18" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-18_R-18">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-34_R-34" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-70_R-70" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-52_R-52" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-88_R-88" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;16">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;16">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-18_R-18" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-18_R-18">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-34_R-34" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-70_R-70" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-52_R-52" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-88_R-88" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;16">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-18_R-18" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-18_R-18">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-16_R-16" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-34_R-34" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-70_R-70" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-52_R-52" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-88_R-88" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;17">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;17">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-19_R-19" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-19_R-19">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-35_R-35" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-71_R-71" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-53_R-53" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-89_R-89" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;17">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-19_R-19" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-19_R-19">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-35_R-35" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-71_R-71" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-53_R-53" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-89_R-89" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                  <when test="&gt;17">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;17">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-19_R-19" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-19_R-19">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-35_R-35" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-71_R-71" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-53_R-53" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-89_R-89" />
+                          </when>
+                        </choose>
+                      </when>
+                      <when test="&gt;17">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-19_R-19" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-19_R-19">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-17_R-17" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-35_R-35" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-71_R-71" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-53_R-53" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-89_R-89" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+                <choose ParamRefId="M-00FA_A-0000-00-0000_P-1_R-1">
+                  <when default="true" />
+                  <when test="&lt;18">
+                    <choose ParamRefId="M-00FA_A-0000-00-0000_P-2_R-2">
+                      <when default="true" />
+                      <when test="&lt;18">
+                        <ParameterRefRef RefId="M-00FA_A-0000-00-0000_P-20_R-20" />
+                        <choose ParamRefId="M-00FA_A-0000-00-0000_P-20_R-20">
+                          <when test="0" />
+                          <when test="1">
+                          <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-18_R-18" />
+                          </when>
+                          <when test="2">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-18_R-18" />
+                          </when>
+                          <when test="3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-18_R-18" />
+                          </when>
+                          <when test="&gt;3">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-36_R-36" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-72_R-72" />
+                          </when>
+                          <when test="&gt;5">
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-54_R-54" />
+                            <ComObjectRefRef RefId="M-00FA_A-0000-00-0000_O-90_R-90" />
+                          </when>
+                        </choose>
+                      </when>
+                    </choose>
+                  </when>
+                </choose>
+              </ParameterBlock>
+            </Channel>
+          </Dynamic>
+        </ApplicationProgram>
+      </ApplicationPrograms>
+      <Hardware>
+        <Hardware Id="M-00FA_H-2023-1" Name="H8I8O" SerialNumber="2023" VersionNumber="1" BusCurrent="10" HasIndividualAddress="true" HasApplicationProgram="true">
+          <Products>
+            <Product Id="M-00FA_H-2023-1_P-H8I8O" Text="H8I8O" OrderNumber="H8I8O" IsRailMounted="false" DefaultLanguage="en-US">
+              <RegistrationInfo RegistrationStatus="Registered" />
+            </Product>
+          </Products>
+          <Hardware2Programs>
+            <Hardware2Program Id="M-00FA_H-2023-1_HP-0000-00-0000" MediumTypes="MT-0">
+              <ApplicationProgramRef RefId="M-00FA_A-0000-00-0000" />
+              <RegistrationInfo RegistrationStatus="Registered" RegistrationNumber="0001/31" />
+            </Hardware2Program>
+          </Hardware2Programs>
+        </Hardware>
+      </Hardware>
+    </Manufacturer>
+  </ManufacturerData>
+</KNX>
