@@ -8,8 +8,6 @@ For ESP8266 and ESP32 [WifiManager](https://github.com/tzapu/WiFiManager) is use
 
 Don't forget to reset ESP8266 manually (disconnect power) after flashing. The reboot doen't work during configuration with ETS otherwise.
 
-The SAMD21 version uses my version of the [FlashStorage](https://github.com/thelsing/FlashStorage) lib (Pull request pending).
-
 Generated documentation can be found [here](https://knx.readthedocs.io/en/latest/).
 
 ## Stack configuration possibilities
