@@ -14,7 +14,8 @@ enum ComFlag
     WriteRequest = 2, //!< Write was requested but was not processed
     Transmitting = 3, //!< Group Object is processed a the moment (read or write)
     Ok = 4,           //!< read or write request were send successfully
-    Error = 5         //!< there was an error on processing a request
+    Error = 5,        //!< there was an error on processing a request
+    Uninitialized = 6 //!< uninitialized Group Object, its value is not valid
 };
 
 class GroupObject;
@@ -235,7 +236,7 @@ class GroupObject
     size_t asapValueSize(uint8_t code);
     size_t goSize();
     uint16_t _asap = 0;
-    ComFlag _commFlag = Ok;
+    ComFlag _commFlag = Uninitialized;
     uint8_t* _data = 0;
     uint8_t _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT

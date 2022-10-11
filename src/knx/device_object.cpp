@@ -91,7 +91,6 @@ DeviceObject::DeviceObject()
 #ifdef USE_RF
         new DataProperty(PID_RF_DOMAIN_ADDRESS_CEMI_SERVER, true, PDT_GENERIC_06, 1, ReadLv3 | WriteLv3),
 #endif
-
     };
     initializeProperties(sizeof(properties), properties);
 }

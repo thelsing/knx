@@ -19,23 +19,23 @@ class NetworkLayerDevice : public NetworkLayer
     NetworkLayerEntity& getInterface();
 
     // from transport layer
-    virtual void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
-    virtual void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
-    virtual void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
-    virtual void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+    void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+    void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+    void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+    void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
 
   private:
     // from entities
-    virtual void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
+    void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
                         Priority priority, uint16_t source, uint8_t srcIfIdx) override;
-    virtual void dataConfirm(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, Priority priority,
+    void dataConfirm(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, Priority priority,
                      uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
-    virtual void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+    void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
                              Priority priority, uint16_t source, uint8_t srcIfIdx) override;
-    virtual void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
-    virtual void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+    void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
+    void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
                                    Priority priority, uint16_t source, uint8_t srcIfIdx) override;
-    virtual void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
+    void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
 
     // Support only a single physical interface for normal devices
     NetworkLayerEntity _netLayerEntities[1];

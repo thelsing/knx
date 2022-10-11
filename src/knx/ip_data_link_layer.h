@@ -18,7 +18,7 @@ class IpDataLinkLayer : public DataLinkLayer
     void loop();
     void enabled(bool value);
     bool enabled() const;
-    virtual DptMedium mediumType() const override;
+    DptMedium mediumType() const override;
 
   private:
     bool _enabled = false;

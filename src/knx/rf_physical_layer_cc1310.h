@@ -26,9 +26,9 @@ class RfPhysicalLayerCC1310 : public RfPhysicalLayer
   public:
     RfPhysicalLayerCC1310(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
 
-    virtual bool InitChip() override;
-    virtual void stopChip() override;
-    virtual void loop() override;
+    bool InitChip() override;
+    void stopChip() override;
+    void loop() override;
 
     void setOutputPowerLevel(int8_t dBm);
 

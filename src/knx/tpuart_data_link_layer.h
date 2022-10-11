@@ -27,7 +27,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     void loop();
     void enabled(bool value);
     bool enabled() const;
-    virtual DptMedium mediumType() const override;
+    DptMedium mediumType() const override;
 
   private:
     bool _enabled = false;
@@ -68,6 +68,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     bool sendFrame(CemiFrame& frame);
     void frameBytesReceived(uint8_t* buffer, uint16_t length);
     void dataConBytesReceived(uint8_t* buffer, uint16_t length, bool success);
+    void enterRxWaitEOP();
     bool resetChip();
     void stopChip();
 

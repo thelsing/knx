@@ -12,7 +12,7 @@ GroupObjectTableObject* GroupObject::_table = 0;
 GroupObject::GroupObject()
 {
     _data = 0;
-    _commFlag = Ok;
+    _commFlag = Uninitialized;
     _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT
     _updateHandler = 0;
@@ -72,6 +72,10 @@ bool GroupObject::writeEnable()
 bool GroupObject::readEnable()
 {
     if (!_table)
+        return false;
+
+    // we forbid reading of new (uninitialized) go
+    if (_commFlag == Uninitialized)
         return false;
 
     return bitRead(ntohs(_table->_tableData[_asap]), 11) > 0;
@@ -270,5 +274,8 @@ void GroupObject::valueNoSend(const KNXValue& value)
 
 void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 {
+    if (_commFlag == Uninitialized)
+        _commFlag = Ok;
+
     KNX_Encode_Value(value, _data, _dataLength, type);
 }

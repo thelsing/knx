@@ -347,7 +347,7 @@ void ApplicationLayer::dataConnectedConfirm(uint16_t tsap)
 
 void ApplicationLayer::dataConnectedConfirm(uint16_t tsap, const SecurityControl& secCtrl)
 {
-
+    //FIXME: implement dataConnectedConfirm DataSecurity
 }
 #pragma endregion
 void ApplicationLayer::groupValueReadRequest(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl)

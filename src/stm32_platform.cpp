@@ -4,9 +4,13 @@
 #include <EEPROM.h>
 #include "knx/bits.h"
 
+#ifndef KNX_SERIAL
+#define KNX_SERIAL Serial2
+#endif
+
 Stm32Platform::Stm32Platform()
 #ifndef KNX_NO_DEFAULT_UART
-    : ArduinoPlatform(&Serial2)
+    : ArduinoPlatform(&KNX_SERIAL)
 #endif
 {
 }
@@ -32,16 +36,21 @@ void Stm32Platform::restart()
 
 uint8_t * Stm32Platform::getEepromBuffer(uint16_t size)
 {
-    if (size > E2END + 1)
+    // check if the buffer already exists
+    if (_eepromPtr == nullptr) // we need to initialize the buffer first
     {
-        fatalError();
+        if (size > E2END + 1)
+        {
+            fatalError();
+        }
+
+        _eepromSize = size;
+        _eepromPtr = new uint8_t[size];
+        eeprom_buffer_fill();
+        for (uint16_t i = 0; i < size; ++i)
+            _eepromPtr[i] = eeprom_buffered_read_byte(i);
     }
-    _eepromSize = size;
-    delete [] _eepromPtr;
-    _eepromPtr = new uint8_t[size];
-    eeprom_buffer_fill();
-    for (uint16_t i = 0; i < size; ++i)
-        _eepromPtr[i] = eeprom_buffered_read_byte(i);
+    
     return _eepromPtr;
 }
 
@@ -51,6 +60,11 @@ void Stm32Platform::commitToEeprom()
         return;
     for (uint16_t i = 0; i < _eepromSize; ++i)
         eeprom_buffered_write_byte(i, _eepromPtr[i]);
+    // For some GD32 chips, the flash needs to be unlocked twice
+    // and the first call will fail. If the first call is
+    // successful, the second one (inside eeprom_buffer_flush)
+    // does nothing.
+    HAL_FLASH_Unlock();
     eeprom_buffer_flush();
 }
 

@@ -679,7 +679,6 @@ void RfPhysicalLayerCC1101::loop()
                         bytesLeft  -= (32 - 1);
                         pByteIndex += (32 - 1);
                     }
-
                 }
             }
 
@@ -719,7 +718,6 @@ void RfPhysicalLayerCC1101::loop()
                     packetStartTime = millis();
                     syncStart = true;
                 }
-                
             }
         }
         break;

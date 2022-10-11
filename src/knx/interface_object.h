@@ -183,12 +183,11 @@ class InterfaceObject : public SaveRestore
      */
     const Property* property(PropertyID id) const;
 
-    virtual uint8_t* save(uint8_t* buffer) override;
-    virtual const uint8_t* restore(const uint8_t* buffer) override;
-    virtual uint16_t saveSize() override;
+    uint8_t* save(uint8_t* buffer) override;
+    const uint8_t* restore(const uint8_t* buffer) override;
+    uint16_t saveSize() override;
 
   protected:
-
     /**
      * Intializes the Property-array the the supplied values.
      */

@@ -18,15 +18,15 @@ class Bau2920 : public BauSystemBCoupler
 {
   public:
     Bau2920(Platform& platform);
-    virtual void loop() override;
-    virtual bool enabled() override;
-    virtual void enabled(bool value) override;
+    void loop() override;
+    bool enabled() override;
+    void enabled(bool value) override;
 
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
 
-    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+    void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:
     RouterObject _rtObjPrimary;
     RouterObject _rtObjSecondary;
