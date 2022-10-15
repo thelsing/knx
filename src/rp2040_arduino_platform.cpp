@@ -35,12 +35,14 @@ A RAM-buffered Flash can be use by defining USE_RP2040_LARGE_EEPROM_EMULATION
 
 #define FLASHPTR ((uint8_t*)XIP_BASE + KNX_FLASH_OFFSET)
 
+#ifndef USE_RP2040_EEPROM_EMULATION
 #if KNX_FLASH_SIZE%4096
 #error "KNX_FLASH_SIZE must be multiple of 4096"
 #endif
 
 #if KNX_FLASH_OFFSET%4096
 #error "KNX_FLASH_OFFSET must be multiple of 4096"
+#endif
 #endif
 
 #ifndef KNX_SERIAL
