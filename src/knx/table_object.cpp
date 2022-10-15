@@ -110,7 +110,7 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
     if (doFill)
     {
         uint32_t addr = _memory.toRelative(_data);
-        for(int i = 0; i< size;i++)
+        for(uint32_t i = 0; i < size;i++)
             _memory.writeMemory(addr+i, 1, &fillByte);
     }
 
