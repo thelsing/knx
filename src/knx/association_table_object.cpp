@@ -65,9 +65,9 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
              // search downwards to return the first occurence in the table
             while(getASAP(--i) == asap)
                 ;
-            return getASAP(i+1);
+            return getTSAP(i+1);
         }
-        if(asap_i < asap)
+        if(asap_i > asap)
             high = i - 1;
         else
             low = i + 1 ;
