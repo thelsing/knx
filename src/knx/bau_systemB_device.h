@@ -20,12 +20,12 @@ class BauSystemBDevice : public BauSystemB
 {
   public:
     BauSystemBDevice(Platform& platform);
-    virtual void loop() override;
-    virtual bool configured() override;
+    void loop() override;
+    bool configured() override;
     GroupObjectTableObject& groupObjectTable();
 
   protected:
-    virtual ApplicationLayer& applicationLayer() override;
+    ApplicationLayer& applicationLayer() override;
 
     void groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl &secCtrl,
                                      uint8_t* data, uint8_t dataLength, bool status) override;
@@ -39,7 +39,7 @@ class BauSystemBDevice : public BauSystemB
     void sendNextGroupTelegram();
     void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
 
-    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+    void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
 
     AddressTableObject _addrTable;
     AssociationTableObject _assocTable;

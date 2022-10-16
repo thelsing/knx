@@ -18,13 +18,13 @@ class BauSystemBCoupler : public BauSystemB
 {
   public:
     BauSystemBCoupler(Platform& platform);
-    virtual void loop() override;
-    virtual bool configured() override;
+    void loop() override;
+    bool configured() override;
 
   protected:
-    virtual ApplicationLayer& applicationLayer() override;
+    ApplicationLayer& applicationLayer() override;
 
-    virtual void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+    void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
 
     Platform& _platform;
 

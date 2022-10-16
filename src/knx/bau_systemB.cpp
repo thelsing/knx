@@ -31,6 +31,11 @@ void BauSystemB::writeMemory()
     _memory.writeMemory();
 }
 
+Platform& BauSystemB::platform()
+{
+    return _platform;
+}
+
 ApplicationProgramObject& BauSystemB::parameters()
 {
     return _appProgram;
@@ -112,9 +117,14 @@ void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, 
     uint16_t memoryAddress, uint8_t * data)
 {
     _memory.writeMemory(memoryAddress, number, data);
-
     if (_deviceObj.verifyMode())
-        memoryReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress);
+        memoryReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress, data);
+}
+
+void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+    uint16_t memoryAddress, uint8_t * data)
+{
+    applicationLayer().memoryReadResponse(AckRequested, priority, hopType, asap, secCtrl, number, memoryAddress, data);
 }
 
 void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
@@ -147,6 +157,8 @@ void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopTyp
     if (restartType == RestartType::BasicRestart)
     {
         println("Basic restart requested");
+        if (_beforeRestart != 0)
+            _beforeRestart();
     }
     else if (restartType == RestartType::MasterReset)
     {
@@ -605,4 +617,24 @@ void BauSystemB::propertyValueWrite(ObjectType objectType, uint8_t objectInstanc
 Memory& BauSystemB::memory()
 {
     return _memory;
+}
+
+void BauSystemB::versionCheckCallback(VersionCheckCallback func)
+{
+    _memory.versionCheckCallback(func);
+}
+
+VersionCheckCallback BauSystemB::versionCheckCallback()
+{
+    return _memory.versionCheckCallback();
+}
+
+void BauSystemB::beforeRestartCallback(BeforeRestartCallback func)
+{
+    _beforeRestart = func;
+}
+
+BeforeRestartCallback BauSystemB::beforeRestartCallback()
+{
+    return _beforeRestart;
 }

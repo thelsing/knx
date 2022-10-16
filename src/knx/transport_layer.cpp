@@ -343,7 +343,6 @@ void TransportLayer::dataIndividualConfirm(AckType ack, uint16_t destination, Ho
                 A5(destination);
                 break;
             }
-
         }
         break;
     case Disconnect:

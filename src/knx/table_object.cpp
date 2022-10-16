@@ -6,12 +6,38 @@
 #include "callback_property.h"
 #include "data_property.h"
 
+BeforeTablesUnloadCallback TableObject::_beforeTablesUnload = 0;
+uint8_t TableObject::_tableUnloadCount = 0;
+
+void TableObject::beforeTablesUnloadCallback(BeforeTablesUnloadCallback func)
+{
+    _beforeTablesUnload = func;
+}
+
+BeforeTablesUnloadCallback TableObject::beforeTablesUnloadCallback()
+{
+    return _beforeTablesUnload;
+}
+
 TableObject::TableObject(Memory& memory)
     : _memory(memory)
 {}
 
 TableObject::~TableObject()
 {}
+
+void TableObject::beforeStateChange(LoadState& newState)
+{
+    if (newState == LS_LOADED && _tableUnloadCount > 0)
+        _tableUnloadCount--;
+    if (_tableUnloadCount > 0)
+        return;
+    if (newState == LS_UNLOADED) {
+        _tableUnloadCount++;
+        if (_beforeTablesUnload != 0)
+            _beforeTablesUnload();
+    }
+}
 
 LoadState TableObject::loadState()
 {
@@ -82,7 +108,11 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
         return false;
 
     if (doFill)
-        memset(_data, fillByte, size);
+    {
+        uint32_t addr = _memory.toRelative(_data);
+        for(uint32_t i = 0; i < size;i++)
+            _memory.writeMemory(addr+i, 1, &fillByte);
+    }
 
     _size = size;
 
@@ -139,6 +169,7 @@ void TableObject::loadEventLoading(const uint8_t* data)
         case LE_START_LOADING:
             break;
         case LE_LOAD_COMPLETED:
+            _memory.saveMemory();
             loadState(LS_LOADED);
             break;
         case LE_UNLOAD:
@@ -293,7 +324,6 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
     //TODO: missing
 
     //      23 PID_TABLE 3 / (3)
-    //      27 PID_MCB_TABLE 3 / 3
 
     uint8_t ownPropertiesCount = sizeof(ownProperties) / sizeof(Property*);
 

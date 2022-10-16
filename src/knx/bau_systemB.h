@@ -21,6 +21,7 @@ class BauSystemB : protected BusAccessUnit
     virtual bool enabled() = 0;
     virtual void enabled(bool value) = 0;
 
+    Platform& platform();
     ApplicationProgramObject& parameters();
     DeviceObject& deviceObject();
 
@@ -38,6 +39,10 @@ class BauSystemB : protected BusAccessUnit
     void propertyValueWrite(ObjectType objectType, uint8_t objectInstance, uint8_t propertyId,
                             uint8_t& numberOfElements, uint16_t startIndex,
                             uint8_t* data, uint32_t length) override;
+    void versionCheckCallback(VersionCheckCallback func);
+    VersionCheckCallback versionCheckCallback();
+    void beforeRestartCallback(BeforeRestartCallback func);
+    BeforeRestartCallback beforeRestartCallback();
 
   protected:
     virtual ApplicationLayer& applicationLayer() = 0;
@@ -48,6 +53,8 @@ class BauSystemB : protected BusAccessUnit
                                uint16_t memoryAddress, uint8_t* data) override;
     void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                               uint16_t memoryAddress) override;
+    void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                              uint16_t memoryAddress, uint8_t * data);
     void memoryExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                   uint32_t memoryAddress, uint8_t* data) override;
     void memoryExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
@@ -105,4 +112,5 @@ class BauSystemB : protected BusAccessUnit
     RestartState _restartState = Idle;
     SecurityControl _restartSecurity;
     uint32_t _restartDelay = 0;
+    BeforeRestartCallback _beforeRestart = 0;
 };

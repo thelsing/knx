@@ -7,7 +7,7 @@
 #endif
 
 #ifndef KNX_NO_PRINT
-Stream* ArduinoPlatform::SerialDebug = &Serial;
+Stream* ArduinoPlatform::SerialDebug = &KNX_DEBUG_SERIAL;
 #endif
 
 ArduinoPlatform::ArduinoPlatform() : _knxSerial(nullptr)
@@ -22,13 +22,13 @@ void ArduinoPlatform::fatalError()
 {
     while (true)
     {
-#ifdef LED_BUILTIN
+#ifdef KNX_LED
         static const long LED_BLINK_PERIOD = 200;
 
         if ((millis() % LED_BLINK_PERIOD) > (LED_BLINK_PERIOD / 2))
-            digitalWrite(LED_BUILTIN, HIGH);
+            digitalWrite(KNX_LED, HIGH);
         else
-            digitalWrite(LED_BUILTIN, LOW);
+            digitalWrite(KNX_LED, LOW);
 #endif
     }
 }

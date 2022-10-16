@@ -11,7 +11,7 @@ class SecurityInterfaceObject: public InterfaceObject
 public:
   SecurityInterfaceObject();
 
-  virtual void masterReset(EraseCode eraseCode, uint8_t channel) override;
+  void masterReset(EraseCode eraseCode, uint8_t channel) override;
 
   bool isSecurityModeEnabled();
 

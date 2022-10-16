@@ -31,6 +31,9 @@
 #define U_STOP_MODE_REQ      0x0E
 #define U_EXIT_STOP_MODE_REQ 0x0F
 #define U_ACK_REQ            0x10 //-0x17
+#define U_ACK_REQ_NACK       0x04
+#define U_ACK_REQ_BUSY       0x02
+#define U_ACK_REQ_ADRESSED   0x01
 #define U_CONFIGURE_REQ      0x18
 #define U_INT_REG_WR_REQ     0x28
 #define U_INT_REG_RD_REQ     0x38
@@ -82,7 +85,6 @@
 enum {
     TX_IDLE,
     TX_FRAME,
-    TX_WAIT_ECHO,
     TX_WAIT_CONN
 };
 
@@ -100,9 +102,22 @@ enum {
 #define RESET_TIMEOUT         100 //milli seconds
 #define TX_TIMEPAUSE            0 // 0 means 1 milli seconds
 
+#define OVERRUN_COUNT           7 //bytes; max. allowed bytes in receive buffer (on start) to see it as overrun
+
 // If this threshold is reached loop() goes into 
 // "hog mode" where it stays in loop() while L2 address reception
 #define HOGMODE_THRESHOLD       3 // milli seconds
+
+void TpUartDataLinkLayer::enterRxWaitEOP()
+{
+    // Flush input
+    while (_platform.uartAvailable())
+    {
+        _platform.readUart();
+    }
+    _lastByteRxTime = millis();
+    _rxState = RX_WAIT_EOP;
+}
 
 void TpUartDataLinkLayer::loop()
 {
@@ -122,7 +137,6 @@ void TpUartDataLinkLayer::loop()
     // Loop once and repeat as long we have rx data available
     do {
         // Signals to communicate from rx part with the tx part
-        bool isEchoComplete = false;    // Flag that a complete echo is received
         uint8_t dataConnMsg = 0;  // The DATA_CONN message just seen or 0
 
 #ifdef KNX_WAIT_FOR_ADDR
@@ -150,6 +164,12 @@ void TpUartDataLinkLayer::loop()
                 case RX_WAIT_START:
                     if (_platform.uartAvailable())
                     {
+                        if (_platform.uartAvailable() > OVERRUN_COUNT)
+                        {
+                            print("input buffer overrun: "); println(_platform.uartAvailable());
+                            enterRxWaitEOP();
+                            break;
+                        }
                         rxByte = _platform.readUart();
 #ifdef DBG_TRACE
                         print(rxByte, HEX);
@@ -258,7 +278,7 @@ void TpUartDataLinkLayer::loop()
                     if (millis() - _lastByteRxTime > EOPR_TIMEOUT)
                     {
                         _rxState = RX_WAIT_START;
-                        print("EOPR inside RX_L_ADDR");
+                        println("EOPR @ RX_L_ADDR");
                         break;
                     }
                     if (!_platform.uartAvailable())
@@ -274,27 +294,19 @@ void TpUartDataLinkLayer::loop()
                     if (_RxByteCnt == 7)
                     {
                         //Destination Address + payload available
-                        //check if echo
-                        if (_sendBuffer != nullptr && (!((buffer[0] ^ _sendBuffer[0]) & ~0x20) && !memcmp(buffer + _convert + 1, _sendBuffer + 1, 5)))
-                        { //ignore repeated bit of control byte
-                            _isEcho = true;
-                        }
-                        else
-                        {
-                            _isEcho = false;
-                        }
+                        //check if echo; ignore repeat bit of control byte
+                        _isEcho = (_sendBuffer != nullptr && (!((buffer[0] ^ _sendBuffer[0]) & ~0x20) && !memcmp(buffer + _convert + 1, _sendBuffer + 1, 5)));
 
                         //convert into Extended.ind
                         if (_convert)
                         {
-                            uint8_t payloadLength = buffer[6] & 0x0F;
                             buffer[1] = buffer[6] & 0xF0;
-                            buffer[6] = payloadLength;
+                            buffer[6] &= 0x0F;
                         }
 
                         if (!_isEcho)
                         {
-                            uint8_t c = 0x10;
+                            uint8_t c = U_ACK_REQ;
 
                             // The bau knows everything and could either check the address table object (normal device)
                             // or any filter tables (coupler) to see if we are addressed.
@@ -305,11 +317,11 @@ void TpUartDataLinkLayer::loop()
 
                             if (_cb.isAckRequired(addr, isGroupAddress))
                             {
-                                c |= 0x01;
+                                c |= U_ACK_REQ_ADRESSED;
                             }
 
                             // Hint: We can send directly here, this doesn't disturb other transmissions
-                            // We don't have to update _lastByteTxTime because after ACK the timing is not so tight
+                            // We don't have to update _lastByteTxTime because after U_ACK_REQ the timing is not so tight
                             _platform.writeUart(c);
                         }
                         _rxState = RX_L_DATA;
@@ -325,8 +337,8 @@ void TpUartDataLinkLayer::loop()
 #endif
                     if (_RxByteCnt == MAX_KNX_TELEGRAM_SIZE)
                     {
-                        _rxState = RX_WAIT_EOP;
                         println("invalid telegram size");
+                        enterRxWaitEOP();
                     }
                     else
                     {
@@ -336,26 +348,25 @@ void TpUartDataLinkLayer::loop()
                     if (_RxByteCnt == buffer[6] + 7 + 2)
                     {
                         //complete Frame received, payloadLength+1 for TCPI +1 for CRC
+                        //check if crc is correct
                         if (rxByte == (uint8_t)(~_xorSum))
                         {
-                            //check if crc is correct
-                            if (_isEcho && _sendBuffer != NULL)
-                            {
-                                //check if it is realy an echo, rx_crc = tx_crc
-                                if (rxByte == _sendBuffer[_sendBufferLength - 1])
-                                    _isEcho = true;
-                                else
-                                    _isEcho = false;
-                            }
-                            if (_isEcho)
-                            {
-                                isEchoComplete = true;
-                            }
-                            else
+                            if (!_isEcho)
                             {
                                 _receiveBuffer[0] = 0x29;
                                 _receiveBuffer[1] = 0;
+#ifdef DBG_TRACE
+                                unsigned long runTime = millis();
+#endif
                                 frameBytesReceived(_receiveBuffer, _RxByteCnt + 2);
+#ifdef DBG_TRACE
+                                runTime = millis() - runTime;
+                                if (runTime > (OVERRUN_COUNT*14)/10)
+                                {
+                                    // complain when the runtime was long than the OVERRUN_COUNT allows
+                                    print("processing received frame took: "); print(runTime); println(" ms");
+                                }
+#endif
                             }
                             _rxState = RX_WAIT_START;
 #ifdef DBG_TRACE
@@ -365,7 +376,7 @@ void TpUartDataLinkLayer::loop()
                         else
                         {
                             println("frame with invalid crc ignored");
-                            _rxState = RX_WAIT_EOP;
+                            enterRxWaitEOP();
                         }
                     }
                     else
@@ -376,20 +387,18 @@ void TpUartDataLinkLayer::loop()
                 case RX_WAIT_EOP:
                     if (millis() - _lastByteRxTime > EOP_TIMEOUT)
                     {
-                        _RxByteCnt = 0;
+                        // found a gap
                         _rxState = RX_WAIT_START;
 #ifdef DBG_TRACE
                         println("RX_WAIT_START");
 #endif
                         break;
                     }
-                    if (!_platform.uartAvailable())
-                        break;
-                    _lastByteRxTime = millis();
-                    rxByte = _platform.readUart();
-#ifdef DBG_TRACE
-                    print(rxByte, HEX);
-#endif
+                    if (_platform.uartAvailable())
+                    {
+                        _platform.readUart();
+                        _lastByteRxTime = millis();
+                    }
                     break;
                 default:
                     break;
@@ -397,8 +406,8 @@ void TpUartDataLinkLayer::loop()
         } while (_rxState == RX_L_ADDR && (stayInRx || _platform.uartAvailable()));
 
         // Check for spurios DATA_CONN message
-        if (dataConnMsg && _txState != TX_WAIT_CONN && _txState != TX_WAIT_ECHO) {
-            println("got unexpected L_DATA_CON");
+        if (dataConnMsg && _txState != TX_WAIT_CONN) {
+            println("unexpected L_DATA_CON");
         }
 
         switch (_txState)
@@ -419,9 +428,9 @@ void TpUartDataLinkLayer::loop()
                     if (sendSingleFrameByte() == false)
                     {
                         _waitConfirmStartTime = millis();
-                        _txState = TX_WAIT_ECHO;
+                        _txState = TX_WAIT_CONN;
 #ifdef DBG_TRACE
-                        println("TX_WAIT_ECHO");
+                        println("TX_WAIT_CONN");
 #endif
                     }
                     else
@@ -430,22 +439,10 @@ void TpUartDataLinkLayer::loop()
                     }
                 }
                 break;
-            case TX_WAIT_ECHO:
             case TX_WAIT_CONN:
-                if (isEchoComplete)
+                if (dataConnMsg)
                 {
-                    _txState = TX_WAIT_CONN;
-#ifdef DBG_TRACE
-                    println("TX_WAIT_CONN");
-#endif
-                }
-                else if (dataConnMsg)
-                {
-                    bool waitEcho = (_txState == TX_WAIT_ECHO);
-                    if (waitEcho) {
-                        println("L_DATA_CON without echo");
-                    }
-                    dataConBytesReceived(_receiveBuffer, _RxByteCnt + 2, !waitEcho && ((dataConnMsg & SUCCESS) > 0));
+                    dataConBytesReceived(_receiveBuffer, _RxByteCnt + 2, (dataConnMsg & SUCCESS));
                     delete[] _sendBuffer;
                     _sendBuffer = 0;
                     _sendBufferLength = 0;
@@ -579,7 +576,8 @@ DptMedium TpUartDataLinkLayer::mediumType() const
 bool TpUartDataLinkLayer::sendSingleFrameByte()
 {
     uint8_t cmd[2];
-    uint8_t idx = _TxByteCnt / 64;
+
+    uint8_t idx = _TxByteCnt >> 6;
 
     if (_sendBuffer == NULL)
         return false;
@@ -594,9 +592,9 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
         }
 
         if (_TxByteCnt != _sendBufferLength - 1)
-            cmd[0] = U_L_DATA_START_CONT_REQ | _TxByteCnt;
+            cmd[0] = U_L_DATA_START_CONT_REQ | (_TxByteCnt & 0x3F);
         else
-            cmd[0] = U_L_DATA_END_REQ | _TxByteCnt;
+            cmd[0] = U_L_DATA_END_REQ | (_TxByteCnt & 0x3F);
 
         cmd[1] = _sendBuffer[_TxByteCnt];
 #ifdef DBG_TRACE
@@ -618,7 +616,6 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
 
 void TpUartDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
 {
-
     _tx_queue_frame_t* tx_frame = new _tx_queue_frame_t;
     tx_frame->length = frame.telegramLengthtTP();
     tx_frame->data = new uint8_t[tx_frame->length];

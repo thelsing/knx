@@ -6,9 +6,13 @@
 
 #include "knx/bits.h"
 
+#ifndef KNX_SERIAL
+#define KNX_SERIAL Serial1
+#endif
+
 Esp32Platform::Esp32Platform()
 #ifndef KNX_NO_DEFAULT_UART
-    : ArduinoPlatform(&Serial1)
+    : ArduinoPlatform(&KNX_SERIAL)
 #endif
 {
 }
@@ -55,10 +59,10 @@ void Esp32Platform::setupMultiCast(uint32_t addr, uint16_t port)
 {
     IPAddress mcastaddr(htonl(addr));
     
-    Serial.printf("setup multicast addr: %s port: %d ip: %s\n", mcastaddr.toString().c_str(), port,
+    KNX_DEBUG_SERIAL.printf("setup multicast addr: %s port: %d ip: %s\n", mcastaddr.toString().c_str(), port,
         WiFi.localIP().toString().c_str());
     uint8_t result = _udp.beginMulticast(mcastaddr, port);
-    Serial.printf("result %d\n", result);
+    KNX_DEBUG_SERIAL.printf("result %d\n", result);
 }
 
 void Esp32Platform::closeMultiCast()
@@ -83,7 +87,7 @@ int Esp32Platform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen)
     
     if (len > maxLen)
     {
-        Serial.printf("udp buffer to small. was %d, needed %d\n", maxLen, len);
+        KNX_DEBUG_SERIAL.printf("udp buffer to small. was %d, needed %d\n", maxLen, len);
         fatalError();
     }
 
@@ -106,8 +110,12 @@ bool Esp32Platform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buff
 
 uint8_t * Esp32Platform::getEepromBuffer(uint16_t size)
 {
-    EEPROM.begin(size);
-    return EEPROM.getDataPtr();
+    uint8_t * eepromptr = EEPROM.getDataPtr();
+    if(eepromptr == nullptr) {
+        EEPROM.begin(size);
+        eepromptr = EEPROM.getDataPtr();
+    }
+    return eepromptr;
 }
 
 void Esp32Platform::commitToEeprom()

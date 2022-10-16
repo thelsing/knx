@@ -157,7 +157,6 @@ class ApplicationLayer
 #pragma endregion
 
   protected:
-
 #pragma region hooks
     void dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl &secCtrl);
     void dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap,

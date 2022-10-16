@@ -12,16 +12,16 @@ class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks
 {
   public:
     Bau07B0(Platform& platform);
-    virtual void loop() override;
-    virtual bool enabled() override;
-    virtual void enabled(bool value) override;
+    void loop() override;
+    bool enabled() override;
+    void enabled(bool value) override;
     
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
 
     // For TP1 only
-    virtual bool isAckRequired(uint16_t address, bool isGrpAddr) override;
+    bool isAckRequired(uint16_t address, bool isGrpAddr) override;
 
   private:
     TpUartDataLinkLayer _dlLayer;

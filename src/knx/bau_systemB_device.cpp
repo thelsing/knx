@@ -23,9 +23,9 @@ BauSystemBDevice::BauSystemBDevice(Platform& platform) :
     _transLayer.groupAddressTable(_addrTable);
 
     _memory.addSaveRestore(&_deviceObj);
+    _memory.addSaveRestore(&_groupObjTable); // changed order for better memory management
     _memory.addSaveRestore(&_addrTable);
     _memory.addSaveRestore(&_assocTable);
-    _memory.addSaveRestore(&_groupObjTable);
 #ifdef USE_DATASECURE
     _memory.addSaveRestore(&_secIfObj);
 #endif
@@ -69,8 +69,21 @@ void BauSystemBDevice::sendNextGroupTelegram()
         if (flag != ReadRequest && flag != WriteRequest)
             continue;
 
+        if (flag == WriteRequest) 
+        {
+#ifdef SMALL_GROUPOBJECT
+            GroupObject::processClassCallback(go);
+#else
+            GroupObjectUpdatedHandler handler = go.callback();
+            if (handler)
+                handler(go);
+#endif
+        }
         if (!go.communicationEnable())
+        {
+            go.commFlag(Ok);
             continue;
+        }
 
         SecurityControl goSecurity;
         goSecurity.toolAccess = false; // Secured group communication never uses the toolkey. ETS knows all keys, also the group keys.
@@ -113,14 +126,21 @@ void BauSystemBDevice::updateGroupObject(GroupObject & go, uint8_t * data, uint8
 
     memcpy(goData, data, length);
 
-    go.commFlag(Updated);
+    if (go.commFlag() != WriteRequest)
+    {
+        go.commFlag(Updated);
 #ifdef SMALL_GROUPOBJECT
-    GroupObject::processClassCallback(go);
+        GroupObject::processClassCallback(go);
 #else
-    GroupObjectUpdatedHandler handler = go.callback();
-    if (handler)
-        handler(go);
+        GroupObjectUpdatedHandler handler = go.callback();
+        if (handler)
+            handler(go);
 #endif
+    }
+    else
+    {
+        go.commFlag(Updated);
+    }
 }
 
 bool BauSystemBDevice::configured()
