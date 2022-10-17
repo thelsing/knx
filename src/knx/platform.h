@@ -105,7 +105,7 @@ class Platform
     // writes _eraseblockBuffer to flash
     virtual void writeBufferedEraseBlock();
     // copies a EraseBlock into the _eraseblockBuffer
-    void bufferEraseBlock(uint32_t eraseBlockNumber);
+    void bufferEraseBlock(int32_t eraseBlockNumber);
 
     // in theory we would have to use this buffer for memory reads too,
     // but because ets always restarts the device after programming it

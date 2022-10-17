@@ -181,8 +181,8 @@ uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buf
             uint32_t start = _bufferedEraseblockNumber * (flashEraseBlockSize() * flashPageSize());
             uint32_t end = start +  (flashEraseBlockSize() * flashPageSize());
 
-            ptrdiff_t offset = relativeAddress - start;
-            ptrdiff_t length = end - relativeAddress;
+            uint32_t offset = relativeAddress - start;
+            uint32_t length = end - relativeAddress;
             if(length > size)
                 length = size;
             memcpy(_eraseblockBuffer + offset, buffer, length);
@@ -227,7 +227,7 @@ void Platform::writeBufferedEraseBlock()
     if(_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
     {
         flashErase(_bufferedEraseblockNumber);
-        for(int i = 0; i < flashEraseBlockSize(); i++)
+        for(uint32_t i = 0; i < flashEraseBlockSize(); i++)
         {   
             int32_t pageNumber = _bufferedEraseblockNumber * flashEraseBlockSize() + i;
             uint8_t *data = _eraseblockBuffer + flashPageSize() * i;
@@ -238,7 +238,7 @@ void Platform::writeBufferedEraseBlock()
 }
 
 
-void Platform::bufferEraseBlock(uint32_t eraseBlockNumber)
+void Platform::bufferEraseBlock(int32_t eraseBlockNumber)
 {
     if(_bufferedEraseblockNumber == eraseBlockNumber)
         return;
