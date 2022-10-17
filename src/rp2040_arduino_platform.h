@@ -4,9 +4,11 @@
 
 #ifdef ARDUINO_ARCH_RP2040
 
+#ifndef USE_RP2040_EEPROM_EMULATION
 #ifndef KNX_FLASH_OFFSET
 #define KNX_FLASH_OFFSET 0x180000   // 1.5MiB
 #pragma warning "KNX_FLASH_OFFSET not defined, using 0x180000"
+#endif
 #endif
 
 #ifdef USE_RP2040_LARGE_EEPROM_EMULATION
