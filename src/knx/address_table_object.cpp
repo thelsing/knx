@@ -77,8 +77,7 @@ const uint8_t* AddressTableObject::restore(const uint8_t* buffer)
 
 bool AddressTableObject::contains(uint16_t addr)
 {
-    uint16_t foundTsap = getTsap(addr);
-    return (foundTsap > 0);
+    return (getTsap(addr) > 0);
 }
 
 void AddressTableObject::beforeStateChange(LoadState& newState)
