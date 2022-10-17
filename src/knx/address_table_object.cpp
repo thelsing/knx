@@ -38,7 +38,7 @@ uint16_t AddressTableObject::getTsap(uint16_t addr)
 {
     uint16_t size = entryCount();
     #ifdef USE_BINSEARCH
-    addr = ntohs(addr);
+    addr = htons(addr);
 
     uint16_t low,high,i;
     low = 1;
