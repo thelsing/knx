@@ -12,7 +12,15 @@
 #define USERDATA_SAVE_SIZE 0
 #endif
 
-#ifdef ARDUINO_ARCH_SAMD
+#ifdef __SAMD51__
+    #include "samd51_platform.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        void buttonUp();
+    #endif
+#elif (defined(__SAMD21E17A__) || \
+        defined(__SAMD21G18A__) || \
+        defined(__SAMD21E18A__) || \
+        defined(__SAMD21J18A__))
     #include "samd_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         void buttonUp();
@@ -465,7 +473,19 @@ template <class P, class B> class KnxFacade : private SaveRestore
 };
 
 #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-    #ifdef ARDUINO_ARCH_SAMD
+    #ifdef __SAMD51__
+        // predefined global instance for TP or IP
+        #if MASK_VERSION == 0x07B0
+            extern KnxFacade<Samd51Platform, Bau07B0> knx;
+        #elif MASK_VERSION == 0x57B0
+            extern KnxFacade<Samd51Platform, Bau57B0> knx;
+        #else
+            #error "Mask version not supported on SAMD51"
+        #endif
+    #elif (defined(__SAMD21E17A__) || \
+           defined(__SAMD21G18A__) || \
+           defined(__SAMD21E18A__) || \
+           defined(__SAMD21J18A__))
         // predefined global instance for TP or RF or TP/RF coupler
         #if MASK_VERSION == 0x07B0
             extern KnxFacade<SamdPlatform, Bau07B0> knx;
@@ -474,7 +494,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         #elif MASK_VERSION == 0x2920
             extern KnxFacade<SamdPlatform, Bau2920> knx;
         #else
-            #error "Mask version not supported on ARDUINO_ARCH_SAMD"
+            #error "Mask version not supported on SAMD21"
         #endif
     #elif defined(ARDUINO_ARCH_RP2040)
         // predefined global instance for TP or RF or TP/RF coupler

@@ -1,6 +1,10 @@
+#if(defined(__SAMD21E17A__) || \
+    defined(__SAMD21G18A__) || \
+    defined(__SAMD21E18A__) || \
+    defined(__SAMD21J18A__))
+
 #include "samd_platform.h"
 
-#ifdef ARDUINO_ARCH_SAMD
 #include <knx/bits.h>
 
 #include <Arduino.h>

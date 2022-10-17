@@ -3,6 +3,19 @@
 #include "samd51_platform.h"
 #include <knx/bits.h>
 
+#define QSPI_STORAGE
+
+#ifdef QSPI_STORAGE
+	#include <SPI.h>	//QSPI
+	#include <SdFat.h>	//QSPI
+	#include <Adafruit_SPIFlash.h>	//QSPI
+	//#define FILE_NAME parameters.knx
+	Adafruit_FlashTransport_QSPI flashTransport;
+	Adafruit_SPIFlash flash(&flashTransport);
+	FatVolume fatfs;
+	File32 saveFile;
+#endif
+
 #if KNX_FLASH_SIZE % 1024
 #error "KNX_FLASH_SIZE must be multiple of 1024"
 #endif
@@ -11,7 +24,7 @@
 #define KNX_SERIAL Serial1
 #endif
 
-SamdPlatform::SamdPlatform()
+Samd51Platform::Samd51Platform()
 #ifndef KNX_NO_DEFAULT_UART
     : ArduinoPlatform(&KNX_SERIAL)
 #endif
@@ -19,12 +32,12 @@ SamdPlatform::SamdPlatform()
     init();
 }
 
-SamdPlatform::SamdPlatform( HardwareSerial* s) : ArduinoPlatform(s)
+Samd51Platform::Samd51Platform( HardwareSerial* s) : ArduinoPlatform(s)
 {
     init();
 }
 
-uint32_t SamdPlatform::uniqueSerialNumber()
+uint32_t Samd51Platform::uniqueSerialNumber()
 {
 	// SAMD51 from section 9.6 of the datasheet
 	#define SERIAL_NUMBER_WORD_0	*(volatile uint32_t*)(0x008061FC)
@@ -35,7 +48,7 @@ uint32_t SamdPlatform::uniqueSerialNumber()
     return SERIAL_NUMBER_WORD_0 ^ SERIAL_NUMBER_WORD_1 ^ SERIAL_NUMBER_WORD_2 ^ SERIAL_NUMBER_WORD_3;
 }
 
-void SamdPlatform::restart()
+void Samd51Platform::restart()
 {
     println("restart");
     NVIC_SystemReset();
@@ -47,18 +60,36 @@ extern uint32_t __data_end__;
 
 static const uint32_t pageSizes[] = {8, 16, 32, 64, 128, 256, 512, 1024};
 
-void SamdPlatform::init()
+void Samd51Platform::init()
 {
+    // _memoryType = QspiFlash;
+	// Initialize flash library and check its chip ID.
+	// if (!flash.begin()) {
+	// 	Serial.println("Error, failed to initialize flash chip!");
+	// 	fatalError();
+	// 	while(1) delay(1);
+	// }
+	// Serial.print("Flash chip JEDEC ID: 0x"); Serial.println(flash.getJEDECID(), HEX);
+
+	// if (!fatfs.begin(&flash)) {
+	// 	Serial.println("Error, failed to mount newly formatted filesystem!");
+	// 	Serial.println("Was the flash chip formatted with the fatfs_format example?");
+	// 	fatalError();
+	// 	while(1) delay(1);
+	// }
+	// Serial.println("Mounted filesystem!");
+
+
     _memoryType = Flash;
     _pageSize = pageSizes[NVMCTRL->PARAM.bit.PSZ];
     _pageCnt = NVMCTRL->PARAM.bit.NVMP;
     _rowSize = (_pageSize * _pageCnt / 64);
 
-    // find end of program flash and set limit to next row
+    //find end of program flash and set limit to next row
     uint32_t endEddr = (uint32_t)(&__etext + (&__data_end__ - &__data_start__)); // text + data MemoryBlock
     _MemoryStart = getRowAddr(_pageSize * _pageCnt - KNX_FLASH_SIZE - 1);        // 23295
     _MemoryEnd = getRowAddr(_pageSize * _pageCnt - 1);
-    // chosen flash size is not available anymore
+    //chosen flash size is not available anymore
     if (_MemoryStart < endEddr) {
         println("KNX_FLASH_SIZE is not available (possible too much flash use by firmware)");
         fatalError();
@@ -90,22 +121,22 @@ static inline uint32_t read_unaligned_uint32(volatile void *data)
 	return res.u32;
 }
 
-size_t SamdPlatform::flashEraseBlockSize()
+size_t Samd51Platform::flashEraseBlockSize()
 {
-    return PAGES_PER_ROW;
+    return (_pageSize / 64);   //PAGES_PER_ROW;
 }
 
-size_t SamdPlatform::flashPageSize()
+size_t Samd51Platform::flashPageSize()
 {
     return _pageSize;
 }
 
-uint8_t* SamdPlatform::userFlashStart()
+uint8_t* Samd51Platform::userFlashStart()
 {
     return (uint8_t*)_MemoryStart;
 }
 
-size_t SamdPlatform::userFlashSizeEraseBlocks()
+size_t Samd51Platform::userFlashSizeEraseBlocks()
 {
     if (KNX_FLASH_SIZE <= 0)
         return 0;
@@ -113,7 +144,7 @@ size_t SamdPlatform::userFlashSizeEraseBlocks()
         return ((KNX_FLASH_SIZE - 1) / (flashPageSize() * flashEraseBlockSize())) + 1;
 }
 
-void SamdPlatform::flashErase(uint16_t eraseBlockNum)
+void Samd51Platform::flashErase(uint16_t eraseBlockNum)
 {
     noInterrupts();
 
@@ -123,7 +154,7 @@ void SamdPlatform::flashErase(uint16_t eraseBlockNum)
     interrupts();
 }
 
-void SamdPlatform::flashWritePage(uint16_t pageNumber, uint8_t* data)
+void Samd51Platform::flashWritePage(uint16_t pageNumber, uint8_t* data)
 {
     noInterrupts();
 
@@ -133,7 +164,7 @@ void SamdPlatform::flashWritePage(uint16_t pageNumber, uint8_t* data)
     interrupts();
 }
 
-void SamdPlatform::writeBufferedEraseBlock()
+void Samd51Platform::writeBufferedEraseBlock()
 {
     if (_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
     {
@@ -150,12 +181,12 @@ void SamdPlatform::writeBufferedEraseBlock()
     }
 }
 
-uint32_t SamdPlatform::getRowAddr(uint32_t flasAddr)
+uint32_t Samd51Platform::getRowAddr(uint32_t flasAddr)
 {
     return flasAddr & ~(_rowSize - 1);
 }
 
-void SamdPlatform::write(const volatile void *flash_ptr, const void *data, uint32_t size)
+void Samd51Platform::write(const volatile void *flash_ptr, const void *data, uint32_t size)
 {
     // Calculate data boundaries
     size = (size + 3) / 4;
@@ -199,7 +230,7 @@ void SamdPlatform::write(const volatile void *flash_ptr, const void *data, uint3
     }
 }
 
-void SamdPlatform::erase(const volatile void *flash_ptr, uint32_t size)
+void Samd51Platform::erase(const volatile void *flash_ptr, uint32_t size)
 {
     const uint8_t *ptr = (const uint8_t *)flash_ptr;
     while (size > _rowSize)
@@ -211,7 +242,7 @@ void SamdPlatform::erase(const volatile void *flash_ptr, uint32_t size)
     eraseRow(ptr);
 }
 
-void SamdPlatform::eraseRow(const volatile void *flash_ptr)
+void Samd51Platform::eraseRow(const volatile void *flash_ptr)
 {
 	NVMCTRL->ADDR.reg = ((uint32_t)flash_ptr);
 	NVMCTRL->CTRLB.reg = NVMCTRL_CTRLB_CMDEX_KEY | NVMCTRL_CTRLB_CMD_EB;

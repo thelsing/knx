@@ -2,11 +2,16 @@
 #include "Arduino.h"
 #include "arduino_platform.h"
 
-class SamdPlatform : public ArduinoPlatform
+// #include <SPI.h>	//QSPI
+// #include <SdFat.h>	//QSPI
+// #include <Adafruit_SPIFlash.h>	//QSPI
+// #define FILE_NAME parameters.sav
+
+class Samd51Platform : public ArduinoPlatform
 {
 public:
-    SamdPlatform();
-    SamdPlatform( HardwareSerial* s);
+    Samd51Platform();
+    Samd51Platform( HardwareSerial* s);
 
     // unique serial number
     uint32_t uniqueSerialNumber() override;
@@ -41,7 +46,6 @@ private:
 	void write(const volatile void* flash_ptr, const void* data, uint32_t size);
 	void erase(const volatile void* flash_ptr, uint32_t size);
 	void eraseRow(const volatile void* flash_ptr);
-
 };
 
 #endif
