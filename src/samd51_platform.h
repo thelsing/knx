@@ -2,11 +2,6 @@
 #include "Arduino.h"
 #include "arduino_platform.h"
 
-// #include <SPI.h>	//QSPI
-// #include <SdFat.h>	//QSPI
-// #include <Adafruit_SPIFlash.h>	//QSPI
-// #define FILE_NAME parameters.sav
-
 class Samd51Platform : public ArduinoPlatform
 {
 public:

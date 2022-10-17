@@ -12,8 +12,7 @@
 enum NvMemoryType
 {
     Eeprom,
-    Flash,
-    QspiFlash
+    Flash
 };
 
 class Platform

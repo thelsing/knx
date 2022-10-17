@@ -3,19 +3,6 @@
 #include "samd51_platform.h"
 #include <knx/bits.h>
 
-#define QSPI_STORAGE
-
-#ifdef QSPI_STORAGE
-	#include <SPI.h>	//QSPI
-	#include <SdFat.h>	//QSPI
-	#include <Adafruit_SPIFlash.h>	//QSPI
-	//#define FILE_NAME parameters.knx
-	Adafruit_FlashTransport_QSPI flashTransport;
-	Adafruit_SPIFlash flash(&flashTransport);
-	FatVolume fatfs;
-	File32 saveFile;
-#endif
-
 #if KNX_FLASH_SIZE % 1024
 #error "KNX_FLASH_SIZE must be multiple of 1024"
 #endif
@@ -62,24 +49,6 @@ static const uint32_t pageSizes[] = {8, 16, 32, 64, 128, 256, 512, 1024};
 
 void Samd51Platform::init()
 {
-    // _memoryType = QspiFlash;
-	// Initialize flash library and check its chip ID.
-	// if (!flash.begin()) {
-	// 	Serial.println("Error, failed to initialize flash chip!");
-	// 	fatalError();
-	// 	while(1) delay(1);
-	// }
-	// Serial.print("Flash chip JEDEC ID: 0x"); Serial.println(flash.getJEDECID(), HEX);
-
-	// if (!fatfs.begin(&flash)) {
-	// 	Serial.println("Error, failed to mount newly formatted filesystem!");
-	// 	Serial.println("Was the flash chip formatted with the fatfs_format example?");
-	// 	fatalError();
-	// 	while(1) delay(1);
-	// }
-	// Serial.println("Mounted filesystem!");
-
-
     _memoryType = Flash;
     _pageSize = pageSizes[NVMCTRL->PARAM.bit.PSZ];
     _pageCnt = NVMCTRL->PARAM.bit.NVMP;
@@ -226,7 +195,6 @@ void Samd51Platform::write(const volatile void *flash_ptr, const void *data, uin
 		// Restore original NVMCTRL cache settings.
 		NVMCTRL->CTRLA.bit.CACHEDIS0 = original_CACHEDIS0;
 		NVMCTRL->CTRLA.bit.CACHEDIS1 = original_CACHEDIS1;
-
     }
 }
 
