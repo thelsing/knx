@@ -38,7 +38,6 @@ uint16_t AddressTableObject::getTsap(uint16_t addr)
 {
     uint16_t size = entryCount();
     #ifdef USE_BINSEARCH
-    addr = htons(addr);
 
     uint16_t low,high,i;
     low = 1;
@@ -47,9 +46,10 @@ uint16_t AddressTableObject::getTsap(uint16_t addr)
     while(low <= high)
     {
         i = (low+high)/2;
-        if (_groupAddresses[i] == addr)
+        uint16_t ga = ntohs(_groupAddresses[i]);
+        if (ga == addr)
             return i;
-        if(addr < _groupAddresses[i])
+        if(addr < ga)
             high = i - 1;
         else
             low = i + 1 ;
