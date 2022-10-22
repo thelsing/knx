@@ -31,7 +31,7 @@ jobs:
         language: ['cpp', 'python']
         # Learn more...
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
-  
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
