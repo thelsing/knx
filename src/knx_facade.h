@@ -474,7 +474,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
 #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
     #ifdef __SAMD51__
-        // predefined global instance for TP or IP
+        // predefined global instance for TP or RF
         #if MASK_VERSION == 0x07B0
             extern KnxFacade<Samd51Platform, Bau07B0> knx;
         #elif MASK_VERSION == 0x27B0
