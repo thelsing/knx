@@ -1,7 +1,9 @@
-#ifdef __SAMD51__
-#include <Arduino.h>
 #include "samd51_platform.h"
+
+#ifdef __SAMD51__
+
 #include <knx/bits.h>
+#include <Arduino.h>
 
 #if KNX_FLASH_SIZE % 1024
 #error "KNX_FLASH_SIZE must be multiple of 1024"

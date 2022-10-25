@@ -1,6 +1,7 @@
-#ifdef __SAMD51__
 #include "Arduino.h"
 #include "arduino_platform.h"
+
+#ifdef __SAMD51__
 
 class Samd51Platform : public ArduinoPlatform
 {
