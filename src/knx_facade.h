@@ -477,8 +477,8 @@ template <class P, class B> class KnxFacade : private SaveRestore
         // predefined global instance for TP or IP
         #if MASK_VERSION == 0x07B0
             extern KnxFacade<Samd51Platform, Bau07B0> knx;
-        #elif MASK_VERSION == 0x57B0
-            extern KnxFacade<Samd51Platform, Bau57B0> knx;
+        // #elif MASK_VERSION == 0x57B0
+        //     extern KnxFacade<Samd51Platform, Bau57B0> knx;
         #else
             #error "Mask version not supported on SAMD51"
         #endif
