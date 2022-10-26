@@ -39,10 +39,64 @@ uint16_t AssociationTableObject::getASAP(uint16_t idx)
     return ntohs(_tableData[2 * idx + 2]);
 }
 
+// after any table change the table is checked if it allows
+// binary search access. If not, sortedEntryCount stays 0, 
+// otherwise sortedEntryCount represents size of bin search array 
+void AssociationTableObject::prepareBinarySearch()
+{
+    sortedEntryCount = 0;
+#ifdef USE_BINSEARCH
+    uint16_t lastASAP = 0;
+    uint16_t currentASAP = 0;
+    uint16_t lookupIdx = 0;
+    uint16_t lookupASAP = 0;
+    // we iterate through all ASAP
+    // the first n ASAP are sorted (strictly increasing number), these are assigning sending TSAP
+    // the remaining ASAP have to be all repetitions, otherwise we set sortedEntryCount to 0, which forces linear search 
+    for (uint16_t idx = 0; idx < entryCount(); idx++)
+    {
+        currentASAP = getASAP(idx);
+        if (sortedEntryCount)
+        {
+            // look if the remaining ASAP exist in the previously sorted list.
+            while (lookupIdx < sortedEntryCount)
+            {
+                lookupASAP = getASAP(lookupIdx);
+                if (currentASAP <= lookupASAP)
+                    break; // while
+                else
+                    lookupIdx++;
+            }
+            if (currentASAP < lookupASAP || lookupIdx >= sortedEntryCount)
+            {
+                // a new ASAP found, we force linear search
+                sortedEntryCount = 0;
+                break; // for
+            }
+        }
+        else
+        {
+            // check for strictly increasing ASAP
+            if (currentASAP > lastASAP)
+                lastASAP = currentASAP;
+            else
+            {
+                sortedEntryCount = idx; // last found index indicates end of sorted list
+                idx--; // current item has to be handled as remaining ASAP
+            }
+        }
+    }
+    // in case complete table is strictly increasing
+    if (lookupIdx == 0 && sortedEntryCount == 0)
+        sortedEntryCount = entryCount();
+#endif    
+}
+
 const uint8_t* AssociationTableObject::restore(const uint8_t* buffer)
 {
     buffer = TableObject::restore(buffer);
     _tableData = (uint16_t*)data();
+    prepareBinarySearch();
     return buffer;
 }
 
@@ -50,35 +104,29 @@ const uint8_t* AssociationTableObject::restore(const uint8_t* buffer)
 int32_t AssociationTableObject::translateAsap(uint16_t asap)
 {
     uint16_t entries = entryCount();
-    #ifdef USE_BINSEARCH
-    uint16_t low,high,i;
-    low = 0;
-    high = entries-1;
+    if (sortedEntryCount)
+    {
+        uint16_t low = 0;
+        uint16_t high = sortedEntryCount - 1;
 
-    while(low <= high)
-    {
-        i = (low+high)/2;
-        uint16_t asap_i = getASAP(i);
-        if (asap_i == asap)
+        while(low <= high)
         {
-             // as the binary search does not hit the first element in a list with identical items,
-             // search downwards to return the first occurence in the table
-            while(getASAP(--i) == asap)
-                ;
-            return getTSAP(i+1);
+            uint16_t i = (low + high) / 2;
+            uint16_t asap_i = getASAP(i);
+            if (asap_i == asap)
+                return getTSAP(i);
+            if(asap_i > asap)
+                high = i - 1;
+            else
+                low = i + 1 ;
         }
-        if(asap_i > asap)
-            high = i - 1;
-        else
-            low = i + 1 ;
     }
-    #else
-    for (uint16_t i = 0; i < entries; i++)
+    else
     {
-        if (getASAP(i) == asap)
-            return getTSAP(i);
+        for (uint16_t i = 0; i < entries; i++)
+            if (getASAP(i) == asap)
+                return getTSAP(i);
     }
-    #endif
     return -1;
 }
 
@@ -89,6 +137,7 @@ void AssociationTableObject::beforeStateChange(LoadState& newState)
         return;
 
     _tableData = (uint16_t*)data();
+    prepareBinarySearch();
 }
 
 int32_t AssociationTableObject::nextAsap(uint16_t tsap, uint16_t& startIdx)
