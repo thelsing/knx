@@ -50,11 +50,35 @@ const uint8_t* AssociationTableObject::restore(const uint8_t* buffer)
 int32_t AssociationTableObject::translateAsap(uint16_t asap)
 {
     uint16_t entries = entryCount();
+    #ifdef USE_BINSEARCH
+    uint16_t low,high,i;
+    low = 0;
+    high = entries-1;
+
+    while(low <= high)
+    {
+        i = (low+high)/2;
+        uint16_t asap_i = getASAP(i);
+        if (asap_i == asap)
+        {
+             // as the binary search does not hit the first element in a list with identical items,
+             // search downwards to return the first occurence in the table
+            while(getASAP(--i) == asap)
+                ;
+            return getTSAP(i+1);
+        }
+        if(asap_i > asap)
+            high = i - 1;
+        else
+            low = i + 1 ;
+    }
+    #else
     for (uint16_t i = 0; i < entries; i++)
     {
         if (getASAP(i) == asap)
             return getTSAP(i);
     }
+    #endif
     return -1;
 }
 
