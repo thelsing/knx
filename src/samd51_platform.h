@@ -1,5 +1,8 @@
-#include "Arduino.h"
+#include <Arduino.h>
 #include "arduino_platform.h"
+#include <SPI.h>
+#include <Ethernet.h>
+#include <EthernetUdp.h>
 
 #ifdef __SAMD51__
 
@@ -13,6 +16,22 @@ public:
     uint32_t uniqueSerialNumber() override;
 
     void restart();
+
+    #if USE_W5X00 == 1
+        // ip config
+        uint32_t currentIpAddress() override;
+        uint32_t currentSubnetMask() override;
+        uint32_t currentDefaultGateway() override;
+        void macAddress(uint8_t* data) override;
+
+        //multicast
+        void setupMultiCast(uint32_t addr, uint16_t port) override;
+        void closeMultiCast() override;
+        bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
+        int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
+
+        bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
+    #endif
 
     // size of one EraseBlock in pages
     virtual size_t flashEraseBlockSize();
@@ -42,6 +61,17 @@ private:
 	void write(const volatile void* flash_ptr, const void* data, uint32_t size);
 	void erase(const volatile void* flash_ptr, uint32_t size);
 	void eraseRow(const volatile void* flash_ptr);
+
+    #if USE_W5X00 == 1
+        uint8_t _macAddress[6] = {0xC0, 0xFF, 0xEE, 0xC0, 0xDE, 0x00};
+        uint32_t _ipAddress = 0;
+        uint32_t _netmask = 0;
+        uint32_t _defaultGateway = 0;
+
+        uint32_t _multicastAddr = -1;
+        uint16_t _multicastPort = -1;
+        EthernetUDP _udp;
+    #endif
 };
 
 #endif
