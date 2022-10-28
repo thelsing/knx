@@ -43,6 +43,110 @@ void Samd51Platform::restart()
     NVIC_SystemReset();
 }
 
+#if USE_W5X00 == 1
+
+    uint32_t Samd51Platform::currentIpAddress()
+    {
+        // IPAddress _ip = Ethernet.localIP();
+        // _ipAddress = htonl(_ip);
+        // return _ipAddress;
+
+        return Ethernet.localIP();
+
+        // _ipAddress = 0x0A063232;
+        // return _ipAddress;
+
+        // return 0x0A063232;
+    }
+
+    uint32_t Samd51Platform::currentSubnetMask()
+    {
+        // IPAddress _nm = Ethernet.subnetMask();
+        // _netmask = htonl(_nm);
+        // return _netmask;
+
+        return Ethernet.subnetMask();
+
+        // _netmask = 0xFFFFFF00;
+        // return _netmask;
+
+        // return 0xFFFFFF00;
+    }
+
+    uint32_t Samd51Platform::currentDefaultGateway()
+    {
+        // IPAddress _gw = Ethernet.gatewayIP();
+        // _defaultGateway = htonl(_gw);
+        // return _defaultGateway;
+
+        return Ethernet.gatewayIP();
+
+        // _defaultGateway = 0x0A063201;
+        // return _defaultGateway;
+
+        // return 0x0A063201;
+    }
+
+    void Samd51Platform::macAddress(uint8_t * mac_address)
+    {
+        //Ethernet.macAddress(mac_address);      //try this first, not sure if this will work, is for ethernet3 lib
+        memcpy(mac_address, _macAddress, sizeof(_macAddress) / sizeof(_macAddress[0]));  //sizeof should resolve to be just 6
+    }
+
+    void Samd51Platform::setupMultiCast(uint32_t addr, uint16_t port)
+    {
+        IPAddress _mcastaddr(htonl(addr));
+
+        KNX_DEBUG_SERIAL.printf("setup multicast on %d.%d.%d.%d:%d\n", _mcastaddr[0], _mcastaddr[1], _mcastaddr[2], _mcastaddr[3], port);
+        uint8_t result = _udp.beginMulticast(_multicastAddr, _multicastPort);
+        KNX_DEBUG_SERIAL.printf("result %d\n", result);
+    }
+
+    void Samd51Platform::closeMultiCast()
+    {
+        _udp.stop();
+    }
+
+    bool Samd51Platform::sendBytesMultiCast(uint8_t * buffer, uint16_t len)
+    {
+        //printHex("<- ",buffer, len);
+        _udp.beginPacket(_multicastAddr, _multicastPort);
+        _udp.write(buffer, len);
+        _udp.endPacket();
+        return true;
+    }
+
+    int Samd51Platform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen)
+    {
+        int len = _udp.parsePacket();
+        if (len == 0)
+            return 0;
+        
+        if (len > maxLen)
+        {
+            KNX_DEBUG_SERIAL.printf("udp buffer to small. was %d, needed %d\n", maxLen, len);
+            fatalError();
+        }
+
+        _udp.read(buffer, len);
+        printHex("-> ", buffer, len);
+        return len;
+    }
+
+    bool Samd51Platform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
+    {
+        IPAddress ucastaddr(htonl(addr));
+        println("sendBytesUniCast endPacket fail");
+        if(_udp.beginPacket(ucastaddr, port) == 1) {
+            _udp.write(buffer, len);
+            if(_udp.endPacket() == 0) println("sendBytesUniCast endPacket fail");
+        }
+        else println("sendBytesUniCast beginPacket fail");
+        return true;
+    }
+
+#endif
+
 extern uint32_t __etext;
 extern uint32_t __data_start__;
 extern uint32_t __data_end__;
@@ -51,6 +155,17 @@ static const uint32_t pageSizes[] = {8, 16, 32, 64, 128, 256, 512, 1024};
 
 void Samd51Platform::init()
 {
+    // println("Entered Init .h variables active, rest and .cpp commented");
+
+    // #if USE_W5X00 == 1
+    //     IPAddress _ip = Ethernet.localIP();
+    //     _ipAddress = htonl(_ip);
+    //     _ip = Ethernet.subnetMask();
+    //     _netmask = htonl(_ip);
+    //     _ip = Ethernet.gatewayIP();
+    //     _defaultGateway = htonl(_ip);
+    // #endif
+
     _memoryType = Flash;
     _pageSize = pageSizes[NVMCTRL->PARAM.bit.PSZ];
     _pageCnt = NVMCTRL->PARAM.bit.NVMP;

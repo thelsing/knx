@@ -42,8 +42,8 @@
             KnxFacade<Samd51Platform, Bau07B0> knx(buttonEvent);
         #elif MASK_VERSION == 0x27B0
             KnxFacade<Samd51Platform, Bau2920> knx(buttonEvent);
-        // #elif MASK_VERSION == 0x57B0
-        //     KnxFacade<Samd51Platform, Bau57B0> knx(buttonEvent);
+        #elif MASK_VERSION == 0x57B0
+            KnxFacade<Samd51Platform, Bau57B0> knx(buttonEvent);
         #else
             #error "Mask version not supported on SAMD51"
         #endif
