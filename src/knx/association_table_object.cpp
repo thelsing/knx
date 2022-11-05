@@ -103,7 +103,9 @@ const uint8_t* AssociationTableObject::restore(const uint8_t* buffer)
 // return type is int32 so that we can return uint16 and -1
 int32_t AssociationTableObject::translateAsap(uint16_t asap)
 {
-    uint16_t entries = entryCount();
+    // sortedEntryCount is determined in prepareBinarySearch()
+    // if ETS provides strictly increasing numbers for ASAP
+    // represents the size of the array to search
     if (sortedEntryCount)
     {
         uint16_t low = 0;
@@ -123,7 +125,8 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
     }
     else
     {
-        for (uint16_t i = 0; i < entries; i++)
+        // if ASAP numbers are not strictly increasing linear seach is used 
+        for (uint16_t i = 0; i < entryCount(); i++)
             if (getASAP(i) == asap)
                 return getTSAP(i);
     }
