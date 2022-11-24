@@ -27,11 +27,16 @@
         ICACHE_RAM_ATTR void buttonEvent()
         {
             static uint32_t lastEvent=0;
+            static uint32_t lastPressed=0;
+
             uint32_t diff = millis() - lastEvent;
             if (diff >= PROG_BTN_PRESS_MIN_MILLIS && diff <= PROG_BTN_PRESS_MAX_MILLIS){
-                knx.toggleProgMode();
+                if (millis() - lastPressed > 200)
+                {  
+                    knx.toggleProgMode();
+                    lastPressed = millis();
+                }
             }
-
             lastEvent = millis();
         }
     #endif
