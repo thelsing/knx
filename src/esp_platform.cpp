@@ -108,7 +108,7 @@ bool EspPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer
     return true;
 }
 
-uint8_t * EspPlatform::getEepromBuffer(uint16_t size)
+uint8_t * EspPlatform::getEepromBuffer(uint32_t size)
 {
     uint8_t * eepromptr = EEPROM.getDataPtr();
     if(eepromptr == nullptr) {

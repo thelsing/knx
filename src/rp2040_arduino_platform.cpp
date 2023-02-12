@@ -109,7 +109,7 @@ void RP2040ArduinoPlatform::restart()
 
 #ifdef USE_RP2040_LARGE_EEPROM_EMULATION
 
-uint8_t * RP2040ArduinoPlatform::getEepromBuffer(uint16_t size)
+uint8_t * RP2040ArduinoPlatform::getEepromBuffer(uint32_t size)
 {
     if(size%4096)
     {
@@ -144,7 +144,7 @@ void RP2040ArduinoPlatform::commitToEeprom()
 
 #else
 
-uint8_t * RP2040ArduinoPlatform::getEepromBuffer(uint16_t size)
+uint8_t * RP2040ArduinoPlatform::getEepromBuffer(uint32_t size)
 {
     if(size > 4096)
     {

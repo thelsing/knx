@@ -265,7 +265,7 @@ int LinuxPlatform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen)
     return len;
 }
 
-uint8_t* LinuxPlatform::getEepromBuffer(uint16_t size)
+uint8_t* LinuxPlatform::getEepromBuffer(uint32_t size)
 {
     if (_fd < 0)
         doMemoryMapping();
