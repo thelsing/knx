@@ -128,7 +128,7 @@ void Platform::flashErase(uint16_t eraseBlockNum)
 void Platform::flashWritePage(uint16_t pageNumber, uint8_t* data)
 {}
 
-uint8_t * Platform::getEepromBuffer(uint16_t size)
+uint8_t * Platform::getEepromBuffer(uint32_t size)
 {
     return nullptr;
 }

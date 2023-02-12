@@ -30,7 +30,7 @@ public:
     void restart();
 
     #ifdef USE_RP2040_EEPROM_EMULATION
-    uint8_t* getEepromBuffer(uint16_t size);
+    uint8_t* getEepromBuffer(uint32_t size);
     void commitToEeprom();
 
     #ifdef USE_RP2040_LARGE_EEPROM_EMULATION

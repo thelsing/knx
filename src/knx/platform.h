@@ -61,7 +61,7 @@ class Platform
     //
     // --- changes to the UserMemory are written directly into the address space starting at getEepromBuffer
     // --- commitToEeprom must save this to a non-volatile area if neccessary
-    virtual uint8_t* getEepromBuffer(uint16_t size);
+    virtual uint8_t* getEepromBuffer(uint32_t size);
     virtual void commitToEeprom();
     // -------------------------------------------------------------------------------------------------------
 

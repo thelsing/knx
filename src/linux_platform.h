@@ -55,7 +55,7 @@ public:
     int readWriteSpi (uint8_t *data, size_t len) override;
 
     //memory
-    uint8_t* getEepromBuffer(uint16_t size) override;
+    uint8_t* getEepromBuffer(uint32_t size) override;
     void commitToEeprom() override;
     void cmdlineArgs(int argc, char** argv);
 

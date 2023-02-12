@@ -20,7 +20,7 @@ class CC1310Platform : public Platform
     void restart() final;
     void fatalError() final;
 
-    uint8_t* getEepromBuffer(uint16_t size) final;
+    uint8_t* getEepromBuffer(uint32_t size) final;
     void commitToEeprom() final;
 };
 
