@@ -128,7 +128,7 @@ void Platform::flashErase(uint16_t eraseBlockNum)
 void Platform::flashWritePage(uint16_t pageNumber, uint8_t* data)
 {}
 
-uint8_t * Platform::getEepromBuffer(uint16_t size)
+uint8_t * Platform::getEepromBuffer(uint32_t size)
 {
     return nullptr;
 }
@@ -198,6 +198,37 @@ uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buf
     {
         memcpy(getEepromBuffer(KNX_FLASH_SIZE)+relativeAddress, buffer, size);
         return relativeAddress+size;
+    }
+}
+
+// writes value repeat times into flash starting at relativeAddress
+// returns next free relativeAddress
+uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t value, size_t repeat)
+{
+    if(_memoryType == Flash)
+    {
+        while (repeat > 0)
+        {
+            loadEraseblockContaining(relativeAddress);
+            uint32_t start = _bufferedEraseblockNumber * (flashEraseBlockSize() * flashPageSize());
+            uint32_t end = start +  (flashEraseBlockSize() * flashPageSize());
+
+            uint32_t offset = relativeAddress - start;
+            uint32_t length = end - relativeAddress;
+            if(length > repeat)
+                length = repeat;
+            memset(_eraseblockBuffer + offset, value, length);
+            _bufferedEraseblockDirty = true;
+
+            relativeAddress += length;
+            repeat -= length;
+        }
+        return relativeAddress;
+    }
+    else
+    {
+        memset(getEepromBuffer(KNX_FLASH_SIZE)+relativeAddress, value, repeat);
+        return relativeAddress+repeat;
     }
 }
 

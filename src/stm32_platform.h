@@ -15,7 +15,7 @@ public:
     void restart();
     
     //memory
-    uint8_t* getEepromBuffer(uint16_t size);
+    uint8_t* getEepromBuffer(uint32_t size);
     void commitToEeprom();
 private:
     uint8_t *_eepromPtr = nullptr;

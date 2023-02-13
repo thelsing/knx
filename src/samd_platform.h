@@ -17,7 +17,7 @@ public:
 
     void restart();
 #ifdef USE_SAMD_EEPROM_EMULATION
-    uint8_t* getEepromBuffer(uint16_t size);
+    uint8_t* getEepromBuffer(uint32_t size);
     void commitToEeprom();
 #else
     // size of one EraseBlock in pages

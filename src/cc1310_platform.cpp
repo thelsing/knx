@@ -495,7 +495,7 @@ void CC1310Platform::init()
     setupNVS();
 }
 
-uint8_t* CC1310Platform::getEepromBuffer(uint16_t size)
+uint8_t* CC1310Platform::getEepromBuffer(uint32_t size)
 {
     if(size > KNX_FLASH_SIZE)
     {

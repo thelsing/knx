@@ -34,7 +34,7 @@ void Stm32Platform::restart()
     NVIC_SystemReset();
 }
 
-uint8_t * Stm32Platform::getEepromBuffer(uint16_t size)
+uint8_t * Stm32Platform::getEepromBuffer(uint32_t size)
 {
     // check if the buffer already exists
     if (_eepromPtr == nullptr) // we need to initialize the buffer first

@@ -32,7 +32,7 @@ public:
     bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
 
     //memory
-    uint8_t* getEepromBuffer(uint16_t size);
+    uint8_t* getEepromBuffer(uint32_t size);
     void commitToEeprom();
 private:
     WiFiUDP _udp;

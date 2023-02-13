@@ -61,7 +61,7 @@ void SamdPlatform::restart()
 
 #ifdef USE_SAMD_EEPROM_EMULATION
 #pragma warning "Using EEPROM Simulation"
-uint8_t* SamdPlatform::getEepromBuffer(uint16_t size)
+uint8_t* SamdPlatform::getEepromBuffer(uint32_t size)
 {
     //EEPROM.begin(size);
     if(size > EEPROM_EMULATION_SIZE)

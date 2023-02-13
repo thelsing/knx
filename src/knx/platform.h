@@ -61,7 +61,7 @@ class Platform
     //
     // --- changes to the UserMemory are written directly into the address space starting at getEepromBuffer
     // --- commitToEeprom must save this to a non-volatile area if neccessary
-    virtual uint8_t* getEepromBuffer(uint16_t size);
+    virtual uint8_t* getEepromBuffer(uint32_t size);
     virtual void commitToEeprom();
     // -------------------------------------------------------------------------------------------------------
 
@@ -70,6 +70,7 @@ class Platform
     virtual void commitNonVolatileMemory();
     // address is relative to start of nonvolatile memory
     virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size);
+    virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t value, size_t repeat);
 
     NvMemoryType NonVolatileMemoryType();
     void NonVolatileMemoryType(NvMemoryType type);
