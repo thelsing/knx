@@ -59,7 +59,7 @@
     #define KNX_LED LED_BUILTIN
 #endif
 #ifndef KNX_BUTTON
-    #define KNX_BUTTON 0
+    #define KNX_BUTTON -1
 #endif
 
 typedef const uint8_t* (*RestoreCallback)(const uint8_t* buffer);
@@ -185,12 +185,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
     }
 
   
-    uint32_t buttonPin()
+    int32_t buttonPin()
     {
         return _buttonPin;
     }
 
-    void buttonPin(uint32_t value)
+    void buttonPin(int32_t value)
     {
         _buttonPin = value;
     }
@@ -267,7 +267,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         progLedOff();
         pinMode(buttonPin(), INPUT_PULLUP);
 
-        if (_progButtonISRFuncPtr)
+        if (_progButtonISRFuncPtr && _buttonPin >= 0)
         {
             // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
             #if (ARDUINO_API_VERSION >= 10200)
@@ -413,7 +413,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
     ProgLedOffCallback _progLedOffCallback = 0;
     uint32_t _ledPinActiveOn = LOW;
     uint32_t _ledPin = KNX_LED;
-    uint32_t _buttonPin = KNX_BUTTON;
+    int32_t _buttonPin = KNX_BUTTON;
     SaveCallback _saveCallback = 0;
     RestoreCallback _restoreCallback = 0;
     volatile bool _toggleProgMode = false;
