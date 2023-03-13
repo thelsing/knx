@@ -43,6 +43,10 @@ class BauSystemB : protected BusAccessUnit
     VersionCheckCallback versionCheckCallback();
     void beforeRestartCallback(BeforeRestartCallback func);
     BeforeRestartCallback beforeRestartCallback();
+#ifdef USE_FUNCTIONPROPERTYCALLBACK
+    void functionPropertyCallback(FunctionPropertyCallback func);
+    FunctionPropertyCallback functionPropertyCallback();
+#endif
 
   protected:
     virtual ApplicationLayer& applicationLayer() = 0;
@@ -113,4 +117,7 @@ class BauSystemB : protected BusAccessUnit
     SecurityControl _restartSecurity;
     uint32_t _restartDelay = 0;
     BeforeRestartCallback _beforeRestart = 0;
+#ifdef USE_FUNCTIONPROPERTYCALLBACK
+    FunctionPropertyCallback _functionProperty = 0;
+#endif
 };

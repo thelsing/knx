@@ -312,7 +312,14 @@ void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountTy
         }
         else
         {
+#ifdef USE_FUNCTIONPROPERTYCALLBACK
+            if(_functionProperty != 0)
+                _functionProperty(objectIndex, propertyId, length, data, resultData, resultLength);
+            else
+                resultLength = 0;
+#else
             resultLength = 0; // We must not send a return code or any data fields
+#endif
         }
     }
 
@@ -638,3 +645,15 @@ BeforeRestartCallback BauSystemB::beforeRestartCallback()
 {
     return _beforeRestart;
 }
+
+#ifdef USE_FUNCTIONPROPERTYCALLBACK
+void BauSystemB::functionPropertyCallback(FunctionPropertyCallback func)
+{
+    _functionProperty = func;
+}
+
+FunctionPropertyCallback BauSystemB::functionPropertyCallback()
+{
+    return _functionProperty;
+}
+#endif
