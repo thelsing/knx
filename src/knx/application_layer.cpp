@@ -626,7 +626,7 @@ void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority,
 void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
                                                      uint8_t objectIndex, uint8_t propertyId, uint8_t* resultData, uint8_t resultLength)
 {
-    CemiFrame frame(3 + resultLength + 1);
+    CemiFrame frame(3 + resultLength);
     APDU& apdu = frame.apdu();
     apdu.type(FunctionPropertyStateResponse);
     uint8_t* data = apdu.data() + 1;
@@ -1033,10 +1033,10 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             break;
         }
         case FunctionPropertyCommand:
-            _bau.functionPropertyCommandIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            _bau.functionPropertyCommandIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 3); //TODO: check length
             break;
         case FunctionPropertyState:
-            _bau.functionPropertyStateIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            _bau.functionPropertyStateIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 3); //TODO: check length
             break;
         case FunctionPropertyExtCommand:
         {
