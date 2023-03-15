@@ -171,5 +171,7 @@ class BusAccessUnit
 #ifdef USE_FUNCTIONPROPERTYCALLBACK
     virtual void functionPropertyCallback(FunctionPropertyCallback func);
     virtual FunctionPropertyCallback functionPropertyCallback();
+    virtual void functionPropertyStateCallback(FunctionPropertyCallback func);
+    virtual FunctionPropertyCallback functionPropertyStateCallback();
 #endif
 };
