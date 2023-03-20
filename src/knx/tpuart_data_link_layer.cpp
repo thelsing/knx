@@ -335,7 +335,7 @@ void TpUartDataLinkLayer::loop()
 #ifdef DBG_TRACE
                     print(rxByte, HEX);
 #endif
-                    if (_RxByteCnt == MAX_KNX_TELEGRAM_SIZE)
+                    if (_RxByteCnt == MAX_KNX_TELEGRAM_SIZE - 2)
                     {
                         println("invalid telegram size");
                         enterRxWaitEOP();
@@ -401,6 +401,8 @@ void TpUartDataLinkLayer::loop()
                     }
                     break;
                 default:
+                    println("invalid _rxState");
+                    enterRxWaitEOP();
                     break;
             }
         } while (_rxState == RX_L_ADDR && (stayInRx || _platform.uartAvailable()));
