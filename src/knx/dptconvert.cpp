@@ -416,6 +416,7 @@ int busValueToTime(const uint8_t* payload, size_t payload_length, const Dpt& dat
         case 1:
         {
             unsigned char hours = unsigned8FromPayload(payload, 0) & 0x1F;
+            unsigned char weekDay = (unsigned8FromPayload(payload, 0) & 0xE0) >> 5;
             unsigned char minutes = unsigned8FromPayload(payload, 1) & 0x3F;
             unsigned char seconds = unsigned8FromPayload(payload, 2) & 0x3F;
 
@@ -423,6 +424,7 @@ int busValueToTime(const uint8_t* payload, size_t payload_length, const Dpt& dat
                 return false;
             struct tm tmp = {0};
             tmp.tm_hour = hours;
+            tmp.tm_wday = weekDay;
             tmp.tm_min = minutes;
             tmp.tm_sec = seconds;
             value = tmp;
