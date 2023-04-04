@@ -1150,7 +1150,7 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         case ADCRead:
         {
             //Since we don't have an adc for bus voltage, we just send zero as readCount
-            uint8_t channelNr = tsap & 0b111111;
+            uint8_t channelNr = data[0] & 0b111111;
             this->adcReadResponse(AckRequested, priority, hopType, tsap, secCtrl, channelNr, 0, 0);
             break;
         }
