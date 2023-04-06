@@ -87,7 +87,7 @@
 #define DPT_Rain_Amount Dpt(9, 26)
 #define DPT_Value_Temp_F Dpt(9, 27)
 #define DPT_Value_Wsp_kmh Dpt(9, 28)
-#define DPT_TimeOfDay Dpt(10, 1)
+#define DPT_TimeOfDay Dpt(10, 1, 1)
 #define DPT_Date Dpt(11, 1)
 #define DPT_Value_4_Ucount Dpt(12, 1)
 #define DPT_Value_4_Count Dpt(13, 1)
