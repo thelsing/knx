@@ -347,3 +347,21 @@ BeforeRestartCallback BusAccessUnit::beforeRestartCallback()
 {
     return 0;
 }
+
+void BusAccessUnit::functionPropertyCallback(FunctionPropertyCallback func)
+{
+}
+
+FunctionPropertyCallback BusAccessUnit::functionPropertyCallback()
+{
+    return 0;
+}
+
+void BusAccessUnit::functionPropertyStateCallback(FunctionPropertyCallback func)
+{
+}
+
+FunctionPropertyCallback BusAccessUnit::functionPropertyStateCallback()
+{
+    return 0;
+}

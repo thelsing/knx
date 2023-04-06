@@ -312,7 +312,10 @@ void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountTy
         }
         else
         {
-            resultLength = 0; // We must not send a return code or any data fields
+            if(_functionProperty != 0)
+                _functionProperty(objectIndex, propertyId, length, data, resultData, resultLength);
+            else
+                resultLength = 0;
         }
     }
 
@@ -334,7 +337,10 @@ void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType
         }
         else
         {
-            resultLength = 0; // We must not send a return code or any data fields
+            if(_functionPropertyState != 0)
+                _functionPropertyState(objectIndex, propertyId, length, data, resultData, resultLength);
+            else
+                resultLength = 0;
         }
     }
 
@@ -637,4 +643,23 @@ void BauSystemB::beforeRestartCallback(BeforeRestartCallback func)
 BeforeRestartCallback BauSystemB::beforeRestartCallback()
 {
     return _beforeRestart;
+}
+
+void BauSystemB::functionPropertyCallback(FunctionPropertyCallback func)
+{
+    _functionProperty = func;
+}
+
+FunctionPropertyCallback BauSystemB::functionPropertyCallback()
+{
+    return _functionProperty;
+}
+void BauSystemB::functionPropertyStateCallback(FunctionPropertyCallback func)
+{
+    _functionPropertyState = func;
+}
+
+FunctionPropertyCallback BauSystemB::functionPropertyStateCallback()
+{
+    return _functionPropertyState;
 }

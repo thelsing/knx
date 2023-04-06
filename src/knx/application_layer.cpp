@@ -623,10 +623,29 @@ void ApplicationLayer::propertyValueWriteRequest(AckType ack, Priority priority,
         startIndex, data, length);
 }
 
+void ApplicationLayer::adcReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
+                                                     uint8_t channelNr, uint8_t readCount, int16_t value)
+{
+    CemiFrame frame(4);
+    APDU& apdu = frame.apdu();
+    apdu.type(ADCResponse);
+    uint8_t* data = apdu.data();
+
+    data[0] |= (channelNr & 0b111111);
+    data[1] = readCount;
+    data[2] = value >> 8;
+    data[3] = value & 0xFF;
+
+    if (asap == _connectedTsap)
+        dataConnectedRequest(asap, priority, apdu, secCtrl);
+    else
+        dataIndividualRequest(ack, hopType, priority, asap, apdu, secCtrl);
+}
+
 void ApplicationLayer::functionPropertyStateResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
                                                      uint8_t objectIndex, uint8_t propertyId, uint8_t* resultData, uint8_t resultLength)
 {
-    CemiFrame frame(3 + resultLength + 1);
+    CemiFrame frame(3 + resultLength);
     APDU& apdu = frame.apdu();
     apdu.type(FunctionPropertyStateResponse);
     uint8_t* data = apdu.data() + 1;
@@ -1033,10 +1052,10 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
             break;
         }
         case FunctionPropertyCommand:
-            _bau.functionPropertyCommandIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            _bau.functionPropertyCommandIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 3); //TODO: check length
             break;
         case FunctionPropertyState:
-            _bau.functionPropertyStateIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 4); //TODO: check length
+            _bau.functionPropertyStateIndication(priority, hopType, tsap, secCtrl, data[1], data[2], &data[3], apdu.length() - 3); //TODO: check length
             break;
         case FunctionPropertyExtCommand:
         {
@@ -1128,6 +1147,13 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         case KeyResponse:
             _bau.keyWriteAppLayerConfirm(priority, hopType, tsap, secCtrl, data[1]);
             break;
+        case ADCRead:
+        {
+            //Since we don't have an adc for bus voltage, we just send zero as readCount
+            uint8_t channelNr = data[0] & 0b111111;
+            this->adcReadResponse(AckRequested, priority, hopType, tsap, secCtrl, channelNr, 0, 0);
+            break;
+        }
         default:
             print("Individual-indication: unhandled APDU-Type: ");
             println(apdu.type());
