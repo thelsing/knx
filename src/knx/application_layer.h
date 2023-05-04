@@ -202,9 +202,9 @@ class ApplicationLayer
     void individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status);
     void individualSend(AckType ack, HopCountType hopType, Priority priority, uint16_t asap, APDU& apdu, const SecurityControl& secCtrl);
 
-    uint16_t _savedAsapReadRequest;
-    uint16_t _savedAsapWriteRequest;
-    uint16_t _savedAsapResponse;
+    uint16_t _savedAsapReadRequest = 0;
+    uint16_t _savedAsapWriteRequest = 0;
+    uint16_t _savedAsapResponse = 0;
     AssociationTableObject* _assocTable = nullptr;
     BusAccessUnit& _bau;
 
