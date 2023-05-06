@@ -303,23 +303,31 @@ void BauSystemB::functionPropertyCommandIndication(Priority priority, HopCountTy
     uint8_t resultData[kFunctionPropertyResultBufferMaxSize];
     uint8_t resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
 
+    bool handled = false;
+
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
     {
         if (obj->property((PropertyID)propertyId)->Type() == PDT_FUNCTION)
         {
             obj->command((PropertyID)propertyId, data, length, resultData, resultLength);
+            handled = true;
         }
         else
         {
             if(_functionProperty != 0)
-                _functionProperty(objectIndex, propertyId, length, data, resultData, resultLength);
-            else
-                resultLength = 0;
+                if(_functionProperty(objectIndex, propertyId, length, data, resultData, resultLength))
+                    handled = true;
         }
+    } else {
+        if(_functionProperty != 0)
+            if(_functionProperty(objectIndex, propertyId, length, data, resultData, resultLength))
+                handled = true;
     }
 
-    applicationLayer().functionPropertyStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectIndex, propertyId, resultData, resultLength);
+    //only return a value it was handled by a property or function
+    if(handled)
+        applicationLayer().functionPropertyStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectIndex, propertyId, resultData, resultLength);
 }
 
 void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
@@ -328,23 +336,31 @@ void BauSystemB::functionPropertyStateIndication(Priority priority, HopCountType
     uint8_t resultData[kFunctionPropertyResultBufferMaxSize];
     uint8_t resultLength = sizeof(resultData); // tell the callee the maximum size of the buffer
 
+    bool handled = true;
+
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if(obj)
     {
         if (obj->property((PropertyID)propertyId)->Type() == PDT_FUNCTION)
         {
             obj->state((PropertyID)propertyId, data, length, resultData, resultLength);
+            handled = true;
         }
         else
         {
             if(_functionPropertyState != 0)
-                _functionPropertyState(objectIndex, propertyId, length, data, resultData, resultLength);
-            else
-                resultLength = 0;
+                if(_functionPropertyState(objectIndex, propertyId, length, data, resultData, resultLength))
+                    handled = true;
         }
+    } else {
+        if(_functionProperty != 0)
+            if(_functionProperty(objectIndex, propertyId, length, data, resultData, resultLength))
+                handled = true;
     }
 
-    applicationLayer().functionPropertyStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectIndex, propertyId, resultData, resultLength);
+    //only return a value it was handled by a property or function
+    if(handled)
+        applicationLayer().functionPropertyStateResponse(AckRequested, priority, hopType, asap, secCtrl, objectIndex, propertyId, resultData, resultLength);
 }
 
 void BauSystemB::functionPropertyExtCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,
