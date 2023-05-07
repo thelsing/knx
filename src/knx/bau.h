@@ -4,7 +4,7 @@
 #include "interface_object.h"
 
 typedef void (*BeforeRestartCallback)(void);
-typedef void (*FunctionPropertyCallback)(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength);
+typedef bool (*FunctionPropertyCallback)(uint8_t objectIndex, uint8_t propertyId, uint8_t length, uint8_t *data, uint8_t *resultData, uint8_t &resultLength);
 
 class BusAccessUnit
 {
