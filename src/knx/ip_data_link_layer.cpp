@@ -26,11 +26,10 @@ IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipPara
 bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
 {
     KnxIpRoutingIndication packet(frame);
-    if(countFrames())
+    // only send 50 packet per second: see KNX 3.2.6 p.6
+    if(CheckSendLimit())
         return false;
     bool success = sendBytes(packet.data(), packet.totalLength());
-    // only send 50 packet per second: see KNX 3.2.6 p.6
-    //delay(20);
     dataConReceived(frame, success);
     return success;
 }
@@ -114,13 +113,8 @@ bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
     return _platform.sendBytesMultiCast(bytes, length);
 }
 
-bool IpDataLinkLayer::countFrames()
+bool IpDataLinkLayer::CheckSendLimit()
 {
-    // _frameCount[_frameCountBase] => frames sent since now and millis() % 100
-    // _frameCount[(_frameCountBase - 1) % 10] => frames sent since millis() % 100 and millis() % 100 - 100
-    // _frameCount[(_frameCountBase - 2) % 10] => frames sent since millis() % 100 - 100 and millis() % 100 - 200
-    // ... => information about the number of frames sent in the last 1000 ms
-
     uint32_t curTime = millis() / 100;
 
     // check if the countbuffer must be adjusted
@@ -157,10 +151,10 @@ bool IpDataLinkLayer::countFrames()
     else
     {
         _frameCount[_frameCountBase]++;
-        print("go for it: ");
-        print(sum);
-        print(" curTime: ");
-        println(curTime);
+        //print("sent packages in last 1000ms: ");
+        //print(sum);
+        //print(" curTime: ");
+        //println(curTime);
         return true;
     }
 }

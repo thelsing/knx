@@ -27,7 +27,7 @@ class IpDataLinkLayer : public DataLinkLayer
     uint32_t _frameCountTimeBase = 0;
     bool sendFrame(CemiFrame& frame);
     bool sendBytes(uint8_t* buffer, uint16_t length);
-    bool countFrames();
+    bool CheckSendLimit();
 
     IpParameterObject& _ipParameters;
 };
