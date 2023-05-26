@@ -26,10 +26,11 @@ IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipPara
 bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
 {
     KnxIpRoutingIndication packet(frame);
-    
+    if(countFrames())
+        return false;
     bool success = sendBytes(packet.data(), packet.totalLength());
     // only send 50 packet per second: see KNX 3.2.6 p.6
-    delay(20);
+    //delay(20);
     dataConReceived(frame, success);
     return success;
 }
@@ -111,5 +112,56 @@ bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
         return false;
 
     return _platform.sendBytesMultiCast(bytes, length);
+}
+
+bool IpDataLinkLayer::countFrames()
+{
+    // _frameCount[_frameCountBase] => frames sent since now and millis() % 100
+    // _frameCount[(_frameCountBase - 1) % 10] => frames sent since millis() % 100 and millis() % 100 - 100
+    // _frameCount[(_frameCountBase - 2) % 10] => frames sent since millis() % 100 - 100 and millis() % 100 - 200
+    // ... => information about the number of frames sent in the last 1000 ms
+
+    uint32_t curTime = millis() / 100;
+
+    // check if the countbuffer must be adjusted
+    if(_frameCountTimeBase >= curTime)
+    {
+        uint32_t timeBaseDiff = _frameCountTimeBase - curTime;
+        if(timeBaseDiff > 10)
+            timeBaseDiff = 10;
+        for(int i = 0; i < timeBaseDiff ; i++)
+        {
+            _frameCountBase++;
+            _frameCountBase = _frameCountBase % 10;
+            _frameCount[_frameCountBase] = 0;
+        }
+        _frameCountTimeBase = curTime;
+    }
+    else // _frameCountTimeBase < curTime => millis overflow, reset
+    {
+        for(int i = 0; i < 10 ; i++)
+            _frameCount[i] = 0;
+        _frameCountBase = 0;
+        _frameCountTimeBase = curTime;
+    }
+
+    //check if we are over the limit
+    uint16_t sum = 0;
+    for(int i = 0; i < 10 ; i++)
+        sum += _frameCount[i];
+    if(sum > 50)
+    {
+        println("Dropping packet due to 50p/s limit");
+        return false;   // drop packet
+    }
+    else
+    {
+        _frameCount[_frameCountBase]++;
+        print("go for it: ");
+        print(sum);
+        print(" curTime: ");
+        println(curTime);
+        return true;
+    }
 }
 #endif
