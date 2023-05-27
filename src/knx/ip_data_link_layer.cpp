@@ -27,7 +27,7 @@ bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
 {
     KnxIpRoutingIndication packet(frame);
     // only send 50 packet per second: see KNX 3.2.6 p.6
-    if(CheckSendLimit())
+    if(isSendLimitReached())
         return false;
     bool success = sendBytes(packet.data(), packet.totalLength());
     dataConReceived(frame, success);
@@ -113,7 +113,7 @@ bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
     return _platform.sendBytesMultiCast(bytes, length);
 }
 
-bool IpDataLinkLayer::CheckSendLimit()
+bool IpDataLinkLayer::isSendLimitReached()
 {
     uint32_t curTime = millis() / 100;
 
@@ -146,7 +146,7 @@ bool IpDataLinkLayer::CheckSendLimit()
     if(sum > 50)
     {
         println("Dropping packet due to 50p/s limit");
-        return false;   // drop packet
+        return true;   // drop packet
     }
     else
     {
@@ -155,7 +155,7 @@ bool IpDataLinkLayer::CheckSendLimit()
         //print(sum);
         //print(" curTime: ");
         //println(curTime);
-        return true;
+        return false;
     }
 }
 #endif
