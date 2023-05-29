@@ -123,11 +123,16 @@ void TpUartDataLinkLayer::loop()
 {
     if (!_enabled)
     {
-        if (millis() - _lastResetChipTime > 1000)
-        { 
-            //reset chip every 1 seconds
-            _lastResetChipTime = millis();
-            _enabled = resetChip();
+        if(_waitConfirmStartTime == 0)
+        {
+            if (millis() - _lastResetChipTime > 1000)
+            { 
+                //reset chip every 1 seconds
+                _lastResetChipTime = millis();
+                _enabled = resetChip();
+            }
+        } else {
+            _enabled = resetChipTick();
         }
     }
 
@@ -485,17 +490,30 @@ bool TpUartDataLinkLayer::sendFrame(CemiFrame& frame)
 
 bool TpUartDataLinkLayer::resetChip()
 {
+    if(_waitConfirmStartTime > 0) return false;
     uint8_t cmd = U_RESET_REQ;
     _platform.writeUart(cmd);
+    
+    int resp = _platform.readUart();
+    if (resp == U_RESET_IND)
+        return true;
+
     _waitConfirmStartTime = millis();
-    while (true)
+    return false;
+}
+
+bool TpUartDataLinkLayer::resetChipTick()
+{
+    int resp = _platform.readUart();
+    if (resp == U_RESET_IND)
     {
-        int resp = _platform.readUart();
-        if (resp == U_RESET_IND)
-            return true;
-        else if (millis() - _waitConfirmStartTime > RESET_TIMEOUT)
-            return false;
+        _waitConfirmStartTime = 0;
+        return true;
     }
+    else if (millis() - _waitConfirmStartTime > RESET_TIMEOUT)
+        _waitConfirmStartTime = 0;
+    
+    return false;
 }
 
 void TpUartDataLinkLayer::stopChip()
