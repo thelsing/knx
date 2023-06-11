@@ -58,6 +58,9 @@
 #ifndef KNX_LED
     #define KNX_LED LED_BUILTIN
 #endif
+#ifndef KNX_LED_ACTIVE_ON
+    #define KNX_LED_ACTIVE_ON 0
+#endif
 #ifndef KNX_BUTTON
     #define KNX_BUTTON -1
 #endif
@@ -411,7 +414,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
     B& _bau;
     ProgLedOnCallback _progLedOnCallback = 0;
     ProgLedOffCallback _progLedOffCallback = 0;
-    uint32_t _ledPinActiveOn = LOW;
+    uint32_t _ledPinActiveOn = KNX_LED_ACTIVE_ON;
     uint32_t _ledPin = KNX_LED;
     int32_t _buttonPin = KNX_BUTTON;
     SaveCallback _saveCallback = 0;
