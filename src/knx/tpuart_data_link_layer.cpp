@@ -560,7 +560,27 @@ void TpUartDataLinkLayer::enabled(bool value)
     {
         _platform.setupUart();
 
-        if (resetChip())
+        uint8_t cmd = U_RESET_REQ;
+        _platform.writeUart(cmd);
+        _waitConfirmStartTime = millis();
+        bool flag = false;
+
+        while (true)
+        {
+            int resp = _platform.readUart();
+            if (resp == U_RESET_IND)
+            {
+                flag = true;
+                break;
+            }
+            else if (millis() - _waitConfirmStartTime > RESET_TIMEOUT)
+            {
+                flag = false;
+                break;
+            }
+        }
+
+        if (flag)
         {
             _enabled = true;
             print("ownaddr ");
