@@ -102,7 +102,9 @@ enum {
 #define RESET_TIMEOUT         100 //milli seconds
 #define TX_TIMEPAUSE            0 // 0 means 1 milli seconds
 
-#define OVERRUN_COUNT           7 //bytes; max. allowed bytes in receive buffer (on start) to see it as overrun
+#ifndef OVERRUN_COUNT
+#define OVERRUN_COUNT          7 //bytes; max. allowed bytes in receive buffer (on start) to see it as overrun
+#endif
 
 // If this threshold is reached loop() goes into 
 // "hog mode" where it stays in loop() while L2 address reception
