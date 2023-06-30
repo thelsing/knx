@@ -97,7 +97,9 @@ enum {
 };
 
 #define EOP_TIMEOUT           2   //milli seconds; end of layer-2 packet gap
+#ifndef EOPR_TIMEOUT              // allow to set EOPR_TIMEOUT externally
 #define EOPR_TIMEOUT          8   //ms; relaxed EOP timeout; usally to trigger after NAK
+#endif
 #define CONFIRM_TIMEOUT       500  //milli seconds
 #define RESET_TIMEOUT         100 //milli seconds
 #define TX_TIMEPAUSE            0 // 0 means 1 milli seconds
