@@ -179,6 +179,7 @@
 #define DPT_Value_Volume_Flux Dpt(14, 77)
 #define DPT_Value_Weight Dpt(14, 78)
 #define DPT_Value_Work Dpt(14, 79)
+#define DPT_Value_ApparentPower Dpt(14, 80)
 #define DPT_Access_Data Dpt(15, 0)
 #define DPT_String_ASCII Dpt(16, 0)
 #define DPT_String_8859_1 Dpt(16, 1)
