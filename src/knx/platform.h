@@ -4,15 +4,28 @@
 #include <stddef.h>
 #include "save_restore.h"
 
+#ifndef KNX_FLASH_CALLBACK
 #ifndef KNX_FLASH_SIZE
 #define KNX_FLASH_SIZE 1024
 #pragma warning "KNX_FLASH_SIZE not defined, using 1024"
+#endif
+#endif
+
+#ifdef KNX_FLASH_CALLBACK
+#ifndef KNX_FLASH_SIZE
+#define KNX_FLASH_SIZE 0
+#endif
+typedef uint32_t (*FlashCallbackSize)();
+typedef uint8_t* (*FlashCallbackRead)();
+typedef uint32_t (*FlashCallbackWrite)(uint32_t relativeAddress, uint8_t* buffer, size_t len);
+typedef void (*FlashCallbackCommit)();
 #endif
 
 enum NvMemoryType
 {
     Eeprom,
-    Flash
+    Flash,
+    Callback
 };
 
 class Platform
@@ -40,7 +53,7 @@ class Platform
 
     //unicast socket
     virtual bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len);
-    
+
     //UART
     virtual void setupUart();
     virtual void closeUart();
@@ -75,12 +88,25 @@ class Platform
     NvMemoryType NonVolatileMemoryType();
     void NonVolatileMemoryType(NvMemoryType type);
 
-  // --- Overwrite these methods in the device-plattform to use flash memory handling by the knx stack ---
-  // --- also set _memoryType = Flash in the device-plattform's contructor
-  // --- optional: overwrite writeBufferedEraseBlock() in the device-plattform to reduce overhead when flashing multiple pages
+    // --- Overwrite these methods in the device-plattform to use flash memory handling by the knx stack ---
+    // --- also set _memoryType = Flash in the device-plattform's contructor
+    // --- optional: overwrite writeBufferedEraseBlock() in the device-plattform to reduce overhead when flashing multiple pages
 
     // size of one flash page in bytes
     virtual size_t flashPageSize();
+    
+#ifdef KNX_FLASH_CALLBACK
+    void registerFlashCallbacks(
+        FlashCallbackSize callbackFlashSize,
+        FlashCallbackRead callbackFlashRead,
+        FlashCallbackWrite callbackFlashWrite,
+        FlashCallbackCommit callbackFlashCommit);
+
+    FlashCallbackSize callbackFlashSize();
+    FlashCallbackRead callbackFlashRead();
+    FlashCallbackWrite callbackFlashWrite();
+    FlashCallbackCommit callbackFlashCommit();
+#endif
 
   protected:
     // size of one EraseBlock in pages
@@ -92,12 +118,11 @@ class Platform
     //relativ to userFlashStart
     virtual void flashErase(uint16_t eraseBlockNum);
     //write a single page to flash (pageNumber relative to userFashStart
-    virtual void flashWritePage(uint16_t pageNumber, uint8_t* data); 
+    virtual void flashWritePage(uint16_t pageNumber, uint8_t* data);
 
 
-  // -------------------------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------------------------------------
 
-    
     NvMemoryType _memoryType = Eeprom;
 
     void loadEraseblockContaining(uint32_t relativeAddress);
@@ -113,4 +138,11 @@ class Platform
     uint8_t* _eraseblockBuffer = nullptr;
     int32_t _bufferedEraseblockNumber = -1;
     bool _bufferedEraseblockDirty = false;
+
+#ifdef KNX_FLASH_CALLBACK
+    FlashCallbackSize _callbackFlashSize = nullptr;
+    FlashCallbackRead _callbackFlashRead = nullptr;
+    FlashCallbackWrite _callbackFlashWrite = nullptr;
+    FlashCallbackCommit _callbackFlashCommit = nullptr;
+#endif
 };
