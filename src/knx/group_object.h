@@ -166,6 +166,16 @@ class GroupObject
      * The parameters must fit the group object. Otherwise it will stay unchanged.
      */
     void valueNoSend(const KNXValue& value, const Dpt& type);
+
+    /**
+     * set the current value of the group object and only when resulting value differes, changes the state of the group object to ::WriteRequest.
+     * @param value the value the group object is set to
+     * @param type the datapoint type used for the conversion.
+     * 
+     * The parameters must fit the group object. Otherwise it will stay unchanged.
+     */
+    void valueSendChangedOnly(const KNXValue& value, const Dpt& type);
+
     /**
      * set the current value of the group object.
      * @param value the value the group object is set to

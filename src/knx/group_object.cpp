@@ -279,3 +279,18 @@ void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 
     KNX_Encode_Value(value, _data, _dataLength, type);
 }
+
+void GroupObject::valueSendChangedOnly(const KNXValue& value, const Dpt& type)
+{
+    // save current value
+    const uint8_t oldLength = _dataLength;
+    uint8_t* old = new uint8_t[_dataLength];
+    memcpy(old, _data, oldLength);
+
+    // update value in com-object, without sending to bus
+    valueNoSend(value, type);
+
+    // only when raw data differs trigger sending
+    if (oldLength!=_dataLength || memcmp(old, _data, oldLength)!=0)
+        objectWritten();
+}
