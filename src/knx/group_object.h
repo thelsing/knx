@@ -176,7 +176,7 @@ class GroupObject
      * 
      * @returns true if the value of the group object has changed (and send was triggered)
      */
-    bool valueSendChangedOnly(const KNXValue& value, const Dpt& type);
+    bool valueModifiedSend(const KNXValue& value, const Dpt& type);
 
     /**
      * set the current value of the group object.

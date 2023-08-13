@@ -280,7 +280,7 @@ void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
     KNX_Encode_Value(value, _data, _dataLength, type);
 }
 
-bool GroupObject::valueSendChangedOnly(const KNXValue& value, const Dpt& type)
+bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type)
 {
     // save current value
     const uint8_t oldLength = _dataLength;
