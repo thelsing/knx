@@ -287,3 +287,27 @@ void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 
     KNX_Encode_Value(value, _data, _dataLength, type);
 }
+
+bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
+{
+    if (_commFlag == Uninitialized)
+    {
+        // always set first value
+        this->valueNoSend(value, type);
+        return true;
+    }
+    else
+    {
+        // convert new value to given dtp
+        uint8_t newData[_dataLength];
+        memset(newData, 0, _dataLength);
+        KNX_Encode_Value(value, newData, _dataLength, type);
+
+        // check for change in converted value / update value on change only
+        const bool dataChanged = memcmp(_data, newData, _dataLength);
+        if (dataChanged)
+            memcpy(_data, newData, _dataLength);
+
+        return dataChanged;
+    }
+}
