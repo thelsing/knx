@@ -280,7 +280,7 @@ void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
     KNX_Encode_Value(value, _data, _dataLength, type);
 }
 
-void GroupObject::valueSendChangedOnly(const KNXValue& value, const Dpt& type)
+bool GroupObject::valueSendChangedOnly(const KNXValue& value, const Dpt& type)
 {
     // save current value
     const uint8_t oldLength = _dataLength;
@@ -291,6 +291,9 @@ void GroupObject::valueSendChangedOnly(const KNXValue& value, const Dpt& type)
     valueNoSend(value, type);
 
     // only when raw data differs trigger sending
-    if (oldLength!=_dataLength || memcmp(old, _data, oldLength)!=0)
+    const bool dataChanged = oldLength!=_dataLength || memcmp(old, _data, oldLength)!=0;
+    if (dataChanged)
         objectWritten();
+
+    return dataChanged;
 }

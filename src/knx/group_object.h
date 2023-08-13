@@ -173,8 +173,10 @@ class GroupObject
      * @param type the datapoint type used for the conversion.
      * 
      * The parameters must fit the group object. Otherwise it will stay unchanged.
+     * 
+     * @returns true if the value of the group object has changed (and send was triggered)
      */
-    void valueSendChangedOnly(const KNXValue& value, const Dpt& type);
+    bool valueSendChangedOnly(const KNXValue& value, const Dpt& type);
 
     /**
      * set the current value of the group object.
