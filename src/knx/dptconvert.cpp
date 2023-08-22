@@ -1749,8 +1749,8 @@ void float16ToPayload(uint8_t* payload, size_t payload_length, int index, double
     value *= 100.0;
     unsigned short exponent = 0;
   
-    if(value > 2048)
-        exponent = ceil(log2(value) - 11.0);
+    if(value >= 2048)
+        exponent = ceil(log2(value + 1.0) - 11.0);
     
     short mantissa = roundf(value / (1 << exponent));
 
