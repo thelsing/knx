@@ -1753,6 +1753,12 @@ void float16ToPayload(uint8_t* payload, size_t payload_length, int index, double
         exponent = ceil(log2(value) - 11.0);
     
     short mantissa = roundf(value / (1 << exponent));
+    // above calculation causes mantissa overflow for values of the form 2^n, where n>11
+    if (mantissa >= 0x800)
+    {
+        exponent++;
+        mantissa = roundf(value / (1 << exponent));
+    }
 
     if (wasNegative)
         mantissa *= -1;
