@@ -282,18 +282,27 @@ void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 
 bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type)
 {
-    // save current value
-    const uint8_t oldLength = _dataLength;
-    uint8_t* old = new uint8_t[_dataLength];
-    memcpy(old, _data, oldLength);
+    if (_commFlag == Uninitialized)
+    {
+        // always send first value
+        this->value(value, type);
+        return true;
+    }
+    else
+    {
+        // save current value
+        const uint8_t oldLength = _dataLength;
+        uint8_t* old = new uint8_t[_dataLength];
+        memcpy(old, _data, oldLength);
 
-    // update value in com-object, without sending to bus
-    valueNoSend(value, type);
+        // update value in com-object, without sending to bus
+        valueNoSend(value, type);
 
-    // only when raw data differs trigger sending
-    const bool dataChanged = oldLength!=_dataLength || memcmp(old, _data, oldLength)!=0;
-    if (dataChanged)
-        objectWritten();
+        // only when raw data differs trigger sending
+        const bool dataChanged = oldLength!=_dataLength || memcmp(old, _data, oldLength)!=0;
+        if (dataChanged)
+            objectWritten();
 
-    return dataChanged;
+        return dataChanged;
+    }
 }
