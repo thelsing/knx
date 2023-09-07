@@ -300,6 +300,7 @@ bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type)
 
         // only when raw data differs trigger sending
         const bool dataChanged = oldLength!=_dataLength || memcmp(old, _data, oldLength)!=0;
+        delete[] old;
         if (dataChanged)
             objectWritten();
 
