@@ -280,7 +280,7 @@ void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
     KNX_Encode_Value(value, _data, _dataLength, type);
 }
 
-bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type)
+bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type, const bool forceSend /*= false*/)
 {
     if (_commFlag == Uninitialized)
     {
@@ -301,7 +301,7 @@ bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type)
         // only when raw data differs trigger sending
         const bool dataChanged = oldLength!=_dataLength || memcmp(old, _data, oldLength)!=0;
         delete[] old;
-        if (dataChanged)
+        if (dataChanged || forceSend)
             objectWritten();
 
         return dataChanged;
