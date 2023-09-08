@@ -290,17 +290,16 @@ bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type, cons
     }
     else
     {
-        // save current value
-        const uint8_t oldLength = _dataLength;
-        uint8_t* old = new uint8_t[_dataLength];
-        memcpy(old, _data, oldLength);
+        // convert new value to given dtp
+        uint8_t newData[_dataLength];
+        KNX_Encode_Value(value, newData, _dataLength, type);
 
-        // update value in com-object, without sending to bus
-        valueNoSend(value, type);
+        // check for change in converted value / update value on change only
+        const bool dataChanged = memcmp(_data, newData, _dataLength);
+        if (dataChanged)
+            memcpy(_data, newData, _dataLength);
 
-        // only when raw data differs trigger sending
-        const bool dataChanged = oldLength!=_dataLength || memcmp(old, _data, oldLength)!=0;
-        delete[] old;
+        // trigger sending
         if (dataChanged || forceSend)
             objectWritten();
 
