@@ -291,7 +291,7 @@ bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
     else
     {
         // convert new value to given dtp
-        uint8_t newData[_dataLength];
+        uint8_t newData[_dataLength] = {0};
         KNX_Encode_Value(value, newData, _dataLength, type);
 
         // check for change in converted value / update value on change only
