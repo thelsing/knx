@@ -168,16 +168,15 @@ class GroupObject
     void valueNoSend(const KNXValue& value, const Dpt& type);
 
     /**
-     * set the current value of the group object and only when resulting value differes, changes the state of the group object to ::WriteRequest.
+     * check if the value (after conversion to dpt) will differ from current value of the group object and update if necessary.
      * @param value the value the group object is set to
      * @param type the datapoint type used for the conversion.
-     * @param forceSend (optional) trigger sending independend of value change. Use e.g. for repeated sending.
      * 
      * The parameters must fit the group object. Otherwise it will stay unchanged.
      * 
-     * @returns true if the value of the group object has changed (and send was triggered)
+     * @returns true if the value of the group object has changed
      */
-    bool valueModifiedSend(const KNXValue& value, const Dpt& type, const bool forceSend = false);
+    bool valueNoSendCompare(const KNXValue& value, const Dpt& type);
 
     /**
      * set the current value of the group object.

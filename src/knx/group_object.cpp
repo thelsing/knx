@@ -280,12 +280,12 @@ void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
     KNX_Encode_Value(value, _data, _dataLength, type);
 }
 
-bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type, const bool forceSend /*= false*/)
+bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
 {
     if (_commFlag == Uninitialized)
     {
-        // always send first value
-        this->value(value, type);
+        // always set first value
+        this->valueNoSend(value, type);
         return true;
     }
     else
@@ -298,10 +298,6 @@ bool GroupObject::valueModifiedSend(const KNXValue& value, const Dpt& type, cons
         const bool dataChanged = memcmp(_data, newData, _dataLength);
         if (dataChanged)
             memcpy(_data, newData, _dataLength);
-
-        // trigger sending
-        if (dataChanged || forceSend)
-            objectWritten();
 
         return dataChanged;
     }
