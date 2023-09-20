@@ -11,7 +11,7 @@ enum NmReadSerialNumberType
     NM_Read_SerialNumber_By_ManufacturerSpecific = 0xFE,
 };
 
-static constexpr auto kFunctionPropertyResultBufferMaxSize = 64;
+static constexpr auto kFunctionPropertyResultBufferMaxSize = 0xFF;
 static constexpr auto kRestartProcessTime = 3;
 
 BauSystemB::BauSystemB(Platform& platform): _memory(platform, _deviceObj),
