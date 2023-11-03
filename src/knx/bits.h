@@ -5,7 +5,7 @@
 
 #if defined(__linux__)
 #include <arpa/inet.h>
-#elif defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_STM32) || defined (DeviceFamily_CC13X0)
+#elif defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_STM32) || defined (DeviceFamily_CC13X0)
 #define getbyte(x,n) (*(((uint8_t*)&(x))+n))
 #define htons(x)  ( (getbyte(x,0)<<8) | getbyte(x,1) ) 
 #define htonl(x) ( (getbyte(x,0)<<24) | (getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
