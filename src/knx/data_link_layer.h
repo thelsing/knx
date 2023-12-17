@@ -42,5 +42,8 @@ class DataLinkLayer
     Platform& _platform;
 #ifdef USE_CEMI_SERVER
     CemiServer* _cemiServer;
-#endif    
+#endif
+#ifdef KNX_ACTIVITYCALLBACK
+    uint8_t _netIndex = 0;
+#endif
 };

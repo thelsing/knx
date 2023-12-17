@@ -23,6 +23,11 @@ DptMedium NetworkLayerEntity::mediumType() const
     return _dataLinkLayer->mediumType();
 }
 
+uint8_t NetworkLayerEntity::getEntityIndex()
+{
+    return _entityIndex;
+}
+
 void NetworkLayerEntity::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source)
 {
     _netLayer.dataIndication(ack, addrType, destination, format, npdu, priority, source, _entityIndex);

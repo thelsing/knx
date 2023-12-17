@@ -30,6 +30,9 @@ bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
     if(isSendLimitReached())
         return false;
     bool success = sendBytes(packet.data(), packet.totalLength());
+#ifdef KNX_ACTIVITYCALLBACK
+        knx.Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR));
+#endif
     dataConReceived(frame, success);
     return success;
 }
@@ -51,6 +54,10 @@ void IpDataLinkLayer::loop()
         || buffer[1] != KNXIP_PROTOCOL_VERSION)
         return;
 
+#ifdef KNX_ACTIVITYCALLBACK
+    knx.Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_RECV << KNX_ACTIVITYCALLBACK_DIR));
+#endif
+
     uint16_t code;
     popWord(code, buffer + 2);
     switch ((KnxIpServiceType)code)
@@ -67,6 +74,9 @@ void IpDataLinkLayer::loop()
             KnxIpSearchResponse searchResponse(_ipParameters, _deviceObject);
 
             auto hpai = searchRequest.hpai();
+#ifdef KNX_ACTIVITYCALLBACK
+            knx.Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR) | (KNX_ACTIVITYCALLBACK_IPUNICAST));
+#endif
             _platform.sendBytesUniCast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
             break;
         }

@@ -9,6 +9,9 @@
 DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform) :
     _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform)
 {
+#ifdef KNX_ACTIVITYCALLBACK
+    _netIndex = netLayerEntity.getEntityIndex();
+#endif
 }
 
 #ifdef USE_CEMI_SERVER

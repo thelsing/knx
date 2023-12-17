@@ -7,6 +7,7 @@
 #include "device_object.h"
 #include "address_table_object.h"
 #include "cemi_frame.h"
+#include "knx_facade.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -546,8 +547,10 @@ TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
 void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
 {
     //printHex("=>", buffer, length);
+#ifdef KNX_ACTIVITYCALLBACK
+    knx.Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_RECV << KNX_ACTIVITYCALLBACK_DIR));
+#endif
     CemiFrame frame(buffer, length);
-
     frameReceived(frame);
 }
 
@@ -653,6 +656,9 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
     if (_TxByteCnt >= _sendBufferLength)
     {
         _TxByteCnt = 0;
+#ifdef KNX_ACTIVITYCALLBACK
+        knx.Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR));
+#endif
         return false;
     }
     return true;

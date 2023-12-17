@@ -19,6 +19,7 @@ class NetworkLayerEntity
     DataLinkLayer& dataLinkLayer();
 
     DptMedium mediumType() const;
+    uint8_t getEntityIndex();
 
     // from data link layer
     void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
