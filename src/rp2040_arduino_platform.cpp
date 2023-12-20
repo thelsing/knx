@@ -245,7 +245,6 @@ void RP2040ArduinoPlatform::writeBufferedEraseBlock()
 #if defined(KNX_NETIF)
 uint32_t RP2040ArduinoPlatform::currentIpAddress()
 {
-
     return KNX_NETIF.localIP();
 }
 uint32_t RP2040ArduinoPlatform::currentSubnetMask()
