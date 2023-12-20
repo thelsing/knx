@@ -480,13 +480,17 @@ template <class P, class B> class KnxFacade : private SaveRestore
             #error "Mask version not supported on ARDUINO_ARCH_SAMD"
         #endif
     #elif defined(ARDUINO_ARCH_RP2040)
-        // predefined global instance for TP or RF or TP/RF coupler
+        // predefined global instance for TP or RF or TP/RF or TP/IP coupler
         #if MASK_VERSION == 0x07B0
             extern KnxFacade<RP2040ArduinoPlatform, Bau07B0> knx;
         #elif MASK_VERSION == 0x27B0
             extern KnxFacade<RP2040ArduinoPlatform, Bau27B0> knx;
+        #elif MASK_VERSION == 0x57B0
+            extern KnxFacade<RP2040ArduinoPlatform, Bau57B0> knx;
         #elif MASK_VERSION == 0x2920
             extern KnxFacade<RP2040ArduinoPlatform, Bau2920> knx;
+        #elif MASK_VERSION == 0x091A
+            extern KnxFacade<RP2040ArduinoPlatform, Bau091A> knx;
         #else
             #error "Mask version not supported on ARDUINO_ARCH_RP2040"
         #endif

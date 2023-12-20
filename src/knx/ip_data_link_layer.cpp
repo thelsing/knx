@@ -70,9 +70,17 @@ void IpDataLinkLayer::loop()
             _platform.sendBytesUniCast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
             break;
         }
+        case SearchRequestExt:
+        {
+            // FIXME, implement (not needed atm)
+            break;
+        }
         default:
+#ifdef KNX_LOG_IP
             print("Unhandled service identifier: ");
             println(code, HEX);
+#endif
+        ;
     }
 }
 
