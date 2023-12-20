@@ -494,7 +494,7 @@ void BauSystemB::individualAddressSerialNumberReadIndication(Priority priority, 
     // An open medium BAU has to override this method and provide a proper domain address.
     if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
     {
-        uint8_t emptyDomainAddress[6] = {0x00};
+        uint8_t emptyDomainAddress[2] = {0x00};
         applicationLayer().IndividualAddressSerialNumberReadResponse(priority, hopType, secCtrl, emptyDomainAddress, knxSerialNumber);
     }
 }

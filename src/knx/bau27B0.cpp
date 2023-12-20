@@ -169,10 +169,7 @@ void Bau27B0::domainAddressSerialNumberReadIndication(Priority priority, HopCoun
 
 void Bau27B0::individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, uint8_t* knxSerialNumber)
 {
-    // If the received serial number matches our serial number
-    // then send a response with the current RF domain address stored in the RF medium object and the serial number
-    if (!memcmp(knxSerialNumber, _deviceObj.propertyData(PID_SERIAL_NUMBER), 6))
-        _appLayer.IndividualAddressSerialNumberReadResponse(priority, hopType, secCtrl, _rfMediumObj.rfDomainAddress(), knxSerialNumber);
+    #pragma warning "individualAddressSerialNumberReadIndication is not available for rf"
 }
 
 void Bau27B0::domainAddressSerialNumberWriteLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl &secCtrl, const uint8_t* rfDoA,

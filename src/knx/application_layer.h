@@ -154,7 +154,7 @@ class ApplicationLayer
                                             uint8_t* testResult, uint16_t testResultLength);
     void domainAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, const uint8_t* rfDoA,
                                                const uint8_t* knxSerialNumber);                                       
-    void IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, const uint8_t* rfDoA,
+    void IndividualAddressSerialNumberReadResponse(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, const uint8_t* domainAddress,
                                                const uint8_t* knxSerialNumber);                                       
 #pragma endregion
 
