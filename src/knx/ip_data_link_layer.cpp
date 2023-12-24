@@ -70,9 +70,16 @@ void IpDataLinkLayer::loop()
             _platform.sendBytesUniCast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
             break;
         }
+        case SearchRequestExt:
+        {
+            // FIXME, implement (not needed atm)
+            break;
+        }
         default:
-            print("Unhandled service identifier: ");
-            println(code, HEX);
+        {
+            // print("Unhandled service identifier: ");
+            // println(code, HEX);
+        }
     }
 }
 
