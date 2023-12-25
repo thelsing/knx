@@ -10,6 +10,10 @@ public:
     Esp32Platform();
     Esp32Platform(HardwareSerial* s);
 
+    // uart
+    void knxUartPins(int8_t rxPin, int8_t txPin);
+    void setupUart() override;
+
     // ip stuff
     uint32_t currentIpAddress() override;
     uint32_t currentSubnetMask() override;
@@ -36,6 +40,8 @@ public:
     void commitToEeprom();
 private:
     WiFiUDP _udp;
+    int8_t _rxPin = -1; 
+    int8_t _txPin = -1;
 };
 
 #endif
