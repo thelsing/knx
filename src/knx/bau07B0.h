@@ -8,7 +8,7 @@
 #include "cemi_server.h"
 #include "cemi_server_object.h"
 
-class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks
+class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks, public DataLinkLayerCallbacks
 {
   public:
     Bau07B0(Platform& platform);

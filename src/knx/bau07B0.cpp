@@ -10,7 +10,8 @@ using namespace std;
 
 Bau07B0::Bau07B0(Platform& platform)
     : BauSystemBDevice(platform),
-      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&) *this)
+      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&) *this, (DataLinkLayerCallbacks*) this),
+      DataLinkLayerCallbacks()
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif           
@@ -149,5 +150,19 @@ bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
 
     return false;
 }
+
+// /// @brief sets the Callback Function indicating sent or received telegrams
+// /// @param activityCallback 
+// /// @details the info parameter 
+// void Bau07B0::setActivityCallback(ActivityCallback activityCallback)
+// {
+//     _activityCallback = activityCallback;
+// }
+
+// void Bau07B0::Activity(uint8_t info)
+// {
+//     if(_activityCallback)
+//         _activityCallback(info);
+// }
 
 #endif

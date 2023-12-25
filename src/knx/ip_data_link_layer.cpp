@@ -19,7 +19,7 @@
 #define MIN_LEN_CEMI 10
 
 IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam,
-    NetworkLayerEntity &netLayerEntity, Platform& platform) : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam)
+    NetworkLayerEntity &netLayerEntity, Platform& platform, DataLinkLayerCallbacks* dllcb) : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam), _dllcb(dllcb)
 {
 }
 
@@ -31,7 +31,8 @@ bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
         return false;
     bool success = sendBytes(packet.data(), packet.totalLength());
 #ifdef KNX_ACTIVITYCALLBACK
-        knx.Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR));
+    if(_dllcb)
+        _dllcb->Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR));
 #endif
     dataConReceived(frame, success);
     return success;
@@ -55,7 +56,8 @@ void IpDataLinkLayer::loop()
         return;
 
 #ifdef KNX_ACTIVITYCALLBACK
-    knx.Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_RECV << KNX_ACTIVITYCALLBACK_DIR));
+    if(_dllcb)
+        _dllcb->Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_RECV << KNX_ACTIVITYCALLBACK_DIR));
 #endif
 
     uint16_t code;
@@ -75,7 +77,8 @@ void IpDataLinkLayer::loop()
 
             auto hpai = searchRequest.hpai();
 #ifdef KNX_ACTIVITYCALLBACK
-            knx.Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR) | (KNX_ACTIVITYCALLBACK_IPUNICAST));
+    if(_dllcb)
+        _dllcb->Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR) | (KNX_ACTIVITYCALLBACK_IPUNICAST));
 #endif
             _platform.sendBytesUniCast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
             break;
