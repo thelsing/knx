@@ -4,7 +4,7 @@ Plattform for Raspberry Pi Pico and other RP2040 boards
 by SirSydom <com@sirsydom.de> 2021-2022
 
 made to work with arduino-pico - "Raspberry Pi Pico Arduino core, for all RP2040 boards"
-by Earl E. Philhower III https://github.com/earlephilhower/arduino-pico V1.11.0
+by Earl E. Philhower III https://github.com/earlephilhower/arduino-pico 
 
 
 RTTI must be set to enabled in the board options
@@ -17,6 +17,10 @@ EEPROM Emulation from arduino-pico core (max 4k) can be use by defining USE_RP20
 
 A RAM-buffered Flash can be use by defining USE_RP2040_LARGE_EEPROM_EMULATION
 
+For usage of KNX-IP you have to define either
+- KNX_IP_W5500 (use the arduino-pico core's w5500 lwip stack)
+- KNX_IP_WIFI (use the arduino-pico core's PiPicoW lwip stack)
+- KNX_IP_GENERIC (use the Ethernet_Generic stack)
 
 ----------------------------------------------------*/
 
@@ -45,8 +49,11 @@ A RAM-buffered Flash can be use by defining USE_RP2040_LARGE_EEPROM_EMULATION
 #endif
 #endif
 
-#ifndef KNX_SERIAL
-#define KNX_SERIAL Serial1
+#ifdef KNX_IP_W5500
+extern Wiznet5500lwIP KNX_NETIF;
+#elif defined(KNX_IP_WIFI)
+#elif defined(KNX_IP_GENERIC)
+
 #endif
 
 #ifndef KNX_UART_RX_PIN
@@ -257,6 +264,119 @@ void RP2040ArduinoPlatform::writeBufferedEraseBlock()
     }
 }
 #endif
+
+#if defined(KNX_NETIF)
+uint32_t RP2040ArduinoPlatform::currentIpAddress()
+{
+    return KNX_NETIF.localIP();
+}
+uint32_t RP2040ArduinoPlatform::currentSubnetMask()
+{
+    return KNX_NETIF.subnetMask();
+}
+uint32_t RP2040ArduinoPlatform::currentDefaultGateway()
+{
+    return KNX_NETIF.gatewayIP();
+}
+void RP2040ArduinoPlatform::macAddress(uint8_t* addr)
+{
+#if defined(KNX_IP_W5500)
+    addr = KNX_NETIF.getNetIf()->hwaddr;
+#elif defined(KNX_IP_WIFI)
+    uint8_t macaddr[6] = {0,0,0,0,0,0};
+    addr = KNX_NETIF.macAddress(macaddr);
+#elif defined(KNX_IP_GENERIC)
+    KNX_NETIF.MACAddress(addr);
+#endif
+}
+
+// multicast
+void RP2040ArduinoPlatform::setupMultiCast(uint32_t addr, uint16_t port)
+{
+    mcastaddr = IPAddress(htonl(addr));
+    _port = port;
+    uint8_t result = _udp.beginMulticast(mcastaddr, port);
+    (void) result;
+
+    #ifdef KNX_IP_GENERIC
+    //if(!_unicast_socket_setup)
+    //    _unicast_socket_setup = UDP_UNICAST.begin(3671);
+    #endif
+
+    // print("Setup Mcast addr: ");
+    // print(mcastaddr.toString().c_str());
+    // print(" on port: ");
+    // print(port);
+    // print(" result ");
+    // println(result);
+}
+
+void RP2040ArduinoPlatform::closeMultiCast()
+{
+    _udp.stop();
+}
+
+bool RP2040ArduinoPlatform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
+{
+    // printHex("<- ",buffer, len);
+
+    //ToDo: check if Ethernet is able to receive, return false if not
+    _udp.beginPacket(mcastaddr, _port);
+    _udp.write(buffer, len);
+    _udp.endPacket();
+    return true;
+}
+
+int RP2040ArduinoPlatform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen)
+{
+    int len = _udp.parsePacket();
+    if (len == 0)
+        return 0;
+
+    if (len > maxLen)
+    {
+        print("udp buffer to small. was ");
+        print(maxLen);
+        print(", needed ");
+        println(len);
+        fatalError();
+    }
+
+    _udp.read(buffer, len);
+
+    // print("Remote IP: ");
+    // print(_udp.remoteIP().toString().c_str());
+    // printHex("-> ", buffer, len);
+
+    return len;
+}
+
+// unicast
+bool RP2040ArduinoPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
+{
+    IPAddress ucastaddr(htonl(addr));
+    
+    // print("sendBytesUniCast to:");
+    // println(ucastaddr.toString().c_str());
+
+#ifdef KNX_IP_GENERIC
+    if(!_unicast_socket_setup)
+        _unicast_socket_setup = UDP_UNICAST.begin(3671);
+#endif
+
+    if (UDP_UNICAST.beginPacket(ucastaddr, port) == 1)
+    {
+        UDP_UNICAST.write(buffer, len);
+        if (UDP_UNICAST.endPacket() == 0)
+            println("sendBytesUniCast endPacket fail");
+    }
+    else
+        println("sendBytesUniCast beginPacket fail");
+
+    return true;
+}
+#endif
+
 #endif
 
 
