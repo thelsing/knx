@@ -151,18 +151,4 @@ bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
     return false;
 }
 
-// /// @brief sets the Callback Function indicating sent or received telegrams
-// /// @param activityCallback 
-// /// @details the info parameter 
-// void Bau07B0::setActivityCallback(ActivityCallback activityCallback)
-// {
-//     _activityCallback = activityCallback;
-// }
-
-// void Bau07B0::Activity(uint8_t info)
-// {
-//     if(_activityCallback)
-//         _activityCallback(info);
-// }
-
 #endif

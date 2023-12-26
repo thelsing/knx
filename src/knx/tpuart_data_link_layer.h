@@ -21,8 +21,6 @@ class TpUartDataLinkLayer : public DataLinkLayer
     using DataLinkLayer::_platform;
 
   public:
-    // TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
-    //                     Platform& platform, ITpUartCallBacks& cb);
     TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
                         Platform& platform, ITpUartCallBacks& cb, DataLinkLayerCallbacks* dllcb = nullptr);
 

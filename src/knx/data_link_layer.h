@@ -18,7 +18,7 @@ protected:
     ActivityCallback _activityCallback = nullptr;
 public:
     virtual ~DataLinkLayerCallbacks() = default;
-    virtual void Activity(uint8_t info);
+    virtual void activity(uint8_t info);
     virtual void setActivityCallback(ActivityCallback activityCallback);
 };
 

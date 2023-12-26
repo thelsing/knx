@@ -7,7 +7,7 @@
 #include "cemi_frame.h"
 
 
-void DataLinkLayerCallbacks::Activity(uint8_t info)
+void DataLinkLayerCallbacks::activity(uint8_t info)
 {
     if(_activityCallback)
         _activityCallback(info);

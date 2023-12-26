@@ -550,7 +550,7 @@ void TpUartDataLinkLayer::frameBytesReceived(uint8_t* buffer, uint16_t length)
     //printHex("=>", buffer, length);
 #ifdef KNX_ACTIVITYCALLBACK
     if(_dllcb)
-        _dllcb->Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_RECV << KNX_ACTIVITYCALLBACK_DIR));
+        _dllcb->activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_RECV << KNX_ACTIVITYCALLBACK_DIR));
 #endif
     CemiFrame frame(buffer, length);
     frameReceived(frame);
@@ -659,8 +659,8 @@ bool TpUartDataLinkLayer::sendSingleFrameByte()
     {
         _TxByteCnt = 0;
 #ifdef KNX_ACTIVITYCALLBACK
-    if(_dllcb)
-        _dllcb->Activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR));
+        if(_dllcb)
+            _dllcb->activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR));
 #endif
         return false;
     }
