@@ -8,7 +8,7 @@
 #include "ip_data_link_layer.h"
 #include "cemi_server_object.h"
 
-class Bau57B0 : public BauSystemBDevice
+class Bau57B0 : public BauSystemBDevice, public DataLinkLayerCallbacks
 {
   public:
     Bau57B0(Platform& platform);

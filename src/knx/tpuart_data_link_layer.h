@@ -22,7 +22,9 @@ class TpUartDataLinkLayer : public DataLinkLayer
 
   public:
     TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
-                        Platform& platform, ITpUartCallBacks& cb);
+                        Platform& platform, ITpUartCallBacks& cb, DataLinkLayerCallbacks* dllcb = nullptr);
+
+
 
     void loop();
     void enabled(bool value);
@@ -74,5 +76,6 @@ class TpUartDataLinkLayer : public DataLinkLayer
     void stopChip();
 
     ITpUartCallBacks& _cb;
+    DataLinkLayerCallbacks* _dllcb;
 };
 #endif

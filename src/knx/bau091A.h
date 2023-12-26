@@ -10,7 +10,7 @@
 #include "tpuart_data_link_layer.h"
 #include "cemi_server_object.h"
 
-class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks
+class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks, public DataLinkLayerCallbacks
 {
   public:
     Bau091A(Platform& platform);

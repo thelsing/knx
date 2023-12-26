@@ -70,6 +70,9 @@ typedef uint8_t* (*SaveCallback)(uint8_t* buffer);
 typedef void (*IsrFunctionPtr)();
 typedef void (*ProgLedOnCallback)();
 typedef void (*ProgLedOffCallback)();
+#ifdef KNX_ACTIVITYCALLBACK
+typedef void (*ActivityCallback)(uint8_t info);
+#endif
 
 template <class P, class B> class KnxFacade : private SaveRestore
 {
@@ -187,6 +190,21 @@ template <class P, class B> class KnxFacade : private SaveRestore
         _progLedOnCallback = progLedOnCallback;
     }
 
+#ifdef KNX_ACTIVITYCALLBACK
+    /// @brief sets the Callback Function indicating sent or received telegrams
+    /// @param activityCallback 
+    /// @details the info parameter 
+    void setActivityCallback(ActivityCallback activityCallback)
+    {
+        _activityCallback = activityCallback;
+    }
+
+    void Activity(uint8_t info)
+    {
+        if(_activityCallback)
+            _activityCallback(info);
+    }
+#endif
   
     int32_t buttonPin()
     {
@@ -414,6 +432,9 @@ template <class P, class B> class KnxFacade : private SaveRestore
     B& _bau;
     ProgLedOnCallback _progLedOnCallback = 0;
     ProgLedOffCallback _progLedOffCallback = 0;
+#ifdef KNX_ACTIVITYCALLBACK
+    ActivityCallback _activityCallback = 0;
+#endif
     uint32_t _ledPinActiveOn = KNX_LED_ACTIVE_ON;
     uint32_t _ledPin = KNX_LED;
     int32_t _buttonPin = KNX_BUTTON;

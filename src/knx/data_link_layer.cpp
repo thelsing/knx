@@ -6,9 +6,24 @@
 #include "cemi_server.h"
 #include "cemi_frame.h"
 
+
+void DataLinkLayerCallbacks::activity(uint8_t info)
+{
+    if(_activityCallback)
+        _activityCallback(info);
+}
+
+void DataLinkLayerCallbacks::setActivityCallback(ActivityCallback activityCallback)
+{
+    _activityCallback = activityCallback;
+}
+
 DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform) :
     _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform)
 {
+#ifdef KNX_ACTIVITYCALLBACK
+    _netIndex = netLayerEntity.getEntityIndex();
+#endif
 }
 
 #ifdef USE_CEMI_SERVER

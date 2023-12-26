@@ -10,6 +10,18 @@
 
 class Platform;
 
+typedef void (*ActivityCallback)(uint8_t info);
+
+class DataLinkLayerCallbacks
+{
+protected:
+    ActivityCallback _activityCallback = nullptr;
+public:
+    virtual ~DataLinkLayerCallbacks() = default;
+    virtual void activity(uint8_t info);
+    virtual void setActivityCallback(ActivityCallback activityCallback);
+};
+
 class DataLinkLayer
 {
   public:
@@ -42,5 +54,8 @@ class DataLinkLayer
     Platform& _platform;
 #ifdef USE_CEMI_SERVER
     CemiServer* _cemiServer;
-#endif    
+#endif
+#ifdef KNX_ACTIVITYCALLBACK
+    uint8_t _netIndex = 0;
+#endif
 };

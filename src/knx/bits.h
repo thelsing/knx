@@ -94,6 +94,14 @@ void printHex(const char* suffix, const uint8_t *data, size_t length, bool newli
 #define printHex(...)   do {} while(0)
 #endif
 
+#ifdef KNX_ACTIVITYCALLBACK
+#define KNX_ACTIVITYCALLBACK_DIR 0x00
+#define KNX_ACTIVITYCALLBACK_DIR_RECV 0x00
+#define KNX_ACTIVITYCALLBACK_DIR_SEND 0x01
+#define KNX_ACTIVITYCALLBACK_IPUNICAST 0x02
+#define KNX_ACTIVITYCALLBACK_NET 0x04
+#endif
+
 const uint8_t* popByte(uint8_t& b, const uint8_t* data);
 const uint8_t* popWord(uint16_t& w, const uint8_t* data);
 const uint8_t* popInt(uint32_t& i, const uint8_t* data);
