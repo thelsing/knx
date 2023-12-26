@@ -49,11 +49,22 @@ A RAM-buffered Flash can be use by defining USE_RP2040_LARGE_EEPROM_EMULATION
 #define KNX_SERIAL Serial1
 #endif
 
+#ifndef KNX_UART_RX_PIN
+#define KNX_UART_RX_PIN UART_PIN_NOT_DEFINED
+#endif
+
+#ifndef KNX_UART_TX_PIN
+#define KNX_UART_TX_PIN UART_PIN_NOT_DEFINED
+#endif
+
 RP2040ArduinoPlatform::RP2040ArduinoPlatform()
 #ifndef KNX_NO_DEFAULT_UART
     : ArduinoPlatform(&KNX_SERIAL)
 #endif
 {
+    #ifndef KNX_NO_DEFAULT_UART
+    knxUartPins(KNX_UART_RX_PIN, KNX_UART_TX_PIN);
+    #endif
     #ifndef USE_RP2040_EEPROM_EMULATION
     _memoryType = Flash;
     #endif
@@ -64,6 +75,18 @@ RP2040ArduinoPlatform::RP2040ArduinoPlatform( HardwareSerial* s) : ArduinoPlatfo
     #ifndef USE_RP2040_EEPROM_EMULATION
     _memoryType = Flash;
     #endif
+}
+
+void RP2040ArduinoPlatform::knxUartPins(pin_size_t rxPin, pin_size_t txPin)
+{
+    SerialUART* serial = dynamic_cast<SerialUART*>(_knxSerial);
+    if(serial)
+    {
+        if (rxPin != UART_PIN_NOT_DEFINED)
+            serial->setRX(rxPin);
+        if (txPin != UART_PIN_NOT_DEFINED)
+            serial->setTX(txPin);
+    }
 }
 
 void RP2040ArduinoPlatform::setupUart()

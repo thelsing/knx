@@ -22,6 +22,8 @@ public:
     RP2040ArduinoPlatform();
     RP2040ArduinoPlatform( HardwareSerial* s);
 
+    // uart
+    void knxUartPins(pin_size_t rxPin, pin_size_t txPin);
     void setupUart();
 
     // unique serial number
