@@ -28,6 +28,7 @@ For usage of KNX-IP you have to define either
 
 #ifdef ARDUINO_ARCH_RP2040
 #include "knx/bits.h"
+#include "knx/logger.h"
 
 #include <Arduino.h>
 
