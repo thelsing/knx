@@ -13,6 +13,8 @@ Usage:
 
 */
 
+#include <utility>
+
 
 constexpr auto KNX_LOG_LVL_ERROR = 1;
 constexpr auto KNX_LOG_LVL_INFO  = 2;
@@ -44,26 +46,26 @@ template<auto x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_TRACE(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_TRACE) && (x & LOGAREAS))
-        Serial.printf(std::forward<Args>(args)...);
+        printf(std::forward<Args>(args)...);
 }
 
 template<auto x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_DEBUG(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_DEBUG) && (x & LOGAREAS))
-        Serial.printf(std::forward<Args>(args)...);
+        printf(std::forward<Args>(args)...);
 }
 
 template<auto x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_INFO(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_INFO) && (x & LOGAREAS))
-        Serial.printf(std::forward<Args>(args)...);
+        printf(std::forward<Args>(args)...);
 }
 
 template<auto x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_ERROR(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_ERROR) && (x & LOGAREAS))
-        Serial.printf(std::forward<Args>(args)...);
+        printf(std::forward<Args>(args)...);
 }
