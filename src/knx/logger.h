@@ -20,11 +20,15 @@ Usage:
 
 #include "platform.h"
 
+typedef void (*KnxLoggerCallback)(const char* message, va_list& values);
 
 class KnxLogger
 {
+    protected:
+        KnxLoggerCallback _callback = nullptr;
     public:
         void log(const char* message, va_list& values);
+        void setCallback(KnxLoggerCallback callback);
 };
 
 extern KnxLogger knxLogger;
