@@ -16,6 +16,7 @@ Usage:
 
 #include <utility>
 #include <string>
+#include <cstdarg>
 
 #include "platform.h"
 
