@@ -7,6 +7,7 @@
 #include "string.h"
 #include "bits.h"
 #include <stdio.h>
+#include "logger.h"
 
 const SecurityControl ApplicationLayer::noSecurity {.toolAccess=false, .dataSecurity=DataSecurity::None};
 
@@ -97,8 +98,9 @@ void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Prior
         _savedAsapWriteRequest = 0;
         break;
     default:
-        print("datagroup-confirm: unhandled APDU-Type: ");
-        println(apdu.type());
+        KNX_LOG_INFO<KNX_LOG_AL>("datagroup-confirm: unhandled APDU-Type: 0x%04x", apdu.type());
+        //print("datagroup-confirm: unhandled APDU-Type: 0x%04x", apdu.type());
+        //println(apdu.type());
     }
 }
 

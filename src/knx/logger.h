@@ -12,8 +12,21 @@ Usage:
 
 
 */
+#pragma once
 
 #include <utility>
+#include <string>
+
+#include "platform.h"
+
+
+class KnxLogger
+{
+    public:
+        void log(const char* message, va_list& values);
+};
+
+extern KnxLogger knxLogger;
 
 
 constexpr uint64_t KNX_LOG_LVL_ERROR = 1;
@@ -46,26 +59,26 @@ template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_TRACE(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_TRACE) && (x & LOGAREAS))
-        printf(std::forward<Args>(args)...);
+        knxLogger.log(std::forward<Args>(args)...);
 }
 
 template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_DEBUG(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_DEBUG) && (x & LOGAREAS))
-        printf(std::forward<Args>(args)...);
+        knxLogger.log(std::forward<Args>(args)...);
 }
 
 template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_INFO(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_INFO) && (x & LOGAREAS))
-        printf(std::forward<Args>(args)...);
+        knxLogger.log(std::forward<Args>(args)...);
 }
 
 template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_ERROR(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_ERROR) && (x & LOGAREAS))
-        printf(std::forward<Args>(args)...);
+        knxLogger.log(std::forward<Args>(args)...);
 }
