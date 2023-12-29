@@ -16,19 +16,19 @@ Usage:
 #include <utility>
 
 
-constexpr auto KNX_LOG_LVL_ERROR = 1;
-constexpr auto KNX_LOG_LVL_INFO  = 2;
-constexpr auto KNX_LOG_LVL_DEBUG = 3;
-constexpr auto KNX_LOG_LVL_TRACE = 4;
+constexpr uint64_t KNX_LOG_LVL_ERROR = 1;
+constexpr uint64_t KNX_LOG_LVL_INFO  = 2;
+constexpr uint64_t KNX_LOG_LVL_DEBUG = 3;
+constexpr uint64_t KNX_LOG_LVL_TRACE = 4;
 
 
-constexpr auto KNX_LOG_LL       = 0x0001;
-constexpr auto KNX_LOG_NL       = 0x0002;
-constexpr auto KNX_LOG_TL       = 0x0004;
-constexpr auto KNX_LOG_AL       = 0x0008;
-constexpr auto KNX_LOG_TPUART   = 0x0010;
-constexpr auto KNX_LOG_IP       = 0x0011;
-constexpr auto KNX_LOG_MEM      = 0x0012;
+constexpr uint64_t KNX_LOG_LL       = 0x0001;
+constexpr uint64_t KNX_LOG_NL       = 0x0002;
+constexpr uint64_t KNX_LOG_TL       = 0x0004;
+constexpr uint64_t KNX_LOG_AL       = 0x0008;
+constexpr uint64_t KNX_LOG_TPUART   = 0x0010;
+constexpr uint64_t KNX_LOG_IP       = 0x0011;
+constexpr uint64_t KNX_LOG_MEM      = 0x0012;
 
 
 #ifndef KNX_LOG_AREAS
@@ -39,31 +39,31 @@ constexpr auto KNX_LOG_MEM      = 0x0012;
  #define KNX_LOG_LVL 0
 #endif
 
-constexpr auto LOGLEVEL = KNX_LOG_LVL;
-constexpr auto LOGAREAS = KNX_LOG_AREAS;
+constexpr uint64_t LOGLEVEL = KNX_LOG_LVL;
+constexpr uint64_t LOGAREAS = KNX_LOG_AREAS;
 
-template<auto x, typename... Args>
+template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_TRACE(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_TRACE) && (x & LOGAREAS))
         printf(std::forward<Args>(args)...);
 }
 
-template<auto x, typename... Args>
+template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_DEBUG(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_DEBUG) && (x & LOGAREAS))
         printf(std::forward<Args>(args)...);
 }
 
-template<auto x, typename... Args>
+template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_INFO(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_INFO) && (x & LOGAREAS))
         printf(std::forward<Args>(args)...);
 }
 
-template<auto x, typename... Args>
+template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_ERROR(Args&&... args)
 {
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_ERROR) && (x & LOGAREAS))
