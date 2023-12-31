@@ -10,22 +10,17 @@
 #define KNX_SERIAL Serial1
 #endif
 
-#ifndef KNX_UART_RX_PIN
-#define KNX_UART_RX_PIN -1
-#endif
-
-#ifndef KNX_UART_TX_PIN
-#define KNX_UART_TX_PIN -1
-#endif
-
 Esp32Platform::Esp32Platform()
 #ifndef KNX_NO_DEFAULT_UART
     : ArduinoPlatform(&KNX_SERIAL)
 #endif
 {
-#ifndef KNX_NO_DEFAULT_UART
-    knxUartPins(KNX_UART_RX_PIN, KNX_UART_TX_PIN);
-#endif
+    #ifdef KNX_UART_RX_PIN
+    _rxPin = KNX_UART_RX_PIN;
+    #endif
+    #ifdef KNX_UART_TX_PIN
+    _txPin = KNX_UART_TX_PIN;
+    #endif
 }
 
 Esp32Platform::Esp32Platform(HardwareSerial* s) : ArduinoPlatform(s)

@@ -56,21 +56,16 @@ extern Wiznet5500lwIP KNX_NETIF;
 
 #endif
 
-#ifndef KNX_UART_RX_PIN
-#define KNX_UART_RX_PIN UART_PIN_NOT_DEFINED
-#endif
-
-#ifndef KNX_UART_TX_PIN
-#define KNX_UART_TX_PIN UART_PIN_NOT_DEFINED
-#endif
-
 RP2040ArduinoPlatform::RP2040ArduinoPlatform()
 #ifndef KNX_NO_DEFAULT_UART
     : ArduinoPlatform(&KNX_SERIAL)
 #endif
 {
-    #ifndef KNX_NO_DEFAULT_UART
-    knxUartPins(KNX_UART_RX_PIN, KNX_UART_TX_PIN);
+    #ifdef KNX_UART_RX_PIN
+    _rxPin = KNX_UART_RX_PIN;
+    #endif
+    #ifdef KNX_UART_TX_PIN
+    _txPin = KNX_UART_TX_PIN;
     #endif
     #ifndef USE_RP2040_EEPROM_EMULATION
     _memoryType = Flash;
@@ -86,14 +81,8 @@ RP2040ArduinoPlatform::RP2040ArduinoPlatform( HardwareSerial* s) : ArduinoPlatfo
 
 void RP2040ArduinoPlatform::knxUartPins(pin_size_t rxPin, pin_size_t txPin)
 {
-    SerialUART* serial = dynamic_cast<SerialUART*>(_knxSerial);
-    if(serial)
-    {
-        if (rxPin != UART_PIN_NOT_DEFINED)
-            serial->setRX(rxPin);
-        if (txPin != UART_PIN_NOT_DEFINED)
-            serial->setTX(txPin);
-    }
+    _rxPin = rxPin;
+    _txPin = txPin;
 }
 
 void RP2040ArduinoPlatform::setupUart()
@@ -101,6 +90,10 @@ void RP2040ArduinoPlatform::setupUart()
     SerialUART* serial = dynamic_cast<SerialUART*>(_knxSerial);
     if(serial)
     {
+        if (_rxPin != UART_PIN_NOT_DEFINED)
+            serial->setRX(_rxPin);
+        if (_txPin != UART_PIN_NOT_DEFINED)
+            serial->setTX(_txPin);
         serial->setPollingMode();
     }
 
