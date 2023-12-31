@@ -60,6 +60,9 @@ constexpr uint64_t KNX_LOG_MEM      = 0x0012;
 constexpr uint64_t LOGLEVEL = KNX_LOG_LVL;
 constexpr uint64_t LOGAREAS = KNX_LOG_AREAS;
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wc++17-extensions"
 template<uint64_t x, typename... Args>
  __attribute__((always_inline)) constexpr void KNX_LOG_TRACE(Args&&... args)
 {
@@ -87,3 +90,4 @@ template<uint64_t x, typename... Args>
     if constexpr((LOGLEVEL >= KNX_LOG_LVL_ERROR) && (x & LOGAREAS))
         knxLogger.log(std::forward<Args>(args)...);
 }
+#pragma GCC diagnostic pop

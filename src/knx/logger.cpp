@@ -9,6 +9,7 @@ void KnxLogger::log(const char* message, va_list& values)
         return;
     }
     printf(message, values);
+    // new line !
 }
 
 void KnxLogger::setCallback(KnxLoggerCallback callback)
