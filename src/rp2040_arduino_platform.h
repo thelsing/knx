@@ -128,6 +128,8 @@ public:
     #endif
     protected: IPAddress mcastaddr;
     protected: uint16_t _port;
+    protected: pin_size_t _rxPin = UART_PIN_NOT_DEFINED; 
+    protected: pin_size_t _txPin = UART_PIN_NOT_DEFINED;
     #endif
 };
 
