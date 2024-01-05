@@ -403,7 +403,7 @@ int32_t KNXValue::intValue() const
     switch (_type)
     {
         case IntType:
-            return _value.shortValue;
+            return _value.ulongValue;
         case BoolType:
         case UCharType:
         case UShortType:
