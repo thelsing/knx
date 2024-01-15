@@ -12,7 +12,8 @@ GroupObjectTableObject* GroupObject::_table = 0;
 GroupObject::GroupObject()
 {
     _data = 0;
-    _commFlag = Uninitialized;
+    _commFlagEx.uninitialized = true;
+    _commFlagEx.commFlag = Uninitialized;
     _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT
     _updateHandler = 0;
@@ -22,7 +23,7 @@ GroupObject::GroupObject()
 GroupObject::GroupObject(const GroupObject& other)
 {
     _data = new uint8_t[other._dataLength];
-    _commFlag = other._commFlag;
+    _commFlagEx = other._commFlagEx;
     _dataLength = other._dataLength;
     _asap = other._asap;
 #ifndef SMALL_GROUPOBJECT
@@ -75,7 +76,7 @@ bool GroupObject::readEnable()
         return false;
 
     // we forbid reading of new (uninitialized) go
-    if (_commFlag == Uninitialized)
+    if (_commFlagEx.uninitialized)
         return false;
 
     return bitRead(ntohs(_table->_tableData[_asap]), 11) > 0;
@@ -157,22 +158,29 @@ size_t GroupObject::asapValueSize(uint8_t code)
 
 ComFlag GroupObject::commFlag()
 {
-    return _commFlag;
+    return _commFlagEx.commFlag;
 }
 
 void GroupObject::commFlag(ComFlag value)
 {
-    _commFlag = value;
+    _commFlagEx.commFlag = value;
+    if (value == WriteRequest || value == Updated || value == Ok)
+        _commFlagEx.uninitialized = false;
+}
+
+bool GroupObject::initialized()
+{
+    return !_commFlagEx.uninitialized;
 }
 
 void GroupObject::requestObjectRead()
 {
-    _commFlag = ReadRequest;
+    _commFlagEx.commFlag = ReadRequest;
 }
 
 void GroupObject::objectWritten()
 {
-    _commFlag = WriteRequest;
+    _commFlagEx.commFlag = WriteRequest;
 }
 
 size_t GroupObject::valueSize()
@@ -274,8 +282,11 @@ void GroupObject::valueNoSend(const KNXValue& value)
 
 void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 {
-    if (_commFlag == Uninitialized)
-        _commFlag = Ok;
+    if (_commFlagEx.uninitialized)
+    {
+        _commFlagEx.commFlag = Ok;
+        _commFlagEx.uninitialized = false;
+    }
 
     KNX_Encode_Value(value, _data, _dataLength, type);
 }

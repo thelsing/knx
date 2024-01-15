@@ -7,7 +7,7 @@
 
 class GroupObjectTableObject;
 
-enum ComFlag
+enum ComFlag : uint8_t
 {
     Updated = 0,      //!< Group object was updated
     ReadRequest = 1,  //!< Read was requested but was not processed
@@ -16,6 +16,16 @@ enum ComFlag
     Ok = 4,           //!< read or write request were send successfully
     Error = 5,        //!< there was an error on processing a request
     Uninitialized = 6 //!< uninitialized Group Object, its value is not valid
+};
+
+// extended ComFlag: Uninitialized it not handled correctly as ComFlag
+// it might be in state Transmitting during a ReadRequest on startup while value is still not valid
+// we use MSB to store Uninitialized and keep the size of GroupObject the same saving memory ressources
+// the old Uninitialized handling is still there for compatibility reasons.
+struct ComFlagEx
+{
+    bool uninitialized : 1;
+    ComFlag commFlag : 7;
 };
 
 class GroupObject;
@@ -95,6 +105,11 @@ class GroupObject
      * reading a ::Updated to mark the changed group object as processed. This is optional.
      */
     void commFlag(ComFlag value);
+
+    /**
+     * Check if the group object contains a valid value assigned from bus or from application program
+     */
+    bool initialized();
 
     /**
     * Request the read of a communication object. Calling this function triggers the
@@ -236,7 +251,7 @@ class GroupObject
     size_t asapValueSize(uint8_t code);
     size_t goSize();
     uint16_t _asap = 0;
-    ComFlag _commFlag = Uninitialized;
+    ComFlagEx _commFlagEx;
     uint8_t* _data = 0;
     uint8_t _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT
