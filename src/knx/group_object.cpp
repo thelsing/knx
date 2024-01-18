@@ -175,12 +175,12 @@ bool GroupObject::initialized()
 
 void GroupObject::requestObjectRead()
 {
-    _commFlagEx.commFlag = ReadRequest;
+    commFlag(ReadRequest);
 }
 
 void GroupObject::objectWritten()
 {
-    _commFlagEx.commFlag = WriteRequest;
+    commFlag(WriteRequest);
 }
 
 size_t GroupObject::valueSize()
@@ -283,10 +283,7 @@ void GroupObject::valueNoSend(const KNXValue& value)
 void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 {
     if (_commFlagEx.uninitialized)
-    {
-        _commFlagEx.commFlag = Ok;
-        _commFlagEx.uninitialized = false;
-    }
+        commFlag(Ok);
 
     KNX_Encode_Value(value, _data, _dataLength, type);
 }
