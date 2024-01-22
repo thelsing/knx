@@ -290,7 +290,7 @@ void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 
 bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
 {
-    if (_commFlag == Uninitialized)
+    if (_commFlagEx.uninitialized)
     {
         // always set first value
         this->valueNoSend(value, type);
