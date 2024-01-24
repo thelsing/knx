@@ -2,7 +2,10 @@
 
 #include "Arduino.h"
 
-#ifdef ARDUINO_ARCH_SAMD
+#if (defined(__SAMD21E17A__) || \
+     defined(__SAMD21G18A__) || \
+     defined(__SAMD21E18A__) || \
+     defined(__SAMD21J18A__))
 
 #define PAGES_PER_ROW 4
 

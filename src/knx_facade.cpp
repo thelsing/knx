@@ -41,7 +41,21 @@
         }
     #endif
 
-    #ifdef ARDUINO_ARCH_SAMD
+    #ifdef __SAMD51__
+        // predefined global instance for TP or RF
+        #if MASK_VERSION == 0x07B0
+            KnxFacade<Samd51Platform, Bau07B0> knx(buttonEvent);
+        #elif MASK_VERSION == 0x27B0
+            KnxFacade<Samd51Platform, Bau2920> knx(buttonEvent);
+        #elif MASK_VERSION == 0x57B0
+            KnxFacade<Samd51Platform, Bau57B0> knx(buttonEvent);
+        #else
+            #error "Mask version not supported on SAMD51"
+        #endif
+    #elif (defined(__SAMD21E17A__) || \
+          defined(__SAMD21G18A__) || \
+          defined(__SAMD21E18A__) || \
+          defined(__SAMD21J18A__))
         // predefined global instance for TP or RF or TP/RF coupler
         #if MASK_VERSION == 0x07B0
             KnxFacade<SamdPlatform, Bau07B0> knx(buttonEvent);
@@ -50,7 +64,7 @@
         #elif MASK_VERSION == 0x2920
             KnxFacade<SamdPlatform, Bau2920> knx(buttonEvent);
         #else
-            #error "Mask version not supported on ARDUINO_ARCH_SAMD"
+            #error "Mask version not supported on SAMD21"
         #endif
     #elif defined(ARDUINO_ARCH_RP2040)
         // predefined global instance for TP or RF or IP or TP/RF coupler or TP/IP coupler
