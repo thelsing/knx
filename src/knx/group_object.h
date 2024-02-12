@@ -7,6 +7,12 @@
 
 class GroupObjectTableObject;
 
+/**
+ * LIMITATION: The differentiation between uninitialized and initialized state can NOT be represented correctly in ComFlag alone:
+ * It might be in state Transmitting during a ReadRequest on startup while value is still not valid.
+ *
+ * See ComFlagEx for a clear uninitialized handling.
+ */
 enum ComFlag : uint8_t
 {
     Updated = 0,      //!< Group object was updated
@@ -15,13 +21,17 @@ enum ComFlag : uint8_t
     Transmitting = 3, //!< Group Object is processed a the moment (read or write)
     Ok = 4,           //!< read or write request were send successfully
     Error = 5,        //!< there was an error on processing a request
-    Uninitialized = 6 //!< uninitialized Group Object, its value is not valid
+    Uninitialized = 6 //!< uninitialized Group Object, its value is not valid; WARNING: Other Values do NOT guarantee an actual valid value!
 };
 
-// extended ComFlag: Uninitialized it not handled correctly as ComFlag
-// it might be in state Transmitting during a ReadRequest on startup while value is still not valid
-// we use MSB to store Uninitialized and keep the size of GroupObject the same saving memory ressources
-// the old Uninitialized handling is still there for compatibility reasons.
+/**
+ * Extended ComFlag
+ * Add a separate uninitialized flag to overcome the limitations of ComFlag.
+ *
+ * Implementation Note:
+ * We use MSB to store uninitialized state and keep the size of GroupObject the same saving memory resources.
+ * The old uninitialized handling is not changed for compatibility reasons.
+ */
 struct ComFlagEx
 {
     bool uninitialized : 1;
