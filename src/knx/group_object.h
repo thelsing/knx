@@ -166,6 +166,19 @@ class GroupObject
      * The parameters must fit the group object. Otherwise it will stay unchanged.
      */
     void valueNoSend(const KNXValue& value, const Dpt& type);
+
+    /**
+     * Check if the value (after conversion to dpt) will differ from current value of the group object and update if necessary.
+     * Use this method only, when the value change is relevant, otherwise valueNoSend(const KNXValue&, const Dpt&) will do the same (without overhead for comparing)
+     * @param value the value the group object is set to
+     * @param type the datapoint type used for the conversion.
+     * 
+     * The parameters must fit the group object. Otherwise it will stay unchanged.
+     * 
+     * @returns true if the value of the group object has changed
+     */
+    bool valueNoSendCompare(const KNXValue& value, const Dpt& type);
+
     /**
      * set the current value of the group object.
      * @param value the value the group object is set to
