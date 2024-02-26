@@ -22,6 +22,7 @@ class Bau27B0 : public BauSystemBDevice
     bool enabled() override;
     void enabled(bool value) override;
 
+    RfDataLinkLayer* getDataLinkLayer();
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
