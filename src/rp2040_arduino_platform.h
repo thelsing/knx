@@ -68,6 +68,8 @@ public:
     // uart
     void knxUartPins(pin_size_t rxPin, pin_size_t txPin);
     void setupUart();
+    virtual bool overflowUart();
+
 
     // unique serial number
     uint32_t uniqueSerialNumber() override; 

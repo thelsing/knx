@@ -85,6 +85,11 @@ void RP2040ArduinoPlatform::knxUartPins(pin_size_t rxPin, pin_size_t txPin)
     _txPin = txPin;
 }
 
+bool RP2040ArduinoPlatform::overflowUart() {
+    SerialUART* serial = dynamic_cast<SerialUART*>(_knxSerial);
+    return serial->overflow();
+}
+
 void RP2040ArduinoPlatform::setupUart()
 {
     SerialUART* serial = dynamic_cast<SerialUART*>(_knxSerial);

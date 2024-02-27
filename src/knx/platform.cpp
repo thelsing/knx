@@ -57,6 +57,14 @@ void Platform::closeUart()
 void Platform::setupUart()
 {}
 
+bool Platform::overflowUart()
+{
+    return false;
+}
+
+void Platform::flushUart()
+{}
+
 uint32_t Platform::currentIpAddress()
 {
     return 0x01020304;

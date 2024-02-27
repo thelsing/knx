@@ -25,6 +25,7 @@ class ArduinoPlatform : public Platform
     virtual size_t writeUart(const uint8_t* buffer, size_t size);
     virtual int readUart();
     virtual size_t readBytesUart(uint8_t* buffer, size_t length);
+    virtual void flushUart();
 
     //spi
 #ifndef KNX_NO_SPI
