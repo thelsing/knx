@@ -169,11 +169,9 @@ void __isr __time_critical_func(TpUartDataLinkLayer::processRx)(bool isr)
         _rxOverflow = true;
 
     // verarbeiten daten
-    uint8_t counter = isr ? 10 : 255;
-    while (_platform.uartAvailable() && counter > 0)
+    while (_platform.uartAvailable())
     {
         processRxByte();
-        counter--;
     }
 
     isrUnlock();
@@ -190,49 +188,28 @@ void TpUartDataLinkLayer::processRxByte()
     if (byte < 0)
         return;
 
-    if (_rxState == RX_FRAME)
+    /*
+     * Wenn ich im RX_INVALID state bin
+     *   und das letzte Byte vor mehr als 2ms verarbeitet wurde (also pause >2ms)
+     *   und keine weiteren Bytes vorliegen,
+     * dann kann ich den INVALID State verwerfen.
+     */
+    if (_rxState == RX_INVALID && (millis() - _rxLastTime) > 2 && !_platform.uartAvailable())
     {
-        processRxFrameByte(byte);
-    }
-    else if ((byte & L_DATA_MASK) == L_DATA_STANDARD_IND || (byte & L_DATA_MASK) == L_DATA_EXTENDED_IND)
-    {
-        /*
-         * Verarbeite ein vorheriges Frame falls noch vorhanden. Das dürfte normal nur im Busmonitor auftreten, weil hier noch auch ein ACK gewartet wird
-         */
+        println("Reset RX_INVALID");
         processRxFrameComplete();
-
-        _rxFrame->addByte(byte);
-
-        // Provoziere ungültige Frames für Tests
-        // if (millis() % 20 == 0)
-        //     _rxFrame->addByte(0x1);
-
-        _rxMarker = false;
-        _rxState = RX_FRAME;
-
-        /*
-         * Hier wird inital ein Ack ohne Addressed gesetzt. Das dient dazu falls noch ein Ack vom vorherigen Frame gesetzt wurde,
-         * welches aber ggf nicht rechtzeitig verarbeitet (also nach der Übertragung gesendet wurde) sich nicht auf das neue Frame auswirkt.
-         * Der Zustand kann beliebig oft gesendet werden. Sobald der Moment gekommen ist, dass ein Ack gesendet wird, schaut TPUart im Buffer
-         * was der letzte Ackstatus war und sendet diesen.
-         *
-         * Das darf man natürlich nur wenn ich nicht gerade selber sende, da man eigene Frames nicht ACKt
-         */
-        if (_txState == TX_IDLE)
-        {
-            _platform.writeUart(U_ACK_REQ);
-        }
+        _rxState = RX_IDLE;
     }
-    else if (_rxState == RX_INVALID || _rxOverflow)
+
+    if (_rxState == RX_INVALID)
     {
         /*
-         * Sobald ein Frame ungültig verarbeitet wurde oder ein unbekanntest Kommando eintrifft ist wechselt der Zustand in RX_INVALID.
+         * Sobald ein Frame ungültig verarbeitet wurde oder ein unbekanntes Kommando eintrifft, wechselt der Zustand in RX_INVALID.
          * Ab jetzt muss ich davon ausgehen, dass einen Übertragungsfehler gegeben hat und die aktuellen Bytes ungültig sind.
-         * Gleiches gilt auch wenn ein HW Overflow erkannt wurde
+         * Gleiches gilt auch wenn ein HW Overflow erkannt wurde.
          *
-         * - Dieser Zustand wird aufgehoben wenn ein Frame "vermutlich" erkannt wurde. (if Abfrage über dieser)
-         * - Die Zeit des letzten Frames 3ms vorbei ist (erfolt im loop)
-         * - Wenn der Markermodus aktiv ist und ein U_FRAME_END_IND sauber erkannt wurde. (passiert hiert)
+         * - Die Zeit des letzten Frames 3ms vorbei ist (kann aber nicht garantiert werden, wegen möglichem ISR & DMA. Hier sollte es das Problem aber nicht geben)
+         * - Wenn der Markermodus aktiv ist und ein U_FRAME_END_IND sauber erkannt wurde. (Wird hier geprüft)
          *
          * Ansonsten macht dieser Abschnitt nichts und verwirrft die ungültigen Bytes
          */
@@ -253,11 +230,38 @@ void TpUartDataLinkLayer::processRxByte()
                 _rxMarker = false;
                 _rxState = RX_IDLE;
             }
-            else
-            {
-                // print("RX_INVALID: ");
-                // println(byte, HEX);
-            }
+        }
+    }
+    else if (_rxState == RX_FRAME)
+    {
+        processRxFrameByte(byte);
+    }
+    else if ((byte & L_DATA_MASK) == L_DATA_STANDARD_IND || (byte & L_DATA_MASK) == L_DATA_EXTENDED_IND)
+    {
+        /*
+         * Verarbeite ein vorheriges Frame falls noch vorhanden. Das dürfte normal nur im Busmonitor auftreten, weil hier noch auch ein ACK gewartet wird
+         */
+        processRxFrameComplete();
+        _rxFrame->addByte(byte);
+
+        // Provoziere ungültige Frames für Tests
+        // if (millis() % 20 == 0)
+        //     _rxFrame->addByte(0x1);
+
+        _rxMarker = false;
+        _rxState = RX_FRAME;
+
+        /*
+         * Hier wird inital ein Ack ohne Addressed gesetzt. Das dient dazu falls noch ein Ack vom vorherigen Frame gesetzt wurde,
+         * welches aber ggf nicht rechtzeitig verarbeitet (also nach der Übertragung gesendet wurde) sich nicht auf das neue Frame auswirkt.
+         * Der Zustand kann beliebig oft gesendet werden. Sobald der Moment gekommen ist, dass ein Ack gesendet wird, schaut TPUart im Buffer
+         * was der letzte Ackstatus war und sendet diesen.
+         *
+         * Das darf man natürlich nur wenn ich nicht gerade selber sende, da man eigene Frames nicht ACKt
+         */
+        if (_txState == TX_IDLE)
+        {
+            _platform.writeUart(U_ACK_REQ);
         }
     }
     else
@@ -576,17 +580,17 @@ bool TpUartDataLinkLayer::sendFrame(CemiFrame &cemiFrame)
  * Außerdem soll regelmäßig die aktuelle Config bzw der Modus übermittelt werden, so dass nach einem Disconnect,
  * der TPUart im richtigen Zustand ist.
  */
-void TpUartDataLinkLayer::requestState()
+void TpUartDataLinkLayer::requestState(bool force /* = false */)
 {
-    if (_rxState != RX_IDLE)
-        return;
+    if (!force)
+    {
+        if (!(_rxState == RX_IDLE || _rxState == RX_INVALID))
+            return;
 
-    if (_txState != TX_IDLE)
-        return;
-
-    // Nur 1x pro Sekunde
-    if ((millis() - _lastStateRequest) < 1000)
-        return;
+        // Nur 1x pro Sekunde
+        if ((millis() - _lastStateRequest) < 1000)
+            return;
+    }
 
     // println("requestState");
 
@@ -720,7 +724,7 @@ bool TpUartDataLinkLayer::reset()
     if (success)
     {
         _lastStateRequest = 0; // Force
-        requestState();
+        requestState(true);
         _rxLastTime = millis();
     }
 
@@ -860,6 +864,7 @@ void TpUartDataLinkLayer::loop()
     {
         println("TPUart overflow detected!");
         _rxOverflow = false;
+        _rxState = RX_INVALID;
     }
 
     if (_tpState)
@@ -869,7 +874,7 @@ void TpUartDataLinkLayer::loop()
         _tpState = 0;
     }
 
-    processRx();
+    // processRx();
 #ifdef USE_TP_RX_QUEUE
     processRxQueue();
 #endif
@@ -877,16 +882,6 @@ void TpUartDataLinkLayer::loop()
     requestState();
     processTxQueue();
     checkConnected();
-
-    /*
-     * Normal ist alles so gebaut worde, dass anhand der Bytes entschieden wird wann ein Frame "fertig" ist oder nicht.
-     * Dennoch gibt es Situationen, wo ein Frame nicht geschlossen wurde, weil Bytes verloren geangen sind oder wie beim Busmonitor
-     * bewusst auf ein Ack gewartet werden muss.
-     */
-    // if (!_platform.uartAvailable() && _rxFrame->size() > 0 && (millis() - _rxLastTime) > 2)
-    // {
-    //     processRxFrameComplete();
-    // }
 }
 
 void TpUartDataLinkLayer::rxFrameReceived(TpFrame *tpFrame)
@@ -1066,7 +1061,8 @@ void TpUartDataLinkLayer::processRxFrame(TpFrame *tpFrame)
         printFrame(tpFrame);
         println();
 #endif
-        rxFrameReceived(tpFrame);
+        if (!(tpFrame->flags() & TP_FRAME_FLAG_ECHO))
+            rxFrameReceived(tpFrame);
     }
 }
 

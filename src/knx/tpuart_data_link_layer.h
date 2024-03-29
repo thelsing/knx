@@ -137,7 +137,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     void processRxFrameComplete();
     inline void processRxFrame(TpFrame* tpFrame);
     void pushTxFrameQueue(TpFrame* tpFrame);
-    void requestState();
+    void requestState(bool force = false);
     void requestConfig();
     inline void processRxFrameByte(uint8_t byte);
 
