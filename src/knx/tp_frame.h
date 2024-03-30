@@ -2,9 +2,9 @@
 #pragma GCC optimize("O3")
 
 #include "cemi_frame.h"
+#include <cstring>
 #include <stdint.h>
 #include <string>
-#include <cstring>
 
 // Means that the frame is invalid
 #define TP_FRAME_FLAG_INVALID 0b10000000
