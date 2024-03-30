@@ -874,7 +874,7 @@ void TpUartDataLinkLayer::loop()
         _tpState = 0;
     }
 
-    // processRx();
+    processRx();
 #ifdef USE_TP_RX_QUEUE
     processRxQueue();
 #endif
