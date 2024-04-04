@@ -560,11 +560,11 @@ void TpUartDataLinkLayer::setFrameRepetition(uint8_t nack, uint8_t busy)
 
 bool TpUartDataLinkLayer::sendFrame(CemiFrame &cemiFrame)
 {
-    // if (!_connected)
-    // {
-    //     dataConReceived(cemiFrame, false);
-    //     return false;
-    // }
+    if (!_connected || _monitoring)
+    {
+        dataConReceived(cemiFrame, false);
+        return false;
+    }
 
     TpFrame *tpFrame = new TpFrame(cemiFrame);
     // printHex("  TP>: ", tpFrame->data(), tpFrame->size());
@@ -686,9 +686,14 @@ bool TpUartDataLinkLayer::reset()
     _rxInvalidFrameCounter = 0;
     _rxUnkownControlCounter = 0;
     if (_txFrame != nullptr)
-        _txFrame->reset();
+    {
+        _txFrame = nullptr;
+        delete _txFrame;
+    }
     if (_rxFrame != nullptr)
+    {
         _rxFrame->reset();
+    }
     _rxState = RX_IDLE;
     _txState = TX_IDLE;
     _connected = false;
@@ -792,7 +797,6 @@ void TpUartDataLinkLayer::processTxQueue()
     if (_rxState != RX_IDLE)
         return;
 
-    //
     if (_txState != TX_IDLE)
         return;
 
@@ -806,16 +810,23 @@ void TpUartDataLinkLayer::processTxQueue()
             _txFrameQueue.back = nullptr;
         }
 
+        // free old frame
+        if (_txFrame != nullptr)
+            delete _txFrame;
+
+        // use frame from queue and delete queue entry
         _txFrame = entry->frame;
+        delete entry;
+
+        _txState = TX_FRAME;
+        _txLastTime = millis();
+
 #ifdef DEBUG_TP_FRAMES
         print("Outbound: ");
         printFrame(_txFrame);
         println();
 #endif
-        _txState = TX_FRAME;
-        _txLastTime = millis();
 
-        delete entry;
         processTxFrameBytes();
     }
 }
@@ -875,7 +886,7 @@ void TpUartDataLinkLayer::loop()
         _tpState = 0;
     }
 
-    // processRx();
+    processRx();
 #ifdef USE_TP_RX_QUEUE
     processRxQueue();
 #endif
