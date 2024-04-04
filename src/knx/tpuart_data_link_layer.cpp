@@ -123,13 +123,10 @@ enum
     // In diesem Zustand werden alle Bytes als Bytes für ein Frame betrachtet.
     RX_FRAME,
 
-    /*
-     * Dieser Zustand ist speziell und soll verhindern dass Framebytes als Steuerbytes betrachet werden.
-     * Das Ganze ist leider nötig, weil die verarbeitung nicht syncron verläuft und teilweise durch externe interrupt.
-     * Dadurch kann die 2,6ms ruhe nicht ermittelt werden um sicher zu sagen das ab jetzt alles wieder Steuercodes sind.
-     */
+    // In diesem Zustand werdem alle Bytes verworfen
     RX_INVALID,
 
+    // Im Monitoring wird noch auf ein ACk gewartet
     RX_AWAITING_ACK
 };
 
@@ -189,9 +186,9 @@ void TpUartDataLinkLayer::processRxByte()
         return;
 
     /*
-     * Wenn ich im RX_INVALID state bin
+     * Wenn ich im RX_INVALID Modus bin
      *   und das letzte Byte vor mehr als 2ms verarbeitet wurde (also pause >2ms)
-     *   und keine weiteren Bytes vorliegen,
+     *   und keine weiteren Bytes in der Buffer vorliegen,
      * dann kann ich den INVALID State verwerfen.
      */
     if (_rxState == RX_INVALID && (millis() - _rxLastTime) > 2 && !_platform.uartAvailable())
@@ -208,10 +205,10 @@ void TpUartDataLinkLayer::processRxByte()
          * Ab jetzt muss ich davon ausgehen, dass einen Übertragungsfehler gegeben hat und die aktuellen Bytes ungültig sind.
          * Gleiches gilt auch wenn ein HW Overflow erkannt wurde.
          *
-         * - Die Zeit des letzten Frames 3ms vorbei ist (kann aber nicht garantiert werden, wegen möglichem ISR & DMA. Hier sollte es das Problem aber nicht geben)
+         * - Die Zeit des letzten Frames 3ms vorbei ist und keine Daten mehr im Buffer sind. (Wird übermir geprüft)
          * - Wenn der Markermodus aktiv ist und ein U_FRAME_END_IND sauber erkannt wurde. (Wird hier geprüft)
          *
-         * Ansonsten macht dieser Abschnitt nichts und verwirrft die ungültigen Bytes
+         * Ansonsten macht dieser Abschnitt nichts und verwirrft damit die ungültigen Bytes
          */
         if (markerMode())
         {
@@ -252,12 +249,12 @@ void TpUartDataLinkLayer::processRxByte()
         _rxState = RX_FRAME;
 
         /*
-         * Hier wird inital ein Ack ohne Addressed gesetzt. Das dient dazu falls noch ein Ack vom vorherigen Frame gesetzt wurde,
-         * welches aber ggf nicht rechtzeitig verarbeitet (also nach der Übertragung gesendet wurde) sich nicht auf das neue Frame auswirkt.
-         * Der Zustand kann beliebig oft gesendet werden. Sobald der Moment gekommen ist, dass ein Ack gesendet wird, schaut TPUart im Buffer
-         * was der letzte Ackstatus war und sendet diesen.
+         * Hier wird inital ein Ack ohne Addressed gesetzt. Das dient dazu, falls noch ein Ack vom vorherigen Frame gesetzt ist,
+         * zurück gesetzt wird. Das passiert wenn die Verarbeitung zu stark verzögert ist (z.B. weil kein DMA/IRQ genutzt wird).
+         * Das ACK kann beliebig oft gesendet werden, weil es in der BCU nur gespeichert wird und erst bei bedarf genutzt / gesendet wird.
          *
-         * Das darf man natürlich nur wenn ich nicht gerade selber sende, da man eigene Frames nicht ACKt
+         * Das darf man natürlich nur wenn ich nicht gerade selber sende, da man eigene Frames nicht ACKt. Ggf ignoriert die BCU dies,
+         * aber ich wollte hier auf sicher gehen.
          */
         if (_txState == TX_IDLE)
         {
@@ -266,6 +263,8 @@ void TpUartDataLinkLayer::processRxByte()
     }
     else
     {
+        // Hier werden die Commands ausgewertet, falls das noch schon passiert ist.
+
         if (byte == U_RESET_IND)
         {
             // println("U_RESET_IND");
@@ -276,7 +275,7 @@ void TpUartDataLinkLayer::processRxByte()
 #ifndef NCN5120
             /*
              * Filtere "Protocol errors" weil auf anderen BCU wie der Siements dies gesetzt, when das timing nicht stimmt.
-             * Leider ist kein perfektes Timing möglich so dass dieser Fehler ignoriert wird. Hat auch keine bekannte Auswirkungen.
+             * Leider ist kein perfektes Timing möglich, so dass dieser Fehler ignoriert werden muss. Hat auch keine bekannte Auswirkungen.
              */
             _tpState &= 0b11101000;
 #endif
@@ -350,7 +349,7 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
 {
     /*
      * Bei aktivem Maker muss das erste U_FRAME_END_IND ignoriert und auf ein Folgebyte gewartet werden.
-     * Das Folgebyte ist also ausschlaggebend wie dieses Byte zo bewerten ist.
+     * Das Folgebyte ist also ausschlaggebend wie dieses Byte zu bewerten ist.
      */
     if (markerMode() && (byte == U_FRAME_END_IND && !_rxMarker))
     {
@@ -377,9 +376,7 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
     /*
      * Dies ist ein hypotetischer Fall, dass die Frames ohne Marker kommen, obwohl der MarkerModus aktiv ist.
      * Hier wird der aktuelle Frame abgearbeitet und RX_INVALID gesetzt, da das aktuelle Byte hierbei nicht bearbeitet wird.
-     * Dieser Fall kann eintreffen wenn der Marker Modus von der TPUart nicht unterstützt wird (NCN51xx Feature).
-     * TODO vergleiche auf maxSize oder falls vorhanden auf länge aus telegramm -> full()
-     * TODO Beschriebung anpassen weil es auch bei Byteverlusten auftreten kann
+     * Dieser Fall kann eintreffen wenn der Marker Modus von der TPUart nicht unterstützt wird (NCN51xx Feature) aber aktiviert wurde.
      */
     else if (markerMode() && _rxFrame->isFull())
     {
@@ -469,8 +466,8 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
  */
 void TpUartDataLinkLayer::processRxFrameComplete()
 {
-    // Sollte aktuell kein Frame in der Bearbeitung (size == 0) sein, dann breche ab
-    if (_rxFrame->size() == 0)
+    // Sollte aktuell kein Frame in der Bearbeitung sein, dann breche ab
+    if (!_rxFrame->size())
         return;
 
     // Ist das Frame vollständig und gültig
@@ -860,6 +857,10 @@ void TpUartDataLinkLayer::loop()
     if (!_initialized)
         return;
 
+    /*
+     * Sollte ein overflow erkannt worden sein, so wechsle in RX_INVALID.
+     * Das greift aber nur im loop und nicht im ISR. Aber bei Nutzung von ISR und DMA sollte dieser Fall nie passieren.
+     */
     if (_rxOverflow)
     {
         println("TPUart overflow detected!");
@@ -874,7 +875,7 @@ void TpUartDataLinkLayer::loop()
         _tpState = 0;
     }
 
-    processRx();
+    // processRx();
 #ifdef USE_TP_RX_QUEUE
     processRxQueue();
 #endif
@@ -1112,16 +1113,13 @@ void TpUartDataLinkLayer::processRxQueue()
     while (_rxBufferCount)
     {
         const uint16_t size = pullByteFromRxQueue() + (pullByteFromRxQueue() << 8);
-        TpFrame *tpFrame = new TpFrame(size);
-        tpFrame->addFlags(pullByteFromRxQueue());
+        TpFrame tpFrame = TpFrame(size);
+        tpFrame.addFlags(pullByteFromRxQueue());
 
         for (uint16_t i = 0; i < size; i++)
-        {
-            tpFrame->addByte(pullByteFromRxQueue());
-        }
+            tpFrame.addByte(pullByteFromRxQueue());
 
-        processRxFrame(tpFrame);
-        delete tpFrame;
+        processRxFrame(&tpFrame);
         asm volatile("" ::: "memory");
         _rxBufferCount--;
     }

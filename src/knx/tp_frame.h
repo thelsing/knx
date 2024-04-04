@@ -67,7 +67,7 @@ class TpFrame
     TpFrame(uint16_t maxSize = 263)
         : _maxSize(maxSize)
     {
-        _data = new uint8_t[_maxSize];
+        _data = (uint8_t *)malloc(_maxSize);
         _size = 0;
     }
 
