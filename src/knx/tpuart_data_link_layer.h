@@ -64,6 +64,8 @@ class TpUartDataLinkLayer : public DataLinkLayer
     uint32_t getRxProcessdFrameCounter();
     uint32_t getRxIgnoredFrameCounter();
     uint32_t getRxUnknownControlCounter();
+    uint32_t getTxFrameCounter();
+    uint32_t getTxProcessedFrameCounter();
     uint8_t getMode();
 
   private:
@@ -95,19 +97,21 @@ class TpUartDataLinkLayer : public DataLinkLayer
     volatile bool _busy = false;
     volatile bool _initialized = false;
 
-    volatile uint32_t _stateTime = 0;
     volatile uint8_t _rxState = 0;
     volatile uint8_t _txState = 0;
     volatile uint32_t _rxProcessdFrameCounter = 0;
     volatile uint32_t _rxInvalidFrameCounter = 0;
     volatile uint32_t _rxIgnoredFrameCounter = 0;
     volatile uint32_t _rxUnkownControlCounter = 0;
+    volatile uint32_t _txFrameCounter = 0;
+    volatile uint32_t _txProcessdFrameCounter = 0;
     volatile bool _rxMarker = false;
     volatile bool _rxOverflow = false;
     volatile uint8_t _tpState = 0x0;
     volatile uint32_t _txLastTime = 0;
     volatile uint32_t _rxLastTime = 0;
     volatile bool _forceAck = false;
+    uint8_t _txQueueCount = 0;
 
     inline bool markerMode();
 
@@ -134,6 +138,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     void checkConnected();
     void processRxByte();
     void processTxQueue();
+    void clearTxFrameQueue();
     void processRxFrameComplete();
     inline void processRxFrame(TpFrame* tpFrame);
     void pushTxFrameQueue(TpFrame* tpFrame);
@@ -159,6 +164,9 @@ class TpUartDataLinkLayer : public DataLinkLayer
     inline void isrUnlock();
     inline void clearUartBuffer();
     inline void connected(bool state = true);
+    void clearTxFrame();
+    void clearOutdatedTxFrame();
+    void processTxFrameComplete(bool success);
 
     ITpUartCallBacks& _cb;
     DataLinkLayerCallbacks* _dllcb;

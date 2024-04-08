@@ -306,13 +306,7 @@ void TpUartDataLinkLayer::processRxByte()
             if (_txState == TX_FRAME)
             {
                 const bool success = ((byte ^ L_DATA_CON_MASK) >> 7);
-                uint8_t *cemiData = _txFrame->cemiData();
-                CemiFrame cemiFrame(cemiData, _txFrame->cemiSize());
-                dataConReceived(cemiFrame, success);
-                free(cemiData);
-                delete _txFrame;
-                _txFrame = nullptr;
-                _txState = TX_IDLE;
+                processTxFrameComplete(success);
             }
             else
             {
@@ -436,7 +430,7 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
                 if (availableInRxQueue() < (_rxFrame->size() + 3))
                 {
                     // Nur wenn ich nicht selber sende
-                    if (_txState == RX_IDLE)
+                    if (_txState == TX_IDLE)
                     {
                         _platform.writeUart(U_ACK_REQ | U_ACK_REQ_ADRESSED | U_ACK_REQ_BUSY);
                     }
@@ -529,6 +523,30 @@ void TpUartDataLinkLayer::processRxFrameComplete()
     _rxFrame->reset();
 }
 
+void TpUartDataLinkLayer::clearTxFrame()
+{
+    if (_txFrame != nullptr)
+    {
+        delete _txFrame;
+        _txFrame = nullptr;
+    }
+}
+
+void TpUartDataLinkLayer::clearTxFrameQueue()
+{
+}
+
+void TpUartDataLinkLayer::processTxFrameComplete(bool success)
+{
+    uint8_t *cemiData = _txFrame->cemiData();
+    CemiFrame cemiFrame(cemiData, _txFrame->cemiSize());
+    dataConReceived(cemiFrame, success);
+    free(cemiData);
+    clearTxFrame();
+    _txProcessdFrameCounter++;
+    _txState = TX_IDLE;
+}
+
 /*
  * Steckt das zu sendende Frame in eine Queue, da der TpUart vielleicht gerade noch nicht sende bereit ist.
  */
@@ -545,6 +563,14 @@ void TpUartDataLinkLayer::pushTxFrameQueue(TpFrame *tpFrame)
         _txFrameQueue.back->next = entry;
         _txFrameQueue.back = entry;
     }
+
+    if (_txQueueCount > 10)
+    {
+        print("_txQueueCount:");
+        print(_txQueueCount);
+    }
+    _txQueueCount++;
+    _txFrameCounter++;
 }
 
 void TpUartDataLinkLayer::setRepetitions(uint8_t nack, uint8_t busy)
@@ -685,17 +711,15 @@ bool TpUartDataLinkLayer::reset()
     _rxInvalidFrameCounter = 0;
     _rxInvalidFrameCounter = 0;
     _rxUnkownControlCounter = 0;
-    if (_txFrame != nullptr)
-    {
-        _txFrame = nullptr;
-        delete _txFrame;
-    }
+
+    clearTxFrame();
+    clearTxFrameQueue();
+
     if (_rxFrame != nullptr)
     {
         _rxFrame->reset();
     }
     _rxState = RX_IDLE;
-    _txState = TX_IDLE;
     _connected = false;
     _stopped = false;
     _monitoring = false;
@@ -787,16 +811,23 @@ bool TpUartDataLinkLayer::enabled() const
 }
 
 /*
+ * Wenn ein TxFrame gesendet wurde, wird eine Bestätigung für den Versand erwartet.
+ * Kam es aber zu einem ungültigen Frame oder Busdisconnect, bleibt die Bestätigung aus und der STack hängt im TX_FRAME fest.
+ * Daher muss nach einer kurzen Wartezeit das Warten beendet werden.
+ */
+void TpUartDataLinkLayer::clearOutdatedTxFrame()
+{
+    if (_txState == TX_FRAME && (millis() - _txLastTime) > 1000)
+        processTxFrameComplete(false);
+}
+
+/*
  * Hier werden die ausgehenden Frames aus der Warteschlange genomnmen und versendet.
  * Das passiert immer nur einzelnd, da nach jedem Frame, gewartet werden muss bis das Frame wieder reingekommen ist und das L_DATA_CON rein kommt.
  *
  */
 void TpUartDataLinkLayer::processTxQueue()
 {
-    // Diese Abfrage ist vorsorglich. Eigentlich sollte auch schon parallel gestartet werden können.
-    if (_rxState != RX_IDLE)
-        return;
-
     if (_txState != TX_IDLE)
         return;
 
@@ -810,9 +841,9 @@ void TpUartDataLinkLayer::processTxQueue()
             _txFrameQueue.back = nullptr;
         }
 
-        // free old frame
-        if (_txFrame != nullptr)
-            delete _txFrame;
+        _txQueueCount--;
+
+        clearTxFrame();
 
         // use frame from queue and delete queue entry
         _txFrame = entry->frame;
@@ -892,6 +923,7 @@ void TpUartDataLinkLayer::loop()
 #endif
 
     requestState();
+    clearOutdatedTxFrame();
     processTxQueue();
     checkConnected();
 }
@@ -1013,6 +1045,21 @@ uint32_t TpUartDataLinkLayer::getRxIgnoredFrameCounter()
 uint32_t TpUartDataLinkLayer::getRxUnknownControlCounter()
 {
     return _rxUnkownControlCounter;
+}
+
+/*
+ * Liefert die Anzahl der zusendenden Frames
+ */
+uint32_t TpUartDataLinkLayer::getTxFrameCounter()
+{
+    return _txFrameCounter;
+}
+/*
+ * Liefert die Anzahl der versendeten Frames
+ */
+uint32_t TpUartDataLinkLayer::getTxProcessedFrameCounter()
+{
+    return _txProcessdFrameCounter;
 }
 
 bool TpUartDataLinkLayer::isConnected()
