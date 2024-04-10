@@ -109,6 +109,8 @@
 #define ACR0_FLAG_TRIGEN 0x08
 #define ACR0_FLAG_V20VCLIMIT 0x04
 
+#define MAX_TX_QUEUE 20
+
 enum
 {
     TX_IDLE,
@@ -193,7 +195,6 @@ void TpUartDataLinkLayer::processRxByte()
      */
     if (_rxState == RX_INVALID && (millis() - _rxLastTime) > 2 && !_platform.uartAvailable())
     {
-        println("Reset RX_INVALID");
         processRxFrameComplete();
         _rxState = RX_IDLE;
     }
@@ -564,11 +565,6 @@ void TpUartDataLinkLayer::pushTxFrameQueue(TpFrame *tpFrame)
         _txFrameQueue.back = entry;
     }
 
-    if (_txQueueCount > 10)
-    {
-        print("_txQueueCount:");
-        print(_txQueueCount);
-    }
     _txQueueCount++;
     _txFrameCounter++;
 }
@@ -586,8 +582,12 @@ void TpUartDataLinkLayer::setFrameRepetition(uint8_t nack, uint8_t busy)
 
 bool TpUartDataLinkLayer::sendFrame(CemiFrame &cemiFrame)
 {
-    if (!_connected || _monitoring)
+    if (!_connected || _monitoring || _txQueueCount > MAX_TX_QUEUE)
     {
+        if (_txQueueCount > MAX_TX_QUEUE)
+        {
+            println("Ignore frame because transmit queue is full!");
+        }
         dataConReceived(cemiFrame, false);
         return false;
     }
