@@ -109,8 +109,6 @@
 #define ACR0_FLAG_TRIGEN 0x08
 #define ACR0_FLAG_V20VCLIMIT 0x04
 
-#define MAX_TX_QUEUE 20
-
 enum
 {
     TX_IDLE,

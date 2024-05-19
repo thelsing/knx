@@ -8,8 +8,13 @@
 #include <stdint.h>
 
 #define MAX_KNX_TELEGRAM_SIZE 263
+
 #ifndef MAX_RX_QUEUE_BYTES
 #define MAX_RX_QUEUE_BYTES MAX_KNX_TELEGRAM_SIZE + 50
+#endif
+
+#ifndef MAX_TX_QUEUE
+#define MAX_TX_QUEUE 50
 #endif
 
 // __time_critical_func fallback
