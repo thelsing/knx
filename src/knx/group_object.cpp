@@ -311,3 +311,13 @@ bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
         return dataChanged;
     }
 }
+
+bool GroupObject::valueCompare(const KNXValue& value, const Dpt& type)
+{
+    if (valueNoSendCompare(value, type))
+    {
+         objectWritten();
+         return true;
+    }
+    return false;
+}
