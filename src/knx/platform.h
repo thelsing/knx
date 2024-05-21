@@ -62,6 +62,8 @@ class Platform
     virtual size_t writeUart(const uint8_t* buffer, size_t size);
     virtual int readUart();
     virtual size_t readBytesUart(uint8_t* buffer, size_t length);
+    virtual bool overflowUart();
+    virtual void flushUart();
 
     // SPI
     virtual void setupSpi();

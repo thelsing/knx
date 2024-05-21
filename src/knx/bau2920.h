@@ -22,6 +22,8 @@ class Bau2920 : public BauSystemBCoupler
     bool enabled() override;
     void enabled(bool value) override;
 
+    TpUartDataLinkLayer* getPrimaryDataLinkLayer();
+    RfDataLinkLayer* getSecondaryDataLinkLayer();
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);

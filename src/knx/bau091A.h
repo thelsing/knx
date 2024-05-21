@@ -18,6 +18,8 @@ class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks, public DataLi
     bool enabled() override;
     void enabled(bool value) override;
 
+    IpDataLinkLayer* getPrimaryDataLinkLayer();
+    TpUartDataLinkLayer* getSecondaryDataLinkLayer();
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);

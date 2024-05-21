@@ -58,6 +58,22 @@
 
 #endif
 
+#if USE_KNX_DMA_UART == 1
+#define KNX_DMA_UART uart1
+#define KNX_DMA_UART_IRQ UART1_IRQ
+#define KNX_DMA_UART_DREQ DREQ_UART1_RX
+#else
+#define KNX_DMA_UART uart0
+#define KNX_DMA_UART_IRQ UART0_IRQ
+#define KNX_DMA_UART_DREQ DREQ_UART0_RX
+#endif
+
+#if USE_KNX_DMA_IRQ == 1
+#define KNX_DMA_IRQ DMA_IRQ_1
+#else
+#define KNX_DMA_IRQ DMA_IRQ_0
+#endif
+
 
 class RP2040ArduinoPlatform : public ArduinoPlatform
 {
@@ -67,7 +83,20 @@ public:
 
     // uart
     void knxUartPins(pin_size_t rxPin, pin_size_t txPin);
-    void setupUart();
+    void setupUart() override;
+    bool overflowUart() override;
+    #ifdef USE_KNX_DMA_UART
+    int uartAvailable() override;
+    void closeUart() override;
+    void knxUart( HardwareSerial* serial) override {};
+    HardwareSerial* knxUart() override { return nullptr; };
+    size_t writeUart(const uint8_t data) override;
+    size_t writeUart(const uint8_t* buffer, size_t size) override { return 0; };
+    int readUart() override;
+    size_t readBytesUart(uint8_t* buffer, size_t length) override { return 0; };
+    void flushUart() override {};
+    #endif
+   
 
     // unique serial number
     uint32_t uniqueSerialNumber() override; 

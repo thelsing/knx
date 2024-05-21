@@ -15,7 +15,8 @@ class Bau57B0 : public BauSystemBDevice, public DataLinkLayerCallbacks
     void loop() override;
     bool enabled() override;
     void enabled(bool value) override;
-
+    
+    IpDataLinkLayer* getDataLinkLayer();
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
     InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);

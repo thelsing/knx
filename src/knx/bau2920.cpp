@@ -154,4 +154,11 @@ void Bau2920::loop()
     BauSystemBCoupler::loop();
 }
 
+TpUartDataLinkLayer* Bau2920::getPrimaryDataLinkLayer() {
+    return (TpUartDataLinkLayer*)&_dlLayerPrimary;
+}
+
+RfDataLinkLayer* Bau2920::getSecondaryDataLinkLayer() {
+    return (RfDataLinkLayer*)&_dlLayerSecondary;
+}
 #endif
