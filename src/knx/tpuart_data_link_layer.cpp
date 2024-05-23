@@ -564,7 +564,6 @@ void TpUartDataLinkLayer::pushTxFrameQueue(TpFrame *tpFrame)
     }
 
     _txQueueCount++;
-    _txFrameCounter++;
 }
 
 void TpUartDataLinkLayer::setRepetitions(uint8_t nack, uint8_t busy)
@@ -580,12 +579,15 @@ void TpUartDataLinkLayer::setFrameRepetition(uint8_t nack, uint8_t busy)
 
 bool TpUartDataLinkLayer::sendFrame(CemiFrame &cemiFrame)
 {
+    _txFrameCounter++;
+
     if (!_connected || _monitoring || _txQueueCount > MAX_TX_QUEUE)
     {
         if (_txQueueCount > MAX_TX_QUEUE)
         {
             println("Ignore frame because transmit queue is full!");
         }
+
         dataConReceived(cemiFrame, false);
         return false;
     }
@@ -692,6 +694,17 @@ void TpUartDataLinkLayer::connected(bool state /* = true */)
     _connected = state;
 }
 
+void TpUartDataLinkLayer::resetStats()
+{
+    _rxProcessdFrameCounter = 0;
+    _rxIgnoredFrameCounter = 0;
+    _rxInvalidFrameCounter = 0;
+    _rxInvalidFrameCounter = 0;
+    _rxUnkownControlCounter = 0;
+    _txFrameCounter = 0;
+    _txProcessdFrameCounter = 0;
+}
+
 bool TpUartDataLinkLayer::reset()
 {
     // println("Reset TP");
@@ -705,11 +718,7 @@ bool TpUartDataLinkLayer::reset()
     isrLock(true);
 
     // Reset
-    _rxIgnoredFrameCounter = 0;
-    _rxInvalidFrameCounter = 0;
-    _rxInvalidFrameCounter = 0;
-    _rxUnkownControlCounter = 0;
-
+    resetStats();
     clearTxFrame();
     clearTxFrameQueue();
 
@@ -792,6 +801,7 @@ void TpUartDataLinkLayer::monitor()
     // println("busmonitor");
     _monitoring = true;
     _platform.writeUart(U_BUSMON_REQ);
+    resetStats();
 }
 
 void TpUartDataLinkLayer::enabled(bool value)
