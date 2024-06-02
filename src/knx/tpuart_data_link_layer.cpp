@@ -477,8 +477,8 @@ void TpUartDataLinkLayer::processRxFrameComplete()
         // Wenn ein Frame gesendet wurde
         if (_txState == TX_FRAME)
         {
-            // prüfe ob das Empfangen diesem entspricht
-            if (!memcmp(_rxFrame->data(), _txFrame->data(), _txFrame->size()))
+            // prüfe ob das Empfangen diesem entspricht: Vergleich der Quelladresse und Zieladresse sowie Startbyte ohne Berücksichtigung des Retry-Bits
+            if(!((_rxFrame->data(0) ^ _txFrame->data(0)) & ~0x20) && _rxFrame->destination() == _txFrame->destination() && _rxFrame->source() == _txFrame->source())
             {
                 // und markiere das entsprechend
                 // println("MATCH");
