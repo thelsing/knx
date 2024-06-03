@@ -517,11 +517,10 @@ int RP2040ArduinoPlatform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen)
 
     if (len > maxLen)
     {
-        print("udp buffer to small. was ");
-        print(maxLen);
-        print(", needed ");
-        println(len);
-        fatalError();
+        println("Unexpected UDP data packet length - drop packet");
+        for (size_t i = 0; i < len; i++)
+            _udp.read();
+        return 0;
     }
 
     _udp.read(buffer, len);
