@@ -173,9 +173,11 @@ bool DataLinkLayer::sendTelegram(NPDU & npdu, AckType ack, uint16_t destinationA
     // We can just copy the pointer for rfSerialOrDoA as sendFrame() sets
     // a pointer to const uint8_t data in either device object (serial) or
     // RF medium object (domain address)
+#ifdef USE_RF
     tmpFrame.rfSerialOrDoA(frame.rfSerialOrDoA()); 
     tmpFrame.rfInfo(frame.rfInfo());
     tmpFrame.rfLfn(frame.rfLfn());
+#endif
     tmpFrame.confirm(ConfirmNoError);
     _cemiServer->dataIndicationToTunnel(tmpFrame);
 #endif

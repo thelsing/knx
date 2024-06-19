@@ -56,6 +56,7 @@ void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
 
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 {
+#ifdef USE_RF
     bool isRf = _dataLinkLayer->mediumType() == DptMedium::KNX_RF;
     uint8_t data[frame.dataLength() + (isRf ? 10 : 0)];
 
@@ -74,6 +75,10 @@ void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
     {
         memcpy(&data[0], frame.data(), frame.dataLength());
     }
+#else
+    uint8_t data[frame.dataLength()];
+    memcpy(&data[0], frame.data(), frame.dataLength());
+#endif
 
     CemiFrame tmpFrame(data, sizeof(data));
 
@@ -102,7 +107,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
             {
                 frame.sourceAddress(_clientAddress);
             }
-
+#ifdef USE_RF
             if (isRf)
             {
                 // Check if we have additional info for RF
@@ -133,7 +138,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
                     _frameNumber = (_frameNumber + 1) & 0x7;
                 }
             }
-
+#endif
             print("L_data_req: src: ");
             print(frame.sourceAddress(), HEX);
             print(" dst: ");
