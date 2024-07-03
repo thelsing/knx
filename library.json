@@ -1,0 +1,23 @@
+{
+    "name": "knx",
+    "version": "2.1.0",
+    "dependencies": {
+    },
+    "description": "knx stack",
+    "homepage": "https://openknx.de",
+    "authors": [
+        {
+            "name": "Thomas Kunze"
+        },
+        {
+            "name": "OpenKNX",
+            "email": "info@openknx.de",
+            "url": "https://openknx.de",
+            "maintainer": true
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/OpenKNX/knx"
+    }
+}
