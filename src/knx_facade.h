@@ -286,10 +286,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
             pinMode(ledPin(), OUTPUT);
 
         progLedOff();
-        pinMode(buttonPin(), INPUT_PULLUP);
-
+        
         if (_progButtonISRFuncPtr && _buttonPin >= 0)
         {
+            pinMode(buttonPin(), INPUT_PULLUP);
             // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
             #if (ARDUINO_API_VERSION >= 10200)
                 attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
