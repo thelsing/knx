@@ -18,9 +18,8 @@ EEPROM Emulation from arduino-pico core (max 4k) can be use by defining USE_RP20
 A RAM-buffered Flash can be use by defining USE_RP2040_LARGE_EEPROM_EMULATION
 
 For usage of KNX-IP you have to define either
-- KNX_IP_W5500 (use the arduino-pico core's w5500 lwip stack)
+- KNX_IP_LAN (use the arduino-pico core's w5500 lwip stack)
 - KNX_IP_WIFI (use the arduino-pico core's PiPicoW lwip stack)
-- KNX_IP_GENERIC (use the Ethernet_Generic stack)
 
 ----------------------------------------------------*/
 
@@ -106,7 +105,7 @@ void __time_critical_func(uartDmaRestart)()
 #endif
 #endif
 
-#ifdef KNX_IP_W5500
+#ifdef KNX_IP_LAN
 extern Wiznet5500lwIP KNX_NETIF;
 #elif defined(KNX_IP_WIFI)
 #elif defined(KNX_IP_GENERIC)
@@ -462,13 +461,11 @@ uint32_t RP2040ArduinoPlatform::currentDefaultGateway()
 }
 void RP2040ArduinoPlatform::macAddress(uint8_t* addr)
 {
-#if defined(KNX_IP_W5500)
+#if defined(KNX_IP_LAN)
     addr = KNX_NETIF.getNetIf()->hwaddr;
-#elif defined(KNX_IP_WIFI)
+#else
     uint8_t macaddr[6] = {0, 0, 0, 0, 0, 0};
     addr = KNX_NETIF.macAddress(macaddr);
-#elif defined(KNX_IP_GENERIC)
-    KNX_NETIF.MACAddress(addr);
 #endif
 }
 
