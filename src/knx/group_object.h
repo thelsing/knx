@@ -58,10 +58,6 @@ class GroupObject
      */
     GroupObject();
     /**
-     * The copy constructor.
-     */
-    GroupObject(const GroupObject& other);
-    /**
      * The destructor.
      */
     virtual ~GroupObject();
@@ -139,6 +135,11 @@ class GroupObject
      * will return 0.
      */
     size_t sizeInTelegram();
+    /**
+     * returns the size of the group object in the heap memory of the group object. The function returns the same value as goSize(), 
+     * exept fot the 14 byte string type to reserve one byte of a \0 terminator character.
+     */
+    size_t sizeInMemory() const;
     /**
      * returns the pointer to the value of the group object. This can be used if a datapoint type is not supported or if you want do 
      * your own conversion.
@@ -274,7 +275,7 @@ class GroupObject
     static GroupObjectUpdatedHandler _updateHandlerStatic;
 #endif
 
-    size_t asapValueSize(uint8_t code);
+    size_t asapValueSize(uint8_t code) const;
     size_t goSize();
     uint16_t _asap = 0;
     ComFlagEx _commFlagEx;

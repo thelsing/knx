@@ -20,18 +20,6 @@ GroupObject::GroupObject()
 #endif
 }
 
-GroupObject::GroupObject(const GroupObject& other)
-{
-    _data = new uint8_t[other._dataLength];
-    _commFlagEx = other._commFlagEx;
-    _dataLength = other._dataLength;
-    _asap = other._asap;
-#ifndef SMALL_GROUPOBJECT
-    _updateHandler = other._updateHandler;
-#endif
-    memcpy(_data, other._data, _dataLength);
-}
-
 GroupObject::~GroupObject()
 {
     if (_data)
@@ -114,12 +102,12 @@ size_t GroupObject::goSize()
     size_t size = sizeInTelegram();
     if (size == 0)
         return 1;
-
+ 
     return size;
 }
 
 // see knxspec 3.5.1 p. 178
-size_t GroupObject::asapValueSize(uint8_t code)
+size_t GroupObject::asapValueSize(uint8_t code) const
 {
     if (code < 7)
         return 0;
@@ -192,6 +180,17 @@ size_t GroupObject::sizeInTelegram()
 {
     uint8_t code = lowByte(ntohs(_table->_tableData[_asap]));
     return asapValueSize(code);
+}
+
+size_t GroupObject::sizeInMemory() const
+{
+    uint8_t code = lowByte(ntohs(_table->_tableData[_asap]));
+    size_t result = asapValueSize(code);
+    if (code == 0)
+        return 1;
+    if (code == 14)
+        return 14 + 1;
+    return result;
 }
 
 #ifdef SMALL_GROUPOBJECT
