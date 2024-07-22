@@ -9,13 +9,11 @@
 using namespace std;
 
 Bau57B0::Bau57B0(Platform& platform)
-    : BauSystemBDevice(platform),
+    : BauSystemBDevice(platform), DataLinkLayerCallbacks(),
       _ipParameters(_deviceObj, platform),
-      _dlLayer(_deviceObj, _ipParameters, _netLayer.getInterface(), _platform, (DataLinkLayerCallbacks*) this),
-      DataLinkLayerCallbacks()
+      _dlLayer(_deviceObj, _ipParameters, _netLayer.getInterface(), _platform, (DataLinkLayerCallbacks*) this)
 #ifdef USE_CEMI_SERVER
-      ,
-      _cemiServer(*this)
+      , _cemiServer(*this)
 #endif
 {
     _netLayer.getInterface().dataLinkLayer(_dlLayer);
