@@ -119,7 +119,7 @@ public:
     void setupMultiCast(uint32_t addr, uint16_t port) override;
     void closeMultiCast() override;
     bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
-    int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
+    int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen, uint32_t& src_addr, uint16_t& src_port) override;
 
     // unicast
     bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
@@ -131,6 +131,9 @@ public:
     #endif
     protected: pin_size_t _rxPin = UART_PIN_NOT_DEFINED; 
     protected: pin_size_t _txPin = UART_PIN_NOT_DEFINED;
+
+    protected: IPAddress _remoteIP = 0;
+    protected: uint16_t _remotePort = 0;
 };
 
 #endif

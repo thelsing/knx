@@ -17,15 +17,16 @@ class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks, public DataLi
     void loop() override;
     bool enabled() override;
     void enabled(bool value) override;
+    bool configured() override;
 
     IpDataLinkLayer* getPrimaryDataLinkLayer();
     TpUartDataLinkLayer* getSecondaryDataLinkLayer();
   protected:
     InterfaceObject* getInterfaceObject(uint8_t idx);
-    InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance);
+    InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
 
     // For TP1 only
-    bool isAckRequired(uint16_t address, bool isGrpAddr) override;
+    TPAckType isAckRequired(uint16_t address, bool isGrpAddr) override;
 
     void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
   private:

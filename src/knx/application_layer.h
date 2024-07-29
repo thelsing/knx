@@ -125,9 +125,16 @@ class ApplicationLayer
     void propertyDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
                                          uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex, bool writeEnable, uint8_t type,
                                          uint16_t maxNumberOfElements, uint8_t access);
+    void propertyExtDescriptionReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
+                                         uint16_t objectType, uint16_t objectInstance, uint16_t propertyId, uint16_t propertyIndex, uint8_t descriptionType, bool writeEnable, uint8_t type,
+                                         uint16_t maxNumberOfElements, uint8_t access);
     void memoryReadRequest(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
                            uint16_t memoryAddress);
     void memoryReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
+                            uint16_t memoryAddress, uint8_t* data);
+    void memoryRouterReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
+                            uint16_t memoryAddress, uint8_t* data);
+    void memoryRoutingTableReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
                             uint16_t memoryAddress, uint8_t* data);
     void memoryExtReadResponse(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ReturnCodes code, uint8_t number,
                             uint32_t memoryAddress, uint8_t* data);
@@ -195,6 +202,12 @@ class ApplicationLayer
                              uint16_t objectType, uint8_t objectInstance, uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length);
     void memorySend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
                     uint16_t memoryAddress, uint8_t* memoryData);
+    // Added EC
+    void memoryRouterSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
+                    uint16_t memoryAddress, uint8_t* memoryData);
+    void memoryRoutingTableSend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
+                                uint16_t memoryAddress, uint8_t* memoryData);
+    //
     void userMemorySend(ApduType type, AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
                         uint8_t number, uint32_t memoryAddress, uint8_t* memoryData);
     void groupValueSend(ApduType type, AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint8_t* data, uint8_t& dataLength);

@@ -34,6 +34,11 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
                 io->_deviceObject.individualAddress(getWord(data));
                 return 1; 
             }),
+#ifdef KNX_TUNNELING
+        new DataProperty(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES, true, PDT_UNSIGNED_INT, KNX_TUNNELING, ReadLv3 | WriteLv3),
+        new DataProperty(PID_CUSTOM_RESERVED_TUNNELS_CTRL, true, PDT_UNSIGNED_CHAR, KNX_TUNNELING, ReadLv3 | WriteLv3), // custom propertiy to control the stacks behaviour for reserverd tunnels, not in Spec (PID >= 200)
+        new DataProperty(PID_CUSTOM_RESERVED_TUNNELS_IP, true, PDT_UNSIGNED_LONG, KNX_TUNNELING, ReadLv3 | WriteLv3), // custom propertiy to control the stacks behaviour for reserverd tunnels, not in Spec (PID >= 200)
+#endif
         new DataProperty(PID_CURRENT_IP_ASSIGNMENT_METHOD, false, PDT_UNSIGNED_CHAR, 0, ReadLv3 | WriteLv3),
         new DataProperty(PID_IP_ASSIGNMENT_METHOD, true, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv3),
         new DataProperty(PID_IP_CAPABILITIES, true, PDT_BITSET8, 0, ReadLv3 | WriteLv1),    // must be set by application due to capabilities of the used ip stack

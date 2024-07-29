@@ -14,8 +14,8 @@ Bau2920::Bau2920(Platform& platform)
       _rtObjPrimary(memory()),
       _rtObjSecondary(memory()),
       _rfMediumObject(),
-      _dlLayerPrimary(_deviceObj, _netLayer.getPrimaryInterface(), _platform, (ITpUartCallBacks&) *this),
-      _dlLayerSecondary(_deviceObj, _rfMediumObject, _netLayer.getSecondaryInterface(), platform)
+      _dlLayerPrimary(_deviceObj, _netLayer.getPrimaryInterface(), _platform, *this, (ITpUartCallBacks&) *this),
+      _dlLayerSecondary(_deviceObj, _rfMediumObject, _netLayer.getSecondaryInterface(), platform, *this)
 #ifdef USE_CEMI_SERVER
       ,
       _cemiServer(*this)
@@ -97,7 +97,7 @@ InterfaceObject* Bau2920::getInterfaceObject(uint8_t idx)
     }
 }
 
-InterfaceObject* Bau2920::getInterfaceObject(ObjectType objectType, uint8_t objectInstance)
+InterfaceObject* Bau2920::getInterfaceObject(ObjectType objectType, uint16_t objectInstance)
 {
     // We do not use it right now. 
     // Required for coupler mode as there are multiple router objects for example

@@ -51,7 +51,7 @@ class BauSystemB : protected BusAccessUnit
   protected:
     virtual ApplicationLayer& applicationLayer() = 0;
     virtual InterfaceObject* getInterfaceObject(uint8_t idx) = 0;
-    virtual InterfaceObject* getInterfaceObject(ObjectType objectType, uint8_t objectInstance) = 0;
+    virtual InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance) = 0;
 
     void memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                uint16_t memoryAddress, uint8_t* data) override;
@@ -59,6 +59,15 @@ class BauSystemB : protected BusAccessUnit
                               uint16_t memoryAddress) override;
     void memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                               uint16_t memoryAddress, uint8_t * data);
+    void memoryRouterWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                              uint16_t memoryAddress, uint8_t *data);
+    void memoryRouterReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                    uint16_t memoryAddress, uint8_t *data);
+    void memoryRoutingTableWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                              uint16_t memoryAddress, uint8_t *data);
+    void memoryRoutingTableReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress, uint8_t *data);
+    void memoryRoutingTableReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress);
+    //
     void memoryExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
                                   uint32_t memoryAddress, uint8_t* data) override;
     void memoryExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
@@ -71,6 +80,8 @@ class BauSystemB : protected BusAccessUnit
                                    uint32_t memoryAddress, uint8_t* memoryData) override;
     void propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                            uint8_t propertyId, uint8_t propertyIndex) override;
+    void propertyExtDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl,
+                                                   uint16_t objectType, uint16_t objectInstance, uint16_t propertyId, uint8_t descriptionType, uint16_t propertyIndex) override;
     void propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
                                       uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length) override;
     void propertyValueExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, ObjectType objectType, uint8_t objectInstance,

@@ -11,7 +11,7 @@ using namespace std;
 Bau57B0::Bau57B0(Platform& platform)
     : BauSystemBDevice(platform),
       _ipParameters(_deviceObj, platform),
-      _dlLayer(_deviceObj, _ipParameters, _netLayer.getInterface(), _platform, (DataLinkLayerCallbacks*) this),
+      _dlLayer(_deviceObj, _ipParameters, _netLayer.getInterface(), _platform, *this, (DataLinkLayerCallbacks*) this),
       DataLinkLayerCallbacks()
 #ifdef USE_CEMI_SERVER
       ,
@@ -85,7 +85,7 @@ InterfaceObject* Bau57B0::getInterfaceObject(uint8_t idx)
     }
 }
 
-InterfaceObject* Bau57B0::getInterfaceObject(ObjectType objectType, uint8_t objectInstance)
+InterfaceObject* Bau57B0::getInterfaceObject(ObjectType objectType, uint16_t objectInstance)
 {
     // We do not use it right now. 
     // Required for coupler mode as there are multiple router objects for example

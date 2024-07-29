@@ -189,22 +189,6 @@ template <class P, class B> class KnxFacade : private SaveRestore
     {
         _progLedOnCallback = progLedOnCallback;
     }
-
-#ifdef KNX_ACTIVITYCALLBACK
-    /// @brief sets the Callback Function indicating sent or received telegrams
-    /// @param activityCallback 
-    /// @details the info parameter 
-    void setActivityCallback(ActivityCallback activityCallback)
-    {
-        _activityCallback = activityCallback;
-    }
-
-    void Activity(uint8_t info)
-    {
-        if(_activityCallback)
-            _activityCallback(info);
-    }
-#endif
   
     int32_t buttonPin()
     {

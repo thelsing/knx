@@ -52,7 +52,7 @@
 // cEMI options
 //#define USE_USB
 //#define USE_CEMI_SERVER
-#ifdef USE_USB
+#if defined(USE_USB) || defined(KNX_TUNNELING)
 #define USE_CEMI_SERVER
 #endif
 

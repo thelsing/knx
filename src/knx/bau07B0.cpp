@@ -10,7 +10,7 @@ using namespace std;
 
 Bau07B0::Bau07B0(Platform& platform)
     : BauSystemBDevice(platform),
-      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&) *this, (DataLinkLayerCallbacks*) this),
+      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, *this, (ITpUartCallBacks&) *this, (DataLinkLayerCallbacks*) this),
       DataLinkLayerCallbacks()
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
@@ -78,7 +78,7 @@ InterfaceObject* Bau07B0::getInterfaceObject(uint8_t idx)
     }
 }
 
-InterfaceObject* Bau07B0::getInterfaceObject(ObjectType objectType, uint8_t objectInstance)
+InterfaceObject* Bau07B0::getInterfaceObject(ObjectType objectType, uint16_t objectInstance)
 {
     // We do not use it right now. 
     // Required for coupler mode as there are multiple router objects for example
@@ -128,27 +128,30 @@ void Bau07B0::loop()
 #endif    
 }
 
-bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
+TPAckType Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
 {
     if (isGrpAddr)
     {
         // ACK for broadcasts
         if (address == 0)
-            return true;
+            return TPAckType::AckReqAck;
         // is group address in group address table? ACK if yes.
-        return _addrTable.contains(address);
+        if(_addrTable.contains(address))
+            return TPAckType::AckReqAck;
+        else
+            return TPAckType::AckReqNone;
     }
 
     // Also ACK for our own individual address
     if (address  == _deviceObj.individualAddress())
-        return true;
+        return TPAckType::AckReqAck;
 
     if (address == 0)
     {
         println("Invalid broadcast detected: destination address is 0, but address type is \"individual\"");
     }
 
-    return false;
+    return TPAckType::AckReqNone;
 }
 
 TpUartDataLinkLayer* Bau07B0::getDataLinkLayer() {

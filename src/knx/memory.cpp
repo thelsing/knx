@@ -114,7 +114,7 @@ void Memory::readMemory()
         buffer = _tableObjects[i]->restore(buffer);
         uint16_t memorySize = 0;
         buffer = popWord(memorySize, buffer);
-
+        println(memorySize);
         if (memorySize == 0)
             continue;
 
@@ -277,6 +277,11 @@ void Memory::freeMemory(uint8_t* ptr)
 void Memory::writeMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
 {
     _platform.writeNonVolatileMemory(relativeAddress, data, size);
+}
+
+void Memory::readMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
+{
+    _platform.readNonVolatileMemory(relativeAddress, data, size);
 }
 
 

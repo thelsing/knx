@@ -245,7 +245,7 @@ class TpFrame
      */
     uint16_t cemiSize()
     {
-        return fullSize() + (isExtended() ? 2 : 3);
+        return fullSize() + (isExtended() ? 2 : 3) - 1; // -1 without CRC
     }
 
     /**
@@ -262,14 +262,14 @@ class TpFrame
         cemiBuffer[2] = _data[0];
         if (isExtended())
         {
-            memcpy(cemiBuffer + 2, _data, fullSize());
+            memcpy(cemiBuffer + 2, _data, fullSize() - 1); // -1 without CRC
         }
         else
         {
             cemiBuffer[3] = _data[5] & 0xF0;
             memcpy(cemiBuffer + 4, _data + 1, 4);
             cemiBuffer[8] = _data[5] & 0x0F;
-            memcpy(cemiBuffer + 9, _data + 6, cemiBuffer[8] + 2);
+            memcpy(cemiBuffer + 9, _data + 6, cemiBuffer[8] + 2 - 1); // -1 without CRC
         }
 
         return cemiBuffer;

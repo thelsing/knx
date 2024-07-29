@@ -29,7 +29,7 @@ class ITpUartCallBacks
 {
   public:
     virtual ~ITpUartCallBacks() = default;
-    virtual bool isAckRequired(uint16_t address, bool isGrpAddr) = 0;
+    virtual TPAckType isAckRequired(uint16_t address, bool isGrpAddr) = 0;
 };
 
 class TpUartDataLinkLayer : public DataLinkLayer
@@ -39,7 +39,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
 
   public:
     TpUartDataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
-                        Platform& platform, ITpUartCallBacks& cb, DataLinkLayerCallbacks* dllcb = nullptr);
+                        Platform& platform, BusAccessUnit& busAccessUnit, ITpUartCallBacks& cb, DataLinkLayerCallbacks* dllcb = nullptr);
 
     void loop();
     void enabled(bool value);
