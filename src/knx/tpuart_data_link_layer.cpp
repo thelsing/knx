@@ -1206,19 +1206,19 @@ void TpUartDataLinkLayer::processRxQueue()
 void TpUartDataLinkLayer::pushByteToRxQueue(uint8_t byte)
 {
     _rxBuffer[_rxBufferFront] = byte;
-    _rxBufferFront = (_rxBufferFront + 1) % MAX_RX_QUEUE_BYTES;
+    _rxBufferFront = (_rxBufferFront + 1) % (MAX_RX_QUEUE_BYTES);
 }
 
 uint8_t TpUartDataLinkLayer::pullByteFromRxQueue()
 {
     uint8_t byte = _rxBuffer[_rxBufferRear];
-    _rxBufferRear = (_rxBufferRear + 1) % MAX_RX_QUEUE_BYTES;
+    _rxBufferRear = (_rxBufferRear + 1) % (MAX_RX_QUEUE_BYTES);
     return byte;
 }
 
 uint16_t TpUartDataLinkLayer::availableInRxQueue()
 {
-    return ((_rxBufferFront == _rxBufferRear) ? MAX_RX_QUEUE_BYTES : (((MAX_RX_QUEUE_BYTES - _rxBufferFront) + _rxBufferRear) % MAX_RX_QUEUE_BYTES)) - 1;
+    return ((_rxBufferFront == _rxBufferRear) ? (MAX_RX_QUEUE_BYTES) : ((((MAX_RX_QUEUE_BYTES) - _rxBufferFront) + _rxBufferRear) % (MAX_RX_QUEUE_BYTES))) - 1;
 }
 #endif
 
