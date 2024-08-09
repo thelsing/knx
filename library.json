@@ -1,0 +1,16 @@
+{
+    "name": "knx",
+    "version": "1.2.0",
+    "dependencies": {
+    },
+    "description": "knx stack",
+    "authors": [
+        {
+            "name": "Thomas Kunze"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/thelsing/knx"
+    }
+}
