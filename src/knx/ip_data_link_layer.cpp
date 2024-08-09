@@ -768,7 +768,6 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
             }
         
         tun->IndividualAddress = tunPa;
-
     }
 
     if(tun == nullptr)

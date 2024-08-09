@@ -205,7 +205,6 @@ TPAckType Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
         if(_dlLayerPrimary.isSentToTunnel(address, isGrpAddr))
             ack = TPAckType::AckReqAck;
 #endif
-
     }
 
     return ack;

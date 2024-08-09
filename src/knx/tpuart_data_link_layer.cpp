@@ -758,7 +758,6 @@ bool TpUartDataLinkLayer::reset()
             success = true;
             break; // next run for U_CONFIGURE_IND
         }
-
     } while (!((millis() - start) >= 10));
 
     connected(success);
