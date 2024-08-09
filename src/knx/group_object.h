@@ -7,7 +7,7 @@
 
 class GroupObjectTableObject;
 
-enum ComFlag
+enum ComFlag : uint8_t
 {
     Updated = 0,      //!< Group object was updated
     ReadRequest = 1,  //!< Read was requested but was not processed
@@ -16,6 +16,16 @@ enum ComFlag
     Ok = 4,           //!< read or write request were send successfully
     Error = 5,        //!< there was an error on processing a request
     Uninitialized = 6 //!< uninitialized Group Object, its value is not valid
+};
+
+// extended ComFlag: Uninitialized it not handled correctly as ComFlag
+// it might be in state Transmitting during a ReadRequest on startup while value is still not valid
+// we use MSB to store Uninitialized and keep the size of GroupObject the same saving memory ressources
+// the old Uninitialized handling is still there for compatibility reasons.
+struct ComFlagEx
+{
+    bool uninitialized : 1;
+    ComFlag commFlag : 7;
 };
 
 class GroupObject;
@@ -97,6 +107,11 @@ class GroupObject
     void commFlag(ComFlag value);
 
     /**
+     * Check if the group object contains a valid value assigned from bus or from application program
+     */
+    bool initialized();
+
+    /**
     * Request the read of a communication object. Calling this function triggers the
     * sending of a read-group-value telegram, to read the value of the communication
     * object from the bus.
@@ -158,6 +173,19 @@ class GroupObject
      * The parameters must fit the group object. Otherwise it will stay unchanged.
      */
     void value(const KNXValue& value, const Dpt& type);
+    
+    /**
+     * Check if the value (after conversion to dpt) will differ from current value of the group object and changes the state of the group object to ::WriteRequest if different.
+     * Use this method only, when the value should not be sent if it was not changed, otherwise value(const KNXValue&, const Dpt&) will do the same (without overhead for comparing)
+     * @param value the value the group object is set to
+     * @param type the datapoint type used for the conversion.
+     * 
+     * The parameters must fit the group object. Otherwise it will stay unchanged.
+     * 
+     * @returns true if the value of the group object has changed
+     */
+    bool valueCompare(const KNXValue& value, const Dpt& type);
+
     /**
      * set the current value of the group object.
      * @param value the value the group object is set to
@@ -249,7 +277,7 @@ class GroupObject
     size_t asapValueSize(uint8_t code);
     size_t goSize();
     uint16_t _asap = 0;
-    ComFlag _commFlag = Uninitialized;
+    ComFlagEx _commFlagEx;
     uint8_t* _data = 0;
     uint8_t _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT

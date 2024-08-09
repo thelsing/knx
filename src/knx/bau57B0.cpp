@@ -143,4 +143,7 @@ void Bau57B0::loop()
 #endif
 }
 
+IpDataLinkLayer* Bau57B0::getDataLinkLayer() {
+    return (IpDataLinkLayer*)&_dlLayer;
+}
 #endif

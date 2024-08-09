@@ -103,6 +103,11 @@ size_t ArduinoPlatform::readBytesUart(uint8_t *buffer, size_t length)
     return length;
 }
 
+void ArduinoPlatform::flushUart()
+{
+    return _knxSerial->flush();
+}
+
 #ifndef KNX_NO_SPI
 void ArduinoPlatform::setupSpi()
 {

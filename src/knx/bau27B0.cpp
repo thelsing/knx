@@ -181,5 +181,7 @@ void Bau27B0::domainAddressSerialNumberReadLocalConfirm(Priority priority, HopCo
 {
 }
 
-
+RfDataLinkLayer* Bau27B0::getDataLinkLayer() {
+    return (RfDataLinkLayer*)&_dlLayer;
+}
 #endif // #ifdef USE_RF
