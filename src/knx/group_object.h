@@ -7,12 +7,6 @@
 
 class GroupObjectTableObject;
 
-/**
- * LIMITATION: The differentiation between uninitialized and initialized state can NOT be represented correctly in ComFlag alone:
- * It might be in state Transmitting during a ReadRequest on startup while value is still not valid.
- *
- * See ComFlagEx for a clear uninitialized handling.
- */
 enum ComFlag : uint8_t
 {
     Updated = 0,      //!< Group object was updated
@@ -21,17 +15,13 @@ enum ComFlag : uint8_t
     Transmitting = 3, //!< Group Object is processed a the moment (read or write)
     Ok = 4,           //!< read or write request were send successfully
     Error = 5,        //!< there was an error on processing a request
-    Uninitialized = 6 //!< uninitialized Group Object, its value is not valid; WARNING: Other Values do NOT guarantee an actual valid value!
+    Uninitialized = 6 //!< uninitialized Group Object, its value is not valid
 };
 
-/**
- * Extended ComFlag
- * Add a separate uninitialized flag to overcome the limitations of ComFlag.
- *
- * Implementation Note:
- * We use MSB to store uninitialized state and keep the size of GroupObject the same saving memory resources.
- * The old uninitialized handling is not changed for compatibility reasons.
- */
+// extended ComFlag: Uninitialized it not handled correctly as ComFlag
+// it might be in state Transmitting during a ReadRequest on startup while value is still not valid
+// we use MSB to store Uninitialized and keep the size of GroupObject the same saving memory ressources
+// the old Uninitialized handling is still there for compatibility reasons.
 struct ComFlagEx
 {
     bool uninitialized : 1;
@@ -67,10 +57,6 @@ class GroupObject
      * The constructor.
      */
     GroupObject();
-    /**
-     * The copy constructor.
-     */
-    GroupObject(const GroupObject& other);
     /**
      * The destructor.
      */
@@ -150,6 +136,11 @@ class GroupObject
      */
     size_t sizeInTelegram();
     /**
+     * returns the size of the group object in the heap memory of the group object. The function returns the same value as goSize(), 
+     * exept fot the 14 byte string type to reserve one byte of a \0 terminator character.
+     */
+    size_t sizeInMemory() const;
+    /**
      * returns the pointer to the value of the group object. This can be used if a datapoint type is not supported or if you want do 
      * your own conversion.
      */
@@ -183,6 +174,19 @@ class GroupObject
      * The parameters must fit the group object. Otherwise it will stay unchanged.
      */
     void value(const KNXValue& value, const Dpt& type);
+    
+    /**
+     * Check if the value (after conversion to dpt) will differ from current value of the group object and changes the state of the group object to ::WriteRequest if different.
+     * Use this method only, when the value should not be sent if it was not changed, otherwise value(const KNXValue&, const Dpt&) will do the same (without overhead for comparing)
+     * @param value the value the group object is set to
+     * @param type the datapoint type used for the conversion.
+     * 
+     * The parameters must fit the group object. Otherwise it will stay unchanged.
+     * 
+     * @returns true if the value of the group object has changed
+     */
+    bool valueCompare(const KNXValue& value, const Dpt& type);
+
     /**
      * set the current value of the group object.
      * @param value the value the group object is set to
@@ -271,7 +275,7 @@ class GroupObject
     static GroupObjectUpdatedHandler _updateHandlerStatic;
 #endif
 
-    size_t asapValueSize(uint8_t code);
+    size_t asapValueSize(uint8_t code) const;
     size_t goSize();
     uint16_t _asap = 0;
     ComFlagEx _commFlagEx;

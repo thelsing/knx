@@ -7,6 +7,7 @@
 #include "knx_types.h"
 #include "network_layer_entity.h"
 #include "cemi_server.h"
+#include "bau.h"
 
 class Platform;
 
@@ -26,12 +27,18 @@ class DataLinkLayer
 {
   public:
     DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
-                  Platform& platform);
+                  Platform& platform, BusAccessUnit& busAccessUnit);
 
 #ifdef USE_CEMI_SERVER
     // from tunnel
     void cemiServer(CemiServer& cemiServer);
     void dataRequestFromTunnel(CemiFrame& frame);
+#ifdef KNX_TUNNELING
+    virtual void dataRequestToTunnel(CemiFrame& frame);
+    virtual void dataConfirmationToTunnel(CemiFrame& frame);
+    virtual void dataIndicationToTunnel(CemiFrame& frame);
+    virtual bool isTunnelAddress(uint16_t addr);
+#endif
 #endif
 
     // from network layer
@@ -46,16 +53,21 @@ class DataLinkLayer
   protected:
     void frameReceived(CemiFrame& frame);
     void dataConReceived(CemiFrame& frame, bool success);
-    bool sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAddr, AddressType addrType, uint16_t sourceAddr, FrameFormat format, Priority priority, SystemBroadcast systemBroadcast);
+    bool sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAddr, AddressType addrType, uint16_t sourceAddr, FrameFormat format, Priority priority, SystemBroadcast systemBroadcast, bool doNotRepeat = false);
     virtual bool sendFrame(CemiFrame& frame) = 0;
     uint8_t* frameData(CemiFrame& frame);
     DeviceObject& _deviceObject;
     NetworkLayerEntity& _networkLayerEntity;
     Platform& _platform;
+    BusAccessUnit& _bau;
 #ifdef USE_CEMI_SERVER
     CemiServer* _cemiServer;
 #endif
 #ifdef KNX_ACTIVITYCALLBACK
     uint8_t _netIndex = 0;
+#endif
+#ifdef KNX_TUNNELING
+    bool isTunnelingPA(uint16_t pa);
+    bool isRoutedPA(uint16_t pa);
 #endif
 };

@@ -50,6 +50,7 @@ class Platform
     virtual void closeMultiCast();
     virtual bool sendBytesMultiCast(uint8_t* buffer, uint16_t len);
     virtual int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen);
+    virtual int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen, uint32_t& src_addr, uint16_t& src_port);
 
     //unicast socket
     virtual bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len);
@@ -62,6 +63,8 @@ class Platform
     virtual size_t writeUart(const uint8_t* buffer, size_t size);
     virtual int readUart();
     virtual size_t readBytesUart(uint8_t* buffer, size_t length);
+    virtual bool overflowUart();
+    virtual void flushUart();
 
     // SPI
     virtual void setupSpi();
@@ -83,6 +86,7 @@ class Platform
     virtual void commitNonVolatileMemory();
     // address is relative to start of nonvolatile memory
     virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size);
+    virtual uint32_t readNonVolatileMemory(uint32_t relativeAddress, uint8_t* buffer, size_t size);
     virtual uint32_t writeNonVolatileMemory(uint32_t relativeAddress, uint8_t value, size_t repeat);
 
     NvMemoryType NonVolatileMemoryType();

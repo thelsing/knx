@@ -189,22 +189,6 @@ template <class P, class B> class KnxFacade : private SaveRestore
     {
         _progLedOnCallback = progLedOnCallback;
     }
-
-#ifdef KNX_ACTIVITYCALLBACK
-    /// @brief sets the Callback Function indicating sent or received telegrams
-    /// @param activityCallback 
-    /// @details the info parameter 
-    void setActivityCallback(ActivityCallback activityCallback)
-    {
-        _activityCallback = activityCallback;
-    }
-
-    void Activity(uint8_t info)
-    {
-        if(_activityCallback)
-            _activityCallback(info);
-    }
-#endif
   
     int32_t buttonPin()
     {
@@ -286,10 +270,10 @@ template <class P, class B> class KnxFacade : private SaveRestore
             pinMode(ledPin(), OUTPUT);
 
         progLedOff();
-        pinMode(buttonPin(), INPUT_PULLUP);
-
+        
         if (_progButtonISRFuncPtr && _buttonPin >= 0)
         {
+            pinMode(buttonPin(), INPUT_PULLUP);
             // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
             #if (ARDUINO_API_VERSION >= 10200)
                 attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);

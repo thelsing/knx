@@ -151,7 +151,16 @@ void BusAccessUnit::propertyDescriptionReadLocalConfirm(AckType ack, Priority pr
 {
 }
 
+void BusAccessUnit::propertyExtDescriptionReadLocalConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint16_t objectIndex, uint8_t propertyId, uint16_t propertyIndex, bool status)
+{
+}
+
 void BusAccessUnit::propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex, uint8_t propertyId, uint8_t propertyIndex)
+{
+}
+
+void BusAccessUnit::propertyExtDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl,
+uint16_t objectType, uint16_t objectInstance, uint16_t propertyId, uint8_t descriptionType, uint16_t propertyIndex)
 {
 }
 
@@ -188,6 +197,22 @@ void BusAccessUnit::memoryWriteLocalConfirm(AckType ack, Priority priority, HopC
 }
 
 void BusAccessUnit::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress, uint8_t* data)
+{
+}
+
+void BusAccessUnit::memoryRouterWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress, uint8_t* data)
+{
+}
+void BusAccessUnit::memoryRouterReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress, uint8_t* data)
+{
+}
+void BusAccessUnit::memoryRoutingTableReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress)
+{
+}
+void BusAccessUnit::memoryRoutingTableReadAppLayerConfirm(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress, uint8_t* data)
+{
+}
+void BusAccessUnit::memoryRoutingTableWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress, uint8_t *data)
 {
 }
 

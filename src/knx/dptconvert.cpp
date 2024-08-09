@@ -87,6 +87,9 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         // DPT 26.* - Scene Info
         if (datatype.mainGroup == 26 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToSceneInfo(payload, payload_length, datatype, value);
+        // DPT 27.001 - 32 Bit field
+        if (datatype.mainGroup == 27 && datatype.subGroup == 1 && !datatype.index)
+            return busValueToSigned32(payload, payload_length, datatype, value);
         // DPT 28.* - Unicode String
         if (datatype.mainGroup == 28 && datatype.subGroup == 1 && !datatype.index)
             return busValueToUnicode(payload, payload_length, datatype, value);
@@ -205,7 +208,10 @@ int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_len
         return valueToBusValueDateTime(value, payload, payload_length, datatype);
     // DPT 26.* - Scene Info
     if (datatype.mainGroup == 26 && datatype.subGroup == 1 && datatype.index <= 1)
-        return valueToBusValueSceneInfo(value, payload, payload_length, datatype);
+        return valueToBusValueSceneInfo(value, payload, payload_length, datatype);     
+    // DPT 27.001 - 32 Bit Field
+    if (datatype.mainGroup == 27 && datatype.subGroup == 1 && !datatype.index)
+        return valueToBusValueUnsigned32(value, payload, payload_length, datatype);
     // DPT 28.* - Unicode String
     if (datatype.mainGroup == 28 && datatype.subGroup == 1 && !datatype.index)
         return valueToBusValueUnicode(value, payload, payload_length, datatype);
@@ -517,15 +523,13 @@ int busValueToAccess(const uint8_t* payload, size_t payload_length, const Dpt& d
 int busValueToString(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(14);
-    char strValue[15];
-    strValue[14] = '\0';
     for (int n = 0; n < 14; ++n)
     {
-        strValue[n] = signed8FromPayload(payload, n);
-        if (!datatype.subGroup && (strValue[n] & 0x80))
+        auto value = signed8FromPayload(payload, n);
+        if (!datatype.subGroup && (value & 0x80))
             return false;
     }
-    value = strValue;
+    value = (const char*) payload;
     return true;
 }
 

@@ -6,7 +6,11 @@
 #include <cstring>
 
 ApplicationProgramObject::ApplicationProgramObject(Memory& memory)
+#if MASK_VERSION == 0x091A
+    : TableObject(memory, 0x0100, 0x0100)
+#else
     : TableObject(memory)
+#endif
 {
     Property* properties[] =
     {

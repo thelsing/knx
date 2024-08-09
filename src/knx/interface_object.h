@@ -4,6 +4,7 @@
 #include "property.h"
 #include "save_restore.h"
 #include "knx_types.h"
+#include "bits.h"
 
 /** Enum for the type of an interface object. See Section 2.2 of knx:3/7/3 */
 enum ObjectType
@@ -54,7 +55,10 @@ enum ObjectType
     OT_SECURITY = 17,
 
     /** RF Medium Object */
-    OT_RF_MEDIUM = 19
+    OT_RF_MEDIUM = 19,
+
+    /** Dummy so this enum is 16bit */
+    OT_DUMMY = 0xFFFF
 };
 
 /**
@@ -67,6 +71,14 @@ class InterfaceObject : public SaveRestore
      * Destructor
      */
     virtual ~InterfaceObject();
+    /**
+     * Read length of a property of the interface object. See section 4.8.4.2 of @cite knx:3/4/1.
+     * 
+     * @param id id of the property to read
+     * 
+     * @param[out] length length of the requested property
+     */
+    virtual void readPropertyLength(PropertyID id, uint16_t &length);
     /**
      * Read a property of the interface object. See section 4.8.4.2 of @cite knx:3/4/1.
      * 

@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.7)
-project(knx-linux-coupler)
+cmake_minimum_required(VERSION 3.16)
+project(knx-linux-coupler VERSION 1.5)
 set(LIBRARIES_FROM_REFERENCES "")
 
 set(SOURCES

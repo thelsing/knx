@@ -60,6 +60,20 @@ void InterfaceObject::masterReset(EraseCode eraseCode, uint8_t channel)
     // However, for the time being we provide an empty default implementation
 }
 
+void InterfaceObject::readPropertyLength(PropertyID id, uint16_t &length)
+{
+    uint8_t count = 1;
+    uint16_t propval = 0;
+    readProperty(id, 0, count, (uint8_t*)&propval);
+
+    if(count == 0)
+    {
+        length = 0;
+        return;
+    }
+    length = ntohs(propval);
+}
+
 void InterfaceObject::readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data)
 {
     Property* prop = property(id);

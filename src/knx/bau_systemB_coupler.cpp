@@ -17,7 +17,6 @@ BauSystemBCoupler::BauSystemBCoupler(Platform& platform) :
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);
     _memory.addSaveRestore(&_deviceObj);
-    _memory.addSaveRestore(&_appProgram);
 #ifdef USE_DATASECURE
     _memory.addSaveRestore(&_secIfObj);
 #endif
