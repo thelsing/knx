@@ -125,6 +125,36 @@ set(SOURCES
 	../../src/knx/transport_layer.h
 	../../src/knx/usb_tunnel_interface.cpp
         ../../src/knx/usb_tunnel_interface.h
+        ../../src/knx/knx_ip_tunnel_connection.cpp
+        ../../src/knx/knx_ip_tunnel_connection.h
+        ../../src/knx/knx_ip_tunneling_request.cpp
+        ../../src/knx/knx_ip_tunneling_request.h
+        ../../src/knx/knx_ip_ch.cpp
+        ../../src/knx/knx_ip_ch.h
+        ../../src/knx/knx_ip_cri.cpp
+        ../../src/knx/knx_ip_cri.h
+        ../../src/knx/knx_ip_crd.cpp
+        ../../src/knx/knx_ip_crd.h
+        ../../src/knx/knx_ip_connect_request.cpp
+        ../../src/knx/knx_ip_connect_request.h
+        ../../src/knx/knx_ip_connect_response.cpp
+        ../../src/knx/knx_ip_connect_response.h
+        ../../src/knx/knx_ip_disconnect_request.cpp
+        ../../src/knx/knx_ip_disconnect_request.h
+        ../../src/knx/knx_ip_disconnect_response.cpp
+        ../../src/knx/knx_ip_disconnect_response.h
+        ../../src/knx/knx_ip_state_request.cpp
+        ../../src/knx/knx_ip_state_request.h
+        ../../src/knx/knx_ip_state_response.cpp
+        ../../src/knx/knx_ip_state_response.h
+        ../../src/knx/knx_ip_description_request.cpp
+        ../../src/knx/knx_ip_description_request.h
+        ../../src/knx/knx_ip_description_response.cpp
+        ../../src/knx/knx_ip_description_response.h
+        ../../src/knx/knx_ip_config_request.cpp
+        ../../src/knx/knx_ip_config_request.h
+        ../../src/knx/knx_ip_tunneling_ack.cpp
+        ../../src/knx/knx_ip_tunneling_ack.h
         ../../src/knx_facade.cpp
 	../../src/knx_facade.h
 	../../src/linux_platform.cpp 
@@ -141,7 +171,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -
 add_executable(knx-linux-iptp ${SOURCES})
 target_link_libraries(knx-linux-iptp  "${LIBRARIES_FROM_REFERENCES}")
 set_property(TARGET knx-linux-iptp PROPERTY CXX_STANDARD 11)
-target_compile_definitions(knx-linux-iptp PUBLIC -DMASK_VERSION=0x091A)
+target_compile_definitions(knx-linux-iptp PUBLIC -DMASK_VERSION=0x091A -DKNX_TUNNELING)
 
 add_executable(knx-linux-tprf ${SOURCES})
 target_link_libraries(knx-linux-tprf  "${LIBRARIES_FROM_REFERENCES}")

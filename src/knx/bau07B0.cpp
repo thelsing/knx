@@ -10,7 +10,7 @@ using namespace std;
 
 Bau07B0::Bau07B0(Platform& platform)
     : BauSystemBDevice(platform), DataLinkLayerCallbacks(),
-      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, *this, (ITpUartCallBacks&) * this, (DataLinkLayerCallbacks*) this)
+      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&) * this, (DataLinkLayerCallbacks*) this)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif

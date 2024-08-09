@@ -17,8 +17,8 @@ Bau091A::Bau091A(Platform& platform)
     : BauSystemBCoupler(platform), DataLinkLayerCallbacks(),
       _routerObj(memory(), 0x200, 0x2000),  // the Filtertable of 0x091A IP Routers is fixed at 0x200 and 0x2000 long
       _ipParameters(_deviceObj, platform),
-      _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getPrimaryInterface(), _platform, *this, (DataLinkLayerCallbacks*) this),
-      _dlLayerSecondary(_deviceObj, _netLayer.getSecondaryInterface(), platform, *this, (ITpUartCallBacks&) * this, (DataLinkLayerCallbacks*) this)
+      _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getPrimaryInterface(), _platform, (DataLinkLayerCallbacks*) this),
+      _dlLayerSecondary(_deviceObj, _netLayer.getSecondaryInterface(), platform, (ITpUartCallBacks&) * this, (DataLinkLayerCallbacks*) this)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
 #endif

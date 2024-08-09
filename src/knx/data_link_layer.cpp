@@ -18,8 +18,8 @@ void DataLinkLayerCallbacks::setActivityCallback(ActivityCallback activityCallba
     _activityCallback = activityCallback;
 }
 
-DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform, BusAccessUnit& busAccessUnit) :
-    _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform), _bau(busAccessUnit)
+DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform) :
+    _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform)
 {
 #ifdef KNX_ACTIVITYCALLBACK
     _netIndex = netLayerEntity.getEntityIndex();
@@ -281,38 +281,14 @@ uint8_t* DataLinkLayer::frameData(CemiFrame& frame)
 #ifdef KNX_TUNNELING
 bool DataLinkLayer::isTunnelingPA(uint16_t pa)
 {
-    uint8_t num = KNX_TUNNELING;
-    uint32_t len = 0;
-    uint8_t* data = nullptr;
-    _bau.propertyValueRead(OT_IP_PARAMETER, 0, PID_ADDITIONAL_INDIVIDUAL_ADDRESSES, num, 1, &data, len);
+    uint8_t numAddresses = 0;
+    uint16_t* addresses = _ipParameters->additionalIndivualAddresses(numAddresses);
 
-    //printHex("isTunnelingPA, PID_ADDITIONAL_INDIVIDUAL_ADDRESSES: ", *data, len);
-    if (len != KNX_TUNNELING * 2)
+    for (uint8_t i = 0; i < numAddresses; i++)
     {
-        println("Tunnel PAs unkwnown");
-
-        if (data != nullptr)
-            delete[] data;
-
-        return false;
-    }
-
-    for (uint8_t i = 0; i < KNX_TUNNELING; i++)
-    {
-        uint16_t tunnelpa;
-        popWord(tunnelpa, (data) + i * 2);
-
-        if (pa == tunnelpa)
-        {
-            if (data != nullptr)
-                delete[] data;
-
+        if (pa == addresses[i])
             return true;
-        }
     }
-
-    if (data != nullptr)
-        delete[] data;
 
     return false;
 }

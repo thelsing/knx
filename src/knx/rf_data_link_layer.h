@@ -22,7 +22,7 @@ class RfDataLinkLayer : public DataLinkLayer
 
     public:
         RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj, NetworkLayerEntity& netLayerEntity,
-                        Platform& platform, BusAccessUnit& busAccessUnit);
+                        Platform& platform);
 
         void loop();
         void enabled(bool value);

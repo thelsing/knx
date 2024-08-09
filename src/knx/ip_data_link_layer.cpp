@@ -35,7 +35,7 @@
 #define MIN_LEN_CEMI 10
 
 IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam,
-                                 NetworkLayerEntity& netLayerEntity, Platform& platform, BusAccessUnit& busAccessUnit, DataLinkLayerCallbacks* dllcb) : DataLinkLayer(devObj, netLayerEntity, platform, busAccessUnit), _ipParameters(ipParam), _dllcb(dllcb)
+                                 NetworkLayerEntity& netLayerEntity, Platform& platform, DataLinkLayerCallbacks* dllcb) : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam), _dllcb(dllcb)
 {
 }
 
@@ -704,8 +704,8 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
     int firstFreeTunnel = -1;
     int firstResAndFreeTunnel = -1;
     int firstResAndOccTunnel = -1;
-    bool tunnelResActive[KNX_TUNNELING];
-    uint8_t tunnelResOptions[KNX_TUNNELING];
+    bool tunnelResActive[KNX_TUNNELING] = {0};
+    uint8_t tunnelResOptions[KNX_TUNNELING] = {0};
 
     for (int i = 0; i < KNX_TUNNELING; i++)
     {

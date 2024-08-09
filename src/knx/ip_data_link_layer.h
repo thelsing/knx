@@ -15,7 +15,7 @@ class IpDataLinkLayer : public DataLinkLayer
 
     public:
         IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam, NetworkLayerEntity& netLayerEntity,
-                        Platform& platform, BusAccessUnit& busAccessUnit, DataLinkLayerCallbacks* dllcb = nullptr);
+                        Platform& platform, DataLinkLayerCallbacks* dllcb = nullptr);
 
         void loop();
         void enabled(bool value);
@@ -49,7 +49,6 @@ class IpDataLinkLayer : public DataLinkLayer
 #endif
         bool sendBytes(uint8_t* buffer, uint16_t length);
         bool isSendLimitReached();
-
         IpParameterObject& _ipParameters;
         DataLinkLayerCallbacks* _dllcb;
 #ifdef KNX_TUNNELING

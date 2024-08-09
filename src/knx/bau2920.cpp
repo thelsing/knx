@@ -14,8 +14,8 @@ Bau2920::Bau2920(Platform& platform)
       _rtObjPrimary(memory()),
       _rtObjSecondary(memory()),
       _rfMediumObject(),
-      _dlLayerPrimary(_deviceObj, _netLayer.getPrimaryInterface(), _platform, *this, (ITpUartCallBacks&) * this),
-      _dlLayerSecondary(_deviceObj, _rfMediumObject, _netLayer.getSecondaryInterface(), platform, *this)
+      _dlLayerPrimary(_deviceObj, _netLayer.getPrimaryInterface(), _platform, (ITpUartCallBacks&) * this),
+      _dlLayerSecondary(_deviceObj, _rfMediumObject, _netLayer.getSecondaryInterface(), platform)
 #ifdef USE_CEMI_SERVER
     ,
       _cemiServer(*this)

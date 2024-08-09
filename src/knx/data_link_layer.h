@@ -6,6 +6,9 @@
 #include "device_object.h"
 #include "knx_types.h"
 #include "network_layer_entity.h"
+#ifdef KNX_TUNNELING
+    #include "ip_parameter_object.h"
+#endif
 #include "cemi_server.h"
 #include "bau.h"
 
@@ -27,7 +30,7 @@ class DataLinkLayer
 {
     public:
         DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
-                      Platform& platform, BusAccessUnit& busAccessUnit);
+                      Platform& platform);
 
 #ifdef USE_CEMI_SERVER
         // from tunnel
@@ -38,6 +41,7 @@ class DataLinkLayer
         virtual void dataConfirmationToTunnel(CemiFrame& frame);
         virtual void dataIndicationToTunnel(CemiFrame& frame);
         virtual bool isTunnelAddress(uint16_t addr);
+        void ipParameterObject(IpParameterObject* object);
 #endif
 #endif
 
@@ -59,7 +63,6 @@ class DataLinkLayer
         DeviceObject& _deviceObject;
         NetworkLayerEntity& _networkLayerEntity;
         Platform& _platform;
-        BusAccessUnit& _bau;
 #ifdef USE_CEMI_SERVER
         CemiServer* _cemiServer;
 #endif
@@ -69,5 +72,6 @@ class DataLinkLayer
 #ifdef KNX_TUNNELING
         bool isTunnelingPA(uint16_t pa);
         bool isRoutedPA(uint16_t pa);
+        IpParameterObject* _ipParameters;
 #endif
 };

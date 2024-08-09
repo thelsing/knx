@@ -130,4 +130,14 @@ IpParameterObject::IpParameterObject(DeviceObject& deviceObject, Platform& platf
     initializeProperties(sizeof(properties), properties);
 }
 
+uint16_t* IpParameterObject::additionalIndivualAddresses(uint8_t& numAddresses) 
+{
+#ifdef KNX_TUNNELING   
+    numAddresses = KNX_TUNNELING;
+#else
+    numAddresses = 0;
+#endif
+    return (uint16_t*) propertyData(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES);
+}
+
 #endif
