@@ -11,7 +11,7 @@ using namespace std;
 Bau57B0::Bau57B0(Platform& platform)
     : BauSystemBDevice(platform), DataLinkLayerCallbacks(),
       _ipParameters(_deviceObj, platform),
-      _dlLayer(_deviceObj, _ipParameters, _netLayer.getInterface(), _platform, (DataLinkLayerCallbacks*) this)
+      _dlLayer(_deviceObj, _ipParameters, _netLayer.getInterface(), _platform, *this, (DataLinkLayerCallbacks*) this)
 #ifdef USE_CEMI_SERVER
       , _cemiServer(*this)
 #endif
