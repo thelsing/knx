@@ -57,6 +57,7 @@ class TpUartDataLinkLayer : public DataLinkLayer
     bool isMonitoring();
     bool isStopped();
     bool isBusy();
+    void resetStats();
 
 #ifdef USE_TP_RX_QUEUE
     void processRxISR();

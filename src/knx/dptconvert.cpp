@@ -517,15 +517,13 @@ int busValueToAccess(const uint8_t* payload, size_t payload_length, const Dpt& d
 int busValueToString(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(14);
-    char strValue[15];
-    strValue[14] = '\0';
     for (int n = 0; n < 14; ++n)
     {
-        strValue[n] = signed8FromPayload(payload, n);
-        if (!datatype.subGroup && (strValue[n] & 0x80))
+        auto value = signed8FromPayload(payload, n);
+        if (!datatype.subGroup && (value & 0x80))
             return false;
     }
-    value = strValue;
+    value = (const char*) payload;
     return true;
 }
 

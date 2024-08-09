@@ -19,13 +19,16 @@
 #define TP_FRAME_FLAG_ECHO 0b00010000
 
 // Means that the frame is processed by this device
-#define TP_FRAME_FLAG_ADDRESSED 0b00000100
+#define TP_FRAME_FLAG_ADDRESSED 0b00001000
 
-// Means that the frame has been acked by this device.
-#define TP_FRAME_FLAG_ACKING 0b00000010
+// Means that the frame has been acked with BUSY
+#define TP_FRAME_FLAG_ACK_BUSY 0b00000100
 
-// Means that the frame has been acked by other (Busmontior)
-#define TP_FRAME_FLAG_ACKED 0b00000001
+// Means that the frame has been acked with NACK
+#define TP_FRAME_FLAG_ACK_NACK 0b00000010
+
+// Means that the frame has been acked
+#define TP_FRAME_FLAG_ACK 0b00000001
 
 class TpFrame
 {
