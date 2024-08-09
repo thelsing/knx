@@ -22,40 +22,18 @@
 #define KNX_SERIAL Serial1
 #endif
 
-#ifdef KNX_IP_W5500
-#if ARDUINO_PICO_MAJOR * 10000 + ARDUINO_PICO_MINOR * 100 + ARDUINO_PICO_REVISION < 30600
-#pragma error "arduino-pico >= 3.6.0 needed"
+#ifdef KNX_IP_LAN
+#if ARDUINO_PICO_MAJOR * 10000 + ARDUINO_PICO_MINOR * 100 + ARDUINO_PICO_REVISION < 30700
+#pragma error "arduino-pico >= 3.7.0 needed"
 #endif
 #define KNX_NETIF Eth
 
 #include "SPI.h"
 #include <W5500lwIP.h>
 
-#elif defined(KNX_IP_WIFI)
-
-#define KNX_NETIF WiFi
+#else
 #include <WiFi.h>
-
-#elif defined(KNX_IP_GENERIC)
-
-
-#include <SPI.h>
-
-#ifndef DEBUG_ETHERNET_GENERIC_PORT
-#define DEBUG_ETHERNET_GENERIC_PORT         Serial
-#endif
-
-#ifndef _ETG_LOGLEVEL_
-#define _ETG_LOGLEVEL_                      1
-#endif
-
-
-#define ETHERNET_USE_RPIPICO      true
-#include <Ethernet_Generic.hpp>             // https://github.com/khoih-prog/Ethernet_Generic
-
-
-#define KNX_NETIF Ethernet
-
+#define KNX_NETIF WiFi
 #endif
 
 #if USE_KNX_DMA_UART == 1
@@ -141,25 +119,21 @@ public:
     void setupMultiCast(uint32_t addr, uint16_t port) override;
     void closeMultiCast() override;
     bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
-    int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
+    int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen, uint32_t& src_addr, uint16_t& src_port) override;
 
     // unicast
     bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
 
-    #if defined(KNX_IP_W5500) || defined(KNX_IP_WIFI)
     #define UDP_UNICAST _udp
     protected: WiFiUDP _udp;
-    #elif defined(KNX_IP_GENERIC)
-    #define UDP_UNICAST _udp_uni
-    protected: bool _unicast_socket_setup = false;
-    protected: EthernetUDP _udp;
-    protected: EthernetUDP UDP_UNICAST;
-    #endif
     protected: IPAddress mcastaddr;
     protected: uint16_t _port;
     #endif
     protected: pin_size_t _rxPin = UART_PIN_NOT_DEFINED; 
     protected: pin_size_t _txPin = UART_PIN_NOT_DEFINED;
+
+    protected: IPAddress _remoteIP = 0;
+    protected: uint16_t _remotePort = 0;
 };
 
 #endif

@@ -139,6 +139,8 @@ enum PropertyID
     PID_MSG_TRANSMIT_TO_KNX = 75,
     PID_FRIENDLY_NAME = 76,
     PID_ROUTING_BUSY_WAIT_TIME = 78,
+    PID_CUSTOM_RESERVED_TUNNELS_CTRL = 201, // custom propertiy to control the stacks behaviour for reserverd tunnels, not in Spec (PID >= 200)
+    PID_CUSTOM_RESERVED_TUNNELS_IP = 202, // custom propertiy to control the stacks behaviour for reserverd tunnels, not in Spec (PID >= 200)
 
     /** cEMI Server Object */
     PID_MEDIUM_TYPE = 51,

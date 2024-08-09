@@ -17,6 +17,7 @@ class NetworkLayerEntity
 
     void dataLinkLayer(DataLinkLayer& layer);
     DataLinkLayer& dataLinkLayer();
+    NetworkLayer& networkLayer();
 
     DptMedium mediumType() const;
     uint8_t getEntityIndex();
@@ -35,7 +36,7 @@ class NetworkLayerEntity
 
   private:
     // From network layer
-    void sendDataRequest(NPDU& npdu, AckType ack, uint16_t destination, uint16_t source, Priority priority, AddressType addrType, SystemBroadcast systemBroadcast);
+    void sendDataRequest(NPDU& npdu, AckType ack, uint16_t destination, uint16_t source, Priority priority, AddressType addrType, SystemBroadcast systemBroadcast, bool doNotRepeat = false);
 
     DataLinkLayer* _dataLinkLayer = 0;
     NetworkLayer& _netLayer;

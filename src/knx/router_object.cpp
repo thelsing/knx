@@ -8,6 +8,7 @@
 #include "callback_property.h"
 #include "function_property.h"
 
+
 // Filter Table Realization Type 3
 // The Filter Table Realisation Type 3 shall be organised as a memory mapped bit-field of
 // 65536 bits and thus 8 192 octets. Each bit shall uniquely correspond to one Group Address.
@@ -25,8 +26,8 @@ enum RouteTableServices
     SetGroupAddress = 0x04,   // 4 bytes: start address and end address
 };
 
-RouterObject::RouterObject(Memory& memory)
-    : TableObject(memory)
+RouterObject::RouterObject(Memory& memory, uint32_t staticTableAdr, uint32_t staticTableSize)
+    : TableObject(memory, staticTableAdr, staticTableSize)
 {
 }
 
@@ -45,6 +46,7 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
 {
     bool useHopCount = false;
     bool useTable = true;
+    _model = model;
 
     if (model == CouplerModel::Model_20)
     {
@@ -64,11 +66,11 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     // Only present if coupler model is 1.x
     Property* model1xProperties[] =
     {
-        // TODO: implement filtering based on this config here
-        new DataProperty( PID_MAIN_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Primary: data individual (connless and connorient) + broadcast
-        new DataProperty( PID_SUB_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Secondary: data individual (connless and connorient) + broadcast
-        new DataProperty( PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Primary: data group
-        new DataProperty( PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) 0 ), // Secondary: data group
+        // default values from Spec, see 03_05_01 4.4.4 and 4.4.5
+        new DataProperty( PID_MAIN_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL) ), // Primary: data individual (connless and connorient) + broadcast
+        new DataProperty( PID_SUB_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL) ), // Secondary: data individual (connless and connorient) + broadcast
+        new DataProperty( PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)) , // Primary: data group
+        new DataProperty( PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)), // Secondary: data group
     };
     uint8_t model1xPropertiesCount = sizeof(model1xProperties) / sizeof(Property*);
 
@@ -83,8 +85,6 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
 
     Property* tableProperties[] =
     {
-        new DataProperty( PID_COUPLER_SERVICES_CONTROL, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint8_t) 0), // written by ETS TODO: implement
-        new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // default: invalid filter table, do not use, written by ETS
         new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
                 // Command Callback of PID_ROUTETABLE_CONTROL
                 [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
@@ -95,12 +95,21 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
                     obj->functionRouteTableControl(false, data, length, resultData, resultLength);
                 })
     };
+
+    Property* tableProperties20[] =
+    {
+        new DataProperty( PID_COUPLER_SERVICES_CONTROL, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint8_t) 0), // written by ETS TODO: implement
+        new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ) // default: invalid filter table, do not use, written by ETS
+    };
+
     uint8_t tablePropertiesCount = sizeof(tableProperties) / sizeof(Property*);
+    uint8_t tableProperties20Count = sizeof(tableProperties20) / sizeof(Property*);
 
     size_t allPropertiesCount = fixedPropertiesCount;
     allPropertiesCount += (model == CouplerModel::Model_1x) ? model1xPropertiesCount : model20PropertiesCount;
     allPropertiesCount += useHopCount ? 1 : 0;
     allPropertiesCount += useTable ? tablePropertiesCount : 0;
+    allPropertiesCount += useTable && (model == CouplerModel::Model_20)  ? tableProperties20Count : 0;
     allPropertiesCount += ((mediumType == DptMedium::KNX_RF) || (mediumType == DptMedium::KNX_IP)) ? 1 : 0; // PID_RF_ENABLE_SBC and PID_IP_ENABLE_SBC
 
     Property* allProperties[allPropertiesCount];
@@ -131,6 +140,11 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     {
         memcpy(&allProperties[i], tableProperties, sizeof(tableProperties));
         i += tablePropertiesCount;
+        if((model == CouplerModel::Model_20))
+        {
+            memcpy(&allProperties[i], tableProperties20, sizeof(tableProperties20));
+            i += tableProperties20Count;
+        }
     }
 
     if (mediumType == DptMedium::KNX_RF)
@@ -166,23 +180,32 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
 
 const uint8_t* RouterObject::restore(const uint8_t* buffer)
 {
-    buffer = TableObject::restore(buffer);
-
-    _filterTableGroupAddresses = (uint16_t*)data();
-
-    return buffer;
+    return TableObject::restore(buffer);
 }
 
 void RouterObject::commandClearSetRoutingTable(bool bitIsSet)
 {
+    uint8_t fillbyte = bitIsSet ? 0xFF : 0x00;
+    uint32_t relptr = _memory.toRelative(data());
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::commandClearSetRoutingTable ");
+    println(bitIsSet);
+    println(relptr);
+    println((uint32_t)data());
+#endif
+
     for (uint16_t i = 0; i < kFilterTableSize; i++)
     {
-        data()[i] = bitIsSet ? 0xFF : 0x00;
+        _memory.writeMemory(relptr+i, 1, &fillbyte);
     }
 }
 
 bool RouterObject::statusClearSetRoutingTable(bool bitIsSet)
 {
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::statusClearSetRoutingTable ");
+    println(bitIsSet);
+#endif
     for (uint16_t i = 0; i < kFilterTableSize; i++)
     {
         if (data()[i] != (bitIsSet ? 0xFF : 0x00))
@@ -193,6 +216,15 @@ bool RouterObject::statusClearSetRoutingTable(bool bitIsSet)
 
 void RouterObject::commandClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet)
 {
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::commandClearSetGroupAddress ");
+    print(startAddress);
+    print(" ");
+    print(endAddress);
+    print(" ");
+    println(bitIsSet);
+#endif
+
     uint16_t startOctet = startAddress / 8;
     uint8_t startBitPosition = startAddress % 8;
     uint16_t endOctet = endAddress / 8;
@@ -200,26 +232,34 @@ void RouterObject::commandClearSetGroupAddress(uint16_t startAddress, uint16_t e
 
     if (startOctet == endOctet)
     {
+        uint32_t relptr = _memory.toRelative(data()) + startOctet;
+        uint8_t octetData =  0; // = data()[startOctet];
+        _memory.readMemory(relptr, 1, &octetData);
+
         for (uint8_t bitPos = startBitPosition; bitPos <= endBitPosition; bitPos++)
         {
             if (bitIsSet)
-                data()[startOctet] |= 1 << bitPos;
+                octetData |= 1 << bitPos;
             else
-                data()[startOctet] &= ~(1 << bitPos);
+                octetData &= ~(1 << bitPos);
         }
+        _memory.writeMemory(relptr, 1, &octetData);
         return;
     }
 
     for (uint16_t i = startOctet; i <= endOctet; i++)
     {
+        uint32_t relptr = _memory.toRelative(data()) + i;
+        uint8_t octetData = 0;
+        _memory.readMemory(relptr, 1, &octetData);
         if (i == startOctet)
         {
             for (uint8_t bitPos = startBitPosition; bitPos <= 7; bitPos++)
             {
                 if (bitIsSet)
-                    data()[i] |= 1 << bitPos;
+                    octetData |= 1 << bitPos;
                 else
-                    data()[i] &= ~(1 << bitPos);
+                    octetData &= ~(1 << bitPos);
             }
         }
         else if (i == endOctet)
@@ -227,23 +267,33 @@ void RouterObject::commandClearSetGroupAddress(uint16_t startAddress, uint16_t e
             for (uint8_t bitPos = 0; bitPos <= endBitPosition; bitPos++)
             {
                 if (bitIsSet)
-                    data()[i] |= 1 << bitPos;
+                    octetData |= 1 << bitPos;
                 else
-                    data()[i] &= ~(1 << bitPos);
+                    octetData &= ~(1 << bitPos);
             }
         }
         else
         {
             if (bitIsSet)
-                data()[i] = 0xFF;
+                octetData = 0xFF;
             else
-                data()[i] = 0x00;
+                octetData = 0x00;
         }
+        _memory.writeMemory(relptr, 1, &octetData);
     }
 }
 
 bool RouterObject::statusClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet)
 {
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::statusClearSetGroupAddress ");
+    print(startAddress);
+    print(" ");
+    print(endAddress);
+    print(" ");
+    println(bitIsSet);
+#endif
+
     uint16_t startOctet = startAddress / 8;
     uint8_t startBitPosition = startAddress % 8;
     uint16_t endOctet = endAddress / 8;
@@ -313,10 +363,25 @@ bool RouterObject::statusClearSetGroupAddress(uint16_t startAddress, uint16_t en
 
 void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::functionRouteTableControl ");
+    print(isCommand);
+    print(" ");
+    printHex("", data, length);
+#endif
+
     RouteTableServices srvId = (RouteTableServices) data[1];
 
     if (isCommand)
     {
+        if (loadState() != LS_LOADING)
+        {
+            println("access violation. filter table can only be modified in LS_LOADING");
+            resultData[0] = ReturnCodes::AccessReadOnly;
+            resultData[1] = srvId;
+            resultLength = 2;
+            return;
+        }
         switch(srvId)
         {
             case ClearRoutingTable:
@@ -424,12 +489,22 @@ void RouterObject::functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t le
 
 bool RouterObject::isRfSbcRoutingEnabled()
 {
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::isRfSbcRoutingEnabled ");
+    println(_rfSbcRoutingEnabled);
+#endif
     return _rfSbcRoutingEnabled;
 }
 
 // TODO: check if IP SBC works the same way, just copied from RF
 void RouterObject::functionIpEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::functionIpEnableSbc ");
+    print(isCommand);
+    printHex(" ", data, length);
+#endif
+
     if (isCommand)
     {
         _ipSbcRoutingEnabled = (data[0] == 1) ? true : false;
@@ -443,19 +518,31 @@ void RouterObject::functionIpEnableSbc(bool isCommand, uint8_t* data, uint8_t le
 // TODO: check if IP SBC works the same way, just copied from RF
 bool RouterObject::isIpSbcRoutingEnabled()
 {
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::isIpSbcRoutingEnabled ");
+    println(_ipSbcRoutingEnabled);
+#endif
     return _ipSbcRoutingEnabled;
 }
 
 void RouterObject::beforeStateChange(LoadState& newState)
 {
+#ifdef KNX_LOG_COUPLER
+    println("RouterObject::beforeStateChange");
+#endif
     if (newState != LS_LOADED)
         return;
-
-    _filterTableGroupAddresses = (uint16_t*)data();
 }
 
 void RouterObject::masterReset(EraseCode eraseCode, uint8_t channel)
 {
+#ifdef KNX_LOG_COUPLER
+    print("RouterObject::masterReset ");
+    print(eraseCode);
+    print(" ");
+    println(channel);
+#endif
+
     if (eraseCode == FactoryReset)
     {
         // TODO: handle different erase codes
@@ -468,18 +555,28 @@ bool RouterObject::isGroupAddressInFilterTable(uint16_t groupAddress)
     if (loadState() != LS_LOADED)
         return false;
 
-    uint8_t filterTableUse = 0x00;
-    if (property(PID_FILTER_TABLE_USE)->read(filterTableUse) == 0)
-        return false;
+    uint8_t filterTableUse = 0x01;
+    Property* propFilterTableUse = property(PID_FILTER_TABLE_USE);
+    if(propFilterTableUse) // check if property PID_FILTER_TABLE_USE exists (only coupler 20), if not, ignore this
+        if (propFilterTableUse->read(filterTableUse) == 0)  // check if property PID_FILTER_TABLE_USE is empty, if so, return false
+            return false;
 
     if ((filterTableUse&0x01) == 1)
     {
+        uint8_t* filterTable = data();
         // octet_address = GA_value div 8
         // bit_position = GA_value mod 8
         uint16_t octetAddress = groupAddress / 8;
         uint8_t bitPosition = groupAddress % 8;
+        
 
-        return (data()[octetAddress] & (1 << bitPosition)) == (1 << bitPosition);
+        if(filterTable)
+            return (filterTable[octetAddress] & (1 << bitPosition)) == (1 << bitPosition);
+        else
+        {
+            println("RouterObject::isGroupAddressInFilterTable filterTable is NULL");
+            return false;
+        }
     }
 
     return false;

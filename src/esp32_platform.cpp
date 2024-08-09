@@ -99,32 +99,50 @@ bool Esp32Platform::sendBytesMultiCast(uint8_t * buffer, uint16_t len)
     return true;
 }
 
-int Esp32Platform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen)
+int Esp32Platform::readBytesMultiCast(uint8_t * buffer, uint16_t maxLen, uint32_t& src_addr, uint16_t& src_port)
 {
     int len = _udp.parsePacket();
     if (len == 0)
         return 0;
-    
+
     if (len > maxLen)
     {
-        KNX_DEBUG_SERIAL.printf("udp buffer to small. was %d, needed %d\n", maxLen, len);
-        fatalError();
+        println("Unexpected UDP data packet length - drop packet");
+        for (size_t i = 0; i < len; i++)
+            _udp.read();
+        return 0;
     }
 
     _udp.read(buffer, len);
-    //printHex("-> ", buffer, len);
+    _remoteIP = _udp.remoteIP();
+    _remotePort = _udp.remotePort();
+    src_addr = htonl(_remoteIP);
+    src_port = _remotePort;
+
+    // print("Remote IP: ");
+    // print(_udp.remoteIP().toString().c_str());
+    // printHex("-> ", buffer, len);
+
     return len;
 }
 
 bool Esp32Platform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
 {
     IPAddress ucastaddr(htonl(addr));
-    println("sendBytesUniCast endPacket fail");
-    if(_udp.beginPacket(ucastaddr, port) == 1) {
+
+    if(!addr)
+        ucastaddr = _remoteIP;
+    
+    if(!port)
+        port = _remotePort;
+
+    if(_udp.beginPacket(ucastaddr, port) == 1)
+    {
         _udp.write(buffer, len);
         if(_udp.endPacket() == 0) println("sendBytesUniCast endPacket fail");
     }
-    else println("sendBytesUniCast beginPacket fail");
+    else
+        println("sendBytesUniCast beginPacket fail");
     return true;
 }
 

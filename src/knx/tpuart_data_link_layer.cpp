@@ -407,7 +407,8 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
             if (_rxFrame->size() == 7)
             {
                 // Check whether I am responsible for the frame
-                if (_forceAck || _cb.isAckRequired(_rxFrame->destination(), _rxFrame->isGroupAddress()))
+                TPAckType ack = _cb.isAckRequired(_rxFrame->destination(), _rxFrame->isGroupAddress());
+                if (_forceAck || ack)
                 {
                     /*
                      * Save the responsibility that this frame is to be processed further.
@@ -424,7 +425,7 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
                         _rxFrame->addFlags(TP_FRAME_FLAG_ACK);
 
                         // and in the TPUart so that it can send the ACK
-                        _platform.writeUart(U_ACK_REQ | U_ACK_REQ_ADRESSED);
+                        _platform.writeUart(U_ACK_REQ | ack);
                     }
                 }
             }
@@ -1021,9 +1022,10 @@ bool TpUartDataLinkLayer::processTxFrameBytes()
 TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject &devObj,
                                          NetworkLayerEntity &netLayerEntity,
                                          Platform &platform,
+                                         BusAccessUnit& busAccessUnit,
                                          ITpUartCallBacks &cb,
                                          DataLinkLayerCallbacks *dllcb)
-    : DataLinkLayer(devObj, netLayerEntity, platform),
+    : DataLinkLayer(devObj, netLayerEntity, platform, busAccessUnit),
       _cb(cb),
       _dllcb(dllcb)
 {

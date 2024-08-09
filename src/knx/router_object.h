@@ -23,7 +23,7 @@ enum RouterObjectType
 class RouterObject : public TableObject
 {
 public:
-  RouterObject(Memory& memory);
+  RouterObject(Memory& memory, uint32_t staticTableAdr = 0, uint32_t staticTableSize = 0);
 
   void initialize1x(DptMedium mediumType, uint16_t maxApduSize);
   void initialize20(uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize);
@@ -54,5 +54,5 @@ private:
 
   bool _rfSbcRoutingEnabled = false;
   bool _ipSbcRoutingEnabled = false;
-  uint16_t* _filterTableGroupAddresses = 0;
+  CouplerModel _model = CouplerModel::Model_20;
 };

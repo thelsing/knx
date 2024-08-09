@@ -112,6 +112,50 @@ void BauSystemB::deviceDescriptorReadIndication(Priority priority, HopCountType 
     pushWord(_deviceObj.maskVersion(), data);
     applicationLayer().deviceDescriptorReadResponse(AckRequested, priority, hopType, asap, secCtrl, descriptorType, data);
 }
+void BauSystemB::memoryRouterWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                             uint16_t memoryAddress, uint8_t *data)
+{
+    print("Writing memory at: ");
+    print(memoryAddress, HEX);
+    print(" length: ");
+    print(number);
+    print(" data: ");
+    printHex("=>", data, number);
+    _memory.writeMemory(memoryAddress, number, data);
+    if (_deviceObj.verifyMode())
+    {
+        print("Sending Read indication");
+        memoryRouterReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress, data);
+    }
+}
+
+void BauSystemB::memoryRouterReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
+                                            uint16_t memoryAddress, uint8_t *data)
+{
+    applicationLayer().memoryRouterReadResponse(AckRequested, priority, hopType, asap, secCtrl, number, memoryAddress, data);
+}
+
+void BauSystemB::memoryRoutingTableReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress, uint8_t *data)
+{
+    applicationLayer().memoryRoutingTableReadResponse(AckRequested, priority, hopType, asap, secCtrl, number, memoryAddress, data);
+}
+void BauSystemB::memoryRoutingTableReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress)
+{
+    memoryRoutingTableReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress, _memory.toAbsolute(memoryAddress));
+}
+
+void BauSystemB::memoryRoutingTableWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number, uint16_t memoryAddress, uint8_t *data)
+{
+    print("Writing memory at: ");
+    print(memoryAddress, HEX);
+    print(" length: ");
+    print(number);
+    print(" data: ");
+    printHex("=>", data, number);
+    _memory.writeMemory(memoryAddress, number, data);
+    if (_deviceObj.verifyMode())
+        memoryRoutingTableReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress, data);
+}
 
 void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t number,
     uint16_t memoryAddress, uint8_t * data)
@@ -215,6 +259,33 @@ void BauSystemB::propertyDescriptionReadIndication(Priority priority, HopCountTy
         writeEnable, type, numberOfElements, access);
 }
 
+void BauSystemB::propertyExtDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl,
+    uint16_t objectType, uint16_t objectInstance, uint16_t propertyId, uint8_t descriptionType, uint16_t propertyIndex)
+{
+    uint8_t pid = propertyId;
+    uint8_t pidx = propertyIndex;
+    if(propertyId > 0xFF || propertyIndex > 0xFF)
+    {
+        println("BauSystemB::propertyExtDescriptionReadIndication: propertyId or Idx > 256 are not supported");
+        return;
+    }
+    if(descriptionType != 0)
+    {
+        println("BauSystemB::propertyExtDescriptionReadIndication: only descriptionType 0 supported");
+        return;
+    }
+    bool writeEnable = false;
+    uint8_t type = 0;
+    uint16_t numberOfElements = 0;
+    uint8_t access = 0;
+    InterfaceObject* obj = getInterfaceObject((ObjectType)objectType, objectInstance);
+    if (obj)
+        obj->readPropertyDescription(pid, pidx, writeEnable, type, numberOfElements, access);
+
+    applicationLayer().propertyExtDescriptionReadResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, propertyIndex,
+        descriptionType, writeEnable, type, numberOfElements, access);
+}
+
 void BauSystemB::propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl &secCtrl, uint8_t objectIndex,
     uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length)
 {
@@ -246,6 +317,17 @@ void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hop
 {
     uint8_t size = 0;
     uint8_t elementCount = numberOfElements;
+#ifdef LOG_KNX_PROP
+    print("propertyValueReadIndication: ObjIdx ");
+    print(objectIndex);
+    print(" propId ");
+    print(propertyId);
+    print(" num ");
+    print(numberOfElements);
+    print(" start ");
+    print(startIndex);
+#endif
+
     InterfaceObject* obj = getInterfaceObject(objectIndex);
     if (obj)
     {

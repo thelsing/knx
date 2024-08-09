@@ -18,7 +18,7 @@ class TableObject: public InterfaceObject
      * The constuctor.
      * @param memory The instance of the memory management class to use.
      */
-    TableObject(Memory& memory);
+    TableObject(Memory& memory, uint32_t staticTableAdr = 0, uint32_t staticTableSize = 0);
 
     /**
      * The destructor.
@@ -45,7 +45,7 @@ class TableObject: public InterfaceObject
 
     /**
      * returns the internal data of the interface object. This pointer belongs to the TableObject class and 
-     * must not be freed.
+     * must not be written at nor freed.
      */
     uint8_t* data();
     /**
@@ -57,15 +57,20 @@ class TableObject: public InterfaceObject
 
     static BeforeTablesUnloadCallback _beforeTablesUnload;
 
+    Memory& _memory;
+
   private:
     uint32_t tableReference();
     bool allocTable(uint32_t size, bool doFill, uint8_t fillByte);
+    void allocTableStatic();
+    void initializeDynTableProperties(size_t propertiesSize, Property** properties);
     void loadEvent(const uint8_t* data);
     void loadEventUnloaded(const uint8_t* data);
     void loadEventLoading(const uint8_t* data);
     void loadEventLoaded(const uint8_t* data);
     void loadEventError(const uint8_t* data);
     void additionalLoadControls(const uint8_t* data);
+    
     /**
      * set the ::LoadState of the interface object.
      * 
@@ -75,9 +80,10 @@ class TableObject: public InterfaceObject
      */
     void loadState(LoadState newState);
     LoadState _state = LS_UNLOADED;
-    Memory& _memory;
     uint8_t *_data = 0;
     static uint8_t _tableUnloadCount;
+    uint32_t _staticTableAdr;
+    uint32_t _staticTableSize;
 
     /**
      * used to store size of data() in allocTable(), needed for calculation of crc in PID_MCB_TABLE.
