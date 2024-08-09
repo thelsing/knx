@@ -14,17 +14,17 @@ class RfDataLinkLayer;
 
 class RfPhysicalLayer
 {
-  public:
-    RfPhysicalLayer(RfDataLinkLayer& rfDataLinkLayer, Platform& platform) 
-    : _rfDataLinkLayer(rfDataLinkLayer), _platform(platform) {}
+    public:
+        RfPhysicalLayer(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
+            : _rfDataLinkLayer(rfDataLinkLayer), _platform(platform) {}
 
-    virtual bool InitChip() = 0;
-    virtual void stopChip() = 0;
-    virtual void loop() = 0;
+        virtual bool InitChip() = 0;
+        virtual void stopChip() = 0;
+        virtual void loop() = 0;
 
-  protected:
-    RfDataLinkLayer& _rfDataLinkLayer;
-    Platform& _platform;
+    protected:
+        RfDataLinkLayer& _rfDataLinkLayer;
+        Platform& _platform;
 };
 
 #endif

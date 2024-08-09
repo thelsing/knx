@@ -7,13 +7,13 @@
 
 class KnxIpTunnelingRequest : public KnxIpFrame
 {
-  public:
-    KnxIpTunnelingRequest(uint8_t* data, uint16_t length);
-    KnxIpTunnelingRequest(CemiFrame frame);
-    CemiFrame& frame();
-    KnxIpCH& connectionHeader();
-  private:
-    CemiFrame _frame;
-    KnxIpCH _ch;
+    public:
+        KnxIpTunnelingRequest(uint8_t* data, uint16_t length);
+        KnxIpTunnelingRequest(CemiFrame frame);
+        CemiFrame& frame();
+        KnxIpCH& connectionHeader();
+    private:
+        CemiFrame _frame;
+        KnxIpCH _ch;
 };
 #endif

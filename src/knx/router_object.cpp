@@ -69,7 +69,7 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
         // default values from Spec, see 03_05_01 4.4.4 and 4.4.5
         new DataProperty( PID_MAIN_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL) ), // Primary: data individual (connless and connorient) + broadcast
         new DataProperty( PID_SUB_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL) ), // Secondary: data individual (connless and connorient) + broadcast
-        new DataProperty( PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)) , // Primary: data group
+        new DataProperty( PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)),  // Primary: data group
         new DataProperty( PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)), // Secondary: data group
     };
     uint8_t model1xPropertiesCount = sizeof(model1xProperties) / sizeof(Property*);
@@ -86,14 +86,14 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     Property* tableProperties[] =
     {
         new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
-                // Command Callback of PID_ROUTETABLE_CONTROL
-                [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                    obj->functionRouteTableControl(true, data, length, resultData, resultLength);
-                },
-                // State Callback of PID_ROUTETABLE_CONTROL
-                [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                    obj->functionRouteTableControl(false, data, length, resultData, resultLength);
-                })
+                                           // Command Callback of PID_ROUTETABLE_CONTROL
+        [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            obj->functionRouteTableControl(true, data, length, resultData, resultLength);
+        },
+        // State Callback of PID_ROUTETABLE_CONTROL
+        [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            obj->functionRouteTableControl(false, data, length, resultData, resultLength);
+        })
     };
 
     Property* tableProperties20[] =
@@ -140,7 +140,8 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     {
         memcpy(&allProperties[i], tableProperties, sizeof(tableProperties));
         i += tablePropertiesCount;
-        if((model == CouplerModel::Model_20))
+
+        if ((model == CouplerModel::Model_20))
         {
             memcpy(&allProperties[i], tableProperties20, sizeof(tableProperties20));
             i += tableProperties20Count;
@@ -150,26 +151,30 @@ void RouterObject::initialize(CouplerModel model, uint8_t objIndex, DptMedium me
     if (mediumType == DptMedium::KNX_RF)
     {
         allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC,
-                                    // Command Callback of PID_RF_ENABLE_SBC
-                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                                       obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
-                                    },
-                                    // State Callback of PID_RF_ENABLE_SBC
-                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                                       obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
-                                    });
+                // Command Callback of PID_RF_ENABLE_SBC
+                [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void
+        {
+            obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
+        },
+        // State Callback of PID_RF_ENABLE_SBC
+        [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void
+        {
+            obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
+        });
     }
     else if (mediumType == DptMedium::KNX_IP)
     {
         allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_IP_ENABLE_SBC,
-                                    // Command Callback of PID_IP_ENABLE_SBC
-                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                                       obj->functionIpEnableSbc(true, data, length, resultData, resultLength);
-                                    },
-                                    // State Callback of PID_IP_ENABLE_SBC
-                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                                       obj->functionIpEnableSbc(false, data, length, resultData, resultLength);
-                                    });
+                // Command Callback of PID_IP_ENABLE_SBC
+                [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void
+        {
+            obj->functionIpEnableSbc(true, data, length, resultData, resultLength);
+        },
+        // State Callback of PID_IP_ENABLE_SBC
+        [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void
+        {
+            obj->functionIpEnableSbc(false, data, length, resultData, resultLength);
+        });
     }
 
     if (useTable)
@@ -196,7 +201,7 @@ void RouterObject::commandClearSetRoutingTable(bool bitIsSet)
 
     for (uint16_t i = 0; i < kFilterTableSize; i++)
     {
-        _memory.writeMemory(relptr+i, 1, &fillbyte);
+        _memory.writeMemory(relptr + i, 1, &fillbyte);
     }
 }
 
@@ -206,11 +211,13 @@ bool RouterObject::statusClearSetRoutingTable(bool bitIsSet)
     print("RouterObject::statusClearSetRoutingTable ");
     println(bitIsSet);
 #endif
+
     for (uint16_t i = 0; i < kFilterTableSize; i++)
     {
         if (data()[i] != (bitIsSet ? 0xFF : 0x00))
             return false;
     }
+
     return true;
 }
 
@@ -243,6 +250,7 @@ void RouterObject::commandClearSetGroupAddress(uint16_t startAddress, uint16_t e
             else
                 octetData &= ~(1 << bitPos);
         }
+
         _memory.writeMemory(relptr, 1, &octetData);
         return;
     }
@@ -252,6 +260,7 @@ void RouterObject::commandClearSetGroupAddress(uint16_t startAddress, uint16_t e
         uint32_t relptr = _memory.toRelative(data()) + i;
         uint8_t octetData = 0;
         _memory.readMemory(relptr, 1, &octetData);
+
         if (i == startOctet)
         {
             for (uint8_t bitPos = startBitPosition; bitPos <= 7; bitPos++)
@@ -279,6 +288,7 @@ void RouterObject::commandClearSetGroupAddress(uint16_t startAddress, uint16_t e
             else
                 octetData = 0x00;
         }
+
         _memory.writeMemory(relptr, 1, &octetData);
     }
 }
@@ -314,6 +324,7 @@ bool RouterObject::statusClearSetGroupAddress(uint16_t startAddress, uint16_t en
                     return false;
             }
         }
+
         return true;
     }
 
@@ -382,7 +393,8 @@ void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint
             resultLength = 2;
             return;
         }
-        switch(srvId)
+
+        switch (srvId)
         {
             case ClearRoutingTable:
                 commandClearSetRoutingTable(false);
@@ -390,12 +402,14 @@ void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint
                 resultData[1] = srvId;
                 resultLength = 2;
                 return;
+
             case SetRoutingTable:
                 commandClearSetRoutingTable(true);
                 resultData[0] = ReturnCodes::Success;
                 resultData[1] = srvId;
                 resultLength = 2;
                 return;
+
             case ClearGroupAddress:
             {
                 uint16_t startAddress;
@@ -410,6 +424,7 @@ void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint
                 resultLength = 6;
                 return;
             }
+
             case SetGroupAddress:
             {
                 uint16_t startAddress;
@@ -428,18 +443,20 @@ void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint
     }
     else
     {
-        switch(srvId)
+        switch (srvId)
         {
             case ClearRoutingTable:
                 resultData[0] = statusClearSetRoutingTable(false) ? ReturnCodes::Success : ReturnCodes::GenericError;
                 resultData[1] = srvId;
                 resultLength = 2;
                 return;
+
             case SetRoutingTable:
                 resultData[0] = statusClearSetRoutingTable(true) ? ReturnCodes::Success : ReturnCodes::GenericError;
                 resultData[1] = srvId;
                 resultLength = 2;
                 return;
+
             case ClearGroupAddress:
             {
                 uint16_t startAddress;
@@ -453,6 +470,7 @@ void RouterObject::functionRouteTableControl(bool isCommand, uint8_t* data, uint
                 resultLength = 6;
                 return;
             }
+
             case SetGroupAddress:
             {
                 uint16_t startAddress;
@@ -530,6 +548,7 @@ void RouterObject::beforeStateChange(LoadState& newState)
 #ifdef KNX_LOG_COUPLER
     println("RouterObject::beforeStateChange");
 #endif
+
     if (newState != LS_LOADED)
         return;
 }
@@ -557,20 +576,21 @@ bool RouterObject::isGroupAddressInFilterTable(uint16_t groupAddress)
 
     uint8_t filterTableUse = 0x01;
     Property* propFilterTableUse = property(PID_FILTER_TABLE_USE);
-    if(propFilterTableUse) // check if property PID_FILTER_TABLE_USE exists (only coupler 20), if not, ignore this
+
+    if (propFilterTableUse) // check if property PID_FILTER_TABLE_USE exists (only coupler 20), if not, ignore this
         if (propFilterTableUse->read(filterTableUse) == 0)  // check if property PID_FILTER_TABLE_USE is empty, if so, return false
             return false;
 
-    if ((filterTableUse&0x01) == 1)
+    if ((filterTableUse & 0x01) == 1)
     {
         uint8_t* filterTable = data();
         // octet_address = GA_value div 8
         // bit_position = GA_value mod 8
         uint16_t octetAddress = groupAddress / 8;
         uint8_t bitPosition = groupAddress % 8;
-        
 
-        if(filterTable)
+
+        if (filterTable)
             return (filterTable[octetAddress] & (1 << bitPosition)) == (1 << bitPosition);
         else
         {

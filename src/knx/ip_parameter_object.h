@@ -10,11 +10,11 @@
 
 class IpParameterObject : public InterfaceObject
 {
-  public:
-    IpParameterObject(DeviceObject& deviceObject, Platform& platform);
+    public:
+        IpParameterObject(DeviceObject& deviceObject, Platform& platform);
 
-  private:
-    DeviceObject& _deviceObject;
-    Platform& _platform;
+    private:
+        DeviceObject& _deviceObject;
+        Platform& _platform;
 };
 #endif

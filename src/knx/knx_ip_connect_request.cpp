@@ -1,7 +1,7 @@
 #include "knx_ip_connect_request.h"
 #ifdef USE_IP
 KnxIpConnectRequest::KnxIpConnectRequest(uint8_t* data, uint16_t length)
-    : KnxIpFrame(data, length), _hpaiCtrl(data + LEN_KNXIP_HEADER), _hpaiData(data + LEN_KNXIP_HEADER + LEN_IPHPAI), _cri(data + LEN_KNXIP_HEADER + 2*LEN_IPHPAI)
+    : KnxIpFrame(data, length), _hpaiCtrl(data + LEN_KNXIP_HEADER), _hpaiData(data + LEN_KNXIP_HEADER + LEN_IPHPAI), _cri(data + LEN_KNXIP_HEADER + 2 * LEN_IPHPAI)
 {
 }
 

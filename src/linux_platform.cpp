@@ -42,6 +42,7 @@
 LinuxPlatform::LinuxPlatform()
 {
     int socketMac = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+
     if (socketMac < 0)
     {
         printf("Lookup socket creation failed");
@@ -49,11 +50,15 @@ LinuxPlatform::LinuxPlatform()
     }
 
     struct ifreq ifr;
+
     struct ifconf ifc;
+
     char buf[1024];
 
     ifc.ifc_len = sizeof(buf);
+
     ifc.ifc_buf = buf;
+
     if (ioctl(socketMac, SIOCGIFCONF, &ifc) < 0)
         return;
 
@@ -63,6 +68,7 @@ LinuxPlatform::LinuxPlatform()
     for (; it != end; ++it)
     {
         strcpy(ifr.ifr_name, it->ifr_name);
+
         if (ioctl(socketMac, SIOCGIFFLAGS, &ifr))
             continue;
 
@@ -89,6 +95,7 @@ LinuxPlatform::LinuxPlatform()
         //printf("Netmask: %s\n", inet_ntoa(ipaddr->sin_addr));
         break;
     }
+
     close(socketMac);
 
     // default GW
@@ -113,10 +120,12 @@ LinuxPlatform::LinuxPlatform()
                     char* pEnd;
                     _defaultGateway = ntohl(strtol(g, &pEnd, 16));
                 }
+
                 break;
             }
         }
     }
+
     fclose(f);
 }
 
@@ -149,6 +158,7 @@ void LinuxPlatform::restart()
 void LinuxPlatform::fatalError()
 {
     printf("A fatal error occured. Stopping.\n");
+
     while (true)
         sleep(1);
 }
@@ -171,6 +181,7 @@ void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
     sin.sin_port = htons(port);
 
     _multicastSocketFd = socket(AF_INET, SOCK_DGRAM, 0);
+
     if (_multicastSocketFd == -1)
     {
         perror("socket()");
@@ -179,6 +190,7 @@ void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 
     /* Mehr Prozessen erlauben, denselben Port zu nutzen */
     loop = 1;
+
     if (setsockopt(_multicastSocketFd, SOL_SOCKET, SO_REUSEADDR, &loop, sizeof(loop)) < 0)
     {
         perror("setsockopt:SO_REUSEADDR");
@@ -193,6 +205,7 @@ void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 
     /* loopback */
     loop = 0;
+
     if (setsockopt(_multicastSocketFd, IPPROTO_IP, IP_MULTICAST_LOOP, &loop, sizeof(loop)) < 0)
     {
         perror("setsockopt:IP_MULTICAST_LOOP");
@@ -227,6 +240,7 @@ void LinuxPlatform::closeMultiCast()
     {
         perror("setsockopt:IP_DROP_MEMBERSHIP");
     }
+
     close(_multicastSocketFd);
     _multicastSocketFd = -1;
 }
@@ -239,15 +253,18 @@ bool LinuxPlatform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
     address.sin_port = htons(_multicastPort);
 
     ssize_t retVal = 0;
+
     do
     {
         retVal = sendto(_multicastSocketFd, buffer, len, 0, (struct sockaddr*)&address, sizeof(address));
+
         if (retVal == -1)
         {
             if (errno != EAGAIN && errno != EWOULDBLOCK)
                 return false;
         }
     } while (retVal == -1);
+
     //    printHex("<-", buffer, len);
     return true;
 }
@@ -285,6 +302,7 @@ void LinuxPlatform::commitToEeprom()
 void LinuxPlatform::doMemoryMapping()
 {
     _fd = open(_flashFilePath.c_str(), O_RDWR | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
+
     if (_fd < 0)
     {
         puts("Error in file opening");
@@ -292,7 +310,9 @@ void LinuxPlatform::doMemoryMapping()
     }
 
     struct stat st;
+
     uint32_t ret = fstat(_fd, &st);
+
     if (ret < 0)
     {
         puts("Error in fstat");
@@ -300,6 +320,7 @@ void LinuxPlatform::doMemoryMapping()
     }
 
     size_t len_file = st.st_size;
+
     if (len_file < FLASHSIZE)
     {
         if (ftruncate(_fd, FLASHSIZE) != 0)
@@ -307,9 +328,12 @@ void LinuxPlatform::doMemoryMapping()
             puts("Error extending file");
             //exit(-1);
         }
+
         len_file = FLASHSIZE;
     }
+
     unsigned char* addr = (unsigned char*)mmap(NULL, len_file, PROT_READ | PROT_WRITE, MAP_SHARED, _fd, 0);
+
     if (addr[0] != 0xAF || addr[1] != 0xFE)
     {
         memset(addr, 0, FLASHSIZE);
@@ -322,6 +346,7 @@ void LinuxPlatform::doMemoryMapping()
         puts("Error in mmap");
         //exit(-1);
     }
+
     _mappedFile = addr;
 }
 
@@ -340,7 +365,7 @@ int LinuxPlatform::readWriteSpi(uint8_t* data, size_t len)
     struct spi_ioc_transfer spi;
 
     // Mentioned in spidev.h but not used in the original kernel documentation
-    //	test program )-:
+    //  test program )-:
 
     memset(&spi, 0, sizeof(spi));
 
@@ -403,7 +428,7 @@ std::string LinuxPlatform::flashFilePath()
 
 
 
-size_t LinuxPlatform::readBytesUart(uint8_t *buffer, size_t length)
+size_t LinuxPlatform::readBytesUart(uint8_t* buffer, size_t length)
 {
     return read(_uartFd, buffer, length);
 }
@@ -420,7 +445,7 @@ int LinuxPlatform::readUart()
     return ((int)x) & 0xFF ;
 }
 
-size_t LinuxPlatform::writeUart(const uint8_t *buffer, size_t size)
+size_t LinuxPlatform::writeUart(const uint8_t* buffer, size_t size)
 {
     return write(_uartFd, buffer, size) ;
 }
@@ -434,12 +459,12 @@ int LinuxPlatform::uartAvailable()
 {
     int result ;
 
-     if (ioctl(_uartFd, FIONREAD, &result) == -1)
-     {
+    if (ioctl(_uartFd, FIONREAD, &result) == -1)
+    {
         return -1;
-     }
+    }
 
-     return result ;
+    return result ;
 }
 
 void LinuxPlatform::closeUart()
@@ -459,16 +484,19 @@ void LinuxPlatform::setupUart()
 
     /* Port oeffnen - read/write, kein "controlling tty", Status von DCD ignorieren */
     _uartFd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY);
+
     if (_uartFd >= 0)
     {
         /* get the current options */
         fcntl(_uartFd, F_SETFL, 0);
+
         if (tcgetattr(_uartFd, &options) != 0)
         {
             close(_uartFd);
             _uartFd = -1;
             return;
         }
+
         memset(&options, 0, sizeof(options)); /* Structur loeschen, ggf. vorher sichern
                                              und bei Programmende wieder restaurieren */
         /* Baudrate setzen */
@@ -491,7 +519,7 @@ void LinuxPlatform::setupUart()
         options.c_oflag &= ~OPOST;          /* setze "raw" Input */
         options.c_cc[VMIN]  = 0;            /* warten auf min. 0 Zeichen */
         options.c_cc[VTIME] = 10;           /* Timeout 1 Sekunde */
-        tcflush(_uartFd,TCIOFLUSH);         /* Puffer leeren */
+        tcflush(_uartFd, TCIOFLUSH);        /* Puffer leeren */
 
         if (tcsetattr(_uartFd, TCSAFLUSH, &options) != 0)
         {
@@ -504,20 +532,22 @@ void LinuxPlatform::setupUart()
 
 #ifndef KNX_NO_PRINT
 void printUint64(uint64_t value, int base = DEC)
-  {
+{
     char buf[8 * sizeof(uint64_t) + 1];
     char* str = &buf[sizeof(buf) - 1];
     *str = '\0';
 
     uint64_t n = value;
-    do {
-      char c = n % base;
-      n /= base;
 
-      *--str = c < 10 ? c + '0' : c + 'A' - 10;
+    do
+    {
+        char c = n % base;
+        n /= base;
+
+        *--str = c < 10 ? c + '0' : c + 'A' - 10;
     } while (n > 0);
 
-     print(str);
+    print(str);
 }
 
 void print(const char* s)
@@ -737,7 +767,7 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
     if (_args)
         delete[] _args;
 
-    _args = new char*[argc + 1];
+    _args = new char* [argc + 1];
     memcpy(_args, argv, argc * sizeof(char*));
     _args[argc] = 0;
 }
@@ -747,7 +777,8 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
 #define MAX_NUM_GPIO 64
 
 static int gpioFds[MAX_NUM_GPIO] =
-    {
+{
+    -1,
         -1,
         -1,
         -1,
@@ -811,8 +842,7 @@ static int gpioFds[MAX_NUM_GPIO] =
         -1,
         -1,
         -1,
-        -1,
-};
+    };
 
 /* Activate GPIO-Pin
  * Write GPIO pin number to /sys/class/gpio/export
@@ -828,6 +858,7 @@ int gpio_export(int pin)
     fprintf(stderr, "Export GPIO pin %d\n", pin);
 
     fd = open("/sys/class/gpio/export", O_WRONLY);
+
     if (fd < 0)
     {
         perror("Could not export GPIO pin(open)!\n");
@@ -865,6 +896,7 @@ int gpio_unexport(int pin)
     close(gpioFds[pin]);
 
     fd = open("/sys/class/gpio/unexport", O_WRONLY);
+
     if (fd < 0)
     {
         perror("Could not unexport GPIO pin(open)!\n");
@@ -899,6 +931,7 @@ int gpio_direction(int pin, int dir)
 
     snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/direction", pin);
     fd = open(path, O_WRONLY);
+
     if (fd < 0)
     {
         perror("Could not set mode for GPIO pin(open)!\n");
@@ -910,9 +943,11 @@ int gpio_direction(int pin, int dir)
         case INPUT:
             res = write(fd, "in", 2);
             break;
+
         case OUTPUT:
             res = write(fd, "out", 3);
             break;
+
         default:
             res = -1;
             break;
@@ -937,8 +972,10 @@ int gpio_read(int pin)
     char c;
 
     snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/value", pin);
+
     if (gpioFds[pin] < 0)
         gpioFds[pin] = open(path, O_RDWR);
+
     if (gpioFds[pin] < 0)
     {
         perror("Could not read from GPIO(open)!\n");
@@ -946,6 +983,7 @@ int gpio_read(int pin)
     }
 
     lseek(gpioFds[pin], 0L, SEEK_SET);
+
     if (read(gpioFds[pin], &c, 1) < 0)
     {
         perror("Could not read from GPIO(read)!\n");
@@ -964,6 +1002,7 @@ int gpio_write(int pin, int value)
     int res;                    /* Result from write()*/
 
     snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/value", pin);
+
     if (gpioFds[pin] < 0)
         gpioFds[pin] = open(path, O_RDWR);
 
@@ -978,9 +1017,11 @@ int gpio_write(int pin, int value)
         case LOW:
             res = write(gpioFds[pin], "0\n", 2);
             break;
+
         case HIGH:
             res = write(gpioFds[pin], "1\n", 2);
             break;
+
         default:
             res = -1;
             break;
@@ -1008,6 +1049,7 @@ int gpio_edge(unsigned int pin, char edge)
     snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/edge", pin);
 
     fd = open(path, O_WRONLY | O_NONBLOCK);
+
     if (fd < 0)
     {
         perror("Could not set GPIO edge detection(open)!\n");
@@ -1019,15 +1061,19 @@ int gpio_edge(unsigned int pin, char edge)
         case 'r':
             strncpy(path, "rising", 8);
             break;
+
         case 'f':
             strncpy(path, "falling", 8);
             break;
+
         case 'b':
             strncpy(path, "both", 8);
             break;
+
         case 'n':
             strncpy(path, "none", 8);
             break;
+
         default:
             close(fd);
             return (-2);
@@ -1056,6 +1102,7 @@ int gpio_wait(unsigned int pin, int timeout)
     /* Open GPIO pin */
     snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/value", pin);
     fd = open(path, O_RDONLY | O_NONBLOCK);
+
     if (fd < 0)
     {
         perror("Could not wait for GPIO edge(open)!\n");
@@ -1073,15 +1120,18 @@ int gpio_wait(unsigned int pin, int timeout)
     rc = read(fd, buf, MAX_STRBUF_SIZE - 1);
 
     rc = poll(polldat, 1, timeout);
+
     if (rc < 0)
-    { /* poll() failed! */
+    {
+        /* poll() failed! */
         perror("Could not wait for GPIO edge(poll)!\n");
         close(fd);
         return (-1);
     }
 
     if (rc == 0)
-    { /* poll() timeout! */
+    {
+        /* poll() timeout! */
         close(fd);
         return (0);
     }
@@ -1089,11 +1139,13 @@ int gpio_wait(unsigned int pin, int timeout)
     if (polldat[0].revents & POLLPRI)
     {
         if (rc < 0)
-        { /* read() failed! */
+        {
+            /* read() failed! */
             perror("Could not wait for GPIO edge(read)!\n");
             close(fd);
             return (-2);
         }
+
         /* printf("poll() GPIO %d interrupt occurred: %s\n", pin, buf); */
         close(fd);
         return (1 + atoi(buf));
@@ -1112,7 +1164,7 @@ void delayMicrosecondsHard(unsigned int howLong)
     tLong.tv_usec = howLong % 1000000;
     timeradd(&tNow, &tLong, &tEnd);
 
-    while (timercmp(&tNow, &tEnd, <))
+    while (timercmp(&tNow, &tEnd, < ))
         gettimeofday(&tNow, NULL);
 }
 
@@ -1142,15 +1194,18 @@ bool LinuxPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buff
     address.sin_port = htons(port);
 
     ssize_t retVal = 0;
+
     do
     {
         retVal = sendto(_multicastSocketFd, buffer, len, 0, (struct sockaddr*)&address, sizeof(address));
+
         if (retVal == -1)
         {
             if (errno != EAGAIN && errno != EWOULDBLOCK)
                 return false;
         }
     } while (retVal == -1);
+
     //    printHex("<-", buffer, len);
     return true;
 }

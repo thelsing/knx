@@ -9,7 +9,7 @@ KnxIpConnectResponse::KnxIpConnectResponse(IpParameterObject& parameters, uint16
     serviceTypeIdentifier(ConnectResponse);
 
     _data[LEN_KNXIP_HEADER] = channel;
-    
+
     _controlEndpoint.length(LEN_IPHPAI);
     _controlEndpoint.code(IPV4_UDP);
     _controlEndpoint.ipAddress(parameters.propertyValue<uint32_t>(PID_CURRENT_IP_ADDRESS));

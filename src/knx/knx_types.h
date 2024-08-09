@@ -50,14 +50,14 @@ enum MessageCode
     M_PropInfo_ind = 0xF7,
 
     // Function Properties
-     M_FuncPropCommand_req = 0xF8,
-     M_FuncPropCommand_con = 0xFA,
-     M_FuncPropStateRead_req = 0xF9,
-     M_FuncPropStateRead_con = 0xFA, // same as M_FuncPropStateRead_con (see 3/6/3 p.105)
+    M_FuncPropCommand_req = 0xF8,
+    M_FuncPropCommand_con = 0xFA,
+    M_FuncPropStateRead_req = 0xF9,
+    M_FuncPropStateRead_con = 0xFA, // same as M_FuncPropStateRead_con (see 3/6/3 p.105)
 
-     // Further cEMI servies
-     M_Reset_req = 0xF1,
-     M_Reset_ind = 0xF0,
+    // Further cEMI servies
+    M_Reset_req = 0xF1,
+    M_Reset_ind = 0xF0,
 };
 
 enum cEmiErrorCode
@@ -140,7 +140,7 @@ enum TpduType
 
 enum ApduType
 {
-    // Application Layer services on Multicast Communication Mode 
+    // Application Layer services on Multicast Communication Mode
     GroupValueRead = 0x000,
     GroupValueResponse = 0x040,
     GroupValueWrite = 0x080,
@@ -165,7 +165,7 @@ enum ApduType
     DomainAddressSerialNumberRead = 0x3ec,
     DomainAddressSerialNumberResponse = 0x3ed,
     DomainAddressSerialNumberWrite = 0x3ee,
-    
+
     // Application Layer Services on Point-to-point Connection-Oriented Communication Mode (mandatory)
     // Application Layer Services on Point-to-point Connectionless Communication Mode (either optional or mandatory)
     ADCRead = 0x0180,

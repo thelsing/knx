@@ -10,13 +10,13 @@
 #include "rf_physical_layer.h"
 
 /*----------------------------------[standard]--------------------------------*/
-#define CC1101_TIMEOUT 		     2000		// Time to wait for a response from CC1101
+#define CC1101_TIMEOUT           2000       // Time to wait for a response from CC1101
 
 #define RX_PACKET_TIMEOUT        20   // Wait 20ms for packet reception to complete
 #define TX_PACKET_TIMEOUT        20   // Wait 20ms for packet reception to complete
 
 #ifdef __linux__ // Linux Platform
-extern void delayMicroseconds (unsigned int howLong);
+    extern void delayMicroseconds (unsigned int howLong);
 #endif
 
 /*----------------------[CC1101 - misc]---------------------------------------*/
@@ -167,14 +167,14 @@ extern void delayMicroseconds (unsigned int howLong);
 #define CHIPSTATUS_STATE_BITMASK   0x70
 #define CHIPSTATUS_FIFO_BYTES_AVAILABLE_BITMASK 0x0F
 // Chip states
- #define CHIPSTATUS_STATE_IDLE 0x00
- #define CHIPSTATUS_STATE_RX 0x10
- #define CHIPSTATUS_STATE_TX 0x20
- #define CHIPSTATUS_STATE_FSTXON 0x30
- #define CHIPSTATUS_STATE_CALIBRATE 0x40
- #define CHIPSTATUS_STATE_SETTLING 0x50
- #define CHIPSTATUS_STATE_RX_OVERFLOW 0x60
- #define CHIPSTATUS_STATE_TX_UNDERFLOW 0x70
+#define CHIPSTATUS_STATE_IDLE 0x00
+#define CHIPSTATUS_STATE_RX 0x10
+#define CHIPSTATUS_STATE_TX 0x20
+#define CHIPSTATUS_STATE_FSTXON 0x30
+#define CHIPSTATUS_STATE_CALIBRATE 0x40
+#define CHIPSTATUS_STATE_SETTLING 0x50
+#define CHIPSTATUS_STATE_RX_OVERFLOW 0x60
+#define CHIPSTATUS_STATE_TX_UNDERFLOW 0x70
 
 // loop states
 #define RX_START 0
@@ -188,55 +188,55 @@ class RfDataLinkLayer;
 
 class RfPhysicalLayerCC1101 : public RfPhysicalLayer
 {
-  public:
-    RfPhysicalLayerCC1101(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
+    public:
+        RfPhysicalLayerCC1101(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
 
-    bool InitChip();
-    void showRegisterSettings();
-    void stopChip();
-    void loop();
+        bool InitChip();
+        void showRegisterSettings();
+        void stopChip();
+        void loop();
 
-  private:
-    // Table for encoding 4-bit data into a 8-bit Manchester encoding.
-    static const uint8_t manchEncodeTab[16];
-    // Table for decoding 4-bit Manchester encoded data into 2-bit
-    static const uint8_t manchDecodeTab[16];
+    private:
+        // Table for encoding 4-bit data into a 8-bit Manchester encoding.
+        static const uint8_t manchEncodeTab[16];
+        // Table for decoding 4-bit Manchester encoded data into 2-bit
+        static const uint8_t manchDecodeTab[16];
 
-    static const uint8_t cc1101_2FSK_32_7_kb[CFG_REGISTER];
-    static const uint8_t paTablePower868[8];
+        static const uint8_t cc1101_2FSK_32_7_kb[CFG_REGISTER];
+        static const uint8_t paTablePower868[8];
 
-    void manchEncode(uint8_t *uncodedData, uint8_t *encodedData);
-    bool manchDecode(uint8_t *encodedData, uint8_t *decodedData);
+        void manchEncode(uint8_t* uncodedData, uint8_t* encodedData);
+        bool manchDecode(uint8_t* encodedData, uint8_t* decodedData);
 
-    void powerDownCC1101();
-    void setOutputPowerLevel(int8_t dBm);
+        void powerDownCC1101();
+        void setOutputPowerLevel(int8_t dBm);
 
-    uint8_t sIdle();
-    uint8_t sReceive();
+        uint8_t sIdle();
+        uint8_t sReceive();
 
-    void spiWriteRegister(uint8_t spi_instr, uint8_t value);
-    uint8_t spiReadRegister(uint8_t spi_instr);
-    uint8_t spiWriteStrobe(uint8_t spi_instr);
-    void spiReadBurst(uint8_t spi_instr, uint8_t *pArr, uint8_t len);
-    void spiWriteBurst(uint8_t spi_instr, const uint8_t *pArr, uint8_t len);
+        void spiWriteRegister(uint8_t spi_instr, uint8_t value);
+        uint8_t spiReadRegister(uint8_t spi_instr);
+        uint8_t spiWriteStrobe(uint8_t spi_instr);
+        void spiReadBurst(uint8_t spi_instr, uint8_t* pArr, uint8_t len);
+        void spiWriteBurst(uint8_t spi_instr, const uint8_t* pArr, uint8_t len);
 
-    uint8_t _loopState = RX_START;
+        uint8_t _loopState = RX_START;
 
-    bool syncStart = false;
-    bool packetStart = true;
-    bool fixedLengthMode = false;
-    uint8_t *sendBuffer {0};
-    uint16_t sendBufferLength {0};
-    uint8_t packet[512];
-    uint8_t buffer[sizeof(packet)*2]; // We need twice the space due to manchester encoding
-    uint8_t* pByteIndex = &buffer[0];
-    uint16_t pktLen {0};
-    uint16_t bytesLeft = {0};
-    uint8_t statusGDO0 {0};
-    uint8_t statusGDO2 {0};
-    uint8_t prevStatusGDO0 {0}; // for edge detection during polling
-    uint8_t prevStatusGDO2 {0}; // for edge detection during polling
-    uint32_t packetStartTime {0};
+        bool syncStart = false;
+        bool packetStart = true;
+        bool fixedLengthMode = false;
+        uint8_t* sendBuffer {0};
+        uint16_t sendBufferLength {0};
+        uint8_t packet[512];
+        uint8_t buffer[sizeof(packet) * 2]; // We need twice the space due to manchester encoding
+        uint8_t* pByteIndex = &buffer[0];
+        uint16_t pktLen {0};
+        uint16_t bytesLeft = {0};
+        uint8_t statusGDO0 {0};
+        uint8_t statusGDO2 {0};
+        uint8_t prevStatusGDO0 {0}; // for edge detection during polling
+        uint8_t prevStatusGDO2 {0}; // for edge detection during polling
+        uint32_t packetStartTime {0};
 };
 
 #endif // USE_RF

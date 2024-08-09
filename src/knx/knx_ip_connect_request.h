@@ -6,14 +6,14 @@
 #ifdef USE_IP
 class KnxIpConnectRequest : public KnxIpFrame
 {
-  public:
-    KnxIpConnectRequest(uint8_t* data, uint16_t length);
-    IpHostProtocolAddressInformation& hpaiCtrl();
-    IpHostProtocolAddressInformation& hpaiData();
-    KnxIpCRI& cri();
-  private:
-    IpHostProtocolAddressInformation _hpaiCtrl;
-    IpHostProtocolAddressInformation _hpaiData;
-    KnxIpCRI _cri;
+    public:
+        KnxIpConnectRequest(uint8_t* data, uint16_t length);
+        IpHostProtocolAddressInformation& hpaiCtrl();
+        IpHostProtocolAddressInformation& hpaiData();
+        KnxIpCRI& cri();
+    private:
+        IpHostProtocolAddressInformation _hpaiCtrl;
+        IpHostProtocolAddressInformation _hpaiData;
+        KnxIpCRI _cri;
 };
 #endif

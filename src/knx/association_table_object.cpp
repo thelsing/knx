@@ -40,8 +40,8 @@ uint16_t AssociationTableObject::getASAP(uint16_t idx)
 }
 
 // after any table change the table is checked if it allows
-// binary search access. If not, sortedEntryCount stays 0, 
-// otherwise sortedEntryCount represents size of bin search array 
+// binary search access. If not, sortedEntryCount stays 0,
+// otherwise sortedEntryCount represents size of bin search array
 void AssociationTableObject::prepareBinarySearch()
 {
     sortedEntryCount = 0;
@@ -50,24 +50,29 @@ void AssociationTableObject::prepareBinarySearch()
     uint16_t currentASAP = 0;
     uint16_t lookupIdx = 0;
     uint16_t lookupASAP = 0;
+
     // we iterate through all ASAP
     // the first n ASAP are sorted (strictly increasing number), these are assigning sending TSAP
-    // the remaining ASAP have to be all repetitions, otherwise we set sortedEntryCount to 0, which forces linear search 
-    if(_tableData != nullptr) {
+    // the remaining ASAP have to be all repetitions, otherwise we set sortedEntryCount to 0, which forces linear search
+    if (_tableData != nullptr)
+    {
         for (uint16_t idx = 0; idx < entryCount(); idx++)
         {
             currentASAP = getASAP(idx);
+
             if (sortedEntryCount)
             {
                 // look if the remaining ASAP exist in the previously sorted list.
                 while (lookupIdx < sortedEntryCount)
                 {
                     lookupASAP = getASAP(lookupIdx);
+
                     if (currentASAP <= lookupASAP)
                         break; // while
                     else
                         lookupIdx++;
                 }
+
                 if (currentASAP < lookupASAP || lookupIdx >= sortedEntryCount)
                 {
                     // a new ASAP found, we force linear search
@@ -87,11 +92,13 @@ void AssociationTableObject::prepareBinarySearch()
                 }
             }
         }
+
         // in case complete table is strictly increasing
         if (lookupIdx == 0 && sortedEntryCount == 0)
             sortedEntryCount = entryCount();
-    } 
-#endif    
+    }
+
+#endif
 }
 
 const uint8_t* AssociationTableObject::restore(const uint8_t* buffer)
@@ -113,13 +120,15 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
         uint16_t low = 0;
         uint16_t high = sortedEntryCount - 1;
 
-        while(low <= high)
+        while (low <= high)
         {
             uint16_t i = (low + high) / 2;
             uint16_t asap_i = getASAP(i);
+
             if (asap_i == asap)
                 return getTSAP(i);
-            if(asap_i > asap)
+
+            if (asap_i > asap)
                 high = i - 1;
             else
                 low = i + 1 ;
@@ -127,17 +136,19 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
     }
     else
     {
-        // if ASAP numbers are not strictly increasing linear seach is used 
+        // if ASAP numbers are not strictly increasing linear seach is used
         for (uint16_t i = 0; i < entryCount(); i++)
             if (getASAP(i) == asap)
                 return getTSAP(i);
     }
+
     return -1;
 }
 
 void AssociationTableObject::beforeStateChange(LoadState& newState)
 {
     TableObject::beforeStateChange(newState);
+
     if (newState != LS_LOADED)
         return;
 
@@ -148,14 +159,16 @@ void AssociationTableObject::beforeStateChange(LoadState& newState)
 int32_t AssociationTableObject::nextAsap(uint16_t tsap, uint16_t& startIdx)
 {
     uint16_t entries = entryCount();
+
     for (uint16_t i = startIdx; i < entries; i++)
     {
-        startIdx = i+1;
+        startIdx = i + 1;
 
         if (getTSAP(i) == tsap)
         {
             return getASAP(i);
         }
     }
+
     return -1;
 }

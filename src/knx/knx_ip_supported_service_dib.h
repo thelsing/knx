@@ -15,9 +15,9 @@ enum ServiceFamily : uint8_t
 
 class KnxIpSupportedServiceDIB : public KnxIpDIB
 {
-  public:
-    KnxIpSupportedServiceDIB(uint8_t* data);
-    uint8_t serviceVersion(ServiceFamily family);
-    void serviceVersion(ServiceFamily family, uint8_t version);
+    public:
+        KnxIpSupportedServiceDIB(uint8_t* data);
+        uint8_t serviceVersion(ServiceFamily family);
+        void serviceVersion(ServiceFamily family, uint8_t version);
 };
 #endif

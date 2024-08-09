@@ -5,17 +5,17 @@
 
 #define LEN_SERVICE_FAMILIES 2
 #if MASK_VERSION == 0x091A
-#ifdef KNX_TUNNELING
-#define LEN_SERVICE_DIB (2 + 4 * LEN_SERVICE_FAMILIES)
+    #ifdef KNX_TUNNELING
+        #define LEN_SERVICE_DIB (2 + 4 * LEN_SERVICE_FAMILIES)
+    #else
+        #define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
+    #endif
 #else
-#define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
-#endif
-#else
-#ifdef KNX_TUNNELING
-#define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
-#else
-#define LEN_SERVICE_DIB (2 + 2 * LEN_SERVICE_FAMILIES)
-#endif
+    #ifdef KNX_TUNNELING
+        #define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
+    #else
+        #define LEN_SERVICE_DIB (2 + 2 * LEN_SERVICE_FAMILIES)
+    #endif
 #endif
 
 KnxIpSearchResponseExtended::KnxIpSearchResponseExtended(IpParameterObject& parameters, DeviceObject& deviceObject, int dibLength)
@@ -54,7 +54,7 @@ void KnxIpSearchResponseExtended::setDeviceInfo(IpParameterObject& parameters, D
     Property* prop = parameters.property(PID_MAC_ADDRESS);
     prop->read(mac_address);
     _deviceInfo.macAddress(mac_address);
-    
+
     uint8_t friendlyName[LEN_FRIENDLY_NAME] = {0};
     prop = parameters.property(PID_FRIENDLY_NAME);
     prop->read(1, LEN_FRIENDLY_NAME, friendlyName);
@@ -122,12 +122,12 @@ void KnxIpSearchResponseExtended::setKnxAddresses(IpParameterObject& parameters,
     uint16_t length = 0;
     parameters.readPropertyLength(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES, length);
 
-    const uint8_t *addresses = parameters.propertyData(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES);
+    const uint8_t* addresses = parameters.propertyData(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES);
 
-    for(int i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
         uint16_t additional = 0;
-        popWord(additional, addresses + i*2);
+        popWord(additional, addresses + i * 2);
         _knxAddresses.additional(additional);
     }
 
@@ -144,43 +144,49 @@ void KnxIpSearchResponseExtended::setTunnelingInfo(IpParameterObject& parameters
 
     uint16_t length = 0;
     parameters.readPropertyLength(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES, length);
-    
-    const uint8_t *addresses;
-    if(length == KNX_TUNNELING)
+
+    const uint8_t* addresses;
+
+    if (length == KNX_TUNNELING)
     {
         addresses = parameters.propertyData(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES);
-    } else {
-        uint8_t addrbuffer[KNX_TUNNELING*2];
+    }
+    else
+    {
+        uint8_t addrbuffer[KNX_TUNNELING * 2];
         addresses = (uint8_t*)addrbuffer;
-        for(int i = 0; i < KNX_TUNNELING; i++)
+
+        for (int i = 0; i < KNX_TUNNELING; i++)
         {
-            addrbuffer[i*2+1] = i+1;
-            addrbuffer[i*2] = deviceObject.individualAddress() / 0x0100;
+            addrbuffer[i * 2 + 1] = i + 1;
+            addrbuffer[i * 2] = deviceObject.individualAddress() / 0x0100;
         }
     }
 
-    for(int i = 0; i < length; i++)
+    for (int i = 0; i < length; i++)
     {
         uint16_t additional = 0;
-        popWord(additional, addresses + i*2);
+        popWord(additional, addresses + i * 2);
         uint16_t flags = 0;
 
         uint8_t doubleCounter = 0;
         bool used = false;
-        for(int i = 0; i < KNX_TUNNELING; i++)
+
+        for (int i = 0; i < KNX_TUNNELING; i++)
         {
-            if(tunnels[i].IndividualAddress == additional)
+            if (tunnels[i].IndividualAddress == additional)
             {
                 doubleCounter += 1;
-                if(tunnels[i].ChannelId != 0)
+
+                if (tunnels[i].ChannelId != 0)
                     used = true;
             }
         }
 
-        if(doubleCounter > 1 && used)
+        if (doubleCounter > 1 && used)
             flags |= 1 << 2; //Slot is not usable; double PA is already used
 
-        if(used)
+        if (used)
         {
             flags |= 1 << 2; //Slot is not usable; PA is already used
             flags |= 1; //Slot is not free
@@ -213,7 +219,7 @@ IpHostProtocolAddressInformation& KnxIpSearchResponseExtended::controlEndpoint()
 }
 
 
-uint8_t *KnxIpSearchResponseExtended::DIBs()
+uint8_t* KnxIpSearchResponseExtended::DIBs()
 {
     return _data + LEN_KNXIP_HEADER + LEN_IPHPAI;
 }

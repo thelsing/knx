@@ -23,17 +23,17 @@ class RfDataLinkLayer;
 
 class RfPhysicalLayerCC1310 : public RfPhysicalLayer
 {
-  public:
-    RfPhysicalLayerCC1310(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
+    public:
+        RfPhysicalLayerCC1310(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
 
-    bool InitChip() override;
-    void stopChip() override;
-    void loop() override;
+        bool InitChip() override;
+        void stopChip() override;
+        void loop() override;
 
-    void setOutputPowerLevel(int8_t dBm);
+        void setOutputPowerLevel(int8_t dBm);
 
-  private:
-    uint8_t _loopState = RX_START;
+    private:
+        uint8_t _loopState = RX_START;
 };
 
 #endif // USE_RF

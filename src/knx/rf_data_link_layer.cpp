@@ -2,9 +2,9 @@
 #ifdef USE_RF
 
 #if defined(DeviceFamily_CC13X0)
-  #include "rf_physical_layer_cc1310.h"
+    #include "rf_physical_layer_cc1310.h"
 #else
-  #include "rf_physical_layer_cc1101.h"
+    #include "rf_physical_layer_cc1101.h"
 #endif
 #include "rf_data_link_layer.h"
 
@@ -23,7 +23,7 @@ void RfDataLinkLayer::loop()
     if (!_enabled)
         return;
 
-    _rfPhy.loop();        
+    _rfPhy.loop();
 }
 
 bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
@@ -78,7 +78,7 @@ bool RfDataLinkLayer::sendFrame(CemiFrame& frame)
 }
 
 RfDataLinkLayer::RfDataLinkLayer(DeviceObject& devObj, RfMediumObject& rfMediumObj,
-                                         NetworkLayerEntity &netLayerEntity, Platform& platform, BusAccessUnit& busAccessUnit)
+                                 NetworkLayerEntity& netLayerEntity, Platform& platform, BusAccessUnit& busAccessUnit)
     : DataLinkLayer(devObj, netLayerEntity, platform, busAccessUnit),
       _rfMediumObj(rfMediumObj),
       _rfPhy(*this, platform)
@@ -99,34 +99,34 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
     }
 
 #if defined(DeviceFamily_CC13X0)
-        // Small optimization:
-        // We do not calculate the CRC16-DNP again for the first block.
-        // It was already done in the CC13x0 RX driver during reception.
-        // Also the two fixed bytes 0x44 and 0xFF are also there.
-        // So if we get here we can assume a valid block 1
-#else        
+    // Small optimization:
+    // We do not calculate the CRC16-DNP again for the first block.
+    // It was already done in the CC13x0 RX driver during reception.
+    // Also the two fixed bytes 0x44 and 0xFF are also there.
+    // So if we get here we can assume a valid block 1
+#else
     // CRC16-DNP of first block is always located here
     uint16_t block1Crc = rfPacketBuf[10] << 8 | rfPacketBuf[11];
-    
+
     // If the checksum was ok and the other
     // two constant header bytes match the KNX-RF spec. (C-field: 0x44 and ESC-field: 0xFF)...
     // then we seem to have a valid first block of an KNX RF frame.
     // The first block basically contains the RF-info field and the KNX SN/Domain address.
     if ((rfPacketBuf[1] == 0x44) &&
-        (rfPacketBuf[2] == 0xFF) &&
-        (crc16Dnp(rfPacketBuf, 10) == block1Crc))
-#endif        
+            (rfPacketBuf[2] == 0xFF) &&
+            (crc16Dnp(rfPacketBuf, 10) == block1Crc))
+#endif
     {
         // bytes left from the remaining block(s)
         uint16_t bytesLeft = length - 12;
         // we use two pointers to move over the two buffers
         uint8_t* pRfPacketBuf = &rfPacketBuf[12]; // pointer to start of RF frame block 2 (with CTRL field)
-        // Reserve 1 byte (+1) for the second ctrl field 
+        // Reserve 1 byte (+1) for the second ctrl field
         // cEMI frame has two CTRL fields, but RF frame has only one, but uses ALWAYS extended frames
         // Information for BOTH cEMI CTRL fields is distributed in a RF frame (RF CTRL field and RF L/NPCI field)
         // So we cannot just copy an RF frame with CTRL fields as is
         // KNX RF frame will be placed starting at cEMI CTRL2 field (so RF CTRL field is CTRL2 field cEMI)
-        uint8_t* pBuffer = &_buffer[CEMI_HEADER_SIZE + 1]; 
+        uint8_t* pBuffer = &_buffer[CEMI_HEADER_SIZE + 1];
         // New length of the packet with CRC bytes removed, add space for CEMI header and the second CTRL field
         uint16_t newLength = CEMI_HEADER_SIZE + 1;
 
@@ -134,10 +134,12 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
         // into a new buffer without checksum
         uint16_t blockCrc;
         bool crcOk = true;
+
         while (bytesLeft > 18)
         {
             // Get CRC16 from end of the block
             blockCrc = pRfPacketBuf[16] << 8 | pRfPacketBuf[17];
+
             if (crc16Dnp(pRfPacketBuf, 16) == blockCrc)
             {
                 // Copy only the payload without the checksums
@@ -148,6 +150,7 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
                 crcOk = false;
                 break;
             }
+
             pBuffer += 16;
             pRfPacketBuf += 18;
             newLength += 16;
@@ -156,33 +159,33 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
 
         // Now process the last block
         blockCrc = pRfPacketBuf[bytesLeft - 2] << 8 | pRfPacketBuf[bytesLeft - 1];
-        crcOk = crcOk && (crc16Dnp(&pRfPacketBuf[0], bytesLeft -2) == blockCrc);
+        crcOk = crcOk && (crc16Dnp(&pRfPacketBuf[0], bytesLeft - 2) == blockCrc);
 
         // If all checksums were ok, then...
         if (crcOk)
         {
             // Copy rest of the received packet without checksum
-            memcpy(pBuffer, pRfPacketBuf,  bytesLeft -2);
-            newLength += bytesLeft -2;
+            memcpy(pBuffer, pRfPacketBuf,  bytesLeft - 2);
+            newLength += bytesLeft - 2;
 
             // Prepare CEMI by writing/overwriting certain fields in the buffer (contiguous frame without CRC checksums)
-            // See 3.6.3 p.79: L_Data services for KNX RF asynchronous frames 
+            // See 3.6.3 p.79: L_Data services for KNX RF asynchronous frames
             // For now we do not use additional info, but use normal method arguments for CEMI
             _buffer[0] = (uint8_t) L_data_ind;  // L_data.ind
             _buffer[1] = 0;     // Additional info length (spec. says that local dev management is not required to use AddInfo internally)
             _buffer[2] = 0;     // CTRL1 field (will be set later, this is the field we reserved space for)
             _buffer[3] &= 0x0F; // CTRL2 field (take only RFCtrl.b3..0, b7..4 shall always be 0 for asynchronous KNX RF)
 
-            // Now get all control bits from the L/NPCI field of the RF frame 
+            // Now get all control bits from the L/NPCI field of the RF frame
             // so that we can overwrite it afterwards with the correct NPDU length
             // Get data link layer frame number (LFN field) from L/NPCI.LFN (bit 3..1)
             uint8_t lfn = (_buffer[8] & 0x0E) >> 1;
             // Get address type from L/NPCI.LFN (bit 7)
-            AddressType addressType = (_buffer[8] & 0x80) ? GroupAddress:IndividualAddress;
+            AddressType addressType = (_buffer[8] & 0x80) ? GroupAddress : IndividualAddress;
             // Get routing counter from L/NPCI.LFN (bit 6..4) and map to hop count in Ctrl2.b6-4
             uint8_t hopCount = (_buffer[8] & 0x70) >> 4;
             // Get AddrExtensionType from L/NPCI.LFN (bit 7) and map to system broadcast flag in Ctrl1.b4
-            SystemBroadcast systemBroadcast = (_buffer[8] & 0x01) ? Broadcast:SysBroadcast;
+            SystemBroadcast systemBroadcast = (_buffer[8] & 0x01) ? Broadcast : SysBroadcast;
 
             // Setup L field of the cEMI frame with the NPDU length
             // newLength -8 bytes (NPDU_LPDU_DIFF, no AddInfo) -1 byte length field -1 byte TPCI/APCI bits
@@ -208,22 +211,22 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
             CemiFrame frame(_buffer, newLength);
             frame.frameType(ExtendedFrame);         // KNX RF uses only extended frame format
             frame.priority(SystemPriority);         // Not used in KNX RF
-            frame.ack(AckDontCare);                 // Not used in KNX RF 
+            frame.ack(AckDontCare);                 // Not used in KNX RF
             frame.systemBroadcast(systemBroadcast); // Mapped from flag AddrExtensionType (KNX serial(0) or Domain Address(1))
             frame.hopCount(hopCount);               // Hop count from routing counter
             frame.addressType(addressType);         // Group address or individual address
             frame.rfSerialOrDoA(&rfPacketBuf[4]);   // Copy pointer to field Serial or Domain Address (check broadcast flag what it is exactly)
             frame.rfInfo(rfPacketBuf[3]);           // RF-info field (1 byte)
             frame.rfLfn(lfn);                       // Data link layer frame number (LFN field)
-/*
-            print("RX LFN: ");
-            print(lfn);
-            print(" len: ");
-            print(newLength);
+            /*
+                        print("RX LFN: ");
+                        print(lfn);
+                        print(" len: ");
+                        print(newLength);
 
-            print(" data: ");
-            printHex(" data: ", _buffer, newLength);
-*/
+                        print(" data: ");
+                        printHex(" data: ", _buffer, newLength);
+            */
             frameReceived(frame);
         }
     }
@@ -241,9 +244,10 @@ void RfDataLinkLayer::enabled(bool value)
         }
         else
         {
-        	_enabled = false;
+            _enabled = false;
             println("ERROR, RF transceiver not responding");
         }
+
         return;
     }
 
@@ -271,8 +275,8 @@ void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
     uint16_t length = frame.telegramLengthtRF();
 
     data[0] = 9 + length;     // Length block1 (always 9 bytes, without length itself) + Length of KNX telegram without CRCs
-    data[1] = 0x44;           // C field: According to IEC870-5. KNX only uses SEND/NO REPLY (C = 44h) 
-    data[2] = 0xFF;           // ESC field: This field shall have the fixed value FFh. 
+    data[1] = 0x44;           // C field: According to IEC870-5. KNX only uses SEND/NO REPLY (C = 44h)
+    data[2] = 0xFF;           // ESC field: This field shall have the fixed value FFh.
     data[3] = frame.rfInfo(); // RF-info field
 
     // Generate CRC16-DNP over the first block of data
@@ -286,8 +290,9 @@ void RfDataLinkLayer::fillRfFrame(CemiFrame& frame, uint8_t* data)
 
     // Create a checksum for each block of full 16 bytes
     uint16_t bytesLeft = length;
-    uint8_t *pBuffer = &_buffer[0];
-    uint8_t *pData = &data[12];
+    uint8_t* pBuffer = &_buffer[0];
+    uint8_t* pData = &data[12];
+
     while (bytesLeft > 16)
     {
         memcpy(pData, pBuffer, 16);
@@ -326,15 +331,16 @@ void RfDataLinkLayer::addFrameTxQueue(CemiFrame& frame)
 
     // Prepare the raw RF frame
     fillRfFrame(frame, tx_frame->data);
-/*
-    print("TX LFN: ");
-    print(frame.rfLfn());
 
-    print(" len: ");
-    print(totalLength);
+    /*
+        print("TX LFN: ");
+        print(frame.rfLfn());
 
-    printHex(" data:", tx_frame->data, totalLength);
-*/
+        print(" len: ");
+        print(totalLength);
+
+        printHex(" data:", tx_frame->data, totalLength);
+    */
     if (_tx_queue.back == NULL)
     {
         _tx_queue.front = _tx_queue.back = tx_frame;
@@ -352,6 +358,7 @@ bool RfDataLinkLayer::isTxQueueEmpty()
     {
         return true;
     }
+
     return false;
 }
 
@@ -361,6 +368,7 @@ void RfDataLinkLayer::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuffer
     {
         return;
     }
+
     _tx_queue_frame_t* tx_frame = _tx_queue.front;
     *sendBuffer = tx_frame->data;
     *sendBufferLength = tx_frame->length;
@@ -370,6 +378,7 @@ void RfDataLinkLayer::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuffer
     {
         _tx_queue.back = NULL;
     }
+
     delete tx_frame;
 }
 

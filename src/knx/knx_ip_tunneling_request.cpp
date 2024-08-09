@@ -2,8 +2,8 @@
 #include <cstring>
 
 #ifdef USE_IP
-KnxIpTunnelingRequest::KnxIpTunnelingRequest(uint8_t* data, 
-    uint16_t length) : KnxIpFrame(data, length), _ch(_data + headerLength()), _frame(data + LEN_CH + headerLength(), length - LEN_CH - headerLength())
+KnxIpTunnelingRequest::KnxIpTunnelingRequest(uint8_t* data,
+        uint16_t length) : KnxIpFrame(data, length), _ch(_data + headerLength()), _frame(data + LEN_CH + headerLength(), length - LEN_CH - headerLength())
 {
 }
 

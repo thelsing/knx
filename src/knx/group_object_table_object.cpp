@@ -67,7 +67,7 @@ GroupObject& GroupObjectTableObject::nextUpdatedObject(bool& valid)
     return get(1);
 }
 
-void GroupObjectTableObject::groupObjects(GroupObject * objs, uint16_t size)
+void GroupObjectTableObject::groupObjects(GroupObject* objs, uint16_t size)
 {
     freeGroupObjects();
     _groupObjects = objs;
@@ -78,6 +78,7 @@ void GroupObjectTableObject::groupObjects(GroupObject * objs, uint16_t size)
 void GroupObjectTableObject::beforeStateChange(LoadState& newState)
 {
     TableObject::beforeStateChange(newState);
+
     if (newState != LS_LOADED)
         return;
 
@@ -94,11 +95,11 @@ bool GroupObjectTableObject::initGroupObjects()
 {
     if (!_tableData)
         return false;
-    
+
     freeGroupObjects();
 
     uint16_t goCount = ntohs(_tableData[0]);
-    
+
     _groupObjects = new GroupObject[goCount];
     _groupObjectCount = goCount;
 
@@ -107,12 +108,12 @@ bool GroupObjectTableObject::initGroupObjects()
         GroupObject& go = _groupObjects[asap - 1];
         go._asap = asap;
         go._table = this;
-    
+
         go._dataLength = go.goSize();
         size_t sizeInMemory = go.sizeInMemory();
         go._data = new uint8_t[sizeInMemory];
         memset(go._data, 0, sizeInMemory);
-        
+
         if (go.valueReadOnInit())
             go.requestObjectRead();
     }
@@ -124,7 +125,7 @@ void GroupObjectTableObject::freeGroupObjects()
 {
     if (_groupObjects)
         delete[] _groupObjects;
-    
+
     _groupObjectCount = 0;
     _groupObjects = 0;
 }

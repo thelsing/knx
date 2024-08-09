@@ -7,30 +7,30 @@ class APDU;
 
 class TPDU
 {
-    friend class CemiFrame;
+        friend class CemiFrame;
 
-  public:
-    TpduType type() const;
-    void type(TpduType type);
+    public:
+        TpduType type() const;
+        void type(TpduType type);
 
-    bool numbered() const;
-    void numbered(bool value);
+        bool numbered() const;
+        void numbered(bool value);
 
-    bool control() const;
-    void control(bool value);
+        bool control() const;
+        void control(bool value);
 
-    uint8_t sequenceNumber() const;
-    void sequenceNumber(uint8_t value);
+        uint8_t sequenceNumber() const;
+        void sequenceNumber(uint8_t value);
 
-    APDU& apdu();
+        APDU& apdu();
 
-    CemiFrame& frame();
-    void printPDU();
+        CemiFrame& frame();
+        void printPDU();
 
-  protected:
-    TPDU(uint8_t* data, CemiFrame& frame);
+    protected:
+        TPDU(uint8_t* data, CemiFrame& frame);
 
-  private:
-    uint8_t* _data = 0;
-    CemiFrame& _frame;
+    private:
+        uint8_t* _data = 0;
+        CemiFrame& _frame;
 };

@@ -20,136 +20,149 @@ SecurityInterfaceObject::SecurityInterfaceObject()
     {
         new DataProperty( PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_SECURITY ),
         new CallbackProperty<SecurityInterfaceObject>(this, PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3,
-            // ReadCallback of PID_LOAD_STATE_CONTROL
-            [](SecurityInterfaceObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
-                if (start == 0)
-                    return 1;
+                // ReadCallback of PID_LOAD_STATE_CONTROL
+        [](SecurityInterfaceObject * obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+            if (start == 0)
+                return 1;
 
-                data[0] = obj->_state;
-                return 1;
-            },
-            // WriteCallback of PID_LOAD_STATE_CONTROL
-            [](SecurityInterfaceObject* obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
-                obj->loadEvent(data);
-                return 1;
-            }),
+            data[0] = obj->_state;
+            return 1;
+        },
+        // WriteCallback of PID_LOAD_STATE_CONTROL
+        [](SecurityInterfaceObject * obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
+            obj->loadEvent(data);
+            return 1;
+        }),
         new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_MODE,
-            // Command Callback of PID_SECURITY_MODE
-            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                uint8_t serviceId = data[1] & 0xff;
-                if (serviceId != 0)
+                // Command Callback of PID_SECURITY_MODE
+        [](SecurityInterfaceObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            uint8_t serviceId = data[1] & 0xff;
+
+            if (serviceId != 0)
+            {
+                resultData[0]
+                = ReturnCodes::InvalidCommand;
+                resultLength = 1;
+                return;
+            }
+            if (length == 3)
+            {
+                uint8_t mode = data[2];
+
+                if (mode > 1)
                 {
-                    resultData[0] = ReturnCodes::InvalidCommand;
+                    resultData[0] = ReturnCodes::DataVoid;
                     resultLength = 1;
                     return;
                 }
-                if (length == 3)
-                {
-                    uint8_t mode = data[2];
-                    if (mode > 1)
-                    {
-                        resultData[0] = ReturnCodes::DataVoid;
-                        resultLength = 1;
-                        return;
-                    }
-                    obj->setSecurityMode(mode == 1);
-                    resultData[0] = ReturnCodes::Success;
-                    resultData[1] = serviceId;
-                    resultLength = 2;
-                    return;
-                }
-                resultData[0] = ReturnCodes::GenericError;
+
+                obj->setSecurityMode(mode == 1);
+                resultData[0] = ReturnCodes::Success;
+                resultData[1] = serviceId;
+                resultLength = 2;
+                return;
+            }
+            resultData[0] = ReturnCodes::GenericError;
+            resultLength = 1;
+        },
+        // State Callback of PID_SECURITY_MODE
+        [](SecurityInterfaceObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            uint8_t serviceId = data[1] & 0xff;
+
+            if (serviceId != 0)
+            {
+                resultData[0]
+                = ReturnCodes::InvalidCommand;
                 resultLength = 1;
-            },
-            // State Callback of PID_SECURITY_MODE
-            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                uint8_t serviceId = data[1] & 0xff;
-                if (serviceId != 0)
-                {
-                    resultData[0] = ReturnCodes::InvalidCommand;
-                    resultLength = 1;
-                    return;
-                }
-                if (length == 2)
-                {
-                    resultData[0] = ReturnCodes::Success;
-                    resultData[1] = serviceId;
-                    resultData[2] = obj->isSecurityModeEnabled() ? 1 : 0;
-                    resultLength = 3;
-                    return;
-                }
-                resultData[0] = ReturnCodes::GenericError;
-                resultLength = 1;
-            }),
+                return;
+            }
+            if (length == 2)
+            {
+                resultData[0]
+                = ReturnCodes::Success;
+                resultData[1] = serviceId;
+                resultData[2] = obj->isSecurityModeEnabled() ? 1 : 0;
+                resultLength = 3;
+                return;
+            }
+            resultData[0] = ReturnCodes::GenericError;
+            resultLength = 1;
+        }),
         new DataProperty( PID_P2P_KEY_TABLE, true, PDT_GENERIC_20, 1, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_GRP_KEY_TABLE, true, PDT_GENERIC_18, 50, ReadLv3 | WriteLv0 ), // written by ETS
         new DataProperty( PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE, true, PDT_GENERIC_08, 32, ReadLv3 | WriteLv0 ), // written by ETS
         new FunctionProperty<SecurityInterfaceObject>(this, PID_SECURITY_FAILURES_LOG,
-            // Command Callback of PID_SECURITY_FAILURES_LOG
-            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                if (length != 3)
-                {
-                    resultData[0] = ReturnCodes::DataVoid;
-                    resultLength = 1;
-                    return;
-                }
-                uint8_t id = data[1];
-                uint8_t info = data[2];
-                if (id == 0 && info == 0)
-                {
-                    obj->clearFailureLog();
-                    resultData[0] = ReturnCodes::Success;
-                    resultData[1] = id;
-                    resultLength = 2;
-                    return;
-                }
-                resultData[0] = ReturnCodes::GenericError;
+                // Command Callback of PID_SECURITY_FAILURES_LOG
+        [](SecurityInterfaceObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            if (length != 3)
+            {
+                resultData[0]
+                = ReturnCodes::DataVoid;
                 resultLength = 1;
-            },
-            // State Callback of PID_SECURITY_FAILURES_LOG
-            [](SecurityInterfaceObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                if (length != 3)
-                {
-                    resultData[0] = ReturnCodes::DataVoid;
-                    resultLength = 1;
-                    return;
-                }
-                uint8_t id = data[1];
-                uint8_t info = data[2];
+                return;
+            }
+            uint8_t id = data[1];
+            uint8_t info = data[2];
 
-                // failure counters
-                if (id == 0 && info == 0)
+            if (id == 0 && info == 0)
+            {
+                obj->clearFailureLog();
+                resultData[0] = ReturnCodes::Success;
+                resultData[1] = id;
+                resultLength = 2;
+                return;
+            }
+            resultData[0] = ReturnCodes::GenericError;
+            resultLength = 1;
+        },
+        // State Callback of PID_SECURITY_FAILURES_LOG
+        [](SecurityInterfaceObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
+            if (length != 3)
+            {
+                resultData[0]
+                = ReturnCodes::DataVoid;
+                resultLength = 1;
+                return;
+            }
+            uint8_t id = data[1];
+            uint8_t info = data[2];
+
+            // failure counters
+            if (id == 0 && info == 0)
+            {
+                resultData[0]
+                = ReturnCodes::Success;
+                resultData[1] = id;
+                resultData[2] = info;
+                obj->getFailureCounters(&resultData[3]); // Put 8 bytes in the buffer
+                resultLength = 3 + 8;
+                return;
+            }
+            // query latest failure by index
+            else if (id == 1)
+            {
+                uint8_t maxBufferSize = resultLength; // Remember the maximum buffer size of the buffer that is provided to us
+                uint8_t index = info;
+                uint8_t numBytes = obj->getFromFailureLogByIndex(index, &resultData[2], maxBufferSize);
+
+                if ( numBytes > 0)
                 {
                     resultData[0] = ReturnCodes::Success;
                     resultData[1] = id;
-                    resultData[2] = info;
-                    obj->getFailureCounters(&resultData[3]); // Put 8 bytes in the buffer
-                    resultLength = 3 + 8;
+                    resultData[2] = index;
+                    resultLength += numBytes;
+                    resultLength = 3 + numBytes;
                     return;
                 }
-                // query latest failure by index
-                else if(id == 1)
-                {
-                    uint8_t maxBufferSize = resultLength; // Remember the maximum buffer size of the buffer that is provided to us
-                    uint8_t index = info;
-                    uint8_t numBytes = obj->getFromFailureLogByIndex(index, &resultData[2], maxBufferSize);
-                    if ( numBytes > 0)
-                    {
-                        resultData[0] = ReturnCodes::Success;
-                        resultData[1] = id;
-                        resultData[2] = index;
-                        resultLength += numBytes;
-                        resultLength = 3 + numBytes;
-                        return;
-                    }
-                    resultData[0] = ReturnCodes::DataVoid;
-                    resultData[1] = id;
-                    resultLength = 2;
-                    return;
-                }
-                resultData[0] = ReturnCodes::GenericError;
-                resultLength = 1;
-            }),
+
+                resultData[0] = ReturnCodes::DataVoid;
+                resultData[1] = id;
+                resultLength = 2;
+                return;
+            }
+            resultData[0] = ReturnCodes::GenericError;
+            resultLength = 1;
+        }),
         new DataProperty( PID_TOOL_KEY, true, PDT_GENERIC_16, 1, ReadLv3 | WriteLv0, (uint8_t*) _fdsk ), // default is FDSK // ETS changes this property during programming from FDSK to some random key!
         new DataProperty( PID_SECURITY_REPORT, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, _secReport ), // Not implemented
         new DataProperty( PID_SECURITY_REPORT_CONTROL, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, _secReportCtrl ), // Not implemented
@@ -236,15 +249,19 @@ void SecurityInterfaceObject::loadEvent(const uint8_t* data)
         case LS_UNLOADED:
             loadEventUnloaded(data);
             break;
+
         case LS_LOADING:
             loadEventLoading(data);
             break;
+
         case LS_LOADED:
             loadEventLoaded(data);
             break;
+
         case LS_ERROR:
             loadEventError(data);
             break;
+
         default:
             /* do nothing */
             break;
@@ -254,6 +271,7 @@ void SecurityInterfaceObject::loadEvent(const uint8_t* data)
 void SecurityInterfaceObject::loadEventUnloaded(const uint8_t* data)
 {
     uint8_t event = data[0];
+
     switch (event)
     {
         case LE_NOOP:
@@ -261,9 +279,11 @@ void SecurityInterfaceObject::loadEventUnloaded(const uint8_t* data)
         case LE_ADDITIONAL_LOAD_CONTROLS:
         case LE_UNLOAD:
             break;
+
         case LE_START_LOADING:
             loadState(LS_LOADING);
             break;
+
         default:
             loadState(LS_ERROR);
             errorCode(E_GOT_UNDEF_LOAD_CMD);
@@ -273,17 +293,21 @@ void SecurityInterfaceObject::loadEventUnloaded(const uint8_t* data)
 void SecurityInterfaceObject::loadEventLoading(const uint8_t* data)
 {
     uint8_t event = data[0];
+
     switch (event)
     {
         case LE_NOOP:
         case LE_START_LOADING:
             break;
+
         case LE_LOAD_COMPLETED:
             loadState(LS_LOADED);
             break;
+
         case LE_UNLOAD:
             loadState(LS_UNLOADED);
             break;
+
         case LE_ADDITIONAL_LOAD_CONTROLS: // Not supported here
         default:
             loadState(LS_ERROR);
@@ -294,21 +318,26 @@ void SecurityInterfaceObject::loadEventLoading(const uint8_t* data)
 void SecurityInterfaceObject::loadEventLoaded(const uint8_t* data)
 {
     uint8_t event = data[0];
+
     switch (event)
     {
         case LE_NOOP:
         case LE_LOAD_COMPLETED:
             break;
+
         case LE_START_LOADING:
             loadState(LS_LOADING);
             break;
+
         case LE_UNLOAD:
             loadState(LS_UNLOADED);
             break;
+
         case LE_ADDITIONAL_LOAD_CONTROLS:
             loadState(LS_ERROR);
             errorCode(E_INVALID_OPCODE);
             break;
+
         default:
             loadState(LS_ERROR);
             errorCode(E_GOT_UNDEF_LOAD_CMD);
@@ -318,6 +347,7 @@ void SecurityInterfaceObject::loadEventLoaded(const uint8_t* data)
 void SecurityInterfaceObject::loadEventError(const uint8_t* data)
 {
     uint8_t event = data[0];
+
     switch (event)
     {
         case LE_NOOP:
@@ -325,9 +355,11 @@ void SecurityInterfaceObject::loadEventError(const uint8_t* data)
         case LE_ADDITIONAL_LOAD_CONTROLS:
         case LE_START_LOADING:
             break;
+
         case LE_UNLOAD:
             loadState(LS_UNLOADED);
             break;
+
         default:
             loadState(LS_ERROR);
             errorCode(E_GOT_UNDEF_LOAD_CMD);
@@ -338,6 +370,7 @@ void SecurityInterfaceObject::loadState(LoadState newState)
 {
     if (newState == _state)
         return;
+
     //beforeStateChange(newState);
     _state = newState;
 }
@@ -381,14 +414,17 @@ const uint8_t* SecurityInterfaceObject::p2pKey(uint16_t addressIndex)
 
         // Search for address index
         uint8_t entry[elementSize]; // 2 bytes index + keysize (16 bytes) + 2 bytes(roles) = 20 bytes
+
         for (int i = 1; i <= numElements; i++)
         {
             property(PID_P2P_KEY_TABLE)->read(i, 1, entry);
             uint16_t index = (entry[0] << 8) | entry[1];
+
             if (index > addressIndex)
             {
                 return nullptr;
             }
+
             if (index == addressIndex)
             {
                 return propertyData(PID_P2P_KEY_TABLE, i) + sizeof(index);
@@ -413,14 +449,17 @@ const uint8_t* SecurityInterfaceObject::groupKey(uint16_t addressIndex)
 
         // Search for address index
         uint8_t entry[elementSize]; // 2 bytes index + keysize (16 bytes) = 18 bytes
+
         for (int i = 1; i <= numElements; i++)
         {
             property(PID_GRP_KEY_TABLE)->read(i, 1, entry);
             uint16_t index = ((entry[0] << 8) | entry[1]);
+
             if (index > addressIndex)
             {
                 return nullptr;
             }
+
             if (index == addressIndex)
             {
                 return propertyData(PID_GRP_KEY_TABLE, i) + sizeof(index);
@@ -442,10 +481,12 @@ uint16_t SecurityInterfaceObject::indAddressIndex(uint16_t indAddr)
 
         // Search for individual address
         uint8_t entry[elementSize]; // 2 bytes address + 6 bytes seqno = 8 bytes
+
         for (int i = 1; i <= numElements; i++)
         {
             property(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE)->read(i, 1, entry);
             uint16_t addr = (entry[0] << 8) | entry[1];
+
             if (addr == indAddr)
             {
                 return i;
@@ -499,16 +540,19 @@ uint64_t SecurityInterfaceObject::getLastValidSequenceNumber(uint16_t deviceAddr
 
         // Search for individual address
         uint8_t entry[elementSize]; // 2 bytes address + 6 bytes seqno = 8 bytes
+
         for (int i = 1; i <= numElements; i++)
         {
             property(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE)->read(i, 1, entry);
             uint16_t addr = (entry[0] << 8) | entry[1];
+
             if (addr == deviceAddr)
             {
                 return sixBytesToUInt64(&entry[2]);
             }
         }
     }
+
     return 0;
 }
 
@@ -523,10 +567,12 @@ void SecurityInterfaceObject::setLastValidSequenceNumber(uint16_t deviceAddr, ui
 
         // Search for individual address
         uint8_t entry[elementSize]; // 2 bytes address + 6 bytes seqno = 8 bytes
+
         for (int i = 1; i <= numElements; i++)
         {
             property(PID_SECURITY_INDIVIDUAL_ADDRESS_TABLE)->read(i, 1, entry);
             uint16_t addr = (entry[0] << 8) | entry[1];
+
             if (addr == deviceAddr)
             {
                 sixBytesFromUInt64(seqNum, &entry[2]);

@@ -35,13 +35,13 @@
 
 // Only on NCN51xx available
 #ifdef NCN5120
-#define U_CONFIGURE_REQ 0x18
-#define U_CONFIGURE_MARKER_REQ 0x1
-#define U_CONFIGURE_CRC_CCITT_REQ 0x2
-#define U_CONFIGURE_AUTO_POLLING_REQ 0x4
-#define U_SET_REPETITION_REQ 0xF2
+    #define U_CONFIGURE_REQ 0x18
+    #define U_CONFIGURE_MARKER_REQ 0x1
+    #define U_CONFIGURE_CRC_CCITT_REQ 0x2
+    #define U_CONFIGURE_AUTO_POLLING_REQ 0x4
+    #define U_SET_REPETITION_REQ 0xF2
 #else
-#define U_MXRSTCNT 0x24
+    #define U_MXRSTCNT 0x24
 #endif
 
 // knx transmit data commands
@@ -131,7 +131,7 @@ enum
     RX_AWAITING_ACK
 };
 
-void printFrame(TpFrame *tpframe)
+void printFrame(TpFrame* tpframe)
 {
     print(tpframe->humanSource().c_str());
     print(" -> ");
@@ -305,6 +305,7 @@ void TpUartDataLinkLayer::processRxByte()
                 _rxFrame->addFlags(TP_FRAME_FLAG_ACK);
                 processRxFrameComplete();
             }
+
             // println("L_ACKN_IND");
         }
         else if ((byte & L_DATA_CON_MASK) == L_DATA_CON)
@@ -408,6 +409,7 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
             {
                 // Check whether I am responsible for the frame
                 TPAckType ack = _cb.isAckRequired(_rxFrame->destination(), _rxFrame->isGroupAddress());
+
                 if (_forceAck || ack)
                 {
                     /*
@@ -431,6 +433,7 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
             }
 
 #ifdef USE_TP_RX_QUEUE
+
             // Now check whether the RxQueue still has space for Frame + Size (2) + Flags(1)
             if (_rxFrame->size() == 8 && (_rxFrame->flags() & TP_FRAME_FLAG_ADDRESSED))
             {
@@ -443,6 +446,7 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
                     }
                 }
             }
+
 #endif
         }
     }
@@ -478,14 +482,16 @@ void TpUartDataLinkLayer::processRxFrameComplete()
         if (_txState == TX_FRAME)
         {
             // check whether the receive corresponds to this: comparison of the source address and destination address and start byte without taking the retry bit into account
-            if(!((_rxFrame->data(0) ^ _txFrame->data(0)) & ~0x20) && _rxFrame->destination() == _txFrame->destination() && _rxFrame->source() == _txFrame->source())
+            if (!((_rxFrame->data(0) ^ _txFrame->data(0)) & ~0x20) && _rxFrame->destination() == _txFrame->destination() && _rxFrame->source() == _txFrame->source())
             {
                 // and mark this accordingly
                 // println("MATCH");
                 _rxFrame->addFlags(TP_FRAME_FLAG_ECHO);
             }
+
             // Now wait for the L_DATA_CON
         }
+
         // if the frame is for me or i am in busmonitor mode then i want to process it further
         if (_rxFrame->flags() & TP_FRAME_FLAG_ADDRESSED || _monitoring)
         {
@@ -499,6 +505,7 @@ void TpUartDataLinkLayer::processRxFrameComplete()
                 _rxState = RX_AWAITING_ACK;
                 return;
             }
+
             _rxProcessdFrameCounter++;
         }
         else
@@ -506,6 +513,7 @@ void TpUartDataLinkLayer::processRxFrameComplete()
             // Otherwise, discard the package and release the memory -> as it is not packed into the queue
             _rxIgnoredFrameCounter++;
         }
+
         // And ready for control codes again
         _rxState = RX_IDLE;
     }
@@ -545,7 +553,7 @@ void TpUartDataLinkLayer::clearTxFrameQueue()
 
 void TpUartDataLinkLayer::processTxFrameComplete(bool success)
 {
-    uint8_t *cemiData = _txFrame->cemiData();
+    uint8_t* cemiData = _txFrame->cemiData();
     CemiFrame cemiFrame(cemiData, _txFrame->cemiSize());
     dataConReceived(cemiFrame, success);
     free(cemiData);
@@ -557,9 +565,9 @@ void TpUartDataLinkLayer::processTxFrameComplete(bool success)
 /*
  * Puts the frame to be sent into a queue, as the TpUart may not yet be ready to send.
  */
-void TpUartDataLinkLayer::pushTxFrameQueue(TpFrame *tpFrame)
+void TpUartDataLinkLayer::pushTxFrameQueue(TpFrame* tpFrame)
 {
-    knx_tx_queue_entry_t *entry = new knx_tx_queue_entry_t(tpFrame);
+    knx_tx_queue_entry_t* entry = new knx_tx_queue_entry_t(tpFrame);
 
     if (_txFrameQueue.back == nullptr)
     {
@@ -585,7 +593,7 @@ void TpUartDataLinkLayer::setFrameRepetition(uint8_t nack, uint8_t busy)
     setRepetitions(nack, busy);
 }
 
-bool TpUartDataLinkLayer::sendFrame(CemiFrame &cemiFrame)
+bool TpUartDataLinkLayer::sendFrame(CemiFrame& cemiFrame)
 {
     _txFrameCounter++;
 
@@ -600,7 +608,7 @@ bool TpUartDataLinkLayer::sendFrame(CemiFrame &cemiFrame)
         return false;
     }
 
-    TpFrame *tpFrame = new TpFrame(cemiFrame);
+    TpFrame* tpFrame = new TpFrame(cemiFrame);
     // printHex("  TP>: ", tpFrame->data(), tpFrame->size());
     pushTxFrameQueue(tpFrame);
     return true;
@@ -647,6 +655,7 @@ void TpUartDataLinkLayer::requestConfig()
 #ifdef NCN5120
     if (markerMode())
         _platform.writeUart(U_CONFIGURE_REQ | U_CONFIGURE_MARKER_REQ);
+
 #endif
 
     // Deviating Config
@@ -734,6 +743,7 @@ bool TpUartDataLinkLayer::reset()
     {
         _rxFrame->reset();
     }
+
     _rxState = RX_IDLE;
     _connected = false;
     _stopped = false;
@@ -746,10 +756,12 @@ bool TpUartDataLinkLayer::reset()
     bool success = false;
 
     const uint32_t start = millis();
+
     // During startup answer took up to 2ms and normal 1ms
     do
     {
         const int byte = _platform.readUart();
+
         if (byte == -1)
             continue; // empty
 
@@ -761,6 +773,7 @@ bool TpUartDataLinkLayer::reset()
     } while (!((millis() - start) >= 10));
 
     connected(success);
+
     if (success)
     {
         _lastStateRequest = 0; // Force
@@ -848,7 +861,7 @@ void TpUartDataLinkLayer::processTxQueue()
 
     if (_txFrameQueue.front != nullptr)
     {
-        knx_tx_queue_entry_t *entry = _txFrameQueue.front;
+        knx_tx_queue_entry_t* entry = _txFrameQueue.front;
         _txFrameQueue.front = entry->next;
 
         if (_txFrameQueue.front == nullptr)
@@ -943,16 +956,18 @@ void TpUartDataLinkLayer::loop()
     checkConnected();
 }
 
-void TpUartDataLinkLayer::rxFrameReceived(TpFrame *tpFrame)
+void TpUartDataLinkLayer::rxFrameReceived(TpFrame* tpFrame)
 {
-    uint8_t *cemiData = tpFrame->cemiData();
+    uint8_t* cemiData = tpFrame->cemiData();
     CemiFrame cemiFrame(cemiData, tpFrame->cemiSize());
     // printHex("  TP<: ", tpFrame->data(), tpFrame->size());
     // printHex("  CEMI<: ", cemiFrame.data(), cemiFrame.dataLength());
 
 #ifdef KNX_ACTIVITYCALLBACK
+
     if (_dllcb)
         _dllcb->activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_RECV << KNX_ACTIVITYCALLBACK_DIR));
+
 #endif
 
     frameReceived(cemiFrame);
@@ -971,6 +986,7 @@ DptMedium TpUartDataLinkLayer::mediumType() const
 void TpUartDataLinkLayer::powerControl(bool state)
 {
     _platform.writeUart(U_INT_REG_WR_REQ_ACR0);
+
     if (state)
         _platform.writeUart(ACR0_FLAG_DC2EN | ACR0_FLAG_V20VEN | ACR0_FLAG_XCLKEN | ACR0_FLAG_V20VCLIMIT);
     else
@@ -1011,19 +1027,21 @@ bool TpUartDataLinkLayer::processTxFrameBytes()
     }
 
 #ifdef KNX_ACTIVITYCALLBACK
+
     if (_dllcb)
         _dllcb->activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR));
+
 #endif
 
     return true;
 }
 
-TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject &devObj,
-                                         NetworkLayerEntity &netLayerEntity,
-                                         Platform &platform,
-                                         BusAccessUnit& busAccessUnit,
-                                         ITpUartCallBacks &cb,
-                                         DataLinkLayerCallbacks *dllcb)
+TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
+        NetworkLayerEntity& netLayerEntity,
+        Platform& platform,
+        BusAccessUnit& busAccessUnit,
+        ITpUartCallBacks& cb,
+        DataLinkLayerCallbacks* dllcb)
     : DataLinkLayer(devObj, netLayerEntity, platform, busAccessUnit),
       _cb(cb),
       _dllcb(dllcb)
@@ -1104,13 +1122,13 @@ bool TpUartDataLinkLayer::markerMode()
         return false;
 
 #ifdef NCN5120
-        // return true;
+    // return true;
 #endif
 
     return false;
 }
 
-void TpUartDataLinkLayer::processRxFrame(TpFrame *tpFrame)
+void TpUartDataLinkLayer::processRxFrame(TpFrame* tpFrame)
 {
     if (_monitoring)
     {
@@ -1136,6 +1154,7 @@ void TpUartDataLinkLayer::processRxFrame(TpFrame *tpFrame)
         printFrame(tpFrame);
         println();
 #endif
+
         if (!(tpFrame->flags() & TP_FRAME_FLAG_ECHO))
             rxFrameReceived(tpFrame);
     }

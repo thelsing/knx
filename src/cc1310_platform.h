@@ -10,18 +10,18 @@
 
 class CC1310Platform : public Platform
 {
-  public:
-    CC1310Platform();
-    virtual ~CC1310Platform();
+    public:
+        CC1310Platform();
+        virtual ~CC1310Platform();
 
-    void init();
+        void init();
 
-    // basic stuff
-    void restart() final;
-    void fatalError() final;
+        // basic stuff
+        void restart() final;
+        void fatalError() final;
 
-    uint8_t* getEepromBuffer(uint32_t size) final;
-    void commitToEeprom() final;
+        uint8_t* getEepromBuffer(uint32_t size) final;
+        void commitToEeprom() final;
 };
 
 #endif //DeviceFamily_CC13X0

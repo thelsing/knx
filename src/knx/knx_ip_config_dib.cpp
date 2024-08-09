@@ -44,7 +44,9 @@ void KnxIpConfigDIB::gateway(uint32_t addr)
 
 uint32_t KnxIpConfigDIB::dhcp()
 {
-    if(!_isCurrent) return 0;
+    if (!_isCurrent)
+        return 0;
+
     uint32_t addr = 0;
     popInt(addr, _data + 14);
     return addr;
@@ -52,13 +54,15 @@ uint32_t KnxIpConfigDIB::dhcp()
 
 void KnxIpConfigDIB::dhcp(uint32_t addr)
 {
-    if(!_isCurrent) return;
+    if (!_isCurrent)
+        return;
+
     pushInt(addr, _data + 14);
 }
 
 uint8_t KnxIpConfigDIB::info1()
 {
-    if(_isCurrent)
+    if (_isCurrent)
         return _data[14];
     else
         return _data[18];
@@ -66,7 +70,7 @@ uint8_t KnxIpConfigDIB::info1()
 
 void KnxIpConfigDIB::info1(uint8_t addr)
 {
-    if(_isCurrent)
+    if (_isCurrent)
         _data[14] = addr;
     else
         _data[18] = addr;
@@ -74,7 +78,7 @@ void KnxIpConfigDIB::info1(uint8_t addr)
 
 uint8_t KnxIpConfigDIB::info2()
 {
-    if(_isCurrent)
+    if (_isCurrent)
         return _data[15];
     else
         return _data[19];
@@ -82,7 +86,7 @@ uint8_t KnxIpConfigDIB::info2()
 
 void KnxIpConfigDIB::info2(uint8_t addr)
 {
-    if(_isCurrent)
+    if (_isCurrent)
         _data[15] = addr;
     else
         _data[19] = addr;

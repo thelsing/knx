@@ -7,11 +7,11 @@
 
 class KnxIpTunnelingAck : public KnxIpFrame
 {
-  public:
-    KnxIpTunnelingAck(uint8_t* data, uint16_t length);
-    KnxIpTunnelingAck();
-    KnxIpCH& connectionHeader();
-  private:
-    KnxIpCH _ch;
+    public:
+        KnxIpTunnelingAck(uint8_t* data, uint16_t length);
+        KnxIpTunnelingAck();
+        KnxIpCH& connectionHeader();
+    private:
+        KnxIpCH _ch;
 };
 #endif

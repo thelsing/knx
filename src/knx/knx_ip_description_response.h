@@ -9,13 +9,13 @@
 
 class KnxIpDescriptionResponse : public KnxIpFrame
 {
-  public:
-    KnxIpDescriptionResponse(IpParameterObject& parameters, DeviceObject& deviceObj);
-    KnxIpDeviceInformationDIB& deviceInfo();
-    KnxIpSupportedServiceDIB& supportedServices();
-  private:
-    KnxIpDeviceInformationDIB _deviceInfo;
-    KnxIpSupportedServiceDIB _supportedServices;
+    public:
+        KnxIpDescriptionResponse(IpParameterObject& parameters, DeviceObject& deviceObj);
+        KnxIpDeviceInformationDIB& deviceInfo();
+        KnxIpSupportedServiceDIB& supportedServices();
+    private:
+        KnxIpDeviceInformationDIB _deviceInfo;
+        KnxIpSupportedServiceDIB _supportedServices;
 };
 
 #endif

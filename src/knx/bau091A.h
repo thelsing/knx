@@ -12,31 +12,31 @@
 
 class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks, public DataLinkLayerCallbacks
 {
-  public:
-    Bau091A(Platform& platform);
-    void loop() override;
-    bool enabled() override;
-    void enabled(bool value) override;
-    bool configured() override;
+    public:
+        Bau091A(Platform& platform);
+        void loop() override;
+        bool enabled() override;
+        void enabled(bool value) override;
+        bool configured() override;
 
-    IpDataLinkLayer* getPrimaryDataLinkLayer();
-    TpUartDataLinkLayer* getSecondaryDataLinkLayer();
-  protected:
-    InterfaceObject* getInterfaceObject(uint8_t idx);
-    InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
+        IpDataLinkLayer* getPrimaryDataLinkLayer();
+        TpUartDataLinkLayer* getSecondaryDataLinkLayer();
+    protected:
+        InterfaceObject* getInterfaceObject(uint8_t idx);
+        InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
 
-    // For TP1 only
-    TPAckType isAckRequired(uint16_t address, bool isGrpAddr) override;
+        // For TP1 only
+        TPAckType isAckRequired(uint16_t address, bool isGrpAddr) override;
 
-    void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
-  private:
-    RouterObject _routerObj;
-    IpParameterObject _ipParameters;
-    IpDataLinkLayer _dlLayerPrimary;
-    TpUartDataLinkLayer _dlLayerSecondary;
+        void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+    private:
+        RouterObject _routerObj;
+        IpParameterObject _ipParameters;
+        IpDataLinkLayer _dlLayerPrimary;
+        TpUartDataLinkLayer _dlLayerSecondary;
 #ifdef USE_CEMI_SERVER
-    CemiServer _cemiServer;
-    CemiServerObject _cemiServerObject;
+        CemiServer _cemiServer;
+        CemiServerObject _cemiServerObject;
 #endif
 };
 #endif

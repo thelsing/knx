@@ -9,14 +9,21 @@ const uint8_t* popByte(uint8_t& b, const uint8_t* data)
 }
 
 #ifndef KNX_NO_PRINT
-void printHex(const char* suffix, const uint8_t *data, size_t length, bool newline)
+void printHex(const char* suffix, const uint8_t* data, size_t length, bool newline)
 {
     print(suffix);
-    for (size_t i = 0; i < length; i++) {
-        if (data[i] < 0x10) { print("0"); }
+
+    for (size_t i = 0; i < length; i++)
+    {
+        if (data[i] < 0x10)
+        {
+            print("0");
+        }
+
         print(data[i], HEX);
         print(" ");
     }
+
     if (newline)
     {
         println();
@@ -76,7 +83,7 @@ uint8_t* pushByteArray(const uint8_t* src, uint32_t size, uint8_t* data)
 {
     for (uint32_t i = 0; i < size; i++)
         data[i] = src[i];
-    
+
     data += size;
     return data;
 }
@@ -86,7 +93,7 @@ uint16_t getWord(const uint8_t* data)
     return (data[0] << 8) + data[1];
 }
 
-uint32_t getInt(const uint8_t * data)
+uint32_t getInt(const uint8_t* data)
 {
     return (data[0] << 24) + (data[1] << 16) + (data[2] << 8) + data[3];
 }
@@ -109,6 +116,7 @@ uint64_t sixBytesToUInt64(uint8_t* data)
     {
         l = (l << 8) + data[i];
     }
+
     return l;
 }
 
@@ -127,35 +135,44 @@ uint16_t crc16Ccitt(uint8_t* input, uint16_t length)
     uint32_t polynom = 0x1021;
 
     uint32_t result = 0xffff;
+
     for (uint32_t i = 0; i < 8 * ((uint32_t)length + 2); i++)
     {
         result <<= 1;
         uint32_t nextBit;
         nextBit = ((i / 8) < length) ? ((input[i / 8] >> (7 - (i % 8))) & 0x1) : 0;
         result |= nextBit;
+
         if ((result & 0x10000) != 0)
             result ^= polynom;
     }
+
     return result & 0xffff;
 }
 
 uint16_t crc16Dnp(uint8_t* input, uint16_t length)
 {
-        // CRC-16-DNP
-        // generator polynomial = 2^16 + 2^13 + 2^12 + 2^11 + 2^10 + 2^8 + 2^6 + 2^5 + 2^2 + 2^0
-        uint32_t pn = 0x13d65; // 1 0011 1101 0110 0101
+    // CRC-16-DNP
+    // generator polynomial = 2^16 + 2^13 + 2^12 + 2^11 + 2^10 + 2^8 + 2^6 + 2^5 + 2^2 + 2^0
+    uint32_t pn = 0x13d65; // 1 0011 1101 0110 0101
 
-        // for much data, using a lookup table would be a way faster CRC calculation
-        uint32_t crc = 0;
-        for (uint32_t i = 0; i < length; i++) {
-            uint8_t bite = input[i] & 0xff;
-            for (uint8_t b = 8; b --> 0;) {
-                bool bit = ((bite >> b) & 1) == 1;
-                bool one = (crc >> 15 & 1) == 1;
-                crc <<= 1;
-                if (one ^ bit)
-                    crc ^= pn;
-            }
+    // for much data, using a lookup table would be a way faster CRC calculation
+    uint32_t crc = 0;
+
+    for (uint32_t i = 0; i < length; i++)
+    {
+        uint8_t bite = input[i] & 0xff;
+
+        for (uint8_t b = 8; b -- > 0;)
+        {
+            bool bit = ((bite >> b) & 1) == 1;
+            bool one = (crc >> 15 & 1) == 1;
+            crc <<= 1;
+
+            if (one ^ bit)
+                crc ^= pn;
         }
-        return (~crc) & 0xffff;
+    }
+
+    return (~crc) & 0xffff;
 }

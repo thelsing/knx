@@ -126,7 +126,7 @@ KNXValue::operator double() const
     return doubleValue();
 }
 
-KNXValue::operator const char*() const
+KNXValue::operator const char* () const
 {
     return stringValue();
 }
@@ -226,6 +226,7 @@ bool KNXValue::boolValue() const
     {
         case BoolType:
             return _value.boolValue;
+
         case UCharType:
         case UShortType:
         case UIntType:
@@ -236,11 +237,14 @@ bool KNXValue::boolValue() const
         case LongType:
         case TimeType:
             return longValue() != 0;
+
         case DoubleType:
             return _value.doubleValue != 0;
+
         case StringType:
             return strcmp(_value.stringValue, "true") == 0 || strcmp(_value.stringValue, "True") == 0 || longValue() != 0 || doubleValue() != 0;
     }
+
     return 0;
 }
 
@@ -250,12 +254,14 @@ uint8_t KNXValue::ucharValue() const
     {
         case UCharType:
             return _value.ucharValue;
+
         case BoolType:
         case UShortType:
         case UIntType:
         case ULongType:
         case TimeType:
             return (uint8_t)ulongValue();
+
         case CharType:
         case ShortType:
         case IntType:
@@ -264,6 +270,7 @@ uint8_t KNXValue::ucharValue() const
         case StringType:
             return (uint8_t)longValue();
     }
+
     return 0;
 }
 
@@ -273,12 +280,14 @@ uint16_t KNXValue::ushortValue() const
     {
         case UShortType:
             return _value.ushortValue;
+
         case BoolType:
         case UCharType:
         case UIntType:
         case ULongType:
         case TimeType:
             return (uint16_t)ulongValue();
+
         case CharType:
         case ShortType:
         case IntType:
@@ -287,6 +296,7 @@ uint16_t KNXValue::ushortValue() const
         case StringType:
             return (uint16_t)longValue();
     }
+
     return 0;
 }
 
@@ -296,12 +306,14 @@ uint32_t KNXValue::uintValue() const
     {
         case UIntType:
             return _value.uintValue;
+
         case BoolType:
         case UCharType:
         case UShortType:
         case ULongType:
         case TimeType:
             return (uint32_t)ulongValue();
+
         case CharType:
         case ShortType:
         case IntType:
@@ -310,6 +322,7 @@ uint32_t KNXValue::uintValue() const
         case StringType:
             return (uint32_t)longValue();
     }
+
     return 0;
 }
 
@@ -319,29 +332,40 @@ uint64_t KNXValue::ulongValue() const
     {
         case ULongType:
             return _value.ulongValue;
+
         case BoolType:
             return _value.boolValue ? 1 : 0;
+
         case UCharType:
             return (uint64_t)_value.ucharValue;
+
         case UShortType:
             return (uint64_t)_value.ushortValue;
+
         case UIntType:
             return (uint64_t)_value.uintValue;
+
         case TimeType:
         {
             struct tm* timeptr = const_cast<struct tm*>(&_value.timeValue);
             return (uint64_t)mktime(timeptr);
         }
+
         case CharType:
             return (uint64_t)_value.charValue;
+
         case ShortType:
             return (uint64_t)_value.shortValue;
+
         case IntType:
             return (uint64_t)_value.intValue;
+
         case LongType:
             return (uint64_t)_value.longValue;
+
         case DoubleType:
             return (uint64_t)_value.doubleValue;
+
         case StringType:
 #ifndef KNX_NO_STRTOx_CONVERSION
             return (uint64_t)strtoul(_value.stringValue, NULL, 0);
@@ -349,6 +373,7 @@ uint64_t KNXValue::ulongValue() const
             return 0;
 #endif
     }
+
     return 0;
 }
 
@@ -358,6 +383,7 @@ int8_t KNXValue::charValue() const
     {
         case CharType:
             return _value.charValue;
+
         case BoolType:
         case UCharType:
         case UShortType:
@@ -365,6 +391,7 @@ int8_t KNXValue::charValue() const
         case ULongType:
         case TimeType:
             return (int8_t)ulongValue();
+
         case ShortType:
         case IntType:
         case LongType:
@@ -372,6 +399,7 @@ int8_t KNXValue::charValue() const
         case StringType:
             return (int8_t)longValue();
     }
+
     return 0;
 }
 
@@ -381,6 +409,7 @@ int16_t KNXValue::shortValue() const
     {
         case ShortType:
             return _value.shortValue;
+
         case BoolType:
         case UCharType:
         case UShortType:
@@ -388,6 +417,7 @@ int16_t KNXValue::shortValue() const
         case ULongType:
         case TimeType:
             return (int16_t)ulongValue();
+
         case CharType:
         case IntType:
         case LongType:
@@ -395,6 +425,7 @@ int16_t KNXValue::shortValue() const
         case StringType:
             return (int16_t)longValue();
     }
+
     return 0;
 }
 
@@ -404,6 +435,7 @@ int32_t KNXValue::intValue() const
     {
         case IntType:
             return _value.ulongValue;
+
         case BoolType:
         case UCharType:
         case UShortType:
@@ -411,6 +443,7 @@ int32_t KNXValue::intValue() const
         case ULongType:
         case TimeType:
             return (int32_t)ulongValue();
+
         case CharType:
         case ShortType:
         case LongType:
@@ -418,6 +451,7 @@ int32_t KNXValue::intValue() const
         case StringType:
             return (int32_t)longValue();
     }
+
     return 0;
 }
 
@@ -427,26 +461,37 @@ int64_t KNXValue::longValue() const
     {
         case LongType:
             return _value.longValue;
+
         case BoolType:
             return _value.boolValue ? 1 : 0;
+
         case UCharType:
             return (int64_t)_value.ucharValue;
+
         case UShortType:
             return (int64_t)_value.ushortValue;
+
         case UIntType:
             return (int64_t)_value.uintValue;
+
         case ULongType:
             return (int64_t)_value.uintValue;
+
         case TimeType:
             return (int64_t)ulongValue();
+
         case CharType:
             return (int64_t)_value.charValue;
+
         case ShortType:
             return (int64_t)_value.shortValue;
+
         case IntType:
             return (int64_t)_value.intValue;
+
         case DoubleType:
             return (int64_t)_value.doubleValue;
+
         case StringType:
 #ifndef KNX_NO_STRTOx_CONVERSION
             return strtol(_value.stringValue, NULL, 0);
@@ -454,6 +499,7 @@ int64_t KNXValue::longValue() const
             return 0;
 #endif
     }
+
     return 0;
 }
 
@@ -463,26 +509,37 @@ double KNXValue::doubleValue() const
     {
         case DoubleType:
             return _value.doubleValue;
-         case BoolType:
+
+        case BoolType:
             return _value.boolValue ? 1 : 0;
+
         case UCharType:
             return _value.ucharValue;
+
         case UShortType:
             return _value.ushortValue;
+
         case UIntType:
             return _value.uintValue;
+
         case ULongType:
             return _value.uintValue;
+
         case TimeType:
             return ulongValue();
+
         case CharType:
             return _value.charValue;
+
         case ShortType:
             return _value.shortValue;
+
         case IntType:
             return _value.intValue;
+
         case LongType:
             return _value.longValue;
+
         case StringType:
 #ifndef KNX_NO_STRTOx_CONVERSION
             return strtod(_value.stringValue, NULL);
@@ -490,6 +547,7 @@ double KNXValue::doubleValue() const
             return 0;
 #endif
     }
+
     return 0;
 }
 
@@ -509,9 +567,11 @@ const char* KNXValue::stringValue() const
         case IntType:
         case LongType:
             return ""; // we would have to manage the memory for the string otherwise. Maybe later.
+
         case StringType:
             return _value.stringValue;
     }
+
     return 0;
 }
 
@@ -521,6 +581,7 @@ struct tm KNXValue::timeValue() const
     {
         case TimeType:
             return _value.timeValue;
+
         case BoolType:
         case UCharType:
         case UShortType:
@@ -539,7 +600,9 @@ struct tm KNXValue::timeValue() const
             return timeStruct;
         }
     }
+
     struct tm tmp = {0};
+
     return tmp;
 }
 

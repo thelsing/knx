@@ -6,8 +6,8 @@
 
 #define ASSERT_PAYLOAD(x)      \
     if (payload_length != (x)) \
-    return false
-#define ENSURE_PAYLOAD(x) 
+        return false
+#define ENSURE_PAYLOAD(x)
 
 
 int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
@@ -19,120 +19,159 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         {
             return busValueToBinary(payload, payload_length, datatype, value);
         } // DPT 2.* - Binary Control
+
         if (datatype.mainGroup == 2 && datatype.subGroup >= 1 && datatype.subGroup <= 12 && datatype.index <= 1)
             return busValueToBinaryControl(payload, payload_length, datatype, value);
+
         // DPT 3.* - Step Control
         if (datatype.mainGroup == 3 && datatype.subGroup >= 7 && datatype.subGroup <= 8 && datatype.index <= 1)
             return busValueToStepControl(payload, payload_length, datatype, value);
+
         // DPT 4.* - Character
         if (datatype.mainGroup == 4 && datatype.subGroup >= 1 && datatype.subGroup <= 2 && !datatype.index)
             return busValueToCharacter(payload, payload_length, datatype, value);
+
         // DPT 5.* - Unsigned 8 Bit Integer
         if (datatype.mainGroup == 5 && ((datatype.subGroup >= 1 && datatype.subGroup <= 6 && datatype.subGroup != 2) || datatype.subGroup == 10) && !datatype.index)
             return busValueToUnsigned8(payload, payload_length, datatype, value);
+
         // DPT 6.001/6.010 - Signed 8 Bit Integer
         if (datatype.mainGroup == 6 && (datatype.subGroup == 1 || datatype.subGroup == 10) && !datatype.index)
             return busValueToSigned8(payload, payload_length, datatype, value);
+
         // DPT 6.020 - Status with Mode
         if (datatype.mainGroup == 6 && datatype.subGroup == 20 && datatype.index <= 5)
             return busValueToStatusAndMode(payload, payload_length, datatype, value);
+
         // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
         if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || (datatype.subGroup == 600)) && !datatype.index)
             return busValueToUnsigned16(payload, payload_length, datatype, value);
+
         // DPT 7.002-DPT 7.007 - Time Period
         if (datatype.mainGroup == 7 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
             return busValueToTimePeriod(payload, payload_length, datatype, value);
+
         // DPT 8.001/8.010/8.011 - Signed 16 Bit Integer
         if (datatype.mainGroup == 8 && (datatype.subGroup == 1 || datatype.subGroup == 10 || datatype.subGroup == 11) && !datatype.index)
             return busValueToSigned16(payload, payload_length, datatype, value);
+
         // DPT 8.002-DPT 8.007 - Time Delta
         if (datatype.mainGroup == 8 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
             return busValueToTimeDelta(payload, payload_length, datatype, value);
+
         // DPT 9.* - 16 Bit Float
         if (datatype.mainGroup == 9 && ((datatype.subGroup >= 1 && datatype.subGroup <= 11) || (datatype.subGroup >= 20 && datatype.subGroup <= 29)) && !datatype.index)
             return busValueToFloat16(payload, payload_length, datatype, value);
+
         // DPT 10.* - Time and Weekday
         if (datatype.mainGroup == 10 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToTime(payload, payload_length, datatype, value);
+
         // DPT 11.* - Date
         if (datatype.mainGroup == 11 && datatype.subGroup == 1 && !datatype.index)
             return busValueToDate(payload, payload_length, datatype, value);
+
         // DPT 12.* - Unsigned 32 Bit Integer
         if (datatype.mainGroup == 12 && datatype.subGroup == 1 && !datatype.index)
             return busValueToUnsigned32(payload, payload_length, datatype, value);
+
         // DPT 13.001/13.002/13.010-13.015 - Signed 32 Bit Integer
         if (datatype.mainGroup == 13 && (datatype.subGroup == 1 || datatype.subGroup == 2 || (datatype.subGroup >= 10 && datatype.subGroup <= 15)) && !datatype.index)
             return busValueToSigned32(payload, payload_length, datatype, value);
+
         // DPT 13.100 - Long Time Period
         if (datatype.mainGroup == 13 && datatype.subGroup == 100 && !datatype.index)
             return busValueToLongTimePeriod(payload, payload_length, datatype, value);
+
         // DPT 14.* - 32 Bit Float
         if (datatype.mainGroup == 14 && datatype.subGroup <= 79 && !datatype.index)
             return busValueToFloat32(payload, payload_length, datatype, value);
+
         // DPT 15.* - Access Data
         if (datatype.mainGroup == 15 && !datatype.subGroup && datatype.index <= 5)
             return busValueToAccess(payload, payload_length, datatype, value);
+
         // DPT 16.* - String
         if (datatype.mainGroup == 16 && datatype.subGroup <= 1 && !datatype.index)
             return busValueToString(payload, payload_length, datatype, value);
+
         // DPT 17.* - Scene Number
         if (datatype.mainGroup == 17 && datatype.subGroup == 1 && !datatype.index)
             return busValueToScene(payload, payload_length, datatype, value);
+
         // DPT 18.* - Scene Control
         if (datatype.mainGroup == 18 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToSceneControl(payload, payload_length, datatype, value);
+
         // DPT 19.* - Date and Time
         if (datatype.mainGroup == 19 && datatype.subGroup == 1 && (datatype.index <= 3 || datatype.index == 9 || datatype.index == 10))
             return busValueToDateTime(payload, payload_length, datatype, value);
+
         // DPT 26.* - Scene Info
         if (datatype.mainGroup == 26 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToSceneInfo(payload, payload_length, datatype, value);
+
         // DPT 27.001 - 32 Bit field
         if (datatype.mainGroup == 27 && datatype.subGroup == 1 && !datatype.index)
             return busValueToSigned32(payload, payload_length, datatype, value);
+
         // DPT 28.* - Unicode String
         if (datatype.mainGroup == 28 && datatype.subGroup == 1 && !datatype.index)
             return busValueToUnicode(payload, payload_length, datatype, value);
+
         // DPT 29.* - Signed 64 Bit Integer
         if (datatype.mainGroup == 29 && datatype.subGroup >= 10 && datatype.subGroup <= 12 && !datatype.index)
             return busValueToSigned64(payload, payload_length, datatype, value);
+
         // DPT 219.* - Alarm Info
         if (datatype.mainGroup == 219 && datatype.subGroup == 1 && datatype.index <= 10)
             return busValueToAlarmInfo(payload, payload_length, datatype, value);
+
         // DPT 221.* - Serial Number
         if (datatype.mainGroup == 221 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToSerialNumber(payload, payload_length, datatype, value);
+
         // DPT 217.* - Version
         if (datatype.mainGroup == 217 && datatype.subGroup == 1 && datatype.index <= 2)
             return busValueToVersion(payload, payload_length, datatype, value);
+
         // DPT 225.001/225.002 - Scaling Speed and Scaling Step Time
         if (datatype.mainGroup == 225 && datatype.subGroup >= 1 && datatype.subGroup <= 2 && datatype.index <= 1)
             return busValueToScaling(payload, payload_length, datatype, value);
+
         // DPT 225.003 - Next Tariff
         if (datatype.mainGroup == 225 && datatype.subGroup == 3 && datatype.index <= 1)
             return busValueToTariff(payload, payload_length, datatype, value);
+
         // DPT 231.* - Locale
         if (datatype.mainGroup == 231 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToLocale(payload, payload_length, datatype, value);
+
         // DPT 232.600 - RGB
         if (datatype.mainGroup == 232 && datatype.subGroup == 600 && !datatype.index)
             return busValueToRGB(payload, payload_length, datatype, value);
+
         // DPT 234.* - Language and Region
         if (datatype.mainGroup == 234 && datatype.subGroup >= 1 && datatype.subGroup <= 2 && !datatype.index)
             return busValueToLocale(payload, payload_length, datatype, value);
+
         // DPT 235.* - Active Energy
         if (datatype.mainGroup == 235 && datatype.subGroup == 1 && datatype.index <= 3)
             return busValueToActiveEnergy(payload, payload_length, datatype, value);
+
         // DPT 238.* - Scene Config
         if (datatype.mainGroup == 238 && datatype.subGroup == 1 && datatype.index <= 2)
             return busValueToSceneConfig(payload, payload_length, datatype, value);
+
         // DPT 239.* - Flagged Scaling
         if (datatype.mainGroup == 239 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToFlaggedScaling(payload, payload_length, datatype, value);
+
         // DPT 251.600 - RGBW
         if (datatype.mainGroup == 251 && datatype.subGroup == 600 && datatype.index <= 1)
             return busValueToRGBW(payload, payload_length, datatype, value);
     }
+
     return false;
 }
 
@@ -140,120 +179,159 @@ int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_len
 {
     if (datatype.mainGroup == 1 && datatype.subGroup >= 1 && datatype.subGroup <= 23 && datatype.subGroup != 20 && !datatype.index)
         return valueToBusValueBinary(value, payload, payload_length, datatype);
+
     // DPT 2.* - Binary Control
     if (datatype.mainGroup == 2 && datatype.subGroup >= 1 && datatype.subGroup <= 12 && datatype.index <= 1)
         return valueToBusValueBinaryControl(value, payload, payload_length, datatype);
+
     // DPT 3.* - Step Control
     if (datatype.mainGroup == 3 && datatype.subGroup >= 7 && datatype.subGroup <= 8 && datatype.index <= 1)
         return valueToBusValueStepControl(value, payload, payload_length, datatype);
+
     // DPT 4.* - Character
     if (datatype.mainGroup == 4 && datatype.subGroup >= 1 && datatype.subGroup <= 2 && !datatype.index)
         return valueToBusValueCharacter(value, payload, payload_length, datatype);
+
     // DPT 5.* - Unsigned 8 Bit Integer
     if (datatype.mainGroup == 5 && ((datatype.subGroup >= 1 && datatype.subGroup <= 6 && datatype.subGroup != 2) || datatype.subGroup == 10) && !datatype.index)
         return valueToBusValueUnsigned8(value, payload, payload_length, datatype);
+
     // DPT 6.001/6.010 - Signed 8 Bit Integer
     if (datatype.mainGroup == 6 && (datatype.subGroup == 1 || datatype.subGroup == 10) && !datatype.index)
         return valueToBusValueSigned8(value, payload, payload_length, datatype);
+
     // DPT 6.020 - Status with Mode
     if (datatype.mainGroup == 6 && datatype.subGroup == 20 && datatype.index <= 5)
         return valueToBusValueStatusAndMode(value, payload, payload_length, datatype);
+
     // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
     if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || datatype.subGroup == 600) && !datatype.index)
         return valueToBusValueUnsigned16(value, payload, payload_length, datatype);
+
     // DPT 7.002-DPT 7.007 - Time Period
     if (datatype.mainGroup == 7 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
         return valueToBusValueTimePeriod(value, payload, payload_length, datatype);
+
     // DPT 8.001/8.010/8.011 - Signed 16 Bit Integer
     if (datatype.mainGroup == 8 && (datatype.subGroup == 1 || datatype.subGroup == 10 || datatype.subGroup == 11) && !datatype.index)
         return valueToBusValueSigned16(value, payload, payload_length, datatype);
+
     // DPT 8.002-DPT 8.007 - Time Delta
     if (datatype.mainGroup == 8 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
         return valueToBusValueTimeDelta(value, payload, payload_length, datatype);
+
     // DPT 9.* - 16 Bit Float
     if (datatype.mainGroup == 9 && ((datatype.subGroup >= 1 && datatype.subGroup <= 11 ) || (datatype.subGroup >= 20 && datatype.subGroup <= 29)) && !datatype.index)
         return valueToBusValueFloat16(value, payload, payload_length, datatype);
+
     // DPT 10.* - Time and Weekday
     if (datatype.mainGroup == 10 && datatype.subGroup == 1 && datatype.index <= 1)
         return valueToBusValueTime(value, payload, payload_length, datatype);
+
     // DPT 11.* - Date
     if (datatype.mainGroup == 11 && datatype.subGroup == 1 && !datatype.index)
         return valueToBusValueDate(value, payload, payload_length, datatype);
+
     // DPT 12.* - Unsigned 32 Bit Integer
     if (datatype.mainGroup == 12 && datatype.subGroup == 1 && !datatype.index)
         return valueToBusValueUnsigned32(value, payload, payload_length, datatype);
+
     // DPT 13.001/13.002/13.010-13.015 - Signed 32 Bit Integer
     if (datatype.mainGroup == 13 && (datatype.subGroup == 1 || datatype.subGroup == 2 || (datatype.subGroup >= 10 && datatype.subGroup <= 15)) && !datatype.index)
         return valueToBusValueSigned32(value, payload, payload_length, datatype);
+
     // DPT 13.100 - Long Time Period
     if (datatype.mainGroup == 13 && datatype.subGroup == 100 && !datatype.index)
         return valueToBusValueLongTimePeriod(value, payload, payload_length, datatype);
+
     // DPT 14.* - 32 Bit Float
     if (datatype.mainGroup == 14 && datatype.subGroup <= 79 && !datatype.index)
         return valueToBusValueFloat32(value, payload, payload_length, datatype);
+
     // DPT 15.* - Access Data
     if (datatype.mainGroup == 15 && !datatype.subGroup && datatype.index <= 5)
         return valueToBusValueAccess(value, payload, payload_length, datatype);
+
     // DPT 16.* - String
     if (datatype.mainGroup == 16 && datatype.subGroup <= 1 && !datatype.index)
         return valueToBusValueString(value, payload, payload_length, datatype);
+
     // DPT 17.* - Scene Number
     if (datatype.mainGroup == 17 && datatype.subGroup == 1 && !datatype.index)
         return valueToBusValueScene(value, payload, payload_length, datatype);
+
     // DPT 18.* - Scene Control
     if (datatype.mainGroup == 18 && datatype.subGroup == 1 && datatype.index <= 1)
         return valueToBusValueSceneControl(value, payload, payload_length, datatype);
+
     // DPT 19.* - Date and Time
     if (datatype.mainGroup == 19 && datatype.subGroup == 1 && (datatype.index <= 3 || datatype.index == 9 || datatype.index == 10))
         return valueToBusValueDateTime(value, payload, payload_length, datatype);
+
     // DPT 26.* - Scene Info
     if (datatype.mainGroup == 26 && datatype.subGroup == 1 && datatype.index <= 1)
-        return valueToBusValueSceneInfo(value, payload, payload_length, datatype);     
+        return valueToBusValueSceneInfo(value, payload, payload_length, datatype);
+
     // DPT 27.001 - 32 Bit Field
     if (datatype.mainGroup == 27 && datatype.subGroup == 1 && !datatype.index)
         return valueToBusValueUnsigned32(value, payload, payload_length, datatype);
+
     // DPT 28.* - Unicode String
     if (datatype.mainGroup == 28 && datatype.subGroup == 1 && !datatype.index)
         return valueToBusValueUnicode(value, payload, payload_length, datatype);
+
     // DPT 29.* - Signed 64 Bit Integer
     if (datatype.mainGroup == 29 && datatype.subGroup >= 10 && datatype.subGroup <= 12 && !datatype.index)
         return valueToBusValueSigned64(value, payload, payload_length, datatype);
+
     // DPT 219.* - Alarm Info
     if (datatype.mainGroup == 219 && datatype.subGroup == 1 && datatype.index <= 10)
         return valueToBusValueAlarmInfo(value, payload, payload_length, datatype);
+
     // DPT 221.* - Serial Number
     if (datatype.mainGroup == 221 && datatype.subGroup == 1 && datatype.index <= 1)
         return valueToBusValueSerialNumber(value, payload, payload_length, datatype);
+
     // DPT 217.* - Version
     if (datatype.mainGroup == 217 && datatype.subGroup == 1 && datatype.index <= 2)
         return valueToBusValueVersion(value, payload, payload_length, datatype);
+
     // DPT 225.001/225.002 - Scaling Speed and Scaling Step Time
     if (datatype.mainGroup == 225 && datatype.subGroup >= 1 && datatype.subGroup <= 2 && datatype.index <= 1)
         return valueToBusValueScaling(value, payload, payload_length, datatype);
+
     // DPT 225.003 - Next Tariff
     if (datatype.mainGroup == 225 && datatype.subGroup == 3 && datatype.index <= 1)
         return valueToBusValueTariff(value, payload, payload_length, datatype);
+
     // DPT 231.* - Locale
     if (datatype.mainGroup == 231 && datatype.subGroup == 1 && datatype.index <= 1)
         return valueToBusValueLocale(value, payload, payload_length, datatype);
+
     // DPT 232.600 - RGB
     if (datatype.mainGroup == 232 && datatype.subGroup == 600 && !datatype.index)
         return valueToBusValueRGB(value, payload, payload_length, datatype);
+
     // DPT 234.* - Language and Region
     if (datatype.mainGroup == 234 && datatype.subGroup >= 1 && datatype.subGroup <= 2 && !datatype.index)
         return valueToBusValueLocale(value, payload, payload_length, datatype);
+
     // DPT 235.* - Active Energy
     if (datatype.mainGroup == 235 && datatype.subGroup == 1 && datatype.index <= 3)
         return valueToBusValueActiveEnergy(value, payload, payload_length, datatype);
+
     // DPT 238.* - Scene Config
     if (datatype.mainGroup == 238 && datatype.subGroup == 1 && datatype.index <= 2)
         return valueToBusValueSceneConfig(value, payload, payload_length, datatype);
+
     // DPT 239.* - Flagged Scaling
     if (datatype.mainGroup == 239 && datatype.subGroup == 1 && datatype.index <= 1)
         return valueToBusValueFlaggedScaling(value, payload, payload_length, datatype);
+
     // DPT 251.600 - RGBW
     if (datatype.mainGroup == 251 && datatype.subGroup == 600 && datatype.index <= 1)
         return valueToBusValueRGBW(value, payload, payload_length, datatype);
+
     return false;
 }
 
@@ -267,11 +345,13 @@ int busValueToBinary(const uint8_t* payload, size_t payload_length, const Dpt& d
 int busValueToBinaryControl(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
+
     switch (datatype.index)
     {
         case 0:
             value = bitFromPayload(payload, 6);
             return true;
+
         case 1:
             value = bitFromPayload(payload, 7);
             return true;
@@ -283,11 +363,13 @@ int busValueToBinaryControl(const uint8_t* payload, size_t payload_length, const
 int busValueToStepControl(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
+
     switch (datatype.index)
     {
         case 0:
             value = bitFromPayload(payload, 4);
             return true;
+
         case 1:
         {
             const unsigned char stepCode = unsigned8FromPayload(payload, 0) & 0x07;
@@ -302,8 +384,10 @@ int busValueToCharacter(const uint8_t* payload, size_t payload_length, const Dpt
 {
     ASSERT_PAYLOAD(1);
     int8_t charValue = signed8FromPayload(payload, 0);
+
     if (datatype.subGroup == 1 && (charValue & 0x80))
         return false;
+
     if (datatype.subGroup == 2)
     {
         value = (uint8_t)charValue;
@@ -317,6 +401,7 @@ int busValueToCharacter(const uint8_t* payload, size_t payload_length, const Dpt
 int busValueToUnsigned8(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
+
     switch (datatype.subGroup)
     {
         case 1:
@@ -330,8 +415,10 @@ int busValueToUnsigned8(const uint8_t* payload, size_t payload_length, const Dpt
         case 6:
         {
             uint8_t numValue = unsigned8FromPayload(payload, 0);
+
             if (numValue == 0xFF)
                 return false;
+
             value = numValue;
             return true;
         }
@@ -351,6 +438,7 @@ int busValueToSigned8(const uint8_t* payload, size_t payload_length, const Dpt& 
 int busValueToStatusAndMode(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
+
     if (datatype.index < 5)
     {
         value = bitFromPayload(payload, datatype.index);
@@ -361,6 +449,7 @@ int busValueToStatusAndMode(const uint8_t* payload, size_t payload_length, const
         value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x07);
         return true;
     }
+
     return false;
 }
 
@@ -383,11 +472,13 @@ int busValueToTimePeriod(const uint8_t* payload, size_t payload_length, const Dp
 int busValueToSigned16(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(2);
+
     if (datatype.subGroup == 10)
     {
         value = signed16FromPayload(payload, 0) / 100.0;
         return true;
     }
+
     value = signed16FromPayload(payload, 0);
     return true;
 }
@@ -404,6 +495,7 @@ int busValueToTimeDelta(const uint8_t* payload, size_t payload_length, const Dpt
 int busValueToFloat16(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(2);
+
     if (unsigned16FromPayload(payload, 0) == 0x7FFF)
         return false;
 
@@ -414,11 +506,13 @@ int busValueToFloat16(const uint8_t* payload, size_t payload_length, const Dpt& 
 int busValueToTime(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(3);
+
     switch (datatype.index)
     {
         case 0:
             value = (uint8_t)((unsigned8FromPayload(payload, 0) >> 5) & 0x07);
             return true;
+
         case 1:
         {
             unsigned char hours = unsigned8FromPayload(payload, 0) & 0x1F;
@@ -428,6 +522,7 @@ int busValueToTime(const uint8_t* payload, size_t payload_length, const Dpt& dat
 
             if (hours > 23 || minutes > 59 || seconds > 59)
                 return false;
+
             struct tm tmp = {0};
             tmp.tm_hour = hours;
             tmp.tm_wday = weekDay;
@@ -491,27 +586,34 @@ int busValueToFloat32(const uint8_t* payload, size_t payload_length, const Dpt& 
 int busValueToAccess(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(4);
+
     switch (datatype.index)
     {
         case 0:
         {
             int32_t digits = 0;
+
             for (int n = 0, factor = 100000; n < 6; ++n, factor /= 10)
             {
                 unsigned char digit = bcdFromPayload(payload, n);
+
                 if (digit > 9)
                     return false;
+
                 digits += digit * factor;
             }
+
             value = digits;
             return true;
         }
+
         case 1:
         case 2:
         case 3:
         case 4:
             value = bitFromPayload(payload, 23 + datatype.index);
             return true;
+
         case 5:
             value = bcdFromPayload(payload, 7);
             return true;
@@ -523,12 +625,15 @@ int busValueToAccess(const uint8_t* payload, size_t payload_length, const Dpt& d
 int busValueToString(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(14);
+
     for (int n = 0; n < 14; ++n)
     {
         auto value = signed8FromPayload(payload, n);
+
         if (!datatype.subGroup && (value & 0x80))
             return false;
     }
+
     value = (const char*) payload;
     return true;
 }
@@ -543,6 +648,7 @@ int busValueToScene(const uint8_t* payload, size_t payload_length, const Dpt& da
 int busValueToSceneControl(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
+
     switch (datatype.index)
     {
         case 0:
@@ -550,6 +656,7 @@ int busValueToSceneControl(const uint8_t* payload, size_t payload_length, const 
             value = bitFromPayload(payload, 0);
             return true;
         }
+
         case 1:
         {
             value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x3F);
@@ -563,6 +670,7 @@ int busValueToSceneControl(const uint8_t* payload, size_t payload_length, const 
 int busValueToSceneInfo(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
+
     switch (datatype.index)
     {
         case 0:
@@ -570,6 +678,7 @@ int busValueToSceneInfo(const uint8_t* payload, size_t payload_length, const Dpt
             value = bitFromPayload(payload, 1);
             return true;
         }
+
         case 1:
         {
             value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x3F);
@@ -583,6 +692,7 @@ int busValueToSceneInfo(const uint8_t* payload, size_t payload_length, const Dpt
 int busValueToSceneConfig(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(1);
+
     switch (datatype.index)
     {
         case 0:
@@ -590,6 +700,7 @@ int busValueToSceneConfig(const uint8_t* payload, size_t payload_length, const D
             value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x3F);
             return true;
         }
+
         case 1:
         case 2:
         {
@@ -604,6 +715,7 @@ int busValueToSceneConfig(const uint8_t* payload, size_t payload_length, const D
 int busValueToDateTime(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(8);
+
     if (datatype.index == 3)
     {
         value = bitFromPayload(payload, 48);
@@ -628,6 +740,7 @@ int busValueToDateTime(const uint8_t* payload, size_t payload_length, const Dpt&
 
                 if ((month < 1 || month > 12 || day < 1))
                     return false;
+
                 if ((hours > 24 || minutes > 59 || seconds > 59))
                     return false;
 
@@ -641,6 +754,7 @@ int busValueToDateTime(const uint8_t* payload, size_t payload_length, const Dpt&
                 value = tmp;
                 return true;
             }
+
             case 1:
             {
                 if (bitFromPayload(payload, 53))
@@ -649,6 +763,7 @@ int busValueToDateTime(const uint8_t* payload, size_t payload_length, const Dpt&
                 value = (uint8_t)((unsigned8FromPayload(payload, 3) >> 5) & 0x07);
                 return true;
             }
+
             case 2:
             {
                 if (bitFromPayload(payload, 50))
@@ -657,11 +772,13 @@ int busValueToDateTime(const uint8_t* payload, size_t payload_length, const Dpt&
                 value = bitFromPayload(payload, 49);
                 return true;
             }
+
             case 9:
             {
                 value = bitFromPayload(payload, 55);
                 return true;
             }
+
             case 10:
             {
                 value = bitFromPayload(payload, 56);
@@ -689,62 +806,75 @@ int busValueToSigned64(const uint8_t* payload, size_t payload_length, const Dpt&
 int busValueToAlarmInfo(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(6);
+
     switch (datatype.index)
     {
         case 1:
         {
             unsigned char prio = unsigned8FromPayload(payload, 1);
+
             if (prio > 3)
                 return false;
+
             value = prio;
             return true;
         }
+
         case 0:
         case 2:
         case 3:
             value = unsigned8FromPayload(payload, datatype.index);
             return true;
+
         case 4:
         case 5:
         case 6:
         case 7:
             value = bitFromPayload(payload, 43 - datatype.index);
             return true;
+
         case 8:
         case 9:
         case 10:
             value = bitFromPayload(payload, 55 - datatype.index);
             return true;
     }
+
     return false;
 }
 
 int busValueToSerialNumber(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(6);
+
     switch (datatype.index)
     {
         case 0:
             value = unsigned16FromPayload(payload, 0);
             return true;
+
         case 1:
             value = unsigned32FromPayload(payload, 2);
             return true;
     }
+
     return false;
 }
 
 int busValueToVersion(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(2);
+
     switch (datatype.index)
     {
         case 0:
             value = (uint8_t)((unsigned8FromPayload(payload, 0) >> 3) & 0x1F);
             return true;
+
         case 1:
             value = (uint16_t)((unsigned16FromPayload(payload, 0) >> 6) & 0x1F);
             return true;
+
         case 2:
             value = (uint8_t)(unsigned8FromPayload(payload, 1) & 0x3F);
             return true;
@@ -756,11 +886,13 @@ int busValueToVersion(const uint8_t* payload, size_t payload_length, const Dpt& 
 int busValueToScaling(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(3);
+
     switch (datatype.index)
     {
         case 0:
             value = unsigned16FromPayload(payload, 0);
             return true;
+
         case 1:
             value = (uint8_t)(unsigned8FromPayload(payload, 2) * 100.0 / 255.0);
             return true;
@@ -772,16 +904,20 @@ int busValueToScaling(const uint8_t* payload, size_t payload_length, const Dpt& 
 int busValueToTariff(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(3);
+
     switch (datatype.index)
     {
         case 0:
             value = unsigned16FromPayload(payload, 0);
             return true;
+
         case 1:
         {
             uint8_t tariff = unsigned8FromPayload(payload, 2);
+
             if (tariff > 254)
                 return false;
+
             value = tariff;
             return true;
         }
@@ -793,6 +929,7 @@ int busValueToTariff(const uint8_t* payload, size_t payload_length, const Dpt& d
 int busValueToLocale(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(datatype.mainGroup == 231 ? 4 : 2);
+
     if (!datatype.index || (datatype.mainGroup == 231 && datatype.index == 1))
     {
         char code[2];
@@ -801,6 +938,7 @@ int busValueToLocale(const uint8_t* payload, size_t payload_length, const Dpt& d
         value = code;
         return true;
     }
+
     return false;
 }
 
@@ -815,46 +953,57 @@ int busValueToRGB(const uint8_t* payload, size_t payload_length, const Dpt& data
 int busValueToRGBW(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(6);
-    switch (datatype.index) {
+
+    switch (datatype.index)
+    {
         case 0: // The RGBW value
-            {
-                uint32_t rgbw = unsigned32FromPayload(payload, 0);
-                value = rgbw;
-            }
-            return true;
+        {
+            uint32_t rgbw = unsigned32FromPayload(payload, 0);
+            value = rgbw;
+        }
+
+        return true;
+
         case 1: // The mask bits only
-            value = unsigned8FromPayload(payload,5); 
+            value = unsigned8FromPayload(payload, 5);
             return true;
     }
+
     return false;
 }
 
 int busValueToFlaggedScaling(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(2);
+
     switch (datatype.index)
     {
         case 0:
             value = (uint8_t)(unsigned8FromPayload(payload, 0) * 100.0 / 255.0);
             return true;
+
         case 1:
             value = bitFromPayload(payload, 15);
             return true;
     }
+
     return false;
 }
 
 int busValueToActiveEnergy(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
 {
     ASSERT_PAYLOAD(6);
+
     switch (datatype.index)
     {
         case 0:
             value = signed32FromPayload(payload, 0);
             return true;
+
         case 1:
             value = unsigned8FromPayload(payload, 4);
             return true;
+
         case 2:
         case 3:
             value = bitFromPayload(payload, datatype.index + 44);
@@ -879,9 +1028,11 @@ int valueToBusValueBinaryControl(const KNXValue& value, uint8_t* payload, size_t
         case 0:
             bitToPayload(payload, payload_length, 6, value);
             break;
+
         case 1:
             bitToPayload(payload, payload_length, 7, value);
             break;
+
         default:
             return false;
     }
@@ -896,13 +1047,16 @@ int valueToBusValueStepControl(const KNXValue& value, uint8_t* payload, size_t p
         case 0:
             bitToPayload(payload, payload_length, 4, value);
             break;
+
         case 1:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(7))
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0x07);
         }
         break;
+
         default:
             return false;
     }
@@ -914,6 +1068,7 @@ int valueToBusValueCharacter(const KNXValue& value, uint8_t* payload, size_t pay
 {
     if ((uint64_t)value > INT64_C(255) || (datatype.subGroup == 1 && (uint64_t)value > INT64_C(127)))
         return false;
+
     unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0xFF);
     return true;
 }
@@ -929,27 +1084,34 @@ int valueToBusValueUnsigned8(const KNXValue& value, uint8_t* payload, size_t pay
         {
             if ((double)value > 100.0)
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 0, round((double)value * 255.0 / 100.0), 0xFF);
             break;
         }
+
         case 3:
         {
             if ((double)value > 360.0)
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 0, round((double)value * 255.0 / 360.0), 0xFF);
             break;
         }
+
         case 6:
         {
             if ((int64_t)value > INT64_C(254))
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0xFF);
             break;
         }
+
         default:
         {
             if ((int64_t)value > INT64_C(255))
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0xFF);
         }
     }
@@ -974,6 +1136,7 @@ int valueToBusValueStatusAndMode(const KNXValue& value, uint8_t* payload, size_t
     {
         if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(7))
             return false;
+
         unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0x07);
     }
     else
@@ -1012,6 +1175,7 @@ int valueToBusValueSigned16(const KNXValue& value, uint8_t* payload, size_t payl
     {
         if ((double)value < -327.68 || (double)value > 327.67)
             return false;
+
         signed16ToPayload(payload, payload_length, 0, (int16_t)((double)value * 100.0), 0xFFFF);
     }
     else
@@ -1049,7 +1213,9 @@ int valueToBusValueFloat16(const KNXValue& value, uint8_t* payload, size_t paylo
         case 1:
             if (numValue < -273.0)
                 return false;
+
             break;
+
         case 2:
         case 3:
         case 10:
@@ -1062,7 +1228,9 @@ int valueToBusValueFloat16(const KNXValue& value, uint8_t* payload, size_t paylo
         case 25:
             if (numValue < -670760.0)
                 return false;
+
             break;
+
         case 4:
         case 5:
         case 6:
@@ -1071,10 +1239,13 @@ int valueToBusValueFloat16(const KNXValue& value, uint8_t* payload, size_t paylo
         case 28:
             if (numValue < 0.0)
                 return false;
+
             break;
+
         case 27:
             if (numValue < -459.6)
                 return false;
+
             break;
     }
 
@@ -1090,10 +1261,12 @@ int valueToBusValueTime(const KNXValue& value, uint8_t* payload, size_t payload_
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(7))
                 return false;
+
             ENSURE_PAYLOAD(3);
             unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value << 5, 0xE0);
             break;
         }
+
         case 1:
         {
             struct tm tmp = value;
@@ -1102,6 +1275,7 @@ int valueToBusValueTime(const KNXValue& value, uint8_t* payload, size_t payload_
             unsigned8ToPayload(payload, payload_length, 2, tmp.tm_sec, 0x3F);
             break;
         }
+
         default:
             return false;
     }
@@ -1112,6 +1286,7 @@ int valueToBusValueTime(const KNXValue& value, uint8_t* payload, size_t payload_
 int valueToBusValueDate(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
     struct tm tmp = value;
+
     if (tmp.tm_year < 1990 || tmp.tm_year > 2089)
         return false;
 
@@ -1151,6 +1326,7 @@ int valueToBusValueLongTimePeriod(const KNXValue& value, uint8_t* payload, size_
 int valueToBusValueFloat32(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
     double numValue = value;
+
     if (numValue < (-8388608.0 * pow(2, 255)) || numValue > (8388607.0 * pow(2, 255)))
         return false;
 
@@ -1166,24 +1342,31 @@ int valueToBusValueAccess(const KNXValue& value, uint8_t* payload, size_t payloa
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(999999))
                 return false;
+
             ENSURE_PAYLOAD(4);
+
             for (int n = 0, factor = 100000; n < 6; ++n, factor /= 10)
                 bcdToPayload(payload, payload_length, n, ((uint64_t)value / factor) % 10);
+
             break;
         }
+
         case 1:
         case 2:
         case 3:
         case 4:
             bitToPayload(payload, payload_length, 23 + datatype.index, value);
             break;
+
         case 5:
         {
             if ((uint64_t)value > INT64_C(15))
                 return false;
+
             bcdToPayload(payload, payload_length, 7, (uint64_t)value);
             break;
         }
+
         default:
             return false;
     }
@@ -1195,10 +1378,15 @@ int valueToBusValueString(const KNXValue& value, uint8_t* payload, size_t payloa
 {
     const char* strValue = value;
     uint8_t val = strValue[0];
-    for (int n = 0; n < 14; n++) {
-        if (val) val = strValue[n]; //string terminator 0x00 will stop further assignments and init the remainig payload with zero
+
+    for (int n = 0; n < 14; n++)
+    {
+        if (val)
+            val = strValue[n]; //string terminator 0x00 will stop further assignments and init the remainig payload with zero
+
         unsigned8ToPayload(payload, payload_length, n, val, 0xff);
     }
+
     return true;
 }
 
@@ -1218,13 +1406,16 @@ int valueToBusValueSceneControl(const KNXValue& value, uint8_t* payload, size_t 
         case 0:
             bitToPayload(payload, payload_length, 0, value);
             break;
+
         case 1:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 0, (int64_t)value, 0x3F);
             break;
         }
+
         default:
             return false;
     }
@@ -1239,13 +1430,16 @@ int valueToBusValueSceneInfo(const KNXValue& value, uint8_t* payload, size_t pay
         case 0:
             bitToPayload(payload, payload_length, 1, value);
             break;
+
         case 1:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 0, (int64_t)value, 0x3F);
             break;
         }
+
         default:
             return false;
     }
@@ -1261,13 +1455,16 @@ int valueToBusValueSceneConfig(const KNXValue& value, uint8_t* payload, size_t p
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 0, (int64_t)value, 0x3F);
             break;
         }
+
         case 1:
         case 2:
             bitToPayload(payload, payload_length, 2 - datatype.index, value);
             break;
+
         default:
             return false;
     }
@@ -1301,9 +1498,11 @@ int valueToBusValueDateTime(const KNXValue& value, uint8_t* payload, size_t payl
             unsigned8ToPayload(payload, payload_length, 5, tmp.tm_sec, 0x3F);
             break;
         }
+
         case 1:
         {
             ENSURE_PAYLOAD(8);
+
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(7))
                 bitToPayload(payload, payload_length, 53, true);
             else
@@ -1311,8 +1510,10 @@ int valueToBusValueDateTime(const KNXValue& value, uint8_t* payload, size_t payl
                 bitToPayload(payload, payload_length, 53, false);
                 unsigned8ToPayload(payload, payload_length, 3, (int64_t)value << 5, 0xE0);
             }
+
             break;
         }
+
         case 2:
         {
             ENSURE_PAYLOAD(8);
@@ -1320,23 +1521,27 @@ int valueToBusValueDateTime(const KNXValue& value, uint8_t* payload, size_t payl
             bitToPayload(payload, payload_length, 50, false);
             break;
         }
+
         case 3:
         {
             ENSURE_PAYLOAD(8);
             bitToPayload(payload, payload_length, 48, value);
             break;
         }
+
         case 9:
         {
             ENSURE_PAYLOAD(8);
             bitToPayload(payload, payload_length, 55, value);
             break;
         }
+
         case 10:
         {
             bitToPayload(payload, payload_length, 56, value);
             break;
         }
+
         default:
             return false;
     }
@@ -1364,20 +1569,24 @@ int valueToBusValueAlarmInfo(const KNXValue& value, uint8_t* payload, size_t pay
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(3))
                 return false;
+
             ENSURE_PAYLOAD(6);
             unsigned8ToPayload(payload, payload_length, 1, (int64_t)value, 0xFF);
             break;
         }
+
         case 0:
         case 2:
         case 3:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(255))
                 return false;
+
             ENSURE_PAYLOAD(6);
             unsigned8ToPayload(payload, payload_length, datatype.index, (int64_t)value, 0xFF);
             break;
         }
+
         case 4:
         case 5:
         case 6:
@@ -1387,6 +1596,7 @@ int valueToBusValueAlarmInfo(const KNXValue& value, uint8_t* payload, size_t pay
             bitToPayload(payload, payload_length, 43 - datatype.index, value);
             break;
         }
+
         case 8:
         case 9:
         case 10:
@@ -1395,6 +1605,7 @@ int valueToBusValueAlarmInfo(const KNXValue& value, uint8_t* payload, size_t pay
             bitToPayload(payload, payload_length, 55 - datatype.index, value);
             break;
         }
+
         default:
             return false;
     }
@@ -1410,18 +1621,22 @@ int valueToBusValueSerialNumber(const KNXValue& value, uint8_t* payload, size_t 
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(65535))
                 return false;
+
             ENSURE_PAYLOAD(6);
             unsigned16ToPayload(payload, payload_length, 0, (int64_t)value, 0xFFFF);
             break;
         }
+
         case 1:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(4294967295))
                 return false;
+
             ENSURE_PAYLOAD(6);
             unsigned32ToPayload(payload, payload_length, 2, (int64_t)value, 0xFFFF);
             break;
         }
+
         default:
             return false;
     }
@@ -1437,24 +1652,30 @@ int valueToBusValueVersion(const KNXValue& value, uint8_t* payload, size_t paylo
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(31))
                 return false;
+
             ENSURE_PAYLOAD(2);
             unsigned8ToPayload(payload, payload_length, 0, (int64_t)value << 3, 0xF8);
             break;
         }
+
         case 1:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(31))
                 return false;
+
             unsigned16ToPayload(payload, payload_length, 0, (int64_t)value << 6, 0x07C0);
             break;
         }
+
         case 2:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 1, (int64_t)value, 0x3F);
             break;
         }
+
         default:
             return false;
     }
@@ -1477,10 +1698,12 @@ int valueToBusValueScaling(const KNXValue& value, uint8_t* payload, size_t paylo
             unsigned16ToPayload(payload, payload_length, 0, duration, 0xFFFF);
             return true;
         }
+
         case 1:
         {
             if ((double)value < 0.0 || (double)value > 100.0)
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 2, round((double)value * 255.0 / 100.0), 0xff);
             break;
         }
@@ -1504,10 +1727,12 @@ int valueToBusValueTariff(const KNXValue& value, uint8_t* payload, size_t payloa
             unsigned16ToPayload(payload, payload_length, 0, duration, 0xFFFF);
             return true;
         }
+
         case 1:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(254))
                 return false;
+
             unsigned8ToPayload(payload, payload_length, 2, (int64_t)value, 0xff);
             break;
         }
@@ -1519,6 +1744,7 @@ int valueToBusValueTariff(const KNXValue& value, uint8_t* payload, size_t payloa
 int valueToBusValueLocale(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
     int strl = strlen(value);
+
     if (strl != 2)
         return false;
 
@@ -1547,18 +1773,20 @@ int valueToBusValueRGB(const KNXValue& value, uint8_t* payload, size_t payload_l
 
 int valueToBusValueRGBW(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
-    switch(datatype.index)
+    switch (datatype.index)
     {
         case 0: // RGBW
-            {
-                uint32_t rgbw = (uint32_t)value;
-                unsigned32ToPayload(payload, payload_length, 0, rgbw, 0xffffffff); // RGBW
-            }
-            break;
+        {
+            uint32_t rgbw = (uint32_t)value;
+            unsigned32ToPayload(payload, payload_length, 0, rgbw, 0xffffffff); // RGBW
+        }
+        break;
+
         case 1: // Mask bits
             unsigned8ToPayload(payload, payload_length, 5, (uint8_t)value, 0x0f);
             break;
     }
+
     return true;
 }
 
@@ -1570,13 +1798,16 @@ int valueToBusValueFlaggedScaling(const KNXValue& value, uint8_t* payload, size_
         {
             if ((double)value < 0.0 || (double)value > 100.0)
                 return false;
+
             ENSURE_PAYLOAD(2);
             unsigned8ToPayload(payload, payload_length, 0, round((double)value * 255.0 / 100.0), 0xff);
             break;
         }
+
         case 1:
             bitToPayload(payload, payload_length, 15, value);
             break;
+
         default:
             return false;
     }
@@ -1592,22 +1823,27 @@ int valueToBusValueActiveEnergy(const KNXValue& value, uint8_t* payload, size_t 
         {
             if ((int64_t)value < INT64_C(-2147483648) || (int64_t)value > INT64_C(2147483647))
                 return false;
+
             ENSURE_PAYLOAD(6);
             signed32ToPayload(payload, payload_length, 0, (int64_t)value, 0xffffffff);
             break;
         }
+
         case 1:
         {
             if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(254))
                 return false;
+
             ENSURE_PAYLOAD(6);
             unsigned8ToPayload(payload, payload_length, 4, (int64_t)value, 0xff);
             break;
         }
+
         case 2:
         case 3:
             bitToPayload(payload, payload_length, datatype.index + 44, value);
             break;
+
         default:
             return false;
     }
@@ -1650,18 +1886,19 @@ int32_t signed32FromPayload(const uint8_t* payload, int index)
 }
 uint64_t unsigned64FromPayload(const uint8_t* payload, int index)
 {
-	return ((((uint64_t)payload[index]) << 56) & 0xFF00000000000000) |
-		((((uint64_t)payload[index + 1]) << 48) & 0x00FF000000000000) |
-		((((uint64_t)payload[index + 2]) << 40) & 0x0000FF0000000000) |
-		((((uint64_t)payload[index + 3]) << 32) & 0x000000FF00000000) |
-		((((uint64_t)payload[index + 4]) << 24) & 0x00000000FF000000) |
-		((((uint64_t)payload[index + 5]) << 16) & 0x0000000000FF0000) |
-		((((uint64_t)payload[index + 6]) << 8) & 0x000000000000FF00) |
-		(((uint64_t)payload[index + 7]) & 0x00000000000000FF);
+    return ((((uint64_t)payload[index]) << 56) & 0xFF00000000000000) |
+           ((((uint64_t)payload[index + 1]) << 48) & 0x00FF000000000000) |
+           ((((uint64_t)payload[index + 2]) << 40) & 0x0000FF0000000000) |
+           ((((uint64_t)payload[index + 3]) << 32) & 0x000000FF00000000) |
+           ((((uint64_t)payload[index + 4]) << 24) & 0x00000000FF000000) |
+           ((((uint64_t)payload[index + 5]) << 16) & 0x0000000000FF0000) |
+           ((((uint64_t)payload[index + 6]) << 8) & 0x000000000000FF00) |
+           (((uint64_t)payload[index + 7]) & 0x00000000000000FF);
 }
 double float16FromPayload(const uint8_t* payload, int index)
 {
     uint16_t mantissa = unsigned16FromPayload(payload, index) & 0x87FF;
+
     if (mantissa & 0x8000)
         return ((~mantissa & 0x07FF) + 1.0) * -0.01 * (1 << ((payload[index] >> 3) & 0x0F));
 
@@ -1669,14 +1906,22 @@ double float16FromPayload(const uint8_t* payload, int index)
 }
 float float32FromPayload(const uint8_t* payload, int index)
 {
-    union { float f; uint32_t i; } area;
+    union
+    {
+        float f;
+        uint32_t i;
+    } area;
     area.i = unsigned32FromPayload(payload, index);
-	return area.f;
+    return area.f;
 }
 double float64FromPayload(const uint8_t* payload, int index)
 {
-	union { double f; uint64_t i; } area;
-	area.i = unsigned64FromPayload(payload, index);
+    union
+    {
+        double f;
+        uint64_t i;
+    } area;
+    area.i = unsigned64FromPayload(payload, index);
     return area.f;
 }
 int64_t signed64FromPayload(const uint8_t* payload, int index)
@@ -1694,6 +1939,7 @@ uint8_t bcdFromPayload(const uint8_t* payload, int index)
 {
     if (index % 2)
         return (uint8_t)(payload[index / 2] & 0x0F);
+
     return (uint8_t)((payload[index / 2] >> 4) & 0x0F);
 }
 
@@ -1744,6 +1990,7 @@ void signed32ToPayload(uint8_t* payload, size_t payload_length, int index, int32
 void float16ToPayload(uint8_t* payload, size_t payload_length, int index, double value, uint16_t mask)
 {
     bool wasNegative = false;
+
     if (value < 0)
     {
         wasNegative = true;
@@ -1752,11 +1999,12 @@ void float16ToPayload(uint8_t* payload, size_t payload_length, int index, double
 
     value *= 100.0;
     unsigned short exponent = 0;
-  
-    if(value > 2048)
+
+    if (value > 2048)
         exponent = ceil(log2(value) - 11.0);
-    
+
     short mantissa = roundf(value / (1 << exponent));
+
     // above calculation causes mantissa overflow for values of the form 2^n, where n>11
     if (mantissa >= 0x800)
     {
@@ -1768,13 +2016,17 @@ void float16ToPayload(uint8_t* payload, size_t payload_length, int index, double
         mantissa *= -1;
 
     // println(mantissa);
-    
+
     signed16ToPayload(payload, payload_length, index, mantissa, mask);
     unsigned8ToPayload(payload, payload_length, index, exponent << 3, 0x78 & (mask >> 8));
 }
 void float32ToPayload(uint8_t* payload, size_t payload_length, int index, double value, uint32_t mask)
 {
-    union { float f; uint32_t i; } num;
+    union
+    {
+        float f;
+        uint32_t i;
+    } num;
     num.f = value;
     unsigned32ToPayload(payload, payload_length, index, num.i, mask);
 }
@@ -1793,6 +2045,7 @@ void signed64ToPayload(uint8_t* payload, size_t payload_length, int index, int64
 void bcdToPayload(uint8_t* payload, size_t payload_length, int index, uint8_t value)
 {
     ENSURE_PAYLOAD(index / 2 + 1);
+
     if (index % 2)
         payload[index / 2] = (payload[index / 2] & 0xF0) | (value & 0x0F);
     else

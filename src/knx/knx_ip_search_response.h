@@ -10,15 +10,15 @@
 
 class KnxIpSearchResponse : public KnxIpFrame
 {
-  public:
-    KnxIpSearchResponse(IpParameterObject& parameters, DeviceObject& deviceObj);
-    IpHostProtocolAddressInformation& controlEndpoint();
-    KnxIpDeviceInformationDIB& deviceInfo();
-    KnxIpSupportedServiceDIB& supportedServices();
-  private:
-    IpHostProtocolAddressInformation _controlEndpoint;
-    KnxIpDeviceInformationDIB _deviceInfo;
-    KnxIpSupportedServiceDIB _supportedServices;
+    public:
+        KnxIpSearchResponse(IpParameterObject& parameters, DeviceObject& deviceObj);
+        IpHostProtocolAddressInformation& controlEndpoint();
+        KnxIpDeviceInformationDIB& deviceInfo();
+        KnxIpSupportedServiceDIB& supportedServices();
+    private:
+        IpHostProtocolAddressInformation _controlEndpoint;
+        KnxIpDeviceInformationDIB _deviceInfo;
+        KnxIpSupportedServiceDIB _supportedServices;
 };
 
 #endif

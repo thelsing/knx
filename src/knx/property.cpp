@@ -41,6 +41,7 @@ uint8_t Property::ElementSize() const
         case PDT_ENUM8:
         case PDT_SCALING:
             return 1;
+
         case PDT_GENERIC_02:
         case PDT_INT:
         case PDT_KNX_FLOAT:
@@ -48,6 +49,7 @@ uint8_t Property::ElementSize() const
         case PDT_VERSION:
         case PDT_BITSET16:
             return 2;
+
         case PDT_DATE:
         case PDT_ESCAPE:
         case PDT_FUNCTION:
@@ -58,48 +60,66 @@ uint8_t Property::ElementSize() const
         case PDT_TIME:
         case PDT_UTF8:
             return 3;
+
         case PDT_FLOAT:
         case PDT_GENERIC_04:
         case PDT_LONG:
         case PDT_UNSIGNED_LONG:
             return 4;
+
         case PDT_GENERIC_05:
         case PDT_SHORT_CHAR_BLOCK:
             return 5;
+
         case PDT_GENERIC_06:
         case PDT_ALARM_INFO:
             return 6;
+
         case PDT_GENERIC_07:
             return 7;
+
         case PDT_DATE_TIME:
         case PDT_DOUBLE:
         case PDT_GENERIC_08:
             return 8;
+
         case PDT_GENERIC_09:
             return 9;
+
         case PDT_CHAR_BLOCK:
         case PDT_GENERIC_10:
             return 10;
+
         case PDT_GENERIC_11:
             return 11;
+
         case PDT_GENERIC_12:
             return 12;
+
         case PDT_GENERIC_13:
             return 13;
+
         case PDT_GENERIC_14:
             return 14;
+
         case PDT_GENERIC_15:
             return 15;
+
         case PDT_GENERIC_16:
             return 16;
+
         case PDT_GENERIC_17:
             return 17;
+
         case PDT_GENERIC_18:
             return 18;
+
         case PDT_GENERIC_19:
             return 19;
+
         case PDT_GENERIC_20:
             return 20;
+
         default:
             return 0;
     }
@@ -118,7 +138,7 @@ uint8_t Property::read(uint8_t& value) const
 {
     if (ElementSize() != 1)
         return 0;
-    
+
     return read(1, 1, &value);
 }
 
@@ -130,10 +150,12 @@ uint8_t Property::read(uint16_t& value) const
 
     uint8_t data[2];
     uint8_t count = read(1, 1, data);
+
     if (count > 0)
     {
         popWord(value, data);
     }
+
     return count;
 }
 
@@ -145,10 +167,12 @@ uint8_t Property::read(uint32_t& value) const
 
     uint8_t data[4];
     uint8_t count = read(1, 1, data);
+
     if (count > 0)
     {
         popInt(value, data);
     }
+
     return count;
 }
 
@@ -212,7 +236,7 @@ void Property::command(uint8_t* data, uint8_t length, uint8_t* resultData, uint8
     resultLength = 0;
 }
 
-void Property::state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t &resultLength)
+void Property::state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
     (void)data;
     (void)length;

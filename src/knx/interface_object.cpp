@@ -14,6 +14,7 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
     uint8_t count = _propertyCount;
 
     numberOfElements = 0;
+
     if (_properties == nullptr || count == 0)
         return;
 
@@ -26,6 +27,7 @@ void InterfaceObject::readPropertyDescription(uint8_t& propertyId, uint8_t& prop
         for (uint8_t i = 0; i < count; i++)
         {
             Property* p = _properties[i];
+
             if (p->Id() != propertyId)
                 continue;
 
@@ -60,23 +62,25 @@ void InterfaceObject::masterReset(EraseCode eraseCode, uint8_t channel)
     // However, for the time being we provide an empty default implementation
 }
 
-void InterfaceObject::readPropertyLength(PropertyID id, uint16_t &length)
+void InterfaceObject::readPropertyLength(PropertyID id, uint16_t& length)
 {
     uint8_t count = 1;
     uint16_t propval = 0;
     readProperty(id, 0, count, (uint8_t*)&propval);
 
-    if(count == 0)
+    if (count == 0)
     {
         length = 0;
         return;
     }
+
     length = ntohs(propval);
 }
 
 void InterfaceObject::readProperty(PropertyID id, uint16_t start, uint8_t& count, uint8_t* data)
 {
     Property* prop = property(id);
+
     if (prop == nullptr)
     {
         count = 0;
@@ -89,6 +93,7 @@ void InterfaceObject::readProperty(PropertyID id, uint16_t start, uint8_t& count
 void InterfaceObject::writeProperty(PropertyID id, uint16_t start, uint8_t* data, uint8_t& count)
 {
     Property* prop = property(id);
+
     if (prop == nullptr)
     {
         count = 0;
@@ -101,6 +106,7 @@ void InterfaceObject::writeProperty(PropertyID id, uint16_t start, uint8_t* data
 uint8_t InterfaceObject::propertySize(PropertyID id)
 {
     Property* prop = property(id);
+
     if (prop == nullptr)
     {
         return 0;
@@ -112,6 +118,7 @@ uint8_t InterfaceObject::propertySize(PropertyID id)
 void InterfaceObject::command(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
     Property* prop = property(id);
+
     if (prop == nullptr)
     {
         resultLength = 0;
@@ -124,6 +131,7 @@ void InterfaceObject::command(PropertyID id, uint8_t* data, uint8_t length, uint
 void InterfaceObject::state(PropertyID id, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength)
 {
     Property* prop = property(id);
+
     if (prop == nullptr)
     {
         resultLength = 0;
@@ -156,11 +164,13 @@ uint8_t* InterfaceObject::save(uint8_t* buffer)
     for (int i = 0; i < _propertyCount; i++)
     {
         Property* prop = _properties[i];
+
         if (!prop->WriteEnable())
             continue;
-        
+
         buffer = prop->save(buffer);
     }
+
     return buffer;
 }
 
@@ -170,11 +180,13 @@ const uint8_t* InterfaceObject::restore(const uint8_t* buffer)
     for (int i = 0; i < _propertyCount; i++)
     {
         Property* prop = _properties[i];
+
         if (!prop->WriteEnable())
             continue;
 
         buffer = prop->restore(buffer);
     }
+
     return buffer;
 }
 
@@ -186,11 +198,13 @@ uint16_t InterfaceObject::saveSize()
     for (int i = 0; i < _propertyCount; i++)
     {
         Property* prop = _properties[i];
+
         if (!prop->WriteEnable())
             continue;
 
         size += prop->saveSize();
     }
+
     return size;
 }
 
@@ -201,7 +215,7 @@ const Property* InterfaceObject::property(PropertyID id) const
         if (_properties[i]->Id() == id)
             return _properties[i];
 
-    return nullptr; 
+    return nullptr;
 }
 
 

@@ -12,8 +12,10 @@ ApduType APDU::type()
     apci = getWord(_data);
     popWord(apci, _data);
     apci &= 0x3ff;
+
     if ((apci >> 6) < 11 && (apci >> 6) != 7) //short apci
         apci &= 0x3c0;
+
     return (ApduType)apci;
 }
 
@@ -44,10 +46,14 @@ void APDU::printPDU()
     print(type(), HEX);
     print("  ");
     print(_data[0] & 0x3, HEX);
+
     for (uint8_t i = 1; i < length() + 1; ++i)
     {
-        if (i) print(" ");
+        if (i)
+            print(" ");
+
         print(_data[i], HEX);
     }
+
     println();
 }

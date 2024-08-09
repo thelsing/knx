@@ -11,13 +11,13 @@ KnxIpTunnelingInfoDIB::KnxIpTunnelingInfoDIB(uint8_t* data) : KnxIpDIB(data)
 uint16_t KnxIpTunnelingInfoDIB::apduLength()
 {
     uint16_t addr = 0;
-    popWord(addr, _data+2);
+    popWord(addr, _data + 2);
     return addr;
 }
 
 void KnxIpTunnelingInfoDIB::apduLength(uint16_t addr)
 {
-    pushWord(addr, _data+2);
+    pushWord(addr, _data + 2);
 }
 
 void KnxIpTunnelingInfoDIB::tunnelingSlot(uint16_t addr, uint16_t state)

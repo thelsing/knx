@@ -19,7 +19,7 @@ uint8_t DataProperty::read(uint16_t start, uint8_t count, uint8_t* data) const
     start -= 1;
 
     // data is already big enough to hold the data
-    memcpy(data, _data + (start * ElementSize()), count * ElementSize()); 
+    memcpy(data, _data + (start * ElementSize()), count * ElementSize());
 
     return count;
 }
@@ -35,11 +35,13 @@ uint8_t DataProperty::write(uint16_t start, uint8_t count, const uint8_t* data)
         {
             // reset _data
             _currentElements = 0;
+
             if (_data)
             {
                 delete[] _data;
                 _data = nullptr;
             }
+
             return 1;
         }
         else
@@ -48,6 +50,7 @@ uint8_t DataProperty::write(uint16_t start, uint8_t count, const uint8_t* data)
 
     // we start counting with zero
     start -= 1;
+
     if (start + count > _currentElements)
     {
         // reallocate memory for _data
@@ -90,7 +93,7 @@ DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType typ
     Property::write(value);
 }
 
-DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType type, 
+DataProperty::DataProperty(PropertyID id, bool writeEnable, PropertyDataType type,
                            uint16_t maxElements, uint8_t access, uint32_t value)
     : Property(id, writeEnable, type, maxElements, access)
 {
@@ -126,7 +129,7 @@ const uint8_t* DataProperty::restore(const uint8_t* buffer)
     {
         if (_data != nullptr)
             delete[] _data;
-        
+
         _data = new uint8_t[elements * ElementSize()];
         _currentElements = elements;
     }
@@ -141,6 +144,7 @@ const uint8_t* DataProperty::restore(const uint8_t* buffer)
 uint8_t* DataProperty::save(uint8_t* buffer)
 {
     buffer = pushWord(_currentElements, buffer);
+
     if (_currentElements > 0)
         buffer = pushByteArray(_data, _currentElements * ElementSize(), buffer);
 

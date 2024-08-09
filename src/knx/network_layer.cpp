@@ -6,7 +6,7 @@
 #include "bits.h"
 #include "apdu.h"
 
-NetworkLayer::NetworkLayer(DeviceObject &deviceObj, TransportLayer& layer) :
+NetworkLayer::NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer) :
     _deviceObj(deviceObj),
     _transportLayer(layer)
 {
@@ -26,6 +26,7 @@ bool NetworkLayer::isApciSystemBroadcast(APDU& apdu)
         case SystemNetworkParameterRead:
         case SystemNetworkParameterResponse:
         case SystemNetworkParameterWrite:
+
         // Open media specific Application Layer Services on System Broadcast communication mode
         case DomainAddressSerialNumberRead:
         case DomainAddressSerialNumberResponse:
@@ -35,9 +36,11 @@ bool NetworkLayer::isApciSystemBroadcast(APDU& apdu)
         case DomainAddressResponse:
         case DomainAddressWrite:
             return true;
+
         default:
             return false;
     }
+
     return false;
 }
 

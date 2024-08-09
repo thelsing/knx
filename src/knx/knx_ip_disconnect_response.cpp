@@ -7,6 +7,6 @@ KnxIpDisconnectResponse::KnxIpDisconnectResponse(uint8_t channel, uint8_t status
     serviceTypeIdentifier(DisconnectResponse);
 
     _data[LEN_KNXIP_HEADER] = channel;
-    _data[LEN_KNXIP_HEADER+1] = status;
+    _data[LEN_KNXIP_HEADER + 1] = status;
 }
 #endif

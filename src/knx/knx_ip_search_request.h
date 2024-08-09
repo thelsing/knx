@@ -5,10 +5,10 @@
 #ifdef USE_IP
 class KnxIpSearchRequest : public KnxIpFrame
 {
-  public:
-    KnxIpSearchRequest(uint8_t* data, uint16_t length);
-    IpHostProtocolAddressInformation& hpai();
-  private:
-    IpHostProtocolAddressInformation _hpai;
+    public:
+        KnxIpSearchRequest(uint8_t* data, uint16_t length);
+        IpHostProtocolAddressInformation& hpai();
+    private:
+        IpHostProtocolAddressInformation _hpai;
 };
 #endif

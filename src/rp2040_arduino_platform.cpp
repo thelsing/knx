@@ -96,17 +96,17 @@ void __time_critical_func(uartDmaRestart)()
 #define FLASHPTR ((uint8_t*)XIP_BASE + KNX_FLASH_OFFSET)
 
 #ifndef USE_RP2040_EEPROM_EMULATION
-#if KNX_FLASH_SIZE % 4096
-#error "KNX_FLASH_SIZE must be multiple of 4096"
-#endif
+    #if KNX_FLASH_SIZE % 4096
+        #error "KNX_FLASH_SIZE must be multiple of 4096"
+    #endif
 
-#if KNX_FLASH_OFFSET % 4096
-#error "KNX_FLASH_OFFSET must be multiple of 4096"
-#endif
+    #if KNX_FLASH_OFFSET % 4096
+        #error "KNX_FLASH_OFFSET must be multiple of 4096"
+    #endif
 #endif
 
 #ifdef KNX_IP_LAN
-extern Wiznet5500lwIP KNX_NETIF;
+    extern Wiznet5500lwIP KNX_NETIF;
 #elif defined(KNX_IP_WIFI)
 #elif defined(KNX_IP_GENERIC)
 
@@ -148,6 +148,7 @@ bool RP2040ArduinoPlatform::overflowUart()
     // during dma restart
     bool ret;
     const uint32_t writeCount = uartDmaWriteCount();
+
     if (uartDmaRestartCount > 0)
         ret = writeCount >= (uartDmaBufferSize - uartDmaRestartCount - 1);
     else
@@ -175,6 +176,7 @@ bool RP2040ArduinoPlatform::overflowUart()
 void RP2040ArduinoPlatform::setupUart()
 {
 #ifdef USE_KNX_DMA_UART
+
     if (uartDmaChannel == -1)
     {
         // configure uart0
@@ -203,21 +205,27 @@ void RP2040ArduinoPlatform::setupUart()
         irq_set_exclusive_handler(KNX_DMA_IRQ, uartDmaRestart);
         irq_set_enabled(KNX_DMA_IRQ, true);
     }
+
 #else
     SerialUART* serial = dynamic_cast<SerialUART*>(_knxSerial);
+
     if (serial)
     {
         if (_rxPin != UART_PIN_NOT_DEFINED)
             serial->setRX(_rxPin);
+
         if (_txPin != UART_PIN_NOT_DEFINED)
             serial->setTX(_txPin);
+
         serial->setPollingMode();
         serial->setFIFOSize(64);
     }
 
     _knxSerial->begin(19200, SERIAL_8E1);
+
     while (!_knxSerial)
         ;
+
 #endif
 }
 
@@ -272,6 +280,7 @@ size_t RP2040ArduinoPlatform::writeUart(const uint8_t data)
     // println(data, HEX);
     while (!uart_is_writable(uart0))
         ;
+
     uart_putc_raw(uart0, data);
     return 1;
 }
@@ -478,8 +487,8 @@ void RP2040ArduinoPlatform::setupMultiCast(uint32_t addr, uint16_t port)
     (void)result;
 
 #ifdef KNX_IP_GENERIC
-// if(!_unicast_socket_setup)
-//     _unicast_socket_setup = UDP_UNICAST.begin(3671);
+    // if(!_unicast_socket_setup)
+    //     _unicast_socket_setup = UDP_UNICAST.begin(3671);
 #endif
 
     // print("Setup Mcast addr: ");
@@ -509,14 +518,17 @@ bool RP2040ArduinoPlatform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
 int RP2040ArduinoPlatform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen, uint32_t& src_addr, uint16_t& src_port)
 {
     int len = _udp.parsePacket();
+
     if (len == 0)
         return 0;
 
     if (len > maxLen)
     {
         println("Unexpected UDP data packet length - drop packet");
+
         for (size_t i = 0; i < len; i++)
             _udp.read();
+
         return 0;
     }
 
@@ -538,22 +550,26 @@ bool RP2040ArduinoPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8
 {
     IPAddress ucastaddr(htonl(addr));
 
-    if(!addr)
+    if (!addr)
         ucastaddr = _remoteIP;
-    
-    if(!port)
+
+    if (!port)
         port = _remotePort;
+
     // print("sendBytesUniCast to:");
     // println(ucastaddr.toString().c_str());
 
 #ifdef KNX_IP_GENERIC
+
     if (!_unicast_socket_setup)
         _unicast_socket_setup = UDP_UNICAST.begin(3671);
+
 #endif
 
     if (UDP_UNICAST.beginPacket(ucastaddr, port) == 1)
     {
         UDP_UNICAST.write(buffer, len);
+
         if (UDP_UNICAST.endPacket() == 0)
             println("sendBytesUniCast endPacket fail");
     }

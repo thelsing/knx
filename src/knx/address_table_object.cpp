@@ -37,28 +37,33 @@ uint16_t AddressTableObject::getGroupAddress(uint16_t tsap)
 uint16_t AddressTableObject::getTsap(uint16_t addr)
 {
     uint16_t size = entryCount();
-    #ifdef USE_BINSEARCH
+#ifdef USE_BINSEARCH
 
-    uint16_t low,high,i;
+    uint16_t low, high, i;
     low = 1;
     high = size;
 
-    while(low <= high)
+    while (low <= high)
     {
-        i = (low+high)/2;
+        i = (low + high) / 2;
         uint16_t ga = ntohs(_groupAddresses[i]);
+
         if (ga == addr)
             return i;
-        if(addr < ga)
+
+        if (addr < ga)
             high = i - 1;
         else
             low = i + 1 ;
     }
-    #else
+
+#else
+
     for (uint16_t i = 1; i <= size; i++)
         if (ntohs(_groupAddresses[i]) == addr)
             return i;
-    #endif
+
+#endif
     return 0;
 }
 
@@ -83,6 +88,7 @@ bool AddressTableObject::contains(uint16_t addr)
 void AddressTableObject::beforeStateChange(LoadState& newState)
 {
     TableObject::beforeStateChange(newState);
+
     if (newState != LS_LOADED)
         return;
 
