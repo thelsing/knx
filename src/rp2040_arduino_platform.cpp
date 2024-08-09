@@ -50,38 +50,38 @@ volatile uint16_t uartDmaRestartCount = 0;
 volatile uint32_t uartDmaWriteCount2 = 0;
 volatile uint32_t uartDmaAvail = 0;
 
-// Liefert die Zahl der gelesenen Bytes seit dem DMA Transferstart
+// Returns the number of bytes read since the DMA transfer start
 inline uint32_t uartDmaWriteCount()
 {
     uartDmaWriteCount2 = uartDmaTransferCount - dma_channel_hw_addr(uartDmaChannel)->transfer_count;
     return uartDmaWriteCount2;
 }
 
-// Liefert die aktuelle Schreibposition im DMA Buffer
+// Returns the current write position in the DMA buffer
 inline uint16_t uartDmaWriteBufferPosition()
 {
     return uartDmaWriteCount() % uartDmaBufferSize;
 }
 
-// Liefert die aktuelle Leseposition im DMA Buffer
+// Returns the current read position in the DMA buffer
 inline uint16_t uartDmaReadBufferPosition()
 {
     return uartDmaReadCount % uartDmaBufferSize;
 }
 
-// Liefert die aktuelle Leseposition als Pointer
+// Returns the current reading position as a pointer
 inline uint8_t* uartDmaReadAddr()
 {
     return ((uint8_t*)uartDmaBuffer + uartDmaReadBufferPosition());
 }
 
-// Startet den Transfer nach Abschluss neu.
+// Restarts the transfer after completion.
 void __time_critical_func(uartDmaRestart)()
 {
     // println("Restart");
     uartDmaRestartCount = uartDmaWriteBufferPosition() - uartDmaReadBufferPosition();
 
-    // wenn uartDmaRestartCount == 0 ist, wurde alles verarbeitet und der read count kann mit dem neustart wieder auf 0 gesetzt werden.
+    // if uartDmaRestartCount == 0, everything has been processed and the read count can be set to 0 again with the restart.
     if (uartDmaRestartCount == 0)
     {
         uartDmaReadCount = 0;
