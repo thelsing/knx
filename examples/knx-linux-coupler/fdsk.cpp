@@ -62,8 +62,6 @@ int FdskCalculator::toBase32(uint8_t* in, long length, uint8_t*& out, bool usePa
   char standardPaddingChar = '=';
 
   int result = 0;
-  int count = 0;
-  int bufSize = 8;
   int index = 0;
   int size = 0; // size of temporary array
   uint8_t* temp = nullptr;

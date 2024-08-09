@@ -659,7 +659,7 @@ void TpUartDataLinkLayer::requestConfig()
         _platform.writeUart(0x0); // dummy, see NCN5120 datasheet
 #else
         _platform.writeUart(U_MXRSTCNT);
-        _platform.writeUart(((_repetitions & 0xF0) << 1) || (_repetitions & 0x0F));
+        _platform.writeUart(((_repetitions & 0xF0) << 1) | (_repetitions & 0x0F));
 #endif
     }
 }

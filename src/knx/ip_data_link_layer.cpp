@@ -1069,7 +1069,7 @@ bool IpDataLinkLayer::isSendLimitReached()
         uint32_t timeBaseDiff = _frameCountTimeBase - curTime;
         if(timeBaseDiff > 10)
             timeBaseDiff = 10;
-        for(int i = 0; i < timeBaseDiff ; i++)
+        for(uint32_t i = 0; i < timeBaseDiff ; i++)
         {
             _frameCountBase++;
             _frameCountBase = _frameCountBase % 10;

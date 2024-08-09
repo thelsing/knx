@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(knx VERSION 1.4)
+project(knx VERSION 1.5)
 
 add_subdirectory(pybind11)
 
