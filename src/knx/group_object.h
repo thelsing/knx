@@ -18,16 +18,6 @@ enum ComFlag : uint8_t
     Uninitialized = 6 //!< uninitialized Group Object, its value is not valid
 };
 
-// extended ComFlag: Uninitialized it not handled correctly as ComFlag
-// it might be in state Transmitting during a ReadRequest on startup while value is still not valid
-// we use MSB to store Uninitialized and keep the size of GroupObject the same saving memory ressources
-// the old Uninitialized handling is still there for compatibility reasons.
-struct ComFlagEx
-{
-    bool uninitialized : 1;
-    ComFlag commFlag : 7;
-};
-
 class GroupObject;
 
 #ifndef HAS_FUNCTIONAL
@@ -278,7 +268,8 @@ class GroupObject
         size_t asapValueSize(uint8_t code) const;
         size_t goSize();
         uint16_t _asap = 0;
-        ComFlagEx _commFlagEx;
+        bool _uninitialized : 1;
+        ComFlag _commFlag : 7;
         uint8_t* _data = 0;
         uint8_t _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT
