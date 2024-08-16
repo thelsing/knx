@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_tunnel_connection.h"
 
 KnxIpTunnelConnection::KnxIpTunnelConnection()
@@ -17,3 +19,4 @@ void KnxIpTunnelConnection::Reset()
     IndividualAddress = 0;
     IsConfig = false;
 }
+#endif

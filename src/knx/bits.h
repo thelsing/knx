@@ -6,9 +6,15 @@
 #if defined(__linux__)
     #include <arpa/inet.h>
 #elif defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_STM32) || defined (DeviceFamily_CC13X0)
-    #define getbyte(x,n) (*(((uint8_t*)&(x))+n))
-    #define htons(x)  ( (getbyte(x,0)<<8) | getbyte(x,1) )
-    #define htonl(x) ( (getbyte(x,0)<<24) | (getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
+    #define htons(x) ( ((x)<< 8 & 0xFF00) | \
+                   ((x)>> 8 & 0x00FF) )
+    #define ntohs(x) htons(x)
+
+    #define htonl(x) ( ((x)<<24 & 0xFF000000UL) | \
+                   ((x)<< 8 & 0x00FF0000UL) | \
+                   ((x)>> 8 & 0x0000FF00UL) | \
+                   ((x)>>24 & 0x000000FFUL) )
+    #define ntohl(x) htonl(x)
     #define ntohs(x) htons(x)
     #define ntohl(x) htonl(x)
 #endif

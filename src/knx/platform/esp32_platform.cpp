@@ -1,6 +1,6 @@
+#ifdef ARDUINO_ARCH_ESP32
 #include "esp32_platform.h"
 
-#ifdef ARDUINO_ARCH_ESP32
 #include <Arduino.h>
 #include <EEPROM.h>
 

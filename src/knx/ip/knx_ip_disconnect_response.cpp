@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_disconnect_response.h"
 
 KnxIpDisconnectResponse::KnxIpDisconnectResponse(uint8_t channel, uint8_t status)
@@ -8,3 +10,4 @@ KnxIpDisconnectResponse::KnxIpDisconnectResponse(uint8_t channel, uint8_t status
     _data[LEN_KNXIP_HEADER] = channel;
     _data[LEN_KNXIP_HEADER + 1] = status;
 }
+#endif

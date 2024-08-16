@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_search_request_extended.h"
 #include "../bits.h"
 #include "service_families.h"
@@ -64,3 +66,4 @@ bool KnxIpSearchRequestExtended::requestedDIB(uint8_t code)
 
     return requestedDIBs[code];
 }
+#endif

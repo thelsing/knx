@@ -1,6 +1,6 @@
+#ifdef ARDUINO_ARCH_SAMD
 #include "samd_platform.h"
 
-#ifdef ARDUINO_ARCH_SAMD
 #include <knx/bits.h>
 
 #include <Arduino.h>

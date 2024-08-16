@@ -17,7 +17,7 @@
 #define CBC 1
 #define CTR 1
 #define ECB 0
-#include "aes.hpp"
+#include "util/aes.hpp"
 
 static constexpr uint8_t kSecureDataPdu = 0;
 static constexpr uint8_t kSecureSyncRequest = 2;

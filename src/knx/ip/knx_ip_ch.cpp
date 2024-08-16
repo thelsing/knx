@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_ch.h"
 
 KnxIpCH::KnxIpCH(uint8_t* data) : _data(data)
@@ -45,3 +47,4 @@ uint8_t KnxIpCH::status() const
 {
     return _data[3];
 }
+#endif

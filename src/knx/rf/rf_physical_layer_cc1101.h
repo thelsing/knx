@@ -122,7 +122,7 @@
 #define VERSION        0xF1   // Current version number
 #define FREQEST        0xF2   // Frequency offset estimate
 #define LQI            0xF3   // Demodulator estimate for link quality
-#define RSSI           0xF4   // Received signal strength indication
+#define RF_RSSI           0xF4   // Received signal strength indication
 #define MARCSTATE      0xF5   // Control state machine state
 #define WORTIME1       0xF6   // High byte of WOR timer
 #define WORTIME0       0xF7   // Low byte of WOR timer

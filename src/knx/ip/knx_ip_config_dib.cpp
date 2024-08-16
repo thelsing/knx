@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_config_dib.h"
 
 KnxIpConfigDIB::KnxIpConfigDIB(uint8_t* data, bool isCurrent) : KnxIpDIB(data)
@@ -90,3 +92,4 @@ void KnxIpConfigDIB::info2(uint8_t addr)
     else
         _data[19] = addr;
 }
+#endif

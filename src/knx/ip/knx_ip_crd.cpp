@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_crd.h"
 
 KnxIpCRD::KnxIpCRD(uint8_t* data) : _data(data)
@@ -38,3 +40,4 @@ void KnxIpCRD::address(uint16_t value)
     _data[2] = value >> 8;
     _data[3] = value & 0xFF;
 }
+#endif

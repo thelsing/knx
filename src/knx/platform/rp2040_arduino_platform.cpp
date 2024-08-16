@@ -22,10 +22,9 @@ For usage of KNX-IP you have to define either
 - KNX_IP_WIFI (use the arduino-pico core's PiPicoW lwip stack)
 
 ----------------------------------------------------*/
-
+#ifdef ARDUINO_ARCH_RP2040
 #include "rp2040_arduino_platform.h"
 
-#ifdef ARDUINO_ARCH_RP2040
 #include "knx/bits.h"
 
 #include <Arduino.h>

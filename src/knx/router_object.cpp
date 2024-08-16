@@ -1,4 +1,5 @@
 #include "config.h"
+#if ((MASK_VERSION != 0x07B0) && (MASK_VERSION != 0x27B0) && (MASK_VERSION != 0x57B0)) || defined(ALL_MASKS)
 
 #include <cstring>
 #include "router_object.h"
@@ -601,3 +602,4 @@ bool RouterObject::isGroupAddressInFilterTable(uint16_t groupAddress)
 
     return false;
 }
+#endif

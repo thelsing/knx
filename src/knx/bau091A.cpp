@@ -1,4 +1,5 @@
 #include "config.h"
+#if MASK_VERSION == 0x091A || defined(ALL_MASKS)
 
 #include "bau091A.h"
 #include "bits.h"
@@ -253,3 +254,4 @@ TpUartDataLinkLayer* Bau091A::getSecondaryDataLinkLayer()
 {
     return (TpUartDataLinkLayer*)&_dlLayerSecondary;
 }
+#endif

@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_description_request.h"
 
 KnxIpDescriptionRequest::KnxIpDescriptionRequest(uint8_t* data, uint16_t length)
@@ -10,3 +12,4 @@ IpHostProtocolAddressInformation& KnxIpDescriptionRequest::hpaiCtrl()
 {
     return _hpaiCtrl;
 }
+#endif

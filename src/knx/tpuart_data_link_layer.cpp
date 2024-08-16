@@ -1,4 +1,3 @@
-#include "config.h"
 #pragma GCC optimize("O3")
 
 #include "address_table_object.h"

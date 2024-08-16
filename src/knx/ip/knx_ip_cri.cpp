@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_cri.h"
 
 KnxIpCRI::KnxIpCRI(uint8_t* data) : _data(data)
@@ -35,3 +37,4 @@ void KnxIpCRI::layer(uint8_t value)
 {
     _data[2] = value;
 }
+#endif

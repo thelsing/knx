@@ -1,3 +1,4 @@
+#if (MASK_VERSION == 0x07B0) || (MASK_VERSION == 0x27B0) || (MASK_VERSION == 0x57B0) || defined(ALL_MASKS)
 #include "network_layer_device.h"
 #include "device_object.h"
 #include "tpdu.h"
@@ -148,3 +149,4 @@ void NetworkLayerDevice::systemBroadcastConfirm(AckType ack, FrameFormat format,
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataSystemBroadcastConfirm(ack, hopType, npdu.tpdu(), priority, status);
 }
+#endif

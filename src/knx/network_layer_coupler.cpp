@@ -1,3 +1,4 @@
+#if ((MASK_VERSION != 0x07B0) && (MASK_VERSION != 0x27B0) && (MASK_VERSION != 0x57B0)) || defined(ALL_MASKS)
 #include "network_layer_coupler.h"
 #include "data_link_layer.h"
 #include "device_object.h"
@@ -653,4 +654,5 @@ bool NetworkLayerCoupler::isTunnelAddress(uint16_t destination)
     // tunnels are managed within the IpDataLinkLayer - kPrimaryIfIndex
     return _netLayerEntities[kPrimaryIfIndex].dataLinkLayer().isTunnelAddress(destination);
 }
+#endif
 #endif

@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_tunneling_ack.h"
 #include <cstring>
 
@@ -16,3 +18,4 @@ KnxIpCH& KnxIpTunnelingAck::connectionHeader()
 {
     return _ch;
 }
+#endif

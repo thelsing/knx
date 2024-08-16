@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_state_request.h"
 
 KnxIpStateRequest::KnxIpStateRequest(uint8_t* data, uint16_t length)
@@ -13,3 +15,4 @@ uint8_t KnxIpStateRequest::channelId()
 {
     return _data[LEN_KNXIP_HEADER];
 }
+#endif

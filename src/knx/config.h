@@ -27,20 +27,55 @@
     //#define MASK_VERSION 0x2920
 
     // Data Linklayer Driver Options
-
-    #if MASK_VERSION == 0x27B0 && !defined(USE_RF)
-        #define USE_RF
+    #if MASK_VERSION == 0x07B0
+          #ifndef USE_IP
+            #define USE_IP
+        #endif
     #endif
 
-    #if MASK_VERSION == 0x2920 && !defined(USE_RF)
-        #define USE_RF
+    #if MASK_VERSION == 0x27B0
+        #ifndef USE_RF
+            #define USE_RF
+        #endif
+    #endif
+
+    #if MASK_VERSION == 0x57B0
+          #ifndef USE_IP
+            #define USE_IP
+        #endif
+    #endif
+
+    #if MASK_VERSION == 0x091A
+        #ifndef USE_TP
+            #define USE_TP
+        #endif
+        #ifndef USE_IP
+            #define USE_IP
+        #endif
+    #endif
+
+    #if MASK_VERSION == 0x2920
+        #ifndef USE_TP
+            #define USE_TP
+        #endif
+        #ifndef USE_RF
+            #define USE_RF
+        #endif
     #endif
 
     // cEMI options
     //#define USE_USB
     //#define USE_CEMI_SERVER
-    #if (defined(USE_USB) || defined(KNX_TUNNELING)) && !defined(USE_CEMI_SERVER)
-        #define USE_CEMI_SERVER
+    #if defined(USE_USB) || defined(KNX_TUNNELING)
+        #ifndef USE_CEMI_SERVER
+            #define USE_CEMI_SERVER
+        #endif
+    #endif
+
+    #if defined(KNX_TUNNELING)
+        #ifndef USE_IP
+            #define USE_IP
+        #endif
     #endif
 
     // KNX Data Secure Options

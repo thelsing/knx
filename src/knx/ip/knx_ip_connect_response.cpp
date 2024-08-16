@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_connect_response.h"
 
 KnxIpConnectResponse::KnxIpConnectResponse(IpParameterObject& parameters, uint16_t address, uint16_t port, uint8_t channel, uint8_t type)
@@ -40,3 +42,4 @@ KnxIpCRD& KnxIpConnectResponse::crd()
 {
     return _crd;
 }
+#endif

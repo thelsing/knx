@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_knx_addresses_dib.h"
 
 KnxIpKnxAddressesDIB::KnxIpKnxAddressesDIB(uint8_t* data) : KnxIpDIB(data)
@@ -23,3 +25,4 @@ void KnxIpKnxAddressesDIB::additional(uint16_t addr)
     currentPos += 2;
     length(currentPos - _data);
 }
+#endif

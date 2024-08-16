@@ -1,4 +1,5 @@
 #include "../config.h"
+#ifdef USE_RF
 
 #if defined(DeviceFamily_CC13X0)
     #include "rf_physical_layer_cc1310.h"
@@ -380,3 +381,4 @@ void RfDataLinkLayer::loadNextTxFrame(uint8_t** sendBuffer, uint16_t* sendBuffer
 
     delete tx_frame;
 }
+#endif

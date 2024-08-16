@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_search_response_extended.h"
 #include "service_families.h"
 
@@ -224,3 +226,4 @@ uint8_t* KnxIpSearchResponseExtended::DIBs()
 {
     return _data + LEN_KNXIP_HEADER + LEN_IPHPAI;
 }
+#endif

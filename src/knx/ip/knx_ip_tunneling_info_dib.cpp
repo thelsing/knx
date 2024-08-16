@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_tunneling_info_dib.h"
 #include "service_families.h"
 
@@ -25,3 +27,4 @@ void KnxIpTunnelingInfoDIB::tunnelingSlot(uint16_t addr, uint16_t state)
     currentPos += 4;
     length(currentPos - _data);
 }
+#endif

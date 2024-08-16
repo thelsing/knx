@@ -1,5 +1,6 @@
-#include "linux_platform.h"
 #ifdef __linux__
+#include "linux_platform.h"
+
 #include <cstdio>
 #include <string>
 #include <cstring>

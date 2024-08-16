@@ -1,3 +1,5 @@
+#include "../config.h"
+#ifdef USE_IP
 #include "knx_ip_disconnect_request.h"
 
 KnxIpDisconnectRequest::KnxIpDisconnectRequest(uint8_t* data, uint16_t length)
@@ -23,3 +25,4 @@ void KnxIpDisconnectRequest::channelId(uint8_t channelId)
 {
     _data[LEN_KNXIP_HEADER] = channelId;
 }
+#endif
