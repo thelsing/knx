@@ -16,7 +16,7 @@
 #include <ti/drivers/rf/RF.h>
 #include "smartrf_settings/smartrf_settings.h"
 
-#include "cc1310_platform.h"
+#include "../platform/cc1310_platform.h"
 #include "Board.h"
 
 #include "bits.h"

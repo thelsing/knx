@@ -38,9 +38,9 @@ find_package(SimpleLinkCC13X0SDKnortos REQUIRED)
 set(${PROJECT_NAME}_SOURCES
     ../../src/knx/address_table_object.cpp
     ../../src/knx/address_table_object.h
-    ../../src/knx/aes.c
-    ../../src/knx/aes.h
-    ../../src/knx/aes.hpp
+    ../../src/knx/util/aes.c
+    ../../src/knx/util/aes.h
+    ../../src/knx/util/aes.hpp
     ../../src/knx/apdu.cpp
     ../../src/knx/apdu.h
     ../../src/knx/application_layer.cpp
@@ -94,26 +94,26 @@ set(${PROJECT_NAME}_SOURCES
     ../../src/knx/group_object_table_object.h
     ../../src/knx/interface_object.cpp
     ../../src/knx/interface_object.h
-    ../../src/knx/ip_data_link_layer.cpp
-    ../../src/knx/ip_data_link_layer.h
-    ../../src/knx/ip_parameter_object.cpp
-    ../../src/knx/ip_parameter_object.h
-    ../../src/knx/knx_ip_device_information_dib.cpp
-    ../../src/knx/knx_ip_device_information_dib.h
-    ../../src/knx/knx_ip_dib.cpp
-    ../../src/knx/knx_ip_dib.h
-    ../../src/knx/knx_ip_frame.cpp
-    ../../src/knx/knx_ip_frame.h
-    ../../src/knx/knx_ip_routing_indication.cpp
-    ../../src/knx/knx_ip_routing_indication.h
-    ../../src/knx/knx_ip_search_request.cpp
-    ../../src/knx/knx_ip_search_request.h
-    ../../src/knx/knx_ip_search_response.cpp
-    ../../src/knx/knx_ip_search_response.h
-    ../../src/knx/knx_ip_supported_service_dib.cpp
-    ../../src/knx/knx_ip_supported_service_dib.h
-    ../../src/knx/ip_host_protocol_address_information.cpp
-    ../../src/knx/ip_host_protocol_address_information.h
+    ../../src/knx/ip/ip_data_link_layer.cpp
+    ../../src/knx/ip/ip_data_link_layer.h
+    ../../src/knx/ip/ip_parameter_object.cpp
+    ../../src/knx/ip/ip_parameter_object.h
+    ../../src/knx/ip/knx_ip_device_information_dib.cpp
+    ../../src/knx/ip/knx_ip_device_information_dib.h
+    ../../src/knx/ip/knx_ip_dib.cpp
+    ../../src/knx/ip/knx_ip_dib.h
+    ../../src/knx/ip/knx_ip_frame.cpp
+    ../../src/knx/ip/knx_ip_frame.h
+    ../../src/knx/ip/knx_ip_routing_indication.cpp
+    ../../src/knx/ip/knx_ip_routing_indication.h
+    ../../src/knx/ip/knx_ip_search_request.cpp
+    ../../src/knx/ip/knx_ip_search_request.h
+    ../../src/knx/ip/knx_ip_search_response.cpp
+    ../../src/knx/ip/knx_ip_search_response.h
+    ../../src/knx/ip/knx_ip_supported_service_dib.cpp
+    ../../src/knx/ip/knx_ip_supported_service_dib.h
+    ../../src/knx/ip/ip_host_protocol_address_information.cpp
+    ../../src/knx/ip/ip_host_protocol_address_information.h
     ../../src/knx/knx_types.h
     ../../src/knx/knx_value.cpp
     ../../src/knx/knx_value.h
@@ -133,20 +133,20 @@ set(${PROJECT_NAME}_SOURCES
     ../../src/knx/platform.h
     ../../src/knx/property.cpp
     ../../src/knx/property.h
-    ../../src/knx/rf_data_link_layer.cpp
-    ../../src/knx/rf_data_link_layer.h
-    ../../src/knx/rf_medium_object.cpp
-    ../../src/knx/rf_medium_object.h
-    ../../src/knx/rf_physical_layer_cc1310.cpp
-    ../../src/knx/rf_physical_layer_cc1310.h
-    ../../src/knx/rf_physical_layer.h
+    ../../src/knx/rf/rf_data_link_layer.cpp
+    ../../src/knx/rf/rf_data_link_layer.h
+    ../../src/knx/rf/rf_medium_object.cpp
+    ../../src/knx/rf/rf_medium_object.h
+    ../../src/knx/rf/rf_physical_layer_cc1310.cpp
+    ../../src/knx/rf/rf_physical_layer_cc1310.h
+    ../../src/knx/rf/rf_physical_layer.h
     ../../src/knx/router_object.cpp
     ../../src/knx/router_object.h
     ../../src/knx/secure_application_layer.cpp
     ../../src/knx/secure_application_layer.h
     ../../src/knx/security_interface_object.cpp
     ../../src/knx/security_interface_object.h
-    ../../src/knx/simple_map.h
+    ../../src/knx/util/simple_map.h
     ../../src/knx/save_restore.h
     ../../src/knx/table_object.cpp
     ../../src/knx/table_object.h
@@ -160,7 +160,7 @@ set(${PROJECT_NAME}_SOURCES
     ../../src/knx/usb_tunnel_interface.h
     ../../src/knx_facade.cpp
     ../../src/knx_facade.h
-    ../../src/cc1310_platform.cpp
+    ../../src/knx/platform/cc1310_platform.cpp
     ../../src/knx_facade.cpp
     ./RTT/SEGGER_RTT_Conf.h
     ./RTT/SEGGER_RTT_printf.c

@@ -184,7 +184,8 @@ knx_facade.h
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -g -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -g -O0")
 
-add_library(knx ${SOURCES})
+add_library(knx SHARED ${SOURCES})
 target_include_directories(knx PUBLIC .)
 set_property(TARGET knx PROPERTY CXX_STANDARD 11)
-target_compile_definitions(knx PUBLIC -DUSE_RF -DUSE_USB -DUSE_TP -D_USE_IP -DUSE_CEMI_SERVER -DKNX_TUNNELING=1 -DUSE_DATASECURE -DALL_MASKS)
+target_compile_definitions(knx PUBLIC -DUSE_RF -DUSE_USB -DUSE_TP -D_USE_IP -DUSE_CEMI_SERVER 
+    -DKNX_TUNNELING=1 -DUSE_DATASECURE -DALL_MASKS)

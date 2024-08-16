@@ -2,7 +2,7 @@
 
 #ifdef DeviceFamily_CC13X0
 
-#include "config.h"
+#include "../config.h"
 
 #include <stdint.h>
 
