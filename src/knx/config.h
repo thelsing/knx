@@ -27,32 +27,19 @@
     //#define MASK_VERSION 0x2920
 
     // Data Linklayer Driver Options
-    #if MASK_VERSION == 0x07B0
-        #define USE_TP
-    #endif
 
-    #if MASK_VERSION == 0x27B0
+    #if MASK_VERSION == 0x27B0 && !defined(USE_RF)
         #define USE_RF
     #endif
 
-    #if MASK_VERSION == 0x57B0
-        #define USE_IP
-    #endif
-
-    #if MASK_VERSION == 0x091A
-        #define USE_TP
-        #define USE_IP
-    #endif
-
-    #if MASK_VERSION == 0x2920
-        #define USE_TP
+    #if MASK_VERSION == 0x2920 && !defined(USE_RF)
         #define USE_RF
     #endif
 
     // cEMI options
     //#define USE_USB
     //#define USE_CEMI_SERVER
-    #if defined(USE_USB) || defined(KNX_TUNNELING)
+    #if (defined(USE_USB) || defined(KNX_TUNNELING)) && !defined(USE_CEMI_SERVER)
         #define USE_CEMI_SERVER
     #endif
 
@@ -77,8 +64,3 @@
     //#define KNX_NO_DEFAULT_UART
 
 #endif
-
-#if !defined(MASK_VERSION)
-    #error MASK_VERSION must be defined! See config.h for possible values!
-#endif
-

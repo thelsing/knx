@@ -1,8 +1,5 @@
 #pragma once
 
-#include "config.h"
-#ifdef USE_TP
-
 #include "data_link_layer.h"
 #include "tp_frame.h"
 #include <stdint.h>
@@ -177,4 +174,3 @@ class TpUartDataLinkLayer : public DataLinkLayer
         ITpUartCallBacks& _cb;
         DataLinkLayerCallbacks* _dllcb;
 };
-#endif

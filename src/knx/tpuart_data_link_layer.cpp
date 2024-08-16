@@ -1,5 +1,4 @@
 #include "config.h"
-#ifdef USE_TP
 #pragma GCC optimize("O3")
 
 #include "address_table_object.h"
@@ -1236,6 +1235,4 @@ uint16_t TpUartDataLinkLayer::availableInRxQueue()
 {
     return ((_rxBufferFront == _rxBufferRear) ? (MAX_RX_QUEUE_BYTES) : ((((MAX_RX_QUEUE_BYTES) - _rxBufferFront) + _rxBufferRear) % (MAX_RX_QUEUE_BYTES))) - 1;
 }
-#endif
-
 #endif

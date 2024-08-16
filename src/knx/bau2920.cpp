@@ -1,5 +1,4 @@
 #include "config.h"
-#if MASK_VERSION == 0x2920
 
 #include "bau2920.h"
 #include "bits.h"
@@ -178,4 +177,3 @@ RfDataLinkLayer* Bau2920::getSecondaryDataLinkLayer()
 {
     return (RfDataLinkLayer*)&_dlLayerSecondary;
 }
-#endif

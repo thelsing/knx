@@ -1,16 +1,15 @@
 #pragma once
 
 #include "config.h"
-#if MASK_VERSION == 0x27B0
 
 #include "bau_systemB_device.h"
-#include "rf_medium_object.h"
+#include "rf/rf_medium_object.h"
 #if defined(DeviceFamily_CC13X0)
-    #include "rf_physical_layer_cc1310.h"
+    #include "rf/rf_physical_layer_cc1310.h"
 #else
-    #include "rf_physical_layer_cc1101.h"
+    #include "rf/rf_physical_layer_cc1101.h"
 #endif
-#include "rf_data_link_layer.h"
+#include "rf/rf_data_link_layer.h"
 #include "cemi_server.h"
 #include "cemi_server_object.h"
 
@@ -44,4 +43,3 @@ class Bau27B0 : public BauSystemBDevice
                 const uint8_t* knxSerialNumber, bool status) override;
         void domainAddressSerialNumberReadLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, const uint8_t* knxSerialNumber, bool status) override;
 };
-#endif

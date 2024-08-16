@@ -1,4 +1,4 @@
-#include "knx_facade.h"
+#include <knx.h>
 
 #include "knx/bau57B0.h"
 #include "knx/bau27B0.h"

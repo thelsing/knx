@@ -165,9 +165,7 @@ void CemiFrame::fillTelegramTP(uint8_t* data)
 
     data[len - 1] = calcCrcTP(data, len - 1);
 }
-
 #ifdef USE_RF
-
 uint16_t CemiFrame::telegramLengthtRF() const
 {
     return totalLenght() - 3;

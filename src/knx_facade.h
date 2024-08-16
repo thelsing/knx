@@ -2,6 +2,7 @@
 
 #include "knx/bits.h"
 #include "knx/config.h"
+#include "knx/bau.h"
 #include "knx/bau07B0.h"
 #include "knx/bau091A.h"
 #include "knx/bau27B0.h"
@@ -13,54 +14,37 @@
 #endif
 
 #ifdef ARDUINO_ARCH_SAMD
-    #include "samd_platform.h"
-    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-        void buttonUp();
-    #endif
+    #include "knx/platform/samd_platform.h"
 #elif defined(ARDUINO_ARCH_RP2040)
-    #include "rp2040_arduino_platform.h"
-    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-        void buttonUp();
-    #endif
+    #include "knx/platform/rp2040_arduino_platform.h"
 #elif defined(ARDUINO_ARCH_ESP8266)
-    #include "esp_platform.h"
-    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-        void buttonUp();
-    #endif
+    #include "knx/platform/esp_platform.h"
 #elif defined(ARDUINO_ARCH_ESP32)
-    #if !defined(LED_BUILTIN)
-        #define LED_BUILTIN 13
-    #endif
-    #include "esp32_platform.h"
-    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-        void buttonUp();
-    #endif
+    #include "knx/platform/esp32_platform.h"
 #elif defined(ARDUINO_ARCH_STM32)
-    #include "stm32_platform.h"
-    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-        void buttonUp();
-    #endif
+    #include "knx/platform/stm32_platform.h"
 #elif __linux__
-    #if !defined(LED_BUILTIN)
-        #define LED_BUILTIN 0
-    #endif
-    #include "linux_platform.h"
+    #include "knx/platform/linux_platform.h"
 #else
-    #if !defined(LED_BUILTIN)
-        #define LED_BUILTIN 5 // see GPIO_PinConfig gpioPinConfigs[]
-    #endif
-    #include "cc1310_platform.h"
-    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-        extern void buttonUp();
-    #endif
+    #include "knx/platform/cc1310_platform.h"
+#endif
+
+#ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+    extern void buttonUp();
 #endif
 
 #ifndef KNX_LED
-    #define KNX_LED LED_BUILTIN
+    #ifdef LED_BUILTIN
+        #define KNX_LED LED_BUILTIN
+    #else
+        #define KNX_LED -1
+    #endif
 #endif
+
 #ifndef KNX_LED_ACTIVE_ON
     #define KNX_LED_ACTIVE_ON 0
 #endif
+
 #ifndef KNX_BUTTON
     #define KNX_BUTTON -1
 #endif
@@ -68,8 +52,7 @@
 typedef const uint8_t* (*RestoreCallback)(const uint8_t* buffer);
 typedef uint8_t* (*SaveCallback)(uint8_t* buffer);
 typedef void (*IsrFunctionPtr)();
-typedef void (*ProgLedOnCallback)();
-typedef void (*ProgLedOffCallback)();
+typedef void (*ProgLedCallback)(bool on);
 #ifdef KNX_ACTIVITYCALLBACK
     typedef void (*ActivityCallback)(uint8_t info);
 #endif
@@ -180,14 +163,9 @@ template <class P, class B> class KnxFacade : private SaveRestore
             _ledPin = value;
         }
 
-        void setProgLedOffCallback(ProgLedOffCallback progLedOffCallback)
+        void progLedCallback(ProgLedCallback value)
         {
-            _progLedOffCallback = progLedOffCallback;
-        }
-
-        void setProgLedOnCallback(ProgLedOnCallback progLedOnCallback)
-        {
-            _progLedOnCallback = progLedOnCallback;
+            _progLedCallback = value;
         }
 
         int32_t buttonPin()
@@ -269,7 +247,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         void start()
         {
-            if (_progLedOffCallback == 0 || _progLedOnCallback == 0)
+            if (_progLedCallback == 0 && _ledPin >= 0)
                 pinMode(ledPin(), OUTPUT);
 
             progLedOff();
@@ -417,13 +395,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
         P* _platformPtr = 0;
         B* _bauPtr = 0;
         B& _bau;
-        ProgLedOnCallback _progLedOnCallback = 0;
-        ProgLedOffCallback _progLedOffCallback = 0;
+        ProgLedCallback _progLedCallback = 0;
 #ifdef KNX_ACTIVITYCALLBACK
         ActivityCallback _activityCallback = 0;
 #endif
         uint32_t _ledPinActiveOn = KNX_LED_ACTIVE_ON;
-        uint32_t _ledPin = KNX_LED;
+        int32_t _ledPin = KNX_LED;
         int32_t _buttonPin = KNX_BUTTON;
         SaveCallback _saveCallback = 0;
         RestoreCallback _restoreCallback = 0;
@@ -460,18 +437,18 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         void progLedOn()
         {
-            if (_progLedOnCallback == 0)
+            if (_progLedCallback == 0)
                 digitalWrite(ledPin(), _ledPinActiveOn);
             else
-                _progLedOnCallback();
+                _progLedCallback(true);
         }
 
         void progLedOff()
         {
-            if (_progLedOffCallback == 0)
+            if (_progLedCallback == 0)
                 digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
             else
-                _progLedOffCallback();
+                _progLedCallback(false);
         }
 };
 

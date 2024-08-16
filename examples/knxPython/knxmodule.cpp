@@ -14,7 +14,7 @@ namespace py = pybind11;
 #include <vector>
 #include <algorithm>
 
-#include "linux_platform.h"
+#include "knx/platform/linux_platform.h"
 #include "knx/bau57B0.h"
 #include "knx/group_object_table_object.h"
 

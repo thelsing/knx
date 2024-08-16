@@ -3,7 +3,7 @@ project(knx VERSION 1.5)
 
 add_subdirectory(pybind11)
 
-pybind11_add_module(knx
+pybind11_add_module(knxPython
 	knxmodule.cpp
         ../../src/knx/address_table_object.cpp
         ../../src/knx/address_table_object.h
@@ -137,6 +137,6 @@ include_directories(../../src)
 
 #set(outdir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 #set_target_properties(knx PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${outdir})
-set_target_properties(knx PROPERTIES OUTPUT_NAME knx)
-set_property(TARGET knx PROPERTY CXX_STANDARD 11)
-target_compile_definitions(knx PUBLIC -DMASK_VERSION=0x57B0)
+set_target_properties(knxPython PROPERTIES OUTPUT_NAME knx)
+set_property(TARGET knxPython PROPERTY CXX_STANDARD 11)
+target_compile_definitions(knxPython PUBLIC -DMASK_VERSION=0x57B0)

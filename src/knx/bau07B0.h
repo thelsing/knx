@@ -1,7 +1,6 @@
 #pragma once
 
 #include "config.h"
-#if MASK_VERSION == 0x07B0
 
 #include "bau_systemB_device.h"
 #include "tpuart_data_link_layer.h"
@@ -31,4 +30,3 @@ class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks, public DataLin
         CemiServerObject _cemiServerObject;
 #endif
 };
-#endif

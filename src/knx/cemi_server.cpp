@@ -72,14 +72,8 @@ void CemiServer::dataConfirmationToTunnel(CemiFrame& frame)
 
 void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 {
-#ifdef USE_RF
     bool isRf = _dataLinkLayer->mediumType() == DptMedium::KNX_RF;
     uint8_t data[frame.dataLength() + (isRf ? 10 : 0)];
-#else
-    uint8_t data[frame.dataLength()];
-#endif
-
-#ifdef USE_RF
 
     if (isRf)
     {
@@ -94,12 +88,8 @@ void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
     }
     else
     {
-#endif
         memcpy(&data[0], frame.data(), frame.dataLength());
-#ifdef USE_RF
     }
-
-#endif
 
     CemiFrame tmpFrame(data, sizeof(data));
 
@@ -189,8 +179,6 @@ void CemiServer::handleLData(CemiFrame& frame)
 
 #endif
 
-#ifdef USE_RF
-
     if (_dataLinkLayer->mediumType() == DptMedium::KNX_RF)
     {
         // Check if we have additional info for RF
@@ -223,8 +211,6 @@ void CemiServer::handleLData(CemiFrame& frame)
             _frameNumber = (_frameNumber + 1) & 0x7;
         }
     }
-
-#endif
 
 #ifdef KNX_LOG_TUNNELING
     print("L_data_req: src: ");

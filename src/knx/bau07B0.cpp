@@ -1,5 +1,4 @@
 #include "config.h"
-#if MASK_VERSION == 0x07B0
 
 #include "bau07B0.h"
 #include "bits.h"
@@ -175,4 +174,3 @@ TpUartDataLinkLayer* Bau07B0::getDataLinkLayer()
 {
     return (TpUartDataLinkLayer*)&_dlLayer;
 }
-#endif

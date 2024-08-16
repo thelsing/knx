@@ -57,7 +57,6 @@ class CemiFrame
         uint16_t destinationAddress() const;
         void destinationAddress(uint16_t value);
 
-#ifdef USE_RF
         // only for RF medium
         uint8_t* rfSerialOrDoA() const;
         void rfSerialOrDoA(const uint8_t* rfSerialOrDoA);
@@ -65,7 +64,7 @@ class CemiFrame
         void rfInfo(uint8_t rfInfo);
         uint8_t rfLfn() const;
         void rfLfn(uint8_t rfInfo);
-#endif
+
         NPDU& npdu();
         TPDU& tpdu();
         APDU& apdu();
@@ -81,7 +80,6 @@ class CemiFrame
         TPDU _tpdu;
         APDU _apdu;
         uint16_t _length = 0; // only set if created from byte array
-
 #ifdef USE_RF
         // FIXME: integrate this propery in _data
         // only for RF medium
@@ -89,6 +87,5 @@ class CemiFrame
         uint8_t  _rfInfo = 0;
         uint8_t  _rfLfn = 0xFF; // RF Data Link layer frame number
 #endif
-
         uint8_t _sourceInterfaceIndex;
 };

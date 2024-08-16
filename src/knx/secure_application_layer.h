@@ -5,7 +5,7 @@
 #include "knx_types.h"
 #include "apdu.h"
 #include "bits.h"
-#include "simple_map.h"
+#include "util/simple_map.h"
 
 class DeviceObject;
 class SecurityInterfaceObject;

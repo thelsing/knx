@@ -1,5 +1,4 @@
 #include "config.h"
-#if MASK_VERSION == 0x27B0
 
 #include "bau27B0.h"
 #include "bits.h"
@@ -204,4 +203,3 @@ RfDataLinkLayer* Bau27B0::getDataLinkLayer()
 {
     return (RfDataLinkLayer*)&_dlLayer;
 }
-#endif // #ifdef USE_RF

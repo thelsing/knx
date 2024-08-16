@@ -1,11 +1,10 @@
 #pragma once
 
 #include "config.h"
-#if MASK_VERSION == 0x57B0
 
 #include "bau_systemB_device.h"
-#include "ip_parameter_object.h"
-#include "ip_data_link_layer.h"
+#include "ip/ip_parameter_object.h"
+#include "ip/ip_data_link_layer.h"
 #include "cemi_server_object.h"
 
 class Bau57B0 : public BauSystemBDevice, public DataLinkLayerCallbacks
@@ -30,4 +29,3 @@ class Bau57B0 : public BauSystemBDevice, public DataLinkLayerCallbacks
         CemiServerObject _cemiServerObject;
 #endif
 };
-#endif

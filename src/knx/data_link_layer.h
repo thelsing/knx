@@ -7,7 +7,7 @@
 #include "knx_types.h"
 #include "network_layer_entity.h"
 #ifdef KNX_TUNNELING
-    #include "ip_parameter_object.h"
+    #include "ip/ip_parameter_object.h"
 #endif
 #include "cemi_server.h"
 #include "bau.h"
