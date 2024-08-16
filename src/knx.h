@@ -3,14 +3,9 @@
  * This diagramm shows the most important classes of a normal KNX device.
 
 @startuml
-
 skinparam monochrome true
 skinparam componentStyle uml2
 
-note top of knx
-  Class diagram for a
-  <b><color:royalBlue>normal KNX device</color>
-end note
 package "knx" {
 class BusAccessUnit [[class_bus_access_unit.html]]
 class DeviceObject [[class_device_object.html]]
@@ -133,7 +128,12 @@ class Stm32Platform [[class_stm32_platform.html]]
 ArduinoPlatform<|--Stm32Platform
 class LinuxPlatform [[class_linux_platform.html]]
 LinuxPlatform--|>Platform
+class CC1310Platform [[class_cc1310_platform.html]]
+CC1310Platform--|>Platform
+class RP2040ArduinoPlatform [[class_rp2040_arduino_platform.html]]
+RP2040ArduinoPlatform--|>ArduinoPlatform
 }
+
 package frontend
 {
 class KnxFacade [[class_knx_facade.html]]
@@ -149,10 +149,6 @@ knx-->Platform
 skinparam monochrome true
 skinparam componentStyle uml2
 
-note top of knx
-  Class diagram for a
-  <b><color:royalBlue>KNX coupler</color>
-end note
 package "knx" {
 class BusAccessUnit [[class_bus_access_unit.html]]
 class DeviceObject [[class_device_object.html]]
@@ -234,7 +230,12 @@ class Stm32Platform [[class_stm32_platform.html]]
 ArduinoPlatform<|--Stm32Platform
 class LinuxPlatform [[class_linux_platform.html]]
 LinuxPlatform--|>Platform
+class CC1310Platform [[class_cc1310_platform.html]]
+CC1310Platform--|>Platform
+class RP2040ArduinoPlatform [[class_rp2040_arduino_platform.html]]
+RP2040ArduinoPlatform--|>ArduinoPlatform
 }
+
 package frontend
 {
 class KnxFacade [[class_knx_facade.html]]
