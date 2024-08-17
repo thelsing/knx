@@ -216,7 +216,10 @@ void CemiServer::handleLData(CemiFrame& frame)
     print(frame.destinationAddress(), HEX);
     printHex(" frame: ", frame.data(), frame.dataLength());
 #endif
+
+#ifdef KNX_TUNNELING
     _dataLinkLayer->dataRequestFromTunnel(frame);
+#endif
 }
 
 void CemiServer::handleMPropRead(CemiFrame& frame)

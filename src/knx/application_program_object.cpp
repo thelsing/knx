@@ -4,6 +4,9 @@
 #include "callback_property.h"
 #include "dptconvert.h"
 #include <cstring>
+#include "util/logger.h"
+
+#define LOGGER Logger::logger("ApplicationProgramObject")
 
 ApplicationProgramObject::ApplicationProgramObject(Memory& memory)
 #if MASK_VERSION == 0x091A
@@ -96,4 +99,10 @@ double ApplicationProgramObject::getFloat(uint32_t addr, ParameterFloatEncodings
             return 0;
             break;
     }
+}
+
+void ApplicationProgramObject::beforeStateChange(LoadState& newState)
+{
+    LOGGER.info("beforeStateChange %S", enum_name(newState));
+    TableObject::beforeStateChange(newState);
 }

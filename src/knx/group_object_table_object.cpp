@@ -4,6 +4,9 @@
 #include "group_object.h"
 #include "bits.h"
 #include "data_property.h"
+#include "util/logger.h"
+
+#define LOGGER Logger::logger("GroupObjectTableObject")
 
 GroupObjectTableObject::GroupObjectTableObject(Memory& memory)
     : TableObject(memory)
@@ -77,6 +80,7 @@ void GroupObjectTableObject::groupObjects(GroupObject* objs, uint16_t size)
 
 void GroupObjectTableObject::beforeStateChange(LoadState& newState)
 {
+    LOGGER.info("beforeStateChange %S", enum_name(newState));
     TableObject::beforeStateChange(newState);
 
     if (newState != LS_LOADED)

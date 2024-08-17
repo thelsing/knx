@@ -3,6 +3,9 @@
 #include "address_table_object.h"
 #include "bits.h"
 #include "data_property.h"
+#include "util/logger.h"
+
+#define LOGGER Logger::logger("AddressTableObject")
 
 using namespace std;
 
@@ -87,6 +90,7 @@ bool AddressTableObject::contains(uint16_t addr)
 
 void AddressTableObject::beforeStateChange(LoadState& newState)
 {
+    LOGGER.info("beforeStateChange %S", enum_name(newState));
     TableObject::beforeStateChange(newState);
 
     if (newState != LS_LOADED)

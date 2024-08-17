@@ -15,4 +15,7 @@ class ApplicationProgramObject : public TableObject
         uint16_t getWord(uint32_t addr);
         uint32_t getInt(uint32_t addr);
         double getFloat(uint32_t addr, ParameterFloatEncodings encoding);
+
+    protected:
+        void beforeStateChange(LoadState& newState) override;
 };

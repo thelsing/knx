@@ -19,10 +19,12 @@ class IpDataLinkLayer : public DataLinkLayer
         void enabled(bool value);
         bool enabled() const;
         DptMedium mediumType() const override;
+#ifdef KNX_TUNNELING
         void dataRequestToTunnel(CemiFrame& frame) override;
         void dataConfirmationToTunnel(CemiFrame& frame) override;
         void dataIndicationToTunnel(CemiFrame& frame) override;
         bool isTunnelAddress(uint16_t addr) override;
+#endif
         bool isSentToTunnel(uint16_t address, bool isGrpAddr);
 
     private:
@@ -31,13 +33,15 @@ class IpDataLinkLayer : public DataLinkLayer
         uint8_t _frameCountBase = 0;
         uint32_t _frameCountTimeBase = 0;
         bool sendFrame(CemiFrame& frame);
+#ifdef KNX_TUNNELING
         void sendFrameToTunnel(KnxIpTunnelConnection* tunnel, CemiFrame& frame);
         void loopHandleConnectRequest(uint8_t* buffer, uint16_t length, uint32_t& src_addr, uint16_t& src_port);
         void loopHandleConnectionStateRequest(uint8_t* buffer, uint16_t length);
         void loopHandleDisconnectRequest(uint8_t* buffer, uint16_t length);
-        void loopHandleDescriptionRequest(uint8_t* buffer, uint16_t length);
-        void loopHandleDeviceConfigurationRequest(uint8_t* buffer, uint16_t length);
         void loopHandleTunnelingRequest(uint8_t* buffer, uint16_t length);
+        void loopHandleDeviceConfigurationRequest(uint8_t* buffer, uint16_t length);
+#endif
+        void loopHandleDescriptionRequest(uint8_t* buffer, uint16_t length);
         void loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t length);
         bool sendMulicast(KnxIpFrame& ipFrame);
         bool sendUnicast(uint32_t addr, uint16_t port, KnxIpFrame& ipFrame);

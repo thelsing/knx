@@ -91,7 +91,8 @@ void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Prior
 
 void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority,  uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
-        LOGGER.info("dataGroupConfirm %S", apdu.toString());
+    LOGGER.info("dataGroupConfirm %S", apdu.toString());
+
     switch (apdu.type())
     {
         case GroupValueRead:
@@ -128,7 +129,7 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
 
 void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, const SecurityControl& secCtrl)
 {
-            LOGGER.info("dataBroadcastIndication %S", apdu.toString());
+    LOGGER.info("dataBroadcastIndication %S", apdu.toString());
     uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -292,7 +293,7 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
 
 void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
-        LOGGER.info("dataSystemBroadcastConfirm %S", apdu.toString());
+    LOGGER.info("dataSystemBroadcastConfirm %S", apdu.toString());
     const uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -1116,6 +1117,7 @@ void ApplicationLayer::userMemorySend(ApduType type, AckType ack, Priority prior
 
 void ApplicationLayer::individualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
+    LOGGER.info("individualIndication %S", apdu.toString());
     uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -1377,6 +1379,7 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
 
 void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
+    LOGGER.info("individualConfirm %S", apdu.toString());
     uint8_t* data = apdu.data();
 
     switch (apdu.type())

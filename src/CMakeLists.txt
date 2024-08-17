@@ -188,5 +188,4 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -
 add_library(knx SHARED ${SOURCES})
 target_include_directories(knx PUBLIC .)
 set_property(TARGET knx PROPERTY CXX_STANDARD 11)
-target_compile_definitions(knx PUBLIC -DUSE_USB -DUSE_CEMI_SERVER 
-    -DKNX_TUNNELING=1 -DUSE_DATASECURE)
+target_compile_definitions(knx PUBLIC)

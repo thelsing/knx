@@ -3,6 +3,9 @@
 #include "association_table_object.h"
 #include "bits.h"
 #include "data_property.h"
+#include "util/logger.h"
+
+#define LOGGER Logger::logger("AssociationTableObject")
 
 using namespace std;
 
@@ -147,6 +150,7 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
 
 void AssociationTableObject::beforeStateChange(LoadState& newState)
 {
+    LOGGER.info("beforeStateChange %S", enum_name(newState));
     TableObject::beforeStateChange(newState);
 
     if (newState != LS_LOADED)
