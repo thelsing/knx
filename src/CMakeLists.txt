@@ -176,6 +176,8 @@ knx/util/aes.c
 knx/util/aes.h
 knx/util/aes.hpp
 knx/util/simple_map.h
+knx/util/logger.h
+knx/util/logger.cpp
 knx.h
 knx_facade.cpp
 knx_facade.h

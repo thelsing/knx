@@ -357,14 +357,13 @@ void IpDataLinkLayer::loop()
             break;
         }
 
+#ifdef KNX_TUNNELING
         case SearchRequestExt:
         {
             loopHandleSearchRequestExtended(buffer, len);
             break;
         }
 
-
-#ifdef KNX_TUNNELING
         case ConnectRequest:
         {
             loopHandleConnectRequest(buffer, len, remoteAddr, remotePort);

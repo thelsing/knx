@@ -41,6 +41,8 @@ set(${PROJECT_NAME}_SOURCES
     ../../src/knx/util/aes.c
     ../../src/knx/util/aes.h
     ../../src/knx/util/aes.hpp
+    ../../src/knx/util/logger.h
+    ../../src/knx/util/logger.cpp
     ../../src/knx/apdu.cpp
     ../../src/knx/apdu.h
     ../../src/knx/application_layer.cpp
