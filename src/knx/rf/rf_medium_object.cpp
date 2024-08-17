@@ -1,6 +1,3 @@
-#include "../config.h"
-#ifdef USE_RF
-
 #include <cstring>
 #include "rf_medium_object.h"
 #include "../bits.h"
@@ -57,4 +54,3 @@ void RfMediumObject::rfDomainAddress(const uint8_t* value)
     Property* prop = property(PID_RF_DOMAIN_ADDRESS);
     prop->write(value);
 }
-#endif

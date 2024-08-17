@@ -258,7 +258,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     // We can just copy the pointer for rfSerialOrDoA as sendFrame() sets
     // a pointer to const uint8_t data in either device object (serial) or
     // RF medium object (domain address)
-#ifdef USE_RF
+#ifndef KNX_NO_RF
     tmpFrame.rfSerialOrDoA(frame.rfSerialOrDoA());
     tmpFrame.rfInfo(frame.rfInfo());
     tmpFrame.rfLfn(frame.rfLfn());

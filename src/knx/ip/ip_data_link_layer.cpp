@@ -1,6 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
-
 #include "ip_data_link_layer.h"
 
 #include "../bits.h"
@@ -1187,4 +1184,3 @@ bool IpDataLinkLayer::isSendLimitReached()
         return false;
     }
 }
-#endif

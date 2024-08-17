@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "knx_ip_extended_device_information_dib.h"
 #include "../bits.h"
 
@@ -40,4 +38,3 @@ void KnxIpExtendedDeviceInformationDIB::deviceDescriptor(uint16_t value)
 {
     pushWord(value, _data + 6);
 }
-#endif

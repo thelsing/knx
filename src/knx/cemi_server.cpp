@@ -1,6 +1,3 @@
-#include "config.h"
-#ifdef USE_CEMI_SERVER
-
 #include "cemi_server.h"
 #include "cemi_frame.h"
 #include "bau_systemB.h"
@@ -425,5 +422,3 @@ void CemiServer::loop()
     _usbTunnelInterface.loop();
 #endif
 }
-
-#endif

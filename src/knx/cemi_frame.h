@@ -80,7 +80,7 @@ class CemiFrame
         TPDU _tpdu;
         APDU _apdu;
         uint16_t _length = 0; // only set if created from byte array
-#ifdef USE_RF
+#ifndef KNX_NO_RF
         // FIXME: integrate this propery in _data
         // only for RF medium
         uint8_t* _rfSerialOrDoA = 0;

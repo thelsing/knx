@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "ip_parameter_object.h"
 
 #include "../bits.h"
@@ -139,4 +137,3 @@ uint16_t* IpParameterObject::additionalIndivualAddresses(uint8_t& numAddresses)
 #endif
     return (uint16_t*) propertyData(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES);
 }
-#endif

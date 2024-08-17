@@ -1,4 +1,3 @@
-#if (MASK_VERSION == 0x07B0) || (MASK_VERSION == 0x27B0) || (MASK_VERSION == 0x57B0) || defined(ALL_MASKS)
 #include "bau_systemB_device.h"
 #include "bits.h"
 #include <string.h>
@@ -260,4 +259,3 @@ void BauSystemBDevice::groupValueWriteIndication(uint16_t asap, Priority priorit
 
     updateGroupObject(go, data, dataLength);
 }
-#endif

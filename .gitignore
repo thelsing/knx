@@ -23,7 +23,7 @@ bld/
 [Ll]og/
 out
 flash.bin
-build
+build*
 dist
 *.egg-info
 doxyoutput

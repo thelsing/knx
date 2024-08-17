@@ -165,7 +165,7 @@ void CemiFrame::fillTelegramTP(uint8_t* data)
 
     data[len - 1] = calcCrcTP(data, len - 1);
 }
-#ifdef USE_RF
+#ifndef KNX_NO_RF
 uint16_t CemiFrame::telegramLengthtRF() const
 {
     return totalLenght() - 3;
@@ -321,7 +321,7 @@ void CemiFrame::destinationAddress(uint16_t value)
 {
     pushWord(value, _ctrl1 + 4);
 }
-#ifdef USE_RF
+#ifndef KNX_NO_RF
 uint8_t* CemiFrame::rfSerialOrDoA() const
 {
     return _rfSerialOrDoA;

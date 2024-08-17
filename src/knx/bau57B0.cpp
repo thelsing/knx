@@ -1,6 +1,3 @@
-#include "config.h"
-#if MASK_VERSION == 0x57B0 || defined(ALL_MASKS)
-
 #include "bau57B0.h"
 #include "bits.h"
 #include <string.h>
@@ -166,4 +163,3 @@ IpDataLinkLayer* Bau57B0::getDataLinkLayer()
 {
     return (IpDataLinkLayer*)&_dlLayer;
 }
-#endif

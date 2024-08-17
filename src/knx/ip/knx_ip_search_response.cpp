@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "knx_ip_search_response.h"
 
 #define LEN_SERVICE_FAMILIES 2
@@ -82,4 +80,3 @@ KnxIpSupportedServiceDIB& KnxIpSearchResponse::supportedServices()
 {
     return _supportedServices;
 }
-#endif

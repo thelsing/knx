@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "knx_ip_tunneling_request.h"
 #include <cstring>
 
@@ -24,4 +22,3 @@ KnxIpCH& KnxIpTunnelingRequest::connectionHeader()
 {
     return _ch;
 }
-#endif

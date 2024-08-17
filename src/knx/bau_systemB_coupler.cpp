@@ -1,4 +1,3 @@
-#if ((MASK_VERSION != 0x07B0) && (MASK_VERSION != 0x27B0) && (MASK_VERSION != 0x57B0)) || defined(ALL_MASKS)
 #include "bau_systemB_coupler.h"
 #include "bits.h"
 #include <string.h>
@@ -59,4 +58,3 @@ void BauSystemBCoupler::doMasterReset(EraseCode eraseCode, uint8_t channel)
     _secIfObj.masterReset(eraseCode, channel);
 #endif
 }
-#endif

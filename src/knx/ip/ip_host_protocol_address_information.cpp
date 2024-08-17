@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "ip_host_protocol_address_information.h"
 #include "../bits.h"
 
@@ -47,4 +45,3 @@ void IpHostProtocolAddressInformation::ipPortNumber(uint16_t value)
 {
     pushWord(value, _data + 6);
 }
-#endif

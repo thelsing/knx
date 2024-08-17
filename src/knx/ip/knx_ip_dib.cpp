@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "knx_ip_dib.h"
 
 KnxIpDIB::KnxIpDIB(uint8_t* data) : _data(data)
@@ -27,4 +25,3 @@ void KnxIpDIB::code(DescriptionTypeCode value)
 {
     _data[1] = value;
 }
-#endif

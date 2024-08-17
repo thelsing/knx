@@ -32,17 +32,15 @@ class DataLinkLayer
         DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity,
                       Platform& platform);
 
-#ifdef USE_CEMI_SERVER
         // from tunnel
-        void cemiServer(CemiServer& cemiServer);
         void dataRequestFromTunnel(CemiFrame& frame);
+        void cemiServer(CemiServer& cemiServer);
 #ifdef KNX_TUNNELING
         virtual void dataRequestToTunnel(CemiFrame& frame);
         virtual void dataConfirmationToTunnel(CemiFrame& frame);
         virtual void dataIndicationToTunnel(CemiFrame& frame);
         virtual bool isTunnelAddress(uint16_t addr);
         void ipParameterObject(IpParameterObject* object);
-#endif
 #endif
 
         // from network layer

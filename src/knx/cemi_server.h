@@ -1,8 +1,5 @@
 #pragma once
 
-#include "config.h"
-#ifdef USE_CEMI_SERVER
-
 #include <stdint.h>
 #include "knx_types.h"
 #include "usb_tunnel_interface.h"
@@ -56,9 +53,7 @@ class CemiServer
         DataLinkLayer* _dataLinkLayer = nullptr;
         DataLinkLayer* _dataLinkLayerPrimary = nullptr;
         BauSystemB& _bau;
-#ifdef USE_USB
+#ifdef USE_USB       
         UsbTunnelInterface _usbTunnelInterface;
 #endif
 };
-
-#endif

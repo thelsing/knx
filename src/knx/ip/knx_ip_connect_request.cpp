@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "knx_ip_connect_request.h"
 
 KnxIpConnectRequest::KnxIpConnectRequest(uint8_t* data, uint16_t length)
@@ -20,4 +18,3 @@ KnxIpCRI& KnxIpConnectRequest::cri()
 {
     return _cri;
 }
-#endif

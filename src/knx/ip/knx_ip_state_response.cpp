@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "knx_ip_state_response.h"
 
 #define LEN_SERVICE_FAMILIES 2
@@ -24,4 +22,3 @@ KnxIpStateResponse::KnxIpStateResponse(uint8_t channelId, uint8_t errorCode)
     _data[LEN_KNXIP_HEADER] = channelId;
     _data[LEN_KNXIP_HEADER + 1] = errorCode;
 }
-#endif

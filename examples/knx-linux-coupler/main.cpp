@@ -103,10 +103,5 @@ int main(int argc, char **argv)
     // opens the "value" sysfs file to read or write the GPIO pin value.
     // The following calls will close the "value" sysfs fiel for the pin
     // and unexport the GPIO pin.
-#ifdef USE_RF
-    gpio_unexport(SPI_SS_PIN);
-    gpio_unexport(GPIO_GDO2_PIN);
-    gpio_unexport(GPIO_GDO0_PIN);
-#endif
     printf("main() exit.\n");
 }

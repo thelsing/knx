@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "knx_ip_routing_indication.h"
 #include <cstring>
 
@@ -20,4 +18,3 @@ KnxIpRoutingIndication::KnxIpRoutingIndication(CemiFrame frame)
     serviceTypeIdentifier(RoutingIndication);
     memcpy(_data + LEN_KNXIP_HEADER, frame.data(), frame.totalLenght());
 }
-#endif

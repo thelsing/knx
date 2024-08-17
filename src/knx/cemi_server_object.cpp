@@ -1,6 +1,3 @@
-#include "config.h"
-#ifdef USE_CEMI_SERVER
-
 #include <cstring>
 #include "cemi_server_object.h"
 #include "bits.h"
@@ -56,6 +53,3 @@ void CemiServerObject::clearSupportedMediaTypes()
     // We also set the medium as not available too
     property(PID_MEDIUM_AVAILABILITY)->write((uint16_t) 0);
 }
-
-#endif
-

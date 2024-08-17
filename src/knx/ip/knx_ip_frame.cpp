@@ -1,5 +1,3 @@
-#include "../config.h"
-#ifdef USE_IP
 #include "knx_ip_frame.h"
 
 #include <cstring>
@@ -78,4 +76,3 @@ KnxIpFrame::KnxIpFrame(uint16_t length)
     protocolVersion(KnxIp1_0);
     totalLength(length);
 }
-#endif
