@@ -124,6 +124,7 @@ knx/ip/knx_ip_tunnel_connection.cpp
 knx/ip/knx_ip_tunnel_connection.h
 knx/ip/service_families.h
 knx/knx_types.h
+knx/knx_types.cpp
 knx/knx_value.cpp
 knx/knx_value.h
 knx/memory.cpp

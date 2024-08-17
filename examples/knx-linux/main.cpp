@@ -16,6 +16,8 @@
 
 #include "fdsk.h"
 
+#define LOGGER Logger::logger("App")
+
 volatile sig_atomic_t loopActive = 1;
 void signalHandler(int sig)
 {
@@ -109,20 +111,20 @@ void setup()
         GO_MAX.valueNoSend(-273.0);
         GO_RESET.dataPointType(Dpt(1, 15));
         GO_RESET.callback(resetCallback);
-        printf("Timeout: %d\n", knx.paramWord(0));
-        printf("Zykl. senden: %d\n", knx.paramByte(2));
-        printf("Min/Max senden: %d\n", knx.paramByte(3));
-        printf("Aenderung senden: %d\n", knx.paramByte(4));
-        printf("Abgleich %d\n", knx.paramByte(5));
+        LOGGER.info("Timeout: %d", knx.paramWord(0));
+        LOGGER.info("Zykl. senden: %d", knx.paramByte(2));
+        LOGGER.info("Min/Max senden: %d", knx.paramByte(3));
+        LOGGER.info("Aenderung senden: %d", knx.paramByte(4));
+        LOGGER.info("Abgleich %d", knx.paramByte(5));
     }
     else
-        println("not configured");
+        LOGGER.info("not configured");
     knx.start();
 }
 
 int main(int argc, char **argv)
 {
-    printf("main() start.\n");
+    LOGGER.info("main() start.");
 
     uint8_t serialNumber[] = { 0x00, 0xFA, 0x01, 0x02, 0x03, 0x04};
     uint8_t key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
@@ -130,7 +132,7 @@ int main(int argc, char **argv)
     FdskCalculator calc;
     char fdskString[42]; // 6 * 6 chars + 5 dashes + nullbyte = 42
     calc.snprintFdsk(fdskString, sizeof(fdskString), serialNumber, key);
-    printf("FDSK: %s\n", fdskString);
+    LOGGER.info("FDSK: %s", fdskString);
 
     // Prevent swapping of this process
     struct sched_param sp;
@@ -160,5 +162,5 @@ int main(int argc, char **argv)
     // opens the "value" sysfs file to read or write the GPIO pin value.
     // The following calls will close the "value" sysfs fiel for the pin
     // and unexport the GPIO pin.
-    printf("main() exit.\n");
+    LOGGER.info("main() exit.");
 }

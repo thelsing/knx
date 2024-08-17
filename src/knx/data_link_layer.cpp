@@ -5,6 +5,9 @@
 #include "device_object.h"
 #include "cemi_server.h"
 #include "cemi_frame.h"
+#include "util/logger.h"
+
+#define LOGGER Logger::logger("DataLinkLayer")
 
 
 void DataLinkLayerCallbacks::activity(uint8_t info)
@@ -36,22 +39,22 @@ void DataLinkLayer::cemiServer(CemiServer& cemiServer)
 #ifdef KNX_TUNNELING
 void DataLinkLayer::dataRequestToTunnel(CemiFrame& frame)
 {
-    println("default dataRequestToTunnel");
+    LOGGER.info("default dataRequestToTunnel");
 }
 
 void DataLinkLayer::dataConfirmationToTunnel(CemiFrame& frame)
 {
-    println("default dataConfirmationToTunnel");
+    LOGGER.info("default dataConfirmationToTunnel");
 }
 
 void DataLinkLayer::dataIndicationToTunnel(CemiFrame& frame)
 {
-    println("default dataIndicationToTunnel");
+    LOGGER.info("default dataIndicationToTunnel");
 }
 
 bool DataLinkLayer::isTunnelAddress(uint16_t addr)
 {
-    println("default IsTunnelAddress");
+    LOGGER.info("default IsTunnelAddress");
     return false;
 }
 #endif
@@ -157,6 +160,11 @@ void DataLinkLayer::frameReceived(CemiFrame& frame)
     uint16_t ownAddr = _deviceObject.individualAddress();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
+    if (frame.npdu().octetCount() > 0)
+    {
+        LOGGER.info("->  %s", ((string)frame.apdu()).c_str());
+    }
+
 #ifdef USE_CEMI_SERVER
     // Do not send our own message back to the tunnel
 #ifdef KNX_TUNNELING
@@ -207,7 +215,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     frame.sourceAddress(sourceAddr);
     frame.addressType(addrType);
     frame.priority(priority);
-    frame.repetition(doNotRepeat ? NoRepitiion : RepetitionAllowed);
+    frame.repetition(doNotRepeat ? NoRepetiion : RepetitionAllowed);
     frame.systemBroadcast(systemBroadcast);
 
     if (npdu.octetCount() <= 15)
@@ -218,15 +226,14 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
 
     if (!frame.valid())
     {
-        println("invalid frame");
+        LOGGER.warning("invalid frame");
         return false;
     }
 
-    //    if (frame.npdu().octetCount() > 0)
-    //    {
-    //        _print("<- DLL ");
-    //        frame.apdu().printPDU();
-    //    }
+    if (frame.npdu().octetCount() > 0)
+    {
+        LOGGER.info("<-  %s", ((string)frame.apdu()).c_str());
+    }
 
     bool sendTheFrame = true;
     bool success = true;

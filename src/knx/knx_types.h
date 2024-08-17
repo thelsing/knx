@@ -1,10 +1,13 @@
 #pragma once
+#include <string>
+using namespace std;
 
 enum FrameFormat
 {
     ExtendedFrame = 0,
     StandardFrame = 0x80
 };
+const string enum_name(const FrameFormat enum_val);
 
 enum Priority
 {
@@ -13,12 +16,14 @@ enum Priority
     UrgentPriority = 0x8, //!< Used for alarms.
     SystemPriority = 0x0  //!< Mainly used by ETS for device programming.
 };
+const string enum_name(const Priority enum_val);
 
 enum AckType
 {
     AckDontCare = 0,    //!< We don't care about DataLinkLayer acknowledgement.
     AckRequested = 0x2, //!< We want a DataLinkLayer acknowledgement.
 };
+const string enum_name(const AckType enum_val);
 
 enum TPAckType
 {
@@ -28,12 +33,14 @@ enum TPAckType
     AckReqAck = 0x01,
     AckReqNone = 0x0,
 };
+const string enum_name(const TPAckType enum_val);
 
 enum AddressType
 {
     IndividualAddress = 0,
     GroupAddress = 0x80,
 };
+const string enum_name(const AddressType enum_val);
 
 enum MessageCode
 {
@@ -59,6 +66,7 @@ enum MessageCode
     M_Reset_req = 0xF1,
     M_Reset_ind = 0xF0,
 };
+const string enum_name(const MessageCode enum_val);
 
 enum cEmiErrorCode
 {
@@ -74,6 +82,7 @@ enum cEmiErrorCode
     Prop_Index_Range_Error = 0x09,   //  read or write access to a non existing Property array index  (R/W)
     Value_temp_not_writeable = 0x0A, // The Property exists but can at this moment not be written with a new value (W)
 };
+const string enum_name(const cEmiErrorCode enum_val);
 
 // Unified return codes for KNX services and functions
 // Note, that several older KNX services and functions do not use these return codes.
@@ -99,32 +108,38 @@ enum ReturnCodes
     DataTypeConflict = 0xFE,        // write access with wrong datatype (datapoint length)
     GenericError = 0xFF             // service, function or command failed
 };
+const string enum_name(const ReturnCodes enum_val);
 
 enum Repetition
 {
-    NoRepitiion = 0,
+    NoRepetiion = 0,
     WasRepeated = 0,
     RepetitionAllowed = 0x20,
     WasNotRepeated = 0x20,
 };
+const string enum_name_in(Repetition enum_val);
+const string enum_name_out(Repetition enum_val);
 
 enum SystemBroadcast
 {
     SysBroadcast = 0,
     Broadcast = 0x10,
 };
+const string enum_name(const SystemBroadcast enum_val);
 
 enum Confirm
 {
     ConfirmNoError = 0,
     ConfirmError = 1,
 };
+const string enum_name(const Confirm enum_val);
 
 enum HopCountType
 {
     UnlimitedRouting,     //!< NPDU::hopCount is set to 7. This means that the frame never expires. This could be a problem if your bus contains a circle.
     NetworkLayerParameter //!< use NetworkLayer::hopCount as NPDU::hopCount
 };
+const string enum_name(const HopCountType enum_val);
 
 enum TpduType
 {
@@ -137,6 +152,7 @@ enum TpduType
     Ack,
     Nack,
 };
+const string enum_name(const TpduType enum_val);
 
 enum ApduType
 {
@@ -218,6 +234,7 @@ enum ApduType
     // Secure Service
     SecureService = 0x3F1
 };
+const string enum_name(const ApduType enum_val);
 
 enum DataSecurity
 {
@@ -225,6 +242,7 @@ enum DataSecurity
     Auth,
     AuthConf
 };
+const string enum_name(const DataSecurity enum_val);
 
 struct SecurityControl
 {
@@ -237,6 +255,7 @@ enum RestartType
     BasicRestart = 0x0,
     MasterReset = 0x1
 };
+const string enum_name(const RestartType enum_val);
 
 enum EraseCode
 {
@@ -249,6 +268,7 @@ enum EraseCode
     ResetLinks = 0x06,
     FactoryResetWithoutIA = 0x07
 };
+const string enum_name(const EraseCode enum_val);
 
 enum DptMedium
 {
@@ -259,6 +279,7 @@ enum DptMedium
     KNX_RF = 0x02,
     KNX_IP = 0x05
 };
+const string enum_name(const DptMedium enum_val);
 
 enum LCGRPCONFIG
 {
@@ -272,6 +293,7 @@ enum LCGRPCONFIG
     GROUP_7000LOCK =    0b00001000,
     GROUP_7000ROUTE =   0b00001100
 };
+const string enum_name(const LCGRPCONFIG enum_val);
 
 enum LCCONFIG
 {
@@ -288,3 +310,4 @@ enum LCCONFIG
     PHYS_IACK_ALL =     0b10000000,
     PHYS_IACK_NACK =    0b11000000
 };
+const string enum_name(const LCCONFIG enum_val);

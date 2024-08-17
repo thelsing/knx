@@ -1,6 +1,7 @@
 #pragma once
 
 #include "knx/bits.h"
+#include "knx/util/logger.h"
 #include "knx/config.h"
 #include "knx/bau.h"
 #include "knx/bau07B0.h"
@@ -201,12 +202,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
                 if (_progLedState)
                 {
-                    println("progmode on");
+                    Logger::logger("KnxFacade").info("progmode on");
                     progLedOn();
                 }
                 else
                 {
-                    println("progmode off");
+                    Logger::logger("KnxFacade").info("progmode off");
                     progLedOff();
                 }
             }

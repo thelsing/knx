@@ -7,6 +7,8 @@
 #include "string.h"
 #include "bits.h"
 #include <stdio.h>
+#include "util/logger.h"
+#define LOGGER Logger::logger("ApplicationLayer")
 
 const SecurityControl ApplicationLayer::noSecurity {.toolAccess = false, .dataSecurity = DataSecurity::None};
 
@@ -1360,8 +1362,7 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         }
 
         default:
-            print("Individual-indication: unhandled APDU-Type: ");
-            apdu.printPDU();
+            LOGGER.warning("Individual-indication: unhandled APDU-Type: %s", ((std::string)apdu).c_str());
     }
 }
 

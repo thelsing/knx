@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <string>
 #include "knx_types.h"
 
 class CemiFrame;
@@ -16,7 +17,7 @@ class APDU
         /**
          * Get the type of the APDU.
          */
-        ApduType type();
+        ApduType type() const;
         /**
          * Set the type of the APDU.
          */
@@ -34,9 +35,9 @@ class APDU
          */
         uint8_t length() const;
         /**
-         * Print the contents of the APDU to console.
+         * Convert APDU to string.
          */
-        void printPDU();
+        operator std::string() const;
 
     protected:
         /**

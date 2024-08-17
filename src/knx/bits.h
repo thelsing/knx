@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 #if defined(__linux__)
     #include <arpa/inet.h>
@@ -70,6 +71,7 @@
 #endif
 
 #ifndef KNX_NO_PRINT
+    std::string hex(uint8_t byte);
     void print(const char[]);
     void print(char);
     void print(unsigned char, int = DEC);

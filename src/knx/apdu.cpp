@@ -6,7 +6,7 @@ APDU::APDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
 {
 }
 
-ApduType APDU::type()
+ApduType APDU::type() const
 {
     uint16_t apci;
     apci = getWord(_data);
@@ -40,20 +40,18 @@ uint8_t APDU::length() const
     return _frame.npdu().octetCount();
 }
 
-void APDU::printPDU()
+APDU::operator std::string() const
 {
-    print("APDU: ");
-    print(type(), HEX);
-    print("  ");
-    print(_data[0] & 0x3, HEX);
+    string value = "APDU: " + enum_name(type()) + " ";
+    value += hex(_data[0] & 0x3);
 
     for (uint8_t i = 1; i < length() + 1; ++i)
     {
         if (i)
-            print(" ");
+            value += " ";
 
-        print(_data[i], HEX);
+        value += hex(_data[i]);
     }
 
-    println();
+    return value;
 }

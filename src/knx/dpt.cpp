@@ -1,4 +1,6 @@
 #include "dpt.h"
+#include "util/logger.h"
+#define LOGGER Logger::logger("Dpt")
 
 #include "bits.h"
 
