@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <string>
 
 class CemiFrame;
 class TPDU;
@@ -17,6 +18,7 @@ class NPDU
         void hopCount(uint8_t value);
         CemiFrame& frame();
         TPDU& tpdu();
+        const std::string toString() const;
 
     protected:
         NPDU(uint8_t* data, CemiFrame& frame);

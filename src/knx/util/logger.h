@@ -65,16 +65,16 @@ class Logger
                     return "INFO";
 
                 case LogType::Warning:
-                    return "WARNING";
+                    return "WARN";
 
                 case LogType::Error:
-                    return "ERROR";
+                    return "ERR ";
 
                 case LogType::Critical:
-                    return "CRITICAL";
+                    return "CRIT";
 
                 case LogType::Exception:
-                    return "EXCEPTION";
+                    return "EXCE";
             }
             return to_string(type);
         }
@@ -84,11 +84,11 @@ class Logger
         {
 #ifndef KNX_NO_PRINT
             print(millis());
-            print("\t");
+            print(" ");
             print(_name.c_str());
             print("\t");
             print(enum_name(type).c_str());
-            print("\t");
+            print(" ");
 
             while (*format)
             {
@@ -103,6 +103,10 @@ class Logger
                     else if (*format == 's')
                     {
                         print(va_arg(args, char*));
+                    }
+                    else if (*format == 'S')
+                    {
+                        print(va_arg(args, std::string).c_str());
                     }
                     else if (*format == 'f')
                     {

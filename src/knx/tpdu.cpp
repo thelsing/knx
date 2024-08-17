@@ -118,15 +118,15 @@ CemiFrame& TPDU::frame()
     return _frame;
 }
 
-void TPDU::printPDU()
+const std::string TPDU::toString() const
 {
-    /*    print.print("TPDU: ");
-        print.print(type(), HEX, 2);
-        print.print("    ");
-        for (uint8_t i = 0; i < apdu().length() + 1; ++i)
-        {
-            if (i) print.print(" ");
-            print.print(_data[i], HEX, 2);
-        }
-        print.println()*/;
+    std::string value = std::string("TPDU: ") + enum_name(type()) + " ";
+
+    if (control())
+        value += "control ";
+
+    if (numbered())
+        value += "numbered sequence: " + to_string(sequenceNumber());
+
+    return value;
 }

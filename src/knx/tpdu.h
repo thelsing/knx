@@ -2,6 +2,7 @@
 
 #include "stdint.h"
 #include "knx_types.h"
+#include <string>
 class CemiFrame;
 class APDU;
 
@@ -25,7 +26,7 @@ class TPDU
         APDU& apdu();
 
         CemiFrame& frame();
-        void printPDU();
+        const std::string toString() const;
 
     protected:
         TPDU(uint8_t* data, CemiFrame& frame);

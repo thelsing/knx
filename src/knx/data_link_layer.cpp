@@ -161,7 +161,7 @@ void DataLinkLayer::frameReceived(CemiFrame& frame)
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
 
-    LOGGER.info("frameReceived  %s", frame.to_string().c_str());
+    LOGGER.info("frameReceived  %S", frame.toString());
 
 
 #ifdef USE_CEMI_SERVER
@@ -222,7 +222,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     else
         frame.frameType(format);
 
-    LOGGER.info("sendTelegram  %s", frame.to_string().c_str());
+    LOGGER.info("sendTelegram  %S", frame.toString());
 
     if (!frame.valid())
     {

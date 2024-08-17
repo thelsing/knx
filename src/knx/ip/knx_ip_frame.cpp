@@ -77,7 +77,7 @@ KnxIpFrame::KnxIpFrame(uint16_t length)
     totalLength(length);
 }
 
-const std::string KnxIpFrame::to_string() const 
+const std::string KnxIpFrame::toString() const 
 {
     return enum_name(protocolVersion()) + " " + enum_name(serviceTypeIdentifier());
 }

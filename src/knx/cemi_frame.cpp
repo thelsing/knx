@@ -400,9 +400,9 @@ bool CemiFrame::valid() const
     return true;
 }
 
-std::string CemiFrame::to_string() const
+std::string CemiFrame::toString() const
 {
-    std::string value = enum_name(frameType()) + " ";
+    std::string value = "DPDU:" + enum_name(frameType()) + " ";
     value += enum_name(systemBroadcast()) + " ";
     value += enum_name(ack()) + " ";
     value += enum_name(repetition()) + " ";

@@ -1137,7 +1137,7 @@ bool IpDataLinkLayer::sendMulicast(KnxIpFrame& ipFrame)
     if (!_enabled)
         return false;
 
-    LOGGER.info("sendMulicast %s", ipFrame.to_string().c_str());
+    LOGGER.info("sendMulicast %S", ipFrame.toString());
 
     return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());
 }
@@ -1147,7 +1147,7 @@ bool IpDataLinkLayer::sendUnicast(uint32_t addr, uint16_t port, KnxIpFrame& ipFr
     if (!_enabled)
         return false;
 
-    LOGGER.info("sendUnicast to %s:%d %s", ipaddr2str(addr).c_str(), port, ipFrame.to_string().c_str());
+    LOGGER.info("sendUnicast to %S:%d %S", ipaddr2str(addr), port, ipFrame.toString());
 
     return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());
 }

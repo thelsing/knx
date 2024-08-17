@@ -72,7 +72,7 @@ class CemiFrame
         uint8_t calcCrcTP(uint8_t* buffer, uint16_t len);
         bool valid() const;
 
-        std::string to_string() const;
+        std::string toString() const;
 
     private:
         uint8_t buffer[0xff + NPDU_LPDU_DIFF] = {0}; //only valid of add info is zero

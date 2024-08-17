@@ -40,7 +40,7 @@ uint8_t APDU::length() const
     return _frame.npdu().octetCount();
 }
 
-string APDU::to_string() const
+string APDU::toString() const
 {
     string value = "APDU: " + enum_name(type()) + " ";
     value += byte2hex(_data[0] & 0x3);

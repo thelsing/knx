@@ -42,3 +42,8 @@ TPDU& NPDU::tpdu()
 {
     return _frame.tpdu();
 }
+
+const std::string NPDU::toString() const
+{
+    return std::string("NPDU: Octetcount:") + to_string(octetCount()) + " hopCount " + to_string(hopCount());
+}

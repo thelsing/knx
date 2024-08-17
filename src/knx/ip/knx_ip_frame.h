@@ -48,7 +48,7 @@ class KnxIpFrame
         uint16_t totalLength() const;
         void totalLength(uint16_t length);
         uint8_t* data();
-        const std::string to_string() const;
+        const std::string toString() const;
     protected:
         bool _freeData = false;
         uint8_t* _data = 0;

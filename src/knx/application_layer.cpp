@@ -10,7 +10,10 @@
 #include "util/logger.h"
 #define LOGGER Logger::logger("ApplicationLayer")
 
-const SecurityControl ApplicationLayer::noSecurity {.toolAccess = false, .dataSecurity = DataSecurity::None};
+const SecurityControl ApplicationLayer::noSecurity
+{
+    .toolAccess = false, .dataSecurity = DataSecurity::None
+};
 
 ApplicationLayer::ApplicationLayer(BusAccessUnit& bau) : _bau(bau)
 {
@@ -35,6 +38,8 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
 
 void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
+    LOGGER.info("dataGroupIndication %S", apdu.toString());
+
     if (_assocTable == nullptr)
         return;
 
@@ -86,6 +91,7 @@ void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Prior
 
 void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority,  uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
+        LOGGER.info("dataGroupConfirm %S", apdu.toString());
     switch (apdu.type())
     {
         case GroupValueRead:
@@ -122,6 +128,7 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
 
 void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, const SecurityControl& secCtrl)
 {
+            LOGGER.info("dataBroadcastIndication %S", apdu.toString());
     uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -181,6 +188,7 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
 
 void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
+    LOGGER.info("dataBroadcastConfirm %S", apdu.toString());
     uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -235,6 +243,7 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
 
 void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, const SecurityControl& secCtrl)
 {
+    LOGGER.info("dataSystemBroadcastIndication %S", apdu.toString());
     const uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -271,8 +280,7 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
         }
 
         default:
-            print("SystemBroadcast-indication: unhandled APDU-Type: ");
-            println(apdu.type());
+            LOGGER.warning("SystemBroadcast-indication: unhandled APDU-Type: %d", apdu.type());
             break;
     }
 }
@@ -284,6 +292,7 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
 
 void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
+        LOGGER.info("dataSystemBroadcastConfirm %S", apdu.toString());
     const uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -1362,7 +1371,7 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         }
 
         default:
-            LOGGER.warning("Individual-indication: unhandled APDU-Type: %s", apdu.to_string().c_str());
+            LOGGER.warning("Individual-indication: unhandled APDU-Type: %S", apdu.toString());
     }
 }
 
