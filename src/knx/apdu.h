@@ -37,7 +37,7 @@ class APDU
         /**
          * Convert APDU to string.
          */
-        operator std::string() const;
+        std::string to_string() const;
 
     protected:
         /**

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <stdint.h>
 using namespace std;
 
 enum FrameFormat
@@ -117,8 +118,7 @@ enum Repetition
     RepetitionAllowed = 0x20,
     WasNotRepeated = 0x20,
 };
-const string enum_name_in(Repetition enum_val);
-const string enum_name_out(Repetition enum_val);
+const string enum_name(Repetition enum_val);
 
 enum SystemBroadcast
 {
@@ -311,3 +311,6 @@ enum LCCONFIG
     PHYS_IACK_NACK =    0b11000000
 };
 const string enum_name(const LCCONFIG enum_val);
+
+const string format_ia(uint16_t ia);
+const string format_ga(uint16_t ga);

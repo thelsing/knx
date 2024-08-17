@@ -33,14 +33,14 @@ void KnxIpFrame::protocolVersion(KnxIpVersion version)
     _data[1] = (uint8_t)version;
 }
 
-uint16_t KnxIpFrame::serviceTypeIdentifier() const
+KnxIpServiceType KnxIpFrame::serviceTypeIdentifier() const
 {
-    return getWord(_data + 2);
+    return (KnxIpServiceType)getWord(_data + 2);
 }
 
-void KnxIpFrame::serviceTypeIdentifier(uint16_t identifier)
+void KnxIpFrame::serviceTypeIdentifier(KnxIpServiceType identifier)
 {
-    pushWord(identifier, _data + 2);
+    pushWord((uint16_t) identifier, _data + 2);
 }
 
 uint16_t KnxIpFrame::totalLength() const
@@ -75,4 +75,82 @@ KnxIpFrame::KnxIpFrame(uint16_t length)
     headerLength(LEN_KNXIP_HEADER);
     protocolVersion(KnxIp1_0);
     totalLength(length);
+}
+
+const std::string KnxIpFrame::to_string() const 
+{
+    return enum_name(protocolVersion()) + " " + enum_name(serviceTypeIdentifier());
+}
+
+const string enum_name(const KnxIpVersion enum_val)
+{
+    switch (enum_val)
+    {
+        case KnxIp1_0:
+            return "KnxIp1_0";
+    }
+
+    return to_string(enum_val);
+}
+
+const string enum_name(const KnxIpServiceType enum_val)
+{
+    switch (enum_val)
+    {
+        case SearchRequest:
+            return "SearchRequest";
+
+        case SearchResponse:
+            return "SearchResponse";
+
+        case DescriptionRequest:
+            return "DescriptionRequest";
+
+        case DescriptionResponse:
+            return "DescriptionResponse";
+
+        case ConnectRequest:
+            return "ConnectRequest";
+
+        case ConnectResponse:
+            return "ConnectResponse";
+
+        case ConnectionStateRequest:
+            return "ConnectionStateRequest";
+
+        case ConnectionStateResponse:
+            return "ConnectionStateResponse";
+
+        case DisconnectRequest:
+            return "DisconnectRequest";
+
+        case DisconnectResponse:
+            return "DisconnectResponse";
+
+        case SearchRequestExt:
+            return "SearchRequestExt";
+
+        case SearchResponseExt:
+            return "SearchResponseExt";
+
+        case DeviceConfigurationRequest:
+            return "DeviceConfigurationRequest";
+
+        case DeviceConfigurationAck:
+            return "DeviceConfigurationAck";
+
+        case TunnelingRequest:
+            return "TunnelingRequest";
+
+        case TunnelingAck:
+            return "TunnelingAck";
+
+        case RoutingIndication:
+            return "RoutingIndication";
+
+        case RoutingLostMessage:
+            return "RoutingLostMessage";
+    }
+
+    return to_string(enum_val);
 }

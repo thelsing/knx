@@ -8,8 +8,16 @@
 #include "knx_ip_search_response.h"
 #include "knx_ip_search_request_extended.h"
 #include "knx_ip_search_response_extended.h"
+#include "../util/logger.h"
 
-#ifdef KNX_TUNNELING
+const std::string ipaddr2str(const uint32_t addr)
+{
+    return to_string(addr & 0xFF000000 >> 24) + "." + to_string(addr & 0xFF0000 >> 16) + "." + to_string(addr & 0xFF00 >> 8) + "." + to_string(addr & 0xFF);
+}
+
+#define LOGGER Logger::logger("IpDataLinkLayer")
+
+
     #include "knx_ip_connect_request.h"
     #include "knx_ip_connect_response.h"
     #include "knx_ip_state_request.h"
@@ -21,7 +29,7 @@
     #include "knx_ip_description_request.h"
     #include "knx_ip_description_response.h"
     #include "knx_ip_config_request.h"
-#endif
+
 
 #include <stdio.h>
 #include <string.h>
@@ -44,7 +52,7 @@ bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
     if (isSendLimitReached())
         return false;
 
-    bool success = sendBytes(packet.data(), packet.totalLength());
+    bool success = sendMulicast(packet);
 #ifdef KNX_ACTIVITYCALLBACK
 
     if (_dllcb)
@@ -55,7 +63,6 @@ bool IpDataLinkLayer::sendFrame(CemiFrame& frame)
     return success;
 }
 
-#ifdef KNX_TUNNELING
 void IpDataLinkLayer::dataRequestToTunnel(CemiFrame& frame)
 {
     if (frame.addressType() == AddressType::GroupAddress)
@@ -228,7 +235,8 @@ void IpDataLinkLayer::sendFrameToTunnel(KnxIpTunnelConnection* tunnel, CemiFrame
     if (frame.messageCode() != L_data_req && frame.messageCode() != L_data_con && frame.messageCode() != L_data_ind)
         req.serviceTypeIdentifier(DeviceConfigurationRequest);
 
-    _platform.sendBytesUniCast(tunnel->IpAddress, tunnel->PortData, req.data(), req.totalLength());
+
+    sendUnicast(tunnel->IpAddress, tunnel->PortData, req);
 }
 
 bool IpDataLinkLayer::isTunnelAddress(uint16_t addr)
@@ -262,14 +270,14 @@ bool IpDataLinkLayer::isSentToTunnel(uint16_t address, bool isGrpAddr)
         return false;
     }
 }
-#endif
+
 
 void IpDataLinkLayer::loop()
 {
     if (!_enabled)
         return;
 
-#ifdef KNX_TUNNELING
+
 
     for (int i = 0; i < KNX_TUNNELING; i++)
     {
@@ -288,16 +296,13 @@ void IpDataLinkLayer::loop()
                 discReq.hpaiCtrl().code(IPV4_UDP);
                 discReq.hpaiCtrl().ipAddress(tunnels[i].IpAddress);
                 discReq.hpaiCtrl().ipPortNumber(tunnels[i].PortCtrl);
-                _platform.sendBytesUniCast(tunnels[i].IpAddress, tunnels[i].PortCtrl, discReq.data(), discReq.totalLength());
+                sendUnicast(tunnels[i].IpAddress, tunnels[i].PortCtrl, discReq);
                 tunnels[i].Reset();
             }
 
             break;
         }
     }
-
-#endif
-
 
     uint8_t buffer[512];
     uint16_t remotePort = 0;
@@ -324,6 +329,8 @@ void IpDataLinkLayer::loop()
     uint16_t code;
     popWord(code, buffer + 2);
 
+    LOGGER.info("loop: %s", enum_name((KnxIpServiceType)code).c_str());
+
     switch ((KnxIpServiceType)code)
     {
         case RoutingIndication:
@@ -345,7 +352,7 @@ void IpDataLinkLayer::loop()
                 _dllcb->activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR) | (KNX_ACTIVITYCALLBACK_IPUNICAST));
 
 #endif
-            _platform.sendBytesUniCast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
+            sendUnicast(hpai.ipAddress(), hpai.ipPortNumber(), searchResponse);
             break;
         }
 
@@ -355,7 +362,7 @@ void IpDataLinkLayer::loop()
             break;
         }
 
-#ifdef KNX_TUNNELING
+
 
         case ConnectRequest:
         {
@@ -407,11 +414,8 @@ void IpDataLinkLayer::loop()
             break;
         }
 
-#endif
-
         default:
-            print("Unhandled service identifier: ");
-            println(code, HEX);
+            LOGGER.warning("Unhandled service identifier: %s", word2hex(code).c_str());
             break;
     }
 }
@@ -545,9 +549,12 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
         {
             //println("requested MANUFACTURER_DATA but not implemented");
         }
+
 #ifdef KNX_TUNNELING
+
         if (searchRequest.requestedDIB(TUNNELING_INFO))
             searchResponse.setTunnelingInfo(_ipParameters, _deviceObject, tunnels);
+
 #endif
     }
 
@@ -557,11 +564,11 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
         return;
     }
 
-    _platform.sendBytesUniCast(searchRequest.hpai().ipAddress(), searchRequest.hpai().ipPortNumber(), searchResponse.data(), searchResponse.totalLength());
+    sendUnicast(searchRequest.hpai().ipAddress(), searchRequest.hpai().ipPortNumber(), searchResponse);
 }
 
 
-#ifdef KNX_TUNNELING
+
 void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length, uint32_t& src_addr, uint16_t& src_port)
 {
     KnxIpConnectRequest connRequest(buffer, length);
@@ -622,7 +629,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
         println("Only Tunnel/DeviceMgmt Connection ist supported!");
 #endif
         KnxIpConnectResponse connRes(0x00, E_CONNECTION_TYPE);
-        _platform.sendBytesUniCast(connRequest.hpaiCtrl().ipAddress(), connRequest.hpaiCtrl().ipPortNumber(), connRes.data(), connRes.totalLength());
+        sendUnicast(connRequest.hpaiCtrl().ipAddress(), connRequest.hpaiCtrl().ipPortNumber(), connRes);
         return;
     }
 
@@ -633,7 +640,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
         println("Only LinkLayer ist supported!");
 #endif
         KnxIpConnectResponse connRes(0x00, E_TUNNELING_LAYER);
-        _platform.sendBytesUniCast(connRequest.hpaiCtrl().ipAddress(), connRequest.hpaiCtrl().ipPortNumber(), connRes.data(), connRes.totalLength());
+        sendUnicast(connRequest.hpaiCtrl().ipAddress(), connRequest.hpaiCtrl().ipPortNumber(), connRes);
         return;
     }
 
@@ -777,7 +784,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
                 discReq.hpaiCtrl().code(IPV4_UDP);
                 discReq.hpaiCtrl().ipAddress(tunnels[firstResAndOccTunnel].IpAddress);
                 discReq.hpaiCtrl().ipPortNumber(tunnels[firstResAndOccTunnel].PortCtrl);
-                _platform.sendBytesUniCast(tunnels[firstResAndOccTunnel].IpAddress, tunnels[firstResAndOccTunnel].PortCtrl, discReq.data(), discReq.totalLength());
+                sendUnicast(tunnels[firstResAndOccTunnel].IpAddress, tunnels[firstResAndOccTunnel].PortCtrl, discReq);
                 tunnels[firstResAndOccTunnel].Reset();
 
 
@@ -837,7 +844,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
     {
         println("no free tunnel availible");
         KnxIpConnectResponse connRes(0x00, E_NO_MORE_CONNECTIONS);
-        _platform.sendBytesUniCast(connRequest.hpaiCtrl().ipAddress(), connRequest.hpaiCtrl().ipPortNumber(), connRes.data(), connRes.totalLength());
+        sendUnicast(connRequest.hpaiCtrl().ipAddress(), connRequest.hpaiCtrl().ipPortNumber(), connRes);
         return;
     }
 
@@ -905,7 +912,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
 
 
     KnxIpConnectResponse connRes(_ipParameters, tun->IndividualAddress, 3671, tun->ChannelId, connRequest.cri().type());
-    _platform.sendBytesUniCast(tun->IpAddress, tun->PortCtrl, connRes.data(), connRes.totalLength());
+    sendUnicast(tun->IpAddress, tun->PortCtrl, connRes);
 }
 
 void IpDataLinkLayer::loopHandleConnectionStateRequest(uint8_t* buffer, uint16_t length)
@@ -930,7 +937,7 @@ void IpDataLinkLayer::loopHandleConnectionStateRequest(uint8_t* buffer, uint16_t
         println(stateRequest.channelId());
 #endif
         KnxIpStateResponse stateRes(0x00, E_CONNECTION_ID);
-        _platform.sendBytesUniCast(stateRequest.hpaiCtrl().ipAddress(), stateRequest.hpaiCtrl().ipPortNumber(), stateRes.data(), stateRes.totalLength());
+        sendUnicast(stateRequest.hpaiCtrl().ipAddress(), stateRequest.hpaiCtrl().ipPortNumber(), stateRes);
         return;
     }
 
@@ -941,7 +948,7 @@ void IpDataLinkLayer::loopHandleConnectionStateRequest(uint8_t* buffer, uint16_t
 
     tun->lastHeartbeat = millis();
     KnxIpStateResponse stateRes(tun->ChannelId, E_NO_ERROR);
-    _platform.sendBytesUniCast(stateRequest.hpaiCtrl().ipAddress(), stateRequest.hpaiCtrl().ipPortNumber(), stateRes.data(), stateRes.totalLength());
+    sendUnicast(stateRequest.hpaiCtrl().ipAddress(), stateRequest.hpaiCtrl().ipPortNumber(), stateRes);
 }
 
 void IpDataLinkLayer::loopHandleDisconnectRequest(uint8_t* buffer, uint16_t length)
@@ -971,13 +978,13 @@ void IpDataLinkLayer::loopHandleDisconnectRequest(uint8_t* buffer, uint16_t leng
         println(discReq.channelId());
 #endif
         KnxIpDisconnectResponse discRes(0x00, E_CONNECTION_ID);
-        _platform.sendBytesUniCast(discReq.hpaiCtrl().ipAddress(), discReq.hpaiCtrl().ipPortNumber(), discRes.data(), discRes.totalLength());
+        sendUnicast(discReq.hpaiCtrl().ipAddress(), discReq.hpaiCtrl().ipPortNumber(), discRes);
         return;
     }
 
 
     KnxIpDisconnectResponse discRes(tun->ChannelId, E_NO_ERROR);
-    _platform.sendBytesUniCast(discReq.hpaiCtrl().ipAddress(), discReq.hpaiCtrl().ipPortNumber(), discRes.data(), discRes.totalLength());
+    sendUnicast(discReq.hpaiCtrl().ipAddress(), discReq.hpaiCtrl().ipPortNumber(), discRes);
     tun->Reset();
 }
 
@@ -985,7 +992,7 @@ void IpDataLinkLayer::loopHandleDescriptionRequest(uint8_t* buffer, uint16_t len
 {
     KnxIpDescriptionRequest descReq(buffer, length);
     KnxIpDescriptionResponse descRes(_ipParameters, _deviceObject);
-    _platform.sendBytesUniCast(descReq.hpaiCtrl().ipAddress(), descReq.hpaiCtrl().ipPortNumber(), descRes.data(), descRes.totalLength());
+    sendUnicast(descReq.hpaiCtrl().ipAddress(), descReq.hpaiCtrl().ipPortNumber(), descRes);
 }
 
 void IpDataLinkLayer::loopHandleDeviceConfigurationRequest(uint8_t* buffer, uint16_t length)
@@ -1008,7 +1015,7 @@ void IpDataLinkLayer::loopHandleDeviceConfigurationRequest(uint8_t* buffer, uint
         print("Channel ID nicht gefunden: ");
         println(confReq.connectionHeader().channelId());
         KnxIpStateResponse stateRes(0x00, E_CONNECTION_ID);
-        _platform.sendBytesUniCast(0, 0, stateRes.data(), stateRes.totalLength());
+        sendUnicast(0, 0, stateRes);
         return;
     }
 
@@ -1018,7 +1025,7 @@ void IpDataLinkLayer::loopHandleDeviceConfigurationRequest(uint8_t* buffer, uint
     tunnAck.connectionHeader().channelId(tun->ChannelId);
     tunnAck.connectionHeader().sequenceCounter(confReq.connectionHeader().sequenceCounter());
     tunnAck.connectionHeader().status(E_NO_ERROR);
-    _platform.sendBytesUniCast(tun->IpAddress, tun->PortData, tunnAck.data(), tunnAck.totalLength());
+    sendUnicast(tun->IpAddress, tun->PortData, tunnAck);
 
     tun->lastHeartbeat = millis();
     _cemiServer->frameReceived(confReq.frame());
@@ -1046,7 +1053,7 @@ void IpDataLinkLayer::loopHandleTunnelingRequest(uint8_t* buffer, uint16_t lengt
         println(tunnReq.connectionHeader().channelId());
 #endif
         KnxIpStateResponse stateRes(0x00, E_CONNECTION_ID);
-        _platform.sendBytesUniCast(0, 0, stateRes.data(), stateRes.totalLength());
+        sendUnicast(0, 0, stateRes);
         return;
     }
 
@@ -1065,7 +1072,7 @@ void IpDataLinkLayer::loopHandleTunnelingRequest(uint8_t* buffer, uint16_t lengt
         tunnAck.connectionHeader().channelId(tun->ChannelId);
         tunnAck.connectionHeader().sequenceCounter(tunnReq.connectionHeader().sequenceCounter());
         tunnAck.connectionHeader().status(E_NO_ERROR);
-        _platform.sendBytesUniCast(tun->IpAddress, tun->PortData, tunnAck.data(), tunnAck.totalLength());
+        sendUnicast(tun->IpAddress, tun->PortData, tunnAck);
         return;
     }
     else if ((uint8_t)(sequence - 1) != tun->SequenceCounter_R)
@@ -1085,7 +1092,7 @@ void IpDataLinkLayer::loopHandleTunnelingRequest(uint8_t* buffer, uint16_t lengt
     tunnAck.connectionHeader().channelId(tun->ChannelId);
     tunnAck.connectionHeader().sequenceCounter(tunnReq.connectionHeader().sequenceCounter());
     tunnAck.connectionHeader().status(E_NO_ERROR);
-    _platform.sendBytesUniCast(tun->IpAddress, tun->PortData, tunnAck.data(), tunnAck.totalLength());
+    sendUnicast(tun->IpAddress, tun->PortData, tunnAck);
 
     tun->SequenceCounter_R = tunnReq.connectionHeader().sequenceCounter();
 
@@ -1094,7 +1101,7 @@ void IpDataLinkLayer::loopHandleTunnelingRequest(uint8_t* buffer, uint16_t lengt
 
     _cemiServer->frameReceived(tunnReq.frame());
 }
-#endif
+
 
 void IpDataLinkLayer::enabled(bool value)
 {
@@ -1125,12 +1132,24 @@ DptMedium IpDataLinkLayer::mediumType() const
     return DptMedium::KNX_IP;
 }
 
-bool IpDataLinkLayer::sendBytes(uint8_t* bytes, uint16_t length)
+bool IpDataLinkLayer::sendMulicast(KnxIpFrame& ipFrame)
 {
     if (!_enabled)
         return false;
 
-    return _platform.sendBytesMultiCast(bytes, length);
+    LOGGER.info("sendMulicast %s", ipFrame.to_string().c_str());
+
+    return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());
+}
+
+bool IpDataLinkLayer::sendUnicast(uint32_t addr, uint16_t port, KnxIpFrame& ipFrame)
+{
+    if (!_enabled)
+        return false;
+
+    LOGGER.info("sendUnicast to %s:%d %s", ipaddr2str(addr).c_str(), port, ipFrame.to_string().c_str());
+
+    return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());
 }
 
 bool IpDataLinkLayer::isSendLimitReached()
@@ -1171,7 +1190,7 @@ bool IpDataLinkLayer::isSendLimitReached()
 
     if (sum > 50)
     {
-        println("Dropping packet due to 50p/s limit");
+        LOGGER.warning("Dropping packet due to 50p/s limit");
         return true;   // drop packet
     }
     else

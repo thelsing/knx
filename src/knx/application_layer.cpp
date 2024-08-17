@@ -1362,7 +1362,7 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         }
 
         default:
-            LOGGER.warning("Individual-indication: unhandled APDU-Type: %s", ((std::string)apdu).c_str());
+            LOGGER.warning("Individual-indication: unhandled APDU-Type: %s", apdu.to_string().c_str());
     }
 }
 

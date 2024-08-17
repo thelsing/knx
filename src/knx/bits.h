@@ -70,8 +70,10 @@
     void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 #endif
 
+    std::string byte2hex(uint8_t byte);
+    std::string word2hex(uint16_t value);
+
 #ifndef KNX_NO_PRINT
-    std::string hex(uint8_t byte);
     void print(const char[]);
     void print(char);
     void print(unsigned char, int = DEC);

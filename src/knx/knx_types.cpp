@@ -441,29 +441,15 @@ const string enum_name(const SystemBroadcast enum_val)
 }
 
 
-const string enum_name_in(Repetition enum_val)
+const string enum_name(Repetition enum_val)
 {
     switch (enum_val)
     {
         case WasRepeated:
-            return "WasRepeated";
+            return "WasRepeated/NoRepetiion";
 
         case WasNotRepeated:
-            return "WasNotRepeated";
-    }
-
-    return to_string(enum_val);
-}
-
-const string enum_name_out(Repetition enum_val)
-{
-    switch (enum_val)
-    {
-        case NoRepetiion:
-            return "NoRepetiion";
-
-        case RepetitionAllowed:
-            return "RepetitionAllowed";
+            return "WasNotRepeated/RepetitionAllowed";
     }
 
     return to_string(enum_val);
@@ -703,4 +689,14 @@ const string enum_name(const FrameFormat enum_val)
     }
 
     return to_string(enum_val);
+}
+
+const string format_ia(uint16_t ia)
+{
+    return to_string(ia & 0xF000 >> 24) + "/" + to_string(ia & 0x0F00 >> 16) + "/" + to_string(ia & 0x00FF);
+}
+
+const string format_ga(uint16_t ga)
+{
+    return to_string(ga & 0xF800 >> 23) + "/" + to_string(ga & 0x70 >> 16) + "/" + to_string(ga & 0x00FF);
 }

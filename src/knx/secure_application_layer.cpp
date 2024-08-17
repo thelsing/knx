@@ -660,7 +660,7 @@ void SecureApplicationLayer::sendSyncRequest(uint16_t dstAddr, bool dstAddrIsGro
 
     if (secure(request.data() + APDU_LPDU_DIFF, kSecureSyncRequest, _deviceObj.individualAddress(), dstAddr, dstAddrIsGroupAddr, tpci, asdu, sizeof(asdu), secCtrl, systemBcast))
     {
-        LOGGER.info("SyncRequest: %s", ((string)request.apdu()).c_str());
+        LOGGER.info("SyncRequest: %s", request.apdu().to_string().c_str());
 
         if (_syncReqBroadcastOutgoing)
         {
@@ -723,7 +723,7 @@ void SecureApplicationLayer::sendSyncResponse(uint16_t dstAddr, bool dstAddrIsGr
     {
         _lastSyncRes = millis();
 
-        LOGGER.info("SyncResponse: %s", ((string)response.apdu()).c_str());
+        LOGGER.info("SyncResponse: %s", response.apdu().to_string().c_str());
 
         if (_syncReqBroadcastIncoming)
         {
@@ -1063,7 +1063,7 @@ bool SecureApplicationLayer::decrypt(uint8_t* plainApdu, uint16_t plainApduLengt
 bool SecureApplicationLayer::decodeSecureApdu(APDU& secureApdu, APDU& plainApdu, SecurityControl& secCtrl)
 {
     // Decode secure APDU
-    LOGGER.info("decodeSecureApdu: Secure APDU: %s", ((string)secureApdu).c_str());
+    LOGGER.info("decodeSecureApdu: Secure APDU: %s", secureApdu.to_string().c_str());
 
     uint16_t srcAddress = secureApdu.frame().sourceAddress();
     uint16_t dstAddress = secureApdu.frame().destinationAddress();
@@ -1085,7 +1085,7 @@ bool SecureApplicationLayer::decodeSecureApdu(APDU& secureApdu, APDU& plainApdu,
     // We are starting from TPCI octet (including): plainApdu.frame().data()+APDU_LPDU_DIFF
     if (decrypt(plainApdu.frame().data() + APDU_LPDU_DIFF, plainApdu.length() + 1, srcAddress, dstAddress, isDstAddrGroupAddr, tpci, secureApdu.data() + 1, secCtrl, isSystemBroadcast))
     {
-        LOGGER.info("decodeSecureApdu: Plain APDU: %s", ((string)plainApdu.frame().apdu()).c_str());
+        LOGGER.info("decodeSecureApdu: Plain APDU: %s", plainApdu.frame().apdu().to_string().c_str());
         return true;
     }
 
@@ -1260,7 +1260,7 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
 {
     // Create secure APDU
 
-    LOGGER.info("createSecureApdu: Plain APDU: %s", ((string)plainApdu.frame().apdu()).c_str());
+    LOGGER.info("createSecureApdu: Plain APDU: %s", plainApdu.frame().apdu().to_string().c_str());
 
     uint16_t srcAddress = plainApdu.frame().sourceAddress();
     uint16_t dstAddress = plainApdu.frame().destinationAddress();
@@ -1296,7 +1296,7 @@ bool SecureApplicationLayer::createSecureApdu(APDU& plainApdu, APDU& secureApdu,
         println(nextSequenceNumber(secCtrl.toolAccess), HEX);
         updateSequenceNumber(secCtrl.toolAccess, nextSequenceNumber(secCtrl.toolAccess) + 1);
 
-        LOGGER.info("createSecureApdu: Secure APDU: %s", ((string)secureApdu.frame().apdu()).c_str());
+        LOGGER.info("createSecureApdu: Secure APDU: %s", secureApdu.frame().apdu().to_string().c_str());
 
         return true;
     }

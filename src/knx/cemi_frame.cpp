@@ -399,3 +399,21 @@ bool CemiFrame::valid() const
 
     return true;
 }
+
+std::string CemiFrame::to_string() const
+{
+    std::string value = enum_name(frameType()) + " ";
+    value += enum_name(systemBroadcast()) + " ";
+    value += enum_name(ack()) + " ";
+    value += enum_name(repetition()) + " ";
+    value += enum_name(priority()) + " from ";
+    value += format_ia(sourceAddress()) + " to ";
+    value += enum_name(addressType()) + " ";
+
+    if (addressType() == AddressType::IndividualAddress)
+        value += format_ia(destinationAddress());
+    else
+        value += format_ga(destinationAddress());
+
+    return value;
+}

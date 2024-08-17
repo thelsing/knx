@@ -160,10 +160,9 @@ void DataLinkLayer::frameReceived(CemiFrame& frame)
     uint16_t ownAddr = _deviceObject.individualAddress();
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
-    if (frame.npdu().octetCount() > 0)
-    {
-        LOGGER.info("->  %s", ((string)frame.apdu()).c_str());
-    }
+
+    LOGGER.info("frameReceived  %s", frame.to_string().c_str());
+
 
 #ifdef USE_CEMI_SERVER
     // Do not send our own message back to the tunnel
@@ -189,7 +188,7 @@ void DataLinkLayer::frameReceived(CemiFrame& frame)
     // println();
     // print("frameReceived: frame valid? :");
     // println(npdu.frame().valid() ? "true" : "false");
-    if (source == ownAddr)
+    if (source == ownAddr) 
         _deviceObject.individualAddressDuplication(true);
 
     if (addrType == GroupAddress && destination == 0)
@@ -223,6 +222,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     else
         frame.frameType(format);
 
+    LOGGER.info("sendTelegram  %s", frame.to_string().c_str());
 
     if (!frame.valid())
     {
@@ -230,13 +230,9 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
         return false;
     }
 
-    if (frame.npdu().octetCount() > 0)
-    {
-        LOGGER.info("<-  %s", ((string)frame.apdu()).c_str());
-    }
-
     bool sendTheFrame = true;
     bool success = true;
+
 
 #ifdef KNX_TUNNELING
     // TunnelOpti
@@ -252,6 +248,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     }
 
 #endif
+
 
     // The data link layer might be an open media link layer
     // and will setup rfSerialOrDoA, rfInfo and rfLfn that we also

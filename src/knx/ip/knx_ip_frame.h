@@ -8,6 +8,7 @@ enum KnxIpVersion
 {
     KnxIp1_0 = 0x10
 };
+const string enum_name(const KnxIpVersion enum_val);
 
 enum KnxIpServiceType
 {
@@ -30,6 +31,7 @@ enum KnxIpServiceType
     RoutingIndication = 0x530,
     RoutingLostMessage = 0x531,
 };
+const string enum_name(const KnxIpServiceType enum_val);
 
 class KnxIpFrame
 {
@@ -41,12 +43,12 @@ class KnxIpFrame
         void headerLength(uint8_t length);
         KnxIpVersion protocolVersion() const;
         void protocolVersion(KnxIpVersion version);
-        uint16_t serviceTypeIdentifier() const;
-        void serviceTypeIdentifier(uint16_t identifier);
+        KnxIpServiceType serviceTypeIdentifier() const;
+        void serviceTypeIdentifier(KnxIpServiceType identifier);
         uint16_t totalLength() const;
         void totalLength(uint16_t length);
         uint8_t* data();
-
+        const std::string to_string() const;
     protected:
         bool _freeData = false;
         uint8_t* _data = 0;
