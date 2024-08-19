@@ -1,7 +1,9 @@
 #include "npdu.h"
-#include "cemi_frame.h"
-#include <string.h>
-#include "bits.h"
+
+#include "../datalink_layer/cemi_frame.h"
+#include "../bits.h"
+
+#include <cstring>
 
 NPDU::NPDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
 {

@@ -1,9 +1,10 @@
 #include "bau091A.h"
+
 #include "bits.h"
+
 #include <string.h>
 #include <stdio.h>
 
-using namespace std;
 
 /* ToDos
 Announce the line status of sec side 03_05_01 4.4.3

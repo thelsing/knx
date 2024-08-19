@@ -1,17 +1,17 @@
 #pragma once
 
-#include "config.h"
+#include "../config.h"
 
 #include "bau_systemB_coupler.h"
 #include "tpuart_data_link_layer.h"
 #if defined(DeviceFamily_CC13X0)
-    #include "rf/rf_physical_layer_cc1310.h"
+    #include "../rf/rf_physical_layer_cc1310.h"
 #else
-    #include "rf/rf_physical_layer_cc1101.h"
+    #include "../rf/rf_physical_layer_cc1101.h"
 #endif
-#include "rf/rf_data_link_layer.h"
-#include "rf/rf_medium_object.h"
-#include "cemi_server_object.h"
+#include "../rf/rf_data_link_layer.h"
+#include "../rf/rf_medium_object.h"
+#include "../cemi_server/cemi_server_object.h"
 
 class Bau2920 : public BauSystemBCoupler
 {

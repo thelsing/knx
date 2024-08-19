@@ -1,8 +1,6 @@
 #include "ip_parameter_object.h"
 
 #include "../bits.h"
-#include "../data_property.h"
-#include "../callback_property.h"
 
 // 224.0.23.12
 #define DEFAULT_MULTICAST_ADDR ((uint32_t)0xE000170C)

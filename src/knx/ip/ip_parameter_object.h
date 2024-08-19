@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../interface_object.h"
-#include "../device_object.h"
-#include "../platform.h"
+#include "../inteface_object/device_object.h"
+#include "../platform/platform.h"
 
 #define KNXIP_MULTICAST_PORT 3671
 

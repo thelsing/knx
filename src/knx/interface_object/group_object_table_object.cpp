@@ -1,10 +1,10 @@
-#include <cstring>
-
 #include "group_object_table_object.h"
-#include "group_object.h"
-#include "data_property.h"
-#include "util/logger.h"
-#include "bits.h"
+
+#include "../group_object/group_object.h"
+#include "../util/logger.h"
+#include "../bits.h"
+
+#include <cstring>
 
 #define LOGGER Logger::logger("GroupObjectTableObject")
 

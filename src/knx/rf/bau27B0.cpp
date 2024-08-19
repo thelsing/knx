@@ -1,9 +1,9 @@
 #include "bau27B0.h"
+
 #include "bits.h"
+
 #include <string.h>
 #include <stdio.h>
-
-using namespace std;
 
 Bau27B0::Bau27B0(Platform& platform)
     : BauSystemBDevice(platform),

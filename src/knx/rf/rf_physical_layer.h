@@ -1,8 +1,8 @@
 #pragma once
 
-#include <stdint.h>
+#include "../platform/platform.h"
 
-#include "../platform.h"
+#include <stdint.h>
 
 // Calculate the real packet size out of the L-field of FT3 frame data. See KNX-RF spec. 3.2.5 Data Link Layer frame format
 #define PACKET_SIZE(lField) ((((lField - 10 /*size of first pkt*/))/16 + 2 /*CRC in first pkt */) * 2 /*to bytes*/ +lField + 1 /*size of len byte*/)

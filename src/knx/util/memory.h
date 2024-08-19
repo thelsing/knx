@@ -2,9 +2,9 @@
 
 #include <stdint.h>
 #include "save_restore.h"
-#include "platform.h"
-#include "device_object.h"
-#include "table_object.h"
+#include "../platform/platform.h"
+#include "../interface_object/device_object.h"
+#include "../interface_object/table_object.h"
 
 #define MAXSAVE 5
 #define MAXTABLEOBJ 4

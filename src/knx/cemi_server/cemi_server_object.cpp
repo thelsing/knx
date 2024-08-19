@@ -1,7 +1,8 @@
-#include <cstring>
 #include "cemi_server_object.h"
-#include "bits.h"
-#include "data_property.h"
+
+#include "../bits.h"
+
+#include <cstring>
 
 CemiServerObject::CemiServerObject()
 {

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <stdint.h>
-#include "util/logger.h"
+#include "../util/logger.h"
+
+#include <cstdint>
 
 class CemiFrame;
 class TPDU;

@@ -1,10 +1,10 @@
 #include "network_layer_coupler.h"
-#include "data_link_layer.h"
-#include "device_object.h"
+
 #include "router_object.h"
-#include "tpdu.h"
-#include "cemi_frame.h"
-#include "bits.h"
+#include "../interface_object/device_object.h"
+#include "../transport_layer/tpdu.h"
+#include "../datalink_layer/data_link_layer.h"
+#include "../bits.h"
 
 NetworkLayerCoupler::NetworkLayerCoupler(DeviceObject& deviceObj,
         TransportLayer& layer) :

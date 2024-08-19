@@ -2,8 +2,9 @@
 
 #include "../config.h"
 
-#include <stdint.h>
-#include "../data_link_layer.h"
+#include "..datalink_layer/data_link_layer.h"
+
+#include <cstdint>
 
 #define MAX_KNX_TELEGRAM_SIZE 263
 

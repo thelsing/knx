@@ -1,9 +1,10 @@
 #pragma once
 
+#include "../knx_types.h"
+#include "dptconvert.h"
+
 #include <stddef.h>
 #include <stdint.h>
-#include "knx_types.h"
-#include "dptconvert.h"
 
 class GroupObjectTableObject;
 

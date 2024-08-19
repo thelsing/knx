@@ -1,16 +1,17 @@
+#include "rf_data_link_layer.h"
+
 #if defined(DeviceFamily_CC13X0)
     #include "rf_physical_layer_cc1310.h"
 #else
     #include "rf_physical_layer_cc1101.h"
 #endif
-#include "rf_data_link_layer.h"
 
-#include "../bits.h"
-#include "../platform.h"
-#include "../device_object.h"
-#include "../address_table_object.h"
 #include "rf_medium_object.h"
-#include "../cemi_frame.h"
+#include "../bits.h"
+#include "../platform/platform.h"
+#include "../interface_object/device_object.h"
+#include "../interface_object/address_table_object.h"
+#include "../datalink_layer/cemi_frame.h"
 
 #include <stdio.h>
 #include <string.h>

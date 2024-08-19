@@ -1,11 +1,11 @@
 #pragma once
 
-#include "config.h"
+#include "../config.h"
 
-#include "bau_systemB_device.h"
-#include "tpuart_data_link_layer.h"
-#include "cemi_server.h"
-#include "cemi_server_object.h"
+#include "../bau/bau_systemB_device.h"
+#include "../tp/tpuart_data_link_layer.h"
+#include "../cemi_server/cemi_server.h"
+#include "../cemi_server/cemi_server_object.h"
 
 class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks, public DataLinkLayerCallbacks
 {

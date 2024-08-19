@@ -1,8 +1,8 @@
 #pragma once
 
-#include <stdint.h>
-#include "knx_types.h"
 #include "usb_tunnel_interface.h"
+#include "../knx_types.h"
+#include <stdint.h>
 
 class BauSystemB;
 class DataLinkLayer;

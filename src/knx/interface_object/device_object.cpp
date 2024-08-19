@@ -1,9 +1,9 @@
-#include <cstring>
 #include "device_object.h"
-#include "bits.h"
-#include "data_property.h"
-#include "callback_property.h"
-#include "config.h"
+
+#include "../bits.h"
+#include "../config.h"
+
+#include <cstring>
 
 #define LEN_KNX_SERIAL 6
 

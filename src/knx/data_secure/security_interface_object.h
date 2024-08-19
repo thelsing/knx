@@ -1,10 +1,10 @@
 #pragma once
 
-#include "config.h"
+#include "../config.h"
 #ifdef USE_DATASECURE
 
-#include "interface_object.h"
-#include "knx_types.h"
+#include "../interface_object/interface_object.h"
+#include "../knx_types.h"
 
 class SecurityInterfaceObject: public InterfaceObject
 {

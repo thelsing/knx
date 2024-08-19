@@ -9,8 +9,9 @@
  */
 #pragma once
 
+#include "../util/save_restore.h"
+
 #include <stdint.h>
-#include "save_restore.h"
 
 /** The data type of a property. */
 enum PropertyDataType

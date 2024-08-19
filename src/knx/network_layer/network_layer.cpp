@@ -1,10 +1,9 @@
 #include "network_layer.h"
-#include "device_object.h"
-#include "data_link_layer.h"
-#include "tpdu.h"
-#include "cemi_frame.h"
-#include "bits.h"
-#include "apdu.h"
+
+#include "../interface_object/device_object.h"
+#include "../datalink_layer/data_link_layer.h"
+#include "../transport_layer/tpdu.h"
+#include "../bits.h"
 
 NetworkLayer::NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer) :
     _deviceObj(deviceObj),

@@ -28,10 +28,10 @@
 
 #pragma once
 
-#include <cstdint>
-
 #include "dpt.h"
 #include "knx_value.h"
+
+#include <cstdint>
 
 /**
  * Converts the KNX Payload given by the specific DPT and puts the value in the KNXValue struc

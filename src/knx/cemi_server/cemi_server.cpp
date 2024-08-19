@@ -1,10 +1,12 @@
 #include "cemi_server.h"
-#include "cemi_frame.h"
-#include "bau_systemB.h"
+
 #include "usb_tunnel_interface.h"
-#include "data_link_layer.h"
-#include "string.h"
-#include "bits.h"
+#include "../bau/bau_systemB.h"
+#include "../datalink_layer/cemi_frame.h"
+#include "../datalink_layer/data_link_layer.h"
+#include "../bits.h"
+
+#include <cstring>
 #include <stdio.h>
 
 CemiServer::CemiServer(BauSystemB& bau)

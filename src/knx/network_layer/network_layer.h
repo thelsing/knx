@@ -1,10 +1,11 @@
 #pragma once
 
-#include <stdint.h>
-#include "knx_types.h"
 #include "npdu.h"
-#include "transport_layer.h"
 #include "network_layer_entity.h"
+#include "../transport_layer/transport_layer.h"
+#include "../knx_types.h"
+
+#include <cstdint>
 
 class DeviceObject;
 class APDU;

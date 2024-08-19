@@ -1,6 +1,6 @@
 #pragma once
 
-#include "interface_object.h"
+#include "../interface_object/interface_object.h"
 
 class CemiServerObject: public InterfaceObject
 {

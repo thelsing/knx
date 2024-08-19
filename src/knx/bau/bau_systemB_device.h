@@ -1,20 +1,21 @@
 #pragma once
 
-#include "config.h"
 #include "bau_systemB.h"
-#include "device_object.h"
-#include "address_table_object.h"
-#include "association_table_object.h"
-#include "group_object_table_object.h"
-#include "security_interface_object.h"
-#include "application_program_object.h"
-#include "application_layer.h"
-#include "secure_application_layer.h"
-#include "transport_layer.h"
-#include "network_layer_device.h"
-#include "data_link_layer.h"
-#include "platform.h"
-#include "memory.h"
+
+#include "../config.h"
+#include "../interface_object/device_object.h"
+#include "../interface_object/address_table_object.h"
+#include "../interface_object/association_table_object.h"
+#include "../interface_object/group_object_table_object.h"
+#include "../interface_object/application_program_object.h"
+#include "../data_secure/security_interface_object.h"
+#include "../data_secure/secure_application_layer.h"
+#include "../application_layer/application_layer.h"
+#include "../transport_layer/transport_layer.h"
+#include "../network_layer/network_layer_device.h"
+#include "../datalink_layer/data_link_layer.h"
+#include "../platform/platform.h"
+#include "../util/memory.h"
 
 class BauSystemBDevice : public BauSystemB
 {

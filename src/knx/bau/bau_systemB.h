@@ -1,16 +1,17 @@
 #pragma once
 
-#include "config.h"
 #include "bau.h"
-#include "security_interface_object.h"
-#include "application_program_object.h"
-#include "application_layer.h"
-#include "secure_application_layer.h"
-#include "transport_layer.h"
-#include "network_layer.h"
-#include "data_link_layer.h"
-#include "platform.h"
-#include "memory.h"
+
+#include "../config.h"
+#include "../data_secure/security_interface_object.h"
+#include "../data_secure/secure_application_layer.h"
+#include "../interface_object/application_program_object.h"
+#include "../application_layer/application_layer.h"
+#include "../transport_layer/transport_layer.h"
+#include "../network_layer/network_layer.h"
+#include "../datalink_layer/data_link_layer.h"
+#include "../platform/platform.h"
+#include "../util/memory.h"
 
 class BauSystemB : protected BusAccessUnit
 {

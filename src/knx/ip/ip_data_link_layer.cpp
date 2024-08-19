@@ -1,18 +1,10 @@
 #include "ip_data_link_layer.h"
 
-#include "../bits.h"
-#include "../platform.h"
-#include "../device_object.h"
 #include "knx_ip_routing_indication.h"
 #include "knx_ip_search_request.h"
 #include "knx_ip_search_response.h"
 #include "knx_ip_search_request_extended.h"
 #include "knx_ip_search_response_extended.h"
-#include "../util/logger.h"
-
-#define LOGGER Logger::logger("IpDataLinkLayer")
-
-
 #include "knx_ip_connect_request.h"
 #include "knx_ip_connect_response.h"
 #include "knx_ip_state_request.h"
@@ -24,7 +16,12 @@
 #include "knx_ip_description_request.h"
 #include "knx_ip_description_response.h"
 #include "knx_ip_config_request.h"
+#include "../bits.h"
+#include "../platform/platform.h"
+#include "../interface_object/device_object.h"
+#include "../util/logger.h"
 
+#define LOGGER Logger::logger("IpDataLinkLayer")
 
 #include <stdio.h>
 #include <string.h>

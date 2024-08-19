@@ -1,8 +1,8 @@
 #include "property.h"
-#include "bits.h"
+
+#include "../bits.h"
 
 #include <cstring>
-using namespace std;
 
 PropertyID Property::Id() const
 {

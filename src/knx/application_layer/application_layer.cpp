@@ -1,13 +1,16 @@
 #include "application_layer.h"
-#include "transport_layer.h"
-#include "cemi_frame.h"
-#include "association_table_object.h"
+
 #include "apdu.h"
-#include "bau.h"
-#include "string.h"
+#include "../transport_layer/transport_layer.h"
+#include "../datalink_layer/cemi_frame.h"
+#include "../interface_object/association_table_object.h"
+#include "../bau/bau.h"
+#include "../util/logger.h"
+#include "../bits.h"
+
+// for memcpy
+#include <cstring>
 #include <stdio.h>
-#include "util/logger.h"
-#include "bits.h"
 
 #define LOGGER Logger::logger("ApplicationLayer")
 

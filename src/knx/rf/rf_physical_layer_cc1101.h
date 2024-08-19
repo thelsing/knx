@@ -4,9 +4,9 @@
 
 #include "../config.h"
 
-#include <stdint.h>
-
 #include "rf_physical_layer.h"
+
+#include <stdint.h>
 
 /*----------------------------------[standard]--------------------------------*/
 #define CC1101_TIMEOUT           2000       // Time to wait for a response from CC1101

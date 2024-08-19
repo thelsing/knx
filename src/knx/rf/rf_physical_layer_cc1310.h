@@ -3,10 +3,9 @@
 #ifdef DeviceFamily_CC13X0
 
 #include "../config.h"
+#include "rf_physical_layer.h"
 
 #include <stdint.h>
-
-#include "rf_physical_layer.h"
 
 #define RX_PACKET_TIMEOUT        20   // Wait 20ms for packet reception to complete
 

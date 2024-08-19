@@ -1,8 +1,9 @@
 #include "dpt.h"
-#include "util/logger.h"
-#define LOGGER Logger::logger("Dpt")
 
-#include "bits.h"
+#include "../util/logger.h"
+#include "../bits.h"
+
+#define LOGGER Logger::logger("Dpt")
 
 Dpt::Dpt()
 {}

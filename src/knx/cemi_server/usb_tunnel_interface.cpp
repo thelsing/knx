@@ -1,11 +1,11 @@
 #include "usb_tunnel_interface.h"
+
 #include "cemi_server.h"
-#include "cemi_frame.h"
+#include "../datalink_layer/cemi_frame.h"
+#include "../bits.h"
 
 #include <stdio.h>
 #include <string.h>
-
-#include "bits.h"
 
 #define MAX_EP_SIZE 64
 #define HID_HEADER_SIZE 3

@@ -1,16 +1,19 @@
 #pragma once
 
-#include "config.h"
+#include "../config.h"
+
+#include "cemi_frame.h"
+
+#include "../interface_object/device_object.h"
+#include "../knx_types.h"
+#include "../network_layer/network_layer_entity.h"
+#ifdef KNX_TUNNELING
+    #include "../ip/ip_parameter_object.h"
+#endif
+#include "../cemi_server/cemi_server.h"
+#include "../bau/bau.h"
 
 #include <stdint.h>
-#include "device_object.h"
-#include "knx_types.h"
-#include "network_layer_entity.h"
-#ifdef KNX_TUNNELING
-    #include "ip/ip_parameter_object.h"
-#endif
-#include "cemi_server.h"
-#include "bau.h"
 
 class Platform;
 

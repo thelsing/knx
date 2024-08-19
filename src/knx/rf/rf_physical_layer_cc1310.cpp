@@ -1,11 +1,6 @@
 #ifdef DeviceFamily_CC13X0
-
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "rf_physical_layer_cc1310.h"
+
 #include "rf_data_link_layer.h"
 
 #include <ti/devices/DeviceFamily.h>
@@ -13,12 +8,15 @@
 #include DeviceFamily_constructPath(driverlib/rf_prop_mailbox.h)
 #include <ti/drivers/rf/RF.h>
 #include "smartrf_settings/smartrf_settings.h"
-
+#include "../platform/platform.h"
 #include "../platform/cc1310_platform.h"
 #include "Board.h"
+#include "../bits.h"
 
-#include "bits.h"
-#include "platform.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #define RX_MAX_BUFFER_LENGTH 256
 #define RF_TERMINATION_EVENT_MASK (RF_EventLastCmdDone | RF_EventLastFGCmdDone | RF_EventCmdAborted | RF_EventCmdStopped | RF_EventCmdCancelled)

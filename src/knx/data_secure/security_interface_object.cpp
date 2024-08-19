@@ -1,13 +1,11 @@
-#include "config.h"
+#include "../config.h"
 #ifdef USE_DATASECURE
 
-#include <cstring>
 #include "security_interface_object.h"
 #include "secure_application_layer.h"
-#include "bits.h"
-#include "data_property.h"
-#include "callback_property.h"
-#include "function_property.h"
+#include "../bits.h"
+
+#include <cstring>
 
 // Our FDSK. It is never changed from ETS. This is the permanent default tool key that is restored on every factory reset of the device.
 const uint8_t SecurityInterfaceObject::_fdsk[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F };

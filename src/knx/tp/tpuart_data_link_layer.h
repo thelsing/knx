@@ -1,7 +1,8 @@
 #pragma once
 
-#include "data_link_layer.h"
 #include "tp_frame.h"
+#include "../datalink_layer/data_link_layer.h"
+
 #include <stdint.h>
 
 #define MAX_KNX_TELEGRAM_SIZE 263

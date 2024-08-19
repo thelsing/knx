@@ -1,6 +1,6 @@
 #include "knx_facade.h"
 
-#include "knx/bits.h"
+#include "bits.h"
 
 #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
 

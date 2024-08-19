@@ -1,11 +1,10 @@
 #include "memory.h"
-#include "util/logger.h"
-
-#define LOGGER Logger::logger("Memory")
+#include "logger.h"
+#include "../bits.h"
 
 #include <string.h>
 
-#include "bits.h"
+#define LOGGER Logger::logger("Memory")
 
 Memory::Memory(Platform& platform, DeviceObject& deviceObject)
     : _platform(platform), _deviceObject(deviceObject)

@@ -1,10 +1,8 @@
-#include <string.h>
-
 #include "table_object.h"
-#include "bits.h"
-#include "memory.h"
-#include "callback_property.h"
-#include "data_property.h"
+#include "../bits.h"
+#include "../util/memory.h"
+
+#include <cstring>
 
 BeforeTablesUnloadCallback TableObject::_beforeTablesUnload = 0;
 uint8_t TableObject::_tableUnloadCount = 0;

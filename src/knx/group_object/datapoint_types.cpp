@@ -9,6 +9,7 @@
  */
 
 #include "datapoint_types.h"
+
 #include <stdint.h>
 
 // Sign for a negative DPT9 float value

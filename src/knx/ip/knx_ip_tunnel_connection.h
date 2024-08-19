@@ -1,5 +1,5 @@
 #pragma once
-#include "../platform.h"
+#include "../platform/platform.h"
 
 class KnxIpTunnelConnection
 {

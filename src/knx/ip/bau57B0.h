@@ -1,11 +1,11 @@
 #pragma once
 
-#include "config.h"
+#include "../config.h"
 
-#include "bau_systemB_device.h"
-#include "ip/ip_parameter_object.h"
-#include "ip/ip_data_link_layer.h"
-#include "cemi_server_object.h"
+#include "ip_parameter_object.h"
+#include "ip_data_link_layer.h"
+#include "../bau/bau_systemB_device.h"
+#include "../cemi_server/cemi_server_object.h"
 
 class Bau57B0 : public BauSystemBDevice, public DataLinkLayerCallbacks
 {

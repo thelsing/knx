@@ -1,8 +1,8 @@
 #ifndef DeviceFamily_CC13X0
 
 #include "rf_physical_layer_cc1101.h"
-#include "rf_data_link_layer.h"
 
+#include "rf_data_link_layer.h"
 #include "../bits.h"
 #include "../platform.h"
 

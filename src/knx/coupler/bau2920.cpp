@@ -1,7 +1,9 @@
 #include "bau2920.h"
-#include "bits.h"
-#include <string.h>
-#include <stdio.h>
+
+#include "../bits.h"
+
+#include <cstring>
+#include <cstdio>
 
 using namespace std;
 

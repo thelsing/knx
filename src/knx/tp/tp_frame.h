@@ -1,9 +1,10 @@
 #pragma once
 
-#include "cemi_frame.h"
-#include "util/logger.h"
+#include "../datalink_layer/cemi_frame.h"
+#include "../util/logger.h"
+
 #include <cstring>
-#include <stdint.h>
+#include <cstdint>
 
 // Means that the frame is invalid
 #define TP_FRAME_FLAG_INVALID 0b10000000

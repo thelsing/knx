@@ -1,5 +1,7 @@
 #include "bau_systemB_device.h"
-#include "bits.h"
+
+#include "../bits.h"
+
 #include <string.h>
 #include <stdio.h>
 

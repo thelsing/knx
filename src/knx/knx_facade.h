@@ -1,14 +1,13 @@
 #pragma once
 
-#include "knx/util/logger.h"
-#include "knx/config.h"
-#include "knx/bau.h"
-#include "knx/bau07B0.h"
-#include "knx/bau091A.h"
-#include "knx/bau27B0.h"
-#include "knx/bau2920.h"
-#include "knx/bau57B0.h"
-
+#include "util/logger.h"
+#include "config.h"
+#include "bau/bau.h"
+#include "tp/bau07B0.h"
+#include "rf/bau27B0.h"
+#include "ip/bau57B0.h"
+#include "coupler/bau091A.h"
+#include "coupler/bau2920.h"
 #include "knx/bits.h"
 
 #ifndef USERDATA_SAVE_SIZE
@@ -16,19 +15,19 @@
 #endif
 
 #ifdef ARDUINO_ARCH_SAMD
-    #include "knx/platform/samd_platform.h"
+    #include "platform/samd_platform.h"
 #elif defined(ARDUINO_ARCH_RP2040)
-    #include "knx/platform/rp2040_arduino_platform.h"
+    #include "platform/rp2040_arduino_platform.h"
 #elif defined(ARDUINO_ARCH_ESP8266)
-    #include "knx/platform/esp_platform.h"
+    #include "platform/esp_platform.h"
 #elif defined(ARDUINO_ARCH_ESP32)
-    #include "knx/platform/esp32_platform.h"
+    #include "platform/esp32_platform.h"
 #elif defined(ARDUINO_ARCH_STM32)
-    #include "knx/platform/stm32_platform.h"
+    #include "platform/stm32_platform.h"
 #elif __linux__
-    #include "knx/platform/linux_platform.h"
+    #include "platform/linux_platform.h"
 #else
-    #include "knx/platform/cc1310_platform.h"
+    #include "platform/cc1310_platform.h"
 #endif
 
 #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE

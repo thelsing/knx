@@ -1,11 +1,10 @@
-#pragma GCC optimize("O3")
-
-#include "address_table_object.h"
-#include "cemi_frame.h"
-#include "device_object.h"
-#include "platform.h"
 #include "tpuart_data_link_layer.h"
-#include "bits.h"
+
+#include "../interface_object/address_table_object.h"
+#include "../interface_object/device_object.h"
+#include "../datalink_layer/cemi_frame.h"
+#include "../platform/platform.h"
+#include "../bits.h"
 
 /*
  * A new implementation of the tpuart connection.

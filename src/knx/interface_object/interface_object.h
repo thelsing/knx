@@ -1,9 +1,13 @@
 #pragma once
 
-#include <stddef.h>
 #include "property.h"
-#include "save_restore.h"
-#include "knx_types.h"
+#include "data_property.h"
+#include "callback_property.h"
+#include "function_property.h"
+#include "../util/save_restore.h"
+#include "../knx_types.h"
+
+#include <stddef.h>
 
 /** Enum for the type of an interface object. See Section 2.2 of knx:3/7/3 */
 enum ObjectType

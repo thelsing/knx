@@ -1,8 +1,9 @@
 #pragma once
 
-#include <stdint.h>
-#include "knx_types.h"
 #include "apdu.h"
+#include "../knx_types.h"
+
+#include <cstdint>
 
 class AssociationTableObject;
 class BusAccessUnit;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "knx_ip_frame.h"
-#include "../cemi_frame.h"
+#include "../datalink_layer/cemi_frame.h"
 
 class KnxIpRoutingIndication : public KnxIpFrame
 {

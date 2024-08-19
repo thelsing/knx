@@ -1,13 +1,12 @@
 #pragma once
 
-#include "config.h"
-
 #include "bau_systemB_coupler.h"
-#include "router_object.h"
-#include "ip/ip_parameter_object.h"
-#include "ip/ip_data_link_layer.h"
-#include "tpuart_data_link_layer.h"
-#include "cemi_server_object.h"
+#include "../config.h"
+#include "../interface_object/router_object.h"
+#include "../ip/ip_parameter_object.h"
+#include "../ip/ip_data_link_layer.h"
+#include "../tp/tpuart_data_link_layer.h"
+#include "../cemi_server/cemi_server_object.h"
 
 class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks, public DataLinkLayerCallbacks
 {

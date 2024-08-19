@@ -1,17 +1,17 @@
 #pragma once
 
-#include "config.h"
+#include "../config.h"
 
-#include "bau_systemB_device.h"
-#include "rf/rf_medium_object.h"
+#include "rf_medium_object.h"
 #if defined(DeviceFamily_CC13X0)
-    #include "rf/rf_physical_layer_cc1310.h"
+    #include "rf_physical_layer_cc1310.h"
 #else
-    #include "rf/rf_physical_layer_cc1101.h"
+    #include "rf_physical_layer_cc1101.h"
 #endif
-#include "rf/rf_data_link_layer.h"
-#include "cemi_server.h"
-#include "cemi_server_object.h"
+#include "rf_data_link_layer.h"
+#include "../bau/bau_systemB_device.h"
+#include "../cemi_server/cemi_server.h"
+#include "../cemi_server/cemi_server_object.h"
 
 class Bau27B0 : public BauSystemBDevice
 {

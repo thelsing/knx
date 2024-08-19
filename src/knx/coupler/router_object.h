@@ -1,9 +1,8 @@
 #pragma once
 
-#include "config.h"
-
-#include "table_object.h"
-#include "knx_types.h"
+#include "../interface_object/table_object.h"
+#include "../config.h"
+#include "../knx_types.h"
 
 class Memory;
 

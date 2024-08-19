@@ -1,25 +1,28 @@
-#include "config.h"
+#include "../config.h"
 #ifdef USE_DATASECURE
 
 #include "secure_application_layer.h"
-#include "transport_layer.h"
-#include "cemi_frame.h"
-#include "association_table_object.h"
-#include "address_table_object.h"
+
 #include "security_interface_object.h"
-#include "device_object.h"
-#include "apdu.h"
-#include "bau.h"
-#include "string.h"
-#include "bits.h"
-#include "util/logger.h"
+#include "../bau/bau.h"
+#include "../application_layer/apdu.h"
+#include "../transport_layer/transport_layer.h"
+#include "../datalink_layer/cemi_frame.h"
+#include "../interface_object/association_table_object.h"
+#include "../interface_object/address_table_object.h"
+#include "../interface_object/device_object.h"
+#include "../bits.h"
+#include "../util/logger.h"
+
+#include <cstring>
+
 #define LOGGER Logger::logger("SecureApplicationLayer")
 
 // Select what cipher modes to include. We need AES128-CBC and AES128-CTR modes.
 #define CBC 1
 #define CTR 1
 #define ECB 0
-#include "util/aes.hpp"
+#include "../util/aes.hpp"
 
 static constexpr uint8_t kSecureDataPdu = 0;
 static constexpr uint8_t kSecureSyncRequest = 2;

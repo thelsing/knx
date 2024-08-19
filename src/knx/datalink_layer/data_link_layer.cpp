@@ -1,11 +1,10 @@
 #include "data_link_layer.h"
 
-#include "platform.h"
-#include "device_object.h"
-#include "cemi_server.h"
-#include "cemi_frame.h"
-#include "util/logger.h"
-#include "bits.h"
+#include "../platform/platform.h"
+#include "../interface_object/device_object.h"
+#include "../cemi_server/cemi_server.h"
+#include "../util/logger.h"
+#include "../bits.h"
 
 #define LOGGER Logger::logger("DataLinkLayer")
 

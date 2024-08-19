@@ -1,7 +1,7 @@
 #pragma once
 
 #include "table_object.h"
-#include "group_object.h"
+#include "../group_object/group_object.h"
 
 class GroupObjectTableObject : public TableObject
 {

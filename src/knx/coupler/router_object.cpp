@@ -1,13 +1,10 @@
-#include "config.h"
+#include "router_object.h"
+
+#include "../config.h"
+#include "../bits.h"
+#include "../util/memory.h"
 
 #include <cstring>
-#include "router_object.h"
-#include "bits.h"
-#include "memory.h"
-#include "data_property.h"
-#include "callback_property.h"
-#include "function_property.h"
-
 
 // Filter Table Realization Type 3
 // The Filter Table Realisation Type 3 shall be organised as a memory mapped bit-field of
