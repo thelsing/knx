@@ -77,12 +77,7 @@ KnxIpFrame::KnxIpFrame(uint16_t length)
     totalLength(length);
 }
 
-const std::string KnxIpFrame::toString() const 
-{
-    return enum_name(protocolVersion()) + " " + enum_name(serviceTypeIdentifier());
-}
-
-const string enum_name(const KnxIpVersion enum_val)
+const char* enum_name(const KnxIpVersion enum_val)
 {
     switch (enum_val)
     {
@@ -90,10 +85,10 @@ const string enum_name(const KnxIpVersion enum_val)
             return "KnxIp1_0";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
-const string enum_name(const KnxIpServiceType enum_val)
+const char* enum_name(const KnxIpServiceType enum_val)
 {
     switch (enum_val)
     {
@@ -152,5 +147,5 @@ const string enum_name(const KnxIpServiceType enum_val)
             return "RoutingLostMessage";
     }
 
-    return to_string(enum_val);
+    return "";
 }

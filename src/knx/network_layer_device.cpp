@@ -32,7 +32,7 @@ void NetworkLayerDevice::dataIndividualRequest(AckType ack, uint16_t destination
     //    print.print("-> NL  ");
     //    tpdu.apdu().printPDU();
     //}
-    LOGGER.info("dataIndividualRequest %S", npdu.toString());
+    LOGGER.info("dataIndividualRequest %s", npdu.toString().c_str());
     _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, _deviceObj.individualAddress(), priority, IndividualAddress, Broadcast);
 }
 
@@ -45,7 +45,7 @@ void NetworkLayerDevice::dataGroupRequest(AckType ack, uint16_t destination, Hop
     else
         npdu.hopCount(hopCount());
 
-    LOGGER.info("dataGroupRequest %S", npdu.toString());
+    LOGGER.info("dataGroupRequest %s", npdu.toString().c_str());
     _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, _deviceObj.individualAddress(), priority, GroupAddress, Broadcast);
 }
 
@@ -58,7 +58,7 @@ void NetworkLayerDevice::dataBroadcastRequest(AckType ack, HopCountType hopType,
     else
         npdu.hopCount(hopCount());
 
-    LOGGER.info("dataBroadcastRequest %S", npdu.toString());
+    LOGGER.info("dataBroadcastRequest %s", npdu.toString().c_str());
     _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, 0, _deviceObj.individualAddress(), priority, GroupAddress, Broadcast);
 }
 
@@ -75,13 +75,13 @@ void NetworkLayerDevice::dataSystemBroadcastRequest(AckType ack, HopCountType ho
     else
         npdu.hopCount(hopCount());
 
-    LOGGER.info("dataSystemBroadcastRequest %S", npdu.toString());
+    LOGGER.info("dataSystemBroadcastRequest %s", npdu.toString().c_str());
     _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, 0, _deviceObj.individualAddress(), priority, GroupAddress, broadcastType);
 }
 
 void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
-    LOGGER.info("dataIndication %S", npdu.toString());
+    LOGGER.info("dataIndication %s", npdu.toString().c_str());
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
 
     if (addrType == IndividualAddress)
@@ -103,7 +103,7 @@ void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint1
 
 void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
-    LOGGER.info("dataConfirm %S", npdu.toString());
+    LOGGER.info("dataConfirm %s", npdu.toString().c_str());
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
 
     if (addressType == IndividualAddress)
@@ -122,7 +122,7 @@ void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint1
 
 void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
-    LOGGER.info("broadcastIndication %S", npdu.toString());
+    LOGGER.info("broadcastIndication %s", npdu.toString().c_str());
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     DptMedium mediumType = _netLayerEntities[srcIfIdx].mediumType();
 
@@ -143,21 +143,21 @@ void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NP
 
 void NetworkLayerDevice::broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
-    LOGGER.info("broadcastConfirm %S", npdu.toString());
+    LOGGER.info("broadcastConfirm %s", npdu.toString().c_str());
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataBroadcastConfirm(ack, hopType, priority, npdu.tpdu(), status);
 }
 
 void NetworkLayerDevice::systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIdx)
 {
-    LOGGER.info("systemBroadcastIndication %S", npdu.toString());
+    LOGGER.info("systemBroadcastIndication %s", npdu.toString().c_str());
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
 }
 
 void NetworkLayerDevice::systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
-    LOGGER.info("systemBroadcastConfirm %S", npdu.toString());
+    LOGGER.info("systemBroadcastConfirm %s", npdu.toString().c_str());
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
     _transportLayer.dataSystemBroadcastConfirm(ack, hopType, npdu.tpdu(), priority, status);
 }

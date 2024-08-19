@@ -1,6 +1,6 @@
 #include "knx_types.h"
 #ifndef KNX_NO_PRINT
-const string enum_name(const LCCONFIG enum_val)
+const char* enum_name(const LCCONFIG enum_val)
 {
     switch (enum_val)
     {
@@ -35,11 +35,11 @@ const string enum_name(const LCCONFIG enum_val)
             return "PHYS_IACK_ALL";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const LCGRPCONFIG enum_val)
+const char* enum_name(const LCGRPCONFIG enum_val)
 {
     switch (enum_val)
     {
@@ -65,11 +65,11 @@ const string enum_name(const LCGRPCONFIG enum_val)
             return "GROUP_7000LOCK";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const DptMedium enum_val)
+const char* enum_name(const DptMedium enum_val)
 {
     switch (enum_val)
     {
@@ -86,11 +86,11 @@ const string enum_name(const DptMedium enum_val)
             return "KNX_IP";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const EraseCode enum_val)
+const char* enum_name(const EraseCode enum_val)
 {
     switch (enum_val)
     {
@@ -119,11 +119,11 @@ const string enum_name(const EraseCode enum_val)
             return "FactoryResetWithoutIA";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const RestartType enum_val)
+const char* enum_name(const RestartType enum_val)
 {
     switch (enum_val)
     {
@@ -134,11 +134,11 @@ const string enum_name(const RestartType enum_val)
             return "MasterReset";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const DataSecurity enum_val)
+const char* enum_name(const DataSecurity enum_val)
 {
     switch (enum_val)
     {
@@ -152,11 +152,11 @@ const string enum_name(const DataSecurity enum_val)
             return "AuthConf";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const ApduType enum_val)
+const char* enum_name(const ApduType enum_val)
 {
     switch (enum_val)
     {
@@ -359,11 +359,11 @@ const string enum_name(const ApduType enum_val)
             return "SecureService";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const TpduType enum_val)
+const char* enum_name(const TpduType enum_val)
 {
     switch (enum_val)
     {
@@ -392,11 +392,11 @@ const string enum_name(const TpduType enum_val)
             return "Nack";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const HopCountType enum_val)
+const char* enum_name(const HopCountType enum_val)
 {
     switch (enum_val)
     {
@@ -407,11 +407,11 @@ const string enum_name(const HopCountType enum_val)
             return "NetworkLayerParameter";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const Confirm enum_val)
+const char* enum_name(const Confirm enum_val)
 {
     switch (enum_val)
     {
@@ -422,11 +422,11 @@ const string enum_name(const Confirm enum_val)
             return "ConfirmError";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const SystemBroadcast enum_val)
+const char* enum_name(const SystemBroadcast enum_val)
 {
     switch (enum_val)
     {
@@ -437,11 +437,11 @@ const string enum_name(const SystemBroadcast enum_val)
             return "Broadcast";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(Repetition enum_val)
+const char* enum_name(Repetition enum_val)
 {
     switch (enum_val)
     {
@@ -452,10 +452,10 @@ const string enum_name(Repetition enum_val)
             return "WasNotRepeated/RepetitionAllowed";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
-const string enum_name(const ReturnCodes enum_val)
+const char* enum_name(const ReturnCodes enum_val)
 {
     switch (enum_val)
     {
@@ -511,11 +511,11 @@ const string enum_name(const ReturnCodes enum_val)
             return "GenericError";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const cEmiErrorCode enum_val)
+const char* enum_name(const cEmiErrorCode enum_val)
 {
     switch (enum_val)
     {
@@ -553,11 +553,11 @@ const string enum_name(const cEmiErrorCode enum_val)
             return "Value_temp_not_writeable";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const MessageCode enum_val)
+const char* enum_name(const MessageCode enum_val)
 {
     switch (enum_val)
     {
@@ -601,11 +601,11 @@ const string enum_name(const MessageCode enum_val)
             return "M_Reset_ind";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const AddressType enum_val)
+const char* enum_name(const AddressType enum_val)
 {
     switch (enum_val)
     {
@@ -616,11 +616,11 @@ const string enum_name(const AddressType enum_val)
             return "GroupAddress";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const TPAckType enum_val)
+const char* enum_name(const TPAckType enum_val)
 {
     switch (enum_val)
     {
@@ -637,11 +637,11 @@ const string enum_name(const TPAckType enum_val)
             return "AckReqNone";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const AckType enum_val)
+const char* enum_name(const AckType enum_val)
 {
     switch (enum_val)
     {
@@ -652,11 +652,11 @@ const string enum_name(const AckType enum_val)
             return "AckRequested";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const Priority enum_val)
+const char* enum_name(const Priority enum_val)
 {
     switch (enum_val)
     {
@@ -673,11 +673,11 @@ const string enum_name(const Priority enum_val)
             return "SystemPriority";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 
-const string enum_name(const FrameFormat enum_val)
+const char* enum_name(const FrameFormat enum_val)
 {
     switch (enum_val)
     {
@@ -688,7 +688,7 @@ const string enum_name(const FrameFormat enum_val)
             return "StandardFrame";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
 const string format_ia(uint16_t ia)

@@ -33,11 +33,11 @@ class DataLinkLayer
                       Platform& platform);
 #ifdef USE_CEMI_SERVER
         void cemiServer(CemiServer& cemiServer);
-#endif
 
-#ifdef KNX_TUNNELING
         // from tunnel
         void dataRequestFromTunnel(CemiFrame& frame);
+#endif
+#ifdef KNX_TUNNELING
         virtual void dataRequestToTunnel(CemiFrame& frame);
         virtual void dataConfirmationToTunnel(CemiFrame& frame);
         virtual void dataIndicationToTunnel(CemiFrame& frame);

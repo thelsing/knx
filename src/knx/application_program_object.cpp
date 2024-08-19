@@ -103,6 +103,6 @@ double ApplicationProgramObject::getFloat(uint32_t addr, ParameterFloatEncodings
 
 void ApplicationProgramObject::beforeStateChange(LoadState& newState)
 {
-    LOGGER.info("beforeStateChange %S", enum_name(newState));
+    LOGGER.info("beforeStateChange %s", enum_name(newState));
     TableObject::beforeStateChange(newState);
 }

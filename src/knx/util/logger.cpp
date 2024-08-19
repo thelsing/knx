@@ -2,66 +2,66 @@
 
 #include "../bits.h"
 
-Map<std::string, Logger::LogType, 64> Logger::_loggers;
+Map<const char*, Logger::LogType, 64> Logger::_loggers;
 Logger Logger::_logger;
 
-Logger& Logger::logger(const std::string name)
+Logger& Logger::logger(const char* name)
 {
     _logger.name(name);
     return _logger;
 }
 
-void Logger::logLevel(const std::string name, LogType level)
+void Logger::logLevel(const char* name, LogType level)
 {
     _loggers.insertOrAssign(name, level);
 }
 
-void Logger::info(const std::string message, ...)
+void Logger::info(const char* message, ...)
 {
 #ifndef KNX_NO_PRINT
     va_list objects;
     va_start( objects, message);
-    log(LogType::Info, message.c_str(), objects);
+    log(LogType::Info, message, objects);
     va_end(objects);
 #endif
 }
 
-void Logger::warning(const std::string message, ...)
+void Logger::warning(const char* message, ...)
 {
 #ifndef KNX_NO_PRINT
     va_list objects;
     va_start( objects, message);
-    log(LogType::Warning, message.c_str(), objects);
+    log(LogType::Warning, message, objects);
     va_end(objects);
 #endif
 }
 
-void Logger::error(const std::string message, ...)
+void Logger::error(const char* message, ...)
 {
 #ifndef KNX_NO_PRINT
     va_list objects;
     va_start( objects, message);
-    log(LogType::Error, message.c_str(), objects);
+    log(LogType::Error, message, objects);
     va_end(objects);
 #endif
 }
 
-void Logger::critical(const std::string message, ...)
+void Logger::critical(const char* message, ...)
 {
 #ifndef KNX_NO_PRINT
     va_list objects;
     va_start( objects, message);
-    log(LogType::Critical, message.c_str(), objects);
+    log(LogType::Critical, message, objects);
     va_end(objects);
 #endif
 }
 
-void Logger::exception(const std::string message, ...)
+void Logger::exception(const char* message, ...)
 {
 #ifndef KNX_NO_PRINT
     va_list objects;
     va_start( objects, message);
-    log(LogType::Exception, message.c_str(), objects);
+    log(LogType::Exception, message, objects);
     va_end(objects);
 #endif
 }
@@ -72,9 +72,9 @@ void Logger::log(LogType type, const char* format, va_list args)
     LogType* level = _loggers.get(_name);
     if(level == nullptr) {
         print("Logger ");
-        print(_name.c_str());
+        print(_name);
         print(" is disabled. Use Logger::logLevel(\"");
-        print(_name.c_str());
+        print(_name);
         println("\", Logger::Info) to enable.");
         _loggers.insertOrAssign(_name, Disabled);
         return;
@@ -85,9 +85,9 @@ void Logger::log(LogType type, const char* format, va_list args)
 
     print(millis());
     print(" ");
-    print(_name.c_str());
+    print(_name);
     print("\t");
-    print(enum_name(type).c_str());
+    print(enum_name(type));
     print(" ");
 
     while (*format)
@@ -103,10 +103,6 @@ void Logger::log(LogType type, const char* format, va_list args)
             else if (*format == 's')
             {
                 print(va_arg(args, char*));
-            }
-            else if (*format == 'S')
-            {
-                print(va_arg(args, std::string).c_str());
             }
             else if (*format == 'f')
             {
@@ -126,7 +122,7 @@ void Logger::log(LogType type, const char* format, va_list args)
 #endif
 }
 #ifndef KNX_NO_PRINT
-const std::string Logger::enum_name(LogType type)
+const char* Logger::enum_name(LogType type)
 {
     switch (type)
     {
@@ -149,6 +145,6 @@ const std::string Logger::enum_name(LogType type)
             return "DISA";
     }
 
-    return std::to_string(type);
+    return "";
 }
 #endif

@@ -403,13 +403,19 @@ bool CemiFrame::valid() const
 std::string CemiFrame::toString() const
 {
 #ifndef KNX_NO_PRINT
-    std::string value = "DPDU:" + enum_name(frameType()) + " ";
-    value += enum_name(systemBroadcast()) + " ";
-    value += enum_name(ack()) + " ";
-    value += enum_name(repetition()) + " ";
-    value += enum_name(priority()) + " from ";
-    value += format_ia(sourceAddress()) + " to ";
-    value += enum_name(addressType()) + " ";
+    std::string value = std::string("DPDU:") + enum_name(frameType()) + " ";
+    value += enum_name(systemBroadcast());
+    value += " ";
+    value += enum_name(ack());
+    value += " ";
+    value += enum_name(repetition());
+    value += " ";
+    value += enum_name(priority());
+    value += " from ";
+    value += format_ia(sourceAddress());
+    value += " to ";
+    value += enum_name(addressType());
+    value += " ";
 
     if (addressType() == AddressType::IndividualAddress)
         value += format_ia(destinationAddress());

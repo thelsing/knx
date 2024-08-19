@@ -66,7 +66,7 @@ enum PropertyDataType
     PDT_FUNCTION           = 0x3e,  //!< length: 3
     PDT_ESCAPE             = 0x3f,  //!< length: 3
 };
-const std::string enum_name(const PropertyDataType enum_val);
+const char* enum_name(const PropertyDataType enum_val);
 
 enum PropertyID
 {
@@ -195,7 +195,7 @@ enum PropertyID
     PID_RF_ENABLE_SBC = 112,                    // Exists only if medium for this router object is RF (PDT_FUNCTION)
     PID_IP_ENABLE_SBC = 120,                    // Exists only if medium for this router object is IP (PDT_FUNCTION)
 };
-const std::string enum_name(const PropertyID enum_val);
+const char* enum_name(const PropertyID enum_val);
 
 enum LoadState
 {
@@ -206,7 +206,7 @@ enum LoadState
     LS_UNLOADING = 4,
     LS_LOADCOMPLETING = 5
 };
-const std::string enum_name(const LoadState enum_val);
+const char* enum_name(const LoadState enum_val);
 
 enum LoadEvents
 {
@@ -216,7 +216,7 @@ enum LoadEvents
     LE_ADDITIONAL_LOAD_CONTROLS = 3,
     LE_UNLOAD = 4
 };
-const std::string enum_name(const LoadEvents enum_val);
+const char* enum_name(const LoadEvents enum_val);
 
 // 20.011 DPT_ErrorClass_System
 enum ErrorCode
@@ -241,7 +241,7 @@ enum ErrorCode
     E_INVALID_GO_NUMBER = 17,
     E_GO_TYPE_TOO_BIG = 18
 };
-const std::string enum_name(const ErrorCode enum_val);
+const char* enum_name(const ErrorCode enum_val);
 
 /** The access level necessary to read a property of an interface object. */
 enum AccessLevel
@@ -255,7 +255,7 @@ enum AccessLevel
     WriteLv2 = 0x02,
     WriteLv3 = 0x03,
 };
-const std::string enum_name(const AccessLevel enum_val);
+const char* enum_name(const AccessLevel enum_val);
 
 struct PropertyDescription
 {

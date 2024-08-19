@@ -245,7 +245,7 @@ void Property::state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t
     resultLength = 0;
 }
 #ifndef KNX_NO_PRINT
-const string enum_name(const PropertyDataType enum_val)
+const char* enum_name(const PropertyDataType enum_val)
 {
     switch (enum_val)
     {
@@ -397,10 +397,10 @@ const string enum_name(const PropertyDataType enum_val)
             return "PDT_ESCAPE";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
-const string enum_name(const PropertyID enum_val)
+const char* enum_name(const PropertyID enum_val)
 {
     switch (enum_val)
     {
@@ -718,10 +718,10 @@ const string enum_name(const PropertyID enum_val)
             return "PID_IP_ENABLE_SBC";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
-const string enum_name(const LoadState enum_val)
+const char* enum_name(const LoadState enum_val)
 {
     switch (enum_val)
     {
@@ -744,10 +744,10 @@ const string enum_name(const LoadState enum_val)
             return "LS_LOADCOMPLETING";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
-const string enum_name(const LoadEvents enum_val)
+const char* enum_name(const LoadEvents enum_val)
 {
     switch (enum_val)
     {
@@ -767,10 +767,10 @@ const string enum_name(const LoadEvents enum_val)
             return "LE_UNLOAD";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
-const string enum_name(const ErrorCode enum_val)
+const char* enum_name(const ErrorCode enum_val)
 {
     switch (enum_val)
     {
@@ -832,10 +832,10 @@ const string enum_name(const ErrorCode enum_val)
             return "E_GO_TYPE_TOO_BIG";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 
-const string enum_name(const AccessLevel enum_val)
+const char* enum_name(const AccessLevel enum_val)
 {
     switch (enum_val)
     {
@@ -861,6 +861,6 @@ const string enum_name(const AccessLevel enum_val)
             return "WriteLv3";
     }
 
-    return to_string(enum_val);
+    return "";
 }
 #endif

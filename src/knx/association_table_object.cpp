@@ -150,7 +150,7 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
 
 void AssociationTableObject::beforeStateChange(LoadState& newState)
 {
-    LOGGER.info("beforeStateChange %S", enum_name(newState));
+    LOGGER.info("beforeStateChange %s", enum_name(newState));
     TableObject::beforeStateChange(newState);
 
     if (newState != LS_LOADED)

@@ -27,7 +27,7 @@ void Memory::readMemory()
         return;
     }
 
-    LOGGER.info("content %S", array2hex(flashStart, _metadataSize));
+    LOGGER.info("content %s", array2hex(flashStart, _metadataSize).c_str());
 
     uint16_t metadataBlockSize = alignToPageSize(_metadataSize);
 
@@ -70,9 +70,9 @@ void Memory::readMemory()
         else
         {
             LOGGER.warning("manufacturerId or hardwareType are different");
-            LOGGER.warning("expexted manufacturerId: %S , stored manufacturerId: %S",
+            LOGGER.warning("expexted manufacturerId: %s , stored manufacturerId: %s",
                            word2hex(_deviceObject.manufacturerId()), manufacturerId);
-            LOGGER.warning("expexted hardwareType: %S, stored hardwareType: %S",
+            LOGGER.warning("expexted hardwareType: %s, stored hardwareType: %s",
                            array2hex(_deviceObject.hardwareType(), LEN_HARDWARE_TYPE), 
                            array2hex(hardwareType, LEN_HARDWARE_TYPE));
         }
@@ -80,7 +80,7 @@ void Memory::readMemory()
     else
     {
         LOGGER.warning("DataObject api changed, any data stored in flash is invalid.");
-        LOGGER.warning("expexted DataObject api version: %S, stored api version: %S", word2hex(_deviceObject.apiVersion), word2hex(apiVersion));
+        LOGGER.warning("expexted DataObject api version: %s, stored api version: %s", word2hex(_deviceObject.apiVersion), word2hex(apiVersion));
     }
 
     if (versionCheck == FlashAllInvalid)

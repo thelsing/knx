@@ -330,7 +330,7 @@ void IpDataLinkLayer::loop()
     uint16_t code;
     popWord(code, buffer + 2);
 
-    LOGGER.info("loop: %s", enum_name((KnxIpServiceType)code).c_str());
+    LOGGER.info("loop: %s", enum_name((KnxIpServiceType)code));
 
     switch ((KnxIpServiceType)code)
     {
@@ -1138,7 +1138,7 @@ bool IpDataLinkLayer::sendMulicast(KnxIpFrame& ipFrame)
     if (!_enabled)
         return false;
 
-    LOGGER.info("sendMulicast %S", ipFrame.toString());
+    LOGGER.info("sendMulicast %s %s", enum_name(ipFrame.protocolVersion()), enum_name(ipFrame.serviceTypeIdentifier()));
 
     return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());
 }
@@ -1148,7 +1148,7 @@ bool IpDataLinkLayer::sendUnicast(uint32_t addr, uint16_t port, KnxIpFrame& ipFr
     if (!_enabled)
         return false;
 
-    LOGGER.info("sendUnicast to %S:%d %S", ipaddr2str(addr), port, ipFrame.toString());
+    LOGGER.info("sendUnicast to %s:%d %s %s", ipaddr2str(addr), port, enum_name(ipFrame.protocolVersion()), enum_name(ipFrame.serviceTypeIdentifier()));
 
     return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());
 }
