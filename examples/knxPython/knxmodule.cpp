@@ -16,8 +16,8 @@ namespace py = pybind11;
 
 #include "knx/bits.h"
 #include "knx/platform/linux_platform.h"
-#include "knx/bau57B0.h"
-#include "knx/group_object_table_object.h"
+#include "knx/ip/bau57B0.h"
+#include "knx/interface_object/group_object_table_object.h"
 
 LinuxPlatform* platform = 0;
 Bau57B0* bau = 0;

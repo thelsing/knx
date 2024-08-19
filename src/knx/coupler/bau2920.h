@@ -3,7 +3,7 @@
 #include "../config.h"
 
 #include "bau_systemB_coupler.h"
-#include "tpuart_data_link_layer.h"
+#include "../tp/tpuart_data_link_layer.h"
 #if defined(DeviceFamily_CC13X0)
     #include "../rf/rf_physical_layer_cc1310.h"
 #else

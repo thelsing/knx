@@ -1,6 +1,6 @@
 #include "platform.h"
 
-#include "bits.h"
+#include "../bits.h"
 
 #include <cstring>
 #include <cstdlib>

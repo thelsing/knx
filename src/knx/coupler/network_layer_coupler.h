@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../knx_types.h"
-#include "network_layer.h"
-#include "transport_layer.h"
+#include "../network_layer/network_layer.h"
+#include "../transport_layer/transport_layer.h"
 
 #include <stdint.h>
 

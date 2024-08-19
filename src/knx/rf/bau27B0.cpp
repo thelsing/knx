@@ -1,6 +1,6 @@
 #include "bau27B0.h"
 
-#include "bits.h"
+#include "../bits.h"
 
 #include <string.h>
 #include <stdio.h>

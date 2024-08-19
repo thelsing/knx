@@ -1,8 +1,8 @@
 #pragma once
 
 #include "bau_systemB_coupler.h"
+#include "router_object.h"
 #include "../config.h"
-#include "../interface_object/router_object.h"
 #include "../ip/ip_parameter_object.h"
 #include "../ip/ip_data_link_layer.h"
 #include "../tp/tpuart_data_link_layer.h"

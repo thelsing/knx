@@ -6,7 +6,7 @@
 #include <ti/drivers/UART.h>
 #include <ti/drivers/dpl/ClockP.h>
 
-#include "../platform.h"
+#include ".platform.h"
 
 class CC1310Platform : public Platform
 {

@@ -28,11 +28,11 @@
 #include <poll.h>             // Needed for GPIO edge detection
 #include <sys/time.h>         // Needed for delayMicroseconds()
 
-#include "../device_object.h"
-#include "../address_table_object.h"
-#include "../association_table_object.h"
-#include "../group_object_table_object.h"
-#include "../application_program_object.h"
+#include "../interface_object/device_object.h"
+#include "../interface_object/address_table_object.h"
+#include "../interface_object/association_table_object.h"
+#include "../interface_object/group_object_table_object.h"
+#include "../interface_object/application_program_object.h"
 #include "../ip/ip_parameter_object.h"
 #include "../bits.h"
 #include "../ip/ip_host_protocol_address_information.h"

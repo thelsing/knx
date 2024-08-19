@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include "save_restore.h"
+#include "../util/save_restore.h"
 
 #ifndef KNX_FLASH_CALLBACK
     #ifndef KNX_FLASH_SIZE

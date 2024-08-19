@@ -1,8 +1,14 @@
 #pragma once
 
-#include "../config.h"
+#if defined(DeviceFamily_CC13X0)
+        #include "rf_physical_layer_cc1310.h"
+#else
+        #include "rf_physical_layer_cc1101.h"
+#endif
 
-#include "..datalink_layer/data_link_layer.h"
+#include "../config.h"
+#include "../datalink_layer/data_link_layer.h"
+
 
 #include <cstdint>
 

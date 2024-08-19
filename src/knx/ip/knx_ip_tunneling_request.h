@@ -1,9 +1,8 @@
 #pragma once
 
 #include "knx_ip_frame.h"
-#include "../cemi_frame.h"
 #include "knx_ip_ch.h"
-
+#include "../datalink_layer/cemi_frame.h"
 class KnxIpTunnelingRequest : public KnxIpFrame
 {
     public:

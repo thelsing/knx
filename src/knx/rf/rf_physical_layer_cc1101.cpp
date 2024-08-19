@@ -4,7 +4,7 @@
 
 #include "rf_data_link_layer.h"
 #include "../bits.h"
-#include "../platform.h"
+#include "../platform/platform.h"
 
 #include <stdio.h>
 #include <string.h>

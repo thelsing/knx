@@ -1,10 +1,10 @@
 #include <knx.h>
 
-#include "knx/bau57B0.h"
-#include "knx/bau27B0.h"
-#include "knx/bau07B0.h"
+#include "knx/ip/bau57B0.h"
+#include "knx/rf/bau27B0.h"
+#include "knx/tp/bau07B0.h"
 
-#include "knx/group_object_table_object.h"
+#include "knx/interface_object/group_object_table_object.h"
 #include "knx/bits.h"
 #include <time.h>
 #include <stdlib.h>

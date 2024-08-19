@@ -1,7 +1,7 @@
 #include "group_object.h"
 
 #include "datapoint_types.h"
-#include "../interface_objects/group_object_table_object.h"
+#include "../interface_object/group_object_table_object.h"
 #include "../bits.h"
 
 #include <cstring>

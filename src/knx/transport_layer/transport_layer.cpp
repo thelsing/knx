@@ -4,7 +4,7 @@
 #include "../network_layer/network_layer.h"
 #include "../platform/platform.h"
 #include "../util/logger.h"
-#include "bits.h"
+#include "../bits.h"
 
 #include <stdio.h>
 
