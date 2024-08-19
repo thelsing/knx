@@ -1,4 +1,3 @@
-#include "../bits.h"
 #include <stdarg.h>
 #include <string>
 #include "simple_map.h"
@@ -17,7 +16,7 @@ class Logger
         void exception(const std::string message, ...);
     protected:
         Logger() {}
-        virtual void log(LogType type, const char* format, va_list args);
+        void log(LogType type, const char* format, va_list args);
         void name(std::string value) { _name = value; }
     private:
         const std::string enum_name(LogType type);

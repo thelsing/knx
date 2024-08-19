@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 // Provides a simple unordered map which is based on two arrays of different data types, namely K and V.
 // One array is used for the keys, the other array is used for the values.
 // Tracking of free/occupied slots in the arrays is realized by a bitmask of size uint64_t.

@@ -8,7 +8,7 @@ const uint8_t* popByte(uint8_t& b, const uint8_t* data)
     return data;
 }
 
-
+#ifndef KNX_NO_PRINT
 std::string byte2hex(const uint8_t byte)
 {
     const char* hex = "0123456789ABCDEF";
@@ -33,7 +33,6 @@ std::string array2hex(const uint8_t* value, size_t length)
     return result;
 }
 
-#ifndef KNX_NO_PRINT
 void printHex(const char* suffix, const uint8_t* data, size_t length, bool newline)
 {
     print(suffix);

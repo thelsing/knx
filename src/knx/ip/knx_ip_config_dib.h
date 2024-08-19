@@ -1,6 +1,5 @@
 #pragma once
 #include "knx_ip_dib.h"
-#include "../bits.h"
 
 #define LEN_IP_CONFIG_DIB 16
 #define LEN_IP_CURRENT_CONFIG_DIB 20

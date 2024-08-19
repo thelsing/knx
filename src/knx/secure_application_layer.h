@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include "knx_types.h"
 #include "apdu.h"
-#include "bits.h"
 #include "util/simple_map.h"
 
 class DeviceObject;
@@ -74,7 +73,6 @@ class SecureApplicationLayer :  public ApplicationLayer
             {
                 if ((cmpAddr.addrType == AddrType::unknown) || (addrType == AddrType::unknown))
                 {
-                    println("Unknown address type detected!");
                     return false;
                 }
 

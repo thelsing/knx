@@ -1,5 +1,5 @@
 #include "knx_types.h"
-
+#ifndef KNX_NO_PRINT
 const string enum_name(const LCCONFIG enum_val)
 {
     switch (enum_val)
@@ -700,3 +700,4 @@ const string format_ga(uint16_t ga)
 {
     return to_string(ga & 0xF800 >> 23) + "/" + to_string(ga & 0x70 >> 16) + "/" + to_string(ga & 0x00FF);
 }
+#endif

@@ -1,6 +1,8 @@
 #include "knx_ip_tunneling_info_dib.h"
 #include "service_families.h"
 
+#include "../bits.h"
+
 KnxIpTunnelingInfoDIB::KnxIpTunnelingInfoDIB(uint8_t* data) : KnxIpDIB(data)
 {
     currentPos = data + 4;

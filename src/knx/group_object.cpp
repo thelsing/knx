@@ -1,8 +1,8 @@
 #include "group_object.h"
-#include "bits.h"
 #include "string.h"
 #include "datapoint_types.h"
 #include "group_object_table_object.h"
+#include "bits.h"
 
 #ifdef SMALL_GROUPOBJECT
     GroupObjectUpdatedHandler GroupObject::_updateHandlerStatic = 0;

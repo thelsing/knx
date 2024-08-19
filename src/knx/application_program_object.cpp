@@ -1,10 +1,10 @@
 #include "application_program_object.h"
-#include "bits.h"
 #include "data_property.h"
 #include "callback_property.h"
 #include "dptconvert.h"
 #include <cstring>
 #include "util/logger.h"
+#include "bits.h"
 
 #define LOGGER Logger::logger("ApplicationProgramObject")
 

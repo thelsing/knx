@@ -1,6 +1,5 @@
 #pragma once
 
-#include "knx/bits.h"
 #include "knx/util/logger.h"
 #include "knx/config.h"
 #include "knx/bau.h"
@@ -9,6 +8,8 @@
 #include "knx/bau27B0.h"
 #include "knx/bau2920.h"
 #include "knx/bau57B0.h"
+
+#include "knx/bits.h"
 
 #ifndef USERDATA_SAVE_SIZE
     #define USERDATA_SAVE_SIZE 0

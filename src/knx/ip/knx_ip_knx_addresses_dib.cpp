@@ -1,4 +1,5 @@
 #include "knx_ip_knx_addresses_dib.h"
+#include "../bits.h"
 
 KnxIpKnxAddressesDIB::KnxIpKnxAddressesDIB(uint8_t* data) : KnxIpDIB(data)
 {

@@ -42,6 +42,7 @@ uint8_t APDU::length() const
 
 string APDU::toString() const
 {
+#ifndef KNX_NO_PRINT
     string value = "APDU: " + enum_name(type()) + " ";
     value += byte2hex(_data[0] & 0x3);
 
@@ -54,4 +55,7 @@ string APDU::toString() const
     }
 
     return value;
+#else
+    return "";
+#endif
 }

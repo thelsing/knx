@@ -402,6 +402,7 @@ bool CemiFrame::valid() const
 
 std::string CemiFrame::toString() const
 {
+#ifndef KNX_NO_PRINT
     std::string value = "DPDU:" + enum_name(frameType()) + " ";
     value += enum_name(systemBroadcast()) + " ";
     value += enum_name(ack()) + " ";
@@ -416,4 +417,7 @@ std::string CemiFrame::toString() const
         value += format_ga(destinationAddress());
 
     return value;
+#else
+    return "";
+#endif
 }

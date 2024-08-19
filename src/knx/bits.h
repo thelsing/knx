@@ -70,11 +70,10 @@
     void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 #endif
 
+#ifndef KNX_NO_PRINT
     std::string byte2hex(const uint8_t byte);
     std::string word2hex(const uint16_t value);
     std::string array2hex(const uint8_t* value, size_t length);
-
-#ifndef KNX_NO_PRINT
     void print(const char[]);
     void print(char);
     void print(unsigned char, int = DEC);
@@ -103,6 +102,10 @@
     #define print(...)      do {} while(0)
     #define println(...)    do {} while(0)
     #define printHex(...)   do {} while(0)
+    #define byte2hex(...)   ""
+    #define word2hex(...)   ""
+    #define array2hex(...)  ""
+    #define enum_name(...)  ""
 #endif
 
 #ifdef KNX_ACTIVITYCALLBACK
@@ -129,14 +132,6 @@ uint64_t sixBytesToUInt64(uint8_t* data);
 
 uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
 uint16_t crc16Dnp(uint8_t* input, uint16_t length);
-
-enum ParameterFloatEncodings
-{
-    Float_Enc_DPT9 = 0,          // 2 Byte. See Chapter 3.7.2 section 3.10 (Datapoint Types 2-Octet Float Value)
-    Float_Enc_IEEE754Single = 1, // 4 Byte. C++ float
-    Float_Enc_IEEE754Double = 2, // 8 Byte. C++ double
-};
-
 
 #if defined(ARDUINO_ARCH_SAMD)
     // temporary undef until framework-arduino-samd > 1.8.9 is released. See https://github.com/arduino/ArduinoCore-samd/pull/399 for a PR should will probably address this

@@ -5,9 +5,10 @@
 #include "apdu.h"
 #include "bau.h"
 #include "string.h"
-#include "bits.h"
 #include <stdio.h>
 #include "util/logger.h"
+#include "bits.h"
+
 #define LOGGER Logger::logger("ApplicationLayer")
 
 const SecurityControl ApplicationLayer::noSecurity

@@ -1,6 +1,5 @@
 #pragma once
 #include "knx_ip_dib.h"
-#include "../bits.h"
 
 class KnxIpKnxAddressesDIB : public KnxIpDIB
 {

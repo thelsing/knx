@@ -244,7 +244,7 @@ void Property::state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t
     (void)resultData;
     resultLength = 0;
 }
-
+#ifndef KNX_NO_PRINT
 const string enum_name(const PropertyDataType enum_val)
 {
     switch (enum_val)
@@ -863,3 +863,4 @@ const string enum_name(const AccessLevel enum_val)
 
     return to_string(enum_val);
 }
+#endif

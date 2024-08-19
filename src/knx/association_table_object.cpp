@@ -1,9 +1,9 @@
 #include <cstring>
 
 #include "association_table_object.h"
-#include "bits.h"
 #include "data_property.h"
 #include "util/logger.h"
+#include "bits.h"
 
 #define LOGGER Logger::logger("AssociationTableObject")
 

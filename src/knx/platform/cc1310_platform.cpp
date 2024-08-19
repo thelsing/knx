@@ -390,6 +390,11 @@ void println(unsigned int num, int base)
     println();
 }
 
+void print(double num)
+{
+    printf("%f", num);
+}
+
 void println(long num, int base)
 {
     print(num, base);
@@ -527,7 +532,7 @@ uint8_t* CC1310Platform::getEepromBuffer(uint32_t size)
 
     NVS_read(nvsHandle, 0, (void*) NVS_buffer, size);
 
-    for (int i = 0; i < size; i++)
+    for (uint32_t i = 0; i < size; i++)
     {
         if (NVS_buffer[i] != 0)
         {

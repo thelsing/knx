@@ -120,6 +120,7 @@ CemiFrame& TPDU::frame()
 
 const std::string TPDU::toString() const
 {
+#ifndef KNX_NO_PRINT
     std::string value = std::string("TPDU: ") + enum_name(type()) + " ";
 
     if (control())
@@ -129,4 +130,7 @@ const std::string TPDU::toString() const
         value += "numbered sequence: " + to_string(sequenceNumber());
 
     return value;
+#else
+    return "";
+#endif
 }

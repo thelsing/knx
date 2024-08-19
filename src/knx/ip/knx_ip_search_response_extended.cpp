@@ -1,6 +1,8 @@
 #include "knx_ip_search_response_extended.h"
 #include "service_families.h"
 
+#include "../bits.h"
+
 #define LEN_SERVICE_FAMILIES 2
 #if MASK_VERSION == 0x091A
     #ifdef KNX_TUNNELING

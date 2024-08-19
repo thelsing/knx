@@ -2,8 +2,8 @@
 #include "device_object.h"
 #include "tpdu.h"
 #include "cemi_frame.h"
-#include "bits.h"
 #include "util/logger.h"
+#include "bits.h"
 
 #define LOGGER Logger::logger("NetworkLayerDevice")
 

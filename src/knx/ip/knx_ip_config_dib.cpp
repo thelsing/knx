@@ -1,4 +1,5 @@
 #include "knx_ip_config_dib.h"
+#include "../bits.h"
 
 KnxIpConfigDIB::KnxIpConfigDIB(uint8_t* data, bool isCurrent) : KnxIpDIB(data)
 {

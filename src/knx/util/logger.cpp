@@ -1,5 +1,7 @@
 #include "logger.h"
 
+#include "../bits.h"
+
 Map<std::string, Logger::LogType, 64> Logger::_loggers;
 Logger Logger::_logger;
 
@@ -123,7 +125,7 @@ void Logger::log(LogType type, const char* format, va_list args)
     println();
 #endif
 }
-
+#ifndef KNX_NO_PRINT
 const std::string Logger::enum_name(LogType type)
 {
     switch (type)
@@ -149,3 +151,4 @@ const std::string Logger::enum_name(LogType type)
 
     return std::to_string(type);
 }
+#endif
