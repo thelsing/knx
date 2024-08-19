@@ -1,4 +1,6 @@
 #include "knx_types.h"
+#include "bits.h"
+
 #ifndef KNX_NO_PRINT
 const char* enum_name(const LCCONFIG enum_val)
 {
@@ -691,13 +693,21 @@ const char* enum_name(const FrameFormat enum_val)
     return "";
 }
 
-const string format_ia(uint16_t ia)
+void print_ia(const uint16_t ia)
 {
-    return to_string(ia & 0xF000 >> 24) + "/" + to_string(ia & 0x0F00 >> 16) + "/" + to_string(ia & 0x00FF);
+    print(ia & 0xF000 >> 24);
+    print("/");
+    print(ia & 0x0F00 >> 16);
+    print("/");
+    print(ia & 0x00FF);
 }
 
-const string format_ga(uint16_t ga)
+void print_ga(const uint16_t ga)
 {
-    return to_string(ga & 0xF800 >> 23) + "/" + to_string(ga & 0x70 >> 16) + "/" + to_string(ga & 0x00FF);
+    print(ga & 0xF800 >> 23);
+    print("/");
+    print(ga & 0x70 >> 16);
+    print("/");
+    print(ga & 0x00FF);
 }
 #endif

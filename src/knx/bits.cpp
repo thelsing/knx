@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "bits.h"
 #include <cstring> // for memcpy()
 
@@ -9,29 +10,6 @@ const uint8_t* popByte(uint8_t& b, const uint8_t* data)
 }
 
 #ifndef KNX_NO_PRINT
-std::string byte2hex(const uint8_t byte)
-{
-    const char* hex = "0123456789ABCDEF";
-    char out[3] = {0};
-    out[0] = hex[(byte >> 4) & 0xF];
-    out[1] = hex[ byte     & 0xF];
-    return std::string(out);
-}
-
-std::string word2hex(const uint16_t value)
-{
-    return byte2hex((uint8_t) (value & 0xFF00) >> 8) + byte2hex((uint8_t) (value & 0xFF));
-}
-
-std::string array2hex(const uint8_t* value, size_t length)
-{
-    std::string result("");
-
-    for (size_t i = 0; i < length; i++)
-        result += byte2hex(value[i]) + " ";
-
-    return result;
-}
 
 void printHex(const char* suffix, const uint8_t* data, size_t length, bool newline)
 {

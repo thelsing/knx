@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <string>
+#include "util/logger.h"
 #include "knx_types.h"
 
 class CemiFrame;
@@ -9,7 +9,7 @@ class CemiFrame;
 /**
  * This class represents an Application Protocol Data Unit. It is part of a CemiFrame.
  */
-class APDU
+class APDU : public IPrintable
 {
         friend class CemiFrame;
 
@@ -35,9 +35,9 @@ class APDU
          */
         uint8_t length() const;
         /**
-         * Convert APDU to string.
+         * print APDU
          */
-        std::string toString() const;
+        void printIt() const;
 
     protected:
         /**

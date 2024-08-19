@@ -28,7 +28,7 @@ void TransportLayer::groupAddressTable(AddressTableObject& addrTable)
 
 void TransportLayer::dataIndividualIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
 {
-    LOGGER.info("dataIndividualIndication %s", tpdu.toString().c_str());
+    LOGGER.info("dataIndividualIndication ", tpdu);
 
     uint8_t sequenceNo = tpdu.sequenceNumber();
 
@@ -331,7 +331,7 @@ void TransportLayer::dataIndividualIndication(uint16_t destination, HopCountType
 
 void TransportLayer::dataIndividualConfirm(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu, bool status)
 {
-    LOGGER.info("dataIndividualConfirm %s", tpdu.toString().c_str());
+    LOGGER.info("dataIndividualConfirm ", tpdu);
     TpduType type = tpdu.type();
 
     switch (type)
@@ -405,7 +405,7 @@ void TransportLayer::dataIndividualConfirm(AckType ack, uint16_t destination, Ho
 
 void TransportLayer::dataGroupIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
 {
-    LOGGER.info("dataGroupIndication %s", tpdu.toString().c_str());
+    LOGGER.info("dataGroupIndication ", tpdu);
 
     if (_groupAddressTable == nullptr)
         return;
@@ -423,31 +423,31 @@ void TransportLayer::dataGroupIndication(uint16_t destination, HopCountType hopT
 
 void TransportLayer::dataGroupConfirm(AckType ack, uint16_t source, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu, bool status)
 {
-    LOGGER.info("dataGroupConfirm %s", tpdu.toString().c_str());
+    LOGGER.info("dataGroupConfirm ", tpdu);
     _applicationLayer.dataGroupConfirm(ack, hopType, priority, destination, tpdu.apdu(), status);
 }
 
 void TransportLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
 {
-    LOGGER.info("dataBroadcastIndication %s", tpdu.toString().c_str());
+    LOGGER.info("dataBroadcastIndication ", tpdu);
     _applicationLayer.dataBroadcastIndication(hopType, priority, source, tpdu.apdu());
 }
 
 void TransportLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, bool status)
 {
-    LOGGER.info("dataBroadcastConfirm %s", tpdu.toString().c_str());
+    LOGGER.info("dataBroadcastConfirm ", tpdu);
     _applicationLayer.dataBroadcastConfirm(ack, hopType, priority, tpdu.apdu(), status);
 }
 
 void TransportLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu)
 {
-    LOGGER.info("dataSystemBroadcastIndication %s", tpdu.toString().c_str());
+    LOGGER.info("dataSystemBroadcastIndication ", tpdu);
     _applicationLayer.dataSystemBroadcastIndication(hopType, priority, source, tpdu.apdu());
 }
 
 void TransportLayer::dataSystemBroadcastConfirm(AckType ack, HopCountType hopType, TPDU& tpdu, Priority priority, bool status)
 {
-    LOGGER.info("dataSystemBroadcastConfirm %s", tpdu.toString().c_str());
+    LOGGER.info("dataSystemBroadcastConfirm ", tpdu);
     _applicationLayer.dataSystemBroadcastConfirm(hopType, priority, tpdu.apdu(), status);
 }
 
@@ -458,28 +458,28 @@ void TransportLayer::dataGroupRequest(AckType ack, HopCountType hopType, Priorit
 
     uint16_t groupAdress = _groupAddressTable->getGroupAddress(tsap);
     TPDU& tpdu = apdu.frame().tpdu();
-    LOGGER.info("dataGroupRequest %s", tpdu.toString().c_str());
+    LOGGER.info("dataGroupRequest ", tpdu);
     _networkLayer->dataGroupRequest(ack, groupAdress, hopType, priority, tpdu);
 }
 
 void TransportLayer::dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
     TPDU& tpdu = apdu.frame().tpdu();
-    LOGGER.info("dataBroadcastRequest %s", tpdu.toString().c_str());
+    LOGGER.info("dataBroadcastRequest ", tpdu);
     _networkLayer->dataBroadcastRequest(ack, hopType, priority, tpdu);
 }
 
 void TransportLayer::dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, APDU& apdu)
 {
     TPDU& tpdu = apdu.frame().tpdu();
-    LOGGER.info("dataSystemBroadcastRequest %s", tpdu.toString().c_str());
+    LOGGER.info("dataSystemBroadcastRequest ", tpdu);
     return _networkLayer->dataSystemBroadcastRequest(ack, hopType, priority, tpdu);
 }
 
 void TransportLayer::dataIndividualRequest(AckType ack, HopCountType hopType, Priority priority, uint16_t destination, APDU& apdu)
 {
     TPDU& tpdu = apdu.frame().tpdu();
-    LOGGER.info("dataIndividualRequest %s", tpdu.toString().c_str());
+    LOGGER.info("dataIndividualRequest ", tpdu);
     _networkLayer->dataIndividualRequest(ack, destination, hopType, priority, tpdu);
 }
 
@@ -641,7 +641,7 @@ void TransportLayer::sendControlTelegram(TpduType pduType, uint8_t seqNo)
     TPDU& tpdu = frame.tpdu();
     tpdu.type(pduType);
     tpdu.sequenceNumber(seqNo);
-    LOGGER.info("sendControlTelegram %s", tpdu.toString().c_str());
+    LOGGER.info("sendControlTelegram ", tpdu);
     _networkLayer->dataIndividualRequest(AckRequested, _connectionAddress, NetworkLayerParameter,
                                          SystemPriority, tpdu);
 }

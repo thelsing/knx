@@ -1,7 +1,7 @@
 #include "npdu.h"
 #include "cemi_frame.h"
 #include <string.h>
-
+#include "bits.h"
 
 NPDU::NPDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
 {
@@ -43,7 +43,12 @@ TPDU& NPDU::tpdu()
     return _frame.tpdu();
 }
 
-const std::string NPDU::toString() const
+void NPDU::printIt() const
 {
-    return std::string("NPDU: Octetcount:") + to_string(octetCount()) + " hopCount " + to_string(hopCount());
+#ifndef KNX_NO_PRINT
+    print("NPDU: Octetcount: ");
+    print(octetCount());
+    print(" hopCount ");
+    print(hopCount());
+#endif
 }

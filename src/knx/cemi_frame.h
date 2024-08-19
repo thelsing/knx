@@ -1,11 +1,13 @@
 #pragma once
 
 #include "knx_types.h"
-#include "stdint.h"
+#include <stdint.h>
 #include "npdu.h"
 #include "tpdu.h"
 #include "apdu.h"
 #include "config.h"
+#include "util/logger.h"
+
 
 #define NPDU_LPDU_DIFF 8
 #define TPDU_NPDU_DIFF 1
@@ -16,7 +18,7 @@
 // Mesg Code and additional info length
 #define CEMI_HEADER_SIZE 2
 
-class CemiFrame
+class CemiFrame : public IPrintable
 {
         friend class DataLinkLayer;
 
@@ -72,7 +74,7 @@ class CemiFrame
         uint8_t calcCrcTP(uint8_t* buffer, uint16_t len);
         bool valid() const;
 
-        std::string toString() const;
+        void printIt() const;
 
     private:
         uint8_t buffer[0xff + NPDU_LPDU_DIFF] = {0}; //only valid of add info is zero

@@ -1,5 +1,6 @@
 #include "tpdu.h"
 #include "cemi_frame.h"
+#include "bits.h"
 
 TPDU::TPDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
 {
@@ -118,19 +119,20 @@ CemiFrame& TPDU::frame()
     return _frame;
 }
 
-const std::string TPDU::toString() const
+void TPDU::printIt() const
 {
 #ifndef KNX_NO_PRINT
-    std::string value = std::string("TPDU: ") + enum_name(type()) + " ";
+    print("TPDU: ");
+    print(enum_name(type()));
+    print(" ");
 
     if (control())
-        value += "control ";
+        print("control ");
 
     if (numbered())
-        value += "numbered sequence: " + to_string(sequenceNumber());
-
-    return value;
-#else
-    return "";
+    {
+        print("numbered sequence: ");
+        print(sequenceNumber());
+    }
 #endif
 }

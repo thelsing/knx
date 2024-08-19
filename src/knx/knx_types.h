@@ -1,5 +1,4 @@
 #pragma once
-#include <string>
 #include <stdint.h>
 using namespace std;
 
@@ -312,5 +311,5 @@ enum LCCONFIG
 };
 const char* enum_name(const LCCONFIG enum_val);
 
-const string format_ia(uint16_t ia);
-const string format_ga(uint16_t ga);
+void print_ia(uint16_t ia);
+void print_ga(uint16_t ga);

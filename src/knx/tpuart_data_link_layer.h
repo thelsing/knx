@@ -20,8 +20,6 @@
     #define __isr
 #endif
 
-void printFrame(TpFrame* tpframe);
-
 class ITpUartCallBacks
 {
     public:

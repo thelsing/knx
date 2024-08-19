@@ -164,6 +164,8 @@ set(${PROJECT_NAME}_SOURCES
     ../../src/knx_facade.h
     ../../src/knx/platform/cc1310_platform.cpp
     ../../src/knx_facade.cpp
+    ../../src/knx/knx_types.h
+    ../../src/knx/knx_types.cpp
     ./RTT/SEGGER_RTT_Conf.h
     ./RTT/SEGGER_RTT_printf.c
     ./RTT/SEGGER_RTT.c
@@ -189,7 +191,7 @@ include_directories(
     ${SimpleLinkCC13X0SDK_INCLUDE_DIRS}
 )
 
-add_definitions(-DMASK_VERSION=0x27B0 -Wno-unknown-pragmas)
+add_definitions(-DMASK_VERSION=0x27B0 -Wno-unknown-pragmas -DKNX_NO_PRINT)
 
 add_executable(${PROJECT_NAME}
     ${${PROJECT_NAME}_SOURCES}

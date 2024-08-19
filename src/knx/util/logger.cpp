@@ -66,29 +66,42 @@ void Logger::exception(const char* message, ...)
 #endif
 }
 
-void Logger::log(LogType type, const char* format, va_list args)
+bool Logger::log(LogType type)
 {
 #ifndef KNX_NO_PRINT
-    LogType* level = _loggers.get(_name);
-    if(level == nullptr) {
+    /*LogType* level = _loggers.get(_name);
+
+    if (level == nullptr)
+    {
         print("Logger ");
         print(_name);
         print(" is disabled. Use Logger::logLevel(\"");
         print(_name);
         println("\", Logger::Info) to enable.");
-        _loggers.insertOrAssign(_name, Disabled);
-        return;
+        _loggers.insertOrAssign(_name, Info);
+        return false;
     }
 
-    if(*level > type)
-        return;
-
+    if (*level > type)
+        return false;
+*/
     print(millis());
     print(" ");
     print(_name);
     print("\t");
     print(enum_name(type));
     print(" ");
+    return true;
+#else
+    return false;
+#endif
+}
+
+void Logger::log(LogType type, const char* format, va_list args)
+{
+#ifndef KNX_NO_PRINT
+    if (!log(type))
+        return;
 
     while (*format)
     {
@@ -100,6 +113,10 @@ void Logger::log(LogType type, const char* format, va_list args)
             {
                 print(va_arg(args, int));
             }
+            if (*format == 'x')
+            {
+                print(va_arg(args, int), HEX);
+            }
             else if (*format == 's')
             {
                 print(va_arg(args, char*));
@@ -107,6 +124,10 @@ void Logger::log(LogType type, const char* format, va_list args)
             else if (*format == 'f')
             {
                 print(va_arg(args, double));
+            }
+            else if (*format == 'B')
+            {
+                printHex("", va_arg(args, uint8_t*), va_arg(args, size_t), false);
             }
         }
         else

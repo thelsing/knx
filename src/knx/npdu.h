@@ -1,12 +1,12 @@
 #pragma once
 
 #include <stdint.h>
-#include <string>
+#include "util/logger.h"
 
 class CemiFrame;
 class TPDU;
 
-class NPDU
+class NPDU : public IPrintable
 {
         friend class CemiFrame;
 
@@ -18,7 +18,7 @@ class NPDU
         void hopCount(uint8_t value);
         CemiFrame& frame();
         TPDU& tpdu();
-        const std::string toString() const;
+        void printIt() const;
 
     protected:
         NPDU(uint8_t* data, CemiFrame& frame);

@@ -11,7 +11,6 @@
 
 #include <stdint.h>
 #include "save_restore.h"
-#include <string>
 
 /** The data type of a property. */
 enum PropertyDataType

@@ -1,11 +1,11 @@
 #pragma GCC optimize("O3")
 
 #include "address_table_object.h"
-#include "bits.h"
 #include "cemi_frame.h"
 #include "device_object.h"
 #include "platform.h"
 #include "tpuart_data_link_layer.h"
+#include "bits.h"
 
 /*
  * A new implementation of the tpuart connection.
@@ -128,25 +128,6 @@ enum
     // Monitoring is still waiting for an ACk
     RX_AWAITING_ACK
 };
-
-void printFrame(TpFrame* tpframe)
-{
-    print(tpframe->humanSource().c_str());
-    print(" -> ");
-    print(tpframe->humanDestination().c_str());
-    print(" [");
-    print((tpframe->flags() & TP_FRAME_FLAG_INVALID) ? 'I' : '_');   // Invalid
-    print((tpframe->flags() & TP_FRAME_FLAG_EXTENDED) ? 'E' : '_');  // Extended
-    print((tpframe->flags() & TP_FRAME_FLAG_REPEATED) ? 'R' : '_');  // Repeat
-    print((tpframe->flags() & TP_FRAME_FLAG_ECHO) ? 'T' : '_');      // Send by me
-    print((tpframe->flags() & TP_FRAME_FLAG_ADDRESSED) ? 'D' : '_'); // Recv for me
-    print((tpframe->flags() & TP_FRAME_FLAG_ACK_NACK) ? 'N' : '_');  // ACK + NACK
-    print((tpframe->flags() & TP_FRAME_FLAG_ACK_BUSY) ? 'B' : '_');  // ACK + BUSY
-    print((tpframe->flags() & TP_FRAME_FLAG_ACK) ? 'A' : '_');       // ACK
-    print("] ");
-    printHex("( ", tpframe->data(), tpframe->size(), false);
-    print(")");
-}
 
 /*
  * Processes all bytes.
@@ -554,7 +535,7 @@ void TpUartDataLinkLayer::processTxFrameComplete(bool success)
     uint8_t* cemiData = _txFrame->cemiData();
     CemiFrame cemiFrame(cemiData, _txFrame->cemiSize());
     dataConReceived(cemiFrame, success);
-    free(cemiData);
+    delete[] cemiData;
     clearTxFrame();
     _txProcessdFrameCounter++;
     _txState = TX_IDLE;
@@ -880,7 +861,7 @@ void TpUartDataLinkLayer::processTxQueue()
 
 #ifdef DEBUG_TP_FRAMES
         print("Outbound: ");
-        printFrame(_txFrame);
+        _txFrame.printIt();
         println();
 #endif
 
@@ -969,7 +950,7 @@ void TpUartDataLinkLayer::rxFrameReceived(TpFrame* tpFrame)
 #endif
 
     frameReceived(cemiFrame);
-    free(cemiData);
+    delete[] cemiData;
 }
 
 DptMedium TpUartDataLinkLayer::mediumType() const
@@ -1130,7 +1111,7 @@ void TpUartDataLinkLayer::processRxFrame(TpFrame* tpFrame)
     if (_monitoring)
     {
         print("Monitor:  ");
-        printFrame(tpFrame);
+        tpFrame->printIt();
         println();
     }
     else if (tpFrame->flags() & TP_FRAME_FLAG_INVALID)
@@ -1139,7 +1120,7 @@ void TpUartDataLinkLayer::processRxFrame(TpFrame* tpFrame)
         print(31);
         print("m");
         print("Invalid:  ");
-        printFrame(tpFrame);
+        tpFrame->printIt();
         print("\x1B[");
         print(0);
         println("m");
@@ -1148,7 +1129,7 @@ void TpUartDataLinkLayer::processRxFrame(TpFrame* tpFrame)
     {
 #ifdef DEBUG_TP_FRAMES
         print("Inbound:  ");
-        printFrame(tpFrame);
+        tpFrame.printIt());
         println();
 #endif
 

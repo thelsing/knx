@@ -400,30 +400,29 @@ bool CemiFrame::valid() const
     return true;
 }
 
-std::string CemiFrame::toString() const
+void CemiFrame::printIt() const
 {
 #ifndef KNX_NO_PRINT
-    std::string value = std::string("DPDU:") + enum_name(frameType()) + " ";
-    value += enum_name(systemBroadcast());
-    value += " ";
-    value += enum_name(ack());
-    value += " ";
-    value += enum_name(repetition());
-    value += " ";
-    value += enum_name(priority());
-    value += " from ";
-    value += format_ia(sourceAddress());
-    value += " to ";
-    value += enum_name(addressType());
-    value += " ";
+    print("DPDU:");
+    print(enum_name(frameType()));
+    print(" ");
+    print(enum_name(systemBroadcast()));
+    print(" ");
+    print(enum_name(ack()));
+    print(" ");
+    print(enum_name(repetition()));
+    print(" ");
+    print(enum_name(priority()));
+    print(" from ");
+    print_ia(sourceAddress());
+    print(" to ");
+    print(enum_name(addressType()));
+    print(" ");
 
     if (addressType() == AddressType::IndividualAddress)
-        value += format_ia(destinationAddress());
+        print_ia(destinationAddress());
     else
-        value += format_ga(destinationAddress());
+        print_ga(destinationAddress());
 
-    return value;
-#else
-    return "";
 #endif
 }

@@ -167,6 +167,7 @@ knx/tpdu.cpp
 knx/tpdu.h
 knx/tpuart_data_link_layer.cpp
 knx/tpuart_data_link_layer.h
+knx/tp_frame.cpp
 knx/tp_frame.h
 knx/transport_layer.cpp
 knx/transport_layer.h

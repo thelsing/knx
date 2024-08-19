@@ -76,7 +76,7 @@ KnxIpFrame::KnxIpFrame(uint16_t length)
     protocolVersion(KnxIp1_0);
     totalLength(length);
 }
-
+#ifndef KNX_NO_PRINT
 const char* enum_name(const KnxIpVersion enum_val)
 {
     switch (enum_val)
@@ -149,3 +149,4 @@ const char* enum_name(const KnxIpServiceType enum_val)
 
     return "";
 }
+#endif

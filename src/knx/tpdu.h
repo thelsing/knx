@@ -2,11 +2,11 @@
 
 #include "stdint.h"
 #include "knx_types.h"
-#include <string>
+#include "util/logger.h"
 class CemiFrame;
 class APDU;
 
-class TPDU
+class TPDU : public IPrintable
 {
         friend class CemiFrame;
 
@@ -26,7 +26,7 @@ class TPDU
         APDU& apdu();
 
         CemiFrame& frame();
-        const std::string toString() const;
+        void printIt() const;
 
     protected:
         TPDU(uint8_t* data, CemiFrame& frame);

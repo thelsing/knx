@@ -10,25 +10,20 @@
 #include "knx_ip_search_response_extended.h"
 #include "../util/logger.h"
 
-const std::string ipaddr2str(const uint32_t addr)
-{
-    return to_string(addr & 0xFF000000 >> 24) + "." + to_string(addr & 0xFF0000 >> 16) + "." + to_string(addr & 0xFF00 >> 8) + "." + to_string(addr & 0xFF);
-}
-
 #define LOGGER Logger::logger("IpDataLinkLayer")
 
 
-    #include "knx_ip_connect_request.h"
-    #include "knx_ip_connect_response.h"
-    #include "knx_ip_state_request.h"
-    #include "knx_ip_state_response.h"
-    #include "knx_ip_disconnect_request.h"
-    #include "knx_ip_disconnect_response.h"
-    #include "knx_ip_tunneling_request.h"
-    #include "knx_ip_tunneling_ack.h"
-    #include "knx_ip_description_request.h"
-    #include "knx_ip_description_response.h"
-    #include "knx_ip_config_request.h"
+#include "knx_ip_connect_request.h"
+#include "knx_ip_connect_response.h"
+#include "knx_ip_state_request.h"
+#include "knx_ip_state_response.h"
+#include "knx_ip_disconnect_request.h"
+#include "knx_ip_disconnect_response.h"
+#include "knx_ip_tunneling_request.h"
+#include "knx_ip_tunneling_ack.h"
+#include "knx_ip_description_request.h"
+#include "knx_ip_description_response.h"
+#include "knx_ip_config_request.h"
 
 
 #include <stdio.h>
@@ -304,6 +299,7 @@ void IpDataLinkLayer::loop()
             break;
         }
     }
+
 #endif
     uint8_t buffer[512];
     uint16_t remotePort = 0;
@@ -358,6 +354,7 @@ void IpDataLinkLayer::loop()
         }
 
 #ifdef KNX_TUNNELING
+
         case SearchRequestExt:
         {
             loopHandleSearchRequestExtended(buffer, len);
@@ -413,9 +410,11 @@ void IpDataLinkLayer::loop()
             //println("got Ack");
             break;
         }
+
 #endif
+
         default:
-            LOGGER.warning("Unhandled service identifier: %s", word2hex(code).c_str());
+            LOGGER.warning("Unhandled service identifier: %x:", code);
             break;
     }
 }
@@ -1148,7 +1147,8 @@ bool IpDataLinkLayer::sendUnicast(uint32_t addr, uint16_t port, KnxIpFrame& ipFr
     if (!_enabled)
         return false;
 
-    LOGGER.info("sendUnicast to %s:%d %s %s", ipaddr2str(addr), port, enum_name(ipFrame.protocolVersion()), enum_name(ipFrame.serviceTypeIdentifier()));
+    LOGGER.info("sendUnicast to %d.%d.%d.%d:%d %s %s", addr & 0xFF000000 >> 24, addr & 0xFF0000 >> 16, addr & 0xFF00 >> 8, addr & 0xFF
+                , port, enum_name(ipFrame.protocolVersion()), enum_name(ipFrame.serviceTypeIdentifier()));
 
     return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());
 }

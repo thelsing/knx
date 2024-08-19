@@ -2,7 +2,6 @@
 #include "linux_platform.h"
 
 #include <cstdio>
-#include <string>
 #include <cstring>
 #include <cstdlib>
 #include <stdexcept>

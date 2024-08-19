@@ -1,8 +1,7 @@
 #pragma  once
 
 #include <cstddef>
-#include <cstdint>
-#include <string>
+#include <stdint.h>
 
 #if defined(__linux__)
     #include <arpa/inet.h>
@@ -71,9 +70,6 @@
 #endif
 
 #ifndef KNX_NO_PRINT
-    std::string byte2hex(const uint8_t byte);
-    std::string word2hex(const uint16_t value);
-    std::string array2hex(const uint8_t* value, size_t length);
     void print(const char[]);
     void print(char);
     void print(unsigned char, int = DEC);

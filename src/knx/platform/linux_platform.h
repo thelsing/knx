@@ -2,8 +2,8 @@
 
 #ifdef __linux__
 
-#include <string>
 #include "../platform.h"
+#include <string>
 
 extern int gpio_direction(int pin, int dir);
 extern int gpio_read(int pin);

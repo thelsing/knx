@@ -39,7 +39,7 @@ void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priori
 
 void ApplicationLayer::dataGroupIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
-    LOGGER.info("dataGroupIndication %s", apdu.toString().c_str());
+    LOGGER.info("dataGroupIndication ", apdu);
 
     if (_assocTable == nullptr)
         return;
@@ -92,7 +92,7 @@ void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Prior
 
 void ApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority,  uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
-    LOGGER.info("dataGroupConfirm %s", apdu.toString().c_str());
+    LOGGER.info("dataGroupConfirm ", apdu);
 
     switch (apdu.type())
     {
@@ -130,7 +130,7 @@ void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority pr
 
 void ApplicationLayer::dataBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, const SecurityControl& secCtrl)
 {
-    LOGGER.info("dataBroadcastIndication %s", apdu.toString().c_str());
+    LOGGER.info("dataBroadcastIndication ", apdu);
     uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -190,7 +190,7 @@ void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, P
 
 void ApplicationLayer::dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
-    LOGGER.info("dataBroadcastConfirm %s", apdu.toString().c_str());
+    LOGGER.info("dataBroadcastConfirm ", apdu);
     uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -245,7 +245,7 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
 
 void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, APDU& apdu, const SecurityControl& secCtrl)
 {
-    LOGGER.info("dataSystemBroadcastIndication %s", apdu.toString().c_str());
+    LOGGER.info("dataSystemBroadcastIndication ", apdu);
     const uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -294,7 +294,7 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
 
 void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority priority, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
-    LOGGER.info("dataSystemBroadcastConfirm %s", apdu.toString().c_str());
+    LOGGER.info("dataSystemBroadcastConfirm ", apdu);
     const uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -1118,7 +1118,7 @@ void ApplicationLayer::userMemorySend(ApduType type, AckType ack, Priority prior
 
 void ApplicationLayer::individualIndication(HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl)
 {
-    LOGGER.info("individualIndication %s", apdu.toString().c_str());
+    LOGGER.info("individualIndication ", apdu);
     uint8_t* data = apdu.data();
 
     switch (apdu.type())
@@ -1374,13 +1374,13 @@ void ApplicationLayer::individualIndication(HopCountType hopType, Priority prior
         }
 
         default:
-            LOGGER.warning("Individual-indication: unhandled APDU-Type: %s", apdu.toString().c_str());
+            LOGGER.warning("Individual-indication: unhandled APDU-Type: ", apdu);
     }
 }
 
 void ApplicationLayer::individualConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, const SecurityControl& secCtrl, bool status)
 {
-    LOGGER.info("individualConfirm %s", apdu.toString().c_str());
+    LOGGER.info("individualConfirm ", apdu);
     uint8_t* data = apdu.data();
 
     switch (apdu.type())

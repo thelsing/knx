@@ -1,10 +1,9 @@
 #pragma once
-#pragma GCC optimize("O3")
 
 #include "cemi_frame.h"
+#include "util/logger.h"
 #include <cstring>
 #include <stdint.h>
-#include <string>
 
 // Means that the frame is invalid
 #define TP_FRAME_FLAG_INVALID 0b10000000
@@ -58,7 +57,7 @@ class TpFrame
         {
             _size = cemiFrame.telegramLengthtTP();
             _maxSize = cemiFrame.telegramLengthtTP();
-            _data = (uint8_t*)malloc(cemiFrame.telegramLengthtTP());
+            _data = new uint8_t[cemiFrame.telegramLengthtTP()];
             cemiFrame.fillTelegramTP(_data);
             presetFlags();
         }
@@ -70,7 +69,7 @@ class TpFrame
         TpFrame(uint16_t maxSize = 263)
             : _maxSize(maxSize)
         {
-            _data = (uint8_t*)malloc(_maxSize);
+            _data = new uint8_t[_maxSize];
             _size = 0;
         }
 
@@ -79,7 +78,7 @@ class TpFrame
          */
         ~TpFrame()
         {
-            free(_data);
+            delete[] _data;
         }
 
         /*
@@ -102,7 +101,7 @@ class TpFrame
         /*
          * Current frame size. This may differ from the actual size as long as the frame is not complete.
          */
-        inline uint16_t size()
+        inline uint16_t size() const
         {
             return _size;
         }
@@ -110,7 +109,7 @@ class TpFrame
         /*
          * Returns the assigned flags
          */
-        inline uint16_t flags()
+        inline uint16_t flags() const
         {
             return _flags;
         }
@@ -126,7 +125,7 @@ class TpFrame
         /*
          * Returns a pointer to the data
          */
-        inline uint8_t* data()
+        inline const uint8_t* data() const
         {
             return _data;
         }
@@ -161,7 +160,7 @@ class TpFrame
         /*
          * Returns is the frame exteneded or not
          */
-        inline bool isExtended()
+        inline bool isExtended() const
         {
             return (_data[0] & 0xD3) == 0x10;
         }
@@ -170,37 +169,16 @@ class TpFrame
          * Returns the source
          * Assumes that enough data has been imported.
          */
-        inline uint16_t source()
+        inline uint16_t source() const
         {
             return isExtended() ? (_data[2] << 8) + _data[3] : (_data[1] << 8) + _data[2];
-        }
-
-        inline std::string humanSource()
-        {
-            uint16_t value = source();
-            char buffer[10];
-            sprintf(buffer, "%02i.%02i.%03i", (value >> 12 & 0b1111), (value >> 8 & 0b1111), (value & 0b11111111));
-            return buffer;
-        }
-
-        inline std::string humanDestination()
-        {
-            uint16_t value = destination();
-            char buffer[10];
-
-            if (isGroupAddress())
-                sprintf(buffer, "%02i/%02i/%03i", (value >> 11 & 0b1111), (value >> 8 & 0b111), (value & 0b11111111));
-            else
-                sprintf(buffer, "%02i.%02i.%03i", (value >> 12 & 0b1111), (value >> 8 & 0b1111), (value & 0b11111111));
-
-            return buffer;
         }
 
         /*
          * Returns the destination
          * Assumes that enough data has been imported.
          */
-        inline uint16_t destination()
+        inline uint16_t destination() const
         {
             return isExtended() ? (_data[4] << 8) + _data[5] : (_data[3] << 8) + _data[4];
         }
@@ -235,7 +213,7 @@ class TpFrame
          * Returns if the destination is a group address
          * Assumes that enough data has been imported.
          */
-        inline bool isGroupAddress()
+        inline bool isGroupAddress() const
         {
             return isExtended() ? (_data[1] >> 7) & 0b1 : (_data[5] >> 7) & 0b1;
         }
@@ -255,7 +233,7 @@ class TpFrame
          */
         uint8_t* cemiData()
         {
-            uint8_t* cemiBuffer = (uint8_t*)malloc(cemiSize());
+            uint8_t* cemiBuffer = new uint8_t[cemiSize()];
 
             // Das CEMI erwartet die Daten im Extended format inkl. zwei zusätzlicher Bytes am Anfang.
             cemiBuffer[0] = 0x29;
@@ -306,4 +284,5 @@ class TpFrame
         {
             return !(_data[0] & 0b100000);
         }
+        void printIt() const;
 };

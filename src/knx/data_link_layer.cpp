@@ -59,7 +59,7 @@ bool DataLinkLayer::isTunnelAddress(uint16_t addr)
 }
 #endif
 
-void DataLinkLayer::cddataRequestFromTunnel(CemiFrame& frame)
+void DataLinkLayer::dataRequestFromTunnel(CemiFrame& frame)
 {
     _cemiServer->dataConfirmationToTunnel(frame);
 
@@ -161,7 +161,7 @@ void DataLinkLayer::frameReceived(CemiFrame& frame)
     SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
 
-    LOGGER.info("frameReceived  %s", frame.toString().c_str());
+    LOGGER.info("frameReceived ", frame);
 
 
 #ifdef USE_CEMI_SERVER
@@ -222,7 +222,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     else
         frame.frameType(format);
 
-    LOGGER.info("sendTelegram  %s", frame.toString().c_str());
+    LOGGER.info("sendTelegram  ", frame);
 
     if (!frame.valid())
     {

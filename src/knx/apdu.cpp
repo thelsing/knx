@@ -40,22 +40,20 @@ uint8_t APDU::length() const
     return _frame.npdu().octetCount();
 }
 
-string APDU::toString() const
+void APDU::printIt() const
 {
 #ifndef KNX_NO_PRINT
-    string value = std::string("APDU: ") + enum_name(type()) + " ";
-    value += byte2hex(_data[0] & 0x3);
+    print("APDU: ");
+    print(enum_name(type()));
+    print(" ");
+    print(_data[0] & 0x3, HEX);
 
     for (uint8_t i = 1; i < length() + 1; ++i)
     {
         if (i)
-            value += " ";
+            print(" ");
 
-        value += byte2hex(_data[i]);
+        print(_data[i], HEX);
     }
-
-    return value;
-#else
-    return "";
 #endif
 }
