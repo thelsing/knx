@@ -9,7 +9,7 @@ const uint8_t* popByte(uint8_t& b, const uint8_t* data)
 }
 
 
-std::string byte2hex(uint8_t byte)
+std::string byte2hex(const uint8_t byte)
 {
     const char* hex = "0123456789ABCDEF";
     char out[3] = {0};
@@ -18,9 +18,19 @@ std::string byte2hex(uint8_t byte)
     return std::string(out);
 }
 
-std::string word2hex(uint16_t value)
+std::string word2hex(const uint16_t value)
 {
     return byte2hex((uint8_t) (value & 0xFF00) >> 8) + byte2hex((uint8_t) (value & 0xFF));
+}
+
+std::string array2hex(const uint8_t* value, size_t length)
+{
+    std::string result("");
+
+    for (size_t i = 0; i < length; i++)
+        result += byte2hex(value[i]) + " ";
+
+    return result;
 }
 
 #ifndef KNX_NO_PRINT

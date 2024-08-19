@@ -66,7 +66,7 @@ void measureTemp()
     currentValue -= 50;
     //    currentValue *= (670433.28 + 273);
     //    currentValue -= 273;
-    println(currentValue);
+    LOGGER.info("current value: %f",currentValue);
     GO_CURR.value(currentValue);
 
     double max = GO_MAX.value();
@@ -97,6 +97,9 @@ void appLoop()
 void setup()
 {
     srand((unsigned int)time(NULL));
+
+    Logger::logLevel("App", Logger::Info);
+    Logger::logLevel("ApplicationLayer", Logger::Info);
     knx.readMemory();
 
     if (knx.individualAddress() == 0xFFFF)

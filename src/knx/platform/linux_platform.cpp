@@ -37,6 +37,9 @@
 #include "../ip/ip_parameter_object.h"
 #include "../bits.h"
 #include "../ip/ip_host_protocol_address_information.h"
+#include "../util/logger.h"
+
+#define LOGGER Logger::logger("LinuxPlatform")
 
 #define MAX_MEM 4096
 
@@ -46,7 +49,7 @@ LinuxPlatform::LinuxPlatform()
 
     if (socketMac < 0)
     {
-        printf("Lookup socket creation failed");
+        LOGGER.critical("Lookup socket creation failed");
         return;
     }
 
@@ -158,7 +161,7 @@ void LinuxPlatform::restart()
 
 void LinuxPlatform::fatalError()
 {
-    printf("A fatal error occured. Stopping.\n");
+    LOGGER.critical("A fatal error occured. Stopping.\n");
 
     while (true)
         sleep(1);
@@ -185,7 +188,7 @@ void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 
     if (_multicastSocketFd == -1)
     {
-        perror("socket()");
+        LOGGER.critical("socket() %s", strerror(errno));
         fatalError();
     }
 
@@ -194,13 +197,13 @@ void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 
     if (setsockopt(_multicastSocketFd, SOL_SOCKET, SO_REUSEADDR, &loop, sizeof(loop)) < 0)
     {
-        perror("setsockopt:SO_REUSEADDR");
+        LOGGER.critical("setsockopt:SO_REUSEADDR %s", strerror(errno));
         fatalError();
     }
 
     if (bind(_multicastSocketFd, (struct sockaddr*)&sin, sizeof(sin)) < 0)
     {
-        perror("bind");
+        LOGGER.critical("bind %s", strerror(errno));
         fatalError();
     }
 
@@ -209,7 +212,7 @@ void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 
     if (setsockopt(_multicastSocketFd, IPPROTO_IP, IP_MULTICAST_LOOP, &loop, sizeof(loop)) < 0)
     {
-        perror("setsockopt:IP_MULTICAST_LOOP");
+        LOGGER.critical("setsockopt:IP_MULTICAST_LOOP %s", strerror(errno));
         fatalError();
     }
 
@@ -219,7 +222,7 @@ void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
 
     if (setsockopt(_multicastSocketFd, IPPROTO_IP, IP_ADD_MEMBERSHIP, &command, sizeof(command)) < 0)
     {
-        perror("setsockopt:IP_ADD_MEMBERSHIP");
+        LOGGER.critical("setsockopt:IP_ADD_MEMBERSHIP %s", strerror(errno));
         fatalError();
     }
 
@@ -239,7 +242,7 @@ void LinuxPlatform::closeMultiCast()
                    IP_DROP_MEMBERSHIP,
                    &command, sizeof(command)) < 0)
     {
-        perror("setsockopt:IP_DROP_MEMBERSHIP");
+        LOGGER.error("setsockopt:IP_DROP_MEMBERSHIP %s", strerror(errno));
     }
 
     close(_multicastSocketFd);
@@ -306,7 +309,7 @@ void LinuxPlatform::doMemoryMapping()
 
     if (_fd < 0)
     {
-        puts("Error in file opening");
+        LOGGER.critical("Error in file opening");
         //exit(-1);
     }
 
@@ -316,7 +319,7 @@ void LinuxPlatform::doMemoryMapping()
 
     if (ret < 0)
     {
-        puts("Error in fstat");
+        LOGGER.critical("Error in fstat");
         //exit(-1);
     }
 
@@ -326,7 +329,7 @@ void LinuxPlatform::doMemoryMapping()
     {
         if (ftruncate(_fd, FLASHSIZE) != 0)
         {
-            puts("Error extending file");
+            LOGGER.critical("Error extending file");
             //exit(-1);
         }
 
@@ -344,7 +347,7 @@ void LinuxPlatform::doMemoryMapping()
 
     if (addr == MAP_FAILED)
     {
-        puts("Error in mmap");
+        LOGGER.critical("Error in mmap");
         //exit(-1);
     }
 
@@ -354,7 +357,7 @@ void LinuxPlatform::doMemoryMapping()
 void LinuxPlatform::closeSpi()
 {
     close(_spiFd);
-    printf("SPI device closed.\r\n");
+    LOGGER.info("SPI device closed.");
 }
 
 int LinuxPlatform::readWriteSpi(uint8_t* data, size_t len)
@@ -384,7 +387,7 @@ void LinuxPlatform::setupSpi()
 {
     if ((_spiFd = open("/dev/spidev0.0", O_RDWR)) < 0)
     {
-        printf("ERROR: SPI setup failed! Could not open SPI device!\r\n");
+        LOGGER.error("ERROR: SPI setup failed! Could not open SPI device!");
         return;
     }
 
@@ -395,26 +398,26 @@ void LinuxPlatform::setupSpi()
 
     if (ioctl(_spiFd, SPI_IOC_WR_MODE, &mode) < 0)
     {
-        printf("ERROR: SPI Mode Change failure: %s\n", strerror(errno));
+        LOGGER.error("ERROR: SPI Mode Change failure: %s", strerror(errno));
         close(_spiFd);
         return;
     }
 
     if (ioctl(_spiFd, SPI_IOC_WR_BITS_PER_WORD, &spiBPW) < 0)
     {
-        printf("ERROR: SPI BPW Change failure: %s\n", strerror(errno));
+        LOGGER.error("ERROR: SPI BPW Change failure: %s", strerror(errno));
         close(_spiFd);
         return;
     }
 
     if (ioctl(_spiFd, SPI_IOC_WR_MAX_SPEED_HZ, &speed) < 0)
     {
-        printf("ERROR: SPI Speed Change failure: %s\n", strerror(errno));
+        LOGGER.error("ERROR: SPI Speed Change failure: %s", strerror(errno));
         close(_spiFd);
         return;
     }
 
-    printf("SPI device setup ok.\r\n");
+    LOGGER.info("SPI device setup ok.");
 }
 
 void LinuxPlatform::flashFilePath(const std::string path)
@@ -856,13 +859,13 @@ int gpio_export(int pin)
     int fd;                       /* Filedescriptor      */
     int res;                      /* Result from write() */
 
-    fprintf(stderr, "Export GPIO pin %d\n", pin);
+    LOGGER.info("Export GPIO pin %d", pin);
 
     fd = open("/sys/class/gpio/export", O_WRONLY);
 
     if (fd < 0)
     {
-        perror("Could not export GPIO pin(open)!\n");
+        LOGGER.error("Could not export GPIO pin(open)! %s", strerror(errno));
         return (-1);
     }
 
@@ -871,7 +874,7 @@ int gpio_export(int pin)
 
     if (res < 0)
     {
-        perror("Could not export GPIO pin(write)!\n");
+        LOGGER.error("Could not export GPIO pin(write)! %s", strerror(errno));
         return (-1);
     }
 
@@ -892,7 +895,7 @@ int gpio_unexport(int pin)
     int fd;                       /* Filedescriptor      */
     int res;                      /* Result from write() */
 
-    fprintf(stderr, "Unexport GPIO pin %d\n", pin);
+    LOGGER.info("Unexport GPIO pin %d", pin);
 
     close(gpioFds[pin]);
 
@@ -900,7 +903,7 @@ int gpio_unexport(int pin)
 
     if (fd < 0)
     {
-        perror("Could not unexport GPIO pin(open)!\n");
+        LOGGER.error("Could not unexport GPIO pin(open)! %s", strerror(errno));
         return (-1);
     }
 
@@ -909,7 +912,7 @@ int gpio_unexport(int pin)
 
     if (res < 0)
     {
-        perror("Could not unexport GPIO pin(write)!\n");
+        LOGGER.error("Could not unexport GPIO pin(write)! %s", strerror(errno));
         return (-1);
     }
 
@@ -928,14 +931,14 @@ int gpio_direction(int pin, int dir)
     int fd;                     /* Filedescriptor      */
     int res;                    /* Result from write() */
 
-    fprintf(stderr, "Set GPIO direction for pin %d to %s\n", pin, (dir == INPUT) ? "INPUT" : "OUTPUT");
+    LOGGER.info("Set GPIO direction for pin %d to %s", pin, (dir == INPUT) ? "INPUT" : "OUTPUT");
 
     snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/direction", pin);
     fd = open(path, O_WRONLY);
 
     if (fd < 0)
     {
-        perror("Could not set mode for GPIO pin(open)!\n");
+        LOGGER.error("Could not set mode for GPIO pin(open)! %s", strerror(errno));
         return (-1);
     }
 
@@ -956,7 +959,7 @@ int gpio_direction(int pin, int dir)
 
     if (res < 0)
     {
-        perror("Could not set mode for GPIO pin(write)!\n");
+        LOGGER.error("Could not set mode for GPIO pin(write)! %s", strerror(errno));
         return (-1);
     }
 
@@ -979,7 +982,7 @@ int gpio_read(int pin)
 
     if (gpioFds[pin] < 0)
     {
-        perror("Could not read from GPIO(open)!\n");
+        LOGGER.error("Could not read from GPIO(open)! %s", strerror(errno));
         return (-1);
     }
 
@@ -987,7 +990,7 @@ int gpio_read(int pin)
 
     if (read(gpioFds[pin], &c, 1) < 0)
     {
-        perror("Could not read from GPIO(read)!\n");
+        LOGGER.error("Could not read from GPIO(read)! %s", strerror(errno));
         return (-1);
     }
 
@@ -999,6 +1002,9 @@ int gpio_read(int pin)
  */
 int gpio_write(int pin, int value)
 {
+    if (pin < 0)
+        return -1;
+
     char path[MAX_STRBUF_SIZE]; /* Buffer for path    */
     int res;                    /* Result from write()*/
 
@@ -1009,7 +1015,7 @@ int gpio_write(int pin, int value)
 
     if (gpioFds[pin] < 0)
     {
-        perror("Could not write to GPIO(open)!\n");
+        LOGGER.error("Could not write to GPIO(open)! %s", strerror(errno));
         return (-1);
     }
 
@@ -1030,7 +1036,7 @@ int gpio_write(int pin, int value)
 
     if (res < 0)
     {
-        perror("Could not write to GPIO(write)!\n");
+        LOGGER.error("Could not write to GPIO(write)! %s", strerror(errno));
         return (-1);
     }
 
@@ -1053,7 +1059,7 @@ int gpio_edge(unsigned int pin, char edge)
 
     if (fd < 0)
     {
-        perror("Could not set GPIO edge detection(open)!\n");
+        LOGGER.error("Could not set GPIO edge detection(open)! %s", strerror(errno));
         return (-1);
     }
 
@@ -1106,7 +1112,7 @@ int gpio_wait(unsigned int pin, int timeout)
 
     if (fd < 0)
     {
-        perror("Could not wait for GPIO edge(open)!\n");
+        LOGGER.error("Could not wait for GPIO edge(open)! %s", strerror(errno));
         return (-1);
     }
 
@@ -1125,7 +1131,7 @@ int gpio_wait(unsigned int pin, int timeout)
     if (rc < 0)
     {
         /* poll() failed! */
-        perror("Could not wait for GPIO edge(poll)!\n");
+        LOGGER.error("Could not wait for GPIO edge(poll)! %s", strerror(errno));
         close(fd);
         return (-1);
     }
@@ -1142,7 +1148,7 @@ int gpio_wait(unsigned int pin, int timeout)
         if (rc < 0)
         {
             /* read() failed! */
-            perror("Could not wait for GPIO edge(read)!\n");
+            LOGGER.error("Could not wait for GPIO edge(read)! %s", strerror(errno));
             close(fd);
             return (-2);
         }

@@ -1,4 +1,7 @@
 #include "memory.h"
+#include "util/logger.h"
+
+#define LOGGER Logger::logger("Memory")
 
 #include <string.h>
 
@@ -13,18 +16,18 @@ Memory::~Memory()
 
 void Memory::readMemory()
 {
-    println("readMemory");
+    LOGGER.info("restoring persistant Memory");
 
     uint8_t* flashStart = _platform.getNonVolatileMemoryStart();
     size_t flashSize = _platform.getNonVolatileMemorySize();
 
     if (flashStart == nullptr)
     {
-        println("no user flash available;");
+        LOGGER.error("no user flash available;");
         return;
     }
 
-    printHex("RESTORED ", flashStart, _metadataSize);
+    LOGGER.info("content %S", array2hex(flashStart, _metadataSize));
 
     uint16_t metadataBlockSize = alignToPageSize(_metadataSize);
 
@@ -66,64 +69,51 @@ void Memory::readMemory()
         }
         else
         {
-            println("manufacturerId or hardwareType are different");
-            print("expexted manufacturerId: ");
-            print(_deviceObject.manufacturerId(), HEX);
-            print(", stored manufacturerId: ");
-            println(manufacturerId, HEX);
-            print("expexted hardwareType: ");
-            printHex("", _deviceObject.hardwareType(), LEN_HARDWARE_TYPE);
-            print(", stored hardwareType: ");
-            printHex("", hardwareType, LEN_HARDWARE_TYPE);
-            println("");
+            LOGGER.warning("manufacturerId or hardwareType are different");
+            LOGGER.warning("expexted manufacturerId: %S , stored manufacturerId: %S",
+                           word2hex(_deviceObject.manufacturerId()), manufacturerId);
+            LOGGER.warning("expexted hardwareType: %S, stored hardwareType: %S",
+                           array2hex(_deviceObject.hardwareType(), LEN_HARDWARE_TYPE), 
+                           array2hex(hardwareType, LEN_HARDWARE_TYPE));
         }
     }
     else
     {
-        println("DataObject api changed, any data stored in flash is invalid.");
-        print("expexted DataObject api version: ");
-        print(_deviceObject.apiVersion, HEX);
-        print(", stored api version: ");
-        println(apiVersion, HEX);
+        LOGGER.warning("DataObject api changed, any data stored in flash is invalid.");
+        LOGGER.warning("expexted DataObject api version: %S, stored api version: %S", word2hex(_deviceObject.apiVersion), word2hex(apiVersion));
     }
 
     if (versionCheck == FlashAllInvalid)
     {
-        println("ETS has to reprogram PA and application!");
+        LOGGER.warning("You need to reprogram PA and application with ETS!");
         return;
     }
 
-    println("restoring data from flash...");
-    print("saverestores ");
-    println(_saveCount);
+    LOGGER.info("saverestores %d", _saveCount);
 
     for (int i = 0; i < _saveCount; i++)
     {
-        println(flashStart - buffer);
-        println(".");
+        LOGGER.info("Offset %d", buffer - flashStart);
         buffer = _saveRestores[i]->restore(buffer);
     }
 
-    println("restored saveRestores");
+    LOGGER.info("restored saveRestores");
 
     if (versionCheck == FlashTablesInvalid)
     {
-        println("TableObjects are referring to an older firmware version and are not loaded");
+        LOGGER.warning("TableObjects are referring to an older firmware version and are not loaded");
         return;
     }
 
-    print("tableObjs ");
-    println(_tableObjCount);
+    LOGGER.info("tableObjs %d", _tableObjCount);
 
     for (int i = 0; i < _tableObjCount; i++)
     {
-        println(flashStart - buffer);
-        println(".");
+        ptrdiff_t offset = (buffer - flashStart);
         buffer = _tableObjects[i]->restore(buffer);
         uint16_t memorySize = 0;
         buffer = popWord(memorySize, buffer);
-        println(memorySize);
-
+        LOGGER.info("Offset %d, Size %d", offset, memorySize);
         if (memorySize == 0)
             continue;
 
@@ -131,11 +121,12 @@ void Memory::readMemory()
         addNewUsedBlock(_tableObjects[i]->_data, memorySize);
     }
 
-    println("restored Tableobjects");
+    LOGGER.info("restored Tableobjects");
 }
 
 void Memory::writeMemory()
 {
+    LOGGER.info("writing persistang memory");
     // first get the necessary size of the writeBuffer
     uint16_t writeBufferSize = _metadataSize;
 
@@ -156,8 +147,7 @@ void Memory::writeMemory()
 
     flashPos = _platform.writeNonVolatileMemory(flashPos, buffer, bufferPos - buffer);
 
-    print("save saveRestores ");
-    println(_saveCount);
+    LOGGER.info("write saveRestores %d", _saveCount);
 
     for (int i = 0; i < _saveCount; i++)
     {
@@ -165,8 +155,7 @@ void Memory::writeMemory()
         flashPos = _platform.writeNonVolatileMemory(flashPos, buffer, bufferPos - buffer);
     }
 
-    print("save tableobjs ");
-    println(_tableObjCount);
+    LOGGER.info("save tableobjs %d", _tableObjCount);
 
     for (int i = 0; i < _tableObjCount; i++)
     {
@@ -179,7 +168,7 @@ void Memory::writeMemory()
 
             if (block == nullptr)
             {
-                println("_data of TableObject not in _usedList");
+                LOGGER.error("_data of TableObject not in _usedList");
                 _platform.fatalError();
             }
 
@@ -244,7 +233,7 @@ uint8_t* Memory::allocMemory(size_t size)
 
     if (!blockToUse)
     {
-        println("No available non volatile memory!");
+        LOGGER.error("No available non volatile memory!");
         _platform.fatalError();
     }
 
@@ -287,7 +276,7 @@ void Memory::freeMemory(uint8_t* ptr)
 
     if (!found)
     {
-        println("freeMemory for not used pointer called");
+        LOGGER.error("freeMemory for not used pointer called");
         _platform.fatalError();
     }
 
@@ -328,7 +317,7 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
 
     if (!head || !item)
     {
-        println("invalid parameters of Memory::removeFromList");
+        LOGGER.critical("invalid parameters of Memory::removeFromList");
         _platform.fatalError();
     }
 
@@ -349,7 +338,7 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
 
     if (!found)
     {
-        println("tried to remove block from list not in it");
+        LOGGER.critical("tried to remove block from list not in it");
         _platform.fatalError();
     }
 
@@ -475,13 +464,13 @@ void Memory::addNewUsedBlock(uint8_t* address, size_t size)
 
     if (smallerFreeBlock == nullptr)
     {
-        println("addNewUsedBlock: no smallerBlock found");
+        LOGGER.critical("addNewUsedBlock: no smallerBlock found");
         _platform.fatalError();
     }
 
     if ((smallerFreeBlock->address + smallerFreeBlock->size) < (address + size))
     {
-        println("addNewUsedBlock: found block can't contain new block");
+        LOGGER.critical("addNewUsedBlock: found block can't contain new block");
         _platform.fatalError();
     }
 

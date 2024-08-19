@@ -1,8 +1,17 @@
 #include "logger.h"
 
-Logger Logger::logger(const std::string name)
+Map<std::string, Logger::LogType, 64> Logger::_loggers;
+Logger Logger::_logger;
+
+Logger& Logger::logger(const std::string name)
 {
-    return Logger(name);
+    _logger.name(name);
+    return _logger;
+}
+
+void Logger::logLevel(const std::string name, LogType level)
+{
+    _loggers.insertOrAssign(name, level);
 }
 
 void Logger::info(const std::string message, ...)
@@ -58,6 +67,20 @@ void Logger::exception(const std::string message, ...)
 void Logger::log(LogType type, const char* format, va_list args)
 {
 #ifndef KNX_NO_PRINT
+    LogType* level = _loggers.get(_name);
+    if(level == nullptr) {
+        print("Logger ");
+        print(_name.c_str());
+        print(" is disabled. Use Logger::logLevel(\"");
+        print(_name.c_str());
+        println("\", Logger::Info) to enable.");
+        _loggers.insertOrAssign(_name, Disabled);
+        return;
+    }
+
+    if(*level > type)
+        return;
+
     print(millis());
     print(" ");
     print(_name.c_str());
@@ -119,6 +142,9 @@ const std::string Logger::enum_name(LogType type)
 
         case LogType::Exception:
             return "EXCE";
+
+        case LogType::Disabled:
+            return "DISA";
     }
 
     return std::to_string(type);
