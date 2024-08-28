@@ -35,6 +35,13 @@ For usage of KNX-IP you have to define either
 #include <hardware/watchdog.h> // from Pico SDK
 #include <pico/unique_id.h>    // from Pico SDK
 
+#ifdef KNX_IP_LAN
+    extern Wiznet5500lwIP KNX_NETIF;
+#elif defined(KNX_IP_WIFI)
+#elif defined(KNX_IP_GENERIC)
+
+#endif
+
 namespace Knx
 {
 #ifdef USE_KNX_DMA_UART
@@ -104,13 +111,6 @@ namespace Knx
     #if KNX_FLASH_OFFSET % 4096
         #error "KNX_FLASH_OFFSET must be multiple of 4096"
     #endif
-#endif
-
-#ifdef KNX_IP_LAN
-    extern Wiznet5500lwIP KNX_NETIF;
-#elif defined(KNX_IP_WIFI)
-#elif defined(KNX_IP_GENERIC)
-
 #endif
 
     RP2040ArduinoPlatform::RP2040ArduinoPlatform()

@@ -16,6 +16,10 @@
     #define KNX_SERIAL Serial1
 #endif
 
+extern uint32_t __etext;
+extern uint32_t __data_start__;
+extern uint32_t __data_end__;
+
 namespace Knx
 {
     SamdPlatform::SamdPlatform()
@@ -77,10 +81,6 @@ namespace Knx
         EEPROM.commit();
     }
 #else
-
-    extern uint32_t __etext;
-    extern uint32_t __data_start__;
-    extern uint32_t __data_end__;
 
     static const uint32_t pageSizes[] = {8, 16, 32, 64, 128, 256, 512, 1024};
 

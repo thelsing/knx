@@ -47,26 +47,26 @@ ICACHE_RAM_ATTR void buttonEvent()
 #ifdef ARDUINO_ARCH_SAMD
     // predefined global instance for TP or RF or TP/RF coupler
     #if MASK_VERSION == 0x07B0
-        KnxFacade<SamdPlatform, Bau07B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::SamdPlatform, Knx::Bau07B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x27B0
-        KnxFacade<SamdPlatform, Bau27B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::SamdPlatform, Knx::Bau27B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x2920
-        KnxFacade<SamdPlatform, Bau2920> knx(buttonEvent);
+        Knx::KnxFacade<Knx::SamdPlatform, Knx::Bau2920> knx(buttonEvent);
     #else
         #error "Mask version not supported on ARDUINO_ARCH_SAMD"
     #endif
 #elif defined(ARDUINO_ARCH_RP2040)
     // predefined global instance for TP or RF or IP or TP/RF coupler or TP/IP coupler
     #if MASK_VERSION == 0x07B0
-        KnxFacade<RP2040ArduinoPlatform, Bau07B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau07B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x27B0
-        KnxFacade<RP2040ArduinoPlatform, Bau27B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau27B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x57B0
-        KnxFacade<RP2040ArduinoPlatform, Bau57B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau57B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x2920
-        KnxFacade<RP2040ArduinoPlatform, Bau2920> knx(buttonEvent);
+        Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau2920> knx(buttonEvent);
     #elif MASK_VERSION == 0x091A
-        KnxFacade<RP2040ArduinoPlatform, Bau091A> knx(buttonEvent);
+        Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau091A> knx(buttonEvent);
     #else
         #error "Mask version not supported on ARDUINO_ARCH_RP2040"
     #endif
@@ -74,11 +74,11 @@ ICACHE_RAM_ATTR void buttonEvent()
 #elif defined(ARDUINO_ARCH_ESP8266)
     // predefined global instance for TP or IP or TP/IP coupler
     #if MASK_VERSION == 0x07B0
-        KnxFacade<EspPlatform, Bau07B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::EspPlatform, Knx::Bau07B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x57B0
-        KnxFacade<EspPlatform, Bau57B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::EspPlatform, Knx::Bau57B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x091A
-        KnxFacade<EspPlatform, Bau091A> knx(buttonEvent);
+        Knx::KnxFacade<Knx::EspPlatform, Knx::Bau091A> knx(buttonEvent);
     #else
         #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
     #endif
@@ -86,18 +86,18 @@ ICACHE_RAM_ATTR void buttonEvent()
 #elif defined(ARDUINO_ARCH_ESP32)
     // predefined global instance for TP or IP or TP/IP coupler
     #if MASK_VERSION == 0x07B0
-        KnxFacade<Esp32Platform, Bau07B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau07B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x57B0
-        KnxFacade<Esp32Platform, Bau57B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau57B0> knx(buttonEvent);
     #elif MASK_VERSION == 0x091A
-        KnxFacade<Esp32Platform, Bau091A> knx(buttonEvent);
+        Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau091A> knx(buttonEvent);
     #else
         #error "Mask version not supported on ARDUINO_ARCH_ESP32"
     #endif
 
 #elif defined(ARDUINO_ARCH_STM32)
     #if MASK_VERSION == 0x07B0
-        KnxFacade<Stm32Platform, Bau07B0> knx(buttonEvent);
+        Knx::KnxFacade<Knx::Stm32Platform, Knx::Bau07B0> knx(buttonEvent);
     #else
         #error "Mask version not supported on ARDUINO_ARCH_STM32"
     #endif
