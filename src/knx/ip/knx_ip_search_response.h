@@ -7,15 +7,18 @@
 #include "ip_parameter_object.h"
 #include "service_families.h"
 
-class KnxIpSearchResponse : public KnxIpFrame
+namespace Knx
 {
-    public:
-        KnxIpSearchResponse(IpParameterObject& parameters, DeviceObject& deviceObj);
-        IpHostProtocolAddressInformation& controlEndpoint();
-        KnxIpDeviceInformationDIB& deviceInfo();
-        KnxIpSupportedServiceDIB& supportedServices();
-    private:
-        IpHostProtocolAddressInformation _controlEndpoint;
-        KnxIpDeviceInformationDIB _deviceInfo;
-        KnxIpSupportedServiceDIB _supportedServices;
-};
+    class KnxIpSearchResponse : public KnxIpFrame
+    {
+        public:
+            KnxIpSearchResponse(IpParameterObject& parameters, DeviceObject& deviceObj);
+            IpHostProtocolAddressInformation& controlEndpoint();
+            KnxIpDeviceInformationDIB& deviceInfo();
+            KnxIpSupportedServiceDIB& supportedServices();
+        private:
+            IpHostProtocolAddressInformation _controlEndpoint;
+            KnxIpDeviceInformationDIB _deviceInfo;
+            KnxIpSupportedServiceDIB _supportedServices;
+    };
+}

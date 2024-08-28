@@ -1,713 +1,718 @@
 #include "knx_types.h"
 #include "bits.h"
 
+namespace Knx
+{
+
 #ifndef KNX_NO_PRINT
-const char* enum_name(const LCCONFIG enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const LCCONFIG enum_val)
     {
-        case PHYS_FRAME:
-            return "PHYS_FRAME(ROUT)";
+        switch (enum_val)
+        {
+            case PHYS_FRAME:
+                return "PHYS_FRAME(ROUT)";
 
-        case PHYS_FRAME_UNLOCK:
-            return "PHYS_FRAME_UNLOCK";
+            case PHYS_FRAME_UNLOCK:
+                return "PHYS_FRAME_UNLOCK";
 
-        case PHYS_FRAME_LOCK:
-            return "PHYS_FRAME_LOCK";
+            case PHYS_FRAME_LOCK:
+                return "PHYS_FRAME_LOCK";
 
-        case PHYS_REPEAT:
-            return "PHYS_REPEAT";
+            case PHYS_REPEAT:
+                return "PHYS_REPEAT";
 
-        case BROADCAST_LOCK:
-            return "BROADCAST_LOCK";
+            case BROADCAST_LOCK:
+                return "BROADCAST_LOCK";
 
-        case BROADCAST_REPEAT:
-            return "BROADCAST_REPEAT";
+            case BROADCAST_REPEAT:
+                return "BROADCAST_REPEAT";
 
-        case GROUP_IACK_ROUT:
-            return "GROUP_IACK_ROUT";
+            case GROUP_IACK_ROUT:
+                return "GROUP_IACK_ROUT";
 
-        case PHYS_IACK:
-            return "PHYS_IACK/NACK";
+            case PHYS_IACK:
+                return "PHYS_IACK/NACK";
 
-        case PHYS_IACK_NORMAL:
-            return "PHYS_IACK_NORMAL";
+            case PHYS_IACK_NORMAL:
+                return "PHYS_IACK_NORMAL";
 
-        case PHYS_IACK_ALL:
-            return "PHYS_IACK_ALL";
+            case PHYS_IACK_ALL:
+                return "PHYS_IACK_ALL";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const LCGRPCONFIG enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const LCGRPCONFIG enum_val)
     {
-        case GROUP_6FFF:
-            return "GROUP_6FFF(ROUTE)";
+        switch (enum_val)
+        {
+            case GROUP_6FFF:
+                return "GROUP_6FFF(ROUTE)";
 
-        case GROUP_7000:
-            return "GROUP_7000(ROUTE)";
+            case GROUP_7000:
+                return "GROUP_7000(ROUTE)";
 
-        case GROUP_REPEAT:
-            return "GROUP_REPEAT";
+            case GROUP_REPEAT:
+                return "GROUP_REPEAT";
 
-        case GROUP_6FFFUNLOCK:
-            return "GROUP_6FFFUNLOCK";
+            case GROUP_6FFFUNLOCK:
+                return "GROUP_6FFFUNLOCK";
 
-        case GROUP_6FFFLOCK:
-            return "GROUP_6FFFLOCK";
+            case GROUP_6FFFLOCK:
+                return "GROUP_6FFFLOCK";
 
-        case GROUP_7000UNLOCK:
-            return "GROUP_7000UNLOCK";
+            case GROUP_7000UNLOCK:
+                return "GROUP_7000UNLOCK";
 
-        case GROUP_7000LOCK:
-            return "GROUP_7000LOCK";
+            case GROUP_7000LOCK:
+                return "GROUP_7000LOCK";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const DptMedium enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const DptMedium enum_val)
     {
-        case KNX_TP1:
-            return "KNX_TP1";
+        switch (enum_val)
+        {
+            case KNX_TP1:
+                return "KNX_TP1";
 
-        case KNX_PL110:
-            return "KNX_PL110";
+            case KNX_PL110:
+                return "KNX_PL110";
 
-        case KNX_RF:
-            return "KNX_RF";
+            case KNX_RF:
+                return "KNX_RF";
 
-        case KNX_IP:
-            return "KNX_IP";
+            case KNX_IP:
+                return "KNX_IP";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const EraseCode enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const EraseCode enum_val)
     {
-        case Void:
-            return "Void";
+        switch (enum_val)
+        {
+            case Void:
+                return "Void";
 
-        case ConfirmedRestart:
-            return "ConfirmedRestart";
+            case ConfirmedRestart:
+                return "ConfirmedRestart";
 
-        case FactoryReset:
-            return "FactoryReset";
+            case FactoryReset:
+                return "FactoryReset";
 
-        case ResetIA:
-            return "ResetIA";
+            case ResetIA:
+                return "ResetIA";
 
-        case ResetAP:
-            return "ResetAP";
+            case ResetAP:
+                return "ResetAP";
 
-        case ResetParam:
-            return "ResetParam";
+            case ResetParam:
+                return "ResetParam";
 
-        case ResetLinks:
-            return "ResetLinks";
+            case ResetLinks:
+                return "ResetLinks";
 
-        case FactoryResetWithoutIA:
-            return "FactoryResetWithoutIA";
+            case FactoryResetWithoutIA:
+                return "FactoryResetWithoutIA";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const RestartType enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const RestartType enum_val)
     {
-        case BasicRestart:
-            return "BasicRestart";
+        switch (enum_val)
+        {
+            case BasicRestart:
+                return "BasicRestart";
 
-        case MasterReset:
-            return "MasterReset";
+            case MasterReset:
+                return "MasterReset";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const DataSecurity enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const DataSecurity enum_val)
     {
-        case None:
-            return "None";
+        switch (enum_val)
+        {
+            case None:
+                return "None";
 
-        case Auth:
-            return "Auth";
+            case Auth:
+                return "Auth";
 
-        case AuthConf:
-            return "AuthConf";
+            case AuthConf:
+                return "AuthConf";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const ApduType enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const ApduType enum_val)
     {
-        case GroupValueRead:
-            return "GroupValueRead";
+        switch (enum_val)
+        {
+            case GroupValueRead:
+                return "GroupValueRead";
 
-        case GroupValueResponse:
-            return "GroupValueResponse";
+            case GroupValueResponse:
+                return "GroupValueResponse";
 
-        case GroupValueWrite:
-            return "GroupValueWrite";
+            case GroupValueWrite:
+                return "GroupValueWrite";
 
-        case IndividualAddressWrite:
-            return "IndividualAddressWrite";
+            case IndividualAddressWrite:
+                return "IndividualAddressWrite";
 
-        case IndividualAddressRead:
-            return "IndividualAddressRead";
+            case IndividualAddressRead:
+                return "IndividualAddressRead";
 
-        case IndividualAddressResponse:
-            return "IndividualAddressResponse";
+            case IndividualAddressResponse:
+                return "IndividualAddressResponse";
 
-        case IndividualAddressSerialNumberRead:
-            return "IndividualAddressSerialNumberRead";
+            case IndividualAddressSerialNumberRead:
+                return "IndividualAddressSerialNumberRead";
 
-        case IndividualAddressSerialNumberResponse:
-            return "IndividualAddressSerialNumberResponse";
+            case IndividualAddressSerialNumberResponse:
+                return "IndividualAddressSerialNumberResponse";
 
-        case IndividualAddressSerialNumberWrite:
-            return "IndividualAddressSerialNumberWrite";
+            case IndividualAddressSerialNumberWrite:
+                return "IndividualAddressSerialNumberWrite";
 
-        case SystemNetworkParameterRead:
-            return "SystemNetworkParameterRead";
+            case SystemNetworkParameterRead:
+                return "SystemNetworkParameterRead";
 
-        case SystemNetworkParameterResponse:
-            return "SystemNetworkParameterResponse";
+            case SystemNetworkParameterResponse:
+                return "SystemNetworkParameterResponse";
 
-        case SystemNetworkParameterWrite:
-            return "SystemNetworkParameterWrite";
+            case SystemNetworkParameterWrite:
+                return "SystemNetworkParameterWrite";
 
-        case DomainAddressWrite:
-            return "DomainAddressWrite";
+            case DomainAddressWrite:
+                return "DomainAddressWrite";
 
-        case DomainAddressRead:
-            return "DomainAddressRead";
+            case DomainAddressRead:
+                return "DomainAddressRead";
 
-        case DomainAddressResponse:
-            return "DomainAddressResponse";
+            case DomainAddressResponse:
+                return "DomainAddressResponse";
 
-        case DomainAddressSelectiveRead:
-            return "DomainAddressSelectiveRead";
+            case DomainAddressSelectiveRead:
+                return "DomainAddressSelectiveRead";
 
-        case DomainAddressSerialNumberRead:
-            return "DomainAddressSerialNumberRead";
+            case DomainAddressSerialNumberRead:
+                return "DomainAddressSerialNumberRead";
 
-        case DomainAddressSerialNumberResponse:
-            return "DomainAddressSerialNumberResponse";
+            case DomainAddressSerialNumberResponse:
+                return "DomainAddressSerialNumberResponse";
 
-        case DomainAddressSerialNumberWrite:
-            return "DomainAddressSerialNumberWrite";
+            case DomainAddressSerialNumberWrite:
+                return "DomainAddressSerialNumberWrite";
 
-        case ADCRead:
-            return "ADCRead";
+            case ADCRead:
+                return "ADCRead";
 
-        case ADCResponse:
-            return "ADCResponse";
+            case ADCResponse:
+                return "ADCResponse";
 
-        case PropertyValueExtRead:
-            return "PropertyValueExtRead";
+            case PropertyValueExtRead:
+                return "PropertyValueExtRead";
 
-        case PropertyValueExtResponse:
-            return "PropertyValueExtResponse";
+            case PropertyValueExtResponse:
+                return "PropertyValueExtResponse";
 
-        case PropertyValueExtWriteCon:
-            return "PropertyValueExtWriteCon";
+            case PropertyValueExtWriteCon:
+                return "PropertyValueExtWriteCon";
 
-        case PropertyValueExtWriteConResponse:
-            return "PropertyValueExtWriteConResponse";
+            case PropertyValueExtWriteConResponse:
+                return "PropertyValueExtWriteConResponse";
 
-        case PropertyValueExtWriteUnCon:
-            return "PropertyValueExtWriteUnCon";
+            case PropertyValueExtWriteUnCon:
+                return "PropertyValueExtWriteUnCon";
 
-        case PropertyExtDescriptionRead:
-            return "PropertyExtDescriptionRead";
+            case PropertyExtDescriptionRead:
+                return "PropertyExtDescriptionRead";
 
-        case PropertyExtDescriptionResponse:
-            return "PropertyExtDescriptionResponse";
+            case PropertyExtDescriptionResponse:
+                return "PropertyExtDescriptionResponse";
 
-        case FunctionPropertyExtCommand:
-            return "FunctionPropertyExtCommand";
+            case FunctionPropertyExtCommand:
+                return "FunctionPropertyExtCommand";
 
-        case FunctionPropertyExtState:
-            return "FunctionPropertyExtState";
+            case FunctionPropertyExtState:
+                return "FunctionPropertyExtState";
 
-        case FunctionPropertyExtStateResponse:
-            return "FunctionPropertyExtStateResponse";
+            case FunctionPropertyExtStateResponse:
+                return "FunctionPropertyExtStateResponse";
 
-        case MemoryExtWrite:
-            return "MemoryExtWrite";
+            case MemoryExtWrite:
+                return "MemoryExtWrite";
 
-        case MemoryExtWriteResponse:
-            return "MemoryExtWriteResponse";
+            case MemoryExtWriteResponse:
+                return "MemoryExtWriteResponse";
 
-        case MemoryExtRead:
-            return "MemoryExtRead";
+            case MemoryExtRead:
+                return "MemoryExtRead";
 
-        case MemoryExtReadResponse:
-            return "MemoryExtReadResponse";
+            case MemoryExtReadResponse:
+                return "MemoryExtReadResponse";
 
-        case MemoryRead:
-            return "MemoryRead";
+            case MemoryRead:
+                return "MemoryRead";
 
-        case MemoryResponse:
-            return "MemoryResponse";
+            case MemoryResponse:
+                return "MemoryResponse";
 
-        case MemoryWrite:
-            return "MemoryWrite";
+            case MemoryWrite:
+                return "MemoryWrite";
 
-        case UserMemoryRead:
-            return "UserMemoryRead";
+            case UserMemoryRead:
+                return "UserMemoryRead";
 
-        case UserMemoryResponse:
-            return "UserMemoryResponse";
+            case UserMemoryResponse:
+                return "UserMemoryResponse";
 
-        case UserMemoryWrite:
-            return "UserMemoryWrite";
+            case UserMemoryWrite:
+                return "UserMemoryWrite";
 
-        case UserManufacturerInfoRead:
-            return "UserManufacturerInfoRead";
+            case UserManufacturerInfoRead:
+                return "UserManufacturerInfoRead";
 
-        case UserManufacturerInfoResponse:
-            return "UserManufacturerInfoResponse";
+            case UserManufacturerInfoResponse:
+                return "UserManufacturerInfoResponse";
 
-        case FunctionPropertyCommand:
-            return "FunctionPropertyCommand";
+            case FunctionPropertyCommand:
+                return "FunctionPropertyCommand";
 
-        case FunctionPropertyState:
-            return "FunctionPropertyState";
+            case FunctionPropertyState:
+                return "FunctionPropertyState";
 
-        case FunctionPropertyStateResponse:
-            return "FunctionPropertyStateResponse";
+            case FunctionPropertyStateResponse:
+                return "FunctionPropertyStateResponse";
 
-        case DeviceDescriptorRead:
-            return "DeviceDescriptorRead";
+            case DeviceDescriptorRead:
+                return "DeviceDescriptorRead";
 
-        case DeviceDescriptorResponse:
-            return "DeviceDescriptorResponse";
+            case DeviceDescriptorResponse:
+                return "DeviceDescriptorResponse";
 
-        case Restart:
-            return "Restart";
+            case Restart:
+                return "Restart";
 
-        case RestartMasterReset:
-            return "RestartMasterReset";
+            case RestartMasterReset:
+                return "RestartMasterReset";
 
-        case RoutingTableOpen:
-            return "RoutingTableOpen";
+            case RoutingTableOpen:
+                return "RoutingTableOpen";
 
-        case RoutingTableRead:
-            return "RoutingTableRead";
+            case RoutingTableRead:
+                return "RoutingTableRead";
 
-        case RoutingTableReadResponse:
-            return "RoutingTableReadResponse";
+            case RoutingTableReadResponse:
+                return "RoutingTableReadResponse";
 
-        case RoutingTableWrite:
-            return "RoutingTableWrite";
+            case RoutingTableWrite:
+                return "RoutingTableWrite";
 
-        case MemoryRouterWrite:
-            return "MemoryRouterWrite";
+            case MemoryRouterWrite:
+                return "MemoryRouterWrite";
 
-        case MemoryRouterReadResponse:
-            return "MemoryRouterReadResponse";
+            case MemoryRouterReadResponse:
+                return "MemoryRouterReadResponse";
 
-        case AuthorizeRequest:
-            return "AuthorizeRequest";
+            case AuthorizeRequest:
+                return "AuthorizeRequest";
 
-        case AuthorizeResponse:
-            return "AuthorizeResponse";
+            case AuthorizeResponse:
+                return "AuthorizeResponse";
 
-        case KeyWrite:
-            return "KeyWrite";
+            case KeyWrite:
+                return "KeyWrite";
 
-        case KeyResponse:
-            return "KeyResponse";
+            case KeyResponse:
+                return "KeyResponse";
 
-        case PropertyValueRead:
-            return "PropertyValueRead";
+            case PropertyValueRead:
+                return "PropertyValueRead";
 
-        case PropertyValueResponse:
-            return "PropertyValueResponse";
+            case PropertyValueResponse:
+                return "PropertyValueResponse";
 
-        case PropertyValueWrite:
-            return "PropertyValueWrite";
+            case PropertyValueWrite:
+                return "PropertyValueWrite";
 
-        case PropertyDescriptionRead:
-            return "PropertyDescriptionRead";
+            case PropertyDescriptionRead:
+                return "PropertyDescriptionRead";
 
-        case PropertyDescriptionResponse:
-            return "PropertyDescriptionResponse";
+            case PropertyDescriptionResponse:
+                return "PropertyDescriptionResponse";
 
-        case SecureService:
-            return "SecureService";
+            case SecureService:
+                return "SecureService";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const TpduType enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const TpduType enum_val)
     {
-        case DataBroadcast:
-            return "DataBroadcast";
+        switch (enum_val)
+        {
+            case DataBroadcast:
+                return "DataBroadcast";
 
-        case DataGroup:
-            return "DataGroup";
+            case DataGroup:
+                return "DataGroup";
 
-        case DataInduvidual:
-            return "DataInduvidual";
+            case DataInduvidual:
+                return "DataInduvidual";
 
-        case DataConnected:
-            return "DataConnected";
+            case DataConnected:
+                return "DataConnected";
 
-        case Connect:
-            return "Connect";
+            case Connect:
+                return "Connect";
 
-        case Disconnect:
-            return "Disconnect";
+            case Disconnect:
+                return "Disconnect";
 
-        case Ack:
-            return "Ack";
+            case Ack:
+                return "Ack";
 
-        case Nack:
-            return "Nack";
+            case Nack:
+                return "Nack";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const HopCountType enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const HopCountType enum_val)
     {
-        case UnlimitedRouting:
-            return "UnlimitedRouting";
+        switch (enum_val)
+        {
+            case UnlimitedRouting:
+                return "UnlimitedRouting";
 
-        case NetworkLayerParameter:
-            return "NetworkLayerParameter";
+            case NetworkLayerParameter:
+                return "NetworkLayerParameter";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const Confirm enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const Confirm enum_val)
     {
-        case ConfirmNoError:
-            return "ConfirmNoError";
+        switch (enum_val)
+        {
+            case ConfirmNoError:
+                return "ConfirmNoError";
 
-        case ConfirmError:
-            return "ConfirmError";
+            case ConfirmError:
+                return "ConfirmError";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const SystemBroadcast enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const SystemBroadcast enum_val)
     {
-        case SysBroadcast:
-            return "SysBroadcast";
+        switch (enum_val)
+        {
+            case SysBroadcast:
+                return "SysBroadcast";
 
-        case Broadcast:
-            return "Broadcast";
+            case Broadcast:
+                return "Broadcast";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(Repetition enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(Repetition enum_val)
     {
-        case WasRepeated:
-            return "WasRepeated/NoRepetiion";
+        switch (enum_val)
+        {
+            case WasRepeated:
+                return "WasRepeated/NoRepetiion";
 
-        case WasNotRepeated:
-            return "WasNotRepeated/RepetitionAllowed";
+            case WasNotRepeated:
+                return "WasNotRepeated/RepetitionAllowed";
+        }
+
+        return "";
     }
 
-    return "";
-}
-
-const char* enum_name(const ReturnCodes enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const ReturnCodes enum_val)
     {
-        case Success:
-            return "Success";
+        switch (enum_val)
+        {
+            case Success:
+                return "Success";
 
-        case SuccessWithCrc:
-            return "SuccessWithCrc";
+            case SuccessWithCrc:
+                return "SuccessWithCrc";
 
-        case MemoryError:
-            return "MemoryError";
+            case MemoryError:
+                return "MemoryError";
 
-        case InvalidCommand:
-            return "InvalidCommand";
+            case InvalidCommand:
+                return "InvalidCommand";
 
-        case ImpossibleCommand:
-            return "ImpossibleCommand";
+            case ImpossibleCommand:
+                return "ImpossibleCommand";
 
-        case ExceedsMaxApduLength:
-            return "ExceedsMaxApduLength";
+            case ExceedsMaxApduLength:
+                return "ExceedsMaxApduLength";
 
-        case DataOverflow:
-            return "DataOverflow";
+            case DataOverflow:
+                return "DataOverflow";
 
-        case OutOfMinRange:
-            return "OutOfMinRange";
+            case OutOfMinRange:
+                return "OutOfMinRange";
 
-        case OutOfMaxRange:
-            return "OutOfMaxRange";
+            case OutOfMaxRange:
+                return "OutOfMaxRange";
 
-        case DataVoid:
-            return "DataVoid";
+            case DataVoid:
+                return "DataVoid";
 
-        case TemporarilyNotAvailable:
-            return "TemporarilyNotAvailable";
+            case TemporarilyNotAvailable:
+                return "TemporarilyNotAvailable";
 
-        case AccessWriteOnly:
-            return "AccessWriteOnly";
+            case AccessWriteOnly:
+                return "AccessWriteOnly";
 
-        case AccessReadOnly:
-            return "AccessReadOnly";
+            case AccessReadOnly:
+                return "AccessReadOnly";
 
-        case AccessDenied:
-            return "AccessDenied";
+            case AccessDenied:
+                return "AccessDenied";
 
-        case AddressVoid:
-            return "AddressVoid";
+            case AddressVoid:
+                return "AddressVoid";
 
-        case DataTypeConflict:
-            return "DataTypeConflict";
+            case DataTypeConflict:
+                return "DataTypeConflict";
 
-        case GenericError:
-            return "GenericError";
+            case GenericError:
+                return "GenericError";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const cEmiErrorCode enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const cEmiErrorCode enum_val)
     {
-        case Unspecified_Error:
-            return "Unspecified_Error";
+        switch (enum_val)
+        {
+            case Unspecified_Error:
+                return "Unspecified_Error";
 
-        case Out_Of_Range:
-            return "Out_Of_Range";
+            case Out_Of_Range:
+                return "Out_Of_Range";
 
-        case Out_Of_Max_Range:
-            return "Out_Of_Max_Range";
+            case Out_Of_Max_Range:
+                return "Out_Of_Max_Range";
 
-        case Out_Of_Min_Range:
-            return "Out_Of_Min_Range";
+            case Out_Of_Min_Range:
+                return "Out_Of_Min_Range";
 
-        case Memory_Error:
-            return "Memory_Error";
+            case Memory_Error:
+                return "Memory_Error";
 
-        case Read_Only:
-            return "Read_Only";
+            case Read_Only:
+                return "Read_Only";
 
-        case Illegal_Command:
-            return "Illegal_Command";
+            case Illegal_Command:
+                return "Illegal_Command";
 
-        case Void_DP:
-            return "Void_DP";
+            case Void_DP:
+                return "Void_DP";
 
-        case Type_Conflict:
-            return "Type_Conflict";
+            case Type_Conflict:
+                return "Type_Conflict";
 
-        case Prop_Index_Range_Error:
-            return "Prop_Index_Range_Error";
+            case Prop_Index_Range_Error:
+                return "Prop_Index_Range_Error";
 
-        case Value_temp_not_writeable:
-            return "Value_temp_not_writeable";
+            case Value_temp_not_writeable:
+                return "Value_temp_not_writeable";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const MessageCode enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const MessageCode enum_val)
     {
-        case L_data_req:
-            return "L_data_req";
+        switch (enum_val)
+        {
+            case L_data_req:
+                return "L_data_req";
 
-        case L_data_con:
-            return "L_data_con";
+            case L_data_con:
+                return "L_data_con";
 
-        case L_data_ind:
-            return "L_data_ind";
+            case L_data_ind:
+                return "L_data_ind";
 
-        case M_PropRead_req:
-            return "M_PropRead_req";
+            case M_PropRead_req:
+                return "M_PropRead_req";
 
-        case M_PropRead_con:
-            return "M_PropRead_con";
+            case M_PropRead_con:
+                return "M_PropRead_con";
 
-        case M_PropWrite_req:
-            return "M_PropWrite_req";
+            case M_PropWrite_req:
+                return "M_PropWrite_req";
 
-        case M_PropWrite_con:
-            return "M_PropWrite_con";
+            case M_PropWrite_con:
+                return "M_PropWrite_con";
 
-        case M_PropInfo_ind:
-            return "M_PropInfo_ind";
+            case M_PropInfo_ind:
+                return "M_PropInfo_ind";
 
-        case M_FuncPropCommand_req:
-            return "M_FuncPropCommand_req";
+            case M_FuncPropCommand_req:
+                return "M_FuncPropCommand_req";
 
-        case M_FuncPropCommand_con:
-            return "M_FuncPropCommand/StateRead_con";
+            case M_FuncPropCommand_con:
+                return "M_FuncPropCommand/StateRead_con";
 
-        case M_FuncPropStateRead_req:
-            return "M_FuncPropStateRead_req";
+            case M_FuncPropStateRead_req:
+                return "M_FuncPropStateRead_req";
 
-        case M_Reset_req:
-            return "M_Reset_req";
+            case M_Reset_req:
+                return "M_Reset_req";
 
-        case M_Reset_ind:
-            return "M_Reset_ind";
+            case M_Reset_ind:
+                return "M_Reset_ind";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const AddressType enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const AddressType enum_val)
     {
-        case IndividualAddress:
-            return "IndividualAddress";
+        switch (enum_val)
+        {
+            case IndividualAddress:
+                return "IndividualAddress";
 
-        case GroupAddress:
-            return "GroupAddress";
+            case GroupAddress:
+                return "GroupAddress";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const TPAckType enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const TPAckType enum_val)
     {
-        case AckReqNack:
-            return "AckReqNack";
+        switch (enum_val)
+        {
+            case AckReqNack:
+                return "AckReqNack";
 
-        case AckReqBusy:
-            return "AckReqBusy";
+            case AckReqBusy:
+                return "AckReqBusy";
 
-        case AckReqAck:
-            return "AckReqAck";
+            case AckReqAck:
+                return "AckReqAck";
 
-        case AckReqNone:
-            return "AckReqNone";
+            case AckReqNone:
+                return "AckReqNone";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const AckType enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const AckType enum_val)
     {
-        case AckDontCare:
-            return "AckDontCare";
+        switch (enum_val)
+        {
+            case AckDontCare:
+                return "AckDontCare";
 
-        case AckRequested:
-            return "AckRequested";
+            case AckRequested:
+                return "AckRequested";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const Priority enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const Priority enum_val)
     {
-        case LowPriority:
-            return "LowPriority";
+        switch (enum_val)
+        {
+            case LowPriority:
+                return "LowPriority";
 
-        case NormalPriority:
-            return "NormalPriority";
+            case NormalPriority:
+                return "NormalPriority";
 
-        case UrgentPriority:
-            return "UrgentPriority";
+            case UrgentPriority:
+                return "UrgentPriority";
 
-        case SystemPriority:
-            return "SystemPriority";
+            case SystemPriority:
+                return "SystemPriority";
+        }
+
+        return "";
     }
 
-    return "";
-}
 
-
-const char* enum_name(const FrameFormat enum_val)
-{
-    switch (enum_val)
+    const char* enum_name(const FrameFormat enum_val)
     {
-        case ExtendedFrame:
-            return "ExtendedFrame";
+        switch (enum_val)
+        {
+            case ExtendedFrame:
+                return "ExtendedFrame";
 
-        case StandardFrame:
-            return "StandardFrame";
+            case StandardFrame:
+                return "StandardFrame";
+        }
+
+        return "";
     }
 
-    return "";
-}
+    void print_ia(const uint16_t ia)
+    {
+        print(ia & 0xF000 >> 24);
+        print("/");
+        print(ia & 0x0F00 >> 16);
+        print("/");
+        print(ia & 0x00FF);
+    }
 
-void print_ia(const uint16_t ia)
-{
-    print(ia & 0xF000 >> 24);
-    print("/");
-    print(ia & 0x0F00 >> 16);
-    print("/");
-    print(ia & 0x00FF);
-}
-
-void print_ga(const uint16_t ga)
-{
-    print(ga & 0xF800 >> 23);
-    print("/");
-    print(ga & 0x70 >> 16);
-    print("/");
-    print(ga & 0x00FF);
-}
+    void print_ga(const uint16_t ga)
+    {
+        print(ga & 0xF800 >> 23);
+        print("/");
+        print(ga & 0x70 >> 16);
+        print("/");
+        print(ga & 0x00FF);
+    }
 #endif
+
+}

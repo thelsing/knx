@@ -76,355 +76,358 @@ Control Field 1
          ------+---------------------------------------------------------------
 */
 
-CemiFrame::CemiFrame(uint8_t* data, uint16_t length)
-    : _npdu(data + data[1] + NPDU_LPDU_DIFF, *this),
-      _tpdu(data + data[1] + TPDU_LPDU_DIFF, *this),
-      _apdu(data + data[1] + APDU_LPDU_DIFF, *this)
+namespace Knx
 {
-    _data = data;
-    _ctrl1 = data + data[1] + CEMI_HEADER_SIZE;
-    _length = length;
-}
-
-CemiFrame::CemiFrame(uint8_t apduLength)
-    : _data(buffer),
-      _npdu(_data + NPDU_LPDU_DIFF, *this),
-      _tpdu(_data + TPDU_LPDU_DIFF, *this),
-      _apdu(_data + APDU_LPDU_DIFF, *this)
-{
-    _ctrl1 = _data + CEMI_HEADER_SIZE;
-
-    memset(_data, 0, apduLength + APDU_LPDU_DIFF);
-    _ctrl1[0] |= Broadcast;
-    _npdu.octetCount(apduLength);
-    _length = _npdu.length() + NPDU_LPDU_DIFF;
-}
-
-CemiFrame::CemiFrame(const CemiFrame& other)
-    : _data(buffer),
-      _npdu(_data + NPDU_LPDU_DIFF, *this),
-      _tpdu(_data + TPDU_LPDU_DIFF, *this),
-      _apdu(_data + APDU_LPDU_DIFF, *this)
-{
-    _ctrl1 = _data + CEMI_HEADER_SIZE;
-    _length = other._length;
-
-    memcpy(_data, other._data, other.totalLenght());
-}
-
-CemiFrame& CemiFrame::operator=(CemiFrame other)
-{
-    _length = other._length;
-    _data = buffer;
-    _ctrl1 = _data + CEMI_HEADER_SIZE;
-    memcpy(_data, other._data, other.totalLenght());
-    _npdu._data = _data + NPDU_LPDU_DIFF;
-    _tpdu._data = _data + TPDU_LPDU_DIFF;
-    _apdu._data = _data + APDU_LPDU_DIFF;
-    return *this;
-}
-
-
-MessageCode CemiFrame::messageCode() const
-{
-    return (MessageCode)_data[0];
-}
-
-void CemiFrame::messageCode(MessageCode msgCode)
-{
-    _data[0] = msgCode;
-}
-
-uint16_t CemiFrame::totalLenght() const
-{
-    return _length;
-}
-
-uint16_t CemiFrame::telegramLengthtTP() const
-{
-    if (frameType() == StandardFrame)
-        return totalLenght() - 2; /*-AddInfo -MsgCode - only one CTRL + CRC, */
-    else
-        return totalLenght() - 1; /*-AddInfo -MsgCode + CRC, */
-}
-
-void CemiFrame::fillTelegramTP(uint8_t* data)
-{
-    uint16_t len = telegramLengthtTP();
-
-    if (frameType() == StandardFrame)
+    CemiFrame::CemiFrame(uint8_t* data, uint16_t length)
+        : _npdu(data + data[1] + NPDU_LPDU_DIFF, *this),
+          _tpdu(data + data[1] + TPDU_LPDU_DIFF, *this),
+          _apdu(data + data[1] + APDU_LPDU_DIFF, *this)
     {
-        uint8_t octet5 = (_ctrl1[1] & 0xF0) | (_ctrl1[6] & 0x0F);
-        data[0] = _ctrl1[0]; //CTRL
+        _data = data;
+        _ctrl1 = data + data[1] + CEMI_HEADER_SIZE;
+        _length = length;
+    }
+
+    CemiFrame::CemiFrame(uint8_t apduLength)
+        : _data(buffer),
+          _npdu(_data + NPDU_LPDU_DIFF, *this),
+          _tpdu(_data + TPDU_LPDU_DIFF, *this),
+          _apdu(_data + APDU_LPDU_DIFF, *this)
+    {
+        _ctrl1 = _data + CEMI_HEADER_SIZE;
+
+        memset(_data, 0, apduLength + APDU_LPDU_DIFF);
+        _ctrl1[0] |= Broadcast;
+        _npdu.octetCount(apduLength);
+        _length = _npdu.length() + NPDU_LPDU_DIFF;
+    }
+
+    CemiFrame::CemiFrame(const CemiFrame& other)
+        : _data(buffer),
+          _npdu(_data + NPDU_LPDU_DIFF, *this),
+          _tpdu(_data + TPDU_LPDU_DIFF, *this),
+          _apdu(_data + APDU_LPDU_DIFF, *this)
+    {
+        _ctrl1 = _data + CEMI_HEADER_SIZE;
+        _length = other._length;
+
+        memcpy(_data, other._data, other.totalLenght());
+    }
+
+    CemiFrame& CemiFrame::operator=(CemiFrame other)
+    {
+        _length = other._length;
+        _data = buffer;
+        _ctrl1 = _data + CEMI_HEADER_SIZE;
+        memcpy(_data, other._data, other.totalLenght());
+        _npdu._data = _data + NPDU_LPDU_DIFF;
+        _tpdu._data = _data + TPDU_LPDU_DIFF;
+        _apdu._data = _data + APDU_LPDU_DIFF;
+        return *this;
+    }
+
+
+    MessageCode CemiFrame::messageCode() const
+    {
+        return (MessageCode)_data[0];
+    }
+
+    void CemiFrame::messageCode(MessageCode msgCode)
+    {
+        _data[0] = msgCode;
+    }
+
+    uint16_t CemiFrame::totalLenght() const
+    {
+        return _length;
+    }
+
+    uint16_t CemiFrame::telegramLengthtTP() const
+    {
+        if (frameType() == StandardFrame)
+            return totalLenght() - 2; /*-AddInfo -MsgCode - only one CTRL + CRC, */
+        else
+            return totalLenght() - 1; /*-AddInfo -MsgCode + CRC, */
+    }
+
+    void CemiFrame::fillTelegramTP(uint8_t* data)
+    {
+        uint16_t len = telegramLengthtTP();
+
+        if (frameType() == StandardFrame)
+        {
+            uint8_t octet5 = (_ctrl1[1] & 0xF0) | (_ctrl1[6] & 0x0F);
+            data[0] = _ctrl1[0]; //CTRL
+            memcpy(data + 1, _ctrl1 + 2, 4); // SA, DA
+            data[5] = octet5; // LEN; Hopcount, ..
+            memcpy(data + 6, _ctrl1 + 7, len - 7); // APDU
+        }
+        else
+        {
+            memcpy(data, _ctrl1, len - 1);
+        }
+
+        data[len - 1] = calcCrcTP(data, len - 1);
+    }
+#ifndef KNX_NO_RF
+    uint16_t CemiFrame::telegramLengthtRF() const
+    {
+        return totalLenght() - 3;
+    }
+
+    void CemiFrame::fillTelegramRF(uint8_t* data)
+    {
+        uint16_t len = telegramLengthtRF();
+
+        // We prepare the actual KNX telegram for RF here only.
+        // The packaging into blocks with CRC16 (Format based on FT3 Data Link Layer (IEC 870-5))
+        // is done in the RF Data Link Layer code.
+        // RF always uses the Extended Frame Format. However, the length field is missing (right before the APDU)
+        // as there is already a length field at the beginning of the raw RF frame which is also used by the
+        // physical layer to control the HW packet engine of the transceiver.
+
+        data[0] = _ctrl1[1] & 0x0F; // KNX CTRL field for RF (bits 3..0 EFF only), bits 7..4 are set to 0 for asynchronous RF frames
         memcpy(data + 1, _ctrl1 + 2, 4); // SA, DA
-        data[5] = octet5; // LEN; Hopcount, ..
-        memcpy(data + 6, _ctrl1 + 7, len - 7); // APDU
+        data[5] = (_ctrl1[1] & 0xF0) | ((_rfLfn & 0x7) << 1) | ((_ctrl1[0] & 0x10) >> 4); // L/NPCI field: AT, Hopcount, LFN, AET
+        memcpy(data + 6, _ctrl1 + 7, len - 6); // APDU
+
+        //printHex("cEMI_fill: ", &data[0], len);
     }
-    else
-    {
-        memcpy(data, _ctrl1, len - 1);
-    }
-
-    data[len - 1] = calcCrcTP(data, len - 1);
-}
-#ifndef KNX_NO_RF
-uint16_t CemiFrame::telegramLengthtRF() const
-{
-    return totalLenght() - 3;
-}
-
-void CemiFrame::fillTelegramRF(uint8_t* data)
-{
-    uint16_t len = telegramLengthtRF();
-
-    // We prepare the actual KNX telegram for RF here only.
-    // The packaging into blocks with CRC16 (Format based on FT3 Data Link Layer (IEC 870-5))
-    // is done in the RF Data Link Layer code.
-    // RF always uses the Extended Frame Format. However, the length field is missing (right before the APDU)
-    // as there is already a length field at the beginning of the raw RF frame which is also used by the
-    // physical layer to control the HW packet engine of the transceiver.
-
-    data[0] = _ctrl1[1] & 0x0F; // KNX CTRL field for RF (bits 3..0 EFF only), bits 7..4 are set to 0 for asynchronous RF frames
-    memcpy(data + 1, _ctrl1 + 2, 4); // SA, DA
-    data[5] = (_ctrl1[1] & 0xF0) | ((_rfLfn & 0x7) << 1) | ((_ctrl1[0] & 0x10) >> 4); // L/NPCI field: AT, Hopcount, LFN, AET
-    memcpy(data + 6, _ctrl1 + 7, len - 6); // APDU
-
-    //printHex("cEMI_fill: ", &data[0], len);
-}
 #endif
-uint8_t* CemiFrame::data()
-{
-    return _data;
-}
+    uint8_t* CemiFrame::data()
+    {
+        return _data;
+    }
 
-uint16_t CemiFrame::dataLength()
-{
-    return _length;
-}
+    uint16_t CemiFrame::dataLength()
+    {
+        return _length;
+    }
 
-uint8_t CemiFrame::calcCrcTP(uint8_t* buffer, uint16_t len)
-{
-    uint8_t crc = 0xFF;
+    uint8_t CemiFrame::calcCrcTP(uint8_t* buffer, uint16_t len)
+    {
+        uint8_t crc = 0xFF;
 
-    for (uint16_t i = 0; i < len; i++)
-        crc ^= buffer[i];
+        for (uint16_t i = 0; i < len; i++)
+            crc ^= buffer[i];
 
-    return crc;
-}
+        return crc;
+    }
 
-FrameFormat CemiFrame::frameType() const
-{
-    return (FrameFormat)(_ctrl1[0] & StandardFrame);
-}
+    FrameFormat CemiFrame::frameType() const
+    {
+        return (FrameFormat)(_ctrl1[0] & StandardFrame);
+    }
 
-void CemiFrame::frameType(FrameFormat type)
-{
-    _ctrl1[0] &= ~StandardFrame;
-    _ctrl1[0] |= type;
-}
+    void CemiFrame::frameType(FrameFormat type)
+    {
+        _ctrl1[0] &= ~StandardFrame;
+        _ctrl1[0] |= type;
+    }
 
-Repetition CemiFrame::repetition() const
-{
-    return (Repetition)(_ctrl1[0] & RepetitionAllowed);
-}
+    Repetition CemiFrame::repetition() const
+    {
+        return (Repetition)(_ctrl1[0] & RepetitionAllowed);
+    }
 
-void CemiFrame::repetition(Repetition rep)
-{
-    _ctrl1[0] &= ~RepetitionAllowed;
-    _ctrl1[0] |= rep;
-}
+    void CemiFrame::repetition(Repetition rep)
+    {
+        _ctrl1[0] &= ~RepetitionAllowed;
+        _ctrl1[0] |= rep;
+    }
 
-SystemBroadcast CemiFrame::systemBroadcast() const
-{
-    return (SystemBroadcast)(_ctrl1[0] & Broadcast);
-}
+    SystemBroadcast CemiFrame::systemBroadcast() const
+    {
+        return (SystemBroadcast)(_ctrl1[0] & Broadcast);
+    }
 
-void CemiFrame::systemBroadcast(SystemBroadcast value)
-{
-    _ctrl1[0] &= ~Broadcast;
-    _ctrl1[0] |= value;
-}
+    void CemiFrame::systemBroadcast(SystemBroadcast value)
+    {
+        _ctrl1[0] &= ~Broadcast;
+        _ctrl1[0] |= value;
+    }
 
-Priority CemiFrame::priority() const
-{
-    return (Priority)(_ctrl1[0] & LowPriority);
-}
+    Priority CemiFrame::priority() const
+    {
+        return (Priority)(_ctrl1[0] & LowPriority);
+    }
 
-void CemiFrame::priority(Priority value)
-{
-    _ctrl1[0] &= ~LowPriority;
-    _ctrl1[0] |= value;
-}
+    void CemiFrame::priority(Priority value)
+    {
+        _ctrl1[0] &= ~LowPriority;
+        _ctrl1[0] |= value;
+    }
 
-AckType CemiFrame::ack() const
-{
-    return (AckType)(_ctrl1[0] & AckRequested);
-}
+    AckType CemiFrame::ack() const
+    {
+        return (AckType)(_ctrl1[0] & AckRequested);
+    }
 
-void CemiFrame::ack(AckType value)
-{
-    _ctrl1[0] &= ~AckRequested;
-    _ctrl1[0] |= value;
-}
+    void CemiFrame::ack(AckType value)
+    {
+        _ctrl1[0] &= ~AckRequested;
+        _ctrl1[0] |= value;
+    }
 
-Confirm CemiFrame::confirm() const
-{
-    return (Confirm)(_ctrl1[0] & ConfirmError);
-}
+    Confirm CemiFrame::confirm() const
+    {
+        return (Confirm)(_ctrl1[0] & ConfirmError);
+    }
 
-void CemiFrame::confirm(Confirm value)
-{
-    _ctrl1[0] &= ~ConfirmError;
-    _ctrl1[0] |= value;
-}
+    void CemiFrame::confirm(Confirm value)
+    {
+        _ctrl1[0] &= ~ConfirmError;
+        _ctrl1[0] |= value;
+    }
 
-AddressType CemiFrame::addressType() const
-{
-    return (AddressType)(_ctrl1[1] & GroupAddress);
-}
+    AddressType CemiFrame::addressType() const
+    {
+        return (AddressType)(_ctrl1[1] & GroupAddress);
+    }
 
-void CemiFrame::addressType(AddressType value)
-{
-    _ctrl1[1] &= ~GroupAddress;
-    _ctrl1[1] |= value;
-}
+    void CemiFrame::addressType(AddressType value)
+    {
+        _ctrl1[1] &= ~GroupAddress;
+        _ctrl1[1] |= value;
+    }
 
-uint8_t CemiFrame::hopCount() const
-{
-    return ((_ctrl1[1] >> 4) & 0x7);
-}
+    uint8_t CemiFrame::hopCount() const
+    {
+        return ((_ctrl1[1] >> 4) & 0x7);
+    }
 
-void CemiFrame::hopCount(uint8_t value)
-{
-    _ctrl1[1] &= ~(0x7 << 4);
-    _ctrl1[1] |= ((value & 0x7) << 4);
-}
+    void CemiFrame::hopCount(uint8_t value)
+    {
+        _ctrl1[1] &= ~(0x7 << 4);
+        _ctrl1[1] |= ((value & 0x7) << 4);
+    }
 
-uint16_t CemiFrame::sourceAddress() const
-{
-    uint16_t addr;
-    popWord(addr, _ctrl1 + 2);
-    return addr;
-}
+    uint16_t CemiFrame::sourceAddress() const
+    {
+        uint16_t addr;
+        popWord(addr, _ctrl1 + 2);
+        return addr;
+    }
 
-void CemiFrame::sourceAddress(uint16_t value)
-{
-    pushWord(value, _ctrl1 + 2);
-}
+    void CemiFrame::sourceAddress(uint16_t value)
+    {
+        pushWord(value, _ctrl1 + 2);
+    }
 
-uint16_t CemiFrame::destinationAddress() const
-{
-    uint16_t addr;
-    popWord(addr, _ctrl1 + 4);
-    return addr;
-}
+    uint16_t CemiFrame::destinationAddress() const
+    {
+        uint16_t addr;
+        popWord(addr, _ctrl1 + 4);
+        return addr;
+    }
 
-void CemiFrame::destinationAddress(uint16_t value)
-{
-    pushWord(value, _ctrl1 + 4);
-}
+    void CemiFrame::destinationAddress(uint16_t value)
+    {
+        pushWord(value, _ctrl1 + 4);
+    }
 #ifndef KNX_NO_RF
-uint8_t* CemiFrame::rfSerialOrDoA() const
-{
-    return _rfSerialOrDoA;
-}
+    uint8_t* CemiFrame::rfSerialOrDoA() const
+    {
+        return _rfSerialOrDoA;
+    }
 
-void CemiFrame::rfSerialOrDoA(const uint8_t* rfSerialOrDoA)
-{
-    _rfSerialOrDoA = (uint8_t*)rfSerialOrDoA;
-}
+    void CemiFrame::rfSerialOrDoA(const uint8_t* rfSerialOrDoA)
+    {
+        _rfSerialOrDoA = (uint8_t*)rfSerialOrDoA;
+    }
 
-uint8_t CemiFrame::rfInfo() const
-{
-    return _rfInfo;
-}
+    uint8_t CemiFrame::rfInfo() const
+    {
+        return _rfInfo;
+    }
 
-void CemiFrame::rfInfo(uint8_t rfInfo)
-{
-    _rfInfo = rfInfo;
-}
+    void CemiFrame::rfInfo(uint8_t rfInfo)
+    {
+        _rfInfo = rfInfo;
+    }
 
-uint8_t CemiFrame::rfLfn() const
-{
-    return _rfLfn;
-}
+    uint8_t CemiFrame::rfLfn() const
+    {
+        return _rfLfn;
+    }
 
-void CemiFrame::rfLfn(uint8_t rfLfn)
-{
-    _rfLfn = rfLfn;
-}
+    void CemiFrame::rfLfn(uint8_t rfLfn)
+    {
+        _rfLfn = rfLfn;
+    }
 #endif
-NPDU& CemiFrame::npdu()
-{
-    return _npdu;
-}
-
-TPDU& CemiFrame::tpdu()
-{
-    return _tpdu;
-}
-
-APDU& CemiFrame::apdu()
-{
-    return _apdu;
-}
-
-bool CemiFrame::valid() const
-{
-    uint8_t addInfoLen = _data[1];
-    uint8_t apduLen = _data[_data[1] + NPDU_LPDU_DIFF];
-
-    if (_length != 0 && _length != (addInfoLen + apduLen + NPDU_LPDU_DIFF + 2))
+    NPDU& CemiFrame::npdu()
     {
-        print("length issue, length: ");
-        print(_length);
-        print(" addInfoLen: ");
-        print(addInfoLen);
-        print(" apduLen: ");
-        print(apduLen);
-        print(" expected length: ");
-        println(addInfoLen + apduLen + NPDU_LPDU_DIFF + 2);
-        printHex("Frame: ", _data, _length, true);
-
-        return false;
+        return _npdu;
     }
 
-    if ((_ctrl1[0] & 0x40) > 0 // Bit 6 has do be 0
-            || (_ctrl1[1] & 0xF) > 0 // only standard or extended frames
-            || _npdu.octetCount() == 0xFF // not allowed
-            || (_npdu.octetCount() > 15 && frameType() == StandardFrame)
-       )
+    TPDU& CemiFrame::tpdu()
     {
-        print("Other issue");
-        return false;
+        return _tpdu;
     }
 
-    return true;
-}
+    APDU& CemiFrame::apdu()
+    {
+        return _apdu;
+    }
 
-void CemiFrame::printIt() const
-{
+    bool CemiFrame::valid() const
+    {
+        uint8_t addInfoLen = _data[1];
+        uint8_t apduLen = _data[_data[1] + NPDU_LPDU_DIFF];
+
+        if (_length != 0 && _length != (addInfoLen + apduLen + NPDU_LPDU_DIFF + 2))
+        {
+            print("length issue, length: ");
+            print(_length);
+            print(" addInfoLen: ");
+            print(addInfoLen);
+            print(" apduLen: ");
+            print(apduLen);
+            print(" expected length: ");
+            println(addInfoLen + apduLen + NPDU_LPDU_DIFF + 2);
+            printHex("Frame: ", _data, _length, true);
+
+            return false;
+        }
+
+        if ((_ctrl1[0] & 0x40) > 0 // Bit 6 has do be 0
+                || (_ctrl1[1] & 0xF) > 0 // only standard or extended frames
+                || _npdu.octetCount() == 0xFF // not allowed
+                || (_npdu.octetCount() > 15 && frameType() == StandardFrame)
+           )
+        {
+            print("Other issue");
+            return false;
+        }
+
+        return true;
+    }
+
+    void CemiFrame::printIt() const
+    {
 #ifndef KNX_NO_PRINT
-    print("DPDU:");
-    print(enum_name(frameType()));
-    print(" ");
-    print(enum_name(systemBroadcast()));
-    print(" ");
-    print(enum_name(ack()));
-    print(" ");
-    print(enum_name(repetition()));
-    print(" ");
-    print(enum_name(priority()));
-    print(" from ");
-    print_ia(sourceAddress());
-    print(" to ");
-    print(enum_name(addressType()));
-    print(" ");
+        print("DPDU:");
+        print(enum_name(frameType()));
+        print(" ");
+        print(enum_name(systemBroadcast()));
+        print(" ");
+        print(enum_name(ack()));
+        print(" ");
+        print(enum_name(repetition()));
+        print(" ");
+        print(enum_name(priority()));
+        print(" from ");
+        print_ia(sourceAddress());
+        print(" to ");
+        print(enum_name(addressType()));
+        print(" ");
 
-    if (addressType() == AddressType::IndividualAddress)
-        print_ia(destinationAddress());
-    else
-        print_ga(destinationAddress());
+        if (addressType() == AddressType::IndividualAddress)
+            print_ia(destinationAddress());
+        else
+            print_ga(destinationAddress());
 
 #endif
+    }
 }

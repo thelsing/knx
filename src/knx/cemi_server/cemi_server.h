@@ -4,56 +4,59 @@
 #include "../knx_types.h"
 #include <stdint.h>
 
-class BauSystemB;
-class DataLinkLayer;
-class CemiFrame;
-
-/**
- * This is an implementation of the cEMI server as specified in @cite knx:3/6/3.
- * Overview on page 57.
- * It provides methods for the BusAccessUnit to do different things and translates this
- * call to an cEMI frame and calls the correct method of the data link layer.
- * It also takes calls from data link layer, decodes the submitted cEMI frames and calls the corresponding
- * methods of the BusAccessUnit class.
- */
-class CemiServer
+namespace Knx
 {
-    public:
-        /**
-         * The constructor.
-         * @param bau methods are called here depending of the content of the APDU
-         */
-        CemiServer(BauSystemB& bau);
+    class BauSystemB;
+    class DataLinkLayer;
+    class CemiFrame;
 
-        void dataLinkLayer(DataLinkLayer& layer);
-        void dataLinkLayerPrimary(DataLinkLayer& layer);
+    /**
+     * This is an implementation of the cEMI server as specified in @cite knx:3/6/3.
+     * Overview on page 57.
+     * It provides methods for the BusAccessUnit to do different things and translates this
+     * call to an cEMI frame and calls the correct method of the data link layer.
+     * It also takes calls from data link layer, decodes the submitted cEMI frames and calls the corresponding
+     * methods of the BusAccessUnit class.
+     */
+    class CemiServer
+    {
+        public:
+            /**
+             * The constructor.
+             * @param bau methods are called here depending of the content of the APDU
+             */
+            CemiServer(BauSystemB& bau);
 
-        // from data link layer
-        // Only L_Data service
-        void dataIndicationToTunnel(CemiFrame& frame);
-        void dataConfirmationToTunnel(CemiFrame& frame);
+            void dataLinkLayer(DataLinkLayer& layer);
+            void dataLinkLayerPrimary(DataLinkLayer& layer);
 
-        // From tunnel interface
-        void frameReceived(CemiFrame& frame);
+            // from data link layer
+            // Only L_Data service
+            void dataIndicationToTunnel(CemiFrame& frame);
+            void dataConfirmationToTunnel(CemiFrame& frame);
 
-        uint16_t clientAddress() const;
-        void clientAddress(uint16_t value);
+            // From tunnel interface
+            void frameReceived(CemiFrame& frame);
 
-        void loop();
+            uint16_t clientAddress() const;
+            void clientAddress(uint16_t value);
 
-    private:
-        uint16_t _clientAddress = 0;
-        uint8_t _frameNumber = 0;
+            void loop();
 
-        void handleLData(CemiFrame& frame);
-        void handleMPropRead(CemiFrame& frame);
-        void handleMPropWrite(CemiFrame& frame);
-        void handleMReset(CemiFrame& frame);
+        private:
+            uint16_t _clientAddress = 0;
+            uint8_t _frameNumber = 0;
 
-        DataLinkLayer* _dataLinkLayer = nullptr;
-        DataLinkLayer* _dataLinkLayerPrimary = nullptr;
-        BauSystemB& _bau;
-#ifdef USE_USB       
-        UsbTunnelInterface _usbTunnelInterface;
+            void handleLData(CemiFrame& frame);
+            void handleMPropRead(CemiFrame& frame);
+            void handleMPropWrite(CemiFrame& frame);
+            void handleMReset(CemiFrame& frame);
+
+            DataLinkLayer* _dataLinkLayer = nullptr;
+            DataLinkLayer* _dataLinkLayerPrimary = nullptr;
+            BauSystemB& _bau;
+#ifdef USE_USB
+            UsbTunnelInterface _usbTunnelInterface;
 #endif
-};
+    };
+}

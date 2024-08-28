@@ -4,54 +4,57 @@
 #include "../config.h"
 #include "../knx_types.h"
 
-class Memory;
-
-enum CouplerModel
+namespace Knx
 {
-    Model_1x,
-    Model_20
-};
+    class Memory;
 
-enum RouterObjectType
-{
-    Primary,
-    Secondary,
-    Single     // Not used, just a placeholder for better readability for coupler model 1.x
-};
+    enum CouplerModel
+    {
+        Model_1x,
+        Model_20
+    };
 
-class RouterObject : public TableObject
-{
-    public:
-        RouterObject(Memory& memory, uint32_t staticTableAdr = 0, uint32_t staticTableSize = 0);
+    enum RouterObjectType
+    {
+        Primary,
+        Secondary,
+        Single     // Not used, just a placeholder for better readability for coupler model 1.x
+    };
 
-        void initialize1x(DptMedium mediumType, uint16_t maxApduSize);
-        void initialize20(uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize);
-        void initialize(CouplerModel model, uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize);
+    class RouterObject : public TableObject
+    {
+        public:
+            RouterObject(Memory& memory, uint32_t staticTableAdr = 0, uint32_t staticTableSize = 0);
 
-        bool isGroupAddressInFilterTable(uint16_t groupAddress);
+            void initialize1x(DptMedium mediumType, uint16_t maxApduSize);
+            void initialize20(uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize);
+            void initialize(CouplerModel model, uint8_t objIndex, DptMedium mediumType, RouterObjectType rtType, uint16_t maxApduSize);
 
-        bool isRfSbcRoutingEnabled();
-        bool isIpSbcRoutingEnabled();
+            bool isGroupAddressInFilterTable(uint16_t groupAddress);
 
-        void masterReset(EraseCode eraseCode, uint8_t channel) override;
+            bool isRfSbcRoutingEnabled();
+            bool isIpSbcRoutingEnabled();
 
-        const uint8_t* restore(const uint8_t* buffer) override;
+            void masterReset(EraseCode eraseCode, uint8_t channel) override;
 
-    protected:
-        void beforeStateChange(LoadState& newState) override;
+            const uint8_t* restore(const uint8_t* buffer) override;
 
-    private:
-        // Function properties
-        void functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
-        void functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
-        void functionIpEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+        protected:
+            void beforeStateChange(LoadState& newState) override;
 
-        void commandClearSetRoutingTable(bool bitIsSet);
-        bool statusClearSetRoutingTable(bool bitIsSet);
-        void commandClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet);
-        bool statusClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet);
+        private:
+            // Function properties
+            void functionRouteTableControl(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+            void functionRfEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+            void functionIpEnableSbc(bool isCommand, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
 
-        bool _rfSbcRoutingEnabled = false;
-        bool _ipSbcRoutingEnabled = false;
-        CouplerModel _model = CouplerModel::Model_20;
-};
+            void commandClearSetRoutingTable(bool bitIsSet);
+            bool statusClearSetRoutingTable(bool bitIsSet);
+            void commandClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet);
+            bool statusClearSetGroupAddress(uint16_t startAddress, uint16_t endAddress, bool bitIsSet);
+
+            bool _rfSbcRoutingEnabled = false;
+            bool _ipSbcRoutingEnabled = false;
+            CouplerModel _model = CouplerModel::Model_20;
+    };
+}

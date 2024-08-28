@@ -27,6 +27,8 @@
 
 extern bool sendHidReport(uint8_t* data, uint16_t length);
 extern bool isSendHidReportPossible();
+namespace Knx
+{
 
 // class UsbTunnelInterface
 
@@ -556,4 +558,5 @@ const uint8_t* UsbTunnelInterface::getKnxHidReportDescriptor()
 uint16_t UsbTunnelInterface::getHidReportDescriptorLength()
 {
     return sizeof(descHidReport);
+}
 }

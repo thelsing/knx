@@ -7,19 +7,22 @@
 // Calculate the real packet size out of the L-field of FT3 frame data. See KNX-RF spec. 3.2.5 Data Link Layer frame format
 #define PACKET_SIZE(lField) ((((lField - 10 /*size of first pkt*/))/16 + 2 /*CRC in first pkt */) * 2 /*to bytes*/ +lField + 1 /*size of len byte*/)
 
-class RfDataLinkLayer;
-
-class RfPhysicalLayer
+namespace Knx
 {
-    public:
-        RfPhysicalLayer(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
-            : _rfDataLinkLayer(rfDataLinkLayer), _platform(platform) {}
+    class RfDataLinkLayer;
 
-        virtual bool InitChip() = 0;
-        virtual void stopChip() = 0;
-        virtual void loop() = 0;
+    class RfPhysicalLayer
+    {
+        public:
+            RfPhysicalLayer(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
+                : _rfDataLinkLayer(rfDataLinkLayer), _platform(platform) {}
 
-    protected:
-        RfDataLinkLayer& _rfDataLinkLayer;
-        Platform& _platform;
-};
+            virtual bool InitChip() = 0;
+            virtual void stopChip() = 0;
+            virtual void loop() = 0;
+
+        protected:
+            RfDataLinkLayer& _rfDataLinkLayer;
+            Platform& _platform;
+    };
+}

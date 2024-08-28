@@ -3,27 +3,30 @@
 
 #include "../bits.h"
 
-KnxIpTunnelingInfoDIB::KnxIpTunnelingInfoDIB(uint8_t* data) : KnxIpDIB(data)
+namespace Knx
 {
-    currentPos = data + 4;
-}
+    KnxIpTunnelingInfoDIB::KnxIpTunnelingInfoDIB(uint8_t* data) : KnxIpDIB(data)
+    {
+        currentPos = data + 4;
+    }
 
-uint16_t KnxIpTunnelingInfoDIB::apduLength()
-{
-    uint16_t addr = 0;
-    popWord(addr, _data + 2);
-    return addr;
-}
+    uint16_t KnxIpTunnelingInfoDIB::apduLength()
+    {
+        uint16_t addr = 0;
+        popWord(addr, _data + 2);
+        return addr;
+    }
 
-void KnxIpTunnelingInfoDIB::apduLength(uint16_t addr)
-{
-    pushWord(addr, _data + 2);
-}
+    void KnxIpTunnelingInfoDIB::apduLength(uint16_t addr)
+    {
+        pushWord(addr, _data + 2);
+    }
 
-void KnxIpTunnelingInfoDIB::tunnelingSlot(uint16_t addr, uint16_t state)
-{
-    pushWord(addr, currentPos);
-    pushWord(state, currentPos + 2);
-    currentPos += 4;
-    length(currentPos - _data);
+    void KnxIpTunnelingInfoDIB::tunnelingSlot(uint16_t addr, uint16_t state)
+    {
+        pushWord(addr, currentPos);
+        pushWord(state, currentPos + 2);
+        currentPos += 4;
+        length(currentPos - _data);
+    }
 }

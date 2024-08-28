@@ -4,19 +4,19 @@
 #include <stdint.h>
 
 #if defined(__linux__)
-    #include <arpa/inet.h>
+#include <arpa/inet.h>
 #elif defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_STM32) || defined (DeviceFamily_CC13X0)
-    #define htons(x) ( ((x)<< 8 & 0xFF00) | \
+#define htons(x) ( ((x)<< 8 & 0xFF00) | \
                    ((x)>> 8 & 0x00FF) )
-    #define ntohs(x) htons(x)
+#define ntohs(x) htons(x)
 
-    #define htonl(x) ( ((x)<<24 & 0xFF000000UL) | \
+#define htonl(x) ( ((x)<<24 & 0xFF000000UL) | \
                    ((x)<< 8 & 0x00FF0000UL) | \
                    ((x)>> 8 & 0x0000FF00UL) | \
                    ((x)>>24 & 0x000000FFUL) )
-    #define ntohl(x) htonl(x)
-    #define ntohs(x) htons(x)
-    #define ntohl(x) htonl(x)
+#define ntohl(x) htonl(x)
+#define ntohs(x) htons(x)
+#define ntohl(x) htonl(x)
 #endif
 
 #ifndef MIN
@@ -68,7 +68,8 @@
     typedef void (*voidFuncPtr)(void);
     void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 #endif
-
+namespace Knx
+{
 #ifndef KNX_NO_PRINT
     void print(const char[]);
     void print(char);
@@ -112,22 +113,22 @@
     #define KNX_ACTIVITYCALLBACK_NET 0x04
 #endif
 
-const uint8_t* popByte(uint8_t& b, const uint8_t* data);
-const uint8_t* popWord(uint16_t& w, const uint8_t* data);
-const uint8_t* popInt(uint32_t& i, const uint8_t* data);
-const uint8_t* popByteArray(uint8_t* dst, uint32_t size, const uint8_t* data);
-uint8_t* pushByte(uint8_t b, uint8_t* data);
-uint8_t* pushWord(uint16_t w, uint8_t* data);
-uint8_t* pushInt(uint32_t i, uint8_t* data);
-uint8_t* pushByteArray(const uint8_t* src, uint32_t size, uint8_t* data);
-uint16_t getWord(const uint8_t* data);
-uint32_t getInt(const uint8_t* data);
+    const uint8_t* popByte(uint8_t& b, const uint8_t* data);
+    const uint8_t* popWord(uint16_t& w, const uint8_t* data);
+    const uint8_t* popInt(uint32_t& i, const uint8_t* data);
+    const uint8_t* popByteArray(uint8_t* dst, uint32_t size, const uint8_t* data);
+    uint8_t* pushByte(uint8_t b, uint8_t* data);
+    uint8_t* pushWord(uint16_t w, uint8_t* data);
+    uint8_t* pushInt(uint32_t i, uint8_t* data);
+    uint8_t* pushByteArray(const uint8_t* src, uint32_t size, uint8_t* data);
+    uint16_t getWord(const uint8_t* data);
+    uint32_t getInt(const uint8_t* data);
 
-void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
-uint64_t sixBytesToUInt64(uint8_t* data);
+    void sixBytesFromUInt64(uint64_t num, uint8_t* toByteArray);
+    uint64_t sixBytesToUInt64(uint8_t* data);
 
-uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
-uint16_t crc16Dnp(uint8_t* input, uint16_t length);
+    uint16_t crc16Ccitt(uint8_t* input, uint16_t length);
+    uint16_t crc16Dnp(uint8_t* input, uint16_t length);
 
 #if defined(ARDUINO_ARCH_SAMD)
     // temporary undef until framework-arduino-samd > 1.8.9 is released. See https://github.com/arduino/ArduinoCore-samd/pull/399 for a PR should will probably address this
@@ -135,3 +136,4 @@ uint16_t crc16Dnp(uint8_t* input, uint16_t length);
     #undef min
     // end of temporary undef
 #endif
+}

@@ -246,3 +246,4 @@ knx-->Platform
 
  */
 #include "knx/knx_facade.h"
+using namespace Knx;

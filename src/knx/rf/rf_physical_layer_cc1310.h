@@ -17,21 +17,23 @@
 #define TX_ACTIVE 4
 #define TX_END 5
 
-class RfDataLinkLayer;
-
-class RfPhysicalLayerCC1310 : public RfPhysicalLayer
+namespace Knx
 {
-    public:
-        RfPhysicalLayerCC1310(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
+    class RfDataLinkLayer;
 
-        bool InitChip() override;
-        void stopChip() override;
-        void loop() override;
+    class RfPhysicalLayerCC1310 : public RfPhysicalLayer
+    {
+        public:
+            RfPhysicalLayerCC1310(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
 
-        void setOutputPowerLevel(int8_t dBm);
+            bool InitChip() override;
+            void stopChip() override;
+            void loop() override;
 
-    private:
-        uint8_t _loopState = RX_START;
-};
+            void setOutputPowerLevel(int8_t dBm);
 
+        private:
+            uint8_t _loopState = RX_START;
+    };
+}
 #endif // DeviceFamily_CC13X0

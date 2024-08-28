@@ -15,10 +15,13 @@
     #endif
 #endif
 
-KnxIpStateResponse::KnxIpStateResponse(uint8_t channelId, uint8_t errorCode)
-    : KnxIpFrame(LEN_KNXIP_HEADER + 2)
+namespace Knx
 {
-    serviceTypeIdentifier(ConnectionStateResponse);
-    _data[LEN_KNXIP_HEADER] = channelId;
-    _data[LEN_KNXIP_HEADER + 1] = errorCode;
+    KnxIpStateResponse::KnxIpStateResponse(uint8_t channelId, uint8_t errorCode)
+        : KnxIpFrame(LEN_KNXIP_HEADER + 2)
+    {
+        serviceTypeIdentifier(ConnectionStateResponse);
+        _data[LEN_KNXIP_HEADER] = channelId;
+        _data[LEN_KNXIP_HEADER + 1] = errorCode;
+    }
 }

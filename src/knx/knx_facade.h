@@ -30,10 +30,6 @@
     #include "platform/cc1310_platform.h"
 #endif
 
-#ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-    extern void buttonUp();
-#endif
-
 #ifndef KNX_LED
     #ifdef LED_BUILTIN
         #define KNX_LED LED_BUILTIN
@@ -48,6 +44,12 @@
 
 #ifndef KNX_BUTTON
     #define KNX_BUTTON -1
+#endif
+
+namespace Knx {
+
+#ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+    extern void buttonUp();
 #endif
 
 typedef const uint8_t* (*RestoreCallback)(const uint8_t* buffer);
@@ -452,7 +454,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
                 _progLedCallback(false);
         }
 };
-
+}
 #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
     #ifdef ARDUINO_ARCH_SAMD
         // predefined global instance for TP or RF or TP/RF coupler

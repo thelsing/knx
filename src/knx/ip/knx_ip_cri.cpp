@@ -1,37 +1,40 @@
 #include "knx_ip_cri.h"
 
-KnxIpCRI::KnxIpCRI(uint8_t* data) : _data(data)
-{}
-
-KnxIpCRI::~KnxIpCRI()
-{}
-
-uint8_t KnxIpCRI::length() const
+namespace Knx
 {
-    return *_data;
-}
+    KnxIpCRI::KnxIpCRI(uint8_t* data) : _data(data)
+    {}
 
-void KnxIpCRI::length(uint8_t value)
-{
-    *_data = value;
-}
+    KnxIpCRI::~KnxIpCRI()
+    {}
 
-ConnectionType KnxIpCRI::type() const
-{
-    return (ConnectionType)_data[1];
-}
+    uint8_t KnxIpCRI::length() const
+    {
+        return *_data;
+    }
 
-void KnxIpCRI::type(ConnectionType value)
-{
-    _data[1] = value;
-}
+    void KnxIpCRI::length(uint8_t value)
+    {
+        *_data = value;
+    }
 
-uint8_t KnxIpCRI::layer() const
-{
-    return _data[2];
-}
+    ConnectionType KnxIpCRI::type() const
+    {
+        return (ConnectionType)_data[1];
+    }
 
-void KnxIpCRI::layer(uint8_t value)
-{
-    _data[2] = value;
+    void KnxIpCRI::type(ConnectionType value)
+    {
+        _data[1] = value;
+    }
+
+    uint8_t KnxIpCRI::layer() const
+    {
+        return _data[2];
+    }
+
+    void KnxIpCRI::layer(uint8_t value)
+    {
+        _data[2] = value;
+    }
 }

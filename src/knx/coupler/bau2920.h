@@ -13,29 +13,32 @@
 #include "../rf/rf_medium_object.h"
 #include "../cemi_server/cemi_server_object.h"
 
-class Bau2920 : public BauSystemBCoupler
+namespace Knx
 {
-    public:
-        Bau2920(Platform& platform);
-        void loop() override;
-        bool enabled() override;
-        void enabled(bool value) override;
+    class Bau2920 : public BauSystemBCoupler
+    {
+        public:
+            Bau2920(Platform& platform);
+            void loop() override;
+            bool enabled() override;
+            void enabled(bool value) override;
 
-        TpUartDataLinkLayer* getPrimaryDataLinkLayer();
-        RfDataLinkLayer* getSecondaryDataLinkLayer();
-    protected:
-        InterfaceObject* getInterfaceObject(uint8_t idx);
-        InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
+            TpUartDataLinkLayer* getPrimaryDataLinkLayer();
+            RfDataLinkLayer* getSecondaryDataLinkLayer();
+        protected:
+            InterfaceObject* getInterfaceObject(uint8_t idx);
+            InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
 
-        void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
-    private:
-        RouterObject _rtObjPrimary;
-        RouterObject _rtObjSecondary;
-        RfMediumObject _rfMediumObject;
-        TpUartDataLinkLayer _dlLayerPrimary;
-        RfDataLinkLayer _dlLayerSecondary;
+            void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+        private:
+            RouterObject _rtObjPrimary;
+            RouterObject _rtObjSecondary;
+            RfMediumObject _rfMediumObject;
+            TpUartDataLinkLayer _dlLayerPrimary;
+            RfDataLinkLayer _dlLayerSecondary;
 #ifdef USE_CEMI_SERVER
-        CemiServer _cemiServer;
-        CemiServerObject _cemiServerObject;
+            CemiServer _cemiServer;
+            CemiServerObject _cemiServerObject;
 #endif
-};
+    };
+}

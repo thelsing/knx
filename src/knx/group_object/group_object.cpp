@@ -6,6 +6,9 @@
 
 #include <cstring>
 
+
+namespace Knx
+{
 #ifdef SMALL_GROUPOBJECT
     GroupObjectUpdatedHandler GroupObject::_updateHandlerStatic = 0;
 #endif
@@ -342,4 +345,5 @@ bool GroupObject::valueCompare(const KNXValue& value, const Dpt& type)
     }
 
     return false;
+}
 }

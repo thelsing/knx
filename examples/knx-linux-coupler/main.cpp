@@ -14,6 +14,8 @@
 
 #include "fdsk.h"
 
+using namespace Knx;
+
 volatile sig_atomic_t loopActive = 1;
 void signalHandler(int sig)
 {

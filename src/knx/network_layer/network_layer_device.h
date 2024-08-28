@@ -7,38 +7,41 @@
 
 #include <stdint.h>
 
-class DeviceObject;
-
-class NetworkLayerDevice : public NetworkLayer
+namespace Knx
 {
-        friend class NetworkLayerEntity;
+    class DeviceObject;
 
-    public:
-        NetworkLayerDevice(DeviceObject& deviceObj, TransportLayer& layer);
+    class NetworkLayerDevice : public NetworkLayer
+    {
+            friend class NetworkLayerEntity;
 
-        NetworkLayerEntity& getInterface();
+        public:
+            NetworkLayerDevice(DeviceObject& deviceObj, TransportLayer& layer);
 
-        // from transport layer
-        void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
-        void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
-        void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
-        void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+            NetworkLayerEntity& getInterface();
 
-    private:
-        // from entities
-        void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
-                            Priority priority, uint16_t source, uint8_t srcIfIdx) override;
-        void dataConfirm(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, Priority priority,
-                         uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
-        void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                                 Priority priority, uint16_t source, uint8_t srcIfIdx) override;
-        void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
-        void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
-                                       Priority priority, uint16_t source, uint8_t srcIfIdx) override;
-        void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
+            // from transport layer
+            void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+            void dataGroupRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+            void dataBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
+            void dataSystemBroadcastRequest(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu) override;
 
-        // Support only a single physical interface for normal devices
-        NetworkLayerEntity _netLayerEntities[1];
+        private:
+            // from entities
+            void dataIndication(AckType ack, AddressType addType, uint16_t destination, FrameFormat format, NPDU& npdu,
+                                Priority priority, uint16_t source, uint8_t srcIfIdx) override;
+            void dataConfirm(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, Priority priority,
+                             uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
+            void broadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+                                     Priority priority, uint16_t source, uint8_t srcIfIdx) override;
+            void broadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
+            void systemBroadcastIndication(AckType ack, FrameFormat format, NPDU& npdu,
+                                           Priority priority, uint16_t source, uint8_t srcIfIdx) override;
+            void systemBroadcastConfirm(AckType ack, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx) override;
 
-        static constexpr uint8_t kInterfaceIndex = 0;
-};
+            // Support only a single physical interface for normal devices
+            NetworkLayerEntity _netLayerEntities[1];
+
+            static constexpr uint8_t kInterfaceIndex = 0;
+    };
+}

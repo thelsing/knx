@@ -6,13 +6,16 @@
 #include "knx_ip_supported_service_dib.h"
 #include "ip_parameter_object.h"
 
-class KnxIpDescriptionResponse : public KnxIpFrame
+namespace Knx
 {
-    public:
-        KnxIpDescriptionResponse(IpParameterObject& parameters, DeviceObject& deviceObj);
-        KnxIpDeviceInformationDIB& deviceInfo();
-        KnxIpSupportedServiceDIB& supportedServices();
-    private:
-        KnxIpDeviceInformationDIB _deviceInfo;
-        KnxIpSupportedServiceDIB _supportedServices;
-};
+    class KnxIpDescriptionResponse : public KnxIpFrame
+    {
+        public:
+            KnxIpDescriptionResponse(IpParameterObject& parameters, DeviceObject& deviceObj);
+            KnxIpDeviceInformationDIB& deviceInfo();
+            KnxIpSupportedServiceDIB& supportedServices();
+        private:
+            KnxIpDeviceInformationDIB _deviceInfo;
+            KnxIpSupportedServiceDIB _supportedServices;
+    };
+}

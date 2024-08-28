@@ -1,5 +1,7 @@
 #pragma once
 
+namespace Knx
+{
 #define DPT_Switch Dpt(1, 1)
 #define DPT_Bool Dpt(1, 2)
 #define DPT_Enable Dpt(1, 3)
@@ -360,14 +362,15 @@
 #define DPT_StatusSAB Dpt(241, 800)
 #define DPT_Colour_RGBW Dpt(251, 600)
 
-class Dpt
-{
-    public:
-        Dpt();
-        Dpt(short mainGroup, short subGroup, short index = 0);
-        unsigned short mainGroup;
-        unsigned short subGroup;
-        unsigned short index;
-        bool operator==(const Dpt& other) const;
-        bool operator!=(const Dpt& other) const;
-};
+    class Dpt
+    {
+        public:
+            Dpt();
+            Dpt(short mainGroup, short subGroup, short index = 0);
+            unsigned short mainGroup;
+            unsigned short subGroup;
+            unsigned short index;
+            bool operator==(const Dpt& other) const;
+            bool operator!=(const Dpt& other) const;
+    };
+}

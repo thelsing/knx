@@ -17,42 +17,46 @@
 #include "../platform/platform.h"
 #include "../util/memory.h"
 
-class BauSystemBDevice : public BauSystemB
+namespace Knx
 {
-    public:
-        BauSystemBDevice(Platform& platform);
-        void loop() override;
-        bool configured() override;
-        GroupObjectTableObject& groupObjectTable();
 
-    protected:
-        ApplicationLayer& applicationLayer() override;
+    class BauSystemBDevice : public BauSystemB
+    {
+        public:
+            BauSystemBDevice(Platform& platform);
+            void loop() override;
+            bool configured() override;
+            GroupObjectTableObject& groupObjectTable();
 
-        void groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl,
-                                         uint8_t* data, uint8_t dataLength, bool status) override;
-        void groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl, bool status) override;
-        void groupValueReadIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl) override;
-        void groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl,
+        protected:
+            ApplicationLayer& applicationLayer() override;
+
+            void groupValueWriteLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl,
+                                             uint8_t* data, uint8_t dataLength, bool status) override;
+            void groupValueReadLocalConfirm(AckType ack, uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl, bool status) override;
+            void groupValueReadIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl) override;
+            void groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl,
+                                               uint8_t* data, uint8_t dataLength) override;
+            void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl,
                                            uint8_t* data, uint8_t dataLength) override;
-        void groupValueWriteIndication(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl,
-                                       uint8_t* data, uint8_t dataLength) override;
 
-        void sendNextGroupTelegram();
-        void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
+            void sendNextGroupTelegram();
+            void updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length);
 
-        void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+            void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
 
-        AddressTableObject _addrTable;
-        AssociationTableObject _assocTable;
-        GroupObjectTableObject _groupObjTable;
+            AddressTableObject _addrTable;
+            AssociationTableObject _assocTable;
+            GroupObjectTableObject _groupObjTable;
 #ifdef USE_DATASECURE
-        SecureApplicationLayer _appLayer;
-        SecurityInterfaceObject _secIfObj;
+            SecureApplicationLayer _appLayer;
+            SecurityInterfaceObject _secIfObj;
 #else
-        ApplicationLayer _appLayer;
+            ApplicationLayer _appLayer;
 #endif
-        TransportLayer _transLayer;
-        NetworkLayerDevice _netLayer;
+            TransportLayer _transLayer;
+            NetworkLayerDevice _netLayer;
 
-        bool _configured = true;
-};
+            bool _configured = true;
+    };
+}

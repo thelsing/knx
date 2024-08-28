@@ -8,17 +8,16 @@
 
 #include <stdint.h>
 
-/*----------------------------------[standard]--------------------------------*/
+namespace Knx
+{
+    /*----------------------------------[standard]--------------------------------*/
 #define CC1101_TIMEOUT           2000       // Time to wait for a response from CC1101
 
 #define RX_PACKET_TIMEOUT        20   // Wait 20ms for packet reception to complete
 #define TX_PACKET_TIMEOUT        20   // Wait 20ms for packet reception to complete
 
-#ifdef __linux__ // Linux Platform
-    extern void delayMicroseconds (unsigned int howLong);
-#endif
 
-/*----------------------[CC1101 - misc]---------------------------------------*/
+    /*----------------------[CC1101 - misc]---------------------------------------*/
 #define CRYSTAL_FREQUENCY         26000000
 #define CFG_REGISTER              0x2F  // 47 registers
 #define FIFOBUFFER                0x42  // size of Fifo Buffer +2 for rssi and lqi
@@ -34,23 +33,23 @@
 #define CC1101_TEMP_ADC_MV        3.225 // 3.3V/1023 . mV pro digit
 #define CC1101_TEMP_CELS_CO       2.47  // Temperature coefficient 2.47mV per Grad Celsius
 
-/*---------------------------[CC1101 - R/W offsets]---------------------------*/
+    /*---------------------------[CC1101 - R/W offsets]---------------------------*/
 #define WRITE_SINGLE_BYTE   0x00
 #define WRITE_BURST         0x40
 #define READ_SINGLE_BYTE    0x80
 #define READ_BURST          0xC0
-/*---------------------------[END R/W offsets]--------------------------------*/
+    /*---------------------------[END R/W offsets]--------------------------------*/
 
-/*------------------------[CC1101 - FIFO commands]----------------------------*/
+    /*------------------------[CC1101 - FIFO commands]----------------------------*/
 #define TXFIFO_BURST        0x7F    // write burst only
 #define TXFIFO_SINGLE_BYTE  0x3F    // write single only
 #define RXFIFO_BURST        0xFF    // read burst only
 #define RXFIFO_SINGLE_BYTE  0xBF    // read single only
 #define PATABLE_BURST       0x7E    // power control read/write
 #define PATABLE_SINGLE_BYTE 0xFE    // power control read/write
-/*---------------------------[END FIFO commands]------------------------------*/
+    /*---------------------------[END FIFO commands]------------------------------*/
 
-/*----------------------[CC1101 - config register]----------------------------*/
+    /*----------------------[CC1101 - config register]----------------------------*/
 #define IOCFG2   0x00         // GDO2 output pin configuration
 #define IOCFG1   0x01         // GDO1 output pin configuration
 #define IOCFG0   0x02         // GDO0 output pin configuration
@@ -98,9 +97,9 @@
 #define TEST2    0x2C         // Various test settings
 #define TEST1    0x2D         // Various test settings
 #define TEST0    0x2E         // Various test settings
-/*-------------------------[END config register]------------------------------*/
+    /*-------------------------[END config register]------------------------------*/
 
-/*------------------------[CC1101-command strobes]----------------------------*/
+    /*------------------------[CC1101-command strobes]----------------------------*/
 #define SRES     0x30         // Reset chip
 #define SFSTXON  0x31         // Enable/calibrate freq synthesizer
 #define SXOFF    0x32         // Turn off crystal oscillator.
@@ -115,9 +114,9 @@
 #define SFTX     0x3B         // Flush the TX FIFO buffer.
 #define SWORRST  0x3C         // Reset real time clock.
 #define SNOP     0x3D         // No operation.
-/*-------------------------[END command strobes]------------------------------*/
+    /*-------------------------[END command strobes]------------------------------*/
 
-/*----------------------[CC1101 - status register]----------------------------*/
+    /*----------------------[CC1101 - status register]----------------------------*/
 #define PARTNUM        0xF0   // Part number
 #define VERSION        0xF1   // Current version number
 #define FREQEST        0xF2   // Frequency offset estimate
@@ -132,9 +131,9 @@
 #define RXBYTES        0xFB   // Overflow and # of bytes in RXFIFO
 #define RCCTRL1_STATUS 0xFC   //Last RC Oscillator Calibration Result
 #define RCCTRL0_STATUS 0xFD   //Last RC Oscillator Calibration Result
-//--------------------------[END status register]-------------------------------
+    //--------------------------[END status register]-------------------------------
 
-/*----------------------[CC1101 - Main Radio Control State Machine states]-----*/
+    /*----------------------[CC1101 - Main Radio Control State Machine states]-----*/
 #define MARCSTATE_BITMASK          0x1F
 #define MARCSTATE_SLEEP            0x00
 #define MARCSTATE_IDLE             0x01
@@ -160,12 +159,12 @@
 #define MARCSTATE_RXTX_SWITCH      0x15
 #define MARCSTATE_TXFIFO_UNDERFLOW 0x16
 
-// Chip Status Byte
-// Bit fields in the chip status byte
+    // Chip Status Byte
+    // Bit fields in the chip status byte
 #define CHIPSTATUS_CHIP_RDYn_BITMASK 0x80
 #define CHIPSTATUS_STATE_BITMASK   0x70
 #define CHIPSTATUS_FIFO_BYTES_AVAILABLE_BITMASK 0x0F
-// Chip states
+    // Chip states
 #define CHIPSTATUS_STATE_IDLE 0x00
 #define CHIPSTATUS_STATE_RX 0x10
 #define CHIPSTATUS_STATE_TX 0x20
@@ -175,7 +174,7 @@
 #define CHIPSTATUS_STATE_RX_OVERFLOW 0x60
 #define CHIPSTATUS_STATE_TX_UNDERFLOW 0x70
 
-// loop states
+    // loop states
 #define RX_START 0
 #define RX_ACTIVE 1
 #define RX_END 2
@@ -183,59 +182,59 @@
 #define TX_ACTIVE 4
 #define TX_END 5
 
-class RfDataLinkLayer;
+    class RfDataLinkLayer;
 
-class RfPhysicalLayerCC1101 : public RfPhysicalLayer
-{
-    public:
-        RfPhysicalLayerCC1101(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
+    class RfPhysicalLayerCC1101 : public RfPhysicalLayer
+    {
+        public:
+            RfPhysicalLayerCC1101(RfDataLinkLayer& rfDataLinkLayer, Platform& platform);
 
-        bool InitChip();
-        void showRegisterSettings();
-        void stopChip();
-        void loop();
+            bool InitChip();
+            void showRegisterSettings();
+            void stopChip();
+            void loop();
 
-    private:
-        // Table for encoding 4-bit data into a 8-bit Manchester encoding.
-        static const uint8_t manchEncodeTab[16];
-        // Table for decoding 4-bit Manchester encoded data into 2-bit
-        static const uint8_t manchDecodeTab[16];
+        private:
+            // Table for encoding 4-bit data into a 8-bit Manchester encoding.
+            static const uint8_t manchEncodeTab[16];
+            // Table for decoding 4-bit Manchester encoded data into 2-bit
+            static const uint8_t manchDecodeTab[16];
 
-        static const uint8_t cc1101_2FSK_32_7_kb[CFG_REGISTER];
-        static const uint8_t paTablePower868[8];
+            static const uint8_t cc1101_2FSK_32_7_kb[CFG_REGISTER];
+            static const uint8_t paTablePower868[8];
 
-        void manchEncode(uint8_t* uncodedData, uint8_t* encodedData);
-        bool manchDecode(uint8_t* encodedData, uint8_t* decodedData);
+            void manchEncode(uint8_t* uncodedData, uint8_t* encodedData);
+            bool manchDecode(uint8_t* encodedData, uint8_t* decodedData);
 
-        void powerDownCC1101();
-        void setOutputPowerLevel(int8_t dBm);
+            void powerDownCC1101();
+            void setOutputPowerLevel(int8_t dBm);
 
-        uint8_t sIdle();
-        uint8_t sReceive();
+            uint8_t sIdle();
+            uint8_t sReceive();
 
-        void spiWriteRegister(uint8_t spi_instr, uint8_t value);
-        uint8_t spiReadRegister(uint8_t spi_instr);
-        uint8_t spiWriteStrobe(uint8_t spi_instr);
-        void spiReadBurst(uint8_t spi_instr, uint8_t* pArr, uint8_t len);
-        void spiWriteBurst(uint8_t spi_instr, const uint8_t* pArr, uint8_t len);
+            void spiWriteRegister(uint8_t spi_instr, uint8_t value);
+            uint8_t spiReadRegister(uint8_t spi_instr);
+            uint8_t spiWriteStrobe(uint8_t spi_instr);
+            void spiReadBurst(uint8_t spi_instr, uint8_t* pArr, uint8_t len);
+            void spiWriteBurst(uint8_t spi_instr, const uint8_t* pArr, uint8_t len);
 
-        uint8_t _loopState = RX_START;
+            uint8_t _loopState = RX_START;
 
-        bool syncStart = false;
-        bool packetStart = true;
-        bool fixedLengthMode = false;
-        uint8_t* sendBuffer {0};
-        uint16_t sendBufferLength {0};
-        uint8_t packet[512];
-        uint8_t buffer[sizeof(packet) * 2]; // We need twice the space due to manchester encoding
-        uint8_t* pByteIndex = &buffer[0];
-        uint16_t pktLen {0};
-        uint16_t bytesLeft = {0};
-        uint8_t statusGDO0 {0};
-        uint8_t statusGDO2 {0};
-        uint8_t prevStatusGDO0 {0}; // for edge detection during polling
-        uint8_t prevStatusGDO2 {0}; // for edge detection during polling
-        uint32_t packetStartTime {0};
-};
-
+            bool syncStart = false;
+            bool packetStart = true;
+            bool fixedLengthMode = false;
+            uint8_t* sendBuffer {0};
+            uint16_t sendBufferLength {0};
+            uint8_t packet[512];
+            uint8_t buffer[sizeof(packet) * 2]; // We need twice the space due to manchester encoding
+            uint8_t* pByteIndex = &buffer[0];
+            uint16_t pktLen {0};
+            uint16_t bytesLeft = {0};
+            uint8_t statusGDO0 {0};
+            uint8_t statusGDO2 {0};
+            uint8_t prevStatusGDO0 {0}; // for edge detection during polling
+            uint8_t prevStatusGDO2 {0}; // for edge detection during polling
+            uint32_t packetStartTime {0};
+    };
+}
 #endif // DeviceFamily_CC13X0

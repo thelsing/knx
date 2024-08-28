@@ -5,35 +5,38 @@
 
 #include <cstdint>
 
-class CemiFrame;
-class APDU;
-
-class TPDU : public IPrintable
+namespace Knx
 {
-        friend class CemiFrame;
+    class CemiFrame;
+    class APDU;
 
-    public:
-        TpduType type() const;
-        void type(TpduType type);
+    class TPDU : public IPrintable
+    {
+            friend class CemiFrame;
 
-        bool numbered() const;
-        void numbered(bool value);
+        public:
+            TpduType type() const;
+            void type(TpduType type);
 
-        bool control() const;
-        void control(bool value);
+            bool numbered() const;
+            void numbered(bool value);
 
-        uint8_t sequenceNumber() const;
-        void sequenceNumber(uint8_t value);
+            bool control() const;
+            void control(bool value);
 
-        APDU& apdu();
+            uint8_t sequenceNumber() const;
+            void sequenceNumber(uint8_t value);
 
-        CemiFrame& frame();
-        void printIt() const;
+            APDU& apdu();
 
-    protected:
-        TPDU(uint8_t* data, CemiFrame& frame);
+            CemiFrame& frame();
+            void printIt() const;
 
-    private:
-        uint8_t* _data = 0;
-        CemiFrame& _frame;
-};
+        protected:
+            TPDU(uint8_t* data, CemiFrame& frame);
+
+        private:
+            uint8_t* _data = 0;
+            CemiFrame& _frame;
+    };
+}

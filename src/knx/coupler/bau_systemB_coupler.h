@@ -15,27 +15,30 @@
 #include "../platform/platform.h"
 #include "../util/memory.h"
 
-class BauSystemBCoupler : public BauSystemB
+namespace Knx
 {
-    public:
-        BauSystemBCoupler(Platform& platform);
-        void loop() override;
-        bool configured() override;
+    class BauSystemBCoupler : public BauSystemB
+    {
+        public:
+            BauSystemBCoupler(Platform& platform);
+            void loop() override;
+            bool configured() override;
 
-    protected:
-        ApplicationLayer& applicationLayer() override;
+        protected:
+            ApplicationLayer& applicationLayer() override;
 
-        void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+            void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
 
-        Platform& _platform;
+            Platform& _platform;
 
 #ifdef USE_DATASECURE
-        SecureApplicationLayer _appLayer;
-        SecurityInterfaceObject _secIfObj;
+            SecureApplicationLayer _appLayer;
+            SecurityInterfaceObject _secIfObj;
 #else
-        ApplicationLayer _appLayer;
+            ApplicationLayer _appLayer;
 #endif
-        TransportLayer _transLayer;
-        NetworkLayerCoupler _netLayer;
-        bool _configured = true;
-};
+            TransportLayer _transLayer;
+            NetworkLayerCoupler _netLayer;
+            bool _configured = true;
+    };
+}

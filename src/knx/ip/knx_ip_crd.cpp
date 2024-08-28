@@ -1,40 +1,43 @@
 #include "knx_ip_crd.h"
 
-KnxIpCRD::KnxIpCRD(uint8_t* data) : _data(data)
-{}
-
-KnxIpCRD::~KnxIpCRD()
-{}
-
-uint8_t KnxIpCRD::length() const
+namespace Knx
 {
-    return *_data;
-}
+    KnxIpCRD::KnxIpCRD(uint8_t* data) : _data(data)
+    {}
 
-void KnxIpCRD::length(uint8_t value)
-{
-    *_data = value;
-}
+    KnxIpCRD::~KnxIpCRD()
+    {}
 
-uint8_t KnxIpCRD::type() const
-{
-    return _data[1];
-}
+    uint8_t KnxIpCRD::length() const
+    {
+        return *_data;
+    }
 
-void KnxIpCRD::type(uint8_t value)
-{
-    _data[1] = value;
-}
+    void KnxIpCRD::length(uint8_t value)
+    {
+        *_data = value;
+    }
 
-uint16_t KnxIpCRD::address() const
-{
-    uint16_t addr = _data[3];
-    addr |= _data[2] << 8;
-    return addr;
-}
+    uint8_t KnxIpCRD::type() const
+    {
+        return _data[1];
+    }
 
-void KnxIpCRD::address(uint16_t value)
-{
-    _data[2] = value >> 8;
-    _data[3] = value & 0xFF;
+    void KnxIpCRD::type(uint8_t value)
+    {
+        _data[1] = value;
+    }
+
+    uint16_t KnxIpCRD::address() const
+    {
+        uint16_t addr = _data[3];
+        addr |= _data[2] << 8;
+        return addr;
+    }
+
+    void KnxIpCRD::address(uint16_t value)
+    {
+        _data[2] = value >> 8;
+        _data[3] = value & 0xFF;
+    }
 }
