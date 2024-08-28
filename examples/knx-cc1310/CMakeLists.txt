@@ -36,105 +36,69 @@ find_package(SimpleLinkCC13X0SDKnortos REQUIRED)
 #
 
 set(${PROJECT_NAME}_SOURCES
-    ../../src/knx/address_table_object.cpp
-    ../../src/knx/address_table_object.h
+    ../../src/knx/interface_object/address_table_object.cpp
+    ../../src/knx/interface_object/address_table_object.h
     ../../src/knx/util/aes.c
     ../../src/knx/util/aes.h
     ../../src/knx/util/aes.hpp
     ../../src/knx/util/logger.h
     ../../src/knx/util/logger.cpp
-    ../../src/knx/apdu.cpp
-    ../../src/knx/apdu.h
-    ../../src/knx/application_layer.cpp
-    ../../src/knx/application_layer.h
-    ../../src/knx/application_program_object.cpp
-    ../../src/knx/application_program_object.h
-    ../../src/knx/association_table_object.cpp
-    ../../src/knx/association_table_object.h
-    ../../src/knx/bau.cpp
-    ../../src/knx/bau.h
-    ../../src/knx/bau07B0.cpp
-    ../../src/knx/bau07B0.h
-    ../../src/knx/bau091A.cpp
-    ../../src/knx/bau091A.h
-    ../../src/knx/bau27B0.cpp
-    ../../src/knx/bau27B0.h
-    ../../src/knx/bau2920.cpp
-    ../../src/knx/bau2920.h
-    ../../src/knx/bau57B0.cpp
-    ../../src/knx/bau57B0.h
-    ../../src/knx/bau_systemB.cpp
-    ../../src/knx/bau_systemB.h
-    ../../src/knx/bau_systemB_device.cpp
-    ../../src/knx/bau_systemB_device.h
-    ../../src/knx/bau_systemB_coupler.cpp
-    ../../src/knx/bau_systemB_coupler.h
+    ../../src/knx/application_layer/apdu.cpp
+    ../../src/knx/application_layer/apdu.h
+    ../../src/knx/application_layer/application_layer.cpp
+    ../../src/knx/application_layer/application_layer.h
+    ../../src/knx/interface_object/application_program_object.cpp
+    ../../src/knx/interface_object/application_program_object.h
+    ../../src/knx/interface_object/association_table_object.cpp
+    ../../src/knx/interface_object/association_table_object.h
+    ../../src/knx/bau/bau.cpp
+    ../../src/knx/bau/bau.h
+    ../../src/knx/rf/bau27B0.cpp
+    ../../src/knx/rf/bau27B0.h
+    ../../src/knx/bau/bau_systemB.cpp
+    ../../src/knx/bau/bau_systemB.h
+    ../../src/knx/bau/bau_systemB_device.cpp
+    ../../src/knx/bau/bau_systemB_device.h
     ../../src/knx/bits.cpp
     ../../src/knx/bits.h
-    ../../src/knx/callback_property.h
-    ../../src/knx/cemi_frame.cpp
-    ../../src/knx/cemi_frame.h
-    ../../src/knx/cemi_server.cpp
-    ../../src/knx/cemi_server.h
-    ../../src/knx/cemi_server_object.cpp
-    ../../src/knx/cemi_server_object.h
+    ../../src/knx/interface_object/callback_property.h
+    ../../src/knx/datalink_layer/cemi_frame.cpp
+    ../../src/knx/datalink_layer/cemi_frame.h
     ../../src/knx/config.h
-    ../../src/knx/data_link_layer.cpp
-    ../../src/knx/data_link_layer.h
-    ../../src/knx/data_property.cpp
-    ../../src/knx/data_property.h
-    ../../src/knx/device_object.cpp
-    ../../src/knx/device_object.h
-    ../../src/knx/dpt.cpp
-    ../../src/knx/dpt.h
-    ../../src/knx/dptconvert.cpp
-    ../../src/knx/dptconvert.h
-    ../../src/knx/function_property.h
-    ../../src/knx/group_object.cpp
-    ../../src/knx/group_object.h
-    ../../src/knx/group_object_table_object.cpp
-    ../../src/knx/group_object_table_object.h
-    ../../src/knx/interface_object.cpp
-    ../../src/knx/interface_object.h
-    ../../src/knx/ip/ip_data_link_layer.cpp
-    ../../src/knx/ip/ip_data_link_layer.h
-    ../../src/knx/ip/ip_parameter_object.cpp
-    ../../src/knx/ip/ip_parameter_object.h
-    ../../src/knx/ip/knx_ip_device_information_dib.cpp
-    ../../src/knx/ip/knx_ip_device_information_dib.h
-    ../../src/knx/ip/knx_ip_dib.cpp
-    ../../src/knx/ip/knx_ip_dib.h
-    ../../src/knx/ip/knx_ip_frame.cpp
-    ../../src/knx/ip/knx_ip_frame.h
-    ../../src/knx/ip/knx_ip_routing_indication.cpp
-    ../../src/knx/ip/knx_ip_routing_indication.h
-    ../../src/knx/ip/knx_ip_search_request.cpp
-    ../../src/knx/ip/knx_ip_search_request.h
-    ../../src/knx/ip/knx_ip_search_response.cpp
-    ../../src/knx/ip/knx_ip_search_response.h
-    ../../src/knx/ip/knx_ip_supported_service_dib.cpp
-    ../../src/knx/ip/knx_ip_supported_service_dib.h
-    ../../src/knx/ip/ip_host_protocol_address_information.cpp
-    ../../src/knx/ip/ip_host_protocol_address_information.h
+    ../../src/knx/datalink_layer/data_link_layer.cpp
+    ../../src/knx/datalink_layer/data_link_layer.h
+    ../../src/knx/interface_object/data_property.cpp
+    ../../src/knx/interface_object/data_property.h
+    ../../src/knx/interface_object/device_object.cpp
+    ../../src/knx/interface_object/device_object.h
+    ../../src/knx/group_object/dpt.cpp
+    ../../src/knx/group_object/dpt.h
+    ../../src/knx/group_object/dptconvert.cpp
+    ../../src/knx/group_object/dptconvert.h
+    ../../src/knx/interface_object/function_property.h
+    ../../src/knx/group_object/group_object.cpp
+    ../../src/knx/group_object/group_object.h
+    ../../src/knx/interface_object/group_object_table_object.cpp
+    ../../src/knx/interface_object/group_object_table_object.h
+    ../../src/knx/interface_object/interface_object.cpp
+    ../../src/knx/interface_object/interface_object.h
     ../../src/knx/knx_types.h
-    ../../src/knx/knx_value.cpp
-    ../../src/knx/knx_value.h
-    ../../src/knx/memory.cpp
-    ../../src/knx/memory.h
-    ../../src/knx/network_layer.cpp
-    ../../src/knx/network_layer.h
-    ../../src/knx/network_layer_coupler.cpp
-    ../../src/knx/network_layer_coupler.h
-    ../../src/knx/network_layer_device.cpp
-    ../../src/knx/network_layer_device.h
-    ../../src/knx/network_layer_entity.cpp
-    ../../src/knx/network_layer_entity.h
-    ../../src/knx/npdu.cpp
-    ../../src/knx/npdu.h
-    ../../src/knx/platform.cpp
-    ../../src/knx/platform.h
-    ../../src/knx/property.cpp
-    ../../src/knx/property.h
+    ../../src/knx/group_object/knx_value.cpp
+    ../../src/knx/group_object/knx_value.h
+    ../../src/knx/util/memory.cpp
+    ../../src/knx/util/memory.h
+    ../../src/knx/network_layer/network_layer.cpp
+    ../../src/knx/network_layer/network_layer.h
+    ../../src/knx/network_layer/network_layer_device.cpp
+    ../../src/knx/network_layer/network_layer_device.h
+    ../../src/knx/network_layer/network_layer_entity.cpp
+    ../../src/knx/network_layer/network_layer_entity.h
+    ../../src/knx/network_layer/npdu.cpp
+    ../../src/knx/network_layer/npdu.h
+    ../../src/knx/platform/platform.cpp
+    ../../src/knx/platform/platform.h
+    ../../src/knx/interface_object/property.cpp
+    ../../src/knx/interface_object/property.h
     ../../src/knx/rf/rf_data_link_layer.cpp
     ../../src/knx/rf/rf_data_link_layer.h
     ../../src/knx/rf/rf_medium_object.cpp
@@ -142,28 +106,21 @@ set(${PROJECT_NAME}_SOURCES
     ../../src/knx/rf/rf_physical_layer_cc1310.cpp
     ../../src/knx/rf/rf_physical_layer_cc1310.h
     ../../src/knx/rf/rf_physical_layer.h
-    ../../src/knx/router_object.cpp
-    ../../src/knx/router_object.h
-    ../../src/knx/secure_application_layer.cpp
-    ../../src/knx/secure_application_layer.h
-    ../../src/knx/security_interface_object.cpp
-    ../../src/knx/security_interface_object.h
+    ../../src/knx/data_secure/secure_application_layer.cpp
+    ../../src/knx/data_secure/secure_application_layer.h
+    ../../src/knx/data_secure/security_interface_object.cpp
+    ../../src/knx/data_secure/security_interface_object.h
     ../../src/knx/util/simple_map.h
-    ../../src/knx/save_restore.h
-    ../../src/knx/table_object.cpp
-    ../../src/knx/table_object.h
-    ../../src/knx/tpdu.cpp
-    ../../src/knx/tpdu.h
-    ../../src/knx/tpuart_data_link_layer.cpp
-    ../../src/knx/tpuart_data_link_layer.h
-    ../../src/knx/transport_layer.cpp
-    ../../src/knx/transport_layer.h
-    ../../src/knx/usb_tunnel_interface.cpp
-    ../../src/knx/usb_tunnel_interface.h
-    ../../src/knx_facade.cpp
-    ../../src/knx_facade.h
+    ../../src/knx/util/save_restore.h
+    ../../src/knx/interface_object/table_object.cpp
+    ../../src/knx/interface_object/table_object.h
+    ../../src/knx/transport_layer/tpdu.cpp
+    ../../src/knx/transport_layer/tpdu.h
+    ../../src/knx/transport_layer/transport_layer.cpp
+    ../../src/knx/transport_layer/transport_layer.h
+    ../../src/knx/knx_facade.cpp
+    ../../src/knx/knx_facade.h
     ../../src/knx/platform/cc1310_platform.cpp
-    ../../src/knx_facade.cpp
     ../../src/knx/knx_types.h
     ../../src/knx/knx_types.cpp
     ./RTT/SEGGER_RTT_Conf.h

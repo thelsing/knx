@@ -112,36 +112,6 @@ namespace Knx
         }
     }
 
-    void sleep(uint32_t sec)
-    {
-        ClockP_sleep(sec);
-    }
-
-    void usleep(uint32_t usec)
-    {
-        ClockP_usleep(usec);
-    }
-
-    uint32_t millis()
-    {
-        // we use our own ms clock because the Os tick counter has counts 10us ticks and following calculation would not wrap correctly at 32bit boundary
-        //return Clock_getTicks() * (uint64_t) Clock_tickPeriod / 1000; // rtos
-        //return ClockP_getTicks( * (uint64_t) Clock_tickPeriod / 1000); //nortos
-        return msCounter;
-    }
-
-    void delay(uint32_t ms)
-    {
-        ClockP_usleep(ms * 1000);
-        //sleep(ms * (1000 / ClockP_tickPeriod));   //rtos
-        //sleepTicks(millis * 1000ULL / ClockP_tickPeriod); //nortos
-    }
-
-    void delayMicroseconds (unsigned int howLong)
-    {
-        ClockP_usleep(howLong);
-    }
-
 #ifndef KNX_NO_PRINT
     size_t write(uint8_t c)
     {
@@ -428,71 +398,6 @@ namespace Knx
     }
 #endif // KNX_NO_PRINT
 
-    uint32_t digitalRead(uint32_t dwPin)
-    {
-        print("ignoring digitalRead: pin: ");
-        print(dwPin);
-        println(", returning 0");
-        return 0;
-    }
-
-    void digitalWrite(unsigned long pin, unsigned long value)
-    {
-        if (pin == Board_GPIO_LED0)
-        {
-            if (value > 0)
-            {
-                GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_ON);
-            }
-            else
-            {
-                GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_OFF);
-            }
-        }
-        else
-        {
-            print("dummy digitalWrite: pin: ");
-            print(pin);
-            print(", value: ");
-            println(value, HEX);
-        }
-    }
-
-    void pinMode(unsigned long pin, unsigned long mode)
-    {
-        print("ignoring pinMode: pin: ");
-        print(pin);
-        print(", mode: ");
-        println(mode, HEX);
-    }
-
-    typedef void (*IsrFuncPtr)();
-    static IsrFuncPtr gpioCallback;
-    static void gpioButtonFxn0(uint_least8_t index)
-    {
-        gpioCallback();
-    }
-
-    void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode)
-    {
-        if (pin == Board_GPIO_BUTTON0)
-        {
-            gpioCallback = callback;
-            /* install Button callback */
-            GPIO_setCallback(Board_GPIO_BUTTON0, gpioButtonFxn0);
-
-            /* Enable interrupts */
-            GPIO_enableInt(Board_GPIO_BUTTON0);
-        }
-        else
-        {
-            print("dummy attachInterrupt: pin: ");
-            print(pin);
-            print(", mode: ");
-            println(mode, HEX);
-        }
-    }
-
     CC1310Platform::CC1310Platform()
     {
         // build serialNumber from IEEE MAC Address (MAC is 8 bytes, serialNumber 6 bytes only)
@@ -591,4 +496,100 @@ namespace Knx
         }
     }
 }
+
+void sleep(uint32_t sec)
+{
+    ClockP_sleep(sec);
+}
+
+void usleep(uint32_t usec)
+{
+    ClockP_usleep(usec);
+}
+
+uint32_t millis()
+{
+    // we use our own ms clock because the Os tick counter has counts 10us ticks and following calculation would not wrap correctly at 32bit boundary
+    //return Clock_getTicks() * (uint64_t) Clock_tickPeriod / 1000; // rtos
+    //return ClockP_getTicks( * (uint64_t) Clock_tickPeriod / 1000); //nortos
+    return Knx::msCounter;
+}
+
+void delay(uint32_t ms)
+{
+    ClockP_usleep(ms * 1000);
+    //sleep(ms * (1000 / ClockP_tickPeriod));   //rtos
+    //sleepTicks(millis * 1000ULL / ClockP_tickPeriod); //nortos
+}
+
+void delayMicroseconds (unsigned int howLong)
+{
+    ClockP_usleep(howLong);
+}
+
+
+    uint32_t digitalRead(uint32_t dwPin)
+    {
+        print("ignoring digitalRead: pin: ");
+        print(dwPin);
+        println(", returning 0");
+        return 0;
+    }
+
+    void digitalWrite(unsigned long pin, unsigned long value)
+    {
+        if (pin == Board_GPIO_LED0)
+        {
+            if (value > 0)
+            {
+                GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_ON);
+            }
+            else
+            {
+                GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_OFF);
+            }
+        }
+        else
+        {
+            print("dummy digitalWrite: pin: ");
+            print(pin);
+            print(", value: ");
+            println(value, HEX);
+        }
+    }
+
+    void pinMode(unsigned long pin, unsigned long mode)
+    {
+        print("ignoring pinMode: pin: ");
+        print(pin);
+        print(", mode: ");
+        println(mode, HEX);
+    }
+
+    typedef void (*IsrFuncPtr)();
+    static IsrFuncPtr gpioCallback;
+    static void gpioButtonFxn0(uint_least8_t index)
+    {
+        gpioCallback();
+    }
+
+    void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode)
+    {
+        if (pin == Board_GPIO_BUTTON0)
+        {
+            gpioCallback = callback;
+            /* install Button callback */
+            GPIO_setCallback(Board_GPIO_BUTTON0, gpioButtonFxn0);
+
+            /* Enable interrupts */
+            GPIO_enableInt(Board_GPIO_BUTTON0);
+        }
+        else
+        {
+            print("dummy attachInterrupt: pin: ");
+            print(pin);
+            print(", mode: ");
+            println(mode, HEX);
+        }
+    }
 #endif // DeviceFamily_CC13X0
