@@ -1,6 +1,6 @@
 name: CMake-ARM
 
-#on: [push, pull_request]
+on: [push, pull_request]
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
