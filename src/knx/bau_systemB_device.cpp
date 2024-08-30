@@ -6,7 +6,7 @@
 BauSystemBDevice::BauSystemBDevice(Platform& platform) :
     BauSystemB(platform),
     _addrTable(_memory),
-    _assocTable(_memory), _groupObjTable(_memory),
+    _assocTable(_memory), _groupObjTable(_memory, platform),
 #ifdef USE_DATASECURE
     _appLayer(_deviceObj, _secIfObj, *this),
 #else
