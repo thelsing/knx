@@ -2,7 +2,7 @@
 #include <pybind11/stl_bind.h>
 #include <pybind11/functional.h>
 #include <pybind11/stl.h>
-    
+
 namespace py = pybind11;
 
 #include <Python.h>
@@ -18,6 +18,10 @@ namespace py = pybind11;
 #include "knx/platform/linux_platform.h"
 #include "knx/ip/bau57B0.h"
 #include "knx/interface_object/group_object_table_object.h"
+#include "knx/util/logger.h"
+
+#define LOGGER Logger::logger("knxmodule")
+
 using namespace Knx;
 
 LinuxPlatform* platform = 0;
@@ -40,22 +44,33 @@ static std::vector<const char*> argv;
 
 struct StdStringCStrFunctor
 {
-	const char* operator() (const std::string& str) { return str.c_str(); }
+    const char* operator() (const std::string& str)
+    {
+        return str.c_str();
+    }
 };
 
-static void Prepare(std::vector<std::string> args)
+static void init()
 {
-    // copy args so we control the livetime of the char*
-    argsVector = args;
-    for(int i = 0; i < args.size(); i++)
-        printf("%s\n", args[i].c_str());
+    Logger::logLevel("knxmodule", Logger::Info);
+    Logger::logLevel("ApplicationLayer", Logger::Info);
+    Logger::logLevel("BauSystemBDevice", Logger::Info);
+    Logger::logLevel("GroupObject", Logger::Info);
 
-    argv = std::vector<const char*>(argsVector.size());
-    std::transform(argsVector.begin(), argsVector.end(), argv.begin(), StdStringCStrFunctor());
+    /*
+        // copy args so we control the livetime of the char*
+        argsVector = args;
 
+        for (int i = 0; i < args.size(); i++)
+            printf("%s\n", args[i].c_str());
+
+        argv = std::vector<const char*>(argsVector.size());
+        std::transform(argsVector.begin(), argsVector.end(), argv.begin(), StdStringCStrFunctor());
+    */
     platform = new LinuxPlatform();
     platform->cmdLineArgs(argv.size(), const_cast<char**>(argv.data()));
     bau = new Bau57B0(*platform);
+
 }
 
 static void Destroy()
@@ -69,7 +84,7 @@ static void Destroy()
 static void ReadMemory()
 {
     if (!bau)
-        return;
+        init();
 
     bau->readMemory();
 }
@@ -78,12 +93,12 @@ static void Start()
 {
     if (running)
         return;
-    
+
     if (!bau)
-        return;
+        init();
 
     running = true;
-    
+
     bau->enabled(true);
 
     workerThread = std::thread(loop);
@@ -94,19 +109,20 @@ static void Stop()
 {
     if (!running)
         return;
-    
+
     running = false;
     bau->writeMemory();
     bau->enabled(false);
-    
+
     workerThread.join();
 }
 
 static bool ProgramMode(bool value)
 {
     if (!bau)
-        return false;
+        init();
 
+    LOGGER.info("ProgramMode %d", value);
     bau->deviceObject().progMode(value);
     return bau->deviceObject().progMode();
 }
@@ -114,7 +130,7 @@ static bool ProgramMode(bool value)
 static bool ProgramMode()
 {
     if (!bau)
-        return false;
+        init();
 
     return bau->deviceObject().progMode();
 }
@@ -122,71 +138,75 @@ static bool ProgramMode()
 static bool Configured()
 {
     if (!bau)
-        return false;
+        init();
 
     return bau->configured();
 }
 
 
-PYBIND11_MODULE(knx, m) 
+PYBIND11_MODULE(knx, m)
 {
     m.doc() = "wrapper for knx device lib";    // optional module docstring
 
     m.def("Start", &Start, "Start knx handling thread.");
     m.def("Stop", &Stop, "Stop knx handling thread.");
-	m.def("Prepare", &Prepare, "Allocated needed objects.");
-	m.def("Destroy", &Destroy, "Free object allocated by Prepare.");
+    m.def("Destroy", &Destroy, "Free object allocated objects.");
     m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
     m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
-    m.def("Configured", (bool(*)())&Configured, "get configured status."); 
+    m.def("Configured", (bool(*)())&Configured, "get configured status.");
     m.def("ReadMemory", &ReadMemory, "read memory from flash file");
-    m.def("FlashFilePath", []() 
-	{
-		if(!platform)
-			return std::string("");
+    m.def("FlashFilePath", []()
+    {
+        if (!platform)
+            init();
 
-		return platform->flashFilePath(); 
-	});
-    m.def("FlashFilePath", [](std::string path) 
-	{
-		if(!platform)
-			return;
+        return platform->flashFilePath();
+    });
+    m.def("FlashFilePath", [](std::string path)
+    {
+        if (!platform)
+            init();
 
-		platform->flashFilePath(path); 
-	});
-    m.def("GetGroupObject", [](uint16_t goNr) 
-	{
-		if(!bau || goNr > bau->groupObjectTable().entryCount())
-			return (GroupObject*)nullptr;
+        platform->flashFilePath(path);
+    });
+    m.def("GetGroupObject", [](uint16_t goNr)
+    {
+        LOGGER.info("GetGroupObject arg %d", goNr);
+        LOGGER.info("GetGroupObject entrycount %d", bau->groupObjectTable().entryCount());
 
-		return &bau->groupObjectTable().get(goNr); 
-	}, py::return_value_policy::reference);
-    
+        if (!bau)
+            init();
+
+        if (goNr > bau->groupObjectTable().entryCount())
+            return (GroupObject*)nullptr;
+
+        return &bau->groupObjectTable().get(goNr);
+    }, py::return_value_policy::reference);
+    m.def("Callback", [](GroupObjectUpdatedHandler handler)
+    {
+        GroupObject::classCallback(handler);
+    });
+
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
-        .def(py::init())
-        .def("asap", &GroupObject::asap)
-        .def("size", &GroupObject::valueSize)
-        .def_property("value",
-            [](GroupObject& go) { return py::bytes((const char*)go.valueRef(), go.valueSize()); },
-            [](GroupObject& go, py::bytes bytesValue) 
-            {
-                const auto value = static_cast<std::string>(bytesValue);
-                if (value.length() != go.valueSize())
-                    throw std::length_error("bytesValue");
-            
-                auto valueRef = go.valueRef();
-                memcpy(valueRef, value.c_str(), go.valueSize());
-                go.objectWritten();
-            })
-		.def_property("callback",
-			[](GroupObject& go) 
-			{
-				return go.callback();
-			},
-			[](GroupObject& go, GroupObjectUpdatedHandler handler)
-			{
-				go.callback(handler);
-			}
-			)
-        .def("callBack", (void(GroupObject::*)(GroupObjectUpdatedHandler))&GroupObject::callback);
+    .def(py::init())
+    .def("asap", &GroupObject::asap)
+    .def("size", &GroupObject::valueSize)
+    .def_property("value",
+                  [](GroupObject & go)
+    {
+
+        return py::bytes((const char*)go.valueRef(), go.valueSize());
+    },
+    [](GroupObject & go, py::bytes bytesValue)
+    {
+        const auto value = static_cast<std::string>(bytesValue);
+
+        if (value.length() != go.valueSize())
+            throw std::length_error("bytesValue");
+
+        auto valueRef = go.valueRef();
+        memcpy(valueRef, value.c_str(), go.valueSize());
+        go.objectWritten();
+    });
+
 }

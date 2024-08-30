@@ -12,6 +12,10 @@ namespace Knx
         public:
             IpParameterObject(DeviceObject& deviceObject, Platform& platform);
             uint16_t* additionalIndivualAddresses(uint8_t& numAddresses);
+            const char* name() override
+            {
+                return "IpParameterObject";
+            }
         private:
             DeviceObject& _deviceObject;
             Platform& _platform;

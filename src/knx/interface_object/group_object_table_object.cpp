@@ -35,6 +35,9 @@ namespace Knx
 
     GroupObject& GroupObjectTableObject::get(uint16_t asap)
     {
+        if(asap == 0 || asap > entryCount())
+            LOGGER.warning("get: %d is no valid GroupObject. Asap must be > 0 and <= %d", asap, entryCount());
+
         return _groupObjects[asap - 1];
     }
 
@@ -100,10 +103,13 @@ namespace Knx
     bool GroupObjectTableObject::initGroupObjects()
     {
         if (!_tableData)
+        {
+            LOGGER.info("initGroupObjects: no table data");
             return false;
+        }
 
         freeGroupObjects();
-
+        LOGGER.info("initGroupObjects %B", _tableData, 40);
         uint16_t goCount = ntohs(_tableData[0]);
 
         _groupObjects = new GroupObject[goCount];

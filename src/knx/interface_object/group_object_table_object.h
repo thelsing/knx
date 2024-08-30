@@ -18,7 +18,10 @@ namespace Knx
             void groupObjects(GroupObject* objs, uint16_t size);
 
             const uint8_t* restore(const uint8_t* buffer) override;
-
+            const char* name() override
+            {
+                return "GroupObjectTable";
+            }
         protected:
             void beforeStateChange(LoadState& newState) override;
 

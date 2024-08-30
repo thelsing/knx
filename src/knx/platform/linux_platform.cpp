@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <termios.h>
+#include <filesystem>
 
 #include <sys/ioctl.h>        // Needed for SPI port
 #include <linux/spi/spidev.h> // Needed for SPI port
@@ -37,6 +38,8 @@
 #include "../bits.h"
 #include "../ip/ip_host_protocol_address_information.h"
 #include "../util/logger.h"
+
+namespace fs = std::filesystem;
 
 #define LOGGER Logger::logger("LinuxPlatform")
 
@@ -141,7 +144,8 @@ namespace Knx
 
     void LinuxPlatform::restart()
     {
-        execv(_args[0], _args);
+        if (_args != nullptr)
+            execv(_args[0], _args);
     }
 
     void LinuxPlatform::fatalError()
@@ -154,21 +158,13 @@ namespace Knx
 
     void LinuxPlatform::setupMultiCast(uint32_t addr, uint16_t port)
     {
+        LOGGER.info("setupMultiCast  %d.%d.%d.%d:%d", (addr & 0xFF000000) >> 24, (addr & 0xFF0000) >> 16, (addr & 0xFF00) >> 8, addr & 0xFF, port);
+
         if (_multicastSocketFd >= 0)
             closeMultiCast();
 
         _multicastAddr = addr;
         _multicastPort = port;
-
-        struct ip_mreq command;
-        uint32_t loop = 1;
-
-        struct sockaddr_in sin;
-        memset(&sin, 0, sizeof(sin));
-        sin.sin_family = AF_INET;
-        sin.sin_addr.s_addr = htonl(INADDR_ANY);
-        sin.sin_port = htons(port);
-
         _multicastSocketFd = socket(AF_INET, SOCK_DGRAM, 0);
 
         if (_multicastSocketFd == -1)
@@ -178,13 +174,22 @@ namespace Knx
         }
 
         /* Mehr Prozessen erlauben, denselben Port zu nutzen */
-        loop = 1;
+        int reuse = 1;
 
-        if (setsockopt(_multicastSocketFd, SOL_SOCKET, SO_REUSEADDR, &loop, sizeof(loop)) < 0)
+        if (setsockopt(_multicastSocketFd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0)
         {
             LOGGER.critical("setsockopt:SO_REUSEADDR %s", strerror(errno));
             fatalError();
         }
+
+
+        struct sockaddr_in sin = {0};
+
+        sin.sin_family = AF_INET;
+
+        sin.sin_addr.s_addr = htonl(INADDR_ANY);
+
+        sin.sin_port = htons(port);
 
         if (bind(_multicastSocketFd, (struct sockaddr*)&sin, sizeof(sin)) < 0)
         {
@@ -193,7 +198,7 @@ namespace Knx
         }
 
         /* loopback */
-        loop = 0;
+        uint32_t loop = 0;
 
         if (setsockopt(_multicastSocketFd, IPPROTO_IP, IP_MULTICAST_LOOP, &loop, sizeof(loop)) < 0)
         {
@@ -202,6 +207,7 @@ namespace Knx
         }
 
         /* Join the broadcast group: */
+        struct ip_mreq command = {0};
         command.imr_multiaddr.s_addr = htonl(addr);
         command.imr_interface.s_addr = htonl(INADDR_ANY);
 
@@ -290,6 +296,14 @@ namespace Knx
 #define FLASHSIZE 0x10000
     void LinuxPlatform::doMemoryMapping()
     {
+        fs::path filePath = _flashFilePath;
+        fs::path dir = filePath.parent_path();
+
+        if (!dir.empty() && !fs::exists(dir))
+        {
+            fs::create_directory(dir);
+        }
+
         _fd = open(_flashFilePath.c_str(), O_RDWR | O_CREAT, S_IRWXU | S_IRGRP | S_IROTH);
 
         if (_fd < 0)
@@ -408,6 +422,7 @@ namespace Knx
     void LinuxPlatform::flashFilePath(const std::string path)
     {
         _flashFilePath = path;
+
     }
 
     std::string LinuxPlatform::flashFilePath()

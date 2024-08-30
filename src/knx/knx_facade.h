@@ -429,6 +429,11 @@ namespace Knx
                 return buffer;
             }
 
+            const char* name() override
+            {
+                return "KnxFacade";
+            }
+
             uint16_t saveSize()
             {
                 return _saveSize;

@@ -22,7 +22,10 @@ namespace Knx
             uint16_t getWord(uint32_t addr);
             uint32_t getInt(uint32_t addr);
             double getFloat(uint32_t addr, ParameterFloatEncodings encoding);
-
+            const char* name() override
+            {
+                return "ApplicationProgram";
+            }
         protected:
             void beforeStateChange(LoadState& newState) override;
     };

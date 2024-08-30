@@ -1,6 +1,9 @@
 #include "table_object.h"
 #include "../bits.h"
 #include "../util/memory.h"
+#include "../util/logger.h"
+
+#define LOGGER Logger::logger("TableObject")
 
 #include <cstring>
 
@@ -81,24 +84,23 @@ namespace Knx
 
     const uint8_t* TableObject::restore(const uint8_t* buffer)
     {
-        //println("TableObject::restore");
-
         uint8_t state = 0;
         buffer = popByte(state, buffer);
         _state = (LoadState)state;
+
 
         buffer = popInt(_size, buffer);
 
         uint32_t relativeAddress = 0;
         buffer = popInt(relativeAddress, buffer);
-        //println(relativeAddress);
+        LOGGER.info("restore: state %s, size %d, relAdr %d", enum_name(_state), _size, relativeAddress);
 
         if (relativeAddress != 0)
             _data = _memory.toAbsolute(relativeAddress);
         else
             _data = 0;
 
-        //println((uint32_t)_data);
+        LOGGER.info("restore: content %B", _data, _size);
         return InterfaceObject::restore(buffer);
     }
 

@@ -51,7 +51,10 @@ namespace Knx
              * @return true if the address table contains the group address, false otherwise
              */
             bool contains(uint16_t groupAddress);
-
+            const char* name() override
+            {
+                return "AddressTable";
+            }
         protected:
             void beforeStateChange(LoadState& newState) override;
 

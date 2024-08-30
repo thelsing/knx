@@ -94,7 +94,7 @@ namespace Knx
 
         for (int i = 0; i < _saveCount; i++)
         {
-            LOGGER.info("Offset %d", buffer - flashStart);
+            LOGGER.info("%s Offset %d", _saveRestores[i]->name(), buffer - flashStart);
             buffer = _saveRestores[i]->restore(buffer);
         }
 
@@ -111,10 +111,11 @@ namespace Knx
         for (int i = 0; i < _tableObjCount; i++)
         {
             ptrdiff_t offset = (buffer - flashStart);
+            LOGGER.info("%s Offset %d", _tableObjects[i]->name(), offset);
             buffer = _tableObjects[i]->restore(buffer);
             uint16_t memorySize = 0;
             buffer = popWord(memorySize, buffer);
-            LOGGER.info("Offset %d, Size %d", offset, memorySize);
+            LOGGER.info("%s Size %d", _tableObjects[i]->name(), memorySize);
 
             if (memorySize == 0)
                 continue;

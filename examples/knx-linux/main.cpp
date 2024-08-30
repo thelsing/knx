@@ -113,7 +113,7 @@ void setup()
         GO_MAX.dataPointType(Dpt(9, 1));
         GO_MAX.valueNoSend(-273.0);
         GO_RESET.dataPointType(Dpt(1, 15));
-        GO_RESET.callback(resetCallback);
+        //GO_RESET.callback(resetCallback);
         LOGGER.info("Timeout: %d", knx.paramWord(0));
         LOGGER.info("Zykl. senden: %d", knx.paramByte(2));
         LOGGER.info("Min/Max senden: %d", knx.paramByte(3));

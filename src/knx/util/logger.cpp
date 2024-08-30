@@ -71,22 +71,22 @@ namespace Knx
     bool Logger::log(LogType type)
     {
 #ifndef KNX_NO_PRINT
-        /*LogType* level = _loggers.get(_name);
+        LogType* level = _loggers.get(_name);
 
         if (level == nullptr)
         {
             print("Logger ");
             print(_name);
-            print(" is disabled. Use Logger::logLevel(\"");
+            print(" is set to Warning. Use Logger::logLevel(\"");
             print(_name);
-            println("\", Logger::Info) to enable.");
-            _loggers.insertOrAssign(_name, Info);
-            return false;
+            println("\", Logger::Info) to show more logging.");
+            _loggers.insertOrAssign(_name, Warning);
+            level = _loggers.get(_name);
         }
 
         if (*level > type)
             return false;
-        */
+        
         print(millis());
         print(" ");
         print(_name);
@@ -131,7 +131,9 @@ namespace Knx
                 }
                 else if (*format == 'B')
                 {
-                    printHex("", va_arg(args, uint8_t*), va_arg(args, size_t), false);
+                    uint8_t* data = va_arg(args, uint8_t*);
+                    size_t length = va_arg(args, int);
+                    printHex("", data, length, false);
                 }
             }
             else

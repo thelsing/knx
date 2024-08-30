@@ -187,8 +187,10 @@ set(SOURCES
 
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -g -O0")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wno-unknown-pragmas -g -O0")
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -fPIC -g -O0")
 
-add_library(knx SHARED ${SOURCES})
+add_library(knx ${SOURCES})
 target_include_directories(knx PUBLIC .)
-set_property(TARGET knx PROPERTY CXX_STANDARD 11)
+set_property(TARGET knx PROPERTY CXX_STANDARD 17)
 target_compile_definitions(knx PUBLIC)
+install(TARGETS knx DESTINATION lib)

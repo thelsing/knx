@@ -1,9 +1,12 @@
 #include "bau_systemB_device.h"
 
 #include "../bits.h"
+#include "../util/logger.h"
 
 #include <string.h>
 #include <stdio.h>
+
+#define LOGGER Logger::logger("BauSystemBDevice")
 
 namespace Knx
 {
@@ -77,15 +80,7 @@ namespace Knx
 
             if (flag == WriteRequest)
             {
-#ifdef SMALL_GROUPOBJECT
                 GroupObject::processClassCallback(go);
-#else
-                GroupObjectUpdatedHandler handler = go.callback();
-
-                if (handler)
-                    handler(go);
-
-#endif
             }
 
             if (!go.communicationEnable())
@@ -126,6 +121,8 @@ namespace Knx
 
     void BauSystemBDevice::updateGroupObject(GroupObject& go, uint8_t* data, uint8_t length)
     {
+        LOGGER.info("updateGroupObject %d flag %d %B", go.asap(), go.commFlag(), data, length);
+
         uint8_t* goData = go.valueRef();
 
         if (length != go.valueSize())
@@ -139,15 +136,7 @@ namespace Knx
         if (go.commFlag() != WriteRequest)
         {
             go.commFlag(Updated);
-#ifdef SMALL_GROUPOBJECT
             GroupObject::processClassCallback(go);
-#else
-            GroupObjectUpdatedHandler handler = go.callback();
-
-            if (handler)
-                handler(go);
-
-#endif
         }
         else
         {

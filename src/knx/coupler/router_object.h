@@ -38,7 +38,10 @@ namespace Knx
             void masterReset(EraseCode eraseCode, uint8_t channel) override;
 
             const uint8_t* restore(const uint8_t* buffer) override;
-
+            const char* name() override
+            {
+                return "RouterObject";
+            }
         protected:
             void beforeStateChange(LoadState& newState) override;
 

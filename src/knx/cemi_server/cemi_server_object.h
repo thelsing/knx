@@ -11,5 +11,9 @@ namespace Knx
 
             void setMediumTypeAsSupported(DptMedium dptMedium);
             void clearSupportedMediaTypes();
+            const char* name() override
+            {
+                return "CemiServerObject";
+            }
     };
 }

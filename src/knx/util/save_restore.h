@@ -43,5 +43,7 @@ namespace Knx
             {
                 return 0;
             }
+
+            virtual const char* name() = 0;
     };
 }

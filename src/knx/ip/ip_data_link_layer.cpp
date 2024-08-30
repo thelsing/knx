@@ -1146,7 +1146,7 @@ namespace Knx
         if (!_enabled)
             return false;
 
-        LOGGER.info("sendUnicast to %d.%d.%d.%d:%d %s %s", addr & 0xFF000000 >> 24, addr & 0xFF0000 >> 16, addr & 0xFF00 >> 8, addr & 0xFF
+        LOGGER.info("sendUnicast to %d.%d.%d.%d:%d %s %s", (addr & 0xFF000000) >> 24, (addr & 0xFF0000) >> 16, (addr & 0xFF00) >> 8, addr & 0xFF
                     , port, enum_name(ipFrame.protocolVersion()), enum_name(ipFrame.serviceTypeIdentifier()));
 
         return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());

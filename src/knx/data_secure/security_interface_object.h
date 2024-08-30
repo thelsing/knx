@@ -35,7 +35,10 @@ namespace Knx
             uint8_t* save(uint8_t* buffer) override;
             const uint8_t* restore(const uint8_t* buffer) override;
             uint16_t saveSize() override;
-
+            const char* name() override
+            {
+                return "SecurityObject";
+            }
         private:
             void setSecurityMode(bool enabled);
 

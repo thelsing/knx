@@ -43,6 +43,10 @@ namespace Knx
             const uint8_t* rfDomainAddress();
             void rfDomainAddress(uint8_t* value);
             uint8_t defaultHopCount();
+            const char* name() override
+            {
+                return "DeviceObject";
+            }
         private:
             uint8_t _prgMode = 0;
 #if MASK_VERSION == 0x091A || MASK_VERSION == 0x2920

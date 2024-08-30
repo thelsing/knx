@@ -292,6 +292,10 @@ namespace Knx
             uint8_t write(uint16_t position, uint16_t value);
             uint8_t write(uint32_t value);
             uint8_t write(const uint8_t* value);
+            const char* name() override
+            {
+                return "";
+            }
         protected:
             PropertyID _id;
             bool _writeEnable;

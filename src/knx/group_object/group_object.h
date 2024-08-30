@@ -144,16 +144,6 @@ namespace Knx
              */
             uint16_t asap();
 
-#ifndef SMALL_GROUPOBJECT
-            /**
-             * register a callback for this group object. The registered callback will be called if the group object was changed from the bus.
-             */
-            void callback(GroupObjectUpdatedHandler handler);
-            /**
-             * returns the registered callback
-             */
-            GroupObjectUpdatedHandler callback();
-#endif
             /**
              * return the current value of the group object.
              * @param type the datapoint type used for the conversion. If this doesn't fit to the group object the returned value is invalid.
@@ -250,23 +240,20 @@ namespace Knx
              * sets the datapoint type of the group object.
              */
             void dataPointType(Dpt value);
-#else
+#endif
             /**
-             * Alternative callback processing: register one global callback for all group object.
+             * Callback processing: register one global callback for all group object.
              * The registered callback will be called if any group object was changed from the bus.
              * The callback method has to dispatch to the correct handler for this group object.
              */
             static GroupObjectUpdatedHandler classCallback();
             static void classCallback(GroupObjectUpdatedHandler handler);
             static void processClassCallback(GroupObject& ko);
-#endif
 
         private:
             // class members
             static GroupObjectTableObject* _table;
-#ifdef SMALL_GROUPOBJECT
             static GroupObjectUpdatedHandler _updateHandlerStatic;
-#endif
 
             size_t asapValueSize(uint8_t code) const;
             size_t goSize();
@@ -276,7 +263,6 @@ namespace Knx
             uint8_t* _data = 0;
             uint8_t _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT
-            GroupObjectUpdatedHandler _updateHandler;
             Dpt _datapointType;
 #endif
     };

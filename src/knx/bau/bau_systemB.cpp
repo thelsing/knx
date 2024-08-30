@@ -237,6 +237,8 @@ namespace Knx
 
         // Flush the EEPROM before resetting
         _memory.writeMemory();
+        // Disable progmode (should be disabled after reboot, but some plaforms don't really restart)
+        _deviceObj.progMode(false);
         _platform.restart();
     }
 

@@ -13,7 +13,10 @@ namespace Knx
 
             int32_t translateAsap(uint16_t asap);
             int32_t nextAsap(uint16_t tsap, uint16_t& startIdx);
-
+            const char* name() override
+            {
+                return "AssociationTable";
+            }
         protected:
             void beforeStateChange(LoadState& newState) override;
 
