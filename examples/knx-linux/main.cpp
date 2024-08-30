@@ -77,9 +77,9 @@ void measureTemp()
         GO_MIN.value(currentValue);
 }
 
-void resetCallback(GroupObject& go)
+void handler(GroupObject& go)
 {
-    if (go.value())
+    if (go == GO_RESET && go.value())
     {
         GO_MAX.valueNoSend(-273.0);
         GO_MIN.valueNoSend(670433.28);
@@ -105,6 +105,8 @@ void setup()
     if (knx.individualAddress() == 0xFFFF)
         knx.progMode(true);
 
+    GroupObject::classCallback(handler);
+
     if (knx.configured())
     {
         GO_CURR.dataPointType(Dpt(9, 1));
@@ -113,7 +115,6 @@ void setup()
         GO_MAX.dataPointType(Dpt(9, 1));
         GO_MAX.valueNoSend(-273.0);
         GO_RESET.dataPointType(Dpt(1, 15));
-        //GO_RESET.callback(resetCallback);
         LOGGER.info("Timeout: %d", knx.paramWord(0));
         LOGGER.info("Zykl. senden: %d", knx.paramByte(2));
         LOGGER.info("Min/Max senden: %d", knx.paramByte(3));

@@ -1,7 +1,7 @@
 #include "table_object.h"
-#include "../bits.h"
 #include "../util/memory.h"
 #include "../util/logger.h"
+#include "../bits.h"
 
 #define LOGGER Logger::logger("TableObject")
 

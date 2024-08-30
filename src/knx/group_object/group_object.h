@@ -142,7 +142,7 @@ namespace Knx
              * returns the Application Service Access Point of the group object. In reality this is just the number of the group object.
              * (in german "KO-Nr")
              */
-            uint16_t asap();
+            uint16_t asap() const;
 
             /**
              * return the current value of the group object.
@@ -266,4 +266,6 @@ namespace Knx
             Dpt _datapointType;
 #endif
     };
+
+    bool operator==(const GroupObject& lhs, const GroupObject& rhs);
 }

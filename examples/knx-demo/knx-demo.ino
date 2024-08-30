@@ -2,8 +2,19 @@
 #include <knx.h>
 
 #if MASK_VERSION != 0x07B0 && (defined ARDUINO_ARCH_ESP8266 || defined ARDUINO_ARCH_ESP32)
-#include <WiFiManager.h>
+    #include <WiFiManager.h>
 #endif
+
+/**  If you don't want a global knx object, for example because you want
+ * to more finely control it's construction, this is an example
+ * of how to do so. Define KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+ * and then you can DIY a knx object as shown below. In this case we use
+ * the ESP32's secondary UART and late-bind the ISR function in setup().
+
+Esp32Platform knxPlatform(&Serial2);
+Bau07B0 knxBau(knxPlatform);
+KnxFacade<Esp32Platform, Bau07B0> knx(knxBau);
+*/
 
 // create named references for easy access to group objects
 #define goCurrent knx.getGroupObject(1)
@@ -19,6 +30,7 @@ long lastsend = 0;
 void measureTemp()
 {
     long now = millis();
+
     if ((now - lastsend) < 2000)
         return;
 
@@ -44,9 +56,9 @@ void measureTemp()
 }
 
 // callback from reset-GO
-void resetCallback(GroupObject& go)
+void handler(GroupObject& go)
 {
-    if (go.value())
+    if (go == goReset && go.value())
     {
         maxValue = 0;
         minValue = 10000;
@@ -55,6 +67,8 @@ void resetCallback(GroupObject& go)
 
 void setup()
 {
+    // You can configure the level of the different loggers.
+    //Logger::logLevel("ApplicationLayer", Logger::Info);
     Serial.begin(115200);
     ArduinoPlatform::SerialDebug = &Serial;
 
@@ -67,12 +81,11 @@ void setup()
 
     // read adress table, association table, groupobject table and parameters from eeprom
     knx.readMemory();
+    GroupObject::classCallback(handler);
 
     // print values of parameters if device is already configured
     if (knx.configured())
     {
-        // register callback for reset GO
-        goReset.callback(resetCallback);
         goReset.dataPointType(DPT_Trigger);
         goCurrent.dataPointType(DPT_Value_Temp);
         goMin.dataPointType(DPT_Value_Temp);

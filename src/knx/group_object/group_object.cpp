@@ -2,8 +2,9 @@
 
 #include "datapoint_types.h"
 #include "../interface_object/group_object_table_object.h"
-#include "../bits.h"
 #include "../util/logger.h"
+#include "../bits.h"
+
 
 #include <cstring>
 
@@ -95,7 +96,7 @@ namespace Knx
         return _data;
     }
 
-    uint16_t GroupObject::asap()
+    uint16_t GroupObject::asap() const
     {
         return _asap;
     }
@@ -228,6 +229,7 @@ namespace Knx
     void GroupObject::processClassCallback(GroupObject& go)
     {
         LOGGER.info("processClassCallback for go %d, handlerset:%d", go.asap(), _updateHandlerStatic != 0);
+
         if (_updateHandlerStatic != 0)
             _updateHandlerStatic(go);
     }
@@ -329,5 +331,10 @@ namespace Knx
         }
 
         return false;
+    }
+
+    bool operator==(const GroupObject& lhs, const GroupObject& rhs)
+    {
+        return lhs.asap() == rhs.asap();
     }
 }
