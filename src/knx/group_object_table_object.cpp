@@ -5,8 +5,8 @@
 #include "bits.h"
 #include "data_property.h"
 
-GroupObjectTableObject::GroupObjectTableObject(Memory& memory)
-    : TableObject(memory)
+GroupObjectTableObject::GroupObjectTableObject(Memory& memory, Platform& platform)
+    : TableObject(memory), _platform(platform)
 {
     Property* properties[]
     {
@@ -30,6 +30,11 @@ uint16_t GroupObjectTableObject::entryCount()
 
 GroupObject& GroupObjectTableObject::get(uint16_t asap)
 {
+    if ((asap == 0) || (asap > UINT8_MAX)) {
+        println("Group Object ID out of range!");
+        _platform.fatalError();
+    }
+
     return _groupObjects[asap - 1];
 }
 
