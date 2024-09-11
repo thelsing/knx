@@ -99,7 +99,8 @@ void setup()
     srand((unsigned int)time(NULL));
 
     Logger::logLevel("App", Logger::Info);
-    Logger::logLevel("ApplicationLayer", Logger::Info);
+    Logger::logLevel("TableObject", Logger::Info);
+    Logger::logLevel("Memory", Logger::Info);
     knx.readMemory();
 
     if (knx.individualAddress() == 0xFFFF)
@@ -115,11 +116,11 @@ void setup()
         GO_MAX.dataPointType(Dpt(9, 1));
         GO_MAX.valueNoSend(-273.0);
         GO_RESET.dataPointType(Dpt(1, 15));
-        LOGGER.info("Timeout: %d", knx.paramWord(0));
-        LOGGER.info("Zykl. senden: %d", knx.paramByte(2));
+        LOGGER.info("Startverzögerung s: %d", knx.paramByte(0));
+        LOGGER.info("Aenderung senden (*0.1K): %d", knx.paramByte(1));
+        LOGGER.info("Zykl. senden min: %d", knx.paramByte(2));
         LOGGER.info("Min/Max senden: %d", knx.paramByte(3));
-        LOGGER.info("Aenderung senden: %d", knx.paramByte(4));
-        LOGGER.info("Abgleich %d", knx.paramByte(5));
+        LOGGER.info("Abgleich %d", knx.paramInt(4));
     }
     else
         LOGGER.info("not configured");

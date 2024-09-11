@@ -35,7 +35,7 @@ namespace Knx
 
     GroupObject& GroupObjectTableObject::get(uint16_t asap)
     {
-        if(asap == 0 || asap > entryCount())
+        if (asap == 0 || asap > entryCount())
             LOGGER.warning("get: %d is no valid GroupObject. Asap must be > 0 and <= %d", asap, entryCount());
 
         return _groupObjects[asap - 1];
@@ -122,9 +122,8 @@ namespace Knx
             go._table = this;
 
             go._dataLength = go.goSize();
-            size_t sizeInMemory = go.sizeInMemory();
-            go._data = new uint8_t[sizeInMemory];
-            memset(go._data, 0, sizeInMemory);
+            go._data = new uint8_t[go._dataLength];
+            memset(go._data, 0, go._dataLength);
 
             if (go.valueReadOnInit())
                 go.requestObjectRead();

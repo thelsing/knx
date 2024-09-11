@@ -202,20 +202,6 @@ namespace Knx
         return asapValueSize(code);
     }
 
-    size_t GroupObject::sizeInMemory() const
-    {
-        uint8_t code = lowByte(ntohs(_table->_tableData[_asap]));
-        size_t result = asapValueSize(code);
-
-        if (code == 0)
-            return 1;
-
-        if (code == 14)
-            return 14 + 1;
-
-        return result;
-    }
-
     GroupObjectUpdatedHandler GroupObject::classCallback()
     {
         return _updateHandlerStatic;

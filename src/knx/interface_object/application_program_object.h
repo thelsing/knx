@@ -22,6 +22,8 @@ namespace Knx
             uint16_t getWord(uint32_t addr);
             uint32_t getInt(uint32_t addr);
             double getFloat(uint32_t addr, ParameterFloatEncodings encoding);
+            using TableObject::data;
+            using TableObject::dataSize;
             const char* name() override
             {
                 return "ApplicationProgram";

@@ -50,6 +50,12 @@ namespace Knx
              * must not be written at nor freed.
              */
             uint8_t* data();
+
+            /**
+             * returns the size in bytes of the internal data of the interface object.
+             */
+            uint32_t dataSize();
+
             /**
              * Set the reason for a state change failure.
              */

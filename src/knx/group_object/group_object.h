@@ -129,11 +129,6 @@ namespace Knx
              */
             size_t sizeInTelegram();
             /**
-             * returns the size of the group object in the heap memory of the group object. The function returns the same value as goSize(),
-             * exept fot the 14 byte string type to reserve one byte of a \0 terminator character.
-             */
-            size_t sizeInMemory() const;
-            /**
              * returns the pointer to the value of the group object. This can be used if a datapoint type is not supported or if you want do
              * your own conversion.
              */

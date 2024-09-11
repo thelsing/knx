@@ -3,8 +3,18 @@
 #include <stdarg.h>
 #include "simple_map.h"
 
+#ifdef __linux
+    #include <string>
+    #define loggername_t std::string
+#else
+    #define loggername_t const char*
+#endif
+    
+
 namespace Knx
 {
+
+
     class IPrintable
     {
         public:
@@ -23,8 +33,8 @@ namespace Knx
     {
         public:
             enum LogType { Info, Warning, Error, Critical, Exception, Disabled};
-            static Logger& logger(const char* name);
-            static void logLevel(const char* name, LogType level);
+            static Logger& logger(const loggername_t name);
+            static void logLevel(const loggername_t name, LogType level);
             void info(const char* message, IPrintable& object)
             {
                 if (!log(LogType::Info))
@@ -79,14 +89,14 @@ namespace Knx
             Logger() {}
             bool log(LogType type);
             void log(LogType type, const char* format, va_list args);
-            void name(const char* value)
+            void name(loggername_t value)
             {
                 _name = value;
             }
         private:
             const char* enum_name(LogType type);
-            const char* _name = "";
-            static Map<const char*, LogType, 64> _loggers;
+            loggername_t _name = "";
+            static Map<loggername_t, LogType, 64> _loggers;
             static Logger _logger;
     };
 }

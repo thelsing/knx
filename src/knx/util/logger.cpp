@@ -4,16 +4,16 @@
 
 namespace Knx
 {
-    Map<const char*, Logger::LogType, 64> Logger::_loggers;
+    Map<loggername_t, Logger::LogType, 64> Logger::_loggers;
     Logger Logger::_logger;
 
-    Logger& Logger::logger(const char* name)
+    Logger& Logger::logger(loggername_t name)
     {
         _logger.name(name);
         return _logger;
     }
 
-    void Logger::logLevel(const char* name, LogType level)
+    void Logger::logLevel(loggername_t name, LogType level)
     {
         _loggers.insertOrAssign(name, level);
     }
@@ -67,6 +67,12 @@ namespace Knx
         va_end(objects);
 #endif
     }
+#ifdef __linux__
+    void print(std::string msg)
+    {
+        print(msg.c_str());
+    }
+#endif
 
     bool Logger::log(LogType type)
     {
@@ -86,7 +92,7 @@ namespace Knx
 
         if (*level > type)
             return false;
-        
+
         print(millis());
         print(" ");
         print(_name);

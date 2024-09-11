@@ -293,7 +293,7 @@ namespace Knx
         fsync(_fd);
     }
 
-#define FLASHSIZE 0x10000
+#define FLASHSIZE 0x20000
     void LinuxPlatform::doMemoryMapping()
     {
         fs::path filePath = _flashFilePath;

@@ -317,6 +317,11 @@ namespace Knx
         return _data;
     }
 
+    uint32_t TableObject::dataSize()
+    {
+        return _size;
+    }
+
     void TableObject::errorCode(ErrorCode errorCode)
     {
         uint8_t data = errorCode;

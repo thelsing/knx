@@ -91,13 +91,13 @@ void setup()
         goMin.dataPointType(DPT_Value_Temp);
         goMax.dataPointType(DPT_Value_Temp);
 
-        Serial.print("Timeout: ");
+        Serial.print("Startverzögerung s: ");
         Serial.println(knx.paramByte(0));
-        Serial.print("Zykl. senden: ");
+        Serial.print("Aenderung senden (*0.1K): ");
         Serial.println(knx.paramByte(1));
-        Serial.print("Min/Max senden: ");
+        Serial.print("Zykl. senden min: ");
         Serial.println(knx.paramByte(2));
-        Serial.print("Aenderung senden: ");
+        Serial.print("Min/Max senden: ");
         Serial.println(knx.paramByte(3));
         Serial.print("Abgleich: ");
         Serial.println(knx.paramByte(4));

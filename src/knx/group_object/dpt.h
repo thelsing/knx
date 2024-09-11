@@ -372,5 +372,7 @@ namespace Knx
             unsigned short index;
             bool operator==(const Dpt& other) const;
             bool operator!=(const Dpt& other) const;
+
+             
     };
 }

@@ -14,11 +14,11 @@ namespace py = pybind11;
 #include <vector>
 #include <algorithm>
 
-#include "knx/bits.h"
-#include "knx/platform/linux_platform.h"
-#include "knx/ip/bau57B0.h"
-#include "knx/interface_object/group_object_table_object.h"
-#include "knx/util/logger.h"
+#include <knx/bits.h>
+#include <knx/platform/linux_platform.h>
+#include <knx/ip/bau57B0.h>
+#include <knx/interface_object/group_object_table_object.h>
+#include <knx/util/logger.h>
 
 #define LOGGER Logger::logger("knxmodule")
 
@@ -56,6 +56,8 @@ static void init()
     Logger::logLevel("ApplicationLayer", Logger::Info);
     Logger::logLevel("BauSystemBDevice", Logger::Info);
     Logger::logLevel("GroupObject", Logger::Info);
+    Logger::logLevel("TableObject", Logger::Info);
+    Logger::logLevel("Memory", Logger::Info);
 
     /*
         // copy args so we control the livetime of the char*
@@ -185,6 +187,14 @@ PYBIND11_MODULE(knx, m)
     m.def("Callback", [](GroupObjectUpdatedHandler handler)
     {
         GroupObject::classCallback(handler);
+    });
+    m.def("Parameters", []()
+    {
+        uint8_t* data = bau->parameters().data();
+        if (data == nullptr)
+            return py::bytes();
+
+        return py::bytes((const char*)data, bau->parameters().dataSize());
     });
 
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
