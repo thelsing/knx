@@ -18,11 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-             // DPT 2.* - Binary Control
-
-            if (datatype.mainGroup == 2 && datatype.subGroup >= 1 && datatype.subGroup <= 12 && datatype.index <= 1)
-                return busValueToBinaryControl(payload, payload_length, datatype, value);
-
             // DPT 3.* - Step Control
             if (datatype.mainGroup == 3 && datatype.subGroup >= 7 && datatype.subGroup <= 8 && datatype.index <= 1)
                 return busValueToStepControl(payload, payload_length, datatype, value);
@@ -173,11 +168,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-
-        // DPT 2.* - Binary Control
-        if (datatype.mainGroup == 2 && datatype.subGroup >= 1 && datatype.subGroup <= 12 && datatype.index <= 1)
-            return valueToBusValueBinaryControl(value, payload, payload_length, datatype);
-
         // DPT 3.* - Step Control
         if (datatype.mainGroup == 3 && datatype.subGroup >= 7 && datatype.subGroup <= 8 && datatype.index <= 1)
             return valueToBusValueStepControl(value, payload, payload_length, datatype);
@@ -325,23 +315,6 @@ namespace Knx
         return false;
     }
 
-    int busValueToBinaryControl(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(1);
-
-        switch (datatype.index)
-        {
-            case 0:
-                value = bitFromPayload(payload, 6);
-                return true;
-
-            case 1:
-                value = bitFromPayload(payload, 7);
-                return true;
-        }
-
-        return false;
-    }
 
     int busValueToStepControl(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
     {
@@ -988,24 +961,6 @@ namespace Knx
 
     //-------------------------------------------------------------------------------------------------------------------------------------
 
-    int valueToBusValueBinaryControl(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        switch (datatype.index)
-        {
-            case 0:
-                bitToPayload(payload, 6, value);
-                break;
-
-            case 1:
-                bitToPayload(payload, 7, value);
-                break;
-
-            default:
-                return false;
-        }
-
-        return true;
-    }
 
     int valueToBusValueStepControl(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {

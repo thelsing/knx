@@ -58,4 +58,26 @@ namespace Knx
             operator EnableValue() const;
             DPT_Enable& operator=(const EnableValue value);
     };
+
+// TODO:
+#define DPT_Ramp Dpt1(4)
+#define DPT_Alarm Dpt1(5)
+#define DPT_BinaryValue Dpt1(6)
+#define DPT_Step Dpt1(7)
+#define DPT_UpDown Dpt1(8)
+#define DPT_OpenClose Dpt1(9)
+#define DPT_Start Dpt1(10)
+#define DPT_State Dpt1(11)
+#define DPT_Invert Dpt1(12)
+#define DPT_DimSendStyle Dpt1(13)
+#define DPT_InputSource Dpt1(14)
+#define DPT_Reset Dpt1(15)
+#define DPT_Ack Dpt1(16)
+#define DPT_Trigger Dpt1(17)
+#define DPT_Occupancy Dpt1(18)
+#define DPT_Window_Door Dpt1(19)
+#define DPT_LogicalFunction Dpt1(21)
+#define DPT_Scene_AB Dpt1(22)
+#define DPT_ShutterBlinds_Mode Dpt1(23)
+#define DPT_DayNight Dpt1(24)
 }

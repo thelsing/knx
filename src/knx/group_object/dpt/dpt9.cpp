@@ -2,9 +2,12 @@
 
 #include "dptconvert.h"
 
-Knx::Dpt9::Dpt9() { mainGroup = 9; }
+Knx::Dpt9::Dpt9(unsigned short subgroup /* = 0*/): Dpt(9, subgroup) {}
 
-Knx::Dpt9::Dpt9(float value) : _value(value) { mainGroup = 9; }
+Knx::Dpt9::Dpt9(float value) : Dpt9()
+{
+    _value = value;
+}
 
 Knx::Go_SizeCode Knx::Dpt9::size() const
 {

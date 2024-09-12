@@ -14,6 +14,6 @@ namespace Knx
         : mainGroup(mainGroup), subGroup(subGroup), index(index)
     {
         if (subGroup == 0)
-            println("WARNING: You used and invalid Dpt *.0");
+            LOGGER.warning("You used and invalid Dpt *.0");
     }
 }

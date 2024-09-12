@@ -5,7 +5,7 @@ namespace Knx
     class Dpt9: public Dpt
     {
         public:
-            Dpt9();
+            Dpt9(unsigned short subgroup = 0);
             Dpt9(float value);
             Go_SizeCode size() const override;
 

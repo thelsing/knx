@@ -43,6 +43,8 @@ set(SOURCES
 ./knx/group_object/dpt/dpt.h
 ./knx/group_object/dpt/dpt1.cpp
 ./knx/group_object/dpt/dpt1.h
+./knx/group_object/dpt/dpt2.cpp
+./knx/group_object/dpt/dpt2.h
 ./knx/group_object/dpt/dpt9.cpp
 ./knx/group_object/dpt/dpt9.h
 ./knx/group_object/dpt/dptconvert.cpp
