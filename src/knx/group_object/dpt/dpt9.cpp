@@ -2,9 +2,9 @@
 
 #include "dptconvert.h"
 
-Knx::Dpt9::Dpt9() {}
+Knx::Dpt9::Dpt9() { mainGroup = 9; }
 
-Knx::Dpt9::Dpt9(float value) : _value(value) {}
+Knx::Dpt9::Dpt9(float value) : _value(value) { mainGroup = 9; }
 
 Knx::Go_SizeCode Knx::Dpt9::size() const
 {
@@ -29,7 +29,7 @@ void Knx::Dpt9::value(float value)
     _value = value;
 }
 
-bool Knx::Dpt9::value()
+float Knx::Dpt9::value() const
 {
     return _value;
 }

@@ -3,9 +3,6 @@
 #include "../group_object.h"
 namespace Knx
 {
-#define DPT_Switch Dpt(1, 1)
-#define DPT_Bool Dpt(1, 2)
-#define DPT_Enable Dpt(1, 3)
 #define DPT_Ramp Dpt(1, 4)
 #define DPT_Alarm Dpt(1, 5)
 #define DPT_BinaryValue Dpt(1, 6)

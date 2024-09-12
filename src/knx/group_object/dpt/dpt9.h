@@ -13,7 +13,7 @@ namespace Knx
             virtual void decode(uint8_t* data) override;
 
             void value(float value);
-            bool value();
+            float value() const;
             operator float() const;
             Dpt9& operator=(const float value);
         private:
