@@ -85,8 +85,6 @@ void setup(void)
         cyclSend = knx.paramInt(0);
         Serial1.print("Zykl. send:");
         Serial1.println(cyclSend);
-        goTemperature.dataPointType(Dpt(9, 1));
-        goHumidity.dataPointType(Dpt(9, 1));
     }
 
     // start the framework.
@@ -123,8 +121,8 @@ void loop(void)
     {
         sendCounter = 0;
 
-        goTemperature.value(temp);
-        goHumidity.value(humi);
+        goTemperature.value<Dpt9>(temp);
+        goHumidity.value<Dpt9>(humi);
     }
 
 }

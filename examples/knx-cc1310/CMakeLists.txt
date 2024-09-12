@@ -71,10 +71,13 @@ set(${PROJECT_NAME}_SOURCES
     ../../src/knx/interface_object/data_property.h
     ../../src/knx/interface_object/device_object.cpp
     ../../src/knx/interface_object/device_object.h
-    ../../src/knx/group_object/dpt.cpp
-    ../../src/knx/group_object/dpt.h
-    ../../src/knx/group_object/dptconvert.cpp
-    ../../src/knx/group_object/dptconvert.h
+    ../../src/knx/group_object/dpt/dpt.cpp
+    ../../src/knx/group_object/dpt/dpt.h
+    ../../src/knx/group_object/dpt/dptconvert.cpp
+    ../../src/knx/group_object/dpt/dptconvert.h
+    ../../src/knx/group_object/dpt/dpt1.cpp
+    ../../src/knx/group_object/dpt/dpt1.h
+    ../../src/knx/group_object/dpt/dpts.h
     ../../src/knx/interface_object/function_property.h
     ../../src/knx/group_object/group_object.cpp
     ../../src/knx/group_object/group_object.h

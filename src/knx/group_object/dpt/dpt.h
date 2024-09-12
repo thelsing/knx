@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../group_object.h"
 namespace Knx
 {
 #define DPT_Switch Dpt(1, 1)
@@ -367,12 +368,14 @@ namespace Knx
         public:
             Dpt();
             Dpt(short mainGroup, short subGroup, short index = 0);
+            virtual ~Dpt() {}
             unsigned short mainGroup;
             unsigned short subGroup;
             unsigned short index;
-            bool operator==(const Dpt& other) const;
-            bool operator!=(const Dpt& other) const;
 
-             
+            virtual Go_SizeCode size() const = 0;
+
+            virtual void encode(uint8_t* data) const = 0;
+            virtual void decode(uint8_t* data) = 0;
     };
 }

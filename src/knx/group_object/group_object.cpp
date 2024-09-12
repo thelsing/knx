@@ -1,6 +1,5 @@
 #include "group_object.h"
 
-#include "datapoint_types.h"
 #include "../interface_object/group_object_table_object.h"
 #include "../util/logger.h"
 #include "../bits.h"
@@ -99,6 +98,11 @@ namespace Knx
     uint16_t GroupObject::asap() const
     {
         return _asap;
+    }
+
+    Go_SizeCode GroupObject::sizeCode() const
+    {
+        return (Go_SizeCode)lowByte(ntohs(_table->_tableData[_asap]));
     }
 
     size_t GroupObject::goSize()
@@ -218,105 +222,6 @@ namespace Knx
 
         if (_updateHandlerStatic != 0)
             _updateHandlerStatic(go);
-    }
-
-    void GroupObject::value(const KNXValue& value, const Dpt& type)
-    {
-        valueNoSend(value, type);
-        objectWritten();
-    }
-
-
-    KNXValue GroupObject::value(const Dpt& type)
-    {
-        KNXValue value = "";
-        KNX_Decode_Value(_data, _dataLength, type, value);
-        return value;
-    }
-
-    bool GroupObject::tryValue(KNXValue& value, const Dpt& type)
-    {
-        return KNX_Decode_Value(_data, _dataLength, type, value);
-    }
-
-#ifndef SMALL_GROUPOBJECT
-    void GroupObject::dataPointType(Dpt value)
-    {
-        _datapointType = value;
-    }
-
-
-    Dpt GroupObject::dataPointType()
-    {
-        return _datapointType;
-    }
-
-    bool GroupObject::tryValue(KNXValue& value)
-    {
-        return tryValue(value, _datapointType);
-    }
-
-
-    void GroupObject::value(const KNXValue& value)
-    {
-        this->value(value, _datapointType);
-    }
-
-
-    KNXValue GroupObject::value()
-    {
-        return value(_datapointType);
-    }
-
-
-    void GroupObject::valueNoSend(const KNXValue& value)
-    {
-        valueNoSend(value, _datapointType);
-    }
-#endif
-
-    void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
-    {
-        if (_uninitialized)
-            commFlag(Ok);
-
-        KNX_Encode_Value(value, _data, _dataLength, type);
-    }
-
-    bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
-    {
-        if (_uninitialized)
-        {
-            // always set first value
-            this->valueNoSend(value, type);
-            return true;
-        }
-        else
-        {
-            // convert new value to given dtp
-            uint8_t newData[_dataLength];
-            memset(newData, 0, _dataLength);
-            KNX_Encode_Value(value, newData, _dataLength, type);
-
-            // check for change in converted value / update value on change only
-            const bool dataChanged = memcmp(_data, newData, _dataLength);
-
-            if (dataChanged)
-                memcpy(_data, newData, _dataLength);
-
-            return dataChanged;
-        }
-    }
-
-    bool GroupObject::valueCompare(const KNXValue& value, const Dpt& type)
-    {
-        if (valueNoSendCompare(value, type))
-        {
-            objectWritten();
-            return true;
-        }
-
-        return false;
     }
 
     bool operator==(const GroupObject& lhs, const GroupObject& rhs)

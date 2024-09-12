@@ -29,7 +29,7 @@
 #pragma once
 
 #include "dpt.h"
-#include "knx_value.h"
+#include "../knx_value.h"
 
 #include <cstdint>
 
@@ -47,7 +47,6 @@ namespace Knx
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
 
     //KNX to internal
-    int busValueToBinary(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToBinaryControl(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToStepControl(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToCharacter(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
@@ -58,7 +57,6 @@ namespace Knx
     int busValueToTimePeriod(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToSigned16(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToTimeDelta(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
-    int busValueToFloat16(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToTime(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToDate(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToUnsigned32(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
@@ -86,7 +84,6 @@ namespace Knx
     int busValueToActiveEnergy(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
 
     //Internal to KNX
-    int valueToBusValueBinary(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueBinaryControl(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueStepControl(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueCharacter(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
@@ -97,7 +94,6 @@ namespace Knx
     int valueToBusValueTimePeriod(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueSigned16(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueTimeDelta(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
-    int valueToBusValueFloat16(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueTime(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueDate(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueUnsigned32(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
@@ -133,21 +129,21 @@ namespace Knx
     uint32_t unsigned32FromPayload(const uint8_t* payload, int index);
     int32_t signed32FromPayload(const uint8_t* payload, int index);
     uint64_t unsigned64FromPayload(const uint8_t* payload, int index);
-    double float16FromPayload(const uint8_t* payload, int index);
+    float float16FromPayload(const uint8_t* payload, int index);
     float float32FromPayload(const uint8_t* payload, int index);
     double float64FromPayload(const uint8_t* payload, int index);
     int64_t signed64FromPayload(const uint8_t* payload, int index);
     uint8_t bcdFromPayload(const uint8_t* payload, int index);
 
-    void bitToPayload(uint8_t* payload, size_t payload_length, int index, bool value);
-    void unsigned8ToPayload(uint8_t* payload, size_t payload_length, int index, uint8_t value, uint8_t mask);    //mask 0xFF
-    void signed8ToPayload(uint8_t* payload, size_t payload_length, int index, int8_t value, uint8_t mask);       //mask 0xFF
-    void unsigned16ToPayload(uint8_t* payload, size_t payload_length, int index, uint16_t value, uint16_t mask); //mask 0xFFFF
-    void signed16ToPayload(uint8_t* payload, size_t payload_length, int index, int16_t value, uint16_t mask);    //mask 0xFFFF
-    void unsigned32ToPayload(uint8_t* payload, size_t payload_length, int index, uint32_t value, uint32_t mask); //mask = 0xFFFFFFFF
-    void signed32ToPayload(uint8_t* payload, size_t payload_length, int index, int32_t value, uint32_t mask);    //mask  = 0xFFFFFFFF
-    void float16ToPayload(uint8_t* payload, size_t payload_length, int index, double value, uint16_t mask);      //mask = 0xFFFF
-    void float32ToPayload(uint8_t* payload, size_t payload_length, int index, double value, uint32_t mask);      //mask  = 0xFFFFFFFF
-    void signed64ToPayload(uint8_t* payload, size_t payload_length, int index, int64_t value, uint64_t mask);    //mask = UINT64_C(0xFFFFFFFFFFFFFFFF)
-    void bcdToPayload(uint8_t* payload, size_t payload_length, int index, uint8_t value);
+    void bitToPayload(uint8_t* payload, int index, bool value);
+    void unsigned8ToPayload(uint8_t* payload, int index, uint8_t value, uint8_t mask);    //mask 0xFF
+    void signed8ToPayload(uint8_t* payload, int index, int8_t value, uint8_t mask);       //mask 0xFF
+    void unsigned16ToPayload(uint8_t* payload, int index, uint16_t value, uint16_t mask); //mask 0xFFFF
+    void signed16ToPayload(uint8_t* payload, int index, int16_t value, uint16_t mask);    //mask 0xFFFF
+    void unsigned32ToPayload(uint8_t* payload, int index, uint32_t value, uint32_t mask); //mask = 0xFFFFFFFF
+    void signed32ToPayload(uint8_t* payload, int index, int32_t value, uint32_t mask);    //mask  = 0xFFFFFFFF
+    void float16ToPayload(uint8_t* payload, int index, float value, uint16_t mask);      //mask = 0xFFFF
+    void float32ToPayload(uint8_t* payload, int index, float value, uint32_t mask);      //mask  = 0xFFFFFFFF
+    void signed64ToPayload(uint8_t* payload, int index, int64_t value, uint64_t mask);    //mask = UINT64_C(0xFFFFFFFFFFFFFFFF)
+    void bcdToPayload(uint8_t* payload, int index, uint8_t value);
 }

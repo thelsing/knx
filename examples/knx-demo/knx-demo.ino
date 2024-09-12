@@ -40,25 +40,25 @@ void measureTemp()
     currentValue *= 100 * 100;
 
     // write new value to groupobject
-    goCurrent.value(currentValue);
+    goCurrent.value<Dpt9>(currentValue);
 
     if (currentValue > maxValue)
     {
         maxValue = currentValue;
-        goMax.value(maxValue);
+        goMax.value<Dpt9>(maxValue);
     }
 
     if (currentValue < minValue)
     {
         minValue = currentValue;
-        goMin.value(minValue);
+        goMin.value<Dpt9>(minValue);
     }
 }
 
 // callback from reset-GO
 void handler(GroupObject& go)
 {
-    if (go == goReset && go.value())
+    if (go == goReset && go.value<Dpt1>())
     {
         maxValue = 0;
         minValue = 10000;
@@ -86,11 +86,6 @@ void setup()
     // print values of parameters if device is already configured
     if (knx.configured())
     {
-        goReset.dataPointType(DPT_Trigger);
-        goCurrent.dataPointType(DPT_Value_Temp);
-        goMin.dataPointType(DPT_Value_Temp);
-        goMax.dataPointType(DPT_Value_Temp);
-
         Serial.print("Startverzögerung s: ");
         Serial.println(knx.paramByte(0));
         Serial.print("Aenderung senden (*0.1K): ");

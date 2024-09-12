@@ -6,6 +6,8 @@
 
 #include "knx/interface_object/group_object_table_object.h"
 #include "knx/bits.h"
+#include "knx/group_object/dpt/dpts.h"
+
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -61,28 +63,28 @@ void measureTemp()
 
     lastsend = now;
     int r = rand();
-    double currentValue = (r * 1.0) / (RAND_MAX * 1.0);
+    float currentValue = (r * 1.0f) / (RAND_MAX * 1.0f);
     currentValue *= 100;
     currentValue -= 50;
     //    currentValue *= (670433.28 + 273);
     //    currentValue -= 273;
     LOGGER.info("current value: %f",currentValue);
-    GO_CURR.value(currentValue);
+    GO_CURR.value<Dpt9>(currentValue);
 
-    double max = GO_MAX.value();
+    float max = GO_MAX.value<Dpt9>();
     if (currentValue > max)
-        GO_MAX.value(currentValue);
+        GO_MAX.value<Dpt9>(currentValue);
 
-    if (currentValue < (double)GO_MIN.value())
-        GO_MIN.value(currentValue);
+    if (currentValue < GO_MIN.value<Dpt9>())
+        GO_MIN.value<Dpt9>(currentValue);
 }
 
 void handler(GroupObject& go)
 {
-    if (go == GO_RESET && go.value())
+    if (go == GO_RESET && go.value<Dpt1>())
     {
-        GO_MAX.valueNoSend(-273.0);
-        GO_MIN.valueNoSend(670433.28);
+        GO_MAX.valueNoSend<Dpt9>(-273.0f);
+        GO_MIN.valueNoSend<Dpt9>(670433.28f);
     }
 }
 
@@ -110,12 +112,8 @@ void setup()
 
     if (knx.configured())
     {
-        GO_CURR.dataPointType(Dpt(9, 1));
-        GO_MIN.dataPointType(Dpt(9, 1));
-        GO_MIN.value(670433.28);
-        GO_MAX.dataPointType(Dpt(9, 1));
-        GO_MAX.valueNoSend(-273.0);
-        GO_RESET.dataPointType(Dpt(1, 15));
+        GO_MIN.value<Dpt9>(670433.28f);
+        GO_MAX.valueNoSend<Dpt9>(-273.0f);
         LOGGER.info("Startverzögerung s: %d", knx.paramByte(0));
         LOGGER.info("Aenderung senden (*0.1K): %d", knx.paramByte(1));
         LOGGER.info("Zykl. senden min: %d", knx.paramByte(2));

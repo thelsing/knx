@@ -1,6 +1,6 @@
 #include "application_program_object.h"
 
-#include "../group_object/dptconvert.h"
+#include "../group_object/dpt/dptconvert.h"
 #include "../util/logger.h"
 #include "../bits.h"
 

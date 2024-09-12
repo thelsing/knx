@@ -33,8 +33,8 @@ namespace Knx
     {
         public:
             enum LogType { Info, Warning, Error, Critical, Exception, Disabled};
-            static Logger& logger(const loggername_t name);
-            static void logLevel(const loggername_t name, LogType level);
+            static Logger& logger(loggername_t name);
+            static void logLevel(loggername_t name, LogType level);
             void info(const char* message, IPrintable& object)
             {
                 if (!log(LogType::Info))
