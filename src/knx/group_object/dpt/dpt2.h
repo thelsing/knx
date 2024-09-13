@@ -9,7 +9,7 @@ namespace Knx
     {
         NoControl, Control
     };
-    template<typename T> class DPT2: public Dpt
+    template<typename T> class DPT2: public DPT<T>
     {
         public:
             Go_SizeCode size() const override
@@ -26,7 +26,7 @@ namespace Knx
                 }
 
                 bitToPayload(data, 6, true);
-                bitToPayload(data, 7, ((int)_value) == 1);
+                bitToPayload(data, 7, ((int)DPT<T>::value()) == 1);
             }
 
             bool decode(uint8_t* data) override
@@ -41,7 +41,7 @@ namespace Knx
 
                 bool v = bitFromPayload(data, 7);
 
-                _value = v ? (T)1 : (T)0;
+                value(v ? (T)1 : (T)0);
                 return true;
             }
 
@@ -53,16 +53,6 @@ namespace Knx
             ControlValue control() const
             {
                 return _control;
-            }
-
-            void value(T value)
-            {
-                _value = value;
-            }
-
-            T value() const
-            {
-                return _value;
             }
 
         private:

@@ -330,4 +330,37 @@ namespace Knx
              */
             virtual bool decode(uint8_t* data) = 0;
     };
+
+    template<typename T> class DPT: public Dpt
+    {
+        public:
+            DPT() {};
+            DPT(T value)
+            {
+                _value = value;
+            }
+
+            virtual void value(T value)
+            {
+                _value = value;
+            }
+
+            T value() const
+            {
+                return _value;
+            }
+
+            operator T() const
+            {
+                return _value;
+            }
+
+            DPT& operator=(const T value)
+            {
+                _value = value;
+                return *this;
+            }
+        private:
+            T _value;
+    };
 }

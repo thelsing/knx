@@ -2,22 +2,12 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt1: public Dpt
+    class Dpt1: public DPT<bool>
     {
         public:
-            Dpt1();
-            Dpt1(bool value);
             Go_SizeCode size() const override;
-
             void encode(uint8_t* data) const override;
             bool decode(uint8_t* data) override;
-
-            void value(bool value);
-            bool value() const;
-            operator bool() const;
-            Dpt1& operator=(const bool value);
-        private:
-            bool _value;
     };
 
     template<typename T> class DPT1 : public Dpt1
