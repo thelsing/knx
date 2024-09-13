@@ -85,11 +85,11 @@ ICACHE_RAM_ATTR void buttonEvent()
 #elif defined(ARDUINO_ARCH_ESP8266)
 // predefined global instance for TP or IP or TP/IP coupler
 #if MASK_VERSION == 0x07B0
-    Knx::KnxFacade<Knx::EspPlatform, Knx::Bau07B0> knx(buttonEvent);
+    Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau07B0> knx(buttonEvent);
 #elif MASK_VERSION == 0x57B0
-    Knx::KnxFacade<Knx::EspPlatform, Knx::Bau57B0> knx(buttonEvent);
+    Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau57B0> knx(buttonEvent);
 #elif MASK_VERSION == 0x091A
-    Knx::KnxFacade<Knx::EspPlatform, Knx::Bau091A> knx(buttonEvent);
+    Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau091A> knx(buttonEvent);
 #else
     #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
 #endif

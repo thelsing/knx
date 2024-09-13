@@ -5,7 +5,7 @@
 #include "knx/bits.h"
 
 #ifndef KNX_SERIAL
-    #define KNX_SERIAL Serial2
+    #define KNX_SERIAL Serial
 #endif
 
 namespace Knx

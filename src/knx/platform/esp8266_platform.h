@@ -5,11 +5,11 @@
 
 namespace Knx
 {
-    class EspPlatform : public ArduinoPlatform
+    class Esp8266Platform : public ArduinoPlatform
     {
         public:
-            EspPlatform();
-            EspPlatform(HardwareSerial* s);
+            Esp8266Platform();
+            Esp8266Platform(HardwareSerial* s);
 
             // ip stuff
             uint32_t currentIpAddress() override;

@@ -21,7 +21,7 @@
 #elif defined(ARDUINO_ARCH_RP2040)
 #include "platform/rp2040_arduino_platform.h"
 #elif defined(ARDUINO_ARCH_ESP8266)
-#include "platform/esp_platform.h"
+#include "platform/esp8266_platform.h"
 #elif defined(ARDUINO_ARCH_ESP32)
 #include "platform/esp32_platform.h"
 #elif defined(ARDUINO_ARCH_STM32)
@@ -504,11 +504,11 @@ namespace Knx
 #elif defined(ARDUINO_ARCH_ESP8266)
 // predefined global instance for TP or IP or TP/IP coupler
 #if MASK_VERSION == 0x07B0
-    extern Knx::KnxFacade<Knx::EspPlatform, Knx::Bau07B0> knx;
+    extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau07B0> knx;
 #elif MASK_VERSION == 0x57B0
-    extern Knx::KnxFacade<Knx::EspPlatform, Knx::Bau57B0> knx;
+    extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau57B0> knx;
 #elif MASK_VERSION == 0x091A
-    extern Knx::KnxFacade<Knx::EspPlatform, Knx::Bau091A> knx;
+    extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau091A> knx;
 #else
     #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
 #endif

@@ -122,8 +122,8 @@ class Samd51Platform [[class_samd51_platform.html]]
 Platform<|--ArduinoPlatform
 ArduinoPlatform<|--Samd21Platform
 ArduinoPlatform<|--Samd51Platform
-class EspPlatform [[class_esp_platform.html]]
-ArduinoPlatform<|--EspPlatform
+class Esp8266Platform [[class_esp8266_platform.html]]
+ArduinoPlatform<|--Esp8266Platform
 class Esp32Platform [[class_esp32_platform.html]]
 ArduinoPlatform<|--Esp32Platform
 class Stm32Platform [[class_stm32_platform.html]]
@@ -226,8 +226,8 @@ class Samd51Platform [[class_samd51_platform.html]]
 Platform<|--ArduinoPlatform
 ArduinoPlatform<|--Samd21Platform
 ArduinoPlatform<|--Samd51Platform
-class EspPlatform [[class_esp_platform.html]]
-ArduinoPlatform<|--EspPlatform
+class Esp8266Platform [[class_esp8266_platform.html]]
+ArduinoPlatform<|--Esp8266Platform
 class Esp32Platform [[class_esp32_platform.html]]
 ArduinoPlatform<|--Esp32Platform
 class Stm32Platform [[class_stm32_platform.html]]

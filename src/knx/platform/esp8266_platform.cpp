@@ -1,5 +1,5 @@
 #ifdef ARDUINO_ARCH_ESP8266
-#include "esp_platform.h"
+#include "esp8266_platform.h"
 
 
 #include <user_interface.h>
@@ -14,49 +14,49 @@
 
 namespace Knx
 {
-    EspPlatform::EspPlatform()
+    Esp8266Platform::Esp8266Platform()
 #ifndef KNX_NO_DEFAULT_UART
         : ArduinoPlatform(&KNX_SERIAL)
 #endif
     {
     }
 
-    EspPlatform::EspPlatform( HardwareSerial* s) : ArduinoPlatform(s)
+    Esp8266Platform::Esp8266Platform( HardwareSerial* s) : ArduinoPlatform(s)
     {
     }
 
-    uint32_t EspPlatform::currentIpAddress()
+    uint32_t Esp8266Platform::currentIpAddress()
     {
         return WiFi.localIP();
     }
 
-    uint32_t EspPlatform::currentSubnetMask()
+    uint32_t Esp8266Platform::currentSubnetMask()
     {
         return WiFi.subnetMask();
     }
 
-    uint32_t EspPlatform::currentDefaultGateway()
+    uint32_t Esp8266Platform::currentDefaultGateway()
     {
         return WiFi.gatewayIP();
     }
 
-    void EspPlatform::macAddress(uint8_t* addr)
+    void Esp8266Platform::macAddress(uint8_t* addr)
     {
         wifi_get_macaddr(STATION_IF, addr);
     }
 
-    uint32_t EspPlatform::uniqueSerialNumber()
+    uint32_t Esp8266Platform::uniqueSerialNumber()
     {
         return ESP.getChipId();
     }
 
-    void EspPlatform::restart()
+    void Esp8266Platform::restart()
     {
         println("restart");
         ESP.reset();
     }
 
-    void EspPlatform::setupMultiCast(uint32_t addr, uint16_t port)
+    void Esp8266Platform::setupMultiCast(uint32_t addr, uint16_t port)
     {
         _multicastAddr = htonl(addr);
         _multicastPort = port;
@@ -68,12 +68,12 @@ namespace Knx
         KNX_DEBUG_SERIAL.printf("result %d\n", result);
     }
 
-    void EspPlatform::closeMultiCast()
+    void Esp8266Platform::closeMultiCast()
     {
         _udp.stop();
     }
 
-    bool EspPlatform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
+    bool Esp8266Platform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
     {
         //printHex("<- ",buffer, len);
         _udp.beginPacketMulticast(_multicastAddr, _multicastPort, WiFi.localIP());
@@ -82,7 +82,7 @@ namespace Knx
         return true;
     }
 
-    int EspPlatform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen)
+    int Esp8266Platform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen)
     {
         int len = _udp.parsePacket();
 
@@ -100,7 +100,7 @@ namespace Knx
         return len;
     }
 
-    bool EspPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
+    bool Esp8266Platform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len)
     {
         IPAddress ucastaddr(htonl(addr));
         println("sendBytesUniCast endPacket fail");
@@ -118,7 +118,7 @@ namespace Knx
         return true;
     }
 
-    uint8_t* EspPlatform::getEepromBuffer(uint32_t size)
+    uint8_t* Esp8266Platform::getEepromBuffer(uint32_t size)
     {
         uint8_t* eepromptr = EEPROM.getDataPtr();
 
@@ -131,7 +131,7 @@ namespace Knx
         return eepromptr;
     }
 
-    void EspPlatform::commitToEeprom()
+    void Esp8266Platform::commitToEeprom()
     {
         EEPROM.commit();
     }
