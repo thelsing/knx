@@ -117,9 +117,11 @@ package platform
 {
 class Platform [[class_platform.html]]
 class ArduinoPlatform [[class_arduino_platform.html]]
-class SamdPlatform [[class_samd_platform.html]]
+class Samd21Platform [[class_samd21_platform.html]]
+class Samd51Platform [[class_samd51_platform.html]]
 Platform<|--ArduinoPlatform
-ArduinoPlatform<|--SamdPlatform
+ArduinoPlatform<|--Samd21Platform
+ArduinoPlatform<|--Samd51Platform
 class EspPlatform [[class_esp_platform.html]]
 ArduinoPlatform<|--EspPlatform
 class Esp32Platform [[class_esp32_platform.html]]
@@ -219,9 +221,11 @@ package platform
 {
 class Platform [[class_platform.html]]
 class ArduinoPlatform [[class_arduino_platform.html]]
-class SamdPlatform [[class_samd_platform.html]]
+class Samd21Platform [[class_samd21_platform.html]]
+class Samd51Platform [[class_samd51_platform.html]]
 Platform<|--ArduinoPlatform
-ArduinoPlatform<|--SamdPlatform
+ArduinoPlatform<|--Samd21Platform
+ArduinoPlatform<|--Samd51Platform
 class EspPlatform [[class_esp_platform.html]]
 ArduinoPlatform<|--EspPlatform
 class Esp32Platform [[class_esp32_platform.html]]

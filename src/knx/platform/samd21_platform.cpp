@@ -1,6 +1,5 @@
-#ifdef ARDUINO_ARCH_SAMD
-#include "samd_platform.h"
-
+#include "samd21_platform.h"
+#if defined(_SAMD21_)
 #include <knx/bits.h>
 
 #include <Arduino.h>
@@ -22,7 +21,8 @@ extern uint32_t __data_end__;
 
 namespace Knx
 {
-    SamdPlatform::SamdPlatform()
+
+    Samd21Platform::Samd21Platform()
 #ifndef KNX_NO_DEFAULT_UART
         : ArduinoPlatform(&KNX_SERIAL)
 #endif
@@ -32,34 +32,25 @@ namespace Knx
 #endif
     }
 
-    SamdPlatform::SamdPlatform( HardwareSerial* s) : ArduinoPlatform(s)
+    Samd21Platform::Samd21Platform( HardwareSerial* s) : ArduinoPlatform(s)
     {
 #ifndef USE_SAMD_EEPROM_EMULATION
         init();
 #endif
     }
 
-    uint32_t SamdPlatform::uniqueSerialNumber()
+    uint32_t Samd21Platform::uniqueSerialNumber()
     {
-#if defined (__SAMD51__)
-        // SAMD51 from section 9.6 of the datasheet
-#define SERIAL_NUMBER_WORD_0  *(volatile uint32_t*)(0x008061FC)
-#define SERIAL_NUMBER_WORD_1  *(volatile uint32_t*)(0x00806010)
-#define SERIAL_NUMBER_WORD_2  *(volatile uint32_t*)(0x00806014)
-#define SERIAL_NUMBER_WORD_3  *(volatile uint32_t*)(0x00806018)
-#else
-        //#elif defined (__SAMD21E17A__) || defined(__SAMD21G18A__)  || defined(__SAMD21E18A__) || defined(__SAMD21J18A__)
         // SAMD21 from section 9.3.3 of the datasheet
 #define SERIAL_NUMBER_WORD_0  *(volatile uint32_t*)(0x0080A00C)
 #define SERIAL_NUMBER_WORD_1  *(volatile uint32_t*)(0x0080A040)
 #define SERIAL_NUMBER_WORD_2  *(volatile uint32_t*)(0x0080A044)
 #define SERIAL_NUMBER_WORD_3  *(volatile uint32_t*)(0x0080A048)
-#endif
 
         return SERIAL_NUMBER_WORD_0 ^ SERIAL_NUMBER_WORD_1 ^ SERIAL_NUMBER_WORD_2 ^ SERIAL_NUMBER_WORD_3;
     }
 
-    void SamdPlatform::restart()
+    void Samd21Platform::restart()
     {
         println("restart");
         NVIC_SystemReset();
@@ -67,7 +58,7 @@ namespace Knx
 
 #ifdef USE_SAMD_EEPROM_EMULATION
 #pragma warning "Using EEPROM Simulation"
-    uint8_t* SamdPlatform::getEepromBuffer(uint32_t size)
+    uint8_t* Samd21Platform::getEepromBuffer(uint32_t size)
     {
         //EEPROM.begin(size);
         if (size > EEPROM_EMULATION_SIZE)
@@ -76,7 +67,7 @@ namespace Knx
         return EEPROM.getDataPtr();
     }
 
-    void SamdPlatform::commitToEeprom()
+    void Samd21Platform::commitToEeprom()
     {
         EEPROM.commit();
     }
@@ -84,7 +75,7 @@ namespace Knx
 
     static const uint32_t pageSizes[] = {8, 16, 32, 64, 128, 256, 512, 1024};
 
-    void SamdPlatform::init()
+    void Samd21Platform::init()
     {
         _memoryType = Flash;
         _pageSize = pageSizes[NVMCTRL->PARAM.bit.PSZ];
@@ -109,22 +100,22 @@ namespace Knx
         }
     }
 
-    size_t SamdPlatform::flashEraseBlockSize()
+    size_t Samd21Platform::flashEraseBlockSize()
     {
         return PAGES_PER_ROW;
     }
 
-    size_t SamdPlatform::flashPageSize()
+    size_t Samd21Platform::flashPageSize()
     {
         return _pageSize;
     }
 
-    uint8_t* SamdPlatform::userFlashStart()
+    uint8_t* Samd21Platform::userFlashStart()
     {
         return (uint8_t*)_MemoryStart;
     }
 
-    size_t SamdPlatform::userFlashSizeEraseBlocks()
+    size_t Samd21Platform::userFlashSizeEraseBlocks()
     {
         if (KNX_FLASH_SIZE <= 0)
             return 0;
@@ -132,7 +123,7 @@ namespace Knx
             return ((KNX_FLASH_SIZE - 1) / (flashPageSize() * flashEraseBlockSize())) + 1;
     }
 
-    void SamdPlatform::flashErase(uint16_t eraseBlockNum)
+    void Samd21Platform::flashErase(uint16_t eraseBlockNum)
     {
         noInterrupts();
 
@@ -142,7 +133,7 @@ namespace Knx
         interrupts();
     }
 
-    void SamdPlatform::flashWritePage(uint16_t pageNumber, uint8_t* data)
+    void Samd21Platform::flashWritePage(uint16_t pageNumber, uint8_t* data)
     {
         noInterrupts();
 
@@ -152,7 +143,7 @@ namespace Knx
         interrupts();
     }
 
-    void SamdPlatform::writeBufferedEraseBlock()
+    void Samd21Platform::writeBufferedEraseBlock()
     {
         if (_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
         {
@@ -169,12 +160,12 @@ namespace Knx
         }
     }
 
-    uint32_t SamdPlatform::getRowAddr(uint32_t flasAddr)
+    uint32_t Samd21Platform::getRowAddr(uint32_t flasAddr)
     {
         return flasAddr & ~(_rowSize - 1);
     }
 
-    void SamdPlatform::write(const volatile void* flash_ptr, const void* data, uint32_t size)
+    void Samd21Platform::write(const volatile void* flash_ptr, const void* data, uint32_t size)
     {
         // Calculate data boundaries
         size = (size + 3) / 4;
@@ -216,7 +207,7 @@ namespace Knx
         }
     }
 
-    void SamdPlatform::erase(const volatile void* flash_ptr, uint32_t size)
+    void Samd21Platform::erase(const volatile void* flash_ptr, uint32_t size)
     {
         const uint8_t* ptr = (const uint8_t*)flash_ptr;
 
@@ -230,7 +221,7 @@ namespace Knx
         eraseRow(ptr);
     }
 
-    void SamdPlatform::eraseRow(const volatile void* flash_ptr)
+    void Samd21Platform::eraseRow(const volatile void* flash_ptr)
     {
         NVMCTRL->ADDR.reg = ((uint32_t)flash_ptr) / 2;
         NVMCTRL->CTRLA.reg = NVMCTRL_CTRLA_CMDEX_KEY | NVMCTRL_CTRLA_CMD_ER;

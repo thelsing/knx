@@ -1,27 +1,40 @@
+#include <Arduino.h>
 #include "arduino_platform.h"
 
-#include "Arduino.h"
-
-#ifdef ARDUINO_ARCH_SAMD
-
-#define PAGES_PER_ROW 4
+#ifdef __SAMD51__
+#include <SPI.h>
+#include <Ethernet.h>
+#include <EthernetUdp.h>
 
 namespace Knx
 {
-    class SamdPlatform : public ArduinoPlatform
+    class Samd51Platform : public ArduinoPlatform
     {
         public:
-            SamdPlatform();
-            SamdPlatform( HardwareSerial* s);
+            Samd51Platform();
+            Samd51Platform( HardwareSerial* s);
 
             // unique serial number
             uint32_t uniqueSerialNumber() override;
 
             void restart();
-#ifdef USE_SAMD_EEPROM_EMULATION
-            uint8_t* getEepromBuffer(uint32_t size);
-            void commitToEeprom();
-#else
+
+#if USE_W5X00 == 1
+            // ip config
+            uint32_t currentIpAddress() override;
+            uint32_t currentSubnetMask() override;
+            uint32_t currentDefaultGateway() override;
+            void macAddress(uint8_t* data) override;
+
+            //multicast
+            void setupMultiCast(uint32_t addr, uint16_t port) override;
+            void closeMultiCast() override;
+            bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
+            int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
+
+            bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
+#endif
+
             // size of one EraseBlock in pages
             virtual size_t flashEraseBlockSize();
             // size of one flash page in bytes
@@ -51,6 +64,15 @@ namespace Knx
             void erase(const volatile void* flash_ptr, uint32_t size);
             void eraseRow(const volatile void* flash_ptr);
 
+#if USE_W5X00 == 1
+            uint8_t _macAddress[6] = {0xC0, 0xFF, 0xEE, 0xC0, 0xDE, 0x00};
+            uint32_t _ipAddress = 0;
+            uint32_t _netmask = 0;
+            uint32_t _defaultGateway = 0;
+
+            uint32_t _multicastAddr = -1;
+            uint16_t _multicastPort = -1;
+            EthernetUDP _udp;
 #endif
     };
 }
