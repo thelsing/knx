@@ -5,12 +5,12 @@ namespace Knx
     class Dpt1: public Dpt
     {
         public:
-            Dpt1(unsigned short subgroup = 0);
+            Dpt1();
             Dpt1(bool value);
             Go_SizeCode size() const override;
 
-            virtual void encode(uint8_t* data) const override;
-            virtual void decode(uint8_t* data) override;
+            void encode(uint8_t* data) const override;
+            bool decode(uint8_t* data) override;
 
             void value(bool value);
             bool value() const;
@@ -20,64 +20,164 @@ namespace Knx
             bool _value;
     };
 
-    class DPT_Switch : public Dpt1
+    template<typename T> class DPT1 : public Dpt1
     {
         public:
-            enum SwitchValue
+            DPT1() {};
+            DPT1(T value) : Dpt1(((int)value) == 1) {}
+            void value(T value)
             {
-                Off, On
-            };
-
-            DPT_Switch();
-            DPT_Switch(SwitchValue value);
-            void value(SwitchValue value);
-            SwitchValue value() const;
-            operator SwitchValue() const;
-            DPT_Switch& operator=(const SwitchValue value);
-    };
-
-    class DPT_Bool : public Dpt1
-    {
-        public:
-            DPT_Bool();
-            DPT_Bool(bool value);
-    };
-
-    class DPT_Enable : public Dpt1
-    {
-        public:
-            enum EnableValue
+                Dpt1::value(((int)value) == 1);
+            }
+            T value() const
             {
-                Disable, Enable
-            };
-
-            DPT_Enable();
-            DPT_Enable(EnableValue value);
-            void value(EnableValue value);
-            EnableValue value() const;
-            operator EnableValue() const;
-            DPT_Enable& operator=(const EnableValue value);
+                return Dpt1::value() ? (T)1 : (T)0;
+            }
+            operator T() const
+            {
+                return value();
+            }
+            DPT1& operator=(const T value)
+            {
+                this->value(value);
+                return *this;
+            }
     };
 
-// TODO:
-#define DPT_Ramp Dpt1(4)
-#define DPT_Alarm Dpt1(5)
-#define DPT_BinaryValue Dpt1(6)
-#define DPT_Step Dpt1(7)
-#define DPT_UpDown Dpt1(8)
-#define DPT_OpenClose Dpt1(9)
-#define DPT_Start Dpt1(10)
-#define DPT_State Dpt1(11)
-#define DPT_Invert Dpt1(12)
-#define DPT_DimSendStyle Dpt1(13)
-#define DPT_InputSource Dpt1(14)
-#define DPT_Reset Dpt1(15)
-#define DPT_Ack Dpt1(16)
-#define DPT_Trigger Dpt1(17)
-#define DPT_Occupancy Dpt1(18)
-#define DPT_Window_Door Dpt1(19)
-#define DPT_LogicalFunction Dpt1(21)
-#define DPT_Scene_AB Dpt1(22)
-#define DPT_ShutterBlinds_Mode Dpt1(23)
-#define DPT_DayNight Dpt1(24)
+    enum SwitchValue
+    {
+        Off = 0, On = 1
+    };
+    typedef DPT1<SwitchValue> DPT_Switch;
+
+    typedef Dpt1 DPT_Bool;
+
+    enum EnableValue
+    {
+        Disable = 0, Enable = 1
+    };
+    typedef DPT1<EnableValue> DPT_Enable;
+
+    enum RampValue
+    {
+        NoRamp = 0, Ramp = 1
+    };
+    typedef DPT1<RampValue> DPT_Ramp;
+
+    enum AlarmValue
+    {
+        NoAlarm = 0, Alarm = 1
+    };
+    typedef DPT1<AlarmValue> DPT_Alarm;
+
+    enum BinaryValue
+    {
+        Low = 0, High = 1
+    };
+    typedef DPT1<BinaryValue> DPT_BinaryValue;
+
+    enum StepValue
+    {
+        Decrease = 0, Increase = 1
+    };
+    typedef DPT1<StepValue> DPT_Step;
+
+    enum UpDownValue
+    {
+        Up = 0, Down = 1
+    };
+    typedef DPT1<UpDownValue> DPT_UpDown;
+
+    enum OpenCloseValue
+    {
+        OpenNormallyOpen = 0, ClosedNormallyOpen = 1
+    };
+    typedef DPT1<OpenCloseValue> DPT_OpenClose;
+
+    enum StartValue
+    {
+        Stop = 0, Start = 1
+    };
+    typedef DPT1<StartValue> DPT_Start;
+
+    enum StateValue
+    {
+        Inactive = 0, Active = 1
+    };
+    typedef DPT1<StateValue> DPT_State;
+
+    enum InvertValue
+    {
+        NotInverted = 0, Inverted = 1
+    };
+    typedef DPT1<InvertValue> DPT_Invert;
+
+    enum DimSendStyleValue
+    {
+        StartStop = 0, Cyclically = 1
+    };
+    typedef DPT1<DimSendStyleValue> DPT_DimSendStyle;
+
+    enum InputSourceValue
+    {
+        Fixed = 0, Calculated = 1
+    };
+    typedef DPT1<InputSourceValue> DPT_InputSource;
+
+    enum ResetValue
+    {
+        NoActionReset = 0, ResetCommand = 1
+    };
+    typedef DPT1<ResetValue> DPT_Reset;
+
+    enum AckValue
+    {
+        NoActionAck = 0, AcknowledgeCommand = 1
+    };
+    typedef DPT1<AckValue> DPT_Ack;
+
+    typedef Dpt1 DPT_Trigger;
+
+    enum OccupancyValue
+    {
+        NotOccupied = 0, Occupied = 1
+    };
+    typedef DPT1<OccupancyValue> DPT_Occupancy;
+
+    enum WindowDoorValue
+    {
+        ClosedNormallyClosed = 0, OpenNormallyClosed = 1
+    };
+    typedef DPT1<WindowDoorValue> DPT_Window_Door;
+
+    enum LogicalFunctionValue
+    {
+        OR = 0, AND = 1
+    };
+    typedef DPT1<LogicalFunctionValue> DPT_LogicalFunction;
+
+    enum SceneABValue
+    {
+        SceneA = 0, SceneB = 1
+    };
+    typedef DPT1<SceneABValue> DPT_Scene_AB;
+
+    enum ShutterBlindsMode
+    {
+        /**
+         * Only move up/down
+         */
+        Shutter = 0,
+        /**
+         * move up/down and step/stop
+         */
+        Blinds = 1
+    };
+    typedef DPT1<ShutterBlindsMode> DPT_ShutterBlinds_Mode;
+
+    enum DayNightValue
+    {
+        Day = 0, Night = 1
+    };
+    typedef DPT1<DayNightValue> DPT_DayNight;
 }

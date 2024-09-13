@@ -2,9 +2,9 @@
 
 #include "dptconvert.h"
 
-Knx::Dpt9::Dpt9(unsigned short subgroup /* = 0*/): Dpt(9, subgroup) {}
+Knx::Dpt9::Dpt9() {}
 
-Knx::Dpt9::Dpt9(float value) : Dpt9()
+Knx::Dpt9::Dpt9(float value)
 {
     _value = value;
 }
@@ -19,12 +19,13 @@ void Knx::Dpt9::encode(uint8_t* data) const
     float16ToPayload(data, 0, _value, 0xFFFF);
 }
 
-void Knx::Dpt9::decode(uint8_t* data)
+bool Knx::Dpt9::decode(uint8_t* data)
 {
     if (unsigned16FromPayload(data, 0) == 0x7FFF)
-        return;
+        return false;
 
     _value = float16FromPayload(data, 0);
+    return true;
 }
 
 void Knx::Dpt9::value(float value)

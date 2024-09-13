@@ -71,7 +71,6 @@ set(${PROJECT_NAME}_SOURCES
     ../../src/knx/interface_object/data_property.h
     ../../src/knx/interface_object/device_object.cpp
     ../../src/knx/interface_object/device_object.h
-    ../../src/knx/group_object/dpt/dpt.cpp
     ../../src/knx/group_object/dpt/dpt.h
     ../../src/knx/group_object/dpt/dptconvert.cpp
     ../../src/knx/group_object/dpt/dptconvert.h

@@ -504,8 +504,7 @@ namespace Knx
         if (value.size() != sizeCode())
             return false;
 
-        value.decode(_data);
-        return true;
+        return value.decode(_data);
     }
 
     template<class DPT> void GroupObject::valueNoSend(const DPT& value)

@@ -39,12 +39,15 @@ set(SOURCES
 ./knx/data_secure/security_interface_object.cpp
 ./knx/data_secure/security_interface_object.h
 ./knx/group_object/dpt/dpts.h
-./knx/group_object/dpt/dpt.cpp
 ./knx/group_object/dpt/dpt.h
 ./knx/group_object/dpt/dpt1.cpp
 ./knx/group_object/dpt/dpt1.h
-./knx/group_object/dpt/dpt2.cpp
 ./knx/group_object/dpt/dpt2.h
+./knx/group_object/dpt/dpt3.h
+./knx/group_object/dpt/dpt4.cpp
+./knx/group_object/dpt/dpt4.h
+./knx/group_object/dpt/dpt5.cpp
+./knx/group_object/dpt/dpt5.h
 ./knx/group_object/dpt/dpt9.cpp
 ./knx/group_object/dpt/dpt9.h
 ./knx/group_object/dpt/dptconvert.cpp

@@ -3,16 +3,10 @@
 #include "../group_object.h"
 namespace Knx
 {
-#define DPT_Control_Dimming Dpt(3, 7)
-#define DPT_Control_Blinds Dpt(3, 8)
-#define DPT_Char_ASCII Dpt(4, 1)
-#define DPT_Char_8859_1 Dpt(4, 2)
-#define DPT_Scaling Dpt(5, 1)
-#define DPT_Angle Dpt(5, 3)
-#define DPT_Percent_U8 Dpt(5, 4)
-#define DPT_DecimalFactor Dpt(5, 5)
-#define DPT_Tariff Dpt(5, 6)
-#define DPT_Value_1_Ucount Dpt(5, 10)
+
+
+
+
 #define DPT_Percent_V8 Dpt(6, 1)
 #define DPT_Value_1_Count Dpt(6, 10)
 #define DPT_Status_Mode3 Dpt(6, 20)
@@ -36,25 +30,6 @@ namespace Knx
 #define DPT_DeltaTimeHrs Dpt(8, 7)
 #define DPT_Percent_V16 Dpt(8, 10)
 #define DPT_Rotation_Angle Dpt(8, 11)
-#define DPT_Value_Temp Dpt(9, 1)
-#define DPT_Value_Tempd Dpt(9, 2)
-#define DPT_Value_Tempa Dpt(9, 3)
-#define DPT_Value_Lux Dpt(9, 4)
-#define DPT_Value_Wsp Dpt(9, 5)
-#define DPT_Value_Pres Dpt(9, 6)
-#define DPT_Value_Humidity Dpt(9, 7)
-#define DPT_Value_AirQuality Dpt(9, 8)
-#define DPT_Value_Time1 Dpt(9, 10)
-#define DPT_Value_Time2 Dpt(9, 11)
-#define DPT_Value_Volt Dpt(9, 20)
-#define DPT_Value_Curr Dpt(9, 21)
-#define DPT_PowerDensity Dpt(9, 22)
-#define DPT_KelvinPerPercent Dpt(9, 23)
-#define DPT_Power Dpt(9, 24)
-#define DPT_Value_Volume_Flow Dpt(9, 25)
-#define DPT_Rain_Amount Dpt(9, 26)
-#define DPT_Value_Temp_F Dpt(9, 27)
-#define DPT_Value_Wsp_kmh Dpt(9, 28)
 #define DPT_TimeOfDay Dpt(10, 1, 1)
 #define DPT_Date Dpt(11, 1)
 #define DPT_Value_4_Ucount Dpt(12, 1)
@@ -328,19 +303,31 @@ namespace Knx
 #define DPT_StatusSAB Dpt(241, 800)
 #define DPT_Colour_RGBW Dpt(251, 600)
 
+    /**
+     * This class represents a value to sent to or receive from the bus. The stored data is always a valid representation of the Dpt.
+     */
     class Dpt
     {
         public:
-            Dpt();
-            Dpt(short mainGroup, short subGroup, short index = 0);
             virtual ~Dpt() {}
             unsigned short mainGroup;
             unsigned short subGroup;
             unsigned short index;
 
+            /**
+             * Size of the Dpt. It can only assigned to or received from group objects with a matching size code.
+             */
             virtual Go_SizeCode size() const = 0;
 
+            /**
+             * Encode the data to a byte array. The size of the array is implict decided by the size of the Dpt.
+             */
             virtual void encode(uint8_t* data) const = 0;
-            virtual void decode(uint8_t* data) = 0;
+
+            /**
+             * Decodes the data from a byte array. @return true if the data can be decoded without error and false otherwise.
+             * This method will also return false, if the date could fit the datatype but is invalid for this Dpt.
+             */
+            virtual bool decode(uint8_t* data) = 0;
     };
 }

@@ -1,40 +1,85 @@
 #pragma once
 #include "dpt.h"
+#include "dpt1.h"
+#include "dptconvert.h"
+
 namespace Knx
 {
-    class Dpt2: public Dpt
+    enum ControlValue
+    {
+        NoControl, Control
+    };
+    template<typename T> class DPT2: public Dpt
     {
         public:
-            enum Dpt2Value
+            Go_SizeCode size() const override
             {
-                NoControl, Control_Function0, Control_Function1
-            };
+                return Go_2_Bit;
+            }
 
-            Dpt2(unsigned short subgroup = 0);
-            Dpt2(Dpt2Value value);
-            Go_SizeCode size() const override;
+            void encode(uint8_t* data) const override
+            {
+                if (_control ==  NoControl)
+                {
+                    bitToPayload(data, 6, false);
+                    return;
+                }
 
-            virtual void encode(uint8_t* data) const override;
-            virtual void decode(uint8_t* data) override;
+                bitToPayload(data, 6, true);
+                bitToPayload(data, 7, ((int)_value) == 1);
+            }
 
-            void value(Dpt2Value value);
-            Dpt2Value value() const;
-            operator Dpt2Value() const;
-            Dpt2& operator=(const Dpt2Value value);
+            bool decode(uint8_t* data) override
+            {
+                bool c = bitFromPayload(data, 6);
+
+                if (!c)
+                {
+                    _control =  NoControl;
+                    return true;
+                }
+
+                bool v = bitFromPayload(data, 7);
+
+                _value = v ? (T)1 : (T)0;
+                return true;
+            }
+
+            void control(ControlValue control)
+            {
+                _control = control;
+            }
+
+            ControlValue control() const
+            {
+                return _control;
+            }
+
+            void value(T value)
+            {
+                _value = value;
+            }
+
+            T value() const
+            {
+                return _value;
+            }
+
         private:
-            Dpt2Value _value;
+            ControlValue _control;
+            T _value;
     };
 
-#define DPT_Switch_Control Dpt2(1)
-#define DPT_Bool_Control Dpt2(2)
-#define DPT_Enable_Control Dpt2(3)
-#define DPT_Ramp_Control Dpt2(4)
-#define DPT_Alarm_Control Dpt2(5)
-#define DPT_BinaryValue_Control Dpt2(6)
-#define DPT_Step_Control Dpt2(7)
-#define DPT_Direction1_Control Dpt2(8)
-#define DPT_Direction2_Control Dpt2(9)
-#define DPT_Start_Control Dpt2(10)
-#define DPT_State_Control Dpt2(11)
-#define DPT_Invert_Control Dpt2(12)
+    typedef DPT2<SwitchValue> DPT_Switch_Control;
+    typedef DPT2<bool> DPT_Bool_Control;
+    typedef DPT2<EnableValue> DPT_Enable_Control;
+    typedef DPT2<RampValue> DPT_Ramp_Control;
+    typedef DPT2<AlarmValue> DPT_Alarm_Control;
+    typedef DPT2<BinaryValue> DPT_BinaryValue_Control;
+    typedef DPT2<StepValue> DPT_Step_Control;
+    typedef DPT2<UpDownValue> DPT_Direction1_Control;
+    typedef DPT2<UpDownValue> DPT_Direction2_Control;
+    typedef DPT2<StartValue> DPT_Start_Control;
+    typedef DPT2<StateValue> DPT_State_Control;
+    typedef DPT2<InvertValue> DPT_Invert_Control;
 }
