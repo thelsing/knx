@@ -3,13 +3,6 @@
 #include "../group_object.h"
 namespace Knx
 {
-
-
-
-
-#define DPT_Percent_V8 Dpt(6, 1)
-#define DPT_Value_1_Count Dpt(6, 10)
-#define DPT_Status_Mode3 Dpt(6, 20)
 #define DPT_Value_2_Ucount Dpt(7, 1)
 #define DPT_TimePeriodMsec Dpt(7, 2)
 #define DPT_TimePeriod10MSec Dpt(7, 3)
@@ -360,7 +353,7 @@ namespace Knx
                 _value = value;
                 return *this;
             }
-        private:
+        protected:
             T _value;
     };
 }

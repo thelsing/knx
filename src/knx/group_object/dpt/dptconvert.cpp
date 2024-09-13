@@ -18,18 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-            // DPT 5.* - Unsigned 8 Bit Integer
-            if (datatype.mainGroup == 5 && ((datatype.subGroup >= 1 && datatype.subGroup <= 6 && datatype.subGroup != 2) || datatype.subGroup == 10) && !datatype.index)
-                return busValueToUnsigned8(payload, payload_length, datatype, value);
-
-            // DPT 6.001/6.010 - Signed 8 Bit Integer
-            if (datatype.mainGroup == 6 && (datatype.subGroup == 1 || datatype.subGroup == 10) && !datatype.index)
-                return busValueToSigned8(payload, payload_length, datatype, value);
-
-            // DPT 6.020 - Status with Mode
-            if (datatype.mainGroup == 6 && datatype.subGroup == 20 && datatype.index <= 5)
-                return busValueToStatusAndMode(payload, payload_length, datatype, value);
-
             // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
             if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || (datatype.subGroup == 600)) && !datatype.index)
                 return busValueToUnsigned16(payload, payload_length, datatype, value);
@@ -160,19 +148,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-
-        // DPT 5.* - Unsigned 8 Bit Integer
-        if (datatype.mainGroup == 5 && ((datatype.subGroup >= 1 && datatype.subGroup <= 6 && datatype.subGroup != 2) || datatype.subGroup == 10) && !datatype.index)
-            return valueToBusValueUnsigned8(value, payload, payload_length, datatype);
-
-        // DPT 6.001/6.010 - Signed 8 Bit Integer
-        if (datatype.mainGroup == 6 && (datatype.subGroup == 1 || datatype.subGroup == 10) && !datatype.index)
-            return valueToBusValueSigned8(value, payload, payload_length, datatype);
-
-        // DPT 6.020 - Status with Mode
-        if (datatype.mainGroup == 6 && datatype.subGroup == 20 && datatype.index <= 5)
-            return valueToBusValueStatusAndMode(value, payload, payload_length, datatype);
-
         // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
         if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || datatype.subGroup == 600) && !datatype.index)
             return valueToBusValueUnsigned16(value, payload, payload_length, datatype);
@@ -296,61 +271,6 @@ namespace Knx
         // DPT 251.600 - RGBW
         if (datatype.mainGroup == 251 && datatype.subGroup == 600 && datatype.index <= 1)
             return valueToBusValueRGBW(value, payload, payload_length, datatype);
-
-        return false;
-    }
-
-    int busValueToUnsigned8(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(1);
-
-        switch (datatype.subGroup)
-        {
-            case 1:
-                value = (uint8_t)round(unsigned8FromPayload(payload, 0) * 100.0 / 255.0);
-                return true;
-
-            case 3:
-                value = (uint8_t)round(unsigned8FromPayload(payload, 0) * 360.0 / 255.0);
-                return true;
-
-            case 6:
-            {
-                uint8_t numValue = unsigned8FromPayload(payload, 0);
-
-                if (numValue == 0xFF)
-                    return false;
-
-                value = numValue;
-                return true;
-            }
-        }
-
-        value = unsigned8FromPayload(payload, 0);
-        return true;
-    }
-
-    int busValueToSigned8(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(1);
-        value = (uint8_t)(unsigned8FromPayload(payload, 0));
-        return true;
-    }
-
-    int busValueToStatusAndMode(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(1);
-
-        if (datatype.index < 5)
-        {
-            value = bitFromPayload(payload, datatype.index);
-            return true;
-        }
-        else if (datatype.index == 5)
-        {
-            value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x07);
-            return true;
-        }
 
         return false;
     }
@@ -906,78 +826,6 @@ namespace Knx
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------
-
-    int valueToBusValueUnsigned8(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        if ((int64_t)value < INT64_C(0))
-            return false;
-
-        switch (datatype.subGroup)
-        {
-            case 1:
-            {
-                if ((double)value > 100.0)
-                    return false;
-
-                unsigned8ToPayload(payload, 0, round((double)value * 255.0 / 100.0), 0xFF);
-                break;
-            }
-
-            case 3:
-            {
-                if ((double)value > 360.0)
-                    return false;
-
-                unsigned8ToPayload(payload, 0, round((double)value * 255.0 / 360.0), 0xFF);
-                break;
-            }
-
-            case 6:
-            {
-                if ((int64_t)value > INT64_C(254))
-                    return false;
-
-                unsigned8ToPayload(payload, 0, (uint64_t)value, 0xFF);
-                break;
-            }
-
-            default:
-            {
-                if ((int64_t)value > INT64_C(255))
-                    return false;
-
-                unsigned8ToPayload(payload, 0, (uint64_t)value, 0xFF);
-            }
-        }
-
-        return true;
-    }
-
-    int valueToBusValueSigned8(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        if ((int64_t)value < INT64_C(-128) || (int64_t)value > INT64_C(127))
-            return false;
-
-        signed8ToPayload(payload, 0, (uint64_t)value, 0xFF);
-        return true;
-    }
-
-    int valueToBusValueStatusAndMode(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        if (datatype.index < 5)
-            bitToPayload(payload, datatype.index, value);
-        else if (datatype.index == 5)
-        {
-            if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(7))
-                return false;
-
-            unsigned8ToPayload(payload, 0, (uint64_t)value, 0x07);
-        }
-        else
-            return false;
-
-        return true;
-    }
 
     int valueToBusValueUnsigned16(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {

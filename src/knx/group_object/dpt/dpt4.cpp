@@ -14,13 +14,13 @@ void Knx::Dpt4::encode(uint8_t* data) const
 
 bool Knx::Dpt4::decode(uint8_t* data)
 {
-    value(signed8FromPayload(data, 0));
+    value(unsigned8FromPayload(data, 0));
     return true;
 }
 
 bool Knx::DPT_Char_ASCII::decode(uint8_t* data)
 {
-    Dpt4::value(signed8FromPayload(data, 0) & 0x7F);
+    Dpt4::value(unsigned8FromPayload(data, 0) & 0x7F);
     return true;
 }
 
