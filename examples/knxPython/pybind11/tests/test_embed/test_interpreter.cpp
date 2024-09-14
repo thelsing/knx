@@ -14,109 +14,78 @@ PYBIND11_WARNING_DISABLE_MSVC(4996)
 namespace py = pybind11;
 using namespace py::literals;
 
-size_t get_sys_path_size()
-{
+size_t get_sys_path_size() {
     auto sys_path = py::module::import("sys").attr("path");
     return py::len(sys_path);
 }
 
-class Widget
-{
-    public:
-        explicit Widget(std::string message) : message(std::move(message)) {}
-        virtual ~Widget() = default;
+class Widget {
+public:
+    explicit Widget(std::string message) : message(std::move(message)) {}
+    virtual ~Widget() = default;
 
-        std::string the_message() const
-        {
-            return message;
-        }
-        virtual int the_answer() const = 0;
-        virtual std::string argv0() const = 0;
+    std::string the_message() const { return message; }
+    virtual int the_answer() const = 0;
+    virtual std::string argv0() const = 0;
 
-    private:
-        std::string message;
+private:
+    std::string message;
 };
 
-class PyWidget final : public Widget
-{
-        using Widget::Widget;
+class PyWidget final : public Widget {
+    using Widget::Widget;
 
-        int the_answer() const override
-        {
-            PYBIND11_OVERRIDE_PURE(int, Widget, the_answer);
-        }
-        std::string argv0() const override
-        {
-            PYBIND11_OVERRIDE_PURE(std::string, Widget, argv0);
-        }
+    int the_answer() const override { PYBIND11_OVERRIDE_PURE(int, Widget, the_answer); }
+    std::string argv0() const override { PYBIND11_OVERRIDE_PURE(std::string, Widget, argv0); }
 };
 
-class test_override_cache_helper
-{
+class test_override_cache_helper {
 
-    public:
-        virtual int func()
-        {
-            return 0;
-        }
+public:
+    virtual int func() { return 0; }
 
-        test_override_cache_helper() = default;
-        virtual ~test_override_cache_helper() = default;
-        // Non-copyable
-        test_override_cache_helper& operator=(test_override_cache_helper const& Right) = delete;
-        test_override_cache_helper(test_override_cache_helper const& Copy) = delete;
+    test_override_cache_helper() = default;
+    virtual ~test_override_cache_helper() = default;
+    // Non-copyable
+    test_override_cache_helper &operator=(test_override_cache_helper const &Right) = delete;
+    test_override_cache_helper(test_override_cache_helper const &Copy) = delete;
 };
 
-class test_override_cache_helper_trampoline : public test_override_cache_helper
-{
-        int func() override
-        {
-            PYBIND11_OVERRIDE(int, test_override_cache_helper, func);
-        }
+class test_override_cache_helper_trampoline : public test_override_cache_helper {
+    int func() override { PYBIND11_OVERRIDE(int, test_override_cache_helper, func); }
 };
 
-PYBIND11_EMBEDDED_MODULE(widget_module, m)
-{
+PYBIND11_EMBEDDED_MODULE(widget_module, m) {
     py::class_<Widget, PyWidget>(m, "Widget")
-    .def(py::init<std::string>())
-    .def_property_readonly("the_message", &Widget::the_message);
+        .def(py::init<std::string>())
+        .def_property_readonly("the_message", &Widget::the_message);
 
-    m.def("add", [](int i, int j)
-    {
-        return i + j;
-    });
+    m.def("add", [](int i, int j) { return i + j; });
 }
 
-PYBIND11_EMBEDDED_MODULE(trampoline_module, m)
-{
+PYBIND11_EMBEDDED_MODULE(trampoline_module, m) {
     py::class_<test_override_cache_helper,
-    test_override_cache_helper_trampoline,
-    std::shared_ptr<test_override_cache_helper>>(m, "test_override_cache_helper")
-    .def(py::init_alias<>())
-    .def("func", &test_override_cache_helper::func);
+               test_override_cache_helper_trampoline,
+               std::shared_ptr<test_override_cache_helper>>(m, "test_override_cache_helper")
+        .def(py::init_alias<>())
+        .def("func", &test_override_cache_helper::func);
 }
 
-PYBIND11_EMBEDDED_MODULE(throw_exception, )
-{
-    throw std::runtime_error("C++ Error");
-}
+PYBIND11_EMBEDDED_MODULE(throw_exception, ) { throw std::runtime_error("C++ Error"); }
 
-PYBIND11_EMBEDDED_MODULE(throw_error_already_set, )
-{
+PYBIND11_EMBEDDED_MODULE(throw_error_already_set, ) {
     auto d = py::dict();
     d["missing"].cast<py::object>();
 }
 
-TEST_CASE("PYTHONPATH is used to update sys.path")
-{
+TEST_CASE("PYTHONPATH is used to update sys.path") {
     // The setup for this TEST_CASE is in catch.cpp!
     auto sys_path = py::str(py::module_::import("sys").attr("path")).cast<std::string>();
     REQUIRE_THAT(sys_path,
                  Catch::Matchers::Contains("pybind11_test_embed_PYTHONPATH_2099743835476552"));
 }
 
-TEST_CASE("Pass classes and data between modules defined in C++ and Python")
-{
+TEST_CASE("Pass classes and data between modules defined in C++ and Python") {
     auto module_ = py::module_::import("test_interpreter");
     REQUIRE(py::hasattr(module_, "DerivedWidget"));
 
@@ -133,12 +102,11 @@ TEST_CASE("Pass classes and data between modules defined in C++ and Python")
     auto message = py_widget.attr("the_message");
     REQUIRE(message.cast<std::string>() == "The question");
 
-    const auto& cpp_widget = py_widget.cast<const Widget&>();
+    const auto &cpp_widget = py_widget.cast<const Widget &>();
     REQUIRE(cpp_widget.the_answer() == 42);
 }
 
-TEST_CASE("Override cache")
-{
+TEST_CASE("Override cache") {
     auto module_ = py::module_::import("test_trampoline");
     REQUIRE(py::hasattr(module_, "func"));
     REQUIRE(py::hasattr(module_, "func2"));
@@ -146,9 +114,7 @@ TEST_CASE("Override cache")
     auto locals = py::dict(**module_.attr("__dict__"));
 
     int i = 0;
-
-    for (; i < 1500; ++i)
-    {
+    for (; i < 1500; ++i) {
         std::shared_ptr<test_override_cache_helper> p_obj;
         std::shared_ptr<test_override_cache_helper> p_obj2;
 
@@ -167,8 +133,7 @@ TEST_CASE("Override cache")
     }
 }
 
-TEST_CASE("Import error handling")
-{
+TEST_CASE("Import error handling") {
     REQUIRE_NOTHROW(py::module_::import("widget_module"));
     REQUIRE_THROWS_WITH(py::module_::import("throw_exception"), "ImportError: C++ Error");
     REQUIRE_THROWS_WITH(py::module_::import("throw_error_already_set"),
@@ -188,8 +153,7 @@ TEST_CASE("Import error handling")
     REQUIRE(locals["message"].cast<std::string>() == "'missing'");
 }
 
-TEST_CASE("There can be only one interpreter")
-{
+TEST_CASE("There can be only one interpreter") {
     static_assert(std::is_move_constructible<py::scoped_interpreter>::value, "");
     static_assert(!std::is_move_assignable<py::scoped_interpreter>::value, "");
     static_assert(!std::is_copy_constructible<py::scoped_interpreter>::value, "");
@@ -208,8 +172,7 @@ TEST_CASE("There can be only one interpreter")
 }
 
 #if PY_VERSION_HEX >= PYBIND11_PYCONFIG_SUPPORT_PY_VERSION_HEX
-TEST_CASE("Custom PyConfig")
-{
+TEST_CASE("Custom PyConfig") {
     py::finalize_interpreter();
     PyConfig config;
     PyConfig_InitPythonConfig(&config);
@@ -221,25 +184,23 @@ TEST_CASE("Custom PyConfig")
     py::initialize_interpreter();
 }
 
-TEST_CASE("scoped_interpreter with PyConfig_InitIsolatedConfig and argv")
-{
+TEST_CASE("scoped_interpreter with PyConfig_InitIsolatedConfig and argv") {
     py::finalize_interpreter();
     {
         PyConfig config;
         PyConfig_InitIsolatedConfig(&config);
-        char* argv[] = {strdup("a.out")};
+        char *argv[] = {strdup("a.out")};
         py::scoped_interpreter argv_scope{&config, 1, argv};
         std::free(argv[0]);
         auto module = py::module::import("test_interpreter");
         auto py_widget = module.attr("DerivedWidget")("The question");
-        const auto& cpp_widget = py_widget.cast<const Widget&>();
+        const auto &cpp_widget = py_widget.cast<const Widget &>();
         REQUIRE(cpp_widget.argv0() == "a.out");
     }
     py::initialize_interpreter();
 }
 
-TEST_CASE("scoped_interpreter with PyConfig_InitPythonConfig and argv")
-{
+TEST_CASE("scoped_interpreter with PyConfig_InitPythonConfig and argv") {
     py::finalize_interpreter();
     {
         PyConfig config;
@@ -247,21 +208,20 @@ TEST_CASE("scoped_interpreter with PyConfig_InitPythonConfig and argv")
 
         // `initialize_interpreter() overrides the default value for config.parse_argv (`1`) by
         // changing it to `0`. This test exercises `scoped_interpreter` with the default config.
-        char* argv[] = {strdup("a.out"), strdup("arg1")};
+        char *argv[] = {strdup("a.out"), strdup("arg1")};
         py::scoped_interpreter argv_scope(&config, 2, argv);
         std::free(argv[0]);
         std::free(argv[1]);
         auto module = py::module::import("test_interpreter");
         auto py_widget = module.attr("DerivedWidget")("The question");
-        const auto& cpp_widget = py_widget.cast<const Widget&>();
+        const auto &cpp_widget = py_widget.cast<const Widget &>();
         REQUIRE(cpp_widget.argv0() == "arg1");
     }
     py::initialize_interpreter();
 }
 #endif
 
-TEST_CASE("Add program dir to path pre-PyConfig")
-{
+TEST_CASE("Add program dir to path pre-PyConfig") {
     py::finalize_interpreter();
     size_t path_size_add_program_dir_to_path_false = 0;
     {
@@ -276,8 +236,7 @@ TEST_CASE("Add program dir to path pre-PyConfig")
 }
 
 #if PY_VERSION_HEX >= PYBIND11_PYCONFIG_SUPPORT_PY_VERSION_HEX
-TEST_CASE("Add program dir to path using PyConfig")
-{
+TEST_CASE("Add program dir to path using PyConfig") {
     py::finalize_interpreter();
     size_t path_size_add_program_dir_to_path_false = 0;
     {
@@ -296,20 +255,17 @@ TEST_CASE("Add program dir to path using PyConfig")
 }
 #endif
 
-bool has_state_dict_internals_obj()
-{
+bool has_state_dict_internals_obj() {
     return bool(
-               py::detail::get_internals_obj_from_state_dict(py::detail::get_python_state_dict()));
+        py::detail::get_internals_obj_from_state_dict(py::detail::get_python_state_dict()));
 }
 
-bool has_pybind11_internals_static()
-{
-    auto**& ipp = py::detail::get_internals_pp();
+bool has_pybind11_internals_static() {
+    auto **&ipp = py::detail::get_internals_pp();
     return (ipp != nullptr) && (*ipp != nullptr);
 }
 
-TEST_CASE("Restart the interpreter")
-{
+TEST_CASE("Restart the interpreter") {
     // Verify pre-restart state.
     REQUIRE(py::module_::import("widget_module").attr("add")(1, 2).cast<int>() == 3);
     REQUIRE(has_state_dict_internals_obj());
@@ -343,11 +299,10 @@ TEST_CASE("Restart the interpreter")
     py::initialize_interpreter();
     bool ran = false;
     py::module_::import("__main__").attr("internals_destroy_test")
-        = py::capsule(&ran, [](void* ran)
-    {
-        py::detail::get_internals();
-        *static_cast<bool*>(ran) = true;
-    });
+        = py::capsule(&ran, [](void *ran) {
+              py::detail::get_internals();
+              *static_cast<bool *>(ran) = true;
+          });
     REQUIRE_FALSE(has_state_dict_internals_obj());
     REQUIRE_FALSE(has_pybind11_internals_static());
     REQUIRE_FALSE(ran);
@@ -367,8 +322,7 @@ TEST_CASE("Restart the interpreter")
     REQUIRE(py_widget.attr("the_message").cast<std::string>() == "Hello after restart");
 }
 
-TEST_CASE("Subinterpreter")
-{
+TEST_CASE("Subinterpreter") {
     // Add tags to the modules in the main interpreter and test the basics.
     py::module_::import("__main__").attr("main_tag") = "main interpreter";
     {
@@ -381,8 +335,8 @@ TEST_CASE("Subinterpreter")
     REQUIRE(has_pybind11_internals_static());
 
     /// Create and switch to a subinterpreter.
-    auto* main_tstate = PyThreadState_Get();
-    auto* sub_tstate = Py_NewInterpreter();
+    auto *main_tstate = PyThreadState_Get();
+    auto *sub_tstate = Py_NewInterpreter();
 
     // Subinterpreters get their own copy of builtins. detail::get_internals() still
     // works by returning from the static variable, i.e. all interpreters share a single
@@ -408,16 +362,14 @@ TEST_CASE("Subinterpreter")
     REQUIRE(py::hasattr(py::module_::import("widget_module"), "extension_module_tag"));
 }
 
-TEST_CASE("Execution frame")
-{
+TEST_CASE("Execution frame") {
     // When the interpreter is embedded, there is no execution frame, but `py::exec`
     // should still function by using reasonable globals: `__main__.__dict__`.
     py::exec("var = dict(number=42)");
     REQUIRE(py::globals()["var"]["number"].cast<int>() == 42);
 }
 
-TEST_CASE("Threads")
-{
+TEST_CASE("Threads") {
     // Restart interpreter to ensure threads are not initialized
     py::finalize_interpreter();
     py::initialize_interpreter();
@@ -430,18 +382,14 @@ TEST_CASE("Threads")
         py::gil_scoped_release gil_release{};
 
         auto threads = std::vector<std::thread>();
-
-        for (auto i = 0; i < num_threads; ++i)
-        {
-            threads.emplace_back([&]()
-            {
+        for (auto i = 0; i < num_threads; ++i) {
+            threads.emplace_back([&]() {
                 py::gil_scoped_acquire gil{};
                 locals["count"] = locals["count"].cast<int>() + 1;
             });
         }
 
-        for (auto& thread : threads)
-        {
+        for (auto &thread : threads) {
             thread.join();
         }
     }
@@ -450,21 +398,17 @@ TEST_CASE("Threads")
 }
 
 // Scope exit utility https://stackoverflow.com/a/36644501/7255855
-struct scope_exit
-{
+struct scope_exit {
     std::function<void()> f_;
     explicit scope_exit(std::function<void()> f) noexcept : f_(std::move(f)) {}
-    ~scope_exit()
-    {
-        if (f_)
-        {
+    ~scope_exit() {
+        if (f_) {
             f_();
         }
     }
 };
 
-TEST_CASE("Reload module from file")
-{
+TEST_CASE("Reload module from file") {
     // Disable generation of cached bytecode (.pyc files) for this test, otherwise
     // Python might pick up an old version from the cache instead of the new versions
     // of the .py files generated below
@@ -473,10 +417,7 @@ TEST_CASE("Reload module from file")
     sys.attr("dont_write_bytecode") = true;
     // Reset the value at scope exit
     scope_exit reset_dont_write_bytecode(
-        [&]()
-    {
-        sys.attr("dont_write_bytecode") = dont_write_bytecode;
-    });
+        [&]() { sys.attr("dont_write_bytecode") = dont_write_bytecode; });
 
     std::string module_name = "test_module_reload";
     std::string module_file = module_name + ".py";
@@ -487,10 +428,7 @@ TEST_CASE("Reload module from file")
     test_module << "    return 1\n";
     test_module.close();
     // Delete the file at scope exit
-    scope_exit delete_module_file([&]()
-    {
-        std::remove(module_file.c_str());
-    });
+    scope_exit delete_module_file([&]() { std::remove(module_file.c_str()); });
 
     // Import the module from file
     auto module_ = py::module_::import(module_name.c_str());
@@ -509,31 +447,29 @@ TEST_CASE("Reload module from file")
     REQUIRE(result == 2);
 }
 
-TEST_CASE("sys.argv gets initialized properly")
-{
+TEST_CASE("sys.argv gets initialized properly") {
     py::finalize_interpreter();
     {
         py::scoped_interpreter default_scope;
         auto module = py::module::import("test_interpreter");
         auto py_widget = module.attr("DerivedWidget")("The question");
-        const auto& cpp_widget = py_widget.cast<const Widget&>();
+        const auto &cpp_widget = py_widget.cast<const Widget &>();
         REQUIRE(cpp_widget.argv0().empty());
     }
 
     {
-        char* argv[] = {strdup("a.out")};
+        char *argv[] = {strdup("a.out")};
         py::scoped_interpreter argv_scope(true, 1, argv);
         std::free(argv[0]);
         auto module = py::module::import("test_interpreter");
         auto py_widget = module.attr("DerivedWidget")("The question");
-        const auto& cpp_widget = py_widget.cast<const Widget&>();
+        const auto &cpp_widget = py_widget.cast<const Widget &>();
         REQUIRE(cpp_widget.argv0() == "a.out");
     }
     py::initialize_interpreter();
 }
 
-TEST_CASE("make_iterator can be called before then after finalizing an interpreter")
-{
+TEST_CASE("make_iterator can be called before then after finalizing an interpreter") {
     // Reproduction of issue #2101 (https://github.com/pybind/pybind11/issues/2101)
     py::finalize_interpreter();
 
@@ -543,12 +479,10 @@ TEST_CASE("make_iterator can be called before then after finalizing an interpret
         auto iter = pybind11::make_iterator(container.begin(), container.end());
     }
 
-    REQUIRE_NOTHROW([&]()
-    {
+    REQUIRE_NOTHROW([&]() {
         pybind11::scoped_interpreter g;
         auto iter = pybind11::make_iterator(container.begin(), container.end());
-    }
-    ());
+    }());
 
     py::initialize_interpreter();
 }
