@@ -93,7 +93,8 @@ extern "C" {
  *  TRNG26X0 hardware attributes should be included in the board file
  *  and pointed to by the TRNG_config struct.
  */
-typedef struct TRNGCC26XX_HWAttrs {
+typedef struct TRNGCC26XX_HWAttrs
+{
     /*! @brief Crypto Peripheral's interrupt priority.
 
         The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
@@ -126,15 +127,16 @@ typedef struct TRNGCC26XX_HWAttrs {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct TRNGCC26XX_Object {
+typedef struct TRNGCC26XX_Object
+{
     bool                            isOpen;
     TRNG_ReturnBehavior             returnBehavior;
     int_fast16_t                    returnStatus;
     size_t                          entropyGenerated;
     size_t                          entropyRequested;
     uint32_t                        semaphoreTimeout;
-    uint8_t                         *entropyBuffer;
-    CryptoKey                       *entropyKey;
+    uint8_t*                         entropyBuffer;
+    CryptoKey*                       entropyKey;
     uint32_t                        samplesPerCycle;
     TRNG_CallbackFxn                callbackFxn;
 } TRNGCC26XX_Object;
@@ -173,7 +175,7 @@ extern int_fast16_t TRNGCC26XX_setSamplesPerCycle(TRNG_Handle handle, uint32_t s
  * TRNG_Handle handle = TRNG_construct(&config, ...);
  *
  */
-extern TRNG_Handle TRNGCC26XX_construct(TRNG_Config *config, const TRNG_Params *params);
+extern TRNG_Handle TRNGCC26XX_construct(TRNG_Config* config, const TRNG_Params* params);
 
 #ifdef __cplusplus
 }

@@ -9,7 +9,7 @@
 #else
     #define loggername_t const char*
 #endif
-    
+
 
 namespace Knx
 {

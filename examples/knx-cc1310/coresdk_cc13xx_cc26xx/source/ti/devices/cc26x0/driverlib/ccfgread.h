@@ -89,8 +89,8 @@ __STATIC_INLINE bool
 CCFGRead_DIS_GPRAM( void )
 {
     return (( HWREG( CCFG_BASE + CCFG_O_SIZE_AND_DIS_FLAGS ) &
-        CCFG_SIZE_AND_DIS_FLAGS_DIS_GPRAM_M ) >>
-        CCFG_SIZE_AND_DIS_FLAGS_DIS_GPRAM_S ) ;
+              CCFG_SIZE_AND_DIS_FLAGS_DIS_GPRAM_M ) >>
+            CCFG_SIZE_AND_DIS_FLAGS_DIS_GPRAM_S ) ;
 }
 
 //*****************************************************************************
@@ -104,8 +104,8 @@ __STATIC_INLINE bool
 CCFGRead_EXT_LF_CLK_DIO( void )
 {
     return (( HWREG( CCFG_BASE + CCFG_O_EXT_LF_CLK ) &
-        CCFG_EXT_LF_CLK_DIO_M ) >>
-        CCFG_EXT_LF_CLK_DIO_S ) ;
+              CCFG_EXT_LF_CLK_DIO_M ) >>
+            CCFG_EXT_LF_CLK_DIO_S ) ;
 }
 
 //*****************************************************************************
@@ -134,8 +134,8 @@ __STATIC_INLINE uint32_t
 CCFGRead_SCLK_LF_OPTION( void )
 {
     return (( HWREG( CCFG_BASE + CCFG_O_MODE_CONF ) &
-        CCFG_MODE_CONF_SCLK_LF_OPTION_M ) >>
-        CCFG_MODE_CONF_SCLK_LF_OPTION_S ) ;
+              CCFG_MODE_CONF_SCLK_LF_OPTION_M ) >>
+            CCFG_MODE_CONF_SCLK_LF_OPTION_S ) ;
 }
 
 //*****************************************************************************
@@ -163,8 +163,8 @@ __STATIC_INLINE uint32_t
 CCFGRead_XOSC_FREQ( void )
 {
     return (( HWREG( CCFG_BASE + CCFG_O_MODE_CONF ) &
-        CCFG_MODE_CONF_XOSC_FREQ_M ) >>
-        CCFG_MODE_CONF_XOSC_FREQ_S ) ;
+              CCFG_MODE_CONF_XOSC_FREQ_M ) >>
+            CCFG_MODE_CONF_XOSC_FREQ_S ) ;
 }
 
 //*****************************************************************************

@@ -61,7 +61,8 @@ extern "C" {
  *  Opaque structure that should be large enough to hold any of the
  *  RTOS specific SwiP objects.
  */
-typedef union SwiP_Struct {
+typedef union SwiP_Struct
+{
     uint32_t dummy;  /*!< Align object */
     char     data[SwiP_STRUCT_SIZE];
 } SwiP_Struct;
@@ -75,13 +76,14 @@ typedef union SwiP_Struct {
  *
  *  A SwiP_Handle returned from the ::SwiP_create represents that instance.
  */
-typedef  void *SwiP_Handle;
+typedef  void* SwiP_Handle;
 
 /*!
  *  @brief    Status codes for SwiP APIs
  *  TODO: See if we need more error codes.
  */
-typedef enum SwiP_Status {
+typedef enum SwiP_Status
+{
     SwiP_OK = 0,
     SwiP_FAILURE = -1
 } SwiP_Status;
@@ -109,7 +111,8 @@ typedef void (*SwiP_Fxn)(uintptr_t arg0, uintptr_t arg1);
  *  SwiP_inc functions also modify the trigger value. SwiP_or
  *  sets bits, and SwiP_andn clears bits.
  */
-typedef struct SwiP_Params {
+typedef struct SwiP_Params
+{
     uintptr_t  arg0;      /*!< Argument passed into the SwiP function. */
     uintptr_t  arg1;      /*!< Argument passed into the SwiP function. */
     uint32_t   priority;  /*!< priority, 0 is min, 1, 2, ..., ~0 for max */
@@ -128,8 +131,8 @@ typedef struct SwiP_Params {
  *
  *  @return A SwiP_Handle on success or a NULL on an error
  */
-extern SwiP_Handle SwiP_construct(SwiP_Struct *swiP, SwiP_Fxn swiFxn,
-                               SwiP_Params *params);
+extern SwiP_Handle SwiP_construct(SwiP_Struct* swiP, SwiP_Fxn swiFxn,
+                                  SwiP_Params* params);
 
 /*!
  *  @brief  Function to destruct a software interrupt object
@@ -139,7 +142,7 @@ extern SwiP_Handle SwiP_construct(SwiP_Struct *swiP, SwiP_Fxn swiFxn,
  *
  *  @return
  */
-extern void SwiP_destruct(SwiP_Struct *swiP);
+extern void SwiP_destruct(SwiP_Struct* swiP);
 
 /*!
  *  @brief  Initialize params structure to default values.
@@ -149,7 +152,7 @@ extern void SwiP_destruct(SwiP_Struct *swiP);
  *
  *  @param params  Pointer to the instance configuration parameters.
  */
-extern void SwiP_Params_init(SwiP_Params *params);
+extern void SwiP_Params_init(SwiP_Params* params);
 
 /*!
  *  @brief  Function to create a software interrupt object.
@@ -163,7 +166,7 @@ extern void SwiP_Params_init(SwiP_Params *params);
  *  @return A SwiP_Handle on success or a NULL on an error
  */
 extern SwiP_Handle SwiP_create(SwiP_Fxn swiFxn,
-                               SwiP_Params *params);
+                               SwiP_Params* params);
 
 /*!
  *  @brief  Function to delete a software interrupt object

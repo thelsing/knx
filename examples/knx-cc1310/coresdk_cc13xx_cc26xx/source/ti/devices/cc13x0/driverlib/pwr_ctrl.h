@@ -90,7 +90,7 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define PowerCtrlSourceSet              NOROM_PowerCtrlSourceSet
+#define PowerCtrlSourceSet              NOROM_PowerCtrlSourceSet
 #endif
 
 //*****************************************************************************
@@ -183,7 +183,8 @@ PowerCtrlSourceGet(void)
 
     // Return the current power source
     ui32PowerConfig = HWREG(AON_SYSCTL_BASE + AON_SYSCTL_O_PWRCTL);
-    if(ui32PowerConfig & AON_SYSCTL_PWRCTL_DCDC_ACTIVE)
+
+    if (ui32PowerConfig & AON_SYSCTL_PWRCTL_DCDC_ACTIVE)
     {
         return (PWRCTRL_PWRSRC_DCDC);
     }
@@ -223,8 +224,8 @@ PowerCtrlResetSourceGet(void)
 {
     //  Get the reset source.
     return (( HWREG( AON_SYSCTL_BASE + AON_SYSCTL_O_RESETCTL ) &
-        AON_SYSCTL_RESETCTL_RESET_SRC_M ) >>
-        AON_SYSCTL_RESETCTL_RESET_SRC_S ) ;
+              AON_SYSCTL_RESETCTL_RESET_SRC_M ) >>
+            AON_SYSCTL_RESETCTL_RESET_SRC_S ) ;
 }
 
 //*****************************************************************************
@@ -269,11 +270,11 @@ PowerCtrlPadSleepDisable(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_PowerCtrlSourceSet
-        #undef  PowerCtrlSourceSet
-        #define PowerCtrlSourceSet              ROM_PowerCtrlSourceSet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_PowerCtrlSourceSet
+#undef  PowerCtrlSourceSet
+#define PowerCtrlSourceSet              ROM_PowerCtrlSourceSet
+#endif
 #endif
 
 //*****************************************************************************

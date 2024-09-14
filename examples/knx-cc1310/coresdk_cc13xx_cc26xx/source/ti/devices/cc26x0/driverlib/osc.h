@@ -84,17 +84,17 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define OSCClockSourceSet               NOROM_OSCClockSourceSet
-    #define OSCClockSourceGet               NOROM_OSCClockSourceGet
-    #define OSCHF_GetStartupTime            NOROM_OSCHF_GetStartupTime
-    #define OSCHF_TurnOnXosc                NOROM_OSCHF_TurnOnXosc
-    #define OSCHF_AttemptToSwitchToXosc     NOROM_OSCHF_AttemptToSwitchToXosc
-    #define OSCHF_SwitchToRcOscTurnOffXosc  NOROM_OSCHF_SwitchToRcOscTurnOffXosc
-    #define OSCHF_DebugGetCrystalAmplitude  NOROM_OSCHF_DebugGetCrystalAmplitude
-    #define OSCHF_DebugGetExpectedAverageCrystalAmplitude NOROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
-    #define OSC_HPOSCRelativeFrequencyOffsetGet NOROM_OSC_HPOSCRelativeFrequencyOffsetGet
-    #define OSC_AdjustXoscHfCapArray        NOROM_OSC_AdjustXoscHfCapArray
-    #define OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert NOROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
+#define OSCClockSourceSet               NOROM_OSCClockSourceSet
+#define OSCClockSourceGet               NOROM_OSCClockSourceGet
+#define OSCHF_GetStartupTime            NOROM_OSCHF_GetStartupTime
+#define OSCHF_TurnOnXosc                NOROM_OSCHF_TurnOnXosc
+#define OSCHF_AttemptToSwitchToXosc     NOROM_OSCHF_AttemptToSwitchToXosc
+#define OSCHF_SwitchToRcOscTurnOffXosc  NOROM_OSCHF_SwitchToRcOscTurnOffXosc
+#define OSCHF_DebugGetCrystalAmplitude  NOROM_OSCHF_DebugGetCrystalAmplitude
+#define OSCHF_DebugGetExpectedAverageCrystalAmplitude NOROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
+#define OSC_HPOSCRelativeFrequencyOffsetGet NOROM_OSC_HPOSCRelativeFrequencyOffsetGet
+#define OSC_AdjustXoscHfCapArray        NOROM_OSC_AdjustXoscHfCapArray
+#define OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert NOROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
 #endif
 
 //*****************************************************************************
@@ -178,8 +178,8 @@ __STATIC_INLINE void
 OSCClockLossEventEnable( void )
 {
     DDI16BitfieldWrite( AUX_DDI0_OSC_BASE, DDI_0_OSC_O_CTL0,
-        DDI_0_OSC_CTL0_CLK_LOSS_EN_M,
-        DDI_0_OSC_CTL0_CLK_LOSS_EN_S, 1 );
+                        DDI_0_OSC_CTL0_CLK_LOSS_EN_M,
+                        DDI_0_OSC_CTL0_CLK_LOSS_EN_S, 1 );
 }
 
 //*****************************************************************************
@@ -201,8 +201,8 @@ __STATIC_INLINE void
 OSCClockLossEventDisable( void )
 {
     DDI16BitfieldWrite( AUX_DDI0_OSC_BASE, DDI_0_OSC_O_CTL0,
-        DDI_0_OSC_CTL0_CLK_LOSS_EN_M,
-        DDI_0_OSC_CTL0_CLK_LOSS_EN_S, 0 );
+                        DDI_0_OSC_CTL0_CLK_LOSS_EN_M,
+                        DDI_0_OSC_CTL0_CLK_LOSS_EN_S, 0 );
 }
 
 //*****************************************************************************
@@ -290,7 +290,7 @@ OSCHfSourceReady(void)
     return (DDI16BitfieldRead(AUX_DDI0_OSC_BASE, DDI_0_OSC_O_STAT0,
                               DDI_0_OSC_STAT0_PENDINGSCLKHFSWITCHING_M,
                               DDI_0_OSC_STAT0_PENDINGSCLKHFSWITCHING_S)) ?
-        true : false;
+           true : false;
 }
 
 //*****************************************************************************
@@ -495,51 +495,51 @@ extern int16_t OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert( int32_t HP
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_OSCClockSourceSet
-        #undef  OSCClockSourceSet
-        #define OSCClockSourceSet               ROM_OSCClockSourceSet
-    #endif
-    #ifdef ROM_OSCClockSourceGet
-        #undef  OSCClockSourceGet
-        #define OSCClockSourceGet               ROM_OSCClockSourceGet
-    #endif
-    #ifdef ROM_OSCHF_GetStartupTime
-        #undef  OSCHF_GetStartupTime
-        #define OSCHF_GetStartupTime            ROM_OSCHF_GetStartupTime
-    #endif
-    #ifdef ROM_OSCHF_TurnOnXosc
-        #undef  OSCHF_TurnOnXosc
-        #define OSCHF_TurnOnXosc                ROM_OSCHF_TurnOnXosc
-    #endif
-    #ifdef ROM_OSCHF_AttemptToSwitchToXosc
-        #undef  OSCHF_AttemptToSwitchToXosc
-        #define OSCHF_AttemptToSwitchToXosc     ROM_OSCHF_AttemptToSwitchToXosc
-    #endif
-    #ifdef ROM_OSCHF_SwitchToRcOscTurnOffXosc
-        #undef  OSCHF_SwitchToRcOscTurnOffXosc
-        #define OSCHF_SwitchToRcOscTurnOffXosc  ROM_OSCHF_SwitchToRcOscTurnOffXosc
-    #endif
-    #ifdef ROM_OSCHF_DebugGetCrystalAmplitude
-        #undef  OSCHF_DebugGetCrystalAmplitude
-        #define OSCHF_DebugGetCrystalAmplitude  ROM_OSCHF_DebugGetCrystalAmplitude
-    #endif
-    #ifdef ROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
-        #undef  OSCHF_DebugGetExpectedAverageCrystalAmplitude
-        #define OSCHF_DebugGetExpectedAverageCrystalAmplitude ROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
-    #endif
-    #ifdef ROM_OSC_HPOSCRelativeFrequencyOffsetGet
-        #undef  OSC_HPOSCRelativeFrequencyOffsetGet
-        #define OSC_HPOSCRelativeFrequencyOffsetGet ROM_OSC_HPOSCRelativeFrequencyOffsetGet
-    #endif
-    #ifdef ROM_OSC_AdjustXoscHfCapArray
-        #undef  OSC_AdjustXoscHfCapArray
-        #define OSC_AdjustXoscHfCapArray        ROM_OSC_AdjustXoscHfCapArray
-    #endif
-    #ifdef ROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
-        #undef  OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
-        #define OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert ROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_OSCClockSourceSet
+#undef  OSCClockSourceSet
+#define OSCClockSourceSet               ROM_OSCClockSourceSet
+#endif
+#ifdef ROM_OSCClockSourceGet
+#undef  OSCClockSourceGet
+#define OSCClockSourceGet               ROM_OSCClockSourceGet
+#endif
+#ifdef ROM_OSCHF_GetStartupTime
+#undef  OSCHF_GetStartupTime
+#define OSCHF_GetStartupTime            ROM_OSCHF_GetStartupTime
+#endif
+#ifdef ROM_OSCHF_TurnOnXosc
+#undef  OSCHF_TurnOnXosc
+#define OSCHF_TurnOnXosc                ROM_OSCHF_TurnOnXosc
+#endif
+#ifdef ROM_OSCHF_AttemptToSwitchToXosc
+#undef  OSCHF_AttemptToSwitchToXosc
+#define OSCHF_AttemptToSwitchToXosc     ROM_OSCHF_AttemptToSwitchToXosc
+#endif
+#ifdef ROM_OSCHF_SwitchToRcOscTurnOffXosc
+#undef  OSCHF_SwitchToRcOscTurnOffXosc
+#define OSCHF_SwitchToRcOscTurnOffXosc  ROM_OSCHF_SwitchToRcOscTurnOffXosc
+#endif
+#ifdef ROM_OSCHF_DebugGetCrystalAmplitude
+#undef  OSCHF_DebugGetCrystalAmplitude
+#define OSCHF_DebugGetCrystalAmplitude  ROM_OSCHF_DebugGetCrystalAmplitude
+#endif
+#ifdef ROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
+#undef  OSCHF_DebugGetExpectedAverageCrystalAmplitude
+#define OSCHF_DebugGetExpectedAverageCrystalAmplitude ROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
+#endif
+#ifdef ROM_OSC_HPOSCRelativeFrequencyOffsetGet
+#undef  OSC_HPOSCRelativeFrequencyOffsetGet
+#define OSC_HPOSCRelativeFrequencyOffsetGet ROM_OSC_HPOSCRelativeFrequencyOffsetGet
+#endif
+#ifdef ROM_OSC_AdjustXoscHfCapArray
+#undef  OSC_AdjustXoscHfCapArray
+#define OSC_AdjustXoscHfCapArray        ROM_OSC_AdjustXoscHfCapArray
+#endif
+#ifdef ROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
+#undef  OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
+#define OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert ROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
+#endif
 #endif
 
 //*****************************************************************************

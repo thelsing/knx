@@ -109,8 +109,8 @@ extern "C"
 static bool
 ADIBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == ADI2_BASE || ui32Base == ADI3_BASE ||
-           ui32Base == AUX_ADI4_BASE);
+    return (ui32Base == ADI2_BASE || ui32Base == ADI3_BASE ||
+            ui32Base == AUX_ADI4_BASE);
 }
 #endif
 
@@ -268,7 +268,7 @@ ADI8RegRead(uint32_t ui32Base, uint32_t ui32Reg)
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Read the register and return the value.
-    return(HWREGB(ui32Base + ui32Reg));
+    return (HWREGB(ui32Base + ui32Reg));
 }
 
 //*****************************************************************************
@@ -303,7 +303,7 @@ ADI16RegRead(uint32_t ui32Base, uint32_t ui32Reg)
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Read the registers and return the value.
-    return(HWREGH(ui32Base + (ui32Reg & 0xFE)));
+    return (HWREGH(ui32Base + (ui32Reg & 0xFE)));
 }
 
 //*****************************************************************************
@@ -336,7 +336,7 @@ ADI32RegRead(uint32_t ui32Base, uint32_t ui32Reg)
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Read the registers and return the value.
-    return(HWREG(ui32Base + (ui32Reg & 0xFC)));
+    return (HWREG(ui32Base + (ui32Reg & 0xFC)));
 }
 
 //*****************************************************************************

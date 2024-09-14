@@ -84,10 +84,10 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define I2CMasterInitExpClk             NOROM_I2CMasterInitExpClk
-    #define I2CMasterErr                    NOROM_I2CMasterErr
-    #define I2CIntRegister                  NOROM_I2CIntRegister
-    #define I2CIntUnregister                NOROM_I2CIntUnregister
+#define I2CMasterInitExpClk             NOROM_I2CMasterInitExpClk
+#define I2CMasterErr                    NOROM_I2CMasterErr
+#define I2CIntRegister                  NOROM_I2CIntRegister
+#define I2CIntUnregister                NOROM_I2CIntUnregister
 #endif
 
 //*****************************************************************************
@@ -96,25 +96,25 @@ extern "C"
 //
 //*****************************************************************************
 #define I2C_MASTER_CMD_SINGLE_SEND                                            \
-                                0x00000007
+    0x00000007
 #define I2C_MASTER_CMD_SINGLE_RECEIVE                                         \
-                                0x00000007
+    0x00000007
 #define I2C_MASTER_CMD_BURST_SEND_START                                       \
-                                0x00000003
+    0x00000003
 #define I2C_MASTER_CMD_BURST_SEND_CONT                                        \
-                                0x00000001
+    0x00000001
 #define I2C_MASTER_CMD_BURST_SEND_FINISH                                      \
-                                0x00000005
+    0x00000005
 #define I2C_MASTER_CMD_BURST_SEND_ERROR_STOP                                  \
-                                0x00000004
+    0x00000004
 #define I2C_MASTER_CMD_BURST_RECEIVE_START                                    \
-                                0x0000000b
+    0x0000000b
 #define I2C_MASTER_CMD_BURST_RECEIVE_CONT                                     \
-                                0x00000009
+    0x00000009
 #define I2C_MASTER_CMD_BURST_RECEIVE_FINISH                                   \
-                                0x00000005
+    0x00000005
 #define I2C_MASTER_CMD_BURST_RECEIVE_ERROR_STOP                               \
-                                0x00000004
+    0x00000004
 
 //*****************************************************************************
 //
@@ -169,7 +169,7 @@ extern "C"
 static bool
 I2CBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == I2C0_BASE);
+    return (ui32Base == I2C0_BASE);
 }
 #endif
 
@@ -226,7 +226,7 @@ I2CMasterControl(uint32_t ui32Base, uint32_t ui32Cmd)
     // Check the arguments.
     ASSERT(I2CBaseValid(ui32Base));
     ASSERT((ui32Cmd == I2C_MASTER_CMD_SINGLE_SEND) ||
-    //     (ui32Cmd == I2C_MASTER_CMD_SINGLE_RECEIVE) || -> Equal to SINGLE_SEND
+           //     (ui32Cmd == I2C_MASTER_CMD_SINGLE_RECEIVE) || -> Equal to SINGLE_SEND
            (ui32Cmd == I2C_MASTER_CMD_BURST_SEND_START) ||
            (ui32Cmd == I2C_MASTER_CMD_BURST_SEND_CONT) ||
            (ui32Cmd == I2C_MASTER_CMD_BURST_SEND_FINISH) ||
@@ -344,13 +344,13 @@ I2CMasterBusy(uint32_t ui32Base)
     ASSERT(I2CBaseValid(ui32Base));
 
     // Return the busy status.
-    if(HWREG(I2C0_BASE + I2C_O_MSTAT) & I2C_MSTAT_BUSY)
+    if (HWREG(I2C0_BASE + I2C_O_MSTAT) & I2C_MSTAT_BUSY)
     {
-        return(true);
+        return (true);
     }
     else
     {
-        return(false);
+        return (false);
     }
 }
 
@@ -376,13 +376,13 @@ I2CMasterBusBusy(uint32_t ui32Base)
     ASSERT(I2CBaseValid(ui32Base));
 
     // Return the bus busy status.
-    if(HWREG(I2C0_BASE + I2C_O_MSTAT) & I2C_MSTAT_BUSBSY)
+    if (HWREG(I2C0_BASE + I2C_O_MSTAT) & I2C_MSTAT_BUSBSY)
     {
-        return(true);
+        return (true);
     }
     else
     {
-        return(false);
+        return (false);
     }
 }
 
@@ -405,7 +405,7 @@ I2CMasterDataGet(uint32_t ui32Base)
     ASSERT(I2CBaseValid(ui32Base));
 
     // Read a byte.
-    return(HWREG(I2C0_BASE + I2C_O_MDR));
+    return (HWREG(I2C0_BASE + I2C_O_MDR));
 }
 
 //*****************************************************************************
@@ -554,13 +554,13 @@ I2CMasterIntStatus(uint32_t ui32Base, bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    if(bMasked)
+    if (bMasked)
     {
-        return((HWREG(I2C0_BASE + I2C_O_MMIS)) ? true : false);
+        return ((HWREG(I2C0_BASE + I2C_O_MMIS)) ? true : false);
     }
     else
     {
-        return((HWREG(I2C0_BASE + I2C_O_MRIS)) ? true : false);
+        return ((HWREG(I2C0_BASE + I2C_O_MRIS)) ? true : false);
     }
 }
 
@@ -689,7 +689,7 @@ I2CSlaveStatus(uint32_t ui32Base)
     ASSERT(I2CBaseValid(ui32Base));
 
     // Return the slave status.
-    return(HWREG(I2C0_BASE + I2C_O_SSTAT));
+    return (HWREG(I2C0_BASE + I2C_O_SSTAT));
 }
 
 //*****************************************************************************
@@ -711,7 +711,7 @@ I2CSlaveDataGet(uint32_t ui32Base)
     ASSERT(I2CBaseValid(ui32Base));
 
     // Read a byte.
-    return(HWREG(I2C0_BASE + I2C_O_SDR));
+    return (HWREG(I2C0_BASE + I2C_O_SDR));
 }
 
 //*****************************************************************************
@@ -874,13 +874,13 @@ I2CSlaveIntStatus(uint32_t ui32Base, bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    if(bMasked)
+    if (bMasked)
     {
-        return(HWREG(I2C0_BASE + I2C_O_SMIS));
+        return (HWREG(I2C0_BASE + I2C_O_SMIS));
     }
     else
     {
-        return(HWREG(I2C0_BASE + I2C_O_SRIS));
+        return (HWREG(I2C0_BASE + I2C_O_SRIS));
     }
 }
 
@@ -935,23 +935,23 @@ extern void I2CIntUnregister(uint32_t ui32Base);
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_I2CMasterInitExpClk
-        #undef  I2CMasterInitExpClk
-        #define I2CMasterInitExpClk             ROM_I2CMasterInitExpClk
-    #endif
-    #ifdef ROM_I2CMasterErr
-        #undef  I2CMasterErr
-        #define I2CMasterErr                    ROM_I2CMasterErr
-    #endif
-    #ifdef ROM_I2CIntRegister
-        #undef  I2CIntRegister
-        #define I2CIntRegister                  ROM_I2CIntRegister
-    #endif
-    #ifdef ROM_I2CIntUnregister
-        #undef  I2CIntUnregister
-        #define I2CIntUnregister                ROM_I2CIntUnregister
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_I2CMasterInitExpClk
+#undef  I2CMasterInitExpClk
+#define I2CMasterInitExpClk             ROM_I2CMasterInitExpClk
+#endif
+#ifdef ROM_I2CMasterErr
+#undef  I2CMasterErr
+#define I2CMasterErr                    ROM_I2CMasterErr
+#endif
+#ifdef ROM_I2CIntRegister
+#undef  I2CIntRegister
+#define I2CIntRegister                  ROM_I2CIntRegister
+#endif
+#ifdef ROM_I2CIntUnregister
+#undef  I2CIntUnregister
+#define I2CIntUnregister                ROM_I2CIntUnregister
+#endif
 #endif
 
 //*****************************************************************************

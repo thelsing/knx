@@ -528,68 +528,68 @@ void delayMicroseconds (unsigned int howLong)
 }
 
 
-    uint32_t digitalRead(uint32_t dwPin)
-    {
-        print("ignoring digitalRead: pin: ");
-        print(dwPin);
-        println(", returning 0");
-        return 0;
-    }
+uint32_t digitalRead(uint32_t dwPin)
+{
+    print("ignoring digitalRead: pin: ");
+    print(dwPin);
+    println(", returning 0");
+    return 0;
+}
 
-    void digitalWrite(unsigned long pin, unsigned long value)
+void digitalWrite(unsigned long pin, unsigned long value)
+{
+    if (pin == Board_GPIO_LED0)
     {
-        if (pin == Board_GPIO_LED0)
+        if (value > 0)
         {
-            if (value > 0)
-            {
-                GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_ON);
-            }
-            else
-            {
-                GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_OFF);
-            }
+            GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_ON);
         }
         else
         {
-            print("dummy digitalWrite: pin: ");
-            print(pin);
-            print(", value: ");
-            println(value, HEX);
+            GPIO_write(Board_GPIO_LED0, Board_GPIO_LED_OFF);
         }
     }
-
-    void pinMode(unsigned long pin, unsigned long mode)
+    else
     {
-        print("ignoring pinMode: pin: ");
+        print("dummy digitalWrite: pin: ");
+        print(pin);
+        print(", value: ");
+        println(value, HEX);
+    }
+}
+
+void pinMode(unsigned long pin, unsigned long mode)
+{
+    print("ignoring pinMode: pin: ");
+    print(pin);
+    print(", mode: ");
+    println(mode, HEX);
+}
+
+typedef void (*IsrFuncPtr)();
+static IsrFuncPtr gpioCallback;
+static void gpioButtonFxn0(uint_least8_t index)
+{
+    gpioCallback();
+}
+
+void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode)
+{
+    if (pin == Board_GPIO_BUTTON0)
+    {
+        gpioCallback = callback;
+        /* install Button callback */
+        GPIO_setCallback(Board_GPIO_BUTTON0, gpioButtonFxn0);
+
+        /* Enable interrupts */
+        GPIO_enableInt(Board_GPIO_BUTTON0);
+    }
+    else
+    {
+        print("dummy attachInterrupt: pin: ");
         print(pin);
         print(", mode: ");
         println(mode, HEX);
     }
-
-    typedef void (*IsrFuncPtr)();
-    static IsrFuncPtr gpioCallback;
-    static void gpioButtonFxn0(uint_least8_t index)
-    {
-        gpioCallback();
-    }
-
-    void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode)
-    {
-        if (pin == Board_GPIO_BUTTON0)
-        {
-            gpioCallback = callback;
-            /* install Button callback */
-            GPIO_setCallback(Board_GPIO_BUTTON0, gpioButtonFxn0);
-
-            /* Enable interrupts */
-            GPIO_enableInt(Board_GPIO_BUTTON0);
-        }
-        else
-        {
-            print("dummy attachInterrupt: pin: ");
-            print(pin);
-            print(", mode: ");
-            println(mode, HEX);
-        }
-    }
+}
 #endif // DeviceFamily_CC13X0

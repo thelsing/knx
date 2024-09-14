@@ -84,19 +84,19 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AUXADCDisable                   NOROM_AUXADCDisable
-    #define AUXADCEnableAsync               NOROM_AUXADCEnableAsync
-    #define AUXADCEnableSync                NOROM_AUXADCEnableSync
-    #define AUXADCDisableInputScaling       NOROM_AUXADCDisableInputScaling
-    #define AUXADCFlushFifo                 NOROM_AUXADCFlushFifo
-    #define AUXADCReadFifo                  NOROM_AUXADCReadFifo
-    #define AUXADCPopFifo                   NOROM_AUXADCPopFifo
-    #define AUXADCGetAdjustmentGain         NOROM_AUXADCGetAdjustmentGain
-    #define AUXADCGetAdjustmentOffset       NOROM_AUXADCGetAdjustmentOffset
-    #define AUXADCValueToMicrovolts         NOROM_AUXADCValueToMicrovolts
-    #define AUXADCMicrovoltsToValue         NOROM_AUXADCMicrovoltsToValue
-    #define AUXADCAdjustValueForGainAndOffset NOROM_AUXADCAdjustValueForGainAndOffset
-    #define AUXADCUnadjustValueForGainAndOffset NOROM_AUXADCUnadjustValueForGainAndOffset
+#define AUXADCDisable                   NOROM_AUXADCDisable
+#define AUXADCEnableAsync               NOROM_AUXADCEnableAsync
+#define AUXADCEnableSync                NOROM_AUXADCEnableSync
+#define AUXADCDisableInputScaling       NOROM_AUXADCDisableInputScaling
+#define AUXADCFlushFifo                 NOROM_AUXADCFlushFifo
+#define AUXADCReadFifo                  NOROM_AUXADCReadFifo
+#define AUXADCPopFifo                   NOROM_AUXADCPopFifo
+#define AUXADCGetAdjustmentGain         NOROM_AUXADCGetAdjustmentGain
+#define AUXADCGetAdjustmentOffset       NOROM_AUXADCGetAdjustmentOffset
+#define AUXADCValueToMicrovolts         NOROM_AUXADCValueToMicrovolts
+#define AUXADCMicrovoltsToValue         NOROM_AUXADCMicrovoltsToValue
+#define AUXADCAdjustValueForGainAndOffset NOROM_AUXADCAdjustValueForGainAndOffset
+#define AUXADCUnadjustValueForGainAndOffset NOROM_AUXADCUnadjustValueForGainAndOffset
 #endif
 
 //*****************************************************************************
@@ -524,59 +524,59 @@ extern int32_t AUXADCUnadjustValueForGainAndOffset(int32_t adcValue, int32_t gai
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AUXADCDisable
-        #undef  AUXADCDisable
-        #define AUXADCDisable                   ROM_AUXADCDisable
-    #endif
-    #ifdef ROM_AUXADCEnableAsync
-        #undef  AUXADCEnableAsync
-        #define AUXADCEnableAsync               ROM_AUXADCEnableAsync
-    #endif
-    #ifdef ROM_AUXADCEnableSync
-        #undef  AUXADCEnableSync
-        #define AUXADCEnableSync                ROM_AUXADCEnableSync
-    #endif
-    #ifdef ROM_AUXADCDisableInputScaling
-        #undef  AUXADCDisableInputScaling
-        #define AUXADCDisableInputScaling       ROM_AUXADCDisableInputScaling
-    #endif
-    #ifdef ROM_AUXADCFlushFifo
-        #undef  AUXADCFlushFifo
-        #define AUXADCFlushFifo                 ROM_AUXADCFlushFifo
-    #endif
-    #ifdef ROM_AUXADCReadFifo
-        #undef  AUXADCReadFifo
-        #define AUXADCReadFifo                  ROM_AUXADCReadFifo
-    #endif
-    #ifdef ROM_AUXADCPopFifo
-        #undef  AUXADCPopFifo
-        #define AUXADCPopFifo                   ROM_AUXADCPopFifo
-    #endif
-    #ifdef ROM_AUXADCGetAdjustmentGain
-        #undef  AUXADCGetAdjustmentGain
-        #define AUXADCGetAdjustmentGain         ROM_AUXADCGetAdjustmentGain
-    #endif
-    #ifdef ROM_AUXADCGetAdjustmentOffset
-        #undef  AUXADCGetAdjustmentOffset
-        #define AUXADCGetAdjustmentOffset       ROM_AUXADCGetAdjustmentOffset
-    #endif
-    #ifdef ROM_AUXADCValueToMicrovolts
-        #undef  AUXADCValueToMicrovolts
-        #define AUXADCValueToMicrovolts         ROM_AUXADCValueToMicrovolts
-    #endif
-    #ifdef ROM_AUXADCMicrovoltsToValue
-        #undef  AUXADCMicrovoltsToValue
-        #define AUXADCMicrovoltsToValue         ROM_AUXADCMicrovoltsToValue
-    #endif
-    #ifdef ROM_AUXADCAdjustValueForGainAndOffset
-        #undef  AUXADCAdjustValueForGainAndOffset
-        #define AUXADCAdjustValueForGainAndOffset ROM_AUXADCAdjustValueForGainAndOffset
-    #endif
-    #ifdef ROM_AUXADCUnadjustValueForGainAndOffset
-        #undef  AUXADCUnadjustValueForGainAndOffset
-        #define AUXADCUnadjustValueForGainAndOffset ROM_AUXADCUnadjustValueForGainAndOffset
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AUXADCDisable
+#undef  AUXADCDisable
+#define AUXADCDisable                   ROM_AUXADCDisable
+#endif
+#ifdef ROM_AUXADCEnableAsync
+#undef  AUXADCEnableAsync
+#define AUXADCEnableAsync               ROM_AUXADCEnableAsync
+#endif
+#ifdef ROM_AUXADCEnableSync
+#undef  AUXADCEnableSync
+#define AUXADCEnableSync                ROM_AUXADCEnableSync
+#endif
+#ifdef ROM_AUXADCDisableInputScaling
+#undef  AUXADCDisableInputScaling
+#define AUXADCDisableInputScaling       ROM_AUXADCDisableInputScaling
+#endif
+#ifdef ROM_AUXADCFlushFifo
+#undef  AUXADCFlushFifo
+#define AUXADCFlushFifo                 ROM_AUXADCFlushFifo
+#endif
+#ifdef ROM_AUXADCReadFifo
+#undef  AUXADCReadFifo
+#define AUXADCReadFifo                  ROM_AUXADCReadFifo
+#endif
+#ifdef ROM_AUXADCPopFifo
+#undef  AUXADCPopFifo
+#define AUXADCPopFifo                   ROM_AUXADCPopFifo
+#endif
+#ifdef ROM_AUXADCGetAdjustmentGain
+#undef  AUXADCGetAdjustmentGain
+#define AUXADCGetAdjustmentGain         ROM_AUXADCGetAdjustmentGain
+#endif
+#ifdef ROM_AUXADCGetAdjustmentOffset
+#undef  AUXADCGetAdjustmentOffset
+#define AUXADCGetAdjustmentOffset       ROM_AUXADCGetAdjustmentOffset
+#endif
+#ifdef ROM_AUXADCValueToMicrovolts
+#undef  AUXADCValueToMicrovolts
+#define AUXADCValueToMicrovolts         ROM_AUXADCValueToMicrovolts
+#endif
+#ifdef ROM_AUXADCMicrovoltsToValue
+#undef  AUXADCMicrovoltsToValue
+#define AUXADCMicrovoltsToValue         ROM_AUXADCMicrovoltsToValue
+#endif
+#ifdef ROM_AUXADCAdjustValueForGainAndOffset
+#undef  AUXADCAdjustValueForGainAndOffset
+#define AUXADCAdjustValueForGainAndOffset ROM_AUXADCAdjustValueForGainAndOffset
+#endif
+#ifdef ROM_AUXADCUnadjustValueForGainAndOffset
+#undef  AUXADCUnadjustValueForGainAndOffset
+#define AUXADCUnadjustValueForGainAndOffset ROM_AUXADCUnadjustValueForGainAndOffset
+#endif
 #endif
 
 //*****************************************************************************

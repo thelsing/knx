@@ -5,10 +5,11 @@
 
 /// Simple class used to test py::local:
 template <int>
-class LocalBase {
-public:
-    explicit LocalBase(int i) : i(i) {}
-    int i = -1;
+class LocalBase
+{
+    public:
+        explicit LocalBase(int i) : i(i) {}
+        int i = -1;
 };
 
 /// Registered with py::module_local in both main and secondary modules:
@@ -37,23 +38,31 @@ using NonLocalMap = std::unordered_map<std::string, NonLocalType>;
 using NonLocalMap2 = std::unordered_map<std::string, uint8_t>;
 
 // Exception that will be caught via the module local translator.
-class LocalException : public std::exception {
-public:
-    explicit LocalException(const char *m) : message{m} {}
-    const char *what() const noexcept override { return message.c_str(); }
+class LocalException : public std::exception
+{
+    public:
+        explicit LocalException(const char* m) : message{m} {}
+        const char* what() const noexcept override
+        {
+            return message.c_str();
+        }
 
-private:
-    std::string message = "";
+    private:
+        std::string message = "";
 };
 
 // Exception that will be registered with register_local_exception_translator
-class LocalSimpleException : public std::exception {
-public:
-    explicit LocalSimpleException(const char *m) : message{m} {}
-    const char *what() const noexcept override { return message.c_str(); }
+class LocalSimpleException : public std::exception
+{
+    public:
+        explicit LocalSimpleException(const char* m) : message{m} {}
+        const char* what() const noexcept override
+        {
+            return message.c_str();
+        }
 
-private:
-    std::string message = "";
+    private:
+        std::string message = "";
 };
 
 PYBIND11_MAKE_OPAQUE(LocalVec);
@@ -66,27 +75,36 @@ PYBIND11_MAKE_OPAQUE(NonLocalMap2);
 
 // Simple bindings (used with the above):
 template <typename T, int Adjust = 0, typename... Args>
-py::class_<T> bind_local(Args &&...args) {
-    return py::class_<T>(std::forward<Args>(args)...).def(py::init<int>()).def("get", [](T &i) {
+py::class_<T> bind_local(Args && ...args)
+{
+    return py::class_<T>(std::forward<Args>(args)...).def(py::init<int>()).def("get", [](T & i)
+    {
         return i.i + Adjust;
     });
 };
 
 // Simulate a foreign library base class (to match the example in the docs):
-namespace pets {
-class Pet {
-public:
-    explicit Pet(std::string name) : name_(std::move(name)) {}
-    std::string name_;
-    const std::string &name() const { return name_; }
-};
+namespace pets
+{
+    class Pet
+    {
+        public:
+            explicit Pet(std::string name) : name_(std::move(name)) {}
+            std::string name_;
+            const std::string& name() const
+            {
+                return name_;
+            }
+    };
 } // namespace pets
 
-struct MixGL {
+struct MixGL
+{
     int i;
     explicit MixGL(int i) : i{i} {}
 };
-struct MixGL2 {
+struct MixGL2
+{
     int i;
     explicit MixGL2(int i) : i{i} {}
 };

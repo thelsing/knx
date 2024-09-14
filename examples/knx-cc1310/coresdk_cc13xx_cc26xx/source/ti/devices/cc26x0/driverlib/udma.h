@@ -82,14 +82,14 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define uDMAChannelAttributeEnable      NOROM_uDMAChannelAttributeEnable
-    #define uDMAChannelAttributeDisable     NOROM_uDMAChannelAttributeDisable
-    #define uDMAChannelAttributeGet         NOROM_uDMAChannelAttributeGet
-    #define uDMAChannelControlSet           NOROM_uDMAChannelControlSet
-    #define uDMAChannelTransferSet          NOROM_uDMAChannelTransferSet
-    #define uDMAChannelScatterGatherSet     NOROM_uDMAChannelScatterGatherSet
-    #define uDMAChannelSizeGet              NOROM_uDMAChannelSizeGet
-    #define uDMAChannelModeGet              NOROM_uDMAChannelModeGet
+#define uDMAChannelAttributeEnable      NOROM_uDMAChannelAttributeEnable
+#define uDMAChannelAttributeDisable     NOROM_uDMAChannelAttributeDisable
+#define uDMAChannelAttributeGet         NOROM_uDMAChannelAttributeGet
+#define uDMAChannelControlSet           NOROM_uDMAChannelControlSet
+#define uDMAChannelTransferSet          NOROM_uDMAChannelTransferSet
+#define uDMAChannelScatterGatherSet     NOROM_uDMAChannelScatterGatherSet
+#define uDMAChannelSizeGet              NOROM_uDMAChannelSizeGet
+#define uDMAChannelModeGet              NOROM_uDMAChannelModeGet
 #endif
 
 //*****************************************************************************
@@ -102,8 +102,8 @@ extern "C"
 //*****************************************************************************
 typedef struct
 {
-    volatile void *pvSrcEndAddr;   //!< The ending source address of the data transfer.
-    volatile void *pvDstEndAddr;   //!< The ending destination address of the data transfer.
+    volatile void* pvSrcEndAddr;   //!< The ending source address of the data transfer.
+    volatile void* pvDstEndAddr;   //!< The ending destination address of the data transfer.
     volatile uint32_t ui32Control; //!< The channel control mode.
     volatile uint32_t ui32Spare;   //!< An unused location.
 }
@@ -185,19 +185,19 @@ tDMAControlTable;
                             pvDstAddr,                                        \
                             ui32ArbSize,                                      \
                             ui32Mode)                                         \
-    {                                                                         \
-        (((ui32SrcIncrement) == UDMA_SRC_INC_NONE) ? (pvSrcAddr) :            \
-            ((void *)(&((uint8_t *)(pvSrcAddr))[((ui32TransferCount) <<       \
-                                         ((ui32SrcIncrement) >> 26)) - 1]))), \
-        (((ui32DstIncrement) == UDMA_DST_INC_NONE) ? (pvDstAddr) :            \
-            ((void *)(&((uint8_t *)(pvDstAddr))[((ui32TransferCount) <<       \
-                                         ((ui32DstIncrement) >> 30)) - 1]))), \
-        (ui32SrcIncrement) | (ui32DstIncrement) | (ui32ItemSize) |            \
-        (ui32ArbSize) | (((ui32TransferCount) - 1) << 4) |                    \
-        ((((ui32Mode) == UDMA_MODE_MEM_SCATTER_GATHER) ||                     \
-          ((ui32Mode) == UDMA_MODE_PER_SCATTER_GATHER)) ?                     \
-                (ui32Mode) | UDMA_MODE_ALT_SELECT : (ui32Mode)), 0            \
-    }
+{                                                                         \
+    (((ui32SrcIncrement) == UDMA_SRC_INC_NONE) ? (pvSrcAddr) :            \
+     ((void *)(&((uint8_t *)(pvSrcAddr))[((ui32TransferCount) <<       \
+                                                               ((ui32SrcIncrement) >> 26)) - 1]))), \
+    (((ui32DstIncrement) == UDMA_DST_INC_NONE) ? (pvDstAddr) :            \
+     ((void *)(&((uint8_t *)(pvDstAddr))[((ui32TransferCount) <<       \
+                                                               ((ui32DstIncrement) >> 30)) - 1]))), \
+    (ui32SrcIncrement) | (ui32DstIncrement) | (ui32ItemSize) |            \
+    (ui32ArbSize) | (((ui32TransferCount) - 1) << 4) |                    \
+    ((((ui32Mode) == UDMA_MODE_MEM_SCATTER_GATHER) ||                     \
+      ((ui32Mode) == UDMA_MODE_PER_SCATTER_GATHER)) ?                     \
+     (ui32Mode) | UDMA_MODE_ALT_SELECT : (ui32Mode)), 0            \
+}
 
 //*****************************************************************************
 //
@@ -237,9 +237,9 @@ tDMAControlTable;
 #define UDMA_MODE_AUTO          0x00000002
 #define UDMA_MODE_PINGPONG      0x00000003
 #define UDMA_MODE_MEM_SCATTER_GATHER                                          \
-                                0x00000004
+    0x00000004
 #define UDMA_MODE_PER_SCATTER_GATHER                                          \
-                                0x00000006
+    0x00000006
 #define UDMA_MODE_M             0x00000007  // uDMA Transfer Mode
 #define UDMA_MODE_ALT_SELECT    0x00000001
 
@@ -342,7 +342,7 @@ tDMAControlTable;
 static bool
 uDMABaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == UDMA0_BASE);
+    return (ui32Base == UDMA0_BASE);
 }
 #endif
 
@@ -410,7 +410,7 @@ uDMAErrorStatusGet(uint32_t ui32Base)
     ASSERT(uDMABaseValid(ui32Base));
 
     // Return the uDMA error status.
-    return(HWREG(ui32Base + UDMA_O_ERROR));
+    return (HWREG(ui32Base + UDMA_O_ERROR));
 }
 
 //*****************************************************************************
@@ -514,8 +514,8 @@ uDMAChannelIsEnabled(uint32_t ui32Base, uint32_t ui32ChannelNum)
 
     // AND the specified channel bit with the enable register, and return the
     // result.
-    return((HWREG(ui32Base + UDMA_O_SETCHANNELEN) & (1 << ui32ChannelNum)) ?
-           true : false);
+    return ((HWREG(ui32Base + UDMA_O_SETCHANNELEN) & (1 << ui32ChannelNum)) ?
+            true : false);
 }
 
 //*****************************************************************************
@@ -547,7 +547,7 @@ uDMAChannelIsEnabled(uint32_t ui32Base, uint32_t ui32ChannelNum)
 //
 //*****************************************************************************
 __STATIC_INLINE void
-uDMAControlBaseSet(uint32_t ui32Base, void *pControlTable)
+uDMAControlBaseSet(uint32_t ui32Base, void* pControlTable)
 {
     // Check the arguments.
     ASSERT(uDMABaseValid(ui32Base));
@@ -572,7 +572,7 @@ uDMAControlBaseSet(uint32_t ui32Base, void *pControlTable)
 //! \return Returns a pointer to the base address of the channel control table.
 //
 //*****************************************************************************
-__STATIC_INLINE void *
+__STATIC_INLINE void*
 uDMAControlBaseGet(uint32_t ui32Base)
 {
     // Check the arguments.
@@ -580,7 +580,7 @@ uDMAControlBaseGet(uint32_t ui32Base)
     ASSERT(uDMABaseValid(ui32Base));
     // Read the current value of the control base register, and return it to
     // the caller.
-    return((void *)HWREG(ui32Base + UDMA_O_CTRL));
+    return ((void*)HWREG(ui32Base + UDMA_O_CTRL));
 }
 
 //*****************************************************************************
@@ -596,7 +596,7 @@ uDMAControlBaseGet(uint32_t ui32Base)
 //! channel control table.
 //
 //*****************************************************************************
-__STATIC_INLINE void *
+__STATIC_INLINE void*
 uDMAControlAlternateBaseGet(uint32_t ui32Base)
 {
     // Check the arguments.
@@ -604,7 +604,7 @@ uDMAControlAlternateBaseGet(uint32_t ui32Base)
 
     // Read the current value of the control base register, and return it to
     // the caller.
-    return((void *)HWREG(ui32Base + UDMA_O_ALTCTRL));
+    return ((void*)HWREG(ui32Base + UDMA_O_ALTCTRL));
 }
 
 //*****************************************************************************
@@ -818,8 +818,8 @@ extern void uDMAChannelControlSet(uint32_t ui32Base,
 //*****************************************************************************
 extern void uDMAChannelTransferSet(uint32_t ui32Base,
                                    uint32_t ui32ChannelStructIndex,
-                                   uint32_t ui32Mode, void *pvSrcAddr,
-                                   void *pvDstAddr, uint32_t ui32TransferSize);
+                                   uint32_t ui32Mode, void* pvSrcAddr,
+                                   void* pvDstAddr, uint32_t ui32TransferSize);
 
 //*****************************************************************************
 //
@@ -852,7 +852,7 @@ extern void uDMAChannelTransferSet(uint32_t ui32Base,
 extern void uDMAChannelScatterGatherSet(uint32_t ui32Base,
                                         uint32_t ui32ChannelNum,
                                         uint32_t ui32TaskCount,
-                                        void *pvTaskList,
+                                        void* pvTaskList,
                                         uint32_t ui32IsPeriphSG);
 
 //*****************************************************************************
@@ -1150,8 +1150,8 @@ uDMAChannelPriorityGet(uint32_t ui32Base, uint32_t ui32ChannelNum)
     ASSERT(ui32ChannelNum < UDMA_NUM_CHANNELS);
 
     // Return the channel priority.
-    return(HWREG(ui32Base + UDMA_O_SETCHNLPRIORITY) & (1 << ui32ChannelNum) ?
-           UDMA_PRIORITY_HIGH : UDMA_PRIORITY_LOW);
+    return (HWREG(ui32Base + UDMA_O_SETCHNLPRIORITY) & (1 << ui32ChannelNum) ?
+            UDMA_PRIORITY_HIGH : UDMA_PRIORITY_LOW);
 }
 
 //*****************************************************************************
@@ -1185,39 +1185,39 @@ uDMAChannelPriorityClear(uint32_t ui32Base, uint32_t ui32ChannelNum)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_uDMAChannelAttributeEnable
-        #undef  uDMAChannelAttributeEnable
-        #define uDMAChannelAttributeEnable      ROM_uDMAChannelAttributeEnable
-    #endif
-    #ifdef ROM_uDMAChannelAttributeDisable
-        #undef  uDMAChannelAttributeDisable
-        #define uDMAChannelAttributeDisable     ROM_uDMAChannelAttributeDisable
-    #endif
-    #ifdef ROM_uDMAChannelAttributeGet
-        #undef  uDMAChannelAttributeGet
-        #define uDMAChannelAttributeGet         ROM_uDMAChannelAttributeGet
-    #endif
-    #ifdef ROM_uDMAChannelControlSet
-        #undef  uDMAChannelControlSet
-        #define uDMAChannelControlSet           ROM_uDMAChannelControlSet
-    #endif
-    #ifdef ROM_uDMAChannelTransferSet
-        #undef  uDMAChannelTransferSet
-        #define uDMAChannelTransferSet          ROM_uDMAChannelTransferSet
-    #endif
-    #ifdef ROM_uDMAChannelScatterGatherSet
-        #undef  uDMAChannelScatterGatherSet
-        #define uDMAChannelScatterGatherSet     ROM_uDMAChannelScatterGatherSet
-    #endif
-    #ifdef ROM_uDMAChannelSizeGet
-        #undef  uDMAChannelSizeGet
-        #define uDMAChannelSizeGet              ROM_uDMAChannelSizeGet
-    #endif
-    #ifdef ROM_uDMAChannelModeGet
-        #undef  uDMAChannelModeGet
-        #define uDMAChannelModeGet              ROM_uDMAChannelModeGet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_uDMAChannelAttributeEnable
+#undef  uDMAChannelAttributeEnable
+#define uDMAChannelAttributeEnable      ROM_uDMAChannelAttributeEnable
+#endif
+#ifdef ROM_uDMAChannelAttributeDisable
+#undef  uDMAChannelAttributeDisable
+#define uDMAChannelAttributeDisable     ROM_uDMAChannelAttributeDisable
+#endif
+#ifdef ROM_uDMAChannelAttributeGet
+#undef  uDMAChannelAttributeGet
+#define uDMAChannelAttributeGet         ROM_uDMAChannelAttributeGet
+#endif
+#ifdef ROM_uDMAChannelControlSet
+#undef  uDMAChannelControlSet
+#define uDMAChannelControlSet           ROM_uDMAChannelControlSet
+#endif
+#ifdef ROM_uDMAChannelTransferSet
+#undef  uDMAChannelTransferSet
+#define uDMAChannelTransferSet          ROM_uDMAChannelTransferSet
+#endif
+#ifdef ROM_uDMAChannelScatterGatherSet
+#undef  uDMAChannelScatterGatherSet
+#define uDMAChannelScatterGatherSet     ROM_uDMAChannelScatterGatherSet
+#endif
+#ifdef ROM_uDMAChannelSizeGet
+#undef  uDMAChannelSizeGet
+#define uDMAChannelSizeGet              ROM_uDMAChannelSizeGet
+#endif
+#ifdef ROM_uDMAChannelModeGet
+#undef  uDMAChannelModeGet
+#define uDMAChannelModeGet              ROM_uDMAChannelModeGet
+#endif
 #endif
 
 //*****************************************************************************

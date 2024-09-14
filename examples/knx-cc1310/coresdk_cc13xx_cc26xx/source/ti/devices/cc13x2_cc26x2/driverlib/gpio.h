@@ -79,8 +79,8 @@ dioNumberLegal( uint32_t dioNumber )
 {
     uint32_t ioCount =
         (( HWREG( FCFG1_BASE + FCFG1_O_IOCONF ) &
-            FCFG1_IOCONF_GPIO_CNT_M ) >>
-            FCFG1_IOCONF_GPIO_CNT_S ) ;
+           FCFG1_IOCONF_GPIO_CNT_M ) >>
+         FCFG1_IOCONF_GPIO_CNT_S ) ;
 
     // CC13x2 + CC26x2
     if ( ChipInfo_ChipFamilyIs_CC13x2_CC26x2() )

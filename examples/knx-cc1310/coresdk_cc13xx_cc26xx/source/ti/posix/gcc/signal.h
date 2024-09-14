@@ -39,7 +39,7 @@
 
 /* compiler vendor check */
 #ifndef __GNUC__
-#error Incompatible compiler: use this include path (.../ti/posix/gcc) only with a GNU compiler. You appear to be using a different compiler.
+    #error Incompatible compiler: use this include path (.../ti/posix/gcc) only with a GNU compiler. You appear to be using a different compiler.
 #endif
 
 #include "sys/types.h"
@@ -73,9 +73,10 @@ extern "C" {
 /*
  *  ======== sigval ========
  */
-union sigval {
+union sigval
+{
     int     sival_int;      /* integer signal value */
-    void   *sival_ptr;      /* pointer signal value */
+    void*   sival_ptr;      /* pointer signal value */
 };
 
 /*  Deprecated. This typedef is for compatibility with old SDKs. It is
@@ -87,13 +88,14 @@ typedef union sigval sigval;
 /*
  *  ======== sigevent ========
  */
-struct sigevent {
+struct sigevent
+{
     int             sigev_notify;       /* notification type */
     int             sigev_signo;        /* signal number */
     union sigval    sigev_value;        /* signal value */
 
     void (*sigev_notify_function)(union sigval val);    /* notify function */
-    pthread_attr_t *sigev_notify_attributes;            /* notify attributes */
+    pthread_attr_t* sigev_notify_attributes;            /* notify attributes */
 };
 
 /*  Deprecated. This typedef is for compatibility with old SDKs. It is

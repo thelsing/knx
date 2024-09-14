@@ -15,7 +15,8 @@ PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 PYBIND11_NAMESPACE_BEGIN(detail)
 
 /// Enumeration with all supported operator types
-enum op_id : int {
+enum op_id : int
+{
     op_add,
     op_sub,
     op_mul,
@@ -62,7 +63,8 @@ enum op_id : int {
     op_hash
 };
 
-enum op_type : int {
+enum op_type : int
+{
     op_l, /* base type on left */
     op_r, /* base type on right */
     op_u  /* unary operator */
@@ -75,7 +77,10 @@ static const self_t self = self_t();
 struct undefined_t {};
 
 /// Don't warn about an unused variable
-inline self_t __self() { return self; }
+inline self_t __self()
+{
+    return self;
+}
 
 /// base template of operator implementations
 template <op_id, op_type, typename B, typename L, typename R>
@@ -83,10 +88,12 @@ struct op_impl {};
 
 /// Operator implementation generator
 template <op_id id, op_type ot, typename L, typename R>
-struct op_ {
+struct op_
+{
     static constexpr bool op_enable_if_hook = true;
     template <typename Class, typename... Extra>
-    void execute(Class &cl, const Extra &...extra) const {
+    void execute(Class& cl, const Extra& ...extra) const
+    {
         using Base = typename Class::type;
         using L_type = conditional_t<std::is_same<L, self_t>::value, Base, L>;
         using R_type = conditional_t<std::is_same<R, self_t>::value, Base, R>;
@@ -94,7 +101,8 @@ struct op_ {
         cl.def(op::name(), &op::execute, is_operator(), extra...);
     }
     template <typename Class, typename... Extra>
-    void execute_cast(Class &cl, const Extra &...extra) const {
+    void execute_cast(Class& cl, const Extra& ...extra) const
+    {
         using Base = typename Class::type;
         using L_type = conditional_t<std::is_same<L, self_t>::value, Base, L>;
         using R_type = conditional_t<std::is_same<R, self_t>::value, Base, R>;
@@ -153,16 +161,16 @@ struct op_ {
 
 PYBIND11_BINARY_OPERATOR(sub, rsub, operator-, l - r)
 PYBIND11_BINARY_OPERATOR(add, radd, operator+, l + r)
-PYBIND11_BINARY_OPERATOR(mul, rmul, operator*, l *r)
+PYBIND11_BINARY_OPERATOR(mul, rmul, operator*, l* r)
 PYBIND11_BINARY_OPERATOR(truediv, rtruediv, operator/, l / r)
 PYBIND11_BINARY_OPERATOR(mod, rmod, operator%, l % r)
 PYBIND11_BINARY_OPERATOR(lshift, rlshift, operator<<, l << r)
 PYBIND11_BINARY_OPERATOR(rshift, rrshift, operator>>, l >> r)
-PYBIND11_BINARY_OPERATOR(and, rand, operator&, l &r)
-PYBIND11_BINARY_OPERATOR(xor, rxor, operator^, l ^ r)
+PYBIND11_BINARY_OPERATOR( and, rand, operator&, l& r)
+PYBIND11_BINARY_OPERATOR(xor, rxor, operator^, l^ r)
 PYBIND11_BINARY_OPERATOR(eq, eq, operator==, l == r)
 PYBIND11_BINARY_OPERATOR(ne, ne, operator!=, l != r)
-PYBIND11_BINARY_OPERATOR(or, ror, operator|, l | r)
+PYBIND11_BINARY_OPERATOR( or, ror, operator|, l | r)
 PYBIND11_BINARY_OPERATOR(gt, lt, operator>, l > r)
 PYBIND11_BINARY_OPERATOR(ge, le, operator>=, l >= r)
 PYBIND11_BINARY_OPERATOR(lt, gt, operator<, l < r)

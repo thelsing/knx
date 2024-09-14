@@ -69,45 +69,46 @@ extern "C"
 #endif
 
 
-CPE_PATCH_TYPE patchImageProp[] = {
-   0x21004059,
-   0x210040c3,
-   0x21004085,
-   0x79654c07,
-   0xf809f000,
-   0x40697961,
-   0xd5030749,
-   0x4a042101,
-   0x60110389,
-   0xb570bd70,
-   0x47084902,
-   0x21000380,
-   0x40041108,
-   0x0000592d,
-   0xf819f000,
-   0x296cb2e1,
-   0x2804d00b,
-   0x2806d001,
-   0x490ed107,
-   0x07c97809,
-   0x7821d103,
-   0xd4000709,
-   0x490b2002,
-   0x210c780a,
-   0xd0024211,
-   0x22804909,
-   0xb003600a,
-   0xb5f0bdf0,
-   0x4907b083,
-   0x48044708,
-   0x22407801,
-   0x70014391,
-   0x47004804,
-   0x210000c8,
-   0x21000133,
-   0xe000e200,
-   0x00031641,
-   0x00031b23,
+CPE_PATCH_TYPE patchImageProp[] =
+{
+    0x21004059,
+    0x210040c3,
+    0x21004085,
+    0x79654c07,
+    0xf809f000,
+    0x40697961,
+    0xd5030749,
+    0x4a042101,
+    0x60110389,
+    0xb570bd70,
+    0x47084902,
+    0x21000380,
+    0x40041108,
+    0x0000592d,
+    0xf819f000,
+    0x296cb2e1,
+    0x2804d00b,
+    0x2806d001,
+    0x490ed107,
+    0x07c97809,
+    0x7821d103,
+    0xd4000709,
+    0x490b2002,
+    0x210c780a,
+    0xd0024211,
+    0x22804909,
+    0xb003600a,
+    0xb5f0bdf0,
+    0x4907b083,
+    0x48044708,
+    0x22407801,
+    0x70014391,
+    0x47004804,
+    0x210000c8,
+    0x21000133,
+    0xe000e200,
+    0x00031641,
+    0x00031b23,
 };
 #define _NWORD_PATCHIMAGE_PROP 38
 
@@ -141,18 +142,18 @@ static uint8_t bPropPatchEntered = 0;
 PATCH_FUN_SPEC void enterPropCpePatch(void)
 {
 #if (_NWORD_PATCHIMAGE_PROP > 0)
-   uint32_t *pPatchVec = (uint32_t *) (_PROP_CPERAM_START + _PROP_PATCH_VEC_OFFSET);
+    uint32_t* pPatchVec = (uint32_t*) (_PROP_CPERAM_START + _PROP_PATCH_VEC_OFFSET);
 
-   memcpy(pPatchVec, patchImageProp, sizeof(patchImageProp));
+    memcpy(pPatchVec, patchImageProp, sizeof(patchImageProp));
 #endif
 }
 
 PATCH_FUN_SPEC void enterPropCpeHdPatch(void)
 {
 #if (_NWORD_PATCHCPEHD_PROP > 0)
-   uint32_t *pPatchCpeHd = (uint32_t *) (_PROP_CPERAM_START + _PROP_PATCH_CPEHD_OFFSET);
+    uint32_t* pPatchCpeHd = (uint32_t*) (_PROP_CPERAM_START + _PROP_PATCH_CPEHD_OFFSET);
 
-   memcpy(pPatchCpeHd, patchCpeHd, sizeof(patchCpeHd));
+    memcpy(pPatchCpeHd, patchCpeHd, sizeof(patchCpeHd));
 #endif
 }
 
@@ -162,47 +163,49 @@ PATCH_FUN_SPEC void enterPropSysPatch(void)
 
 PATCH_FUN_SPEC void configurePropPatch(void)
 {
-   uint8_t *pPatchTab = (uint8_t *) (_PROP_CPERAM_START + _PROP_PATCH_TAB_OFFSET);
+    uint8_t* pPatchTab = (uint8_t*) (_PROP_CPERAM_START + _PROP_PATCH_TAB_OFFSET);
 
 
-   pPatchTab[76] = 0;
-   pPatchTab[62] = 1;
-   pPatchTab[64] = 2;
+    pPatchTab[76] = 0;
+    pPatchTab[62] = 1;
+    pPatchTab[64] = 2;
 }
 
 PATCH_FUN_SPEC void applyPropPatch(void)
 {
 #ifdef _PROP_NO_PROG_STATE_VAR
-   enterPropSysPatch();
-   enterPropCpePatch();
+    enterPropSysPatch();
+    enterPropCpePatch();
 #else
-   if (!bPropPatchEntered)
-   {
-      enterPropSysPatch();
-      enterPropCpePatch();
-      bPropPatchEntered = 1;
-   }
+
+    if (!bPropPatchEntered)
+    {
+        enterPropSysPatch();
+        enterPropCpePatch();
+        bPropPatchEntered = 1;
+    }
+
 #endif
-   enterPropCpeHdPatch();
-   configurePropPatch();
+    enterPropCpeHdPatch();
+    configurePropPatch();
 }
 
 PATCH_FUN_SPEC void refreshPropPatch(void)
 {
-   enterPropCpeHdPatch();
-   configurePropPatch();
+    enterPropCpeHdPatch();
+    configurePropPatch();
 }
 
 #ifndef _PROP_NO_PROG_STATE_VAR
 PATCH_FUN_SPEC void cleanPropPatch(void)
 {
-   bPropPatchEntered = 0;
+    bPropPatchEntered = 0;
 }
 #endif
 
 PATCH_FUN_SPEC void rf_patch_cpe_prop(void)
 {
-   applyPropPatch();
+    applyPropPatch();
 }
 
 

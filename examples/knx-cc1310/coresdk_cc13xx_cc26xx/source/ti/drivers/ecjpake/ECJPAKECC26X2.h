@@ -118,7 +118,8 @@ extern "C" {
  *  The FSM controller will increment the state counter and iterate through
  *  states until it is told to stop or restart.
  */
-typedef enum ECJPAKECC26X2_FsmState_ {
+typedef enum ECJPAKECC26X2_FsmState_
+{
     ECJPAKECC26X2_FSM_ERROR = 0,
 
     ECJPAKECC26X2_FSM_ROUND_ONE_VALIDATE_MYPRIVATEKEY1,
@@ -193,7 +194,8 @@ typedef enum ECJPAKECC26X2_FsmState_ {
  *  ECJPAKECC26X2 hardware attributes should be included in the board file
  *  and pointed to by the ECJPAKE_config struct.
  */
-typedef struct ECJPAKECC26X2_HWAttrs_ {
+typedef struct ECJPAKECC26X2_HWAttrs_
+{
     /*! @brief PKA Peripheral's interrupt priority.
 
         The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
@@ -214,7 +216,8 @@ typedef struct ECJPAKECC26X2_HWAttrs_ {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct ECJPAKECC26X2_Object_ {
+typedef struct ECJPAKECC26X2_Object_
+{
     bool                                isOpen;
     bool                                operationInProgress;
     bool                                operationCanceled;

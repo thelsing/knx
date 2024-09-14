@@ -17,25 +17,39 @@
 #include <numeric>
 #include <utility>
 
-TEST_SUBMODULE(local_bindings, m) {
+TEST_SUBMODULE(local_bindings, m)
+{
     // test_load_external
-    m.def("load_external1", [](ExternalType1 &e) { return e.i; });
-    m.def("load_external2", [](ExternalType2 &e) { return e.i; });
+    m.def("load_external1", [](ExternalType1 & e)
+    {
+        return e.i;
+    });
+    m.def("load_external2", [](ExternalType2 & e)
+    {
+        return e.i;
+    });
 
     // test_local_bindings
     // Register a class with py::module_local:
-    bind_local<LocalType, -1>(m, "LocalType", py::module_local()).def("get3", [](LocalType &t) {
+    bind_local < LocalType, -1 > (m, "LocalType", py::module_local()).def("get3", [](LocalType & t)
+    {
         return t.i + 3;
     });
 
-    m.def("local_value", [](LocalType &l) { return l.i; });
+    m.def("local_value", [](LocalType & l)
+    {
+        return l.i;
+    });
 
     // test_nonlocal_failure
     // The main pybind11 test module is loaded first, so this registration will succeed (the second
     // one, in pybind11_cross_module_tests.cpp, is designed to fail):
     bind_local<NonLocalType, 0>(m, "NonLocalType")
-        .def(py::init<int>())
-        .def("get", [](LocalType &i) { return i.i; });
+    .def(py::init<int>())
+    .def("get", [](LocalType & i)
+    {
+        return i.i;
+    });
 
     // test_duplicate_local
     // py::module_local declarations should be visible across compilation units that get linked
@@ -43,11 +57,16 @@ TEST_SUBMODULE(local_bindings, m) {
     // test_class.cpp and should raise a runtime error from the duplicate definition attempt.  If
     // test_class isn't available it *also* throws a runtime error (with "test_class not enabled"
     // as value).
-    m.def("register_local_external", [m]() {
+    m.def("register_local_external", [m]()
+    {
         auto main = py::module_::import("pybind11_tests");
-        if (py::hasattr(main, "class_")) {
+
+        if (py::hasattr(main, "class_"))
+        {
             bind_local<LocalExternal, 7>(m, "LocalExternal", py::module_local());
-        } else {
+        }
+        else
+        {
             throw std::runtime_error("test_class not enabled");
         }
     });
@@ -69,38 +88,65 @@ TEST_SUBMODULE(local_bindings, m) {
     // test_mixed_local_global
     // We try this both with the global type registered first and vice versa (the order shouldn't
     // matter).
-    m.def("register_mixed_global", [m]() {
+    m.def("register_mixed_global", [m]()
+    {
         bind_local<MixedGlobalLocal, 100>(m, "MixedGlobalLocal", py::module_local(false));
     });
-    m.def("register_mixed_local", [m]() {
+    m.def("register_mixed_local", [m]()
+    {
         bind_local<MixedLocalGlobal, 1000>(m, "MixedLocalGlobal", py::module_local());
     });
-    m.def("get_mixed_gl", [](int i) { return MixedGlobalLocal(i); });
-    m.def("get_mixed_lg", [](int i) { return MixedLocalGlobal(i); });
+    m.def("get_mixed_gl", [](int i)
+    {
+        return MixedGlobalLocal(i);
+    });
+    m.def("get_mixed_lg", [](int i)
+    {
+        return MixedLocalGlobal(i);
+    });
 
     // test_internal_locals_differ
     m.def("local_cpp_types_addr",
-          []() { return (uintptr_t) &py::detail::get_local_internals().registered_types_cpp; });
+          []()
+    {
+        return (uintptr_t) &py::detail::get_local_internals().registered_types_cpp;
+    });
 
     // test_stl_caster_vs_stl_bind
     m.def("load_vector_via_caster",
-          [](std::vector<int> v) { return std::accumulate(v.begin(), v.end(), 0); });
+          [](std::vector<int> v)
+    {
+        return std::accumulate(v.begin(), v.end(), 0);
+    });
 
     // test_cross_module_calls
-    m.def("return_self", [](LocalVec *v) { return v; });
-    m.def("return_copy", [](const LocalVec &v) { return LocalVec(v); });
+    m.def("return_self", [](LocalVec * v)
+    {
+        return v;
+    });
+    m.def("return_copy", [](const LocalVec & v)
+    {
+        return LocalVec(v);
+    });
 
-    class Cat : public pets::Pet {
-    public:
-        explicit Cat(std::string name) : Pet(std::move(name)) {}
+    class Cat : public pets::Pet
+    {
+        public:
+            explicit Cat(std::string name) : Pet(std::move(name)) {}
     };
     py::class_<pets::Pet>(m, "Pet", py::module_local()).def("get_name", &pets::Pet::name);
     // Binding for local extending class:
     py::class_<Cat, pets::Pet>(m, "Cat").def(py::init<std::string>());
-    m.def("pet_name", [](pets::Pet &p) { return p.name(); });
+    m.def("pet_name", [](pets::Pet & p)
+    {
+        return p.name();
+    });
 
     py::class_<MixGL>(m, "MixGL").def(py::init<int>());
-    m.def("get_gl_value", [](MixGL &o) { return o.i + 10; });
+    m.def("get_gl_value", [](MixGL & o)
+    {
+        return o.i + 10;
+    });
 
     py::class_<MixGL2>(m, "MixGL2").def(py::init<int>());
 }

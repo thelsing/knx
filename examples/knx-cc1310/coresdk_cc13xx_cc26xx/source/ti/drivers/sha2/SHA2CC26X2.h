@@ -72,7 +72,8 @@ extern "C" {
  *  SHA2CC26X2 hardware attributes are used in the board file by the
  *  #SHA2_Config struct.
  */
-typedef struct {
+typedef struct
+{
     uint8_t    intPriority; /*!< Hardware interrupt priority of the Hash accelerator.
                              *
                              * The CC26XX provides 8 interrupt priority levels encoded in three bits:
@@ -100,7 +101,8 @@ typedef struct {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct {
+typedef struct
+{
     bool                            isOpen;
     volatile bool                   operationInProgress;
     bool                            operationCanceled;
@@ -134,7 +136,7 @@ typedef struct {
  * SHA2_Handle handle = SHA2_construct(&config, ...);
  *
  */
-SHA2_Handle SHA2CC26X2_construct(SHA2_Config *config, const SHA2_Params *params);
+SHA2_Handle SHA2CC26X2_construct(SHA2_Config* config, const SHA2_Params* params);
 
 /*! \endcond */
 

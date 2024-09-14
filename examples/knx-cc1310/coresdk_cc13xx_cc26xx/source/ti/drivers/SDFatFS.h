@@ -98,7 +98,8 @@ extern "C" {
  *  @brief SDFatFS Object
  *  The application must not access any member variables of this structure!
  */
-typedef struct SDFatFS_Object_ {
+typedef struct SDFatFS_Object_
+{
     uint_fast32_t driveNum;
     DSTATUS       diskState;
     FATFS         filesystem; /* FATFS data object */
@@ -108,7 +109,7 @@ typedef struct SDFatFS_Object_ {
 /*!
  *  @brief A handle that is returned from a SDFatFS_open() call.
  */
-typedef struct SDFatFS_Config_      *SDFatFS_Handle;
+typedef struct SDFatFS_Config_*      SDFatFS_Handle;
 
 
 /*!
@@ -122,9 +123,10 @@ typedef struct SDFatFS_Config_      *SDFatFS_Handle;
  *
  *  @sa SDFatFS_init()
  */
-typedef struct SDFatFS_Config_ {
+typedef struct SDFatFS_Config_
+{
     /*! Pointer to a SDFatFS object */
-    void       *object;
+    void*       object;
 } SDFatFS_Config;
 
 /*!

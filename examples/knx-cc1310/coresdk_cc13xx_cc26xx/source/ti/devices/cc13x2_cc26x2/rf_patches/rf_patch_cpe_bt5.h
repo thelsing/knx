@@ -69,44 +69,45 @@ extern "C"
 #endif
 
 
-CPE_PATCH_TYPE patchImageBt5[] = {
-   0x21004059,
-   0x210040a5,
-   0x21004085,
-   0x79654c07,
-   0xf809f000,
-   0x40697961,
-   0xd5030749,
-   0x4a042101,
-   0x60110389,
-   0xb570bd70,
-   0x47084902,
-   0x21000380,
-   0x40041108,
-   0x0000592d,
-   0x21014805,
-   0x438a6802,
-   0x6b836002,
-   0x6383438b,
-   0x6002430a,
-   0x47004801,
-   0x40046000,
-   0x00005b3f,
-   0x490cb510,
-   0x4a0c4788,
-   0x5e512106,
-   0xd0072900,
-   0xd0052902,
-   0xd0032909,
-   0xd0012910,
-   0xd1072911,
-   0x43c92177,
-   0xdd014288,
-   0xdd012800,
-   0x43c0207f,
-   0x0000bd10,
-   0x000065a9,
-   0x21000380,
+CPE_PATCH_TYPE patchImageBt5[] =
+{
+    0x21004059,
+    0x210040a5,
+    0x21004085,
+    0x79654c07,
+    0xf809f000,
+    0x40697961,
+    0xd5030749,
+    0x4a042101,
+    0x60110389,
+    0xb570bd70,
+    0x47084902,
+    0x21000380,
+    0x40041108,
+    0x0000592d,
+    0x21014805,
+    0x438a6802,
+    0x6b836002,
+    0x6383438b,
+    0x6002430a,
+    0x47004801,
+    0x40046000,
+    0x00005b3f,
+    0x490cb510,
+    0x4a0c4788,
+    0x5e512106,
+    0xd0072900,
+    0xd0052902,
+    0xd0032909,
+    0xd0012910,
+    0xd1072911,
+    0x43c92177,
+    0xdd014288,
+    0xdd012800,
+    0x43c0207f,
+    0x0000bd10,
+    0x000065a9,
+    0x21000380,
 };
 #define _NWORD_PATCHIMAGE_BT5 37
 
@@ -140,18 +141,18 @@ static uint8_t bBt5PatchEntered = 0;
 PATCH_FUN_SPEC void enterBt5CpePatch(void)
 {
 #if (_NWORD_PATCHIMAGE_BT5 > 0)
-   uint32_t *pPatchVec = (uint32_t *) (_BT5_CPERAM_START + _BT5_PATCH_VEC_OFFSET);
+    uint32_t* pPatchVec = (uint32_t*) (_BT5_CPERAM_START + _BT5_PATCH_VEC_OFFSET);
 
-   memcpy(pPatchVec, patchImageBt5, sizeof(patchImageBt5));
+    memcpy(pPatchVec, patchImageBt5, sizeof(patchImageBt5));
 #endif
 }
 
 PATCH_FUN_SPEC void enterBt5CpeHdPatch(void)
 {
 #if (_NWORD_PATCHCPEHD_BT5 > 0)
-   uint32_t *pPatchCpeHd = (uint32_t *) (_BT5_CPERAM_START + _BT5_PATCH_CPEHD_OFFSET);
+    uint32_t* pPatchCpeHd = (uint32_t*) (_BT5_CPERAM_START + _BT5_PATCH_CPEHD_OFFSET);
 
-   memcpy(pPatchCpeHd, patchCpeHd, sizeof(patchCpeHd));
+    memcpy(pPatchCpeHd, patchCpeHd, sizeof(patchCpeHd));
 #endif
 }
 
@@ -161,47 +162,49 @@ PATCH_FUN_SPEC void enterBt5SysPatch(void)
 
 PATCH_FUN_SPEC void configureBt5Patch(void)
 {
-   uint8_t *pPatchTab = (uint8_t *) (_BT5_CPERAM_START + _BT5_PATCH_TAB_OFFSET);
+    uint8_t* pPatchTab = (uint8_t*) (_BT5_CPERAM_START + _BT5_PATCH_TAB_OFFSET);
 
 
-   pPatchTab[76] = 0;
-   pPatchTab[91] = 1;
-   pPatchTab[79] = 2;
+    pPatchTab[76] = 0;
+    pPatchTab[91] = 1;
+    pPatchTab[79] = 2;
 }
 
 PATCH_FUN_SPEC void applyBt5Patch(void)
 {
 #ifdef _BT5_NO_PROG_STATE_VAR
-   enterBt5SysPatch();
-   enterBt5CpePatch();
+    enterBt5SysPatch();
+    enterBt5CpePatch();
 #else
-   if (!bBt5PatchEntered)
-   {
-      enterBt5SysPatch();
-      enterBt5CpePatch();
-      bBt5PatchEntered = 1;
-   }
+
+    if (!bBt5PatchEntered)
+    {
+        enterBt5SysPatch();
+        enterBt5CpePatch();
+        bBt5PatchEntered = 1;
+    }
+
 #endif
-   enterBt5CpeHdPatch();
-   configureBt5Patch();
+    enterBt5CpeHdPatch();
+    configureBt5Patch();
 }
 
 PATCH_FUN_SPEC void refreshBt5Patch(void)
 {
-   enterBt5CpeHdPatch();
-   configureBt5Patch();
+    enterBt5CpeHdPatch();
+    configureBt5Patch();
 }
 
 #ifndef _BT5_NO_PROG_STATE_VAR
 PATCH_FUN_SPEC void cleanBt5Patch(void)
 {
-   bBt5PatchEntered = 0;
+    bBt5PatchEntered = 0;
 }
 #endif
 
 PATCH_FUN_SPEC void rf_patch_cpe_bt5(void)
 {
-   applyBt5Patch();
+    applyBt5Patch();
 }
 
 

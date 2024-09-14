@@ -244,7 +244,7 @@ EventSwEventGet(uint32_t ui32SwEvent)
     ASSERT( ui32SwEvent <= 3 );
 
     // Each software event is byte accessible
-    return( HWREGB(EVENT_BASE + EVENT_O_SWEV + ui32SwEvent));
+    return ( HWREGB(EVENT_BASE + EVENT_O_SWEV + ui32SwEvent));
 }
 
 //*****************************************************************************

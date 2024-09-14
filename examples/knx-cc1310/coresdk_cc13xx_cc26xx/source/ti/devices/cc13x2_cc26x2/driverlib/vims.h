@@ -80,10 +80,10 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define VIMSConfigure                   NOROM_VIMSConfigure
-    #define VIMSModeSet                     NOROM_VIMSModeSet
-    #define VIMSModeGet                     NOROM_VIMSModeGet
-    #define VIMSModeSafeSet                 NOROM_VIMSModeSafeSet
+#define VIMSConfigure                   NOROM_VIMSConfigure
+#define VIMSModeSet                     NOROM_VIMSModeSet
+#define VIMSModeGet                     NOROM_VIMSModeGet
+#define VIMSModeSafeSet                 NOROM_VIMSModeSafeSet
 #endif
 
 //*****************************************************************************
@@ -93,7 +93,7 @@ extern "C"
 //
 //*****************************************************************************
 #define VIMS_MODE_CHANGING 0x4                   // VIMS mode is changing now and VIMS_MODE
-                                                 // can not be changed at moment.
+// can not be changed at moment.
 #define VIMS_MODE_DISABLED (VIMS_CTL_MODE_GPRAM) // Disabled mode (GPRAM enabled).
 #define VIMS_MODE_ENABLED  (VIMS_CTL_MODE_CACHE) // Enabled mode, only USERCODE is cached.
 #define VIMS_MODE_OFF      (VIMS_CTL_MODE_OFF)   // VIMS Cache RAM is off
@@ -120,7 +120,7 @@ extern "C"
 static bool
 VIMSBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == VIMS_BASE);
+    return (ui32Base == VIMS_BASE);
 }
 #endif
 
@@ -277,8 +277,8 @@ extern uint32_t VIMSModeGet(uint32_t ui32Base);
 //! \sa \ref VIMSModeSet() and \ref VIMSModeGet()
 //
 //*****************************************************************************
-extern void VIMSModeSafeSet( uint32_t ui32Base    ,
-                             uint32_t ui32NewMode ,
+extern void VIMSModeSafeSet( uint32_t ui32Base,
+                             uint32_t ui32NewMode,
                              bool     blocking    );
 
 //*****************************************************************************
@@ -300,7 +300,7 @@ VIMSLineBufDisable(uint32_t ui32Base)
 {
     // Disable line buffers
     HWREG(ui32Base + VIMS_O_CTL) |= VIMS_CTL_IDCODE_LB_DIS_M |
-                                        VIMS_CTL_SYSBUS_LB_DIS_M;
+                                    VIMS_CTL_SYSBUS_LB_DIS_M;
 }
 
 //*****************************************************************************
@@ -322,7 +322,7 @@ VIMSLineBufEnable(uint32_t ui32Base)
 {
     // Enable linebuffers
     HWREG(ui32Base + VIMS_O_CTL) &= ~(VIMS_CTL_IDCODE_LB_DIS_M |
-                                          VIMS_CTL_SYSBUS_LB_DIS_M);
+                                      VIMS_CTL_SYSBUS_LB_DIS_M);
 }
 
 //*****************************************************************************
@@ -332,23 +332,23 @@ VIMSLineBufEnable(uint32_t ui32Base)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_VIMSConfigure
-        #undef  VIMSConfigure
-        #define VIMSConfigure                   ROM_VIMSConfigure
-    #endif
-    #ifdef ROM_VIMSModeSet
-        #undef  VIMSModeSet
-        #define VIMSModeSet                     ROM_VIMSModeSet
-    #endif
-    #ifdef ROM_VIMSModeGet
-        #undef  VIMSModeGet
-        #define VIMSModeGet                     ROM_VIMSModeGet
-    #endif
-    #ifdef ROM_VIMSModeSafeSet
-        #undef  VIMSModeSafeSet
-        #define VIMSModeSafeSet                 ROM_VIMSModeSafeSet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_VIMSConfigure
+#undef  VIMSConfigure
+#define VIMSConfigure                   ROM_VIMSConfigure
+#endif
+#ifdef ROM_VIMSModeSet
+#undef  VIMSModeSet
+#define VIMSModeSet                     ROM_VIMSModeSet
+#endif
+#ifdef ROM_VIMSModeGet
+#undef  VIMSModeGet
+#define VIMSModeGet                     ROM_VIMSModeGet
+#endif
+#ifdef ROM_VIMSModeSafeSet
+#undef  VIMSModeSafeSet
+#define VIMSModeSafeSet                 ROM_VIMSModeSafeSet
+#endif
 #endif
 
 //*****************************************************************************

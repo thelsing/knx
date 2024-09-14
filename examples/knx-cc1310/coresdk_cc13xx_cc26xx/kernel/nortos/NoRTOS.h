@@ -153,7 +153,8 @@
  *  changed should be set and given to the NoRTOS framework by calling
  *  NoRTOS_setConfig().
  */
-typedef struct _NoRTOS_Config {
+typedef struct _NoRTOS_Config
+{
     /*! Function that is called when a TI Driver "suspends" its operation */
     void (*idleCallback)(void);
 
@@ -171,7 +172,7 @@ typedef struct _NoRTOS_Config {
  *  @param  cfg    Pointer to a NoRTOS_Config structure in which to store
  *                 the current configuration values
  */
-void NoRTOS_getConfig(NoRTOS_Config *cfg);
+void NoRTOS_getConfig(NoRTOS_Config* cfg);
 
 /*!
  *  @brief  Function to set or modify NoRTOS configuration values
@@ -179,7 +180,7 @@ void NoRTOS_getConfig(NoRTOS_Config *cfg);
  *  @param  cfg    Pointer to a NoRTOS_Config structure from which NoRTOS
  *                 configuration values are set
  */
-void NoRTOS_setConfig(NoRTOS_Config *cfg);
+void NoRTOS_setConfig(NoRTOS_Config* cfg);
 
 /*
  *  @brief  Function to call for enabling NoRTOS system operation

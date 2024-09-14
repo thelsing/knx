@@ -9,7 +9,8 @@
 
 #include "pybind11_tests.h"
 
-TEST_SUBMODULE(docstring_options, m) {
+TEST_SUBMODULE(docstring_options, m)
+{
     // test_docstring_options
     {
         py::options options;
@@ -41,10 +42,10 @@ TEST_SUBMODULE(docstring_options, m) {
             nested_options.enable_user_defined_docstrings();
             m.def(
                 "test_function6",
-                [](int, int) {},
-                py::arg("a"),
-                py::arg("b"),
-                "A custom docstring");
+            [](int, int) {},
+            py::arg("a"),
+            py::arg("b"),
+            "A custom docstring");
         }
     }
 
@@ -62,24 +63,31 @@ TEST_SUBMODULE(docstring_options, m) {
         py::options options;
         options.disable_user_defined_docstrings();
 
-        struct DocstringTestFoo {
+        struct DocstringTestFoo
+        {
             int value;
-            void setValue(int v) { value = v; }
-            int getValue() const { return value; }
+            void setValue(int v)
+            {
+                value = v;
+            }
+            int getValue() const
+            {
+                return value;
+            }
         };
         py::class_<DocstringTestFoo>(m, "DocstringTestFoo", "This is a class docstring")
-            .def_property("value_prop",
-                          &DocstringTestFoo::getValue,
-                          &DocstringTestFoo::setValue,
-                          "This is a property docstring");
+        .def_property("value_prop",
+                      &DocstringTestFoo::getValue,
+                      &DocstringTestFoo::setValue,
+                      "This is a property docstring");
     }
 
     {
         enum class DocstringTestEnum1 { Member1, Member2 };
 
         py::enum_<DocstringTestEnum1>(m, "DocstringTestEnum1", "Enum docstring")
-            .value("Member1", DocstringTestEnum1::Member1)
-            .value("Member2", DocstringTestEnum1::Member2);
+        .value("Member1", DocstringTestEnum1::Member1)
+        .value("Member2", DocstringTestEnum1::Member2);
     }
 
     {
@@ -89,8 +97,8 @@ TEST_SUBMODULE(docstring_options, m) {
         enum class DocstringTestEnum2 { Member1, Member2 };
 
         py::enum_<DocstringTestEnum2>(m, "DocstringTestEnum2", "Enum docstring")
-            .value("Member1", DocstringTestEnum2::Member1)
-            .value("Member2", DocstringTestEnum2::Member2);
+        .value("Member1", DocstringTestEnum2::Member1)
+        .value("Member2", DocstringTestEnum2::Member2);
     }
 
     {
@@ -100,8 +108,8 @@ TEST_SUBMODULE(docstring_options, m) {
         enum class DocstringTestEnum3 { Member1, Member2 };
 
         py::enum_<DocstringTestEnum3>(m, "DocstringTestEnum3", "Enum docstring")
-            .value("Member1", DocstringTestEnum3::Member1)
-            .value("Member2", DocstringTestEnum3::Member2);
+        .value("Member1", DocstringTestEnum3::Member1)
+        .value("Member2", DocstringTestEnum3::Member2);
     }
 
     {
@@ -111,8 +119,8 @@ TEST_SUBMODULE(docstring_options, m) {
         enum class DocstringTestEnum4 { Member1, Member2 };
 
         py::enum_<DocstringTestEnum4>(m, "DocstringTestEnum4", "Enum docstring")
-            .value("Member1", DocstringTestEnum4::Member1)
-            .value("Member2", DocstringTestEnum4::Member2);
+        .value("Member1", DocstringTestEnum4::Member1)
+        .value("Member2", DocstringTestEnum4::Member2);
     }
 
     {
@@ -123,7 +131,7 @@ TEST_SUBMODULE(docstring_options, m) {
         enum class DocstringTestEnum5 { Member1, Member2 };
 
         py::enum_<DocstringTestEnum5>(m, "DocstringTestEnum5", "Enum docstring")
-            .value("Member1", DocstringTestEnum5::Member1)
-            .value("Member2", DocstringTestEnum5::Member2);
+        .value("Member1", DocstringTestEnum5::Member1)
+        .value("Member2", DocstringTestEnum5::Member2);
     }
 }

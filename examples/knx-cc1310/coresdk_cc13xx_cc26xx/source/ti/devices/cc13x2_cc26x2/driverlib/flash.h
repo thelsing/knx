@@ -84,15 +84,15 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define FlashPowerModeSet               NOROM_FlashPowerModeSet
-    #define FlashPowerModeGet               NOROM_FlashPowerModeGet
-    #define FlashProtectionSet              NOROM_FlashProtectionSet
-    #define FlashProtectionGet              NOROM_FlashProtectionGet
-    #define FlashProtectionSave             NOROM_FlashProtectionSave
-    #define FlashSectorErase                NOROM_FlashSectorErase
-    #define FlashProgram                    NOROM_FlashProgram
-    #define FlashEfuseReadRow               NOROM_FlashEfuseReadRow
-    #define FlashDisableSectorsForWrite     NOROM_FlashDisableSectorsForWrite
+#define FlashPowerModeSet               NOROM_FlashPowerModeSet
+#define FlashPowerModeGet               NOROM_FlashPowerModeGet
+#define FlashProtectionSet              NOROM_FlashProtectionSet
+#define FlashProtectionGet              NOROM_FlashProtectionGet
+#define FlashProtectionSave             NOROM_FlashProtectionSave
+#define FlashSectorErase                NOROM_FlashSectorErase
+#define FlashProgram                    NOROM_FlashProgram
+#define FlashEfuseReadRow               NOROM_FlashEfuseReadRow
+#define FlashDisableSectorsForWrite     NOROM_FlashDisableSectorsForWrite
 #endif
 
 //*****************************************************************************
@@ -104,7 +104,7 @@ extern "C"
 #define FAPI_STATUS_FSM_BUSY    0x00000001  // FSM is Busy
 #define FAPI_STATUS_FSM_READY   0x00000002  // FSM is Ready
 #define FAPI_STATUS_INCORRECT_DATABUFFER_LENGTH \
-                                0x00000003  // Incorrect parameter value
+    0x00000003  // Incorrect parameter value
 #define FAPI_STATUS_FSM_ERROR   0x00000004  // Operation failed
 
 //*****************************************************************************
@@ -124,7 +124,7 @@ extern "C"
 #define FLASH_PWR_ACTIVE_MODE   0x00000000
 #define FLASH_PWR_OFF_MODE      0x00000001
 #define FLASH_PWR_DEEP_STDBY_MODE \
-                                0x00000002
+    0x00000002
 
 //*****************************************************************************
 //
@@ -133,7 +133,7 @@ extern "C"
 //*****************************************************************************
 #define FLASH_NO_PROTECT        0x00000000 // Sector not protected
 #define FLASH_WRITE_PROTECT     0x00000001 // Sector erase and program
-                                           // protected
+// protected
 
 //*****************************************************************************
 //
@@ -255,7 +255,7 @@ FlashSectorSizeGet(void)
                             FLASH_FCFG_B0_SSIZE0_B0_SECT_SIZE_S;
 
     // Return flash sector size in number of bytes.
-    return(ui32SectorSizeInKbyte * 1024);
+    return (ui32SectorSizeInKbyte * 1024);
 }
 
 //*****************************************************************************
@@ -278,7 +278,7 @@ FlashSizeGet(void)
                       FLASH_FLASH_SIZE_SECTORS_S;
 
     // Return flash size in number of bytes
-    return(ui32NoOfSectors * FlashSectorSizeGet());
+    return (ui32NoOfSectors * FlashSectorSizeGet());
 }
 
 //*****************************************************************************
@@ -419,13 +419,13 @@ extern uint32_t FlashProtectionSave(uint32_t ui32SectorAddress);
 __STATIC_INLINE uint32_t
 FlashCheckFsmForError(void)
 {
-    if(HWREG(FLASH_BASE + FLASH_O_FMSTAT) & FLASH_FMSTAT_CSTAT)
+    if (HWREG(FLASH_BASE + FLASH_O_FMSTAT) & FLASH_FMSTAT_CSTAT)
     {
-        return(FAPI_STATUS_FSM_ERROR);
+        return (FAPI_STATUS_FSM_ERROR);
     }
     else
     {
-        return(FAPI_STATUS_SUCCESS);
+        return (FAPI_STATUS_SUCCESS);
     }
 }
 
@@ -449,13 +449,13 @@ FlashCheckFsmForError(void)
 __STATIC_INLINE uint32_t
 FlashCheckFsmForReady(void)
 {
-    if(HWREG(FLASH_BASE + FLASH_O_STAT) & FLASH_STAT_BUSY)
+    if (HWREG(FLASH_BASE + FLASH_O_STAT) & FLASH_STAT_BUSY)
     {
-        return(FAPI_STATUS_FSM_BUSY);
+        return (FAPI_STATUS_FSM_BUSY);
     }
     else
     {
-        return(FAPI_STATUS_FSM_READY);
+        return (FAPI_STATUS_FSM_READY);
     }
 }
 
@@ -577,18 +577,18 @@ FlashIntStatus(void)
     ui32IntFlags = 0;
 
     // Check if FSM_DONE interrupt status is set.
-    if(HWREG(FLASH_BASE + FLASH_O_FEDACSTAT) & FLASH_FEDACSTAT_FSM_DONE)
+    if (HWREG(FLASH_BASE + FLASH_O_FEDACSTAT) & FLASH_FEDACSTAT_FSM_DONE)
     {
         ui32IntFlags = FLASH_INT_FSM_DONE;
     }
 
     // Check if RVF_INT interrupt status is set.
-    if(HWREG(FLASH_BASE + FLASH_O_FEDACSTAT) & FLASH_FEDACSTAT_RVF_INT)
+    if (HWREG(FLASH_BASE + FLASH_O_FEDACSTAT) & FLASH_FEDACSTAT_RVF_INT)
     {
         ui32IntFlags |= FLASH_INT_RV;
     }
 
-    return(ui32IntFlags);
+    return (ui32IntFlags);
 }
 
 //*****************************************************************************
@@ -629,12 +629,12 @@ FlashIntClear(uint32_t ui32IntFlags)
 
     ui32TempVal = 0;
 
-    if(ui32IntFlags & FLASH_INT_FSM_DONE)
+    if (ui32IntFlags & FLASH_INT_FSM_DONE)
     {
         ui32TempVal = FLASH_FEDACSTAT_FSM_DONE;
     }
 
-    if(ui32IntFlags & FLASH_INT_RV)
+    if (ui32IntFlags & FLASH_INT_RV)
     {
         ui32TempVal |= FLASH_FEDACSTAT_RVF_INT;
     }
@@ -711,7 +711,7 @@ extern uint32_t FlashSectorErase(uint32_t ui32SectorAddress);
 //! - \ref FAPI_STATUS_FSM_ERROR                   : A programming error is encountered.
 //
 //*****************************************************************************
-extern uint32_t FlashProgram(uint8_t *pui8DataBuffer,
+extern uint32_t FlashProgram(uint8_t* pui8DataBuffer,
                              uint32_t ui32Address, uint32_t ui32Count);
 
 //*****************************************************************************
@@ -730,7 +730,7 @@ extern uint32_t FlashProgram(uint8_t *pui8DataBuffer,
 //! - \c true  : Error status
 //
 //*****************************************************************************
-extern bool FlashEfuseReadRow(uint32_t *pui32EfuseData,
+extern bool FlashEfuseReadRow(uint32_t* pui32EfuseData,
                               uint32_t ui32RowAddress);
 
 //*****************************************************************************
@@ -758,43 +758,43 @@ extern void FlashDisableSectorsForWrite(void);
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_FlashPowerModeSet
-        #undef  FlashPowerModeSet
-        #define FlashPowerModeSet               ROM_FlashPowerModeSet
-    #endif
-    #ifdef ROM_FlashPowerModeGet
-        #undef  FlashPowerModeGet
-        #define FlashPowerModeGet               ROM_FlashPowerModeGet
-    #endif
-    #ifdef ROM_FlashProtectionSet
-        #undef  FlashProtectionSet
-        #define FlashProtectionSet              ROM_FlashProtectionSet
-    #endif
-    #ifdef ROM_FlashProtectionGet
-        #undef  FlashProtectionGet
-        #define FlashProtectionGet              ROM_FlashProtectionGet
-    #endif
-    #ifdef ROM_FlashProtectionSave
-        #undef  FlashProtectionSave
-        #define FlashProtectionSave             ROM_FlashProtectionSave
-    #endif
-    #ifdef ROM_FlashSectorErase
-        #undef  FlashSectorErase
-        #define FlashSectorErase                ROM_FlashSectorErase
-    #endif
-    #ifdef ROM_FlashProgram
-        #undef  FlashProgram
-        #define FlashProgram                    ROM_FlashProgram
-    #endif
-    #ifdef ROM_FlashEfuseReadRow
-        #undef  FlashEfuseReadRow
-        #define FlashEfuseReadRow               ROM_FlashEfuseReadRow
-    #endif
-    #ifdef ROM_FlashDisableSectorsForWrite
-        #undef  FlashDisableSectorsForWrite
-        #define FlashDisableSectorsForWrite     ROM_FlashDisableSectorsForWrite
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_FlashPowerModeSet
+#undef  FlashPowerModeSet
+#define FlashPowerModeSet               ROM_FlashPowerModeSet
+#endif
+#ifdef ROM_FlashPowerModeGet
+#undef  FlashPowerModeGet
+#define FlashPowerModeGet               ROM_FlashPowerModeGet
+#endif
+#ifdef ROM_FlashProtectionSet
+#undef  FlashProtectionSet
+#define FlashProtectionSet              ROM_FlashProtectionSet
+#endif
+#ifdef ROM_FlashProtectionGet
+#undef  FlashProtectionGet
+#define FlashProtectionGet              ROM_FlashProtectionGet
+#endif
+#ifdef ROM_FlashProtectionSave
+#undef  FlashProtectionSave
+#define FlashProtectionSave             ROM_FlashProtectionSave
+#endif
+#ifdef ROM_FlashSectorErase
+#undef  FlashSectorErase
+#define FlashSectorErase                ROM_FlashSectorErase
+#endif
+#ifdef ROM_FlashProgram
+#undef  FlashProgram
+#define FlashProgram                    ROM_FlashProgram
+#endif
+#ifdef ROM_FlashEfuseReadRow
+#undef  FlashEfuseReadRow
+#define FlashEfuseReadRow               ROM_FlashEfuseReadRow
+#endif
+#ifdef ROM_FlashDisableSectorsForWrite
+#undef  FlashDisableSectorsForWrite
+#define FlashDisableSectorsForWrite     ROM_FlashDisableSectorsForWrite
+#endif
 #endif
 
 //*****************************************************************************

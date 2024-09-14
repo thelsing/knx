@@ -303,7 +303,7 @@ extern "C" {
 /*!
  *  @brief    A handle that is returned from an ADCBuf_open() call.
  */
-typedef struct ADCBuf_Config    *ADCBuf_Handle;
+typedef struct ADCBuf_Config*    ADCBuf_Handle;
 
 /*!
  *  @brief  Defines a conversion to be used with ADCBuf_convert().
@@ -327,7 +327,7 @@ typedef struct
      * (#ADCBuf_Conversion.samplesRequestedCount * 2) bytes. When using
      * #ADCBuf_RECURRENCE_MODE_ONE_SHOT, only this buffer is used.
      */
-    void     *sampleBuffer;
+    void*     sampleBuffer;
 
     /*!
      * Buffer to store ADCBuf conversion results. This buffer must be at least
@@ -338,7 +338,7 @@ typedef struct
      *
      * @sa  #ADCBuf_RECURRENCE_MODE_CONTINUOUS
      */
-    void     *sampleBufferTwo;
+    void*     sampleBufferTwo;
 
     /*!
      * Pointer to a custom argument to be passed to the #ADCBuf_Callback
@@ -350,7 +350,7 @@ typedef struct
      * @sa  #ADCBuf_RETURN_MODE_CALLBACK
      * @sa  #ADCBuf_Callback
      */
-    void     *arg;
+    void*     arg;
 
     /*!
      * ADCBuf channel to perform conversions on. Mapping of channel to pin or
@@ -389,8 +389,8 @@ typedef struct
  *  @sa ADCBuf_RETURN_MODE_CALLBACK
  */
 typedef void (*ADCBuf_Callback) (ADCBuf_Handle handle,
-                                 ADCBuf_Conversion *conversion,
-                                 void *completedADCBuffer,
+                                 ADCBuf_Conversion* conversion,
+                                 void* completedADCBuffer,
                                  uint32_t completedChannel);
 
 /*!
@@ -515,7 +515,7 @@ typedef struct
     ADCBuf_Recurrence_Mode recurrenceMode;
 
     /*! Pointer to a device specific extension of the #ADCBuf_Params */
-    void *custom;
+    void* custom;
 } ADCBuf_Params;
 
 /*!
@@ -531,7 +531,7 @@ typedef void (*ADCBuf_CloseFxn) (ADCBuf_Handle handle);
  *              ADCBuf_open().
  */
 typedef ADCBuf_Handle (*ADCBuf_OpenFxn) (ADCBuf_Handle handle,
-                                         const ADCBuf_Params *params);
+        const ADCBuf_Params* params);
 
 /*!
  *  @private
@@ -539,8 +539,8 @@ typedef ADCBuf_Handle (*ADCBuf_OpenFxn) (ADCBuf_Handle handle,
  *              ADCBuf_control().
  */
 typedef int_fast16_t (*ADCBuf_ControlFxn) (ADCBuf_Handle handle,
-                                           uint_fast8_t cmd,
-                                           void *arg);
+        uint_fast8_t cmd,
+        void* arg);
 /*!
  *  @private
  *  @brief      A function pointer to a driver specific implementation of
@@ -554,8 +554,8 @@ typedef void (*ADCBuf_InitFxn) (ADCBuf_Handle handle);
  *              ADCBuf_convert().
  */
 typedef int_fast16_t (*ADCBuf_ConvertFxn) (ADCBuf_Handle handle,
-                                           ADCBuf_Conversion conversions[],
-                                           uint_fast8_t channelCount);
+        ADCBuf_Conversion conversions[],
+        uint_fast8_t channelCount);
 /*!
  *  @private
  *  @brief      A function pointer to a driver specific implementation of
@@ -576,9 +576,9 @@ typedef uint_fast8_t (*ADCBuf_GetResolutionFxn) (ADCBuf_Handle handle);
  *              ADCBuf_adjustRawValues();
  */
 typedef int_fast16_t (*ADCBuf_adjustRawValuesFxn)(ADCBuf_Handle handle,
-                                                  void *sampleBuffer,
-                                                  uint_fast16_t sampleCount,
-                                                  uint32_t adcChannel);
+        void* sampleBuffer,
+        uint_fast16_t sampleCount,
+        uint32_t adcChannel);
 
 /*!
  *  @private
@@ -586,11 +586,11 @@ typedef int_fast16_t (*ADCBuf_adjustRawValuesFxn)(ADCBuf_Handle handle,
  *              ADCBuf_convertAdjustedToMicroVolts();
  */
 typedef int_fast16_t (*ADCBuf_convertAdjustedToMicroVoltsFxn) (
-                                               ADCBuf_Handle handle,
-                                               uint32_t adcChannel,
-                                               void *adjustedSampleBuffer,
-                                               uint32_t outputMicroVoltBuffer[],
-                                               uint_fast16_t sampleCount);
+    ADCBuf_Handle handle,
+    uint32_t adcChannel,
+    void* adjustedSampleBuffer,
+    uint32_t outputMicroVoltBuffer[],
+    uint_fast16_t sampleCount);
 
 /*!
  *  @brief      The definition of an ADCBuf function table that contains the
@@ -632,14 +632,14 @@ typedef struct ADCBuf_Config
 {
     /*! Pointer to a @ref driver_function_table "function pointer table"
      *  with driver-specific implementations of ADC APIs */
-    const ADCBuf_FxnTable *fxnTablePtr;
+    const ADCBuf_FxnTable* fxnTablePtr;
 
     /*! Pointer to a driver specific @ref driver_objects "data object". */
-    void                  *object;
+    void*                  object;
 
     /*! Pointer to a driver specific @ref driver_hardware_attributes
      *  "hardware attributes structure". */
-    void const            *hwAttrs;
+    void const*            hwAttrs;
 } ADCBuf_Config;
 
 /*!
@@ -679,7 +679,7 @@ extern void ADCBuf_close(ADCBuf_Handle handle);
  */
 extern int_fast16_t ADCBuf_control(ADCBuf_Handle handle,
                                    uint_fast16_t cmd,
-                                   void *cmdArg);
+                                   void* cmdArg);
 
 /*!
  *  @brief  Function to initialize the ADCBuf driver.
@@ -702,7 +702,7 @@ extern void ADCBuf_init(void);
  *  @arg #ADCBuf_Params.samplingFrequency = 10000,
  *  @arg #ADCBuf_Params.custom            = NULL
  */
-extern void ADCBuf_Params_init(ADCBuf_Params *params);
+extern void ADCBuf_Params_init(ADCBuf_Params* params);
 
 /*!
  *  @brief  This function opens a given ADCBuf peripheral.
@@ -716,7 +716,7 @@ extern void ADCBuf_Params_init(ADCBuf_Params *params);
  *
  *  @sa     ADCBuf_close()
  */
-extern ADCBuf_Handle ADCBuf_open(uint_least8_t index, ADCBuf_Params *params);
+extern ADCBuf_Handle ADCBuf_open(uint_least8_t index, ADCBuf_Params* params);
 
 /*!
  *  @brief  Starts ADCBuf conversions on one or more channels.
@@ -771,59 +771,59 @@ extern int_fast16_t ADCBuf_convertCancel(ADCBuf_Handle handle);
  */
 extern uint_fast8_t ADCBuf_getResolution(ADCBuf_Handle handle);
 
- /*!
- *  @brief  Adjust a raw ADC output buffer. The function does
- *          the adjustment in-place.
- *
- *  @param[in]  handle          An ADCBuf_Handle returned from ADCBuf_open().
- *
- *  @param[in,out]  sampleBuf   A buffer full of raw sample values.
- *
- *  @param[in]  sampleCount     The number of samples to adjust.
- *
- *  @param[in]  adcChan         The channel the buffer was sampled on.
- *
- *  @retval #ADCBuf_STATUS_SUCCESS The operation was successful.
- *          @p sampleBuf contains valid values.
- *
- *  @retval #ADCBuf_STATUS_ERROR if an error occurred.
- *
- *  @retval #ADCBuf_STATUS_UNSUPPORTED The function is not supported by the
- *                                     device specific implementation.
- *
- *  @pre    ADCBuf_convert() must have returned a valid buffer with samples.
- */
+/*!
+*  @brief  Adjust a raw ADC output buffer. The function does
+*          the adjustment in-place.
+*
+*  @param[in]  handle          An ADCBuf_Handle returned from ADCBuf_open().
+*
+*  @param[in,out]  sampleBuf   A buffer full of raw sample values.
+*
+*  @param[in]  sampleCount     The number of samples to adjust.
+*
+*  @param[in]  adcChan         The channel the buffer was sampled on.
+*
+*  @retval #ADCBuf_STATUS_SUCCESS The operation was successful.
+*          @p sampleBuf contains valid values.
+*
+*  @retval #ADCBuf_STATUS_ERROR if an error occurred.
+*
+*  @retval #ADCBuf_STATUS_UNSUPPORTED The function is not supported by the
+*                                     device specific implementation.
+*
+*  @pre    ADCBuf_convert() must have returned a valid buffer with samples.
+*/
 extern int_fast16_t ADCBuf_adjustRawValues(ADCBuf_Handle handle,
-                                           void *sampleBuf,
-                                           uint_fast16_t sampleCount,
-                                           uint32_t adcChan);
+        void* sampleBuf,
+        uint_fast16_t sampleCount,
+        uint32_t adcChan);
 
- /*!
- *  @brief  Convert an adjusted ADC output buffer to microvolts.
- *
- *  @param[in]  handle    An ADCBuf_Handle returned from ADCBuf_open()
- *
- *  @param[in]  adcChan    The ADC channel the samples were performed on.
- *
- *  @param[in]  adjustedSampleBuffer    A buffer full of adjusted samples.
- *
- *  @param[in,out]  outputMicroVoltBuffer    The output buffer.
- *
- *  @param[in]  sampleCount    The number of samples to convert.
- *
- *  @retval #ADCBuf_STATUS_SUCCESS    The operation was successful.
- *          @p outputMicroVoltBuffer contains valid values.
- *
- *  @retval  #ADCBuf_STATUS_ERROR    The operation failed.
- *
- *  @pre  ADCBuf_adjustRawValues() must be called on @p adjustedSampleBuffer.
- */
+/*!
+*  @brief  Convert an adjusted ADC output buffer to microvolts.
+*
+*  @param[in]  handle    An ADCBuf_Handle returned from ADCBuf_open()
+*
+*  @param[in]  adcChan    The ADC channel the samples were performed on.
+*
+*  @param[in]  adjustedSampleBuffer    A buffer full of adjusted samples.
+*
+*  @param[in,out]  outputMicroVoltBuffer    The output buffer.
+*
+*  @param[in]  sampleCount    The number of samples to convert.
+*
+*  @retval #ADCBuf_STATUS_SUCCESS    The operation was successful.
+*          @p outputMicroVoltBuffer contains valid values.
+*
+*  @retval  #ADCBuf_STATUS_ERROR    The operation failed.
+*
+*  @pre  ADCBuf_adjustRawValues() must be called on @p adjustedSampleBuffer.
+*/
 extern int_fast16_t ADCBuf_convertAdjustedToMicroVolts(
-                                            ADCBuf_Handle handle,
-                                            uint32_t  adcChan,
-                                            void *adjustedSampleBuffer,
-                                            uint32_t outputMicroVoltBuffer[],
-                                            uint_fast16_t sampleCount);
+    ADCBuf_Handle handle,
+    uint32_t  adcChan,
+    void* adjustedSampleBuffer,
+    uint32_t outputMicroVoltBuffer[],
+    uint_fast16_t sampleCount);
 
 #ifdef __cplusplus
 }

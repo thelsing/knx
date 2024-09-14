@@ -81,8 +81,8 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AUXTDCConfigSet                 NOROM_AUXTDCConfigSet
-    #define AUXTDCMeasurementDone           NOROM_AUXTDCMeasurementDone
+#define AUXTDCConfigSet                 NOROM_AUXTDCConfigSet
+#define AUXTDCMeasurementDone           NOROM_AUXTDCMeasurementDone
 #endif
 
 //*****************************************************************************
@@ -304,7 +304,7 @@ extern "C"
 static bool
 AUXTDCBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == AUX_TDC_BASE);
+    return (ui32Base == AUX_TDC_BASE);
 }
 #endif
 
@@ -338,8 +338,8 @@ AUXTDCStatusGet(uint32_t ui32Base)
     ASSERT(AUXTDCBaseValid(ui32Base));
 
     // Return the status value for the correct ADI Slave.
-    return((HWREG(ui32Base + AUX_TDC_O_STAT) & AUX_TDC_STAT_STATE_M) >>
-           AUX_TDC_STAT_STATE_S);
+    return ((HWREG(ui32Base + AUX_TDC_O_STAT) & AUX_TDC_STAT_STATE_M) >>
+            AUX_TDC_STAT_STATE_S);
 }
 
 //*****************************************************************************
@@ -748,7 +748,7 @@ AUXTDCCounterEnable(uint32_t ui32Base)
 
     // Check if the AUX TDC is in idle mode. If not in Idle mode, the counter
     // will not be enabled.
-    if(!((HWREG(ui32Base + AUX_TDC_O_STAT) & AUX_TDC_STAT_STATE_M) ==
+    if (!((HWREG(ui32Base + AUX_TDC_O_STAT) & AUX_TDC_STAT_STATE_M) ==
             AUX_TDC_STAT_STATE_IDLE))
     {
         return false;
@@ -784,7 +784,7 @@ AUXTDCCounterDisable(uint32_t ui32Base)
 
     // Check if the AUX TDC is in Idle mode. If not in Idle mode, the counter
     // will not be disabled.
-    if(!((HWREG(ui32Base + AUX_TDC_O_STAT) & AUX_TDC_STAT_STATE_M) ==
+    if (!((HWREG(ui32Base + AUX_TDC_O_STAT) & AUX_TDC_STAT_STATE_M) ==
             AUX_TDC_STAT_STATE_IDLE))
     {
         return false;
@@ -825,7 +825,7 @@ AUXTDCCounterSet(uint32_t ui32Base, uint32_t ui32Events)
 
     // Check if the AUX TDC is in idle mode. If not in idle mode, the counter
     // will not be disabled.
-    if(!((HWREG(ui32Base + AUX_TDC_O_STAT) & AUX_TDC_STAT_STATE_M) ==
+    if (!((HWREG(ui32Base + AUX_TDC_O_STAT) & AUX_TDC_STAT_STATE_M) ==
             AUX_TDC_STAT_STATE_IDLE))
     {
         return false;
@@ -873,15 +873,15 @@ AUXTDCCounterGet(uint32_t ui32Base)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AUXTDCConfigSet
-        #undef  AUXTDCConfigSet
-        #define AUXTDCConfigSet                 ROM_AUXTDCConfigSet
-    #endif
-    #ifdef ROM_AUXTDCMeasurementDone
-        #undef  AUXTDCMeasurementDone
-        #define AUXTDCMeasurementDone           ROM_AUXTDCMeasurementDone
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AUXTDCConfigSet
+#undef  AUXTDCConfigSet
+#define AUXTDCConfigSet                 ROM_AUXTDCConfigSet
+#endif
+#ifdef ROM_AUXTDCMeasurementDone
+#undef  AUXTDCMeasurementDone
+#define AUXTDCMeasurementDone           ROM_AUXTDCMeasurementDone
+#endif
 #endif
 
 //*****************************************************************************

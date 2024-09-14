@@ -160,7 +160,7 @@ extern uint32_t Random_getNumber(void);
  *  @pre Random_seedAutomatic()
  *  @pre Random_seedManual()
  */
-extern void Random_getBytes(void *buffer, size_t bufferSize);
+extern void Random_getBytes(void* buffer, size_t bufferSize);
 
 
 #ifdef __cplusplus

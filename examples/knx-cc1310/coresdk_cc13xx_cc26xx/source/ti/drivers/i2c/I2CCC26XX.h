@@ -377,7 +377,8 @@ extern const I2C_FxnTable I2CCC26XX_fxnTable;
  *  handle = I2C_open(Board_I2C, &i2cParams);
  *  @endcode
  */
-typedef struct I2CCC26XX_I2CPinCfg {
+typedef struct I2CCC26XX_I2CPinCfg
+{
     uint8_t pinSDA;
     uint8_t pinSCL;
 } I2CCC26XX_I2CPinCfg;
@@ -389,7 +390,8 @@ typedef struct I2CCC26XX_I2CPinCfg {
  *  This enum defines the state of the I2C driver's state-machine. Do not
  *  modify.
  */
-typedef enum I2CCC26XX_Mode {
+typedef enum I2CCC26XX_Mode
+{
     I2CCC26XX_IDLE_MODE = 0,  /* I2C is not performing a transaction */
     I2CCC26XX_WRITE_MODE,     /* I2C is currently performing write operations */
     I2CCC26XX_READ_MODE,      /* I2C is currently performing read operations */
@@ -437,7 +439,8 @@ typedef enum I2CCC26XX_Mode {
  *  };
  *  @endcode
  */
-typedef struct I2CCC26XX_HWAttrsV1 {
+typedef struct I2CCC26XX_HWAttrsV1
+{
     /*! I2C peripheral's base address */
     I2CBaseAddrType     baseAddr;
     /*! I2C peripheral's Power driver ID */
@@ -475,7 +478,8 @@ typedef struct I2CCC26XX_HWAttrsV1 {
  *  I2CCC26XX Object.  The application must not access any member variables
  *  of this structure!
  */
-typedef struct I2CCC26XX_Object {
+typedef struct I2CCC26XX_Object
+{
     /* I2C control variables */
     I2C_TransferMode    transferMode;        /*!< Blocking or Callback mode */
     I2C_CallbackFxn     transferCallbackFxn; /*!< Callback function pointer */
@@ -493,18 +497,18 @@ typedef struct I2CCC26XX_Object {
     PIN_Handle          hPin;
 
     /* I2C current transaction */
-    I2C_Transaction     *currentTransaction; /*!< Ptr to current I2C transaction */
-    uint8_t             *writeBufIdx;        /*!< Internal inc. writeBuf index */
+    I2C_Transaction*     currentTransaction; /*!< Ptr to current I2C transaction */
+    uint8_t*             writeBufIdx;        /*!< Internal inc. writeBuf index */
     unsigned int        writeCountIdx;       /*!< Internal dec. writeCounter */
-    uint8_t             *readBufIdx;         /*!< Internal inc. readBuf index */
+    uint8_t*             readBufIdx;         /*!< Internal inc. readBuf index */
     unsigned int        readCountIdx;        /*!< Internal dec. readCounter */
 
     /* I2C transaction pointers for I2C_MODE_CALLBACK */
-    I2C_Transaction     *headPtr;            /*!< Head ptr for queued transactions */
-    I2C_Transaction     *tailPtr;            /*!< Tail ptr for queued transactions */
+    I2C_Transaction*     headPtr;            /*!< Head ptr for queued transactions */
+    I2C_Transaction*     tailPtr;            /*!< Tail ptr for queued transactions */
 
     /* I2C power notification */
-    void                *i2cPostFxn;        /*!< I2C post-notification Function pointer */
+    void*                i2cPostFxn;        /*!< I2C post-notification Function pointer */
     Power_NotifyObj     i2cPostObj;         /*!< I2C post-notification object */
 
     bool                isOpen;             /*!< flag to indicate module is open */

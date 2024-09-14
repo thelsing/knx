@@ -9,14 +9,16 @@
 
 #include "pybind11_tests.h"
 
-TEST_SUBMODULE(union_, m) {
-    union TestUnion {
+TEST_SUBMODULE(union_, m)
+{
+    union TestUnion
+    {
         int value_int;
         unsigned value_uint;
     };
 
     py::class_<TestUnion>(m, "TestUnion")
-        .def(py::init<>())
-        .def_readonly("as_int", &TestUnion::value_int)
-        .def_readwrite("as_uint", &TestUnion::value_uint);
+    .def(py::init<>())
+    .def_readonly("as_int", &TestUnion::value_int)
+    .def_readwrite("as_uint", &TestUnion::value_uint);
 }

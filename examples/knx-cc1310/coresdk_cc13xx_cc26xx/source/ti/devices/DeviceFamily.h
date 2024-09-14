@@ -92,85 +92,85 @@ extern "C" {
  * multiple DeviceFamily_XYZ are defined, the first one encountered is used.
  */
 #if defined(DeviceFamily_CC13X0)
-    #define DeviceFamily_ID             DeviceFamily_ID_CC13X0
-    #define DeviceFamily_DIRECTORY      cc13x0
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X0_CC26X0
+#define DeviceFamily_ID             DeviceFamily_ID_CC13X0
+#define DeviceFamily_DIRECTORY      cc13x0
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X0_CC26X0
 
 #elif defined(DeviceFamily_CC13X2)
-    #define DeviceFamily_ID             DeviceFamily_ID_CC13X2
-    #define DeviceFamily_DIRECTORY      cc13x2_cc26x2
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X2_CC26X2
+#define DeviceFamily_ID             DeviceFamily_ID_CC13X2
+#define DeviceFamily_DIRECTORY      cc13x2_cc26x2
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X2_CC26X2
 
 #elif defined(DeviceFamily_CC26X0)
-    #define DeviceFamily_ID             DeviceFamily_ID_CC26X0
-    #define DeviceFamily_DIRECTORY      cc26x0
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X0_CC26X0
+#define DeviceFamily_ID             DeviceFamily_ID_CC26X0
+#define DeviceFamily_DIRECTORY      cc26x0
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X0_CC26X0
 
 #elif defined(DeviceFamily_CC26X0R2)
-    #define DeviceFamily_ID             DeviceFamily_ID_CC26X0R2
-    #define DeviceFamily_DIRECTORY      cc26x0r2
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X0_CC26X0
+#define DeviceFamily_ID             DeviceFamily_ID_CC26X0R2
+#define DeviceFamily_DIRECTORY      cc26x0r2
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X0_CC26X0
 
 #elif defined(DeviceFamily_CC26X2)
-    #define DeviceFamily_ID             DeviceFamily_ID_CC26X2
-    #define DeviceFamily_DIRECTORY      cc13x2_cc26x2
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X2_CC26X2
+#define DeviceFamily_ID             DeviceFamily_ID_CC26X2
+#define DeviceFamily_DIRECTORY      cc13x2_cc26x2
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_CC13X2_CC26X2
 
 #elif defined(DeviceFamily_CC3200)
-    #define DeviceFamily_ID             DeviceFamily_ID_CC3200
-    #define DeviceFamily_DIRECTORY      cc32xx
+#define DeviceFamily_ID             DeviceFamily_ID_CC3200
+#define DeviceFamily_DIRECTORY      cc32xx
 
 #elif defined(DeviceFamily_CC3220)
-    #define DeviceFamily_ID             DeviceFamily_ID_CC3220
-    #define DeviceFamily_DIRECTORY      cc32xx
+#define DeviceFamily_ID             DeviceFamily_ID_CC3220
+#define DeviceFamily_DIRECTORY      cc32xx
 
 #elif defined(DeviceFamily_MSP432P401x) || defined(__MSP432P401R__)
-    #define DeviceFamily_ID             DeviceFamily_ID_MSP432P401x
-    #define DeviceFamily_DIRECTORY      msp432p4xx
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432P401R
-    #if !defined(__MSP432P401R__)
-        #define __MSP432P401R__
-    #endif
+#define DeviceFamily_ID             DeviceFamily_ID_MSP432P401x
+#define DeviceFamily_DIRECTORY      msp432p4xx
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432P401R
+#if !defined(__MSP432P401R__)
+#define __MSP432P401R__
+#endif
 
 #elif defined(DeviceFamily_MSP432P4x1xI)
-    #define DeviceFamily_ID             DeviceFamily_ID_MSP432P4x1xI
-    #define DeviceFamily_DIRECTORY      msp432p4xx
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432P4111
-    #if !defined(__MSP432P4111__)
-        #define __MSP432P4111__
-    #endif
+#define DeviceFamily_ID             DeviceFamily_ID_MSP432P4x1xI
+#define DeviceFamily_DIRECTORY      msp432p4xx
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432P4111
+#if !defined(__MSP432P4111__)
+#define __MSP432P4111__
+#endif
 
 #elif defined(DeviceFamily_MSP432P4x1xT)
-    #define DeviceFamily_ID             DeviceFamily_ID_MSP432P4x1xT
-    #define DeviceFamily_DIRECTORY      msp432p4xx
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432P4111
-    #if !defined(__MSP432P4111__)
-        #define __MSP432P4111__
-    #endif
+#define DeviceFamily_ID             DeviceFamily_ID_MSP432P4x1xT
+#define DeviceFamily_DIRECTORY      msp432p4xx
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432P4111
+#if !defined(__MSP432P4111__)
+#define __MSP432P4111__
+#endif
 
 #elif defined(DeviceFamily_MSP432E401Y)
-    #define DeviceFamily_ID             DeviceFamily_ID_MSP432E401Y
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432E4X1Y
-    #define DeviceFamily_DIRECTORY      msp432e4
-    #if !defined(__MSP432E401Y__)
-        #define __MSP432E401Y__
-    #endif
+#define DeviceFamily_ID             DeviceFamily_ID_MSP432E401Y
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432E4X1Y
+#define DeviceFamily_DIRECTORY      msp432e4
+#if !defined(__MSP432E401Y__)
+#define __MSP432E401Y__
+#endif
 
 #elif defined(DeviceFamily_MSP432E411Y)
-    #define DeviceFamily_ID             DeviceFamily_ID_MSP432E411Y
-    #define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432E4X1Y
-    #define DeviceFamily_DIRECTORY      msp432e4
-    #if !defined(__MSP432E411Y__)
-        #define __MSP432E411Y__
-    #endif
+#define DeviceFamily_ID             DeviceFamily_ID_MSP432E411Y
+#define DeviceFamily_PARENT         DeviceFamily_PARENT_MSP432E4X1Y
+#define DeviceFamily_DIRECTORY      msp432e4
+#if !defined(__MSP432E411Y__)
+#define __MSP432E411Y__
+#endif
 #elif defined(DeviceFamily_MTL)
-    #define DeviceFamily_ID             DeviceFamily_ID_MTL
-    #define DeviceFamily_DIRECTORY      mtxx
-    #if !defined(__MTL__)
-        #define __MTL__
-    #endif
+#define DeviceFamily_ID             DeviceFamily_ID_MTL
+#define DeviceFamily_DIRECTORY      mtxx
+#if !defined(__MTL__)
+#define __MTL__
+#endif
 #else
-    #error "DeviceFamily_XYZ undefined. You must define a DeviceFamily_XYZ!"
+#error "DeviceFamily_XYZ undefined. You must define a DeviceFamily_XYZ!"
 #endif
 
 /* Ensure that only one DeviceFamily was specified */
@@ -183,7 +183,7 @@ extern "C" {
     + defined(DeviceFamily_MSP432E411Y)                                      \
     + defined(DeviceFamily_MTL)                                              \
     ) > 1
-    #error More then one DeviceFamily has been defined!
+#error More then one DeviceFamily has been defined!
 #endif
 
 /*!

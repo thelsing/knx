@@ -19,10 +19,10 @@ using namespace Knx;
 volatile sig_atomic_t loopActive = 1;
 void signalHandler(int sig)
 {
-  (void)sig;
+    (void)sig;
 
-  // can be called asynchronously
-  loopActive = 0;
+    // can be called asynchronously
+    loopActive = 0;
 }
 
 bool sendHidReport(uint8_t* data, uint16_t length)
@@ -35,11 +35,11 @@ bool isSendHidReportPossible()
 }
 
 #if MASK_VERSION == 0x091A
-KnxFacade<LinuxPlatform, Bau091A> knx; // IP/TP1 coupler
+    KnxFacade<LinuxPlatform, Bau091A> knx; // IP/TP1 coupler
 #elif MASK_VERSION == 0x2920
-KnxFacade<LinuxPlatform, Bau2920> knx; // TP1/RF coupler
+    KnxFacade<LinuxPlatform, Bau2920> knx; // TP1/RF coupler
 #else
-#error Mask version not supported yet!
+    #error Mask version not supported yet!
 #endif
 
 void appLoop()
@@ -62,10 +62,11 @@ void setup()
     }
     else
         println("not configured");
+
     knx.start();
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     printf("main() start.\n");
 
@@ -91,12 +92,14 @@ int main(int argc, char **argv)
     knx.platform().cmdLineArgs(argc, argv);
 
     setup();
-    
+
     while (loopActive)
     {
         knx.loop();
-        if(knx.configured())
+
+        if (knx.configured())
             appLoop();
+
         delayMicroseconds(100);
     }
 

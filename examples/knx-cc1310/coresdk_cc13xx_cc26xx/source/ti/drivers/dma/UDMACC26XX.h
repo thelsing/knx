@@ -155,24 +155,24 @@ extern "C" {
 
 /*! Base address for the DMA control table, must be 1024 bytes aligned */
 #if !defined(UDMACC26XX_CONFIG_BASE) && (DeviceFamily_PARENT == DeviceFamily_PARENT_CC13X2_CC26X2)
-    #define UDMACC26XX_CONFIG_BASE 0x20001800
+#define UDMACC26XX_CONFIG_BASE 0x20001800
 #elif !defined(UDMACC26XX_CONFIG_BASE)
-    #define UDMACC26XX_CONFIG_BASE 0x20000400
+#define UDMACC26XX_CONFIG_BASE 0x20000400
 #endif
 
 /*! Make sure DMA control table base address is 1024 bytes aligned */
 #if(UDMACC26XX_CONFIG_BASE & 0x3FF)
-    #error "Base address for DMA control table 'UDMACC26XX_CONFIG_BASE' must be 1024 bytes aligned."
+#error "Base address for DMA control table 'UDMACC26XX_CONFIG_BASE' must be 1024 bytes aligned."
 #endif
 
 /*! Compiler specific macros to allocate DMA control table entries */
 #if defined(__IAR_SYSTEMS_ICC__)
 #define ALLOCATE_CONTROL_TABLE_ENTRY(ENTRY_NAME, CHANNEL_INDEX) \
-__no_init static volatile tDMAControlTable ENTRY_NAME @ UDMACC26XX_CONFIG_BASE + CHANNEL_INDEX * sizeof(tDMAControlTable)
+    __no_init static volatile tDMAControlTable ENTRY_NAME @ UDMACC26XX_CONFIG_BASE + CHANNEL_INDEX * sizeof(tDMAControlTable)
 #elif defined(__TI_COMPILER_VERSION__)
 #define ALLOCATE_CONTROL_TABLE_ENTRY(ENTRY_NAME, CHANNEL_INDEX) \
-PRAGMA(LOCATION( ENTRY_NAME , UDMACC26XX_CONFIG_BASE + CHANNEL_INDEX * sizeof(tDMAControlTable) );)\
-static volatile tDMAControlTable ENTRY_NAME
+    PRAGMA(LOCATION( ENTRY_NAME , UDMACC26XX_CONFIG_BASE + CHANNEL_INDEX * sizeof(tDMAControlTable) );)\
+    static volatile tDMAControlTable ENTRY_NAME
 #define PRAGMA(x) _Pragma(#x)
 #elif defined(__GNUC__)
 #define ALLOCATE_CONTROL_TABLE_ENTRY(ENTRY_NAME, CHANNEL_INDEX) \
@@ -189,7 +189,8 @@ static volatile tDMAControlTable ENTRY_NAME
 /*!
  *  @brief  UDMACC26XX object
  */
-typedef struct UDMACC26XX_Object {
+typedef struct UDMACC26XX_Object
+{
     bool             isOpen;           /*!< Flag for open/close status */
     HwiP_Struct hwi;  /*!< Embedded Hwi Object */
 } UDMACC26XX_Object;
@@ -197,7 +198,8 @@ typedef struct UDMACC26XX_Object {
 /*!
  *  @brief  UDMACC26XX hardware attributes
  */
-typedef struct UDMACC26XX_HWAttrs {
+typedef struct UDMACC26XX_HWAttrs
+{
     uint32_t        baseAddr;    /*!< Base adddress for UDMACC26XX */
     PowerCC26XX_Resource  powerMngrId; /*!< UDMACC26XX Peripheral's power manager ID */
     uint8_t         intNum;      /*!< UDMACC26XX error interrupt number */
@@ -228,15 +230,16 @@ typedef struct UDMACC26XX_HWAttrs {
 /*!
  *  @brief      UDMACC26XX Global configuration
  */
-typedef struct UDMACC26XX_Config {
-    void              *object;            /*!< Pointer to UDMACC26XX object */
-    void const        *hwAttrs;           /*!< Pointer to hardware attribute */
+typedef struct UDMACC26XX_Config
+{
+    void*              object;            /*!< Pointer to UDMACC26XX object */
+    void const*        hwAttrs;           /*!< Pointer to hardware attribute */
 } UDMACC26XX_Config;
 
 /*!
  *  @brief      A handle that is returned from a UDMACC26XX_open() call.
  */
-typedef struct UDMACC26XX_Config      *UDMACC26XX_Handle;
+typedef struct UDMACC26XX_Config*      UDMACC26XX_Handle;
 
 /* Extern'd hwiIntFxn */
 extern void UDMACC26XX_hwiIntFxn(uintptr_t callbacks);
@@ -255,10 +258,10 @@ extern void UDMACC26XX_hwiIntFxn(uintptr_t callbacks);
  */
 __STATIC_INLINE void UDMACC26XX_init(UDMACC26XX_Handle handle)
 {
-    UDMACC26XX_Object           *object;
+    UDMACC26XX_Object*           object;
 
     /* Get the pointer to the object */
-    object = (UDMACC26XX_Object *)(handle->object);
+    object = (UDMACC26XX_Object*)(handle->object);
 
     /* mark the module as available */
     object->isOpen = false;
@@ -296,10 +299,10 @@ extern UDMACC26XX_Handle UDMACC26XX_open();
  */
 __STATIC_INLINE void UDMACC26XX_channelEnable(UDMACC26XX_Handle handle, uint32_t channelBitMask)
 {
-    UDMACC26XX_HWAttrs const *hwAttrs;
+    UDMACC26XX_HWAttrs const* hwAttrs;
 
     /* Get the pointer to the hwAttrs */
-    hwAttrs = (UDMACC26XX_HWAttrs *)(handle->hwAttrs);
+    hwAttrs = (UDMACC26XX_HWAttrs*)(handle->hwAttrs);
 
     /* Enable DMA channel */
     HWREG(hwAttrs->baseAddr + UDMA_O_SETCHANNELEN) = channelBitMask;
@@ -325,10 +328,10 @@ __STATIC_INLINE void UDMACC26XX_channelEnable(UDMACC26XX_Handle handle, uint32_t
  */
 __STATIC_INLINE bool UDMACC26XX_channelDone(UDMACC26XX_Handle handle, uint32_t channelBitMask)
 {
-    UDMACC26XX_HWAttrs const *hwAttrs;
+    UDMACC26XX_HWAttrs const* hwAttrs;
 
     /* Get the pointer to the hwAttrs */
-    hwAttrs = (UDMACC26XX_HWAttrs *)(handle->hwAttrs);
+    hwAttrs = (UDMACC26XX_HWAttrs*)(handle->hwAttrs);
 
     /* Check if REQDONE is set for a specific channel */
     return (uDMAIntStatus(hwAttrs->baseAddr) & channelBitMask) ? true : false;
@@ -353,10 +356,10 @@ __STATIC_INLINE bool UDMACC26XX_channelDone(UDMACC26XX_Handle handle, uint32_t c
  */
 __STATIC_INLINE void UDMACC26XX_clearInterrupt(UDMACC26XX_Handle handle, uint32_t channelBitMask)
 {
-    UDMACC26XX_HWAttrs const *hwAttrs;
+    UDMACC26XX_HWAttrs const* hwAttrs;
 
     /* Get the pointer to the hwAttrs and object */
-    hwAttrs = (UDMACC26XX_HWAttrs *)(handle->hwAttrs);
+    hwAttrs = (UDMACC26XX_HWAttrs*)(handle->hwAttrs);
 
     /* Clear UDMA done interrupt */
     uDMAIntClear(hwAttrs->baseAddr, channelBitMask);
@@ -381,7 +384,7 @@ __STATIC_INLINE void UDMACC26XX_clearInterrupt(UDMACC26XX_Handle handle, uint32_
  */
 __STATIC_INLINE void UDMACC26XX_channelDisable(UDMACC26XX_Handle handle, uint32_t channelBitMask)
 {
-    UDMACC26XX_HWAttrs const *hwAttrs = handle->hwAttrs;
+    UDMACC26XX_HWAttrs const* hwAttrs = handle->hwAttrs;
 
     HWREG(hwAttrs->baseAddr + UDMA_O_CLEARCHANNELEN) = channelBitMask;
 }
@@ -407,9 +410,9 @@ __STATIC_INLINE void UDMACC26XX_channelDisable(UDMACC26XX_Handle handle, uint32_
  *  @sa     UDMACC26XX_channelEnable
  */
 __STATIC_INLINE void UDMACC26XX_disableAttribute(UDMACC26XX_Handle handle,
-    uint32_t channelNum, uint32_t attr)
+        uint32_t channelNum, uint32_t attr)
 {
-    UDMACC26XX_HWAttrs const *hwAttrs = (UDMACC26XX_HWAttrs *) handle->hwAttrs;
+    UDMACC26XX_HWAttrs const* hwAttrs = (UDMACC26XX_HWAttrs*) handle->hwAttrs;
 
     uDMAChannelAttributeDisable(hwAttrs->baseAddr, channelNum, attr);
 }

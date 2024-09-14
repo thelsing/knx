@@ -83,26 +83,26 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define IOCPortConfigureSet             NOROM_IOCPortConfigureSet
-    #define IOCPortConfigureGet             NOROM_IOCPortConfigureGet
-    #define IOCIOShutdownSet                NOROM_IOCIOShutdownSet
-    #define IOCIOModeSet                    NOROM_IOCIOModeSet
-    #define IOCIOIntSet                     NOROM_IOCIOIntSet
-    #define IOCIOPortPullSet                NOROM_IOCIOPortPullSet
-    #define IOCIOHystSet                    NOROM_IOCIOHystSet
-    #define IOCIOInputSet                   NOROM_IOCIOInputSet
-    #define IOCIOSlewCtrlSet                NOROM_IOCIOSlewCtrlSet
-    #define IOCIODrvStrengthSet             NOROM_IOCIODrvStrengthSet
-    #define IOCIOPortIdSet                  NOROM_IOCIOPortIdSet
-    #define IOCIntEnable                    NOROM_IOCIntEnable
-    #define IOCIntDisable                   NOROM_IOCIntDisable
-    #define IOCPinTypeGpioInput             NOROM_IOCPinTypeGpioInput
-    #define IOCPinTypeGpioOutput            NOROM_IOCPinTypeGpioOutput
-    #define IOCPinTypeUart                  NOROM_IOCPinTypeUart
-    #define IOCPinTypeSsiMaster             NOROM_IOCPinTypeSsiMaster
-    #define IOCPinTypeSsiSlave              NOROM_IOCPinTypeSsiSlave
-    #define IOCPinTypeI2c                   NOROM_IOCPinTypeI2c
-    #define IOCPinTypeAux                   NOROM_IOCPinTypeAux
+#define IOCPortConfigureSet             NOROM_IOCPortConfigureSet
+#define IOCPortConfigureGet             NOROM_IOCPortConfigureGet
+#define IOCIOShutdownSet                NOROM_IOCIOShutdownSet
+#define IOCIOModeSet                    NOROM_IOCIOModeSet
+#define IOCIOIntSet                     NOROM_IOCIOIntSet
+#define IOCIOPortPullSet                NOROM_IOCIOPortPullSet
+#define IOCIOHystSet                    NOROM_IOCIOHystSet
+#define IOCIOInputSet                   NOROM_IOCIOInputSet
+#define IOCIOSlewCtrlSet                NOROM_IOCIOSlewCtrlSet
+#define IOCIODrvStrengthSet             NOROM_IOCIODrvStrengthSet
+#define IOCIOPortIdSet                  NOROM_IOCIOPortIdSet
+#define IOCIntEnable                    NOROM_IOCIntEnable
+#define IOCIntDisable                   NOROM_IOCIntDisable
+#define IOCPinTypeGpioInput             NOROM_IOCPinTypeGpioInput
+#define IOCPinTypeGpioOutput            NOROM_IOCPinTypeGpioOutput
+#define IOCPinTypeUart                  NOROM_IOCPinTypeUart
+#define IOCPinTypeSsiMaster             NOROM_IOCPinTypeSsiMaster
+#define IOCPinTypeSsiSlave              NOROM_IOCPinTypeSsiSlave
+#define IOCPinTypeI2c                   NOROM_IOCPinTypeI2c
+#define IOCPinTypeAux                   NOROM_IOCPinTypeAux
 #endif
 
 //*****************************************************************************
@@ -237,15 +237,15 @@ extern "C"
 #define IOC_IOMODE_NORMAL       0x00000000  // Normal Input/Output
 #define IOC_IOMODE_INV          0x01000000  // Inverted Input/Output
 #define IOC_IOMODE_OPEN_DRAIN_NORMAL \
-                                0x04000000  // Open Drain, Normal Input/Output
+    0x04000000  // Open Drain, Normal Input/Output
 #define IOC_IOMODE_OPEN_DRAIN_INV \
-                                0x05000000  // Open Drain, Inverted
-                                            // Input/Output
+    0x05000000  // Open Drain, Inverted
+// Input/Output
 #define IOC_IOMODE_OPEN_SRC_NORMAL \
-                                0x06000000  // Open Source, Normal Input/Output
+    0x06000000  // Open Source, Normal Input/Output
 #define IOC_IOMODE_OPEN_SRC_INV \
-                                0x07000000  // Open Source, Inverted
-                                            // Input/Output
+    0x07000000  // Open Source, Inverted
+// Input/Output
 
 //*****************************************************************************
 //
@@ -281,13 +281,13 @@ extern "C"
 #define IOC_CURRENT_8MA         0x00000800  // 4 or 8mA drive strength
 
 #define IOC_STRENGTH_AUTO       0x00000000  // Automatic Drive Strength
-                                            // (2/4/8 mA @ VVDS)
+// (2/4/8 mA @ VVDS)
 #define IOC_STRENGTH_MAX        0x00000300  // Maximum Drive Strength
-                                            // (2/4/8 mA @ 1.8V)
+// (2/4/8 mA @ 1.8V)
 #define IOC_STRENGTH_MED        0x00000200  // Medium Drive Strength
-                                            // (2/4/8 mA @ 2.5V)
+// (2/4/8 mA @ 2.5V)
 #define IOC_STRENGTH_MIN        0x00000100  // Minimum Drive Strength
-                                            // (2/4/8 mA @ 3.3V)
+// (2/4/8 mA @ 3.3V)
 
 //*****************************************************************************
 //
@@ -1051,87 +1051,87 @@ extern void IOCPinTypeAux(uint32_t ui32IOId);
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_IOCPortConfigureSet
-        #undef  IOCPortConfigureSet
-        #define IOCPortConfigureSet             ROM_IOCPortConfigureSet
-    #endif
-    #ifdef ROM_IOCPortConfigureGet
-        #undef  IOCPortConfigureGet
-        #define IOCPortConfigureGet             ROM_IOCPortConfigureGet
-    #endif
-    #ifdef ROM_IOCIOShutdownSet
-        #undef  IOCIOShutdownSet
-        #define IOCIOShutdownSet                ROM_IOCIOShutdownSet
-    #endif
-    #ifdef ROM_IOCIOModeSet
-        #undef  IOCIOModeSet
-        #define IOCIOModeSet                    ROM_IOCIOModeSet
-    #endif
-    #ifdef ROM_IOCIOIntSet
-        #undef  IOCIOIntSet
-        #define IOCIOIntSet                     ROM_IOCIOIntSet
-    #endif
-    #ifdef ROM_IOCIOPortPullSet
-        #undef  IOCIOPortPullSet
-        #define IOCIOPortPullSet                ROM_IOCIOPortPullSet
-    #endif
-    #ifdef ROM_IOCIOHystSet
-        #undef  IOCIOHystSet
-        #define IOCIOHystSet                    ROM_IOCIOHystSet
-    #endif
-    #ifdef ROM_IOCIOInputSet
-        #undef  IOCIOInputSet
-        #define IOCIOInputSet                   ROM_IOCIOInputSet
-    #endif
-    #ifdef ROM_IOCIOSlewCtrlSet
-        #undef  IOCIOSlewCtrlSet
-        #define IOCIOSlewCtrlSet                ROM_IOCIOSlewCtrlSet
-    #endif
-    #ifdef ROM_IOCIODrvStrengthSet
-        #undef  IOCIODrvStrengthSet
-        #define IOCIODrvStrengthSet             ROM_IOCIODrvStrengthSet
-    #endif
-    #ifdef ROM_IOCIOPortIdSet
-        #undef  IOCIOPortIdSet
-        #define IOCIOPortIdSet                  ROM_IOCIOPortIdSet
-    #endif
-    #ifdef ROM_IOCIntEnable
-        #undef  IOCIntEnable
-        #define IOCIntEnable                    ROM_IOCIntEnable
-    #endif
-    #ifdef ROM_IOCIntDisable
-        #undef  IOCIntDisable
-        #define IOCIntDisable                   ROM_IOCIntDisable
-    #endif
-    #ifdef ROM_IOCPinTypeGpioInput
-        #undef  IOCPinTypeGpioInput
-        #define IOCPinTypeGpioInput             ROM_IOCPinTypeGpioInput
-    #endif
-    #ifdef ROM_IOCPinTypeGpioOutput
-        #undef  IOCPinTypeGpioOutput
-        #define IOCPinTypeGpioOutput            ROM_IOCPinTypeGpioOutput
-    #endif
-    #ifdef ROM_IOCPinTypeUart
-        #undef  IOCPinTypeUart
-        #define IOCPinTypeUart                  ROM_IOCPinTypeUart
-    #endif
-    #ifdef ROM_IOCPinTypeSsiMaster
-        #undef  IOCPinTypeSsiMaster
-        #define IOCPinTypeSsiMaster             ROM_IOCPinTypeSsiMaster
-    #endif
-    #ifdef ROM_IOCPinTypeSsiSlave
-        #undef  IOCPinTypeSsiSlave
-        #define IOCPinTypeSsiSlave              ROM_IOCPinTypeSsiSlave
-    #endif
-    #ifdef ROM_IOCPinTypeI2c
-        #undef  IOCPinTypeI2c
-        #define IOCPinTypeI2c                   ROM_IOCPinTypeI2c
-    #endif
-    #ifdef ROM_IOCPinTypeAux
-        #undef  IOCPinTypeAux
-        #define IOCPinTypeAux                   ROM_IOCPinTypeAux
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_IOCPortConfigureSet
+#undef  IOCPortConfigureSet
+#define IOCPortConfigureSet             ROM_IOCPortConfigureSet
+#endif
+#ifdef ROM_IOCPortConfigureGet
+#undef  IOCPortConfigureGet
+#define IOCPortConfigureGet             ROM_IOCPortConfigureGet
+#endif
+#ifdef ROM_IOCIOShutdownSet
+#undef  IOCIOShutdownSet
+#define IOCIOShutdownSet                ROM_IOCIOShutdownSet
+#endif
+#ifdef ROM_IOCIOModeSet
+#undef  IOCIOModeSet
+#define IOCIOModeSet                    ROM_IOCIOModeSet
+#endif
+#ifdef ROM_IOCIOIntSet
+#undef  IOCIOIntSet
+#define IOCIOIntSet                     ROM_IOCIOIntSet
+#endif
+#ifdef ROM_IOCIOPortPullSet
+#undef  IOCIOPortPullSet
+#define IOCIOPortPullSet                ROM_IOCIOPortPullSet
+#endif
+#ifdef ROM_IOCIOHystSet
+#undef  IOCIOHystSet
+#define IOCIOHystSet                    ROM_IOCIOHystSet
+#endif
+#ifdef ROM_IOCIOInputSet
+#undef  IOCIOInputSet
+#define IOCIOInputSet                   ROM_IOCIOInputSet
+#endif
+#ifdef ROM_IOCIOSlewCtrlSet
+#undef  IOCIOSlewCtrlSet
+#define IOCIOSlewCtrlSet                ROM_IOCIOSlewCtrlSet
+#endif
+#ifdef ROM_IOCIODrvStrengthSet
+#undef  IOCIODrvStrengthSet
+#define IOCIODrvStrengthSet             ROM_IOCIODrvStrengthSet
+#endif
+#ifdef ROM_IOCIOPortIdSet
+#undef  IOCIOPortIdSet
+#define IOCIOPortIdSet                  ROM_IOCIOPortIdSet
+#endif
+#ifdef ROM_IOCIntEnable
+#undef  IOCIntEnable
+#define IOCIntEnable                    ROM_IOCIntEnable
+#endif
+#ifdef ROM_IOCIntDisable
+#undef  IOCIntDisable
+#define IOCIntDisable                   ROM_IOCIntDisable
+#endif
+#ifdef ROM_IOCPinTypeGpioInput
+#undef  IOCPinTypeGpioInput
+#define IOCPinTypeGpioInput             ROM_IOCPinTypeGpioInput
+#endif
+#ifdef ROM_IOCPinTypeGpioOutput
+#undef  IOCPinTypeGpioOutput
+#define IOCPinTypeGpioOutput            ROM_IOCPinTypeGpioOutput
+#endif
+#ifdef ROM_IOCPinTypeUart
+#undef  IOCPinTypeUart
+#define IOCPinTypeUart                  ROM_IOCPinTypeUart
+#endif
+#ifdef ROM_IOCPinTypeSsiMaster
+#undef  IOCPinTypeSsiMaster
+#define IOCPinTypeSsiMaster             ROM_IOCPinTypeSsiMaster
+#endif
+#ifdef ROM_IOCPinTypeSsiSlave
+#undef  IOCPinTypeSsiSlave
+#define IOCPinTypeSsiSlave              ROM_IOCPinTypeSsiSlave
+#endif
+#ifdef ROM_IOCPinTypeI2c
+#undef  IOCPinTypeI2c
+#define IOCPinTypeI2c                   ROM_IOCPinTypeI2c
+#endif
+#ifdef ROM_IOCPinTypeAux
+#undef  IOCPinTypeAux
+#define IOCPinTypeAux                   ROM_IOCPinTypeAux
+#endif
 #endif
 
 //*****************************************************************************

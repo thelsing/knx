@@ -71,19 +71,20 @@ extern "C"
 #include "rf_ble_cmd.h"
 
 // Definition of RFTRIM container
-typedef struct {
-   uint32_t configIfAdc;
-   uint32_t configRfFrontend;
-   uint32_t configSynth;
-   uint32_t configMiscAdc;
+typedef struct
+{
+    uint32_t configIfAdc;
+    uint32_t configRfFrontend;
+    uint32_t configSynth;
+    uint32_t configMiscAdc;
 } rfTrim_t;
 
 // Definition of maximum search depth used by the RFCOverrideUpdate function
 #define RFC_MAX_SEARCH_DEPTH     5
-#define RFC_PA_TYPE_ADDRESS		 0x21000345
-#define RFC_PA_TYPE_MASK 		 0x04
-#define RFC_PA_GAIN_ADDRESS		 0x2100034C
-#define RFC_PA_GAIN_MASK		 0x003FFFFF
+#define RFC_PA_TYPE_ADDRESS      0x21000345
+#define RFC_PA_TYPE_MASK         0x04
+#define RFC_PA_GAIN_ADDRESS      0x2100034C
+#define RFC_PA_GAIN_MASK         0x003FFFFF
 #define RFC_FE_MODE_ESCAPE_VALUE 0xFF
 #define RFC_FE_OVERRIDE_ADDRESS  0x0703
 #define RFC_FE_OVERRIDE_MASK     0x0000FFFF
@@ -102,14 +103,14 @@ typedef struct {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define RFCCpeIntGetAndClear            NOROM_RFCCpeIntGetAndClear
-    #define RFCDoorbellSendTo               NOROM_RFCDoorbellSendTo
-    #define RFCSynthPowerDown               NOROM_RFCSynthPowerDown
-    #define RFCCpePatchReset                NOROM_RFCCpePatchReset
-    #define RFCOverrideSearch               NOROM_RFCOverrideSearch
-    #define RFCOverrideUpdate               NOROM_RFCOverrideUpdate
-    #define RFCHwIntGetAndClear             NOROM_RFCHwIntGetAndClear
-    #define RFCAnaDivTxOverride             NOROM_RFCAnaDivTxOverride
+#define RFCCpeIntGetAndClear            NOROM_RFCCpeIntGetAndClear
+#define RFCDoorbellSendTo               NOROM_RFCDoorbellSendTo
+#define RFCSynthPowerDown               NOROM_RFCSynthPowerDown
+#define RFCCpePatchReset                NOROM_RFCCpePatchReset
+#define RFCOverrideSearch               NOROM_RFCOverrideSearch
+#define RFCOverrideUpdate               NOROM_RFCOverrideUpdate
+#define RFCHwIntGetAndClear             NOROM_RFCHwIntGetAndClear
+#define RFCAnaDivTxOverride             NOROM_RFCAnaDivTxOverride
 #endif
 
 //*****************************************************************************
@@ -134,8 +135,8 @@ RFCClockEnable(void)
 {
     // Enable basic clocks to get the CPE run
     HWREG(RFC_PWR_NONBUF_BASE + RFC_PWR_O_PWMCLKEN) = RFC_PWR_PWMCLKEN_CPERAM
-                                                    | RFC_PWR_PWMCLKEN_CPE
-                                                    | RFC_PWR_PWMCLKEN_RFC;
+            | RFC_PWR_PWMCLKEN_CPE
+            | RFC_PWR_PWMCLKEN_RFC;
 }
 
 
@@ -354,7 +355,7 @@ extern void RFCCpePatchReset(void);
 // Function to search an override list for the provided pattern within the search depth.
 //
 //*****************************************************************************
-extern uint8_t RFCOverrideSearch(const uint32_t *pOverride, const uint32_t pattern, const uint32_t mask, const uint8_t searchDepth);
+extern uint8_t RFCOverrideSearch(const uint32_t* pOverride, const uint32_t pattern, const uint32_t mask, const uint8_t searchDepth);
 
 
 //*****************************************************************************
@@ -362,7 +363,7 @@ extern uint8_t RFCOverrideSearch(const uint32_t *pOverride, const uint32_t patte
 //! Function to update override list
 //
 //*****************************************************************************
-extern uint8_t RFCOverrideUpdate(rfc_radioOp_t *pOpSetup, uint32_t *pParams);
+extern uint8_t RFCOverrideUpdate(rfc_radioOp_t* pOpSetup, uint32_t* pParams);
 
 
 //*****************************************************************************
@@ -411,39 +412,39 @@ extern uint32_t RFCAnaDivTxOverride(uint8_t loDivider, uint8_t frontEndMode);
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_RFCCpeIntGetAndClear
-        #undef  RFCCpeIntGetAndClear
-        #define RFCCpeIntGetAndClear            ROM_RFCCpeIntGetAndClear
-    #endif
-    #ifdef ROM_RFCDoorbellSendTo
-        #undef  RFCDoorbellSendTo
-        #define RFCDoorbellSendTo               ROM_RFCDoorbellSendTo
-    #endif
-    #ifdef ROM_RFCSynthPowerDown
-        #undef  RFCSynthPowerDown
-        #define RFCSynthPowerDown               ROM_RFCSynthPowerDown
-    #endif
-    #ifdef ROM_RFCCpePatchReset
-        #undef  RFCCpePatchReset
-        #define RFCCpePatchReset                ROM_RFCCpePatchReset
-    #endif
-    #ifdef ROM_RFCOverrideSearch
-        #undef  RFCOverrideSearch
-        #define RFCOverrideSearch               ROM_RFCOverrideSearch
-    #endif
-    #ifdef ROM_RFCOverrideUpdate
-        #undef  RFCOverrideUpdate
-        #define RFCOverrideUpdate               ROM_RFCOverrideUpdate
-    #endif
-    #ifdef ROM_RFCHwIntGetAndClear
-        #undef  RFCHwIntGetAndClear
-        #define RFCHwIntGetAndClear             ROM_RFCHwIntGetAndClear
-    #endif
-    #ifdef ROM_RFCAnaDivTxOverride
-        #undef  RFCAnaDivTxOverride
-        #define RFCAnaDivTxOverride             ROM_RFCAnaDivTxOverride
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_RFCCpeIntGetAndClear
+#undef  RFCCpeIntGetAndClear
+#define RFCCpeIntGetAndClear            ROM_RFCCpeIntGetAndClear
+#endif
+#ifdef ROM_RFCDoorbellSendTo
+#undef  RFCDoorbellSendTo
+#define RFCDoorbellSendTo               ROM_RFCDoorbellSendTo
+#endif
+#ifdef ROM_RFCSynthPowerDown
+#undef  RFCSynthPowerDown
+#define RFCSynthPowerDown               ROM_RFCSynthPowerDown
+#endif
+#ifdef ROM_RFCCpePatchReset
+#undef  RFCCpePatchReset
+#define RFCCpePatchReset                ROM_RFCCpePatchReset
+#endif
+#ifdef ROM_RFCOverrideSearch
+#undef  RFCOverrideSearch
+#define RFCOverrideSearch               ROM_RFCOverrideSearch
+#endif
+#ifdef ROM_RFCOverrideUpdate
+#undef  RFCOverrideUpdate
+#define RFCOverrideUpdate               ROM_RFCOverrideUpdate
+#endif
+#ifdef ROM_RFCHwIntGetAndClear
+#undef  RFCHwIntGetAndClear
+#define RFCHwIntGetAndClear             ROM_RFCHwIntGetAndClear
+#endif
+#ifdef ROM_RFCAnaDivTxOverride
+#undef  RFCAnaDivTxOverride
+#define RFCAnaDivTxOverride             ROM_RFCAnaDivTxOverride
+#endif
 #endif
 
 //*****************************************************************************

@@ -191,6 +191,7 @@ PYBIND11_MODULE(knx, m)
     m.def("Parameters", []()
     {
         uint8_t* data = bau->parameters().data();
+
         if (data == nullptr)
             return py::bytes();
 

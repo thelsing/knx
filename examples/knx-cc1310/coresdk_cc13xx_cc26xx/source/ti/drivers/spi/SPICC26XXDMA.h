@@ -694,7 +694,8 @@ extern const SPI_FxnTable SPICC26XXDMA_fxnTable;
  *  - SPICC26XXDMA_8bit:  txBuf and rxBuf are arrays of uint8_t elements
  *  - SPICC26XXDMA_16bit: txBuf and rxBuf are arrays of uint16_t elements
  */
-typedef enum SPICC26XXDMA_FrameSize {
+typedef enum SPICC26XXDMA_FrameSize
+{
     SPICC26XXDMA_8bit  = 0,
     SPICC26XXDMA_16bit = 1
 } SPICC26XXDMA_FrameSize;
@@ -753,7 +754,8 @@ typedef enum SPICC26XXDMA_FrameSize {
  *  };
  *  @endcode
  */
-typedef struct SPICC26XXDMA_HWAttrsV1 {
+typedef struct SPICC26XXDMA_HWAttrsV1
+{
     /*! SPI Peripheral's base address */
     uint32_t         baseAddr;
     /*! SPI CC26XXDMA Peripheral's interrupt vector */
@@ -804,7 +806,8 @@ typedef struct SPICC26XXDMA_HWAttrsV1 {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct SPICC26XXDMA_Object {
+typedef struct SPICC26XXDMA_Object
+{
     /* SPI control variables */
     SPI_TransferMode       transferMode;        /*!< Blocking or Callback mode */
     unsigned int           transferTimeout;     /*!< Timeout for the transfer when in blocking mode */
@@ -826,7 +829,7 @@ typedef struct SPICC26XXDMA_Object {
     SemaphoreP_Struct       transferComplete;    /*!< Notify finished SPICC26XXDMA transfer */
 
     /* SPI current transaction */
-    SPI_Transaction        *currentTransaction; /*!< Ptr to the current transaction*/
+    SPI_Transaction*        currentTransaction; /*!< Ptr to the current transaction*/
     size_t                 amtDataXferred;      /*!< Number of frames transferred */
     size_t                 currentXferAmt;      /*!< Size of current DMA transfer */
     SPICC26XXDMA_FrameSize frameSize;           /*!< Data frame size variable */
@@ -848,8 +851,8 @@ typedef struct SPICC26XXDMA_Object {
     uint16_t               scratchBuf;
 
     /* SPI pre- and post notification functions */
-    void                   *spiPreFxn;         /*!< SPI pre-notification function pointer */
-    void                   *spiPostFxn;        /*!< SPI post-notification function pointer */
+    void*                   spiPreFxn;         /*!< SPI pre-notification function pointer */
+    void*                   spiPostFxn;        /*!< SPI post-notification function pointer */
     Power_NotifyObj        spiPreObj;          /*!< SPI pre-notification object */
     Power_NotifyObj        spiPostObj;         /*!< SPI post-notification object */
 

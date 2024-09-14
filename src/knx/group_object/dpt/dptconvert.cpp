@@ -439,9 +439,11 @@ namespace Knx
         ASSERT_PAYLOAD(14);
         char strValue[15];
         strValue[14] = '\0';
+
         for (int n = 0; n < 14; ++n)
         {
             strValue[n] = signed8FromPayload(payload, n);
+
             if (!datatype.subGroup && (strValue[n] & 0x80))
                 return false;
         }
@@ -878,7 +880,7 @@ namespace Knx
         return true;
     }
 
-   
+
 
     int valueToBusValueTime(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {

@@ -27,7 +27,7 @@ namespace Knx
             void loop() override;
             bool configured() override;
             GroupObjectTableObject& groupObjectTable();
-            
+
 
         protected:
             ApplicationLayer& applicationLayer() override;

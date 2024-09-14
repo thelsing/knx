@@ -45,7 +45,8 @@
 //
 //*****************************************************************************
 typedef struct
-{                                              //  Mapped to address
+{
+    //  Mapped to address
     uint32_t   CCFG_EXT_LF_CLK               ; // 0x50003FA8
     uint32_t   CCFG_MODE_CONF_1              ; // 0x50003FAC
     uint32_t   CCFG_SIZE_AND_DIS_FLAGS       ; // 0x50003FB0

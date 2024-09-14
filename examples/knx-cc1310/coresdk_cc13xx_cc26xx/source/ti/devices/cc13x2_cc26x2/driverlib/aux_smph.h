@@ -137,7 +137,7 @@ AUXSMPHAcquire(uint32_t ui32Semaphore)
     // Wait for semaphore to be released such that it can be claimed
     // Semaphore register reads 1 when lock was acquired otherwise 0
     // (i.e. AUX_SMPH_CLAIMED).
-    while(HWREG(AUX_SMPH_BASE + AUX_SMPH_O_SMPH0 + 4 * ui32Semaphore) ==
+    while (HWREG(AUX_SMPH_BASE + AUX_SMPH_O_SMPH0 + 4 * ui32Semaphore) ==
             AUX_SMPH_CLAIMED)
     {
     }

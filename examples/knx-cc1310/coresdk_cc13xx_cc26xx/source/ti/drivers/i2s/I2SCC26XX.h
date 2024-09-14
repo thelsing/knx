@@ -74,7 +74,8 @@ extern "C" {
  *  };
  *  @endcode
  */
-typedef struct I2SCC26XX_HWAttrs_ {
+typedef struct I2SCC26XX_HWAttrs_
+{
     PIN_Id                           pinSD1;                  /*!< Pin used for SD1 signal. */
     PIN_Id                           pinSD0;                  /*!< Pin used for SD0 signal. */
     PIN_Id                           pinSCK;                  /*!< Pin used for SCK signal. */
@@ -82,7 +83,7 @@ typedef struct I2SCC26XX_HWAttrs_ {
     PIN_Id                           pinWS;                   /*!< Pin used for WS signal. */
     uint8_t                          intPriority;             /*!< I2S Peripheral's interrupt priority. */
 
-}I2SCC26XX_HWAttrs;
+} I2SCC26XX_HWAttrs;
 
 /*!
  *  @cond NODOC
@@ -91,11 +92,12 @@ typedef struct I2SCC26XX_HWAttrs_ {
  *  This enum defines how the physical I2S interface (SD0/SD1) behaves.
  *  Do not modify.
  */
-typedef struct I2SCC26XX_DataInterface_ {
+typedef struct I2SCC26XX_DataInterface_
+{
     uint8_t                         numberOfChannelsUsed;     /*!< Number of channels used on SDx. */
     I2S_ChannelConfig               channelsUsed;             /*!< List of the used channels. */
     I2S_DataInterfaceUse            interfaceConfig;          /*!< IN / OUT / UNUSED */
-}I2SCC26XX_DataInterface;
+} I2SCC26XX_DataInterface;
 /*! @endcond */
 
 /*!
@@ -105,13 +107,14 @@ typedef struct I2SCC26XX_DataInterface_ {
  *  This enum defines one of the interfaces (READ or WRITE) of the I2S module.
  *  Do not modify.
  */
-typedef struct I2SCC26XX_Interface_ {
+typedef struct I2SCC26XX_Interface_
+{
     uint16_t                        memoryStep;               /*!< Size of the memory step to access the following sample */
     uint16_t                        delay;                    /*!< Number of WS cycles to wait before starting the first transfer. This value is mostly used when performing constant latency transfers. */
     I2S_Callback                    callback;                 /*!< Pointer to callback */
     I2S_RegUpdate                   pointerSet;               /*!< Pointer on the function used to update PTR-NEXT */
-    I2S_Transaction                *activeTransfer;           /*!< Pointer on the ongoing transfer */
-}I2SCC26XX_Interface;
+    I2S_Transaction*                activeTransfer;           /*!< Pointer on the ongoing transfer */
+} I2SCC26XX_Interface;
 /*! @endcond */
 
 /*!
@@ -123,14 +126,15 @@ typedef struct I2SCC26XX_Interface_ {
  *  @param      I2SCC26XX_Interface *interface Pointer on the interface to update
  *
  */
-typedef void (*I2SCC26XX_PtrUpdate)(I2S_Handle handle, I2SCC26XX_Interface *interface);
+typedef void (*I2SCC26XX_PtrUpdate)(I2S_Handle handle, I2SCC26XX_Interface* interface);
 
 /*!
  *  @cond NODOC
  *  I2S Object.  The application must not access any member variables
  *  of this structure!
  */
-typedef struct I2SCC26XX_Object_ {
+typedef struct I2SCC26XX_Object_
+{
 
     bool                            isOpen;                  /*!< To avoid multiple openings of the I2S. */
     bool                            invertWS;                /*!< WS inversion.
@@ -171,8 +175,8 @@ typedef struct I2SCC26XX_Object_ {
     I2S_Callback                    errorCallback;           /*!< Pointer to error callback */
 
     /* I2S pre and post notification functions */
-    void                            *i2sPreFxn;              /*!< I2S pre-notification function pointer */
-    void                            *i2sPostFxn;             /*!< I2S post-notification function pointer */
+    void*                            i2sPreFxn;              /*!< I2S pre-notification function pointer */
+    void*                            i2sPostFxn;             /*!< I2S post-notification function pointer */
     Power_NotifyObj                 i2sPreObj;               /*!< I2S pre-notification object */
     Power_NotifyObj                 i2sPostObj;              /*!< I2S post-notification object */
     volatile bool                   i2sPowerConstraint;      /*!< I2S power constraint flag, guard to avoid power constraints getting out of sync */

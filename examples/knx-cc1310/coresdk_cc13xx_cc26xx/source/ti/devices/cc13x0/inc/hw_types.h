@@ -58,7 +58,7 @@ typedef void (* FPTR_VOID_UINT8_T) (uint8_t);
 //
 //*****************************************************************************
 #ifndef __STATIC_INLINE
-#define __STATIC_INLINE static inline
+    #define __STATIC_INLINE static inline
 #endif
 
 //*****************************************************************************
@@ -80,19 +80,19 @@ typedef unsigned int  __UINT32;
 // Read example  : my32BitVar = HWREG(base_addr + offset) ;
 // Write example : HWREG(base_addr + offset) = my32BitVar ;
 #define HWREG(x)                                                              \
-        (*((volatile unsigned long *)(x)))
+    (*((volatile unsigned long *)(x)))
 
 // Half word (16 bit) access to address x
 // Read example  : my16BitVar = HWREGH(base_addr + offset) ;
 // Write example : HWREGH(base_addr + offset) = my16BitVar ;
 #define HWREGH(x)                                                             \
-        (*((volatile unsigned short *)(x)))
+    (*((volatile unsigned short *)(x)))
 
 // Byte (8 bit) access to address x
 // Read example  : my8BitVar = HWREGB(base_addr + offset) ;
 // Write example : HWREGB(base_addr + offset) = my8BitVar ;
 #define HWREGB(x)                                                             \
-        (*((volatile unsigned char *)(x)))
+    (*((volatile unsigned char *)(x)))
 
 //*****************************************************************************
 //
@@ -106,18 +106,18 @@ typedef unsigned int  __UINT32;
 //*****************************************************************************
 // Bit-band access to address x bit number b using word access (32 bit)
 #define HWREGBITW(x, b)                                                       \
-        HWREG(((unsigned long)(x) & 0xF0000000) | 0x02000000 |                \
-              (((unsigned long)(x) & 0x000FFFFF) << 5) | ((b) << 2))
+    HWREG(((unsigned long)(x) & 0xF0000000) | 0x02000000 |                \
+          (((unsigned long)(x) & 0x000FFFFF) << 5) | ((b) << 2))
 
 // Bit-band access to address x bit number b using half word access (16 bit)
 #define HWREGBITH(x, b)                                                       \
-        HWREGH(((unsigned long)(x) & 0xF0000000) | 0x02000000 |               \
-               (((unsigned long)(x) & 0x000FFFFF) << 5) | ((b) << 2))
+    HWREGH(((unsigned long)(x) & 0xF0000000) | 0x02000000 |               \
+           (((unsigned long)(x) & 0x000FFFFF) << 5) | ((b) << 2))
 
 // Bit-band access to address x bit number b using byte access (8 bit)
 #define HWREGBITB(x, b)                                                       \
-        HWREGB(((unsigned long)(x) & 0xF0000000) | 0x02000000 |               \
-               (((unsigned long)(x) & 0x000FFFFF) << 5) | ((b) << 2))
+    HWREGB(((unsigned long)(x) & 0xF0000000) | 0x02000000 |               \
+           (((unsigned long)(x) & 0x000FFFFF) << 5) | ((b) << 2))
 
 
 #endif // __HW_TYPES_H__

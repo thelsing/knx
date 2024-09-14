@@ -80,11 +80,11 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define CPUcpsid                        NOROM_CPUcpsid
-    #define CPUprimask                      NOROM_CPUprimask
-    #define CPUcpsie                        NOROM_CPUcpsie
-    #define CPUbasepriGet                   NOROM_CPUbasepriGet
-    #define CPUdelay                        NOROM_CPUdelay
+#define CPUcpsid                        NOROM_CPUcpsid
+#define CPUprimask                      NOROM_CPUprimask
+#define CPUcpsie                        NOROM_CPUcpsie
+#define CPUbasepriGet                   NOROM_CPUbasepriGet
+#define CPUdelay                        NOROM_CPUdelay
 #endif
 
 //*****************************************************************************
@@ -423,27 +423,27 @@ CPU_WriteBufferEnable( void )
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_CPUcpsid
-        #undef  CPUcpsid
-        #define CPUcpsid                        ROM_CPUcpsid
-    #endif
-    #ifdef ROM_CPUprimask
-        #undef  CPUprimask
-        #define CPUprimask                      ROM_CPUprimask
-    #endif
-    #ifdef ROM_CPUcpsie
-        #undef  CPUcpsie
-        #define CPUcpsie                        ROM_CPUcpsie
-    #endif
-    #ifdef ROM_CPUbasepriGet
-        #undef  CPUbasepriGet
-        #define CPUbasepriGet                   ROM_CPUbasepriGet
-    #endif
-    #ifdef ROM_CPUdelay
-        #undef  CPUdelay
-        #define CPUdelay                        ROM_CPUdelay
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_CPUcpsid
+#undef  CPUcpsid
+#define CPUcpsid                        ROM_CPUcpsid
+#endif
+#ifdef ROM_CPUprimask
+#undef  CPUprimask
+#define CPUprimask                      ROM_CPUprimask
+#endif
+#ifdef ROM_CPUcpsie
+#undef  CPUcpsie
+#define CPUcpsie                        ROM_CPUcpsie
+#endif
+#ifdef ROM_CPUbasepriGet
+#undef  CPUbasepriGet
+#define CPUbasepriGet                   ROM_CPUbasepriGet
+#endif
+#ifdef ROM_CPUdelay
+#undef  CPUdelay
+#define CPUdelay                        ROM_CPUdelay
+#endif
 #endif
 
 //*****************************************************************************
