@@ -3,7 +3,6 @@
 #include "../group_object.h"
 namespace Knx
 {
-#define DPT_TimeOfDay Dpt(10, 1, 1)
 #define DPT_Date Dpt(11, 1)
 #define DPT_Value_4_Ucount Dpt(12, 1)
 #define DPT_Value_4_Count Dpt(13, 1)

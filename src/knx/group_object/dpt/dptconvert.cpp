@@ -18,18 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-            // DPT 8.001/8.010/8.011 - Signed 16 Bit Integer
-            if (datatype.mainGroup == 8 && (datatype.subGroup == 1 || datatype.subGroup == 10 || datatype.subGroup == 11) && !datatype.index)
-                return busValueToSigned16(payload, payload_length, datatype, value);
-
-            // DPT 8.002-DPT 8.007 - Time Delta
-            if (datatype.mainGroup == 8 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
-                return busValueToTimeDelta(payload, payload_length, datatype, value);
-
-            // DPT 10.* - Time and Weekday
-            if (datatype.mainGroup == 10 && datatype.subGroup == 1 && datatype.index <= 1)
-                return busValueToTime(payload, payload_length, datatype, value);
-
             // DPT 11.* - Date
             if (datatype.mainGroup == 11 && datatype.subGroup == 1 && !datatype.index)
                 return busValueToDate(payload, payload_length, datatype, value);
@@ -140,18 +128,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-        // DPT 8.001/8.010/8.011 - Signed 16 Bit Integer
-        if (datatype.mainGroup == 8 && (datatype.subGroup == 1 || datatype.subGroup == 10 || datatype.subGroup == 11) && !datatype.index)
-            return valueToBusValueSigned16(value, payload, payload_length, datatype);
-
-        // DPT 8.002-DPT 8.007 - Time Delta
-        if (datatype.mainGroup == 8 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
-            return valueToBusValueTimeDelta(value, payload, payload_length, datatype);
-
-        // DPT 10.* - Time and Weekday
-        if (datatype.mainGroup == 10 && datatype.subGroup == 1 && datatype.index <= 1)
-            return valueToBusValueTime(value, payload, payload_length, datatype);
-
         // DPT 11.* - Date
         if (datatype.mainGroup == 11 && datatype.subGroup == 1 && !datatype.index)
             return valueToBusValueDate(value, payload, payload_length, datatype);
@@ -255,63 +231,6 @@ namespace Knx
         // DPT 251.600 - RGBW
         if (datatype.mainGroup == 251 && datatype.subGroup == 600 && datatype.index <= 1)
             return valueToBusValueRGBW(value, payload, payload_length, datatype);
-
-        return false;
-    }
-
-    int busValueToSigned16(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(2);
-
-        if (datatype.subGroup == 10)
-        {
-            value = signed16FromPayload(payload, 0) / 100.0;
-            return true;
-        }
-
-        value = signed16FromPayload(payload, 0);
-        return true;
-    }
-
-    int busValueToTimeDelta(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(2);
-
-        int64_t duration = signed16FromPayload(payload, 0);
-        value = duration;
-        return true;
-    }
-
-
-    int busValueToTime(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(3);
-
-        switch (datatype.index)
-        {
-            case 0:
-                value = (uint8_t)((unsigned8FromPayload(payload, 0) >> 5) & 0x07);
-                return true;
-
-            case 1:
-            {
-                unsigned char hours = unsigned8FromPayload(payload, 0) & 0x1F;
-                unsigned char weekDay = (unsigned8FromPayload(payload, 0) & 0xE0) >> 5;
-                unsigned char minutes = unsigned8FromPayload(payload, 1) & 0x3F;
-                unsigned char seconds = unsigned8FromPayload(payload, 2) & 0x3F;
-
-                if (hours > 23 || minutes > 59 || seconds > 59)
-                    return false;
-
-                struct tm tmp = {0};
-                tmp.tm_hour = hours;
-                tmp.tm_wday = weekDay;
-                tmp.tm_min = minutes;
-                tmp.tm_sec = seconds;
-                value = tmp;
-                return true;
-            }
-        }
 
         return false;
     }
@@ -796,68 +715,6 @@ namespace Knx
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------
-
-    int valueToBusValueSigned16(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        if ((int64_t)value < INT64_C(-32768) || (int64_t)value > INT64_C(32767))
-            return false;
-
-        if (datatype.subGroup == 10)
-        {
-            if ((double)value < -327.68 || (double)value > 327.67)
-                return false;
-
-            signed16ToPayload(payload, 0, (int16_t)((double)value * 100.0), 0xFFFF);
-        }
-        else
-            signed16ToPayload(payload, 0, (uint64_t)value, 0xffff);
-
-        return true;
-    }
-
-    int valueToBusValueTimeDelta(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        struct tm tmp = value;
-        time_t timeSinceEpoch = mktime(&tmp);
-
-        if (timeSinceEpoch < INT64_C(-32768) || timeSinceEpoch > INT64_C(32767))
-            return false;
-
-        signed16ToPayload(payload, 0, timeSinceEpoch, 0xFFFF);
-        return true;
-    }
-
-
-
-    int valueToBusValueTime(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        switch (datatype.index)
-        {
-            case 0:
-            {
-                if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(7))
-                    return false;
-
-                ENSURE_PAYLOAD(3);
-                unsigned8ToPayload(payload, 0, (uint64_t)value << 5, 0xE0);
-                break;
-            }
-
-            case 1:
-            {
-                struct tm tmp = value;
-                unsigned8ToPayload(payload, 0, tmp.tm_hour, 0x1F);
-                unsigned8ToPayload(payload, 1, tmp.tm_min, 0x3F);
-                unsigned8ToPayload(payload, 2, tmp.tm_sec, 0x3F);
-                break;
-            }
-
-            default:
-                return false;
-        }
-
-        return true;
-    }
 
     int valueToBusValueDate(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
