@@ -2,9 +2,11 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt6: public DPT<int8_t>
+    class Dpt6: public ValueDpt<int8_t>
     {
         public:
+            Dpt6() {};
+            Dpt6(int8_t value) : ValueDpt(value) {}
             Go_SizeCode size() const override;
 
             void encode(uint8_t* data) const override;

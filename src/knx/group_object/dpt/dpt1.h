@@ -2,9 +2,11 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt1: public DPT<bool>
+    class Dpt1: public ValueDpt<bool>
     {
         public:
+            Dpt1() {}
+            Dpt1(bool value) : ValueDpt(value) {}
             Go_SizeCode size() const override;
             void encode(uint8_t* data) const override;
             bool decode(uint8_t* data) override;

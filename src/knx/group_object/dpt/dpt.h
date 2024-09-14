@@ -3,15 +3,6 @@
 #include "../group_object.h"
 namespace Knx
 {
-#define DPT_Value_2_Count Dpt(8, 1)
-#define DPT_DeltaTimeMsec Dpt(8, 2)
-#define DPT_DeltaTime10MSec Dpt(8, 3)
-#define DPT_DeltaTime100MSec Dpt(8, 4)
-#define DPT_DeltaTimeSec Dpt(8, 5)
-#define DPT_DeltaTimeMin Dpt(8, 6)
-#define DPT_DeltaTimeHrs Dpt(8, 7)
-#define DPT_Percent_V16 Dpt(8, 10)
-#define DPT_Rotation_Angle Dpt(8, 11)
 #define DPT_TimeOfDay Dpt(10, 1, 1)
 #define DPT_Date Dpt(11, 1)
 #define DPT_Value_4_Ucount Dpt(12, 1)
@@ -313,11 +304,11 @@ namespace Knx
             virtual bool decode(uint8_t* data) = 0;
     };
 
-    template<typename T> class DPT: public Dpt
+    template<typename T> class ValueDpt: public Dpt
     {
         public:
-            DPT() {};
-            DPT(T value)
+            ValueDpt() {};
+            ValueDpt(T value)
             {
                 _value = value;
             }
@@ -337,7 +328,7 @@ namespace Knx
                 return _value;
             }
 
-            DPT& operator=(const T value)
+            ValueDpt& operator=(const T value)
             {
                 _value = value;
                 return *this;

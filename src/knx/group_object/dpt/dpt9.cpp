@@ -2,13 +2,6 @@
 
 #include "dptconvert.h"
 
-Knx::Dpt9::Dpt9() {}
-
-Knx::Dpt9::Dpt9(float value)
-{
-    _value = value;
-}
-
 Knx::Go_SizeCode Knx::Dpt9::size() const
 {
     return Go_1_Bit;
@@ -28,24 +21,65 @@ bool Knx::Dpt9::decode(uint8_t* data)
     return true;
 }
 
-void Knx::Dpt9::value(float value)
+bool Knx::DPT_Value_Temp::decode(uint8_t* data)
 {
-    _value = value;
+    Dpt9::decode(data);
+
+    if (_value < -273.0f)
+    {
+        _value = 0;
+        return false;
+    }
+
+    return true;
 }
 
-float Knx::Dpt9::value() const
+void Knx::DPT_Value_Temp::value(float value)
 {
-    return _value;
+    if (value < -273.0f)
+        return;
+
+    Dpt9::value(value);
 }
 
-Knx::Dpt9::operator float() const
+bool Knx::DPT_Value_Temp_F::decode(uint8_t* data)
 {
-    return _value;
+    Dpt9::decode(data);
+
+    if (_value < -459.6f)
+    {
+        _value = 0;
+        return false;
+    }
+
+    return true;
 }
 
-
-Knx::Dpt9& Knx::Dpt9::operator=(const float value)
+void Knx::DPT_Value_Temp_F::value(float value)
 {
-    _value = value;
-    return *this;
+    if (value < -459.6f)
+        return;
+
+    Dpt9::value(value);
+}
+
+bool Knx::Dpt9GeZero::decode(uint8_t* data)
+{
+    Dpt9::decode(data);
+
+    if (_value < 0)
+    {
+        _value = 0;
+        return false;
+    }
+
+    return true;
+}
+
+void Knx::Dpt9GeZero::value(float value)
+{
+    if (value < 0)
+        return;
+
+    Dpt9::value(value);
 }
