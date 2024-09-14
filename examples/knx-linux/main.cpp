@@ -74,6 +74,7 @@ void measureTemp()
 
     float max = GO_MAX.value<Dpt9>();
 
+
     if (currentValue > max)
         GO_MAX.value<Dpt9>(currentValue);
 
