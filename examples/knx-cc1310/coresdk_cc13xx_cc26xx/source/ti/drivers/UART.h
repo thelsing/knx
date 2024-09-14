@@ -405,7 +405,7 @@ extern "C" {
 /*!
  *  @brief      A handle that is returned from a UART_open() call.
  */
-typedef struct UART_Config_    *UART_Handle;
+typedef struct UART_Config_*    UART_Handle;
 
 /*!
  *  @brief      The definition of a callback function used by the UART driver
@@ -418,14 +418,15 @@ typedef struct UART_Config_    *UART_Handle;
  *
  *  @param      count                   Number of elements read/written
  */
-typedef void (*UART_Callback) (UART_Handle handle, void *buf, size_t count);
+typedef void (*UART_Callback) (UART_Handle handle, void* buf, size_t count);
 
 /*!
  *  @brief      UART mode settings
  *
  *  This enum defines the read and write modes for the configured UART.
  */
-typedef enum UART_Mode_ {
+typedef enum UART_Mode_
+{
     /*!
       *  Uses a semaphore to block while data is being sent.  Context of the call
       *  must be a Task.
@@ -458,7 +459,8 @@ typedef enum UART_Mode_ {
  *
  *  @pre        UART driver must be used in #UART_DATA_TEXT mode.
  */
-typedef enum UART_ReturnMode_ {
+typedef enum UART_ReturnMode_
+{
     /*! Unblock/callback when buffer is full. */
     UART_RETURN_FULL,
 
@@ -480,7 +482,8 @@ typedef enum UART_ReturnMode_ {
  *  effectively treats all device line endings as LF, and all host PC line
  *  endings as CRLF.
  */
-typedef enum UART_DataMode_ {
+typedef enum UART_DataMode_
+{
     UART_DATA_BINARY = 0, /*!< Data is not processed */
     UART_DATA_TEXT = 1    /*!< Data is processed according to above */
 } UART_DataMode;
@@ -498,7 +501,8 @@ typedef enum UART_DataMode_ {
  *
  *  @pre        UART driver must be used in #UART_DATA_TEXT mode.
  */
-typedef enum UART_Echo_ {
+typedef enum UART_Echo_
+{
     UART_ECHO_OFF = 0,  /*!< Data is not echoed */
     UART_ECHO_ON = 1    /*!< Data is echoed */
 } UART_Echo;
@@ -508,7 +512,8 @@ typedef enum UART_Echo_ {
  *
  *  This enumeration defines the UART data lengths.
  */
-typedef enum UART_LEN_ {
+typedef enum UART_LEN_
+{
     UART_LEN_5 = 0,  /*!< Data length is 5 bits */
     UART_LEN_6 = 1,  /*!< Data length is 6 bits */
     UART_LEN_7 = 2,  /*!< Data length is 7 bits */
@@ -520,7 +525,8 @@ typedef enum UART_LEN_ {
  *
  *  This enumeration defines the UART stop bits.
  */
-typedef enum UART_STOP_ {
+typedef enum UART_STOP_
+{
     UART_STOP_ONE = 0,  /*!< One stop bit */
     UART_STOP_TWO = 1   /*!< Two stop bits */
 } UART_STOP;
@@ -530,7 +536,8 @@ typedef enum UART_STOP_ {
  *
  *  This enumeration defines the UART parity types.
  */
-typedef enum UART_PAR_ {
+typedef enum UART_PAR_
+{
     UART_PAR_NONE = 0,  /*!< No parity */
     UART_PAR_EVEN = 1,  /*!< Parity bit is even */
     UART_PAR_ODD  = 2,  /*!< Parity bit is odd */
@@ -546,7 +553,8 @@ typedef enum UART_PAR_ {
  *
  *  @sa       UART_Params_init()
  */
-typedef struct UART_Params_ {
+typedef struct UART_Params_
+{
     UART_Mode       readMode;        /*!< Mode for all read calls */
     UART_Mode       writeMode;       /*!< Mode for all write calls */
     uint32_t        readTimeout;     /*!< Timeout for read calls in blocking mode. */
@@ -561,7 +569,7 @@ typedef struct UART_Params_ {
     UART_LEN        dataLength;      /*!< Data length for UART */
     UART_STOP       stopBits;        /*!< Stop bits for UART */
     UART_PAR        parityType;      /*!< Parity bit type for UART */
-    void           *custom;          /*!< Custom argument used by driver implementation */
+    void*           custom;          /*!< Custom argument used by driver implementation */
 } UART_Params;
 
 /*!
@@ -574,7 +582,7 @@ typedef void (*UART_CloseFxn) (UART_Handle handle);
  *  @brief      A function pointer to a driver specific implementation of
  *              UART_ControlFxn().
  */
-typedef int_fast16_t (*UART_ControlFxn) (UART_Handle handle, uint_fast16_t cmd, void *arg);
+typedef int_fast16_t (*UART_ControlFxn) (UART_Handle handle, uint_fast16_t cmd, void* arg);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
@@ -586,20 +594,20 @@ typedef void (*UART_InitFxn) (UART_Handle handle);
  *  @brief      A function pointer to a driver specific implementation of
  *              UART_OpenFxn().
  */
-typedef UART_Handle (*UART_OpenFxn) (UART_Handle handle, UART_Params *params);
+typedef UART_Handle (*UART_OpenFxn) (UART_Handle handle, UART_Params* params);
 /*!
  *  @brief      A function pointer to a driver specific implementation of
  *              UART_ReadFxn().
  */
-typedef int_fast32_t (*UART_ReadFxn) (UART_Handle handle, void *buffer,
-    size_t size);
+typedef int_fast32_t (*UART_ReadFxn) (UART_Handle handle, void* buffer,
+                                      size_t size);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
  *              UART_ReadPollingFxn().
  */
-typedef int_fast32_t (*UART_ReadPollingFxn) (UART_Handle handle, void *buffer,
-    size_t size);
+typedef int_fast32_t (*UART_ReadPollingFxn) (UART_Handle handle, void* buffer,
+        size_t size);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
@@ -611,15 +619,15 @@ typedef void (*UART_ReadCancelFxn) (UART_Handle handle);
  *  @brief      A function pointer to a driver specific implementation of
  *              UART_WriteFxn().
  */
-typedef int_fast32_t (*UART_WriteFxn) (UART_Handle handle, const void *buffer,
-    size_t size);
+typedef int_fast32_t (*UART_WriteFxn) (UART_Handle handle, const void* buffer,
+                                       size_t size);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
  *              UART_WritePollingFxn().
  */
 typedef int_fast32_t (*UART_WritePollingFxn) (UART_Handle handle,
-    const void *buffer, size_t size);
+        const void* buffer, size_t size);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
@@ -632,7 +640,8 @@ typedef void (*UART_WriteCancelFxn) (UART_Handle handle);
  *              required set of functions to control a specific UART driver
  *              implementation.
  */
-typedef struct UART_FxnTable_ {
+typedef struct UART_FxnTable_
+{
     /*! Function to close the specified peripheral */
     UART_CloseFxn        closeFxn;
 
@@ -675,15 +684,16 @@ typedef struct UART_FxnTable_ {
  *
  *  @sa     UART_init()
  */
-typedef struct UART_Config_ {
+typedef struct UART_Config_
+{
     /*! Pointer to a table of driver-specific implementations of UART APIs */
-    UART_FxnTable const *fxnTablePtr;
+    UART_FxnTable const* fxnTablePtr;
 
     /*! Pointer to a driver specific data object */
-    void                *object;
+    void*                object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void          const *hwAttrs;
+    void          const* hwAttrs;
 } UART_Config;
 
 /*!
@@ -736,7 +746,7 @@ extern void UART_close(UART_Handle handle);
  *
  *  @sa     UART_open()
  */
-extern int_fast16_t UART_control(UART_Handle handle, uint_fast16_t cmd, void *arg);
+extern int_fast16_t UART_control(UART_Handle handle, uint_fast16_t cmd, void* arg);
 
 /*!
  *  @brief  Function to initialize the UART module
@@ -768,7 +778,7 @@ extern void UART_init(void);
  *  @sa     UART_init()
  *  @sa     UART_close()
  */
-extern UART_Handle UART_open(uint_least8_t index, UART_Params *params);
+extern UART_Handle UART_open(uint_least8_t index, UART_Params* params);
 
 /*!
  *  @brief  Function to initialize the UART_Params struct to its defaults
@@ -792,7 +802,7 @@ extern UART_Handle UART_open(uint_least8_t index, UART_Params *params);
  *      stopBits = UART_STOP_ONE;
  *      parityType = UART_PAR_NONE;
  */
-extern void UART_Params_init(UART_Params *params);
+extern void UART_Params_init(UART_Params* params);
 
 /*!
  *  @brief  Function that writes data to a UART with interrupts enabled.
@@ -836,7 +846,7 @@ extern void UART_Params_init(UART_Params *params);
  *          If an error occurs, #UART_STATUS_ERROR is returned.
  *          In #UART_MODE_CALLBACK mode, the return value is always 0.
  */
-extern int_fast32_t UART_write(UART_Handle handle, const void *buffer, size_t size);
+extern int_fast32_t UART_write(UART_Handle handle, const void* buffer, size_t size);
 
 /*!
  *  @brief  Function that writes data to a UART, polling the peripheral to
@@ -861,7 +871,7 @@ extern int_fast32_t UART_write(UART_Handle handle, const void *buffer, size_t si
  *  @return Returns the number of bytes that have been written to the UART.
  *          If an error occurs, #UART_STATUS_ERROR is returned.
  */
-extern int_fast32_t UART_writePolling(UART_Handle handle, const void *buffer, size_t size);
+extern int_fast32_t UART_writePolling(UART_Handle handle, const void* buffer, size_t size);
 
 /*!
  *  @brief  Function that cancels a UART_write() function call.
@@ -912,7 +922,7 @@ extern void UART_writeCancel(UART_Handle handle);
  *  @return Returns the number of bytes that have been read from the UART,
  *          #UART_STATUS_ERROR on an error.
  */
-extern int_fast32_t UART_read(UART_Handle handle, void *buffer, size_t size);
+extern int_fast32_t UART_read(UART_Handle handle, void* buffer, size_t size);
 
 /*!
  *  @brief  Function that reads data from a UART without interrupts. This API
@@ -934,7 +944,7 @@ extern int_fast32_t UART_read(UART_Handle handle, void *buffer, size_t size);
  *  @return Returns the number of bytes that have been read from the UART,
  *          #UART_STATUS_ERROR on an error.
  */
-extern int_fast32_t UART_readPolling(UART_Handle handle, void *buffer, size_t size);
+extern int_fast32_t UART_readPolling(UART_Handle handle, void* buffer, size_t size);
 
 /*!
  *  @brief  Function that cancels a UART_read() function call.

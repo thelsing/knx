@@ -80,7 +80,8 @@ extern "C" {
  *  Opaque structure that should be large enough to hold any of the
  *  RTOS specific ClockP objects.
  */
-typedef union ClockP_Struct {
+typedef union ClockP_Struct
+{
     uint32_t dummy;  /*!< Align object */
     char     data[ClockP_STRUCT_SIZE];
 } ClockP_Struct;
@@ -88,7 +89,8 @@ typedef union ClockP_Struct {
 /*!
  *  @brief  Frequency-in-hertz struct
  */
-typedef struct ClockP_FreqHz {
+typedef struct ClockP_FreqHz
+{
     uint32_t hi;      /*!< most significant 32-bits of frequency */
     uint32_t lo;      /*!< least significant 32-bits of frequency */
 } ClockP_FreqHz;
@@ -96,7 +98,8 @@ typedef struct ClockP_FreqHz {
 /*!
  *  @brief    Status codes for ClockP APIs
  */
-typedef enum ClockP_Status {
+typedef enum ClockP_Status
+{
     ClockP_OK = 0,
     ClockP_FAILURE = -1
 } ClockP_Status;
@@ -108,7 +111,7 @@ typedef enum ClockP_Status {
  *  and then is used in the other instance based functions (e.g. ::ClockP_start,
  *  ::ClockP_stop, etc.).
  */
-typedef  void *ClockP_Handle;
+typedef  void* ClockP_Handle;
 
 #define ClockP_handle(x) ((ClockP_Handle)(x))
 
@@ -137,7 +140,8 @@ typedef void (*ClockP_Fxn)(uintptr_t arg);
  *  clock is initially started and set to expire with the 'timeout'
  *  argument.
  */
-typedef struct ClockP_Params {
+typedef struct ClockP_Params
+{
     bool      startFlag; /*!< Start immediately after instance is created. */
     uint32_t  period;    /*!< Period of clock object. */
     uintptr_t arg;       /*!< Argument passed into the clock function. */
@@ -157,10 +161,10 @@ typedef struct ClockP_Params {
  *
  *  @return A ClockP_Handle on success or a NULL on an error
  */
-extern ClockP_Handle ClockP_construct(ClockP_Struct *clockP,
+extern ClockP_Handle ClockP_construct(ClockP_Struct* clockP,
                                       ClockP_Fxn clockFxn,
                                       uint32_t timeout,
-                                      ClockP_Params *params);
+                                      ClockP_Params* params);
 
 /*!
  *  @brief  Function to destruct a clock object
@@ -170,7 +174,7 @@ extern ClockP_Handle ClockP_construct(ClockP_Struct *clockP,
  *
  *  @return
  */
-extern void ClockP_destruct(ClockP_Struct *clockP);
+extern void ClockP_destruct(ClockP_Struct* clockP);
 
 /*!
  *  @brief  Function to create a clock object.
@@ -186,7 +190,7 @@ extern void ClockP_destruct(ClockP_Struct *clockP);
  */
 extern ClockP_Handle ClockP_create(ClockP_Fxn clockFxn,
                                    uint32_t timeout,
-                                   ClockP_Params *params);
+                                   ClockP_Params* params);
 
 /*!
  *  @brief  Function to delete a clock.
@@ -200,7 +204,7 @@ extern void ClockP_delete(ClockP_Handle handle);
  *
  *  @param  freq  Pointer to the FreqHz structure
  */
-extern void ClockP_getCpuFreq(ClockP_FreqHz *freq);
+extern void ClockP_getCpuFreq(ClockP_FreqHz* freq);
 
 /*!
  *  @brief  Get the system tick period in microseconds.
@@ -264,7 +268,7 @@ extern bool ClockP_isActive(ClockP_Handle handle);
  *
  *  @param params  Pointer to the instance configuration parameters.
  */
-extern void ClockP_Params_init(ClockP_Params *params);
+extern void ClockP_Params_init(ClockP_Params* params);
 
 /*!
  *  @brief  Set the initial timeout

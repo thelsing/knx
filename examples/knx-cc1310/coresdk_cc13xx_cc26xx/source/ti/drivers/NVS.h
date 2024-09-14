@@ -437,9 +437,9 @@ extern "C" {
  *  @{
  */
 
- /*!
- *  @brief    NVS_lock() Wait forever define
- */
+/*!
+*  @brief    NVS_lock() Wait forever define
+*/
 #define NVS_LOCK_WAIT_FOREVER       (~(0U))
 
 /*!
@@ -454,13 +454,13 @@ extern "C" {
  *  @{
  */
 
- /*!
- *  @brief    This region is not directly addressable (e.g.,: SPI flash region)
- *
- *  The NVS_Attrs.regionBase field returned by NVS_getAttrs() is set to this
- *  value by the NVSSPI driver to indicate that the region is not directly
- *  addressable.
- */
+/*!
+*  @brief    This region is not directly addressable (e.g.,: SPI flash region)
+*
+*  The NVS_Attrs.regionBase field returned by NVS_getAttrs() is set to this
+*  value by the NVSSPI driver to indicate that the region is not directly
+*  addressable.
+*/
 #define NVS_REGION_NOT_ADDRESSABLE  ((void *)(~(0U)))
 
 /** @} */
@@ -475,7 +475,7 @@ extern "C" {
  */
 typedef struct
 {
-    void *custom;    /*!< Custom argument used by driver implementation */
+    void* custom;    /*!< Custom argument used by driver implementation */
 } NVS_Params;
 
 /*!
@@ -487,7 +487,7 @@ typedef struct
  */
 typedef struct
 {
-    void   *regionBase;   /*!< Base address of the NVS region. If the NVS
+    void*   regionBase;   /*!< Base address of the NVS region. If the NVS
                                region is not directly accessible by the MCU
                                (such as SPI flash), this field will be set to
                                #NVS_REGION_NOT_ADDRESSABLE. */
@@ -499,7 +499,7 @@ typedef struct
 /*!
  *  @brief      A handle that is returned from the NVS_open() call.
  */
-typedef struct NVS_Config_ *NVS_Handle;
+typedef struct NVS_Config_* NVS_Handle;
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
@@ -525,7 +525,7 @@ typedef int_fast16_t (*NVS_EraseFxn) (NVS_Handle handle, size_t offset,
  *  @brief      A function pointer to a driver specific implementation of
  *              NVS_getAttrs().
  */
-typedef void (*NVS_GetAttrsFxn) (NVS_Handle handle, NVS_Attrs *attrs);
+typedef void (*NVS_GetAttrsFxn) (NVS_Handle handle, NVS_Attrs* attrs);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
@@ -537,21 +537,21 @@ typedef void (*NVS_InitFxn) (void);
  *  @brief      A function pointer to a driver specific implementation of
  *              NVS_open().
  */
-typedef NVS_Handle (*NVS_OpenFxn) (uint_least8_t index, NVS_Params *params);
+typedef NVS_Handle (*NVS_OpenFxn) (uint_least8_t index, NVS_Params* params);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
  *              NVS_read().
  */
 typedef int_fast16_t (*NVS_ReadFxn) (NVS_Handle handle, size_t offset,
-                                     void *buffer, size_t bufferSize);
+                                     void* buffer, size_t bufferSize);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
  *              NVS_write().
  */
 typedef int_fast16_t (*NVS_WriteFxn) (NVS_Handle handle, size_t offset,
-                                      void *buffer, size_t bufferSize,
+                                      void* buffer, size_t bufferSize,
                                       uint_fast16_t flags);
 
 /*!
@@ -618,13 +618,13 @@ typedef struct
 typedef struct NVS_Config_
 {
     /*! Pointer to a table of driver-specific implementations of NVS APIs */
-    NVS_FxnTable  const *fxnTablePtr;
+    NVS_FxnTable  const* fxnTablePtr;
 
     /*! Pointer to a driver specific data object */
-    void                *object;
+    void*                object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void          const *hwAttrs;
+    void          const* hwAttrs;
 } NVS_Config;
 
 /*!
@@ -699,7 +699,7 @@ extern int_fast16_t NVS_erase(NVS_Handle handle, size_t offset, size_t size);
  *
  *  @param  attrs       Location to store attributes.
  */
-extern void NVS_getAttrs(NVS_Handle handle, NVS_Attrs *attrs);
+extern void NVS_getAttrs(NVS_Handle handle, NVS_Attrs* attrs);
 
 /*!
  *  @brief  Function to initialize the NVS module
@@ -753,7 +753,7 @@ extern int_fast16_t NVS_lock(NVS_Handle handle, uint32_t timeout);
  *
  *  @return  A non-zero handle on success, else NULL.
  */
-extern NVS_Handle NVS_open(uint_least8_t index, NVS_Params *params);
+extern NVS_Handle NVS_open(uint_least8_t index, NVS_Params* params);
 
 /*!
  *  @brief  Function to initialize the NVS_Params struct to its defaults
@@ -761,7 +761,7 @@ extern NVS_Handle NVS_open(uint_least8_t index, NVS_Params *params);
  *  @param  params      A pointer to NVS_Params structure for
  *                      initialization.
  */
-extern void NVS_Params_init(NVS_Params *params);
+extern void NVS_Params_init(NVS_Params* params);
 
 /*!
  *  @brief   Read data from the NVS region associated with the #NVS_Handle.
@@ -779,8 +779,8 @@ extern void NVS_Params_init(NVS_Params *params);
  *  @retval  #NVS_STATUS_INV_OFFSET  If @p offset + @p size exceed the size
  *                                   of the region.
  */
-extern int_fast16_t NVS_read(NVS_Handle handle, size_t offset, void *buffer,
-                    size_t bufferSize);
+extern int_fast16_t NVS_read(NVS_Handle handle, size_t offset, void* buffer,
+                             size_t bufferSize);
 
 /*!
  *  @brief  Function to unlock the NVS driver
@@ -832,8 +832,8 @@ extern void NVS_unlock(NVS_Handle handle);
  *
  *  @remark  This call may lock a region to ensure atomic access to the region.
  */
-extern int_fast16_t NVS_write(NVS_Handle handle, size_t offset, void *buffer,
-                     size_t bufferSize, uint_fast16_t flags);
+extern int_fast16_t NVS_write(NVS_Handle handle, size_t offset, void* buffer,
+                              size_t bufferSize, uint_fast16_t flags);
 
 #if defined (__cplusplus)
 }

@@ -79,7 +79,7 @@ extern "C" {
 #endif
 
 #if DebugP_ASSERT_ENABLED
-extern void _DebugP_assert(int expression, const char *file, int line);
+extern void _DebugP_assert(int expression, const char* file, int line);
 /*!
  *  @brief  Assert checking function
  *
@@ -90,7 +90,7 @@ extern void _DebugP_assert(int expression, const char *file, int line);
  *  @param  expression Expression to evaluate
  */
 #define DebugP_assert(expression) (_DebugP_assert(expression,      \
-                                                  __FILE__, __LINE__))
+                                   __FILE__, __LINE__))
 #else
 #define DebugP_assert(expression)
 #endif
@@ -104,7 +104,7 @@ extern void _DebugP_assert(int expression, const char *file, int line);
  *
  *  @param  format "printf" format string
  */
-extern void DebugP_log0(const char *format);
+extern void DebugP_log0(const char* format);
 
 /*!
  *  @brief  Debug log function with 1 parameters
@@ -115,7 +115,7 @@ extern void DebugP_log0(const char *format);
  *  @param  format "printf" format string
  *  @param  p1 first parameter to format string
  */
-extern void DebugP_log1(const char *format, uintptr_t p1);
+extern void DebugP_log1(const char* format, uintptr_t p1);
 
 /*!
  *  @brief  Debug log function with 2 parameters
@@ -127,7 +127,7 @@ extern void DebugP_log1(const char *format, uintptr_t p1);
  *  @param  p1 first parameter to format string
  *  @param  p2 second parameter to format string
  */
-extern void DebugP_log2(const char *format, uintptr_t p1, uintptr_t p2);
+extern void DebugP_log2(const char* format, uintptr_t p1, uintptr_t p2);
 
 /*!
  *  @brief  Debug log function with 3 parameters
@@ -140,7 +140,7 @@ extern void DebugP_log2(const char *format, uintptr_t p1, uintptr_t p2);
  *  @param  p2 second parameter to format string
  *  @param  p3 third parameter to format string
  */
-extern void DebugP_log3(const char *format, uintptr_t p1, uintptr_t p2, uintptr_t p3);
+extern void DebugP_log3(const char* format, uintptr_t p1, uintptr_t p2, uintptr_t p3);
 
 /*!
  *  @brief  Debug log function with 4 parameters
@@ -154,7 +154,7 @@ extern void DebugP_log3(const char *format, uintptr_t p1, uintptr_t p2, uintptr_
  *  @param  p3 third parameter to format string
  *  @param  p4 fourth parameter to format string
  */
-extern void DebugP_log4(const char *format, uintptr_t p1, uintptr_t p2, uintptr_t p3, uintptr_t p4);
+extern void DebugP_log4(const char* format, uintptr_t p1, uintptr_t p2, uintptr_t p3, uintptr_t p4);
 #else
 #define DebugP_log0(format)
 #define DebugP_log1(format, p1)

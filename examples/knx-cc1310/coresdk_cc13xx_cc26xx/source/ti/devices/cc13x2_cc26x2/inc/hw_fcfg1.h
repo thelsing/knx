@@ -635,13 +635,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV2_CC26_2G4_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV2_CC26_2G4_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV2_CC26_2G4_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV2_CC26_2G4_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -673,13 +673,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV2_CC13_2G4_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV2_CC13_2G4_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV2_CC13_2G4_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV2_CC13_2G4_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -711,13 +711,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV2_CC26_1G_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV2_CC26_1G_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV2_CC26_1G_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV2_CC26_1G_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -749,13 +749,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV2_CC13_1G_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV2_CC13_1G_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV2_CC13_1G_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV2_CC13_1G_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -787,13 +787,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV4_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV4_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV4_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV4_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -825,13 +825,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV4_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV4_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV4_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV4_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -864,11 +864,11 @@
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV5_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N     0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV5_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV5_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M    \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV5_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S    \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -900,13 +900,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV6_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV6_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV6_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV6_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -938,13 +938,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV6_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV6_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV6_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV6_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -976,13 +976,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV10_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N     \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV10_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV10_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M   \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV10_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S   \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -1014,13 +1014,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV12_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV12_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV12_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV12_CC26_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -1052,13 +1052,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV12_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV12_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV12_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV12_CC13_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -1090,13 +1090,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV15_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N     \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV15_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV15_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M   \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV15_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S   \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -1128,13 +1128,13 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_CONFIG_SYNTH_DIV30_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N     \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV30_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_BITN \
-                                                                             5
+    5
 #define FCFG1_CONFIG_SYNTH_DIV30_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_M   \
-                                                                    0x00000020
+    0x00000020
 #define FCFG1_CONFIG_SYNTH_DIV30_RFC_MDM_DEMIQMC0_TRIMCOMPLETE_N_S   \
-                                                                             5
+    5
 
 //*****************************************************************************
 //
@@ -2228,11 +2228,11 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_SOC_ADC_REF_TRIM_AND_OFFSET_EXT_SOC_ADC_REF_VOLTAGE_TRIM_TEMP1_W \
-                                                                             6
+    6
 #define FCFG1_SOC_ADC_REF_TRIM_AND_OFFSET_EXT_SOC_ADC_REF_VOLTAGE_TRIM_TEMP1_M \
-                                                                    0x0000003F
+    0x0000003F
 #define FCFG1_SOC_ADC_REF_TRIM_AND_OFFSET_EXT_SOC_ADC_REF_VOLTAGE_TRIM_TEMP1_S \
-                                                                             0
+    0
 
 //*****************************************************************************
 //

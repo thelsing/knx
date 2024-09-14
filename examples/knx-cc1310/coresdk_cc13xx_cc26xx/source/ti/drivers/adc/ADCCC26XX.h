@@ -68,7 +68,8 @@ extern "C" {
  *  Larger input loads require longer sample times for the most accurate
  *  results.
  */
-typedef enum ADCCC26XX_Sampling_Duration {
+typedef enum ADCCC26XX_Sampling_Duration
+{
     ADCCC26XX_SAMPLING_DURATION_2P7_US    = AUXADC_SAMPLE_TIME_2P7_US,
     ADCCC26XX_SAMPLING_DURATION_5P3_US    = AUXADC_SAMPLE_TIME_5P3_US,
     ADCCC26XX_SAMPLING_DURATION_10P6_US   = AUXADC_SAMPLE_TIME_10P6_US,
@@ -104,7 +105,8 @@ typedef enum ADCCC26XX_Sampling_Duration {
  *  @warning    Even though the upper voltage range of the ADC is 4.3 volts in fixed mode with input scaling enabled, the input should never exceed
  *              VDDS as per the data sheet.
  */
-typedef enum ADCCC26XX_Reference_Source {
+typedef enum ADCCC26XX_Reference_Source
+{
     ADCCC26XX_FIXED_REFERENCE       = AUXADC_REF_FIXED,
     ADCCC26XX_VDDS_REFERENCE        = AUXADC_REF_VDDS_REL
 } ADCCC26XX_Reference_Source;
@@ -115,7 +117,8 @@ typedef enum ADCCC26XX_Reference_Source {
  *  The ADC driver currently only supports the driver manually triggering a conversion.
  *  Support for other trigger sources may be added later.
  */
-typedef enum ADCCC26XX_Trigger_Source {
+typedef enum ADCCC26XX_Trigger_Source
+{
     ADCCC26XX_TRIGGER_MANUAL    = AUXADC_TRIGGER_MANUAL,
 } ADCCC26XX_Trigger_Source;
 
@@ -128,7 +131,8 @@ extern const ADC_FxnTable ADCCC26XX_fxnTable;
  *  driverlib macro definitions.
  *
  */
-typedef struct ADCCC26XX_HWAttrs {
+typedef struct ADCCC26XX_HWAttrs
+{
     uint8_t                             adcDIO;                     /*!< DIO that the ADC is routed to */
     uint8_t                             adcCompBInput;              /*!< Internal signal routed to comparator B */
     bool                                returnAdjustedVal;          /*!< Should the raw output be trimmed before returning it */
@@ -143,7 +147,8 @@ typedef struct ADCCC26XX_HWAttrs {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct ADCCC26XX_Object {
+typedef struct ADCCC26XX_Object
+{
     PIN_State                       pinState;                   /*!< Pin state object */
     PIN_Handle                      pinHandle;                  /*!< Pin handle */
     bool                            isOpen;                     /*!< Flag if the instance is in use */

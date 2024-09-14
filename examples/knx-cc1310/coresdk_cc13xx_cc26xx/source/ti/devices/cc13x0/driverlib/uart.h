@@ -82,16 +82,16 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define UARTFIFOLevelGet                NOROM_UARTFIFOLevelGet
-    #define UARTConfigSetExpClk             NOROM_UARTConfigSetExpClk
-    #define UARTConfigGetExpClk             NOROM_UARTConfigGetExpClk
-    #define UARTDisable                     NOROM_UARTDisable
-    #define UARTCharGetNonBlocking          NOROM_UARTCharGetNonBlocking
-    #define UARTCharGet                     NOROM_UARTCharGet
-    #define UARTCharPutNonBlocking          NOROM_UARTCharPutNonBlocking
-    #define UARTCharPut                     NOROM_UARTCharPut
-    #define UARTIntRegister                 NOROM_UARTIntRegister
-    #define UARTIntUnregister               NOROM_UARTIntUnregister
+#define UARTFIFOLevelGet                NOROM_UARTFIFOLevelGet
+#define UARTConfigSetExpClk             NOROM_UARTConfigSetExpClk
+#define UARTConfigGetExpClk             NOROM_UARTConfigGetExpClk
+#define UARTDisable                     NOROM_UARTDisable
+#define UARTCharGetNonBlocking          NOROM_UARTCharGetNonBlocking
+#define UARTCharGet                     NOROM_UARTCharGet
+#define UARTCharPutNonBlocking          NOROM_UARTCharPutNonBlocking
+#define UARTCharPut                     NOROM_UARTCharPut
+#define UARTIntRegister                 NOROM_UARTIntRegister
+#define UARTIntUnregister               NOROM_UARTIntUnregister
 #endif
 
 //*****************************************************************************
@@ -208,7 +208,7 @@ extern "C"
 static bool
 UARTBaseValid(uint32_t ui32Base)
 {
-    return(( ui32Base == UART0_BASE ) || ( ui32Base == UART0_NONBUF_BASE ));
+    return (( ui32Base == UART0_BASE ) || ( ui32Base == UART0_NONBUF_BASE ));
 }
 #endif
 
@@ -273,8 +273,8 @@ UARTParityModeGet(uint32_t ui32Base)
     ASSERT(UARTBaseValid(ui32Base));
 
     // Return the current parity setting
-    return(HWREG(ui32Base + UART_O_LCRH) &
-           (UART_LCRH_SPS | UART_LCRH_EPS | UART_LCRH_PEN));
+    return (HWREG(ui32Base + UART_O_LCRH) &
+            (UART_LCRH_SPS | UART_LCRH_EPS | UART_LCRH_PEN));
 }
 
 //*****************************************************************************
@@ -348,8 +348,8 @@ UARTFIFOLevelSet(uint32_t ui32Base, uint32_t ui32TxLevel,
 //! \return None
 //
 //*****************************************************************************
-extern void UARTFIFOLevelGet(uint32_t ui32Base, uint32_t *pui32TxLevel,
-                             uint32_t *pui32RxLevel);
+extern void UARTFIFOLevelGet(uint32_t ui32Base, uint32_t* pui32TxLevel,
+                             uint32_t* pui32RxLevel);
 
 //*****************************************************************************
 //
@@ -412,7 +412,7 @@ extern void UARTConfigSetExpClk(uint32_t ui32Base, uint32_t ui32UARTClk,
 //
 //*****************************************************************************
 extern void UARTConfigGetExpClk(uint32_t ui32Base, uint32_t ui32UARTClk,
-                                uint32_t *pui32Baud, uint32_t *pui32Config);
+                                uint32_t* pui32Baud, uint32_t* pui32Config);
 
 //*****************************************************************************
 //
@@ -517,7 +517,7 @@ UARTCharsAvail(uint32_t ui32Base)
     ASSERT(UARTBaseValid(ui32Base));
 
     // Return the availability of characters.
-    return((HWREG(ui32Base + UART_O_FR) & UART_FR_RXFE) ? false : true);
+    return ((HWREG(ui32Base + UART_O_FR) & UART_FR_RXFE) ? false : true);
 }
 
 //*****************************************************************************
@@ -541,7 +541,7 @@ UARTSpaceAvail(uint32_t ui32Base)
     ASSERT(UARTBaseValid(ui32Base));
 
     // Return the availability of space.
-    return((HWREG(ui32Base + UART_O_FR) & UART_FR_TXFF) ? false : true);
+    return ((HWREG(ui32Base + UART_O_FR) & UART_FR_TXFF) ? false : true);
 }
 
 //*****************************************************************************
@@ -639,8 +639,8 @@ UARTBusy(uint32_t ui32Base)
     ASSERT(UARTBaseValid(ui32Base));
 
     // Determine if the UART is busy.
-    return((HWREG(ui32Base + UART_O_FR) & UART_FR_BUSY) ?
-           UART_BUSY : UART_IDLE);
+    return ((HWREG(ui32Base + UART_O_FR) & UART_FR_BUSY) ?
+            UART_BUSY : UART_IDLE);
 }
 
 //*****************************************************************************
@@ -666,7 +666,7 @@ UARTBreakCtl(uint32_t ui32Base, bool bBreakState)
 
     // Set the break condition as requested.
     HWREG(ui32Base + UART_O_LCRH) =
-         (bBreakState ?
+        (bBreakState ?
          (HWREG(ui32Base + UART_O_LCRH) | UART_LCRH_BRK) :
          (HWREG(ui32Base + UART_O_LCRH) & ~(UART_LCRH_BRK)));
 }
@@ -811,13 +811,13 @@ UARTIntStatus(uint32_t ui32Base, bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    if(bMasked)
+    if (bMasked)
     {
-        return(HWREG(ui32Base + UART_O_MIS));
+        return (HWREG(ui32Base + UART_O_MIS));
     }
     else
     {
-        return(HWREG(ui32Base + UART_O_RIS));
+        return (HWREG(ui32Base + UART_O_RIS));
     }
 }
 
@@ -952,7 +952,7 @@ UARTRxErrorGet(uint32_t ui32Base)
     ASSERT(UARTBaseValid(ui32Base));
 
     // Return the current value of the receive status register.
-    return(HWREG(ui32Base + UART_O_RSR) & 0x0000000F);
+    return (HWREG(ui32Base + UART_O_RSR) & 0x0000000F);
 }
 
 //*****************************************************************************
@@ -1028,47 +1028,47 @@ UARTHwFlowControlDisable( uint32_t ui32Base )
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_UARTFIFOLevelGet
-        #undef  UARTFIFOLevelGet
-        #define UARTFIFOLevelGet                ROM_UARTFIFOLevelGet
-    #endif
-    #ifdef ROM_UARTConfigSetExpClk
-        #undef  UARTConfigSetExpClk
-        #define UARTConfigSetExpClk             ROM_UARTConfigSetExpClk
-    #endif
-    #ifdef ROM_UARTConfigGetExpClk
-        #undef  UARTConfigGetExpClk
-        #define UARTConfigGetExpClk             ROM_UARTConfigGetExpClk
-    #endif
-    #ifdef ROM_UARTDisable
-        #undef  UARTDisable
-        #define UARTDisable                     ROM_UARTDisable
-    #endif
-    #ifdef ROM_UARTCharGetNonBlocking
-        #undef  UARTCharGetNonBlocking
-        #define UARTCharGetNonBlocking          ROM_UARTCharGetNonBlocking
-    #endif
-    #ifdef ROM_UARTCharGet
-        #undef  UARTCharGet
-        #define UARTCharGet                     ROM_UARTCharGet
-    #endif
-    #ifdef ROM_UARTCharPutNonBlocking
-        #undef  UARTCharPutNonBlocking
-        #define UARTCharPutNonBlocking          ROM_UARTCharPutNonBlocking
-    #endif
-    #ifdef ROM_UARTCharPut
-        #undef  UARTCharPut
-        #define UARTCharPut                     ROM_UARTCharPut
-    #endif
-    #ifdef ROM_UARTIntRegister
-        #undef  UARTIntRegister
-        #define UARTIntRegister                 ROM_UARTIntRegister
-    #endif
-    #ifdef ROM_UARTIntUnregister
-        #undef  UARTIntUnregister
-        #define UARTIntUnregister               ROM_UARTIntUnregister
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_UARTFIFOLevelGet
+#undef  UARTFIFOLevelGet
+#define UARTFIFOLevelGet                ROM_UARTFIFOLevelGet
+#endif
+#ifdef ROM_UARTConfigSetExpClk
+#undef  UARTConfigSetExpClk
+#define UARTConfigSetExpClk             ROM_UARTConfigSetExpClk
+#endif
+#ifdef ROM_UARTConfigGetExpClk
+#undef  UARTConfigGetExpClk
+#define UARTConfigGetExpClk             ROM_UARTConfigGetExpClk
+#endif
+#ifdef ROM_UARTDisable
+#undef  UARTDisable
+#define UARTDisable                     ROM_UARTDisable
+#endif
+#ifdef ROM_UARTCharGetNonBlocking
+#undef  UARTCharGetNonBlocking
+#define UARTCharGetNonBlocking          ROM_UARTCharGetNonBlocking
+#endif
+#ifdef ROM_UARTCharGet
+#undef  UARTCharGet
+#define UARTCharGet                     ROM_UARTCharGet
+#endif
+#ifdef ROM_UARTCharPutNonBlocking
+#undef  UARTCharPutNonBlocking
+#define UARTCharPutNonBlocking          ROM_UARTCharPutNonBlocking
+#endif
+#ifdef ROM_UARTCharPut
+#undef  UARTCharPut
+#define UARTCharPut                     ROM_UARTCharPut
+#endif
+#ifdef ROM_UARTIntRegister
+#undef  UARTIntRegister
+#define UARTIntRegister                 ROM_UARTIntRegister
+#endif
+#ifdef ROM_UARTIntUnregister
+#undef  UARTIntUnregister
+#define UARTIntUnregister               ROM_UARTIntUnregister
+#endif
 #endif
 
 //*****************************************************************************

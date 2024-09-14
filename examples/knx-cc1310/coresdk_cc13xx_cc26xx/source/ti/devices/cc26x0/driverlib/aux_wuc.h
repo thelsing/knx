@@ -80,10 +80,10 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AUXWUCClockEnable               NOROM_AUXWUCClockEnable
-    #define AUXWUCClockDisable              NOROM_AUXWUCClockDisable
-    #define AUXWUCClockStatus               NOROM_AUXWUCClockStatus
-    #define AUXWUCPowerCtrl                 NOROM_AUXWUCPowerCtrl
+#define AUXWUCClockEnable               NOROM_AUXWUCClockEnable
+#define AUXWUCClockDisable              NOROM_AUXWUCClockDisable
+#define AUXWUCClockStatus               NOROM_AUXWUCClockStatus
+#define AUXWUCPowerCtrl                 NOROM_AUXWUCPowerCtrl
 #endif
 
 //*****************************************************************************
@@ -308,23 +308,23 @@ AUXWUCFreezeDisable(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AUXWUCClockEnable
-        #undef  AUXWUCClockEnable
-        #define AUXWUCClockEnable               ROM_AUXWUCClockEnable
-    #endif
-    #ifdef ROM_AUXWUCClockDisable
-        #undef  AUXWUCClockDisable
-        #define AUXWUCClockDisable              ROM_AUXWUCClockDisable
-    #endif
-    #ifdef ROM_AUXWUCClockStatus
-        #undef  AUXWUCClockStatus
-        #define AUXWUCClockStatus               ROM_AUXWUCClockStatus
-    #endif
-    #ifdef ROM_AUXWUCPowerCtrl
-        #undef  AUXWUCPowerCtrl
-        #define AUXWUCPowerCtrl                 ROM_AUXWUCPowerCtrl
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AUXWUCClockEnable
+#undef  AUXWUCClockEnable
+#define AUXWUCClockEnable               ROM_AUXWUCClockEnable
+#endif
+#ifdef ROM_AUXWUCClockDisable
+#undef  AUXWUCClockDisable
+#define AUXWUCClockDisable              ROM_AUXWUCClockDisable
+#endif
+#ifdef ROM_AUXWUCClockStatus
+#undef  AUXWUCClockStatus
+#define AUXWUCClockStatus               ROM_AUXWUCClockStatus
+#endif
+#ifdef ROM_AUXWUCPowerCtrl
+#undef  AUXWUCPowerCtrl
+#define AUXWUCPowerCtrl                 ROM_AUXWUCPowerCtrl
+#endif
 #endif
 
 //*****************************************************************************

@@ -69,19 +69,20 @@ extern "C"
 #endif
 
 
-CPE_PATCH_TYPE patchImageIeee802154[] = {
-   0x21004051,
-   0x79654c07,
-   0xf809f000,
-   0x40697961,
-   0xd5030749,
-   0x4a042101,
-   0x60110389,
-   0xb570bd70,
-   0x47084902,
-   0x21000380,
-   0x40041108,
-   0x0000592d,
+CPE_PATCH_TYPE patchImageIeee802154[] =
+{
+    0x21004051,
+    0x79654c07,
+    0xf809f000,
+    0x40697961,
+    0xd5030749,
+    0x4a042101,
+    0x60110389,
+    0xb570bd70,
+    0x47084902,
+    0x21000380,
+    0x40041108,
+    0x0000592d,
 };
 #define _NWORD_PATCHIMAGE_IEEE_802_15_4 12
 
@@ -115,18 +116,18 @@ static uint8_t bIeee802154PatchEntered = 0;
 PATCH_FUN_SPEC void enterIeee802154CpePatch(void)
 {
 #if (_NWORD_PATCHIMAGE_IEEE_802_15_4 > 0)
-   uint32_t *pPatchVec = (uint32_t *) (_IEEE_802_15_4_CPERAM_START + _IEEE_802_15_4_PATCH_VEC_OFFSET);
+    uint32_t* pPatchVec = (uint32_t*) (_IEEE_802_15_4_CPERAM_START + _IEEE_802_15_4_PATCH_VEC_OFFSET);
 
-   memcpy(pPatchVec, patchImageIeee802154, sizeof(patchImageIeee802154));
+    memcpy(pPatchVec, patchImageIeee802154, sizeof(patchImageIeee802154));
 #endif
 }
 
 PATCH_FUN_SPEC void enterIeee802154CpeHdPatch(void)
 {
 #if (_NWORD_PATCHCPEHD_IEEE_802_15_4 > 0)
-   uint32_t *pPatchCpeHd = (uint32_t *) (_IEEE_802_15_4_CPERAM_START + _IEEE_802_15_4_PATCH_CPEHD_OFFSET);
+    uint32_t* pPatchCpeHd = (uint32_t*) (_IEEE_802_15_4_CPERAM_START + _IEEE_802_15_4_PATCH_CPEHD_OFFSET);
 
-   memcpy(pPatchCpeHd, patchCpeHd, sizeof(patchCpeHd));
+    memcpy(pPatchCpeHd, patchCpeHd, sizeof(patchCpeHd));
 #endif
 }
 
@@ -136,45 +137,47 @@ PATCH_FUN_SPEC void enterIeee802154SysPatch(void)
 
 PATCH_FUN_SPEC void configureIeee802154Patch(void)
 {
-   uint8_t *pPatchTab = (uint8_t *) (_IEEE_802_15_4_CPERAM_START + _IEEE_802_15_4_PATCH_TAB_OFFSET);
+    uint8_t* pPatchTab = (uint8_t*) (_IEEE_802_15_4_CPERAM_START + _IEEE_802_15_4_PATCH_TAB_OFFSET);
 
 
-   pPatchTab[76] = 0;
+    pPatchTab[76] = 0;
 }
 
 PATCH_FUN_SPEC void applyIeee802154Patch(void)
 {
 #ifdef _IEEE_802_15_4_NO_PROG_STATE_VAR
-   enterIeee802154SysPatch();
-   enterIeee802154CpePatch();
+    enterIeee802154SysPatch();
+    enterIeee802154CpePatch();
 #else
-   if (!bIeee802154PatchEntered)
-   {
-      enterIeee802154SysPatch();
-      enterIeee802154CpePatch();
-      bIeee802154PatchEntered = 1;
-   }
+
+    if (!bIeee802154PatchEntered)
+    {
+        enterIeee802154SysPatch();
+        enterIeee802154CpePatch();
+        bIeee802154PatchEntered = 1;
+    }
+
 #endif
-   enterIeee802154CpeHdPatch();
-   configureIeee802154Patch();
+    enterIeee802154CpeHdPatch();
+    configureIeee802154Patch();
 }
 
 PATCH_FUN_SPEC void refreshIeee802154Patch(void)
 {
-   enterIeee802154CpeHdPatch();
-   configureIeee802154Patch();
+    enterIeee802154CpeHdPatch();
+    configureIeee802154Patch();
 }
 
 #ifndef _IEEE_802_15_4_NO_PROG_STATE_VAR
 PATCH_FUN_SPEC void cleanIeee802154Patch(void)
 {
-   bIeee802154PatchEntered = 0;
+    bIeee802154PatchEntered = 0;
 }
 #endif
 
 PATCH_FUN_SPEC void rf_patch_cpe_ieee_802_15_4(void)
 {
-   applyIeee802154Patch();
+    applyIeee802154Patch();
 }
 
 

@@ -82,11 +82,11 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define DDI32RegWrite                   NOROM_DDI32RegWrite
-    #define DDI16BitWrite                   NOROM_DDI16BitWrite
-    #define DDI16BitfieldWrite              NOROM_DDI16BitfieldWrite
-    #define DDI16BitRead                    NOROM_DDI16BitRead
-    #define DDI16BitfieldRead               NOROM_DDI16BitfieldRead
+#define DDI32RegWrite                   NOROM_DDI32RegWrite
+#define DDI16BitWrite                   NOROM_DDI16BitWrite
+#define DDI16BitfieldWrite              NOROM_DDI16BitfieldWrite
+#define DDI16BitRead                    NOROM_DDI16BitRead
+#define DDI16BitfieldRead               NOROM_DDI16BitfieldRead
 #endif
 
 //*****************************************************************************
@@ -139,7 +139,7 @@ extern "C"
 static bool
 DDIBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == AUX_DDI0_OSC_BASE);
+    return (ui32Base == AUX_DDI0_OSC_BASE);
 }
 #endif
 
@@ -165,7 +165,7 @@ DDI32RegRead(uint32_t ui32Base, uint32_t ui32Reg)
     ASSERT(ui32Reg < DDI_SLAVE_REGS);
 
     // Read the register and return the value.
-    return(HWREG(ui32Base + ui32Reg));
+    return (HWREG(ui32Base + ui32Reg));
 }
 
 //*****************************************************************************
@@ -419,27 +419,27 @@ extern uint16_t DDI16BitfieldRead(uint32_t ui32Base, uint32_t ui32Reg,
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_DDI32RegWrite
-        #undef  DDI32RegWrite
-        #define DDI32RegWrite                   ROM_DDI32RegWrite
-    #endif
-    #ifdef ROM_DDI16BitWrite
-        #undef  DDI16BitWrite
-        #define DDI16BitWrite                   ROM_DDI16BitWrite
-    #endif
-    #ifdef ROM_DDI16BitfieldWrite
-        #undef  DDI16BitfieldWrite
-        #define DDI16BitfieldWrite              ROM_DDI16BitfieldWrite
-    #endif
-    #ifdef ROM_DDI16BitRead
-        #undef  DDI16BitRead
-        #define DDI16BitRead                    ROM_DDI16BitRead
-    #endif
-    #ifdef ROM_DDI16BitfieldRead
-        #undef  DDI16BitfieldRead
-        #define DDI16BitfieldRead               ROM_DDI16BitfieldRead
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_DDI32RegWrite
+#undef  DDI32RegWrite
+#define DDI32RegWrite                   ROM_DDI32RegWrite
+#endif
+#ifdef ROM_DDI16BitWrite
+#undef  DDI16BitWrite
+#define DDI16BitWrite                   ROM_DDI16BitWrite
+#endif
+#ifdef ROM_DDI16BitfieldWrite
+#undef  DDI16BitfieldWrite
+#define DDI16BitfieldWrite              ROM_DDI16BitfieldWrite
+#endif
+#ifdef ROM_DDI16BitRead
+#undef  DDI16BitRead
+#define DDI16BitRead                    ROM_DDI16BitRead
+#endif
+#ifdef ROM_DDI16BitfieldRead
+#undef  DDI16BitfieldRead
+#define DDI16BitfieldRead               ROM_DDI16BitfieldRead
+#endif
 #endif
 
 //*****************************************************************************

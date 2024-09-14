@@ -86,7 +86,7 @@ extern "C" {
  *
  *  @return Returns a status code from CryptoKey.h
  */
-int_fast16_t CryptoKeyPlaintext_initKey(CryptoKey *keyHandle, uint8_t *key, size_t keyLength);
+int_fast16_t CryptoKeyPlaintext_initKey(CryptoKey* keyHandle, uint8_t* key, size_t keyLength);
 
 
 /*!
@@ -101,7 +101,7 @@ int_fast16_t CryptoKeyPlaintext_initKey(CryptoKey *keyHandle, uint8_t *key, size
  *
  *  @return Returns a status code from CryptoKey.h
  */
-int_fast16_t CryptoKeyPlaintext_initBlankKey(CryptoKey *keyHandle, uint8_t *keyLocation, size_t keyLength);
+int_fast16_t CryptoKeyPlaintext_initBlankKey(CryptoKey* keyHandle, uint8_t* keyLocation, size_t keyLength);
 
 /*!
  *  @brief Gets the length of a plaintext key
@@ -112,7 +112,7 @@ int_fast16_t CryptoKeyPlaintext_initBlankKey(CryptoKey *keyHandle, uint8_t *keyL
  *
  *  @return Returns a status code from CryptoKey.h
  */
-int_fast16_t CryptoKeyPlaintext_getKeyLength(CryptoKey *keyHandle, size_t *length);
+int_fast16_t CryptoKeyPlaintext_getKeyLength(CryptoKey* keyHandle, size_t* length);
 
 /*!
  * @brief Sets the CryptoKey keyMaterial pointer
@@ -126,7 +126,7 @@ int_fast16_t CryptoKeyPlaintext_getKeyLength(CryptoKey *keyHandle, size_t *lengt
  *
  *  @return Returns a status code from CryptoKey.h
  */
-int_fast16_t CryptoKeyPlaintext_setKeyLocation(CryptoKey *keyHandle, uint8_t *location);
+int_fast16_t CryptoKeyPlaintext_setKeyLocation(CryptoKey* keyHandle, uint8_t* location);
 
 
 /*!
@@ -138,7 +138,7 @@ int_fast16_t CryptoKeyPlaintext_setKeyLocation(CryptoKey *keyHandle, uint8_t *lo
  *
  *  @return Returns a status code from CryptoKey.h
  */
-int_fast16_t CryptoKeyPlaintext_getKeyLength(CryptoKey *keyHandle, size_t *length);
+int_fast16_t CryptoKeyPlaintext_getKeyLength(CryptoKey* keyHandle, size_t* length);
 
 #ifdef __cplusplus
 }

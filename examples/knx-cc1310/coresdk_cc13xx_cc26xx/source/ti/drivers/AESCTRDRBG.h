@@ -303,7 +303,8 @@ extern "C" {
 /*!
  * @brief   Length in bytes of the internal AES key used by an instance
  */
-typedef enum {
+typedef enum
+{
     AESCTRDRBG_AES_KEY_LENGTH_128 = 16,
     AESCTRDRBG_AES_KEY_LENGTH_256 = 32,
 } AESCTRDRBG_AES_KEY_LENGTH;
@@ -311,7 +312,8 @@ typedef enum {
 /*!
  * @brief   Length in bytes of seed used to instantiate or reseed instance
  */
-typedef enum {
+typedef enum
+{
     AESCTRDRBG_SEED_LENGTH_AES_128 = AESCTRDRBG_AES_KEY_LENGTH_128 + AESCTRDRBG_AES_BLOCK_SIZE_BYTES,
     AESCTRDRBG_SEED_LENGTH_AES_256 = AESCTRDRBG_AES_KEY_LENGTH_256 + AESCTRDRBG_AES_BLOCK_SIZE_BYTES,
 } AESCTRDRBG_SEED_LENGTH;
@@ -336,7 +338,8 @@ typedef enum {
  * |#AESCTRDRBG_RETURN_BEHAVIOR_POLLING  | X     | X     | X     |
  *
  */
-typedef enum AESCTRDRBG_ReturnBehavior_ {
+typedef enum AESCTRDRBG_ReturnBehavior_
+{
     /*!< The function call will block while AESCTRDRBG operation goes
      *   on in the background. AESCTRDRBG operation results are available
      *   after the function returns.
@@ -360,18 +363,19 @@ typedef enum AESCTRDRBG_ReturnBehavior_ {
  *
  *  @sa     #AESCTRDRBG_init()
  */
-typedef struct {
+typedef struct
+{
     /*! Pointer to a driver specific data object */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } AESCTRDRBG_Config;
 
 /*!
  *  @brief  A handle that is returned from an #AESCTRDRBG_open() call.
  */
-typedef AESCTRDRBG_Config *AESCTRDRBG_Handle;
+typedef AESCTRDRBG_Config* AESCTRDRBG_Handle;
 
 /*!
  *  @brief  AESCTRDRBG Parameters
@@ -381,7 +385,8 @@ typedef AESCTRDRBG_Config *AESCTRDRBG_Handle;
  *
  *  @sa     #AESCTRDRBG_Params_init()
  */
-typedef struct {
+typedef struct
+{
     AESCTRDRBG_AES_KEY_LENGTH   keyLength;                      /*!< Length of the internal AES key
                                                                  *   of the driver instance.
                                                                  */
@@ -389,12 +394,12 @@ typedef struct {
                                                                  *   requests before the application is
                                                                  *   required to reseed the driver.
                                                                  */
-    const void                  *seed;                          /*!< Entropy used to seed the internal
+    const void*                  seed;                          /*!< Entropy used to seed the internal
                                                                  *   state of the driver. Must be one of
                                                                  *   #AESCTRDRBG_SEED_LENGTH long depending
                                                                  *   on \c keyLength.
                                                                  */
-    const void                  *personalizationData;           /*!< Optional non-secret personalization
+    const void*                  personalizationData;           /*!< Optional non-secret personalization
                                                                  *   data to mix into the driver's internal
                                                                  *   state.
                                                                  */
@@ -409,7 +414,7 @@ typedef struct {
                                                                  *   1250 bytes for AES-128 will be common
                                                                  *   usecases for this driver instance.
                                                                  */
-    void                        *custom;                        /*!< Custom argument used by driver
+    void*                        custom;                        /*!< Custom argument used by driver
                                                                  *   implementation
                                                                  */
 } AESCTRDRBG_Params;
@@ -437,7 +442,7 @@ void AESCTRDRBG_init(void);
  *  @param  [out]    params  Pointer to #AESCTRDRBG_Params structure for
  *                           initialization
  */
-void AESCTRDRBG_Params_init(AESCTRDRBG_Params *params);
+void AESCTRDRBG_Params_init(AESCTRDRBG_Params* params);
 
 /*!
  *  @brief  This function opens a given AESCTRDRBG instance.
@@ -456,7 +461,7 @@ void AESCTRDRBG_Params_init(AESCTRDRBG_Params *params);
  *  @sa     #AESCTRDRBG_init()
  *  @sa     #AESCTRDRBG_close()
  */
-AESCTRDRBG_Handle AESCTRDRBG_open(uint_least8_t index, const AESCTRDRBG_Params *params);
+AESCTRDRBG_Handle AESCTRDRBG_open(uint_least8_t index, const AESCTRDRBG_Params* params);
 
 /*!
  *  @brief  Function to close an AESCTRDRBG peripheral specified by the #AESCTRDRBG_Handle
@@ -482,7 +487,7 @@ void AESCTRDRBG_close(AESCTRDRBG_Handle handle);
  *  @retval #AESCTRDRBG_STATUS_RESOURCE_UNAVAILABLE The requires hardware was unavailable.
  *  @retval #AESCTRDRBG_STATUS_RESEED_REQUIRED      Reseed counter >= reseed limit. Reseed required.
  */
-int_fast16_t AESCTRDRBG_getBytes(AESCTRDRBG_Handle handle, CryptoKey *randomBytes);
+int_fast16_t AESCTRDRBG_getBytes(AESCTRDRBG_Handle handle, CryptoKey* randomBytes);
 
 /*!
  *  @brief  Reseed an AESCTRDRBG instance.
@@ -503,8 +508,8 @@ int_fast16_t AESCTRDRBG_getBytes(AESCTRDRBG_Handle handle, CryptoKey *randomByte
  *  @retval #AESCTRDRBG_STATUS_RESOURCE_UNAVAILABLE     The requires hardware was unavailable.
  */
 int_fast16_t AESCTRDRBG_reseed(AESCTRDRBG_Handle handle,
-                               const void *seed,
-                               const void *additionalData,
+                               const void* seed,
+                               const void* additionalData,
                                size_t additionalDataLength);
 
 

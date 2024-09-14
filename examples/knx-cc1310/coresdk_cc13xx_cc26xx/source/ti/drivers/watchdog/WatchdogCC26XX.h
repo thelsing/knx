@@ -218,7 +218,8 @@ extern const Watchdog_FxnTable WatchdogCC26XX_fxnTable;
 /*!
  *  @brief  Watchdog hardware attributes for CC26XX
  */
-typedef struct WatchdogCC26XX_HWAttrs {
+typedef struct WatchdogCC26XX_HWAttrs
+{
     unsigned int baseAddr;       /*!< Base adddress for Watchdog */
     unsigned long reloadValue;   /*!< Reload value in milliseconds for Watchdog */
 } WatchdogCC26XX_HWAttrs;
@@ -228,7 +229,8 @@ typedef struct WatchdogCC26XX_HWAttrs {
  *
  *  Not to be accessed by the user.
  */
-typedef struct WatchdogCC26XX_Object {
+typedef struct WatchdogCC26XX_Object
+{
     bool                isOpen;             /* Flag for open/close status */
     Watchdog_Callback   callbackFxn;        /* Pointer to callback. Not supported
                                                on all targets. */

@@ -111,7 +111,8 @@ extern "C" {
 
 
 /*! @brief Global configuration structure */
-typedef struct PowerCC26X2_Config {
+typedef struct PowerCC26X2_Config
+{
     /*!
      *  @brief The Power Policy's initialization function
      *
@@ -192,7 +193,8 @@ typedef struct PowerCC26X2_Config {
  *  Power manager state structure. The application must not access any members
  *  of this structure!
  */
-typedef struct PowerCC26X2_ModuleState {
+typedef struct PowerCC26X2_ModuleState
+{
     List_List notifyList;           /*!< Event notification list */
     uint32_t constraintMask;        /*!< Aggregate constraints mask */
     ClockP_Struct clockObj;         /*!< Clock object for scheduling wakeups */

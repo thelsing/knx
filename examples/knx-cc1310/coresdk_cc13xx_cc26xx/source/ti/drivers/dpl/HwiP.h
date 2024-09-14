@@ -73,7 +73,8 @@ extern "C" {
  *  Opaque structure that should be large enough to hold any of the RTOS
  *  specific HwiP objects.
  */
-typedef union HwiP_Struct {
+typedef union HwiP_Struct
+{
     uint32_t dummy;  /*!< Align object */
     char     data[HwiP_STRUCT_SIZE];
 } HwiP_Struct;
@@ -83,12 +84,13 @@ typedef union HwiP_Struct {
  *
  *  A HwiP_Handle returned from the ::HwiP_create represents that instance.
  */
-typedef  void *HwiP_Handle;
+typedef  void* HwiP_Handle;
 
 /*!
  *  @brief    Status codes for HwiP APIs
  */
-typedef enum HwiP_Status {
+typedef enum HwiP_Status
+{
     HwiP_OK = 0,
     HwiP_FAILURE = -1
 } HwiP_Status;
@@ -110,7 +112,8 @@ typedef void (*HwiP_Fxn)(uintptr_t arg);
  *  Parameter enableInt specifies if the interrupt should be enabled
  *  upon creation of the HwiP object.  The default is true.
  */
-typedef struct HwiP_Params {
+typedef struct HwiP_Params
+{
     uintptr_t  arg;       /*!< Argument passed into the Hwi function. */
     uint32_t   priority;  /*!< Device specific priority. */
     bool       enableInt; /*!< Enable interrupt on creation. */
@@ -146,8 +149,8 @@ extern int HwiP_swiPIntNum;
  *
  *  @return A HwiP_Handle on success or a NULL on an error
  */
-extern HwiP_Handle HwiP_construct(HwiP_Struct *hwiP, int interruptNum,
-                                  HwiP_Fxn hwiFxn, HwiP_Params *params);
+extern HwiP_Handle HwiP_construct(HwiP_Struct* hwiP, int interruptNum,
+                                  HwiP_Fxn hwiFxn, HwiP_Params* params);
 
 /*!
  *  @brief  Function to destruct a hardware interrupt object
@@ -157,7 +160,7 @@ extern HwiP_Handle HwiP_construct(HwiP_Struct *hwiP, int interruptNum,
  *
  *  @return
  */
-extern void HwiP_destruct(HwiP_Struct *hwiP);
+extern void HwiP_destruct(HwiP_Struct* hwiP);
 
 /*!
  *  @brief  Function to clear a single interrupt
@@ -180,7 +183,7 @@ extern void HwiP_clearInterrupt(int interruptNum);
  *  @return A HwiP_Handle on success or a NULL on an error
  */
 extern HwiP_Handle HwiP_create(int interruptNum, HwiP_Fxn hwiFxn,
-                               HwiP_Params *params);
+                               HwiP_Params* params);
 
 /*!
  *  @brief  Function to delete an interrupt on CortexM devices
@@ -246,7 +249,7 @@ extern bool HwiP_inISR(void);
  *
  *  @param params  Pointer to the instance configuration parameters.
  */
-extern void HwiP_Params_init(HwiP_Params *params);
+extern void HwiP_Params_init(HwiP_Params* params);
 
 /*!
  *  @brief  Function to plug an interrupt vector
@@ -254,7 +257,7 @@ extern void HwiP_Params_init(HwiP_Params *params);
  *  @param  interruptNum ID of interrupt to plug
  *  @param  fxn ISR that services plugged interrupt
  */
-extern void HwiP_plug(int interruptNum, void *fxn);
+extern void HwiP_plug(int interruptNum, void* fxn);
 
 /*!
  *  @brief  Function to generate an interrupt

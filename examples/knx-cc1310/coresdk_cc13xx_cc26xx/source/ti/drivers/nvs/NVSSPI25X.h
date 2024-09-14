@@ -297,9 +297,9 @@ typedef struct
     size_t      regionBaseOffset;   /*!< Offset from base of SPI flash */
     size_t      regionSize;         /*!< The size of the region in bytes */
     size_t      sectorSize;         /*!< Erase sector size */
-    uint8_t     *verifyBuf;         /*!< Write Pre/Post verify buffer */
+    uint8_t*     verifyBuf;         /*!< Write Pre/Post verify buffer */
     size_t      verifyBufSize;      /*!< Write Pre/Post verify buffer size */
-    SPI_Handle  *spiHandle;         /*!< ptr to SPI handle if provided by user. */
+    SPI_Handle*  spiHandle;         /*!< ptr to SPI handle if provided by user. */
     uint16_t    spiIndex;           /*!< SPI instance index from Board file */
     uint32_t    spiBitRate;         /*!< SPI bit rate in Hz */
     /*! @brief SPI Flash Chip Select GPIO index
@@ -339,18 +339,18 @@ typedef struct
 
 extern void         NVSSPI25X_close(NVS_Handle handle);
 extern int_fast16_t NVSSPI25X_control(NVS_Handle handle, uint_fast16_t cmd,
-                        uintptr_t arg);
+                                      uintptr_t arg);
 extern int_fast16_t NVSSPI25X_erase(NVS_Handle handle, size_t offset,
-                        size_t size);
-extern void         NVSSPI25X_getAttrs(NVS_Handle handle, NVS_Attrs *attrs);
+                                    size_t size);
+extern void         NVSSPI25X_getAttrs(NVS_Handle handle, NVS_Attrs* attrs);
 extern void         NVSSPI25X_init();
 extern int_fast16_t NVSSPI25X_lock(NVS_Handle handle, uint32_t timeout);
-extern NVS_Handle   NVSSPI25X_open(uint_least8_t index, NVS_Params *params);
+extern NVS_Handle   NVSSPI25X_open(uint_least8_t index, NVS_Params* params);
 extern int_fast16_t NVSSPI25X_read(NVS_Handle handle, size_t offset,
-                        void *buffer, size_t bufferSize);
+                                   void* buffer, size_t bufferSize);
 extern void         NVSSPI25X_unlock(NVS_Handle handle);
 extern int_fast16_t NVSSPI25X_write(NVS_Handle handle, size_t offset,
-                        void *buffer, size_t bufferSize, uint_fast16_t flags);
+                                    void* buffer, size_t bufferSize, uint_fast16_t flags);
 /*
  *  Weakly defined APIs that can be overridden by the user
  */

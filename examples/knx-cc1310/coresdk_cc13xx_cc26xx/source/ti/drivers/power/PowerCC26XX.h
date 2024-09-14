@@ -319,14 +319,16 @@ typedef uint8_t PowerCC26XX_Resource; /* Resource identifier */
 
 /* \cond */
 /*! @brief Power resource database record format */
-typedef struct PowerCC26XX_ResourceRecord {
+typedef struct PowerCC26XX_ResourceRecord
+{
     uint8_t flags;          /* resource type | first parent */
     uint16_t driverlibID;   /* corresponding driverlib ID for this resource */
 } PowerCC26XX_ResourceRecord;
 /* \endcond */
 
 /*! @brief Global configuration structure */
-typedef struct PowerCC26XX_Config {
+typedef struct PowerCC26XX_Config
+{
     /*!
      *  @brief The Power Policy's initialization function
      *
@@ -395,22 +397,22 @@ typedef struct PowerCC26XX_Config {
      *  this purpose.
      */
     uint32_t maxStandbyDuration;
-     /*!
-     *  @brief Margin in SCLK_LF periods subtracted from previous longest
-     *  VDDR recharge period.
-     *
-     *  As the device comes out of standby, it updated its previous initial
-     *  VDDR recharge period to be closer to the longest recharge period
-     *  experienced during the time spent in standby before waking up.
-     *
-     *  vddrRechargeMargin is subtracted from the longest VDDR recharge
-     *  period in SysCtrlAdjustRechargeAfterPowerDown to ensure there is
-     *  some margin between the new initial and converged VDDR recharge
-     *  period. The converged recharge period at a certain temperature
-     *  is board and device dependent.
-     *
-     *  The default value of 0 disables this feature.
-     */
+    /*!
+    *  @brief Margin in SCLK_LF periods subtracted from previous longest
+    *  VDDR recharge period.
+    *
+    *  As the device comes out of standby, it updated its previous initial
+    *  VDDR recharge period to be closer to the longest recharge period
+    *  experienced during the time spent in standby before waking up.
+    *
+    *  vddrRechargeMargin is subtracted from the longest VDDR recharge
+    *  period in SysCtrlAdjustRechargeAfterPowerDown to ensure there is
+    *  some margin between the new initial and converged VDDR recharge
+    *  period. The converged recharge period at a certain temperature
+    *  is board and device dependent.
+    *
+    *  The default value of 0 disables this feature.
+    */
     uint16_t vddrRechargeMargin;
     /*!
      *  @brief Boolean that enables limiting the duration spent in standby
@@ -464,7 +466,8 @@ typedef struct PowerCC26XX_Config {
  *  Power manager state structure. The application must not access any members
  *  of this structure!
  */
-typedef struct PowerCC26XX_ModuleState {
+typedef struct PowerCC26XX_ModuleState
+{
     List_List notifyList;        /*!< Event notification list */
     uint32_t constraintMask;     /*!< Aggregate constraints mask */
     ClockP_Struct clockObj;       /*!< Clock object for scheduling wakeups */

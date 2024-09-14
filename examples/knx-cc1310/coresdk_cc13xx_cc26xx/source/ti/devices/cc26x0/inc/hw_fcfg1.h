@@ -929,11 +929,11 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_SHDW_OSC_BIAS_LDO_TRIM_SET_RCOSC_HF_COARSE_RESISTOR_W  \
-                                                                             2
+    2
 #define FCFG1_SHDW_OSC_BIAS_LDO_TRIM_SET_RCOSC_HF_COARSE_RESISTOR_M  \
-                                                                    0x18000000
+    0x18000000
 #define FCFG1_SHDW_OSC_BIAS_LDO_TRIM_SET_RCOSC_HF_COARSE_RESISTOR_S  \
-                                                                            27
+    27
 
 // Field: [26:23] TRIMMAG
 //
@@ -2228,11 +2228,11 @@
 //
 // Internal. Only to be used through TI provided API.
 #define FCFG1_SOC_ADC_REF_TRIM_AND_OFFSET_EXT_SOC_ADC_REF_VOLTAGE_TRIM_TEMP1_W \
-                                                                             6
+    6
 #define FCFG1_SOC_ADC_REF_TRIM_AND_OFFSET_EXT_SOC_ADC_REF_VOLTAGE_TRIM_TEMP1_M \
-                                                                    0x0000003F
+    0x0000003F
 #define FCFG1_SOC_ADC_REF_TRIM_AND_OFFSET_EXT_SOC_ADC_REF_VOLTAGE_TRIM_TEMP1_S \
-                                                                             0
+    0
 
 //*****************************************************************************
 //

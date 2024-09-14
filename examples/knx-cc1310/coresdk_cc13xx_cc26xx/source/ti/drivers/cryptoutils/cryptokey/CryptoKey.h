@@ -95,11 +95,11 @@ extern "C" {
 
  */
 
-    /**
- *  @defgroup CryptoKey_CONTROL Status codes
- *  These CryptoKey macros are reservations for CryptoKey.h
- *  @{
- */
+/**
+*  @defgroup CryptoKey_CONTROL Status codes
+*  These CryptoKey macros are reservations for CryptoKey.h
+*  @{
+*/
 
 
 /*!
@@ -156,7 +156,8 @@ extern "C" {
  *  @brief  List of the different types of CryptoKey.
  *
  */
-typedef enum CryptoKey_Encoding_ {
+typedef enum CryptoKey_Encoding_
+{
     CryptoKey_PLAINTEXT             = 1 << 1,
     CryptoKey_BLANK_PLAINTEXT       = 1 << 2,
     CryptoKey_KEYSTORE              = 1 << 3,
@@ -171,8 +172,9 @@ typedef enum CryptoKey_Encoding_ {
  * This structure contains all the information necessary to access keying material stored
  * in plaintext form in flash or RAM.
  */
-typedef struct CryptoKey_Plaintext_ {
-    uint8_t *keyMaterial;
+typedef struct CryptoKey_Plaintext_
+{
+    uint8_t* keyMaterial;
     uint16_t keyLength;
 } CryptoKey_Plaintext;
 
@@ -182,7 +184,8 @@ typedef struct CryptoKey_Plaintext_ {
  * This structure contains all the information necessary to access keying material stored
  * in a dedicated key store or key database with memory access controls.
  */
-typedef struct CryptoKey_KeyStore_ {
+typedef struct CryptoKey_KeyStore_
+{
     void* keyStore;
     uint16_t keyLength;
     uint32_t keyIndex;
@@ -194,8 +197,9 @@ typedef struct CryptoKey_KeyStore_ {
  * This structure contains all the information necessary to access keying material stored
  * in an encrypted structure in flash or RAM.
  */
-typedef struct CryptoKey_KeyBlob_ {
-    uint8_t *keyBlob;
+typedef struct CryptoKey_KeyBlob_
+{
+    uint8_t* keyBlob;
     uint32_t keyBlobLength;
 } CryptoKey_KeyBlob;
 
@@ -207,9 +211,11 @@ typedef struct CryptoKey_KeyBlob_ {
  * - CryptoKey_KeyStore
  * - CryptoKey_KeyBlob
  */
-typedef struct CryptoKey_ {
+typedef struct CryptoKey_
+{
     CryptoKey_Encoding encoding;
-    union {
+    union
+    {
         CryptoKey_Plaintext plaintext;
         CryptoKey_KeyStore keyStore;
         CryptoKey_KeyBlob keyBlob;
@@ -237,7 +243,7 @@ typedef struct CryptoKey_SecurityPolicy_ CryptoKey_SecurityPolicy;
  *
  *  @return Returns a status code
  */
-int_fast16_t CryptoKey_getCryptoKeyType(CryptoKey *keyHandle, CryptoKey_Encoding *keyType);
+int_fast16_t CryptoKey_getCryptoKeyType(CryptoKey* keyHandle, CryptoKey_Encoding* keyType);
 
 /*!
  *  @brief Wheather the CryptoKey is 'blank' or represents valid keying material
@@ -247,7 +253,7 @@ int_fast16_t CryptoKey_getCryptoKeyType(CryptoKey *keyHandle, CryptoKey_Encoding
  *
  *  @return Returns a status code
  */
-int_fast16_t CryptoKey_isBlank(CryptoKey *keyHandle, bool *isBlank);
+int_fast16_t CryptoKey_isBlank(CryptoKey* keyHandle, bool* isBlank);
 
 /*!
  *  @brief Marks a CryptoKey as 'blank'.
@@ -258,7 +264,7 @@ int_fast16_t CryptoKey_isBlank(CryptoKey *keyHandle, bool *isBlank);
  *
  *  @return Returns a status code
  */
-int_fast16_t CryptoKey_markAsBlank(CryptoKey *keyHandle);
+int_fast16_t CryptoKey_markAsBlank(CryptoKey* keyHandle);
 
 /*!
  *  @brief Function to initialize the CryptoKey_SecurityPolicy struct to its defaults
@@ -269,7 +275,7 @@ int_fast16_t CryptoKey_markAsBlank(CryptoKey *keyHandle);
  *
  *  @return Returns a status code
  */
-int_fast16_t CryptoKey_initSecurityPolicy(CryptoKey_SecurityPolicy *policy);
+int_fast16_t CryptoKey_initSecurityPolicy(CryptoKey_SecurityPolicy* policy);
 
 #ifdef __cplusplus
 }

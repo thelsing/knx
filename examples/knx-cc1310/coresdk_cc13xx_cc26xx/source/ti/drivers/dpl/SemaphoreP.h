@@ -79,7 +79,8 @@ extern "C" {
  *  Opaque structure that should be large enough to hold any of the
  *  RTOS specific SemaphoreP objects.
  */
-typedef union SemaphoreP_Struct {
+typedef union SemaphoreP_Struct
+{
     uint32_t dummy;  /*!< Align object */
     char     data[SemaphoreP_STRUCT_SIZE];
 } SemaphoreP_Struct;
@@ -97,7 +98,8 @@ typedef union SemaphoreP_Struct {
 /*!
  *  @brief    Status codes for SemaphoreP APIs (for backwards compatibility)
  */
-typedef enum SemaphoreP_Status {
+typedef enum SemaphoreP_Status
+{
     /*! API completed successfully */
     SemaphoreP_OK = 0,
     /*! API failed because of a timeout */
@@ -111,12 +113,13 @@ typedef enum SemaphoreP_Status {
  *  instance and  is used in the other instance based functions (e.g.
  *  ::SemaphoreP_post or ::SemaphoreP_pend, etc.).
  */
-typedef  void *SemaphoreP_Handle;
+typedef  void* SemaphoreP_Handle;
 
 /*!
  *  @brief    Mode of the semaphore
  */
-typedef enum SemaphoreP_Mode {
+typedef enum SemaphoreP_Mode
+{
     SemaphoreP_Mode_COUNTING = 0x0,
     SemaphoreP_Mode_BINARY   = 0x1
 } SemaphoreP_Mode;
@@ -130,7 +133,8 @@ typedef enum SemaphoreP_Mode {
  *  application sets the fields manually. The SemaphoreP default parameters are
  *  noted in SemaphoreP_Params_init.
  */
-typedef struct SemaphoreP_Params {
+typedef struct SemaphoreP_Params
+{
     SemaphoreP_Mode mode;   /*!< Mode for the semaphore */
     void (*callback)(void); /*!< Callback while pending for semaphore post */
 } SemaphoreP_Params;
@@ -158,13 +162,13 @@ extern SemaphoreP_Params SemaphoreP_defaultParams;
  *  is defined.  For FreeRTOS, configSUPPORT_STATIC_ALLOCATION also
  *  has to be set to 1 in FreeRTOSConfig.h.
  */
-extern SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct *handle,
-        unsigned int count, SemaphoreP_Params *params);
+extern SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct* handle,
+        unsigned int count, SemaphoreP_Params* params);
 
-extern SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct *handle,
+extern SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct* handle,
         unsigned int count);
 
-extern void SemaphoreP_destruct(SemaphoreP_Struct *semP);
+extern void SemaphoreP_destruct(SemaphoreP_Struct* semP);
 
 /*!
  *  @brief  Function to create a semaphore.
@@ -179,7 +183,7 @@ extern void SemaphoreP_destruct(SemaphoreP_Struct *semP);
  *  @return A SemaphoreP_Handle on success or a NULL on an error
  */
 extern SemaphoreP_Handle SemaphoreP_create(unsigned int count,
-        SemaphoreP_Params *params);
+        SemaphoreP_Params* params);
 
 /*!
  *  @brief  Function to create a binary semaphore.
@@ -224,7 +228,7 @@ extern void SemaphoreP_delete(SemaphoreP_Handle handle);
  *
  *  @param params  Pointer to the instance configuration parameters.
  */
-extern void SemaphoreP_Params_init(SemaphoreP_Params *params);
+extern void SemaphoreP_Params_init(SemaphoreP_Params* params);
 
 /*!
  *  @brief  Function to pend (wait) on a semaphore.
@@ -239,7 +243,7 @@ extern void SemaphoreP_Params_init(SemaphoreP_Params *params);
  *    - SemaphoreP_TIMEOUT: Timed out. Semaphore was not obtained.
  */
 extern SemaphoreP_Status SemaphoreP_pend(SemaphoreP_Handle handle,
-                                         uint32_t timeout);
+        uint32_t timeout);
 
 /*!
  *  @brief  Function to post (signal) a semaphore from task of ISR context.

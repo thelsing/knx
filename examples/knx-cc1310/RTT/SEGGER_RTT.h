@@ -44,7 +44,7 @@
 ---------------------------END-OF-HEADER------------------------------
 File    : SEGGER_RTT.h
 Purpose : Implementation of SEGGER real-time transfer which allows
-          real-time communication on targets which support debugger 
+          real-time communication on targets which support debugger
           memory accesses while the CPU is running.
 Revision: $Rev: 20159 $
 ----------------------------------------------------------------------
@@ -64,84 +64,84 @@ Revision: $Rev: 20159 $
 **********************************************************************
 */
 #ifndef RTT_USE_ASM
-  #if (defined __SES_ARM)                       // SEGGER Embedded Studio
-    #define _CC_HAS_RTT_ASM_SUPPORT 1
-  #elif (defined __CROSSWORKS_ARM)              // Rowley Crossworks
-    #define _CC_HAS_RTT_ASM_SUPPORT 1
-	#elif (defined __ARMCC_VERSION)
-	  #define _CC_HAS_RTT_ASM_SUPPORT 0
-  #elif (defined __GNUC__)                      // GCC
-    #define _CC_HAS_RTT_ASM_SUPPORT 1
-  #elif (defined __clang__)                     // Clang compiler
-    #define _CC_HAS_RTT_ASM_SUPPORT 1
-  #elif ((defined __IASMARM__) || (defined __ICCARM__))  // IAR assembler/compiler
-    #define _CC_HAS_RTT_ASM_SUPPORT 1
-  #else
-    #define _CC_HAS_RTT_ASM_SUPPORT 0
-  #endif
-  #if ((defined __IASMARM__) || (defined __ICCARM__))  // IAR assembler/compiler
-    //
-    // IAR assembler / compiler
-    //
-    #if (defined __ARM7M__)                            // Needed for old versions that do not know the define yet
-      #if (__CORE__ == __ARM7M__)                      // Cortex-M3
-        #define _CORE_HAS_RTT_ASM_SUPPORT 1
-      #endif
-    #endif
-    #if (defined __ARM7EM__)                           // Needed for old versions that do not know the define yet
-      #if (__CORE__ == __ARM7EM__)                     // Cortex-M4/M7
-        #define _CORE_HAS_RTT_ASM_SUPPORT 1
-        #define _CORE_NEEDS_DMB 1
-        #define RTT__DMB() asm("DMB");
-      #endif
-    #endif
-    #if (defined __ARM8M_BASELINE__)                   // Needed for old versions that do not know the define yet
-      #if (__CORE__ == __ARM8M_BASELINE__)             // Cortex-M23
-        #define _CORE_HAS_RTT_ASM_SUPPORT 1
-        #define _CORE_NEEDS_DMB 1
-        #define RTT__DMB() asm("DMB");
-      #endif
-    #endif
-    #if (defined __ARM8M_MAINLINE__)                   // Needed for old versions that do not know the define yet
-      #if (__CORE__ == __ARM8M_MAINLINE__)             // Cortex-M33
-        #define _CORE_HAS_RTT_ASM_SUPPORT 1
-        #define _CORE_NEEDS_DMB 1
-        #define RTT__DMB() asm("DMB");
-      #endif
-    #endif
-  #else
-    //
-    // GCC / Clang
-    //
-    #if (defined __ARM_ARCH_7M__)                 // Cortex-M3
-      #define _CORE_HAS_RTT_ASM_SUPPORT 1
-    #elif (defined __ARM_ARCH_7EM__)              // Cortex-M4/M7
-      #define _CORE_HAS_RTT_ASM_SUPPORT 1
-      #define _CORE_NEEDS_DMB           1
-      #define RTT__DMB() __asm volatile ("dmb\n" : : :);
-    #elif (defined __ARM_ARCH_8M_BASE__)          // Cortex-M23
-      #define _CORE_HAS_RTT_ASM_SUPPORT 1
-      #define _CORE_NEEDS_DMB           1
-      #define RTT__DMB() __asm volatile ("dmb\n" : : :);
-    #elif (defined __ARM_ARCH_8M_MAIN__)          // Cortex-M33
-      #define _CORE_HAS_RTT_ASM_SUPPORT 1
-      #define _CORE_NEEDS_DMB           1
-      #define RTT__DMB() __asm volatile ("dmb\n" : : :);
+    #if (defined __SES_ARM)                       // SEGGER Embedded Studio
+        #define _CC_HAS_RTT_ASM_SUPPORT 1
+    #elif (defined __CROSSWORKS_ARM)              // Rowley Crossworks
+        #define _CC_HAS_RTT_ASM_SUPPORT 1
+    #elif (defined __ARMCC_VERSION)
+        #define _CC_HAS_RTT_ASM_SUPPORT 0
+    #elif (defined __GNUC__)                      // GCC
+        #define _CC_HAS_RTT_ASM_SUPPORT 1
+    #elif (defined __clang__)                     // Clang compiler
+        #define _CC_HAS_RTT_ASM_SUPPORT 1
+    #elif ((defined __IASMARM__) || (defined __ICCARM__))  // IAR assembler/compiler
+        #define _CC_HAS_RTT_ASM_SUPPORT 1
     #else
-      #define _CORE_HAS_RTT_ASM_SUPPORT 0
+        #define _CC_HAS_RTT_ASM_SUPPORT 0
     #endif
-  #endif
-  //
-  // If IDE and core support the ASM version, enable ASM version by default
-  //
-  #ifndef _CORE_HAS_RTT_ASM_SUPPORT
-    #define _CORE_HAS_RTT_ASM_SUPPORT 0              // Default for unknown cores
-  #endif
-  #if (_CC_HAS_RTT_ASM_SUPPORT && _CORE_HAS_RTT_ASM_SUPPORT)
-    #define RTT_USE_ASM                           (1)
-  #else
-    #define RTT_USE_ASM                           (0)
-  #endif
+    #if ((defined __IASMARM__) || (defined __ICCARM__))  // IAR assembler/compiler
+        //
+        // IAR assembler / compiler
+        //
+        #if (defined __ARM7M__)                            // Needed for old versions that do not know the define yet
+            #if (__CORE__ == __ARM7M__)                      // Cortex-M3
+                #define _CORE_HAS_RTT_ASM_SUPPORT 1
+            #endif
+        #endif
+        #if (defined __ARM7EM__)                           // Needed for old versions that do not know the define yet
+            #if (__CORE__ == __ARM7EM__)                     // Cortex-M4/M7
+                #define _CORE_HAS_RTT_ASM_SUPPORT 1
+                #define _CORE_NEEDS_DMB 1
+                #define RTT__DMB() asm("DMB");
+            #endif
+        #endif
+        #if (defined __ARM8M_BASELINE__)                   // Needed for old versions that do not know the define yet
+            #if (__CORE__ == __ARM8M_BASELINE__)             // Cortex-M23
+                #define _CORE_HAS_RTT_ASM_SUPPORT 1
+                #define _CORE_NEEDS_DMB 1
+                #define RTT__DMB() asm("DMB");
+            #endif
+        #endif
+        #if (defined __ARM8M_MAINLINE__)                   // Needed for old versions that do not know the define yet
+            #if (__CORE__ == __ARM8M_MAINLINE__)             // Cortex-M33
+                #define _CORE_HAS_RTT_ASM_SUPPORT 1
+                #define _CORE_NEEDS_DMB 1
+                #define RTT__DMB() asm("DMB");
+            #endif
+        #endif
+    #else
+        //
+        // GCC / Clang
+        //
+        #if (defined __ARM_ARCH_7M__)                 // Cortex-M3
+            #define _CORE_HAS_RTT_ASM_SUPPORT 1
+        #elif (defined __ARM_ARCH_7EM__)              // Cortex-M4/M7
+            #define _CORE_HAS_RTT_ASM_SUPPORT 1
+            #define _CORE_NEEDS_DMB           1
+            #define RTT__DMB() __asm volatile ("dmb\n" : : :);
+        #elif (defined __ARM_ARCH_8M_BASE__)          // Cortex-M23
+            #define _CORE_HAS_RTT_ASM_SUPPORT 1
+            #define _CORE_NEEDS_DMB           1
+            #define RTT__DMB() __asm volatile ("dmb\n" : : :);
+        #elif (defined __ARM_ARCH_8M_MAIN__)          // Cortex-M33
+            #define _CORE_HAS_RTT_ASM_SUPPORT 1
+            #define _CORE_NEEDS_DMB           1
+            #define RTT__DMB() __asm volatile ("dmb\n" : : :);
+        #else
+            #define _CORE_HAS_RTT_ASM_SUPPORT 0
+        #endif
+    #endif
+    //
+    // If IDE and core support the ASM version, enable ASM version by default
+    //
+    #ifndef _CORE_HAS_RTT_ASM_SUPPORT
+        #define _CORE_HAS_RTT_ASM_SUPPORT 0              // Default for unknown cores
+    #endif
+    #if (_CC_HAS_RTT_ASM_SUPPORT && _CORE_HAS_RTT_ASM_SUPPORT)
+        #define RTT_USE_ASM                           (1)
+    #else
+        #define RTT_USE_ASM                           (0)
+    #endif
 #endif
 
 //
@@ -150,15 +150,15 @@ Revision: $Rev: 20159 $
 // Needed for: Cortex-M7, Cortex-M23, Cortex-M33
 //
 #ifndef _CORE_NEEDS_DMB
-  #define _CORE_NEEDS_DMB 0
+    #define _CORE_NEEDS_DMB 0
 #endif
 
 #ifndef RTT__DMB
-  #if _CORE_NEEDS_DMB
-    #error "Don't know how to place inline assembly for DMB"
-  #else
-    #define RTT__DMB()
-  #endif
+    #if _CORE_NEEDS_DMB
+        #error "Don't know how to place inline assembly for DMB"
+    #else
+        #define RTT__DMB()
+    #endif
 #endif
 
 #ifndef SEGGER_RTT_ASM  // defined when SEGGER_RTT.h is included from assembly file
@@ -183,26 +183,28 @@ Revision: $Rev: 20159 $
 // Description for a circular buffer (also called "ring buffer")
 // which is used as up-buffer (T->H)
 //
-typedef struct {
-  const     char*    sName;         // Optional name. Standard names so far are: "Terminal", "SysView", "J-Scope_t4i4"
-            char*    pBuffer;       // Pointer to start of buffer
-            unsigned SizeOfBuffer;  // Buffer size in bytes. Note that one byte is lost, as this implementation does not fill up the buffer in order to avoid the problem of being unable to distinguish between full and empty.
-            unsigned WrOff;         // Position of next item to be written by either target.
-  volatile  unsigned RdOff;         // Position of next item to be read by host. Must be volatile since it may be modified by host.
-            unsigned Flags;         // Contains configuration flags
+typedef struct
+{
+    const     char*    sName;         // Optional name. Standard names so far are: "Terminal", "SysView", "J-Scope_t4i4"
+    char*    pBuffer;       // Pointer to start of buffer
+    unsigned SizeOfBuffer;  // Buffer size in bytes. Note that one byte is lost, as this implementation does not fill up the buffer in order to avoid the problem of being unable to distinguish between full and empty.
+    unsigned WrOff;         // Position of next item to be written by either target.
+    volatile  unsigned RdOff;         // Position of next item to be read by host. Must be volatile since it may be modified by host.
+    unsigned Flags;         // Contains configuration flags
 } SEGGER_RTT_BUFFER_UP;
 
 //
 // Description for a circular buffer (also called "ring buffer")
 // which is used as down-buffer (H->T)
 //
-typedef struct {
-  const     char*    sName;         // Optional name. Standard names so far are: "Terminal", "SysView", "J-Scope_t4i4"
-            char*    pBuffer;       // Pointer to start of buffer
-            unsigned SizeOfBuffer;  // Buffer size in bytes. Note that one byte is lost, as this implementation does not fill up the buffer in order to avoid the problem of being unable to distinguish between full and empty.
-  volatile  unsigned WrOff;         // Position of next item to be written by host. Must be volatile since it may be modified by host.
-            unsigned RdOff;         // Position of next item to be read by target (down-buffer).
-            unsigned Flags;         // Contains configuration flags
+typedef struct
+{
+    const     char*    sName;         // Optional name. Standard names so far are: "Terminal", "SysView", "J-Scope_t4i4"
+    char*    pBuffer;       // Pointer to start of buffer
+    unsigned SizeOfBuffer;  // Buffer size in bytes. Note that one byte is lost, as this implementation does not fill up the buffer in order to avoid the problem of being unable to distinguish between full and empty.
+    volatile  unsigned WrOff;         // Position of next item to be written by host. Must be volatile since it may be modified by host.
+    unsigned RdOff;         // Position of next item to be read by target (down-buffer).
+    unsigned Flags;         // Contains configuration flags
 } SEGGER_RTT_BUFFER_DOWN;
 
 //
@@ -210,12 +212,13 @@ typedef struct {
 // as well as the configuration for each buffer
 //
 //
-typedef struct {
-  char                    acID[16];                                 // Initialized to "SEGGER RTT"
-  int                     MaxNumUpBuffers;                          // Initialized to SEGGER_RTT_MAX_NUM_UP_BUFFERS (type. 2)
-  int                     MaxNumDownBuffers;                        // Initialized to SEGGER_RTT_MAX_NUM_DOWN_BUFFERS (type. 2)
-  SEGGER_RTT_BUFFER_UP    aUp[SEGGER_RTT_MAX_NUM_UP_BUFFERS];       // Up buffers, transferring information up from target via debug probe to host
-  SEGGER_RTT_BUFFER_DOWN  aDown[SEGGER_RTT_MAX_NUM_DOWN_BUFFERS];   // Down buffers, transferring information down from host via debug probe to target
+typedef struct
+{
+    char                    acID[16];                                 // Initialized to "SEGGER RTT"
+    int                     MaxNumUpBuffers;                          // Initialized to SEGGER_RTT_MAX_NUM_UP_BUFFERS (type. 2)
+    int                     MaxNumDownBuffers;                        // Initialized to SEGGER_RTT_MAX_NUM_DOWN_BUFFERS (type. 2)
+    SEGGER_RTT_BUFFER_UP    aUp[SEGGER_RTT_MAX_NUM_UP_BUFFERS];       // Up buffers, transferring information up from target via debug probe to host
+    SEGGER_RTT_BUFFER_DOWN  aDown[SEGGER_RTT_MAX_NUM_DOWN_BUFFERS];   // Down buffers, transferring information down from host via debug probe to target
 } SEGGER_RTT_CB;
 
 /*********************************************************************
@@ -233,7 +236,7 @@ extern SEGGER_RTT_CB _SEGGER_RTT;
 **********************************************************************
 */
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 int          SEGGER_RTT_AllocDownBuffer         (const char* sName, void* pBuffer, unsigned BufferSize, unsigned Flags);
 int          SEGGER_RTT_AllocUpBuffer           (const char* sName, void* pBuffer, unsigned BufferSize, unsigned Flags);
@@ -268,7 +271,7 @@ unsigned     SEGGER_RTT_GetBytesInBuffer        (unsigned BufferIndex);
 #define      SEGGER_RTT_HASDATA(n)       (_SEGGER_RTT.aDown[n].WrOff - _SEGGER_RTT.aDown[n].RdOff)
 
 #if RTT_USE_ASM
-  #define SEGGER_RTT_WriteSkipNoLock  SEGGER_RTT_ASM_WriteSkipNoLock
+#define SEGGER_RTT_WriteSkipNoLock  SEGGER_RTT_ASM_WriteSkipNoLock
 #endif
 
 /*********************************************************************
@@ -299,11 +302,11 @@ int     SEGGER_RTT_TerminalOut        (unsigned char TerminalId, const char* s);
 *
 **********************************************************************
 */
-int SEGGER_RTT_printf(unsigned BufferIndex, const char * sFormat, ...);
-int SEGGER_RTT_vprintf(unsigned BufferIndex, const char * sFormat, va_list * pParamList);
+int SEGGER_RTT_printf(unsigned BufferIndex, const char* sFormat, ...);
+int SEGGER_RTT_vprintf(unsigned BufferIndex, const char* sFormat, va_list* pParamList);
 
 #ifdef __cplusplus
-  }
+}
 #endif
 
 #endif // ifndef(SEGGER_RTT_ASM)

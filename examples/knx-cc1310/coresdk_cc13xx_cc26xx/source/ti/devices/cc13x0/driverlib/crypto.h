@@ -83,19 +83,19 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define CRYPTOAesLoadKey                NOROM_CRYPTOAesLoadKey
-    #define CRYPTOAesCbc                    NOROM_CRYPTOAesCbc
-    #define CRYPTOAesCbcStatus              NOROM_CRYPTOAesCbcStatus
-    #define CRYPTOAesEcb                    NOROM_CRYPTOAesEcb
-    #define CRYPTOAesEcbStatus              NOROM_CRYPTOAesEcbStatus
-    #define CRYPTOCcmAuthEncrypt            NOROM_CRYPTOCcmAuthEncrypt
-    #define CRYPTOCcmAuthEncryptStatus      NOROM_CRYPTOCcmAuthEncryptStatus
-    #define CRYPTOCcmAuthEncryptResultGet   NOROM_CRYPTOCcmAuthEncryptResultGet
-    #define CRYPTOCcmInvAuthDecrypt         NOROM_CRYPTOCcmInvAuthDecrypt
-    #define CRYPTOCcmInvAuthDecryptStatus   NOROM_CRYPTOCcmInvAuthDecryptStatus
-    #define CRYPTOCcmInvAuthDecryptResultGet NOROM_CRYPTOCcmInvAuthDecryptResultGet
-    #define CRYPTODmaEnable                 NOROM_CRYPTODmaEnable
-    #define CRYPTODmaDisable                NOROM_CRYPTODmaDisable
+#define CRYPTOAesLoadKey                NOROM_CRYPTOAesLoadKey
+#define CRYPTOAesCbc                    NOROM_CRYPTOAesCbc
+#define CRYPTOAesCbcStatus              NOROM_CRYPTOAesCbcStatus
+#define CRYPTOAesEcb                    NOROM_CRYPTOAesEcb
+#define CRYPTOAesEcbStatus              NOROM_CRYPTOAesEcbStatus
+#define CRYPTOCcmAuthEncrypt            NOROM_CRYPTOCcmAuthEncrypt
+#define CRYPTOCcmAuthEncryptStatus      NOROM_CRYPTOCcmAuthEncryptStatus
+#define CRYPTOCcmAuthEncryptResultGet   NOROM_CRYPTOCcmAuthEncryptResultGet
+#define CRYPTOCcmInvAuthDecrypt         NOROM_CRYPTOCcmInvAuthDecrypt
+#define CRYPTOCcmInvAuthDecryptStatus   NOROM_CRYPTOCcmInvAuthDecryptStatus
+#define CRYPTOCcmInvAuthDecryptResultGet NOROM_CRYPTOCcmInvAuthDecryptResultGet
+#define CRYPTODmaEnable                 NOROM_CRYPTODmaEnable
+#define CRYPTODmaDisable                NOROM_CRYPTODmaDisable
 #endif
 
 //*****************************************************************************
@@ -227,7 +227,7 @@ extern "C"
 //! - \ref AES_KEYSTORE_READ_ERROR
 //
 //*****************************************************************************
-extern uint32_t CRYPTOAesLoadKey(uint32_t *pui32AesKey,
+extern uint32_t CRYPTOAesLoadKey(uint32_t* pui32AesKey,
                                  uint32_t ui32KeyLocation);
 
 //*****************************************************************************
@@ -263,8 +263,8 @@ extern uint32_t CRYPTOAesLoadKey(uint32_t *pui32AesKey,
 //! \sa \ref CRYPTOAesCbcStatus()
 //
 //*****************************************************************************
-extern uint32_t CRYPTOAesCbc(uint32_t *pui32MsgIn, uint32_t *pui32MsgOut,
-                             uint32_t ui32MsgLength, uint32_t *pui32Nonce,
+extern uint32_t CRYPTOAesCbc(uint32_t* pui32MsgIn, uint32_t* pui32MsgOut,
+                             uint32_t ui32MsgLength, uint32_t* pui32Nonce,
                              uint32_t ui32KeyLocation, bool bEncrypt,
                              bool bIntEnable);
 
@@ -315,7 +315,7 @@ extern uint32_t CRYPTOAesCbcStatus(void);
 //! \sa \ref CRYPTOAesEcbStatus()
 //
 //*****************************************************************************
-extern uint32_t CRYPTOAesEcb(uint32_t *pui32MsgIn, uint32_t *pui32MsgOut,
+extern uint32_t CRYPTOAesEcb(uint32_t* pui32MsgIn, uint32_t* pui32MsgOut,
                              uint32_t ui32KeyLocation, bool bEncrypt,
                              bool bIntEnable);
 
@@ -416,10 +416,10 @@ CRYPTOAesCbcFinish(void)
 //
 //*****************************************************************************
 extern uint32_t CRYPTOCcmAuthEncrypt(bool bEncrypt, uint32_t ui32AuthLength,
-                                     uint32_t *pui32Nonce,
-                                     uint32_t *pui32PlainText,
+                                     uint32_t* pui32Nonce,
+                                     uint32_t* pui32PlainText,
                                      uint32_t ui32PlainTextLength,
-                                     uint32_t *pui32Header,
+                                     uint32_t* pui32Header,
                                      uint32_t ui32HeaderLength,
                                      uint32_t ui32KeyLocation,
                                      uint32_t ui32FieldLength,
@@ -457,7 +457,7 @@ extern uint32_t CRYPTOCcmAuthEncryptStatus(void);
 //
 //*****************************************************************************
 extern uint32_t CRYPTOCcmAuthEncryptResultGet(uint32_t ui32TagLength,
-                                              uint32_t *pui32CcmTag);
+        uint32_t* pui32CcmTag);
 
 //*****************************************************************************
 //
@@ -495,10 +495,10 @@ extern uint32_t CRYPTOCcmAuthEncryptResultGet(uint32_t ui32TagLength,
 //
 //*****************************************************************************
 extern uint32_t CRYPTOCcmInvAuthDecrypt(bool bDecrypt, uint32_t ui32AuthLength,
-                                        uint32_t *pui32Nonce,
-                                        uint32_t *pui32CipherText,
+                                        uint32_t* pui32Nonce,
+                                        uint32_t* pui32CipherText,
                                         uint32_t ui32CipherTextLength,
-                                        uint32_t *pui32Header,
+                                        uint32_t* pui32Header,
                                         uint32_t ui32HeaderLength,
                                         uint32_t ui32KeyLocation,
                                         uint32_t ui32FieldLength,
@@ -530,9 +530,9 @@ extern uint32_t CRYPTOCcmInvAuthDecryptStatus(void);
 //
 //*****************************************************************************
 extern uint32_t CRYPTOCcmInvAuthDecryptResultGet(uint32_t ui32AuthLength,
-                                                 uint32_t *pui32CipherText,
-                                                 uint32_t ui32CipherTextLength,
-                                                 uint32_t *pui32CcmTag);
+        uint32_t* pui32CipherText,
+        uint32_t ui32CipherTextLength,
+        uint32_t* pui32CcmTag);
 
 //*****************************************************************************
 //
@@ -666,14 +666,14 @@ CRYPTOIntStatus(bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    if(bMasked)
+    if (bMasked)
     {
         ui32Mask = HWREG(CRYPTO_BASE + CRYPTO_O_IRQEN);
-        return(ui32Mask & HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
+        return (ui32Mask & HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
     }
     else
     {
-        return(HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT) & 0x00000003);
+        return (HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT) & 0x00000003);
     }
 }
 
@@ -781,59 +781,59 @@ CRYPTOIntUnregister(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_CRYPTOAesLoadKey
-        #undef  CRYPTOAesLoadKey
-        #define CRYPTOAesLoadKey                ROM_CRYPTOAesLoadKey
-    #endif
-    #ifdef ROM_CRYPTOAesCbc
-        #undef  CRYPTOAesCbc
-        #define CRYPTOAesCbc                    ROM_CRYPTOAesCbc
-    #endif
-    #ifdef ROM_CRYPTOAesCbcStatus
-        #undef  CRYPTOAesCbcStatus
-        #define CRYPTOAesCbcStatus              ROM_CRYPTOAesCbcStatus
-    #endif
-    #ifdef ROM_CRYPTOAesEcb
-        #undef  CRYPTOAesEcb
-        #define CRYPTOAesEcb                    ROM_CRYPTOAesEcb
-    #endif
-    #ifdef ROM_CRYPTOAesEcbStatus
-        #undef  CRYPTOAesEcbStatus
-        #define CRYPTOAesEcbStatus              ROM_CRYPTOAesEcbStatus
-    #endif
-    #ifdef ROM_CRYPTOCcmAuthEncrypt
-        #undef  CRYPTOCcmAuthEncrypt
-        #define CRYPTOCcmAuthEncrypt            ROM_CRYPTOCcmAuthEncrypt
-    #endif
-    #ifdef ROM_CRYPTOCcmAuthEncryptStatus
-        #undef  CRYPTOCcmAuthEncryptStatus
-        #define CRYPTOCcmAuthEncryptStatus      ROM_CRYPTOCcmAuthEncryptStatus
-    #endif
-    #ifdef ROM_CRYPTOCcmAuthEncryptResultGet
-        #undef  CRYPTOCcmAuthEncryptResultGet
-        #define CRYPTOCcmAuthEncryptResultGet   ROM_CRYPTOCcmAuthEncryptResultGet
-    #endif
-    #ifdef ROM_CRYPTOCcmInvAuthDecrypt
-        #undef  CRYPTOCcmInvAuthDecrypt
-        #define CRYPTOCcmInvAuthDecrypt         ROM_CRYPTOCcmInvAuthDecrypt
-    #endif
-    #ifdef ROM_CRYPTOCcmInvAuthDecryptStatus
-        #undef  CRYPTOCcmInvAuthDecryptStatus
-        #define CRYPTOCcmInvAuthDecryptStatus   ROM_CRYPTOCcmInvAuthDecryptStatus
-    #endif
-    #ifdef ROM_CRYPTOCcmInvAuthDecryptResultGet
-        #undef  CRYPTOCcmInvAuthDecryptResultGet
-        #define CRYPTOCcmInvAuthDecryptResultGet ROM_CRYPTOCcmInvAuthDecryptResultGet
-    #endif
-    #ifdef ROM_CRYPTODmaEnable
-        #undef  CRYPTODmaEnable
-        #define CRYPTODmaEnable                 ROM_CRYPTODmaEnable
-    #endif
-    #ifdef ROM_CRYPTODmaDisable
-        #undef  CRYPTODmaDisable
-        #define CRYPTODmaDisable                ROM_CRYPTODmaDisable
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_CRYPTOAesLoadKey
+#undef  CRYPTOAesLoadKey
+#define CRYPTOAesLoadKey                ROM_CRYPTOAesLoadKey
+#endif
+#ifdef ROM_CRYPTOAesCbc
+#undef  CRYPTOAesCbc
+#define CRYPTOAesCbc                    ROM_CRYPTOAesCbc
+#endif
+#ifdef ROM_CRYPTOAesCbcStatus
+#undef  CRYPTOAesCbcStatus
+#define CRYPTOAesCbcStatus              ROM_CRYPTOAesCbcStatus
+#endif
+#ifdef ROM_CRYPTOAesEcb
+#undef  CRYPTOAesEcb
+#define CRYPTOAesEcb                    ROM_CRYPTOAesEcb
+#endif
+#ifdef ROM_CRYPTOAesEcbStatus
+#undef  CRYPTOAesEcbStatus
+#define CRYPTOAesEcbStatus              ROM_CRYPTOAesEcbStatus
+#endif
+#ifdef ROM_CRYPTOCcmAuthEncrypt
+#undef  CRYPTOCcmAuthEncrypt
+#define CRYPTOCcmAuthEncrypt            ROM_CRYPTOCcmAuthEncrypt
+#endif
+#ifdef ROM_CRYPTOCcmAuthEncryptStatus
+#undef  CRYPTOCcmAuthEncryptStatus
+#define CRYPTOCcmAuthEncryptStatus      ROM_CRYPTOCcmAuthEncryptStatus
+#endif
+#ifdef ROM_CRYPTOCcmAuthEncryptResultGet
+#undef  CRYPTOCcmAuthEncryptResultGet
+#define CRYPTOCcmAuthEncryptResultGet   ROM_CRYPTOCcmAuthEncryptResultGet
+#endif
+#ifdef ROM_CRYPTOCcmInvAuthDecrypt
+#undef  CRYPTOCcmInvAuthDecrypt
+#define CRYPTOCcmInvAuthDecrypt         ROM_CRYPTOCcmInvAuthDecrypt
+#endif
+#ifdef ROM_CRYPTOCcmInvAuthDecryptStatus
+#undef  CRYPTOCcmInvAuthDecryptStatus
+#define CRYPTOCcmInvAuthDecryptStatus   ROM_CRYPTOCcmInvAuthDecryptStatus
+#endif
+#ifdef ROM_CRYPTOCcmInvAuthDecryptResultGet
+#undef  CRYPTOCcmInvAuthDecryptResultGet
+#define CRYPTOCcmInvAuthDecryptResultGet ROM_CRYPTOCcmInvAuthDecryptResultGet
+#endif
+#ifdef ROM_CRYPTODmaEnable
+#undef  CRYPTODmaEnable
+#define CRYPTODmaEnable                 ROM_CRYPTODmaEnable
+#endif
+#ifdef ROM_CRYPTODmaDisable
+#undef  CRYPTODmaDisable
+#define CRYPTODmaDisable                ROM_CRYPTODmaDisable
+#endif
 #endif
 
 //*****************************************************************************

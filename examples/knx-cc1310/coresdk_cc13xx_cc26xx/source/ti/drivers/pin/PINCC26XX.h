@@ -64,10 +64,11 @@ extern "C" {
 // Internal function used to find the index of the rightmost set bit in
 // efficient way
 #if defined(__IAR_SYSTEMS_ICC__) || defined(DOXYGEN)
-    #include <intrinsics.h>
+#include <intrinsics.h>
 #endif
 
-__STATIC_INLINE uint32_t PIN_ctz(uint32_t x) {
+__STATIC_INLINE uint32_t PIN_ctz(uint32_t x)
+{
 #if defined(codered) || defined(gcc) || defined(sourcerygxx) || defined(__GNUC__)
     return __builtin_ctz(x);
 #elif defined(__IAR_SYSTEMS_ICC__) || defined(DOXYGEN)
@@ -77,7 +78,7 @@ __STATIC_INLINE uint32_t PIN_ctz(uint32_t x) {
 #elif defined(__TI_COMPILER_VERSION__)
     return __clz(__rbit(x));
 #else
-    #error "Unsupported compiler used"
+#error "Unsupported compiler used"
 #endif
 }
 
@@ -86,9 +87,9 @@ __STATIC_INLINE uint32_t PIN_ctz(uint32_t x) {
 // Constant that can be used to remove run-time checks for improved efficiency
 // Activate through preprocessor define PIN_DISABLE_RUNTIME_CHECKS
 #ifdef PIN_DISABLE_RUNTIME_CHECKS
-    #define PIN_CHKEN 0
+#define PIN_CHKEN 0
 #else
-    #define PIN_CHKEN 1
+#define PIN_CHKEN 1
 #endif
 
 /** @anchor PINCC26XX_FLAGS
@@ -199,7 +200,8 @@ __STATIC_INLINE uint32_t PIN_ctz(uint32_t x) {
  */
 
 /// @brief Fast/efficient version of #PIN_getInputValue()
-__STATIC_INLINE uint32_t PINCC26XX_getInputValue(PIN_Id pinId) {
+__STATIC_INLINE uint32_t PINCC26XX_getInputValue(PIN_Id pinId)
+{
     return (HWREG(GPIO_BASE + GPIO_O_DIN31_0) >> pinId) & 1;
 }
 
@@ -208,10 +210,11 @@ __STATIC_INLINE uint32_t PINCC26XX_getInputValue(PIN_Id pinId) {
  * @note  Does not include any checks on handle for efficiency reasons,
  *        use #PIN_setOutputEnable() for checked version
  */
-__STATIC_INLINE void PINCC26XX_setOutputEnable(PIN_Id pinId, bool outputEnable) {
+__STATIC_INLINE void PINCC26XX_setOutputEnable(PIN_Id pinId, bool outputEnable)
+{
     uint32_t key = HwiP_disable();
-        HWREG(GPIO_BASE + GPIO_O_DOE31_0) =
-            ((HWREG(GPIO_BASE + GPIO_O_DOE31_0) & ~(1 << pinId)) | (outputEnable << pinId));
+    HWREG(GPIO_BASE + GPIO_O_DOE31_0) =
+        ((HWREG(GPIO_BASE + GPIO_O_DOE31_0) & ~(1 << pinId)) | (outputEnable << pinId));
     HwiP_restore(key);
 }
 
@@ -220,31 +223,36 @@ __STATIC_INLINE void PINCC26XX_setOutputEnable(PIN_Id pinId, bool outputEnable) 
  * @note  Does not include any checks on handle for efficiency reasons,
  *        use #PIN_setOutputValue() for checked version
  */
-__STATIC_INLINE void PINCC26XX_setOutputValue(PIN_Id pinId, uint32_t val) {
+__STATIC_INLINE void PINCC26XX_setOutputValue(PIN_Id pinId, uint32_t val)
+{
     HWREGB(GPIO_BASE + GPIO_O_DOUT3_0 + pinId) = (val) ? 1 : 0;
 }
 
 
 /// @brief Fast/efficient version of #PIN_getOutputValue()
-__STATIC_INLINE uint32_t PINCC26XX_getOutputValue(PIN_Id pinId) {
+__STATIC_INLINE uint32_t PINCC26XX_getOutputValue(PIN_Id pinId)
+{
     return (HWREG(GPIO_BASE + GPIO_O_DOUT31_0) >> pinId) & 1;
 }
 
 
-__STATIC_INLINE void PINCC26XX_clrPendInterrupt(PIN_Id pinId) {
+__STATIC_INLINE void PINCC26XX_clrPendInterrupt(PIN_Id pinId)
+{
     HWREG(GPIO_NONBUF_BASE + GPIO_O_EVFLAGS31_0) = (1 << pinId);
 }
 
 
 /// @brief Fast/efficient version of #PIN_getPortInputValue()
-__STATIC_INLINE uint32_t PINCC26XX_getPortInputValue(PIN_Handle handle) {
+__STATIC_INLINE uint32_t PINCC26XX_getPortInputValue(PIN_Handle handle)
+{
     // Only a single port on CC26xx
     return HWREG(GPIO_BASE + GPIO_O_DIN31_0);
 }
 
 
 /// @brief Fast/efficient version of #PIN_getPortOutputValue()
-__STATIC_INLINE uint32_t PINCC26XX_getPortOutputValue(PIN_Handle handle) {
+__STATIC_INLINE uint32_t PINCC26XX_getPortOutputValue(PIN_Handle handle)
+{
     // Only a single port on CC26xx
     return HWREG(GPIO_BASE + GPIO_O_DOUT31_0);
 }
@@ -254,10 +262,11 @@ __STATIC_INLINE uint32_t PINCC26XX_getPortOutputValue(PIN_Handle handle) {
  * @note  Does not include any checks on handle for efficiency reasons,
  *        use #PIN_setPortOutputValue() for checked version
  */
-__STATIC_INLINE void PINCC26XX_setPortOutputValue(PIN_Handle handle, uint32_t outputValueMask) {
+__STATIC_INLINE void PINCC26XX_setPortOutputValue(PIN_Handle handle, uint32_t outputValueMask)
+{
     // Only a single port on CC26xx
     HWREG(GPIO_BASE + GPIO_O_DOUTTGL31_0) =
-         (HWREG(GPIO_BASE + GPIO_O_DOUT31_0) ^ outputValueMask) & handle->portMask;
+        (HWREG(GPIO_BASE + GPIO_O_DOUT31_0) ^ outputValueMask) & handle->portMask;
 }
 
 
@@ -265,11 +274,12 @@ __STATIC_INLINE void PINCC26XX_setPortOutputValue(PIN_Handle handle, uint32_t ou
  * @note  Does not include any checks on handle for efficiency reasons,
  *        use #PIN_setPortOutputEnable() for checked version
  */
-__STATIC_INLINE void PINCC26XX_setPortOutputEnable(PIN_Handle handle, uint32_t outputEnableMask) {
+__STATIC_INLINE void PINCC26XX_setPortOutputEnable(PIN_Handle handle, uint32_t outputEnableMask)
+{
     // Only a single port on CC26xx
     uint32_t key = HwiP_disable();
-        HWREG(GPIO_BASE + GPIO_O_DOE31_0) =
-            (HWREG(GPIO_BASE + GPIO_O_DOE31_0) & (~handle->portMask)) | (outputEnableMask & handle->portMask);
+    HWREG(GPIO_BASE + GPIO_O_DOE31_0) =
+        (HWREG(GPIO_BASE + GPIO_O_DOE31_0) & (~handle->portMask)) | (outputEnableMask & handle->portMask);
     HwiP_restore(key);
 }
 
@@ -361,7 +371,8 @@ extern PIN_Status PINCC26XX_setMux(PIN_Handle handle, PIN_Id pinId, int32_t nMux
  *  will be called in.
  *
  */
-typedef struct PINCC26XX_HWAttrs{
+typedef struct PINCC26XX_HWAttrs
+{
     /*! @brief SPI CC26XXDMA Peripheral's interrupt priority.
 
         The CC26xx uses three of the priority bits,

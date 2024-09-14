@@ -46,23 +46,23 @@
  */
 
 #ifdef I8T
-typedef signed I8T s8;
-typedef unsigned I8T u8;
+    typedef signed I8T s8;
+    typedef unsigned I8T u8;
 #endif
 
 #ifdef I16T
-typedef signed I16T s16;
-typedef unsigned I16T u16;
+    typedef signed I16T s16;
+    typedef unsigned I16T u16;
 #endif
 
 #ifdef I32T
-typedef signed I32T s32;
-typedef unsigned I32T u32;
+    typedef signed I32T s32;
+    typedef unsigned I32T u32;
 #endif
 
 #ifdef I64T
-typedef signed I64T s64;
-typedef unsigned I64T u64;
+    typedef signed I64T s64;
+    typedef unsigned I64T u64;
 #endif
 
 /*
@@ -84,16 +84,16 @@ typedef unsigned I64T u64;
 #define ECRYPT_DEFAULT_ROT
 
 #define ROTL8(v, n) \
-   (U8V((v) << (n)) | ((v) >> (8 - (n))))
+    (U8V((v) << (n)) | ((v) >> (8 - (n))))
 
 #define ROTL16(v, n) \
-   (U16V((v) << (n)) | ((v) >> (16 - (n))))
+    (U16V((v) << (n)) | ((v) >> (16 - (n))))
 
 #define ROTL32(v, n) \
-   (U32V((v) << (n)) | ((v) >> (32 - (n))))
+    (U32V((v) << (n)) | ((v) >> (32 - (n))))
 
 #define ROTL64(v, n) \
-   (U64V((v) << (n)) | ((v) >> (64 - (n))))
+    (U64V((v) << (n)) | ((v) >> (64 - (n))))
 
 #define ROTR8(v, n) ROTL8(v, 8 - (n))
 #define ROTR16(v, n) ROTL16(v, 16 - (n))
@@ -111,21 +111,21 @@ typedef unsigned I64T u64;
 #define ECRYPT_DEFAULT_SWAP
 
 #define SWAP16(v) \
-   ROTL16(v, 8)
+    ROTL16(v, 8)
 
 #define SWAP32(v) \
-   ((ROTL32(v,  8) & U32C(0x00FF00FF)) | \
-    (ROTL32(v, 24) & U32C(0xFF00FF00)))
+    ((ROTL32(v,  8) & U32C(0x00FF00FF)) | \
+     (ROTL32(v, 24) & U32C(0xFF00FF00)))
 
 #ifdef ECRYPT_NATIVE64
 #define SWAP64(v) \
-   ((ROTL64(v,  8) & U64C(0x000000FF000000FF)) | \
-    (ROTL64(v, 24) & U64C(0x0000FF000000FF00)) | \
-    (ROTL64(v, 40) & U64C(0x00FF000000FF0000)) | \
-    (ROTL64(v, 56) & U64C(0xFF000000FF000000)))
+    ((ROTL64(v,  8) & U64C(0x000000FF000000FF)) | \
+     (ROTL64(v, 24) & U64C(0x0000FF000000FF00)) | \
+     (ROTL64(v, 40) & U64C(0x00FF000000FF0000)) | \
+     (ROTL64(v, 56) & U64C(0xFF000000FF000000)))
 #else
 #define SWAP64(v) \
-   (((u64)SWAP32(U32V(v)) << 32) | (u64)SWAP32(U32V(v >> 32)))
+    (((u64)SWAP32(U32V(v)) << 32) | (u64)SWAP32(U32V(v >> 32)))
 #endif
 
 #include "sw_ecrypt-machine.h"
@@ -133,23 +133,23 @@ typedef unsigned I64T u64;
 #define ECRYPT_DEFAULT_WTOW
 
 #ifdef ECRYPT_LITTLE_ENDIAN
-#define U16TO16_LITTLE(v) (v)
-#define U32TO32_LITTLE(v) (v)
-#define U64TO64_LITTLE(v) (v)
+    #define U16TO16_LITTLE(v) (v)
+    #define U32TO32_LITTLE(v) (v)
+    #define U64TO64_LITTLE(v) (v)
 
-#define U16TO16_BIG(v) SWAP16(v)
-#define U32TO32_BIG(v) SWAP32(v)
-#define U64TO64_BIG(v) SWAP64(v)
+    #define U16TO16_BIG(v) SWAP16(v)
+    #define U32TO32_BIG(v) SWAP32(v)
+    #define U64TO64_BIG(v) SWAP64(v)
 #endif
 
 #ifdef ECRYPT_BIG_ENDIAN
-#define U16TO16_LITTLE(v) SWAP16(v)
-#define U32TO32_LITTLE(v) SWAP32(v)
-#define U64TO64_LITTLE(v) SWAP64(v)
+    #define U16TO16_LITTLE(v) SWAP16(v)
+    #define U32TO32_LITTLE(v) SWAP32(v)
+    #define U64TO64_LITTLE(v) SWAP64(v)
 
-#define U16TO16_BIG(v) (v)
-#define U32TO32_BIG(v) (v)
-#define U64TO64_BIG(v) (v)
+    #define U16TO16_BIG(v) (v)
+    #define U32TO32_BIG(v) (v)
+    #define U64TO64_BIG(v) (v)
 #endif
 
 #include "sw_ecrypt-machine.h"
@@ -182,121 +182,121 @@ typedef unsigned I64T u64;
 #else
 
 #define U8TO16_LITTLE(p) \
-   (((u16)((p)[0])      ) | \
-    ((u16)((p)[1]) <<  8))
+    (((u16)((p)[0])      ) | \
+     ((u16)((p)[1]) <<  8))
 
 #define U8TO32_LITTLE(p) \
-   (((u32)((p)[0])      ) | \
-    ((u32)((p)[1]) <<  8) | \
-    ((u32)((p)[2]) << 16) | \
-    ((u32)((p)[3]) << 24))
+    (((u32)((p)[0])      ) | \
+     ((u32)((p)[1]) <<  8) | \
+     ((u32)((p)[2]) << 16) | \
+     ((u32)((p)[3]) << 24))
 
 #ifdef ECRYPT_NATIVE64
 #define U8TO64_LITTLE(p) \
-   (((u64)((p)[0])      ) | \
-    ((u64)((p)[1]) <<  8) | \
-    ((u64)((p)[2]) << 16) | \
-    ((u64)((p)[3]) << 24) | \
-    ((u64)((p)[4]) << 32) | \
-    ((u64)((p)[5]) << 40) | \
-    ((u64)((p)[6]) << 48) | \
-    ((u64)((p)[7]) << 56))
+    (((u64)((p)[0])      ) | \
+     ((u64)((p)[1]) <<  8) | \
+     ((u64)((p)[2]) << 16) | \
+     ((u64)((p)[3]) << 24) | \
+     ((u64)((p)[4]) << 32) | \
+     ((u64)((p)[5]) << 40) | \
+     ((u64)((p)[6]) << 48) | \
+     ((u64)((p)[7]) << 56))
 #else
 #define U8TO64_LITTLE(p) \
-   ((u64)U8TO32_LITTLE(p) | ((u64)U8TO32_LITTLE((p) + 4) << 32))
+    ((u64)U8TO32_LITTLE(p) | ((u64)U8TO32_LITTLE((p) + 4) << 32))
 #endif
 
 #define U8TO16_BIG(p) \
-   (((u16)((p)[0]) <<  8) | \
-    ((u16)((p)[1])      ))
+    (((u16)((p)[0]) <<  8) | \
+     ((u16)((p)[1])      ))
 
 #define U8TO32_BIG(p) \
-   (((u32)((p)[0]) << 24) | \
-    ((u32)((p)[1]) << 16) | \
-    ((u32)((p)[2]) <<  8) | \
-    ((u32)((p)[3])      ))
+    (((u32)((p)[0]) << 24) | \
+     ((u32)((p)[1]) << 16) | \
+     ((u32)((p)[2]) <<  8) | \
+     ((u32)((p)[3])      ))
 
 #ifdef ECRYPT_NATIVE64
 #define U8TO64_BIG(p) \
-   (((u64)((p)[0]) << 56) | \
-    ((u64)((p)[1]) << 48) | \
-    ((u64)((p)[2]) << 40) | \
-    ((u64)((p)[3]) << 32) | \
-    ((u64)((p)[4]) << 24) | \
-    ((u64)((p)[5]) << 16) | \
-    ((u64)((p)[6]) <<  8) | \
-    ((u64)((p)[7])      ))
+    (((u64)((p)[0]) << 56) | \
+     ((u64)((p)[1]) << 48) | \
+     ((u64)((p)[2]) << 40) | \
+     ((u64)((p)[3]) << 32) | \
+     ((u64)((p)[4]) << 24) | \
+     ((u64)((p)[5]) << 16) | \
+     ((u64)((p)[6]) <<  8) | \
+     ((u64)((p)[7])      ))
 #else
 #define U8TO64_BIG(p) \
-   (((u64)U8TO32_BIG(p) << 32) | (u64)U8TO32_BIG((p) + 4))
+    (((u64)U8TO32_BIG(p) << 32) | (u64)U8TO32_BIG((p) + 4))
 #endif
 
 #define U16TO8_LITTLE(p, v) \
-   do { \
-      (p)[0] = U8V((v)      ); \
-      (p)[1] = U8V((v) >>  8); \
-   } while (0)
+    do { \
+        (p)[0] = U8V((v)      ); \
+        (p)[1] = U8V((v) >>  8); \
+    } while (0)
 
 #define U32TO8_LITTLE(p, v) \
-   do { \
-      (p)[0] = U8V((v)      ); \
-      (p)[1] = U8V((v) >>  8); \
-      (p)[2] = U8V((v) >> 16); \
-      (p)[3] = U8V((v) >> 24); \
-   } while (0)
+    do { \
+        (p)[0] = U8V((v)      ); \
+        (p)[1] = U8V((v) >>  8); \
+        (p)[2] = U8V((v) >> 16); \
+        (p)[3] = U8V((v) >> 24); \
+    } while (0)
 
 #ifdef ECRYPT_NATIVE64
 #define U64TO8_LITTLE(p, v) \
-   do { \
-      (p)[0] = U8V((v)      ); \
-      (p)[1] = U8V((v) >>  8); \
-      (p)[2] = U8V((v) >> 16); \
-      (p)[3] = U8V((v) >> 24); \
-      (p)[4] = U8V((v) >> 32); \
-      (p)[5] = U8V((v) >> 40); \
-      (p)[6] = U8V((v) >> 48); \
-      (p)[7] = U8V((v) >> 56); \
-   } while (0)
+    do { \
+        (p)[0] = U8V((v)      ); \
+        (p)[1] = U8V((v) >>  8); \
+        (p)[2] = U8V((v) >> 16); \
+        (p)[3] = U8V((v) >> 24); \
+        (p)[4] = U8V((v) >> 32); \
+        (p)[5] = U8V((v) >> 40); \
+        (p)[6] = U8V((v) >> 48); \
+        (p)[7] = U8V((v) >> 56); \
+    } while (0)
 #else
 #define U64TO8_LITTLE(p, v) \
-   do { \
-      U32TO8_LITTLE((p),     U32V((v)      )); \
-      U32TO8_LITTLE((p) + 4, U32V((v) >> 32)); \
-   } while (0)
+    do { \
+        U32TO8_LITTLE((p),     U32V((v)      )); \
+        U32TO8_LITTLE((p) + 4, U32V((v) >> 32)); \
+    } while (0)
 #endif
 
 #define U16TO8_BIG(p, v) \
-   do { \
-      (p)[0] = U8V((v)      ); \
-      (p)[1] = U8V((v) >>  8); \
-   } while (0)
+    do { \
+        (p)[0] = U8V((v)      ); \
+        (p)[1] = U8V((v) >>  8); \
+    } while (0)
 
 #define U32TO8_BIG(p, v) \
-   do { \
-      (p)[0] = U8V((v) >> 24); \
-      (p)[1] = U8V((v) >> 16); \
-      (p)[2] = U8V((v) >>  8); \
-      (p)[3] = U8V((v)      ); \
-   } while (0)
+    do { \
+        (p)[0] = U8V((v) >> 24); \
+        (p)[1] = U8V((v) >> 16); \
+        (p)[2] = U8V((v) >>  8); \
+        (p)[3] = U8V((v)      ); \
+    } while (0)
 
 #ifdef ECRYPT_NATIVE64
 #define U64TO8_BIG(p, v) \
-   do { \
-      (p)[0] = U8V((v) >> 56); \
-      (p)[1] = U8V((v) >> 48); \
-      (p)[2] = U8V((v) >> 40); \
-      (p)[3] = U8V((v) >> 32); \
-      (p)[4] = U8V((v) >> 24); \
-      (p)[5] = U8V((v) >> 16); \
-      (p)[6] = U8V((v) >>  8); \
-      (p)[7] = U8V((v)      ); \
-   } while (0)
+    do { \
+        (p)[0] = U8V((v) >> 56); \
+        (p)[1] = U8V((v) >> 48); \
+        (p)[2] = U8V((v) >> 40); \
+        (p)[3] = U8V((v) >> 32); \
+        (p)[4] = U8V((v) >> 24); \
+        (p)[5] = U8V((v) >> 16); \
+        (p)[6] = U8V((v) >>  8); \
+        (p)[7] = U8V((v)      ); \
+    } while (0)
 #else
 #define U64TO8_BIG(p, v) \
-   do { \
-      U32TO8_BIG((p),     U32V((v) >> 32)); \
-      U32TO8_BIG((p) + 4, U32V((v)      )); \
-   } while (0)
+    do { \
+        U32TO8_BIG((p),     U32V((v) >> 32)); \
+        U32TO8_BIG((p) + 4, U32V((v)      )); \
+    } while (0)
 #endif
 
 #endif

@@ -81,17 +81,17 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define IntRegister                     NOROM_IntRegister
-    #define IntUnregister                   NOROM_IntUnregister
-    #define IntPriorityGroupingSet          NOROM_IntPriorityGroupingSet
-    #define IntPriorityGroupingGet          NOROM_IntPriorityGroupingGet
-    #define IntPrioritySet                  NOROM_IntPrioritySet
-    #define IntPriorityGet                  NOROM_IntPriorityGet
-    #define IntEnable                       NOROM_IntEnable
-    #define IntDisable                      NOROM_IntDisable
-    #define IntPendSet                      NOROM_IntPendSet
-    #define IntPendGet                      NOROM_IntPendGet
-    #define IntPendClear                    NOROM_IntPendClear
+#define IntRegister                     NOROM_IntRegister
+#define IntUnregister                   NOROM_IntUnregister
+#define IntPriorityGroupingSet          NOROM_IntPriorityGroupingSet
+#define IntPriorityGroupingGet          NOROM_IntPriorityGroupingGet
+#define IntPrioritySet                  NOROM_IntPrioritySet
+#define IntPriorityGet                  NOROM_IntPriorityGet
+#define IntEnable                       NOROM_IntEnable
+#define IntDisable                      NOROM_IntDisable
+#define IntPendSet                      NOROM_IntPendSet
+#define IntPendGet                      NOROM_IntPendGet
+#define IntPendClear                    NOROM_IntPendClear
 #endif
 
 //*****************************************************************************
@@ -549,7 +549,7 @@ __STATIC_INLINE bool
 IntMasterEnable(void)
 {
     // Enable CPU interrupts.
-    return(CPUcpsie());
+    return (CPUcpsie());
 }
 
 //*****************************************************************************
@@ -569,7 +569,7 @@ __STATIC_INLINE bool
 IntMasterDisable(void)
 {
     // Disable CPU interrupts.
-    return(CPUcpsid());
+    return (CPUcpsid());
 }
 
 //*****************************************************************************
@@ -625,7 +625,7 @@ IntPriorityMaskSet(uint32_t ui32PriorityMask)
 __STATIC_INLINE uint32_t
 IntPriorityMaskGet(void)
 {
-    return(CPUbasepriGet());
+    return (CPUbasepriGet());
 }
 
 //*****************************************************************************
@@ -635,51 +635,51 @@ IntPriorityMaskGet(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_IntRegister
-        #undef  IntRegister
-        #define IntRegister                     ROM_IntRegister
-    #endif
-    #ifdef ROM_IntUnregister
-        #undef  IntUnregister
-        #define IntUnregister                   ROM_IntUnregister
-    #endif
-    #ifdef ROM_IntPriorityGroupingSet
-        #undef  IntPriorityGroupingSet
-        #define IntPriorityGroupingSet          ROM_IntPriorityGroupingSet
-    #endif
-    #ifdef ROM_IntPriorityGroupingGet
-        #undef  IntPriorityGroupingGet
-        #define IntPriorityGroupingGet          ROM_IntPriorityGroupingGet
-    #endif
-    #ifdef ROM_IntPrioritySet
-        #undef  IntPrioritySet
-        #define IntPrioritySet                  ROM_IntPrioritySet
-    #endif
-    #ifdef ROM_IntPriorityGet
-        #undef  IntPriorityGet
-        #define IntPriorityGet                  ROM_IntPriorityGet
-    #endif
-    #ifdef ROM_IntEnable
-        #undef  IntEnable
-        #define IntEnable                       ROM_IntEnable
-    #endif
-    #ifdef ROM_IntDisable
-        #undef  IntDisable
-        #define IntDisable                      ROM_IntDisable
-    #endif
-    #ifdef ROM_IntPendSet
-        #undef  IntPendSet
-        #define IntPendSet                      ROM_IntPendSet
-    #endif
-    #ifdef ROM_IntPendGet
-        #undef  IntPendGet
-        #define IntPendGet                      ROM_IntPendGet
-    #endif
-    #ifdef ROM_IntPendClear
-        #undef  IntPendClear
-        #define IntPendClear                    ROM_IntPendClear
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_IntRegister
+#undef  IntRegister
+#define IntRegister                     ROM_IntRegister
+#endif
+#ifdef ROM_IntUnregister
+#undef  IntUnregister
+#define IntUnregister                   ROM_IntUnregister
+#endif
+#ifdef ROM_IntPriorityGroupingSet
+#undef  IntPriorityGroupingSet
+#define IntPriorityGroupingSet          ROM_IntPriorityGroupingSet
+#endif
+#ifdef ROM_IntPriorityGroupingGet
+#undef  IntPriorityGroupingGet
+#define IntPriorityGroupingGet          ROM_IntPriorityGroupingGet
+#endif
+#ifdef ROM_IntPrioritySet
+#undef  IntPrioritySet
+#define IntPrioritySet                  ROM_IntPrioritySet
+#endif
+#ifdef ROM_IntPriorityGet
+#undef  IntPriorityGet
+#define IntPriorityGet                  ROM_IntPriorityGet
+#endif
+#ifdef ROM_IntEnable
+#undef  IntEnable
+#define IntEnable                       ROM_IntEnable
+#endif
+#ifdef ROM_IntDisable
+#undef  IntDisable
+#define IntDisable                      ROM_IntDisable
+#endif
+#ifdef ROM_IntPendSet
+#undef  IntPendSet
+#define IntPendSet                      ROM_IntPendSet
+#endif
+#ifdef ROM_IntPendGet
+#undef  IntPendGet
+#define IntPendGet                      ROM_IntPendGet
+#endif
+#ifdef ROM_IntPendClear
+#undef  IntPendClear
+#define IntPendClear                    ROM_IntPendClear
+#endif
 #endif
 
 //*****************************************************************************

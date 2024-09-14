@@ -57,7 +57,7 @@
 #define IEEE_DONE_ACKPEND       0x2404  ///< ACK packet received with pending data bit set
 #define IEEE_DONE_TIMEOUT       0x2405  ///< Operation ended due to timeout
 #define IEEE_DONE_BGEND         0x2406  ///< FG operation ended because necessary background level
-                                        ///< operation ended
+///< operation ended
 #define IEEE_DONE_ABORT         0x2407  ///< Operation aborted by command
 ///@}
 /// \name Operation finished with error

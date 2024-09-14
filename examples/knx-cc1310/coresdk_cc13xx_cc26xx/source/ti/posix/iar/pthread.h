@@ -39,7 +39,7 @@
 
 /* compiler vendor check */
 #ifndef __IAR_SYSTEMS_ICC__
-#error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
+    #error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
 #endif
 
 #include <stdint.h>
@@ -102,32 +102,32 @@ extern "C" {
  *                      pthread_attr
  *************************************************************************
  */
-extern int pthread_attr_destroy(pthread_attr_t *attr);
+extern int pthread_attr_destroy(pthread_attr_t* attr);
 
-extern int pthread_attr_getdetachstate(const pthread_attr_t *attr,
-        int *detachstate);
-extern int pthread_attr_getguardsize(const pthread_attr_t *attr,
-        size_t *guardsize);
+extern int pthread_attr_getdetachstate(const pthread_attr_t* attr,
+                                       int* detachstate);
+extern int pthread_attr_getguardsize(const pthread_attr_t* attr,
+                                     size_t* guardsize);
 
-extern int pthread_attr_getschedparam(const pthread_attr_t *attr,
-        struct sched_param *schedparam);
+extern int pthread_attr_getschedparam(const pthread_attr_t* attr,
+                                      struct sched_param* schedparam);
 
-extern int pthread_attr_getstack(const pthread_attr_t *attr,
-        void **stackaddr, size_t *stacksize);
-extern int pthread_attr_getstacksize(const pthread_attr_t *attr,
-        size_t *stacksize);
+extern int pthread_attr_getstack(const pthread_attr_t* attr,
+                                 void** stackaddr, size_t* stacksize);
+extern int pthread_attr_getstacksize(const pthread_attr_t* attr,
+                                     size_t* stacksize);
 
-extern int pthread_attr_init(pthread_attr_t *attr);
+extern int pthread_attr_init(pthread_attr_t* attr);
 
-extern int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachedstate);
-extern int pthread_attr_setguardsize(pthread_attr_t *attr, size_t guardsize);
+extern int pthread_attr_setdetachstate(pthread_attr_t* attr, int detachedstate);
+extern int pthread_attr_setguardsize(pthread_attr_t* attr, size_t guardsize);
 
-extern int pthread_attr_setschedparam(pthread_attr_t *attr,
-        const struct sched_param *schedparam);
+extern int pthread_attr_setschedparam(pthread_attr_t* attr,
+                                      const struct sched_param* schedparam);
 
-extern int pthread_attr_setstack(pthread_attr_t *attr, void *stackaddr,
-        size_t stacksize);
-extern int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize);
+extern int pthread_attr_setstack(pthread_attr_t* attr, void* stackaddr,
+                                 size_t stacksize);
+extern int pthread_attr_setstacksize(pthread_attr_t* attr, size_t stacksize);
 
 /*
  *************************************************************************
@@ -135,10 +135,10 @@ extern int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize);
  *************************************************************************
  */
 extern int pthread_cancel(pthread_t pthread);
-extern void _pthread_cleanup_pop(struct _pthread_cleanup_context *context,
-                int execute);
-extern void _pthread_cleanup_push(struct _pthread_cleanup_context *context,
-        void (*fxn)(void *), void *arg);
+extern void _pthread_cleanup_pop(struct _pthread_cleanup_context* context,
+                                 int execute);
+extern void _pthread_cleanup_push(struct _pthread_cleanup_context* context,
+                                  void (*fxn)(void*), void* arg);
 
 #define pthread_cleanup_push(fxn, arg) \
     do { \
@@ -146,141 +146,141 @@ extern void _pthread_cleanup_push(struct _pthread_cleanup_context *context,
         _pthread_cleanup_push(&_pthread_clup_ctx, (fxn), (arg))
 
 #define pthread_cleanup_pop(execute) \
-        _pthread_cleanup_pop(&_pthread_clup_ctx, (execute)); \
+    _pthread_cleanup_pop(&_pthread_clup_ctx, (execute)); \
     } while (0)
 
-extern int pthread_create(pthread_t *newthread, const pthread_attr_t *attr,
-            void *(*startroutine)(void *), void *arg);
-extern int pthread_detach(pthread_t pthread);
-extern int pthread_equal(pthread_t pt1, pthread_t pt2);
-extern void pthread_exit(void *ptr);
-extern int pthread_getschedparam(pthread_t thread, int *policy,
-        struct sched_param *param);
-extern int pthread_join(pthread_t th, void **thread_return);
-extern int pthread_once(pthread_once_t *once, void (*initFxn)(void));
-extern pthread_t pthread_self(void);
-extern int pthread_setcancelstate(int state, int *oldstate);
-extern int pthread_setschedparam(pthread_t pthread, int policy,
-        const struct sched_param *param);
+    extern int pthread_create(pthread_t* newthread, const pthread_attr_t* attr,
+                              void* (*startroutine)(void*), void* arg);
+    extern int pthread_detach(pthread_t pthread);
+    extern int pthread_equal(pthread_t pt1, pthread_t pt2);
+    extern void pthread_exit(void* ptr);
+    extern int pthread_getschedparam(pthread_t thread, int* policy,
+                                     struct sched_param* param);
+    extern int pthread_join(pthread_t th, void** thread_return);
+    extern int pthread_once(pthread_once_t* once, void (*initFxn)(void));
+    extern pthread_t pthread_self(void);
+    extern int pthread_setcancelstate(int state, int* oldstate);
+    extern int pthread_setschedparam(pthread_t pthread, int policy,
+                                     const struct sched_param* param);
 
-/*
- *************************************************************************
- *                      pthread_barrierattr
- *************************************************************************
- */
-extern int pthread_barrierattr_destroy(pthread_barrierattr_t *attr);
-extern int pthread_barrierattr_init(pthread_barrierattr_t *attr);
+    /*
+     *************************************************************************
+     *                      pthread_barrierattr
+     *************************************************************************
+     */
+    extern int pthread_barrierattr_destroy(pthread_barrierattr_t* attr);
+    extern int pthread_barrierattr_init(pthread_barrierattr_t* attr);
 
-/*
- *************************************************************************
- *                      pthread_barrier
- *************************************************************************
- */
-extern int pthread_barrier_destroy(pthread_barrier_t *barrier);
-extern int pthread_barrier_init(pthread_barrier_t *barrier,
-        const pthread_barrierattr_t *attr, unsigned count);
-extern int pthread_barrier_wait(pthread_barrier_t *barrier);
+    /*
+     *************************************************************************
+     *                      pthread_barrier
+     *************************************************************************
+     */
+    extern int pthread_barrier_destroy(pthread_barrier_t* barrier);
+    extern int pthread_barrier_init(pthread_barrier_t* barrier,
+                                    const pthread_barrierattr_t* attr, unsigned count);
+    extern int pthread_barrier_wait(pthread_barrier_t* barrier);
 
-/*
- *************************************************************************
- *                      pthread_condattr
- *************************************************************************
- */
-extern int pthread_condattr_destroy(pthread_condattr_t *attr);
-extern int pthread_condattr_getclock(const pthread_condattr_t *attr,
-        clockid_t *clock_id);
-extern int pthread_condattr_init(pthread_condattr_t * attr);
-extern int pthread_condattr_setclock(pthread_condattr_t *attr,
-        clockid_t clock_id);
+    /*
+     *************************************************************************
+     *                      pthread_condattr
+     *************************************************************************
+     */
+    extern int pthread_condattr_destroy(pthread_condattr_t* attr);
+    extern int pthread_condattr_getclock(const pthread_condattr_t* attr,
+                                         clockid_t* clock_id);
+    extern int pthread_condattr_init(pthread_condattr_t* attr);
+    extern int pthread_condattr_setclock(pthread_condattr_t* attr,
+                                         clockid_t clock_id);
 
-/*
- *************************************************************************
- *                      pthread_cond
- *************************************************************************
- */
-extern int pthread_cond_broadcast(pthread_cond_t *cond);
-extern int pthread_cond_destroy(pthread_cond_t *cond);
-extern int pthread_cond_init(pthread_cond_t *cond,
-        const pthread_condattr_t *attr);
-extern int pthread_cond_signal(pthread_cond_t *cond);
-extern int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
-        const struct timespec *abstime);
-extern int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
+    /*
+     *************************************************************************
+     *                      pthread_cond
+     *************************************************************************
+     */
+    extern int pthread_cond_broadcast(pthread_cond_t* cond);
+    extern int pthread_cond_destroy(pthread_cond_t* cond);
+    extern int pthread_cond_init(pthread_cond_t* cond,
+                                 const pthread_condattr_t* attr);
+    extern int pthread_cond_signal(pthread_cond_t* cond);
+    extern int pthread_cond_timedwait(pthread_cond_t* cond, pthread_mutex_t* mutex,
+                                      const struct timespec* abstime);
+    extern int pthread_cond_wait(pthread_cond_t* cond, pthread_mutex_t* mutex);
 
-/*
- *************************************************************************
- *                      pthread_key
- *************************************************************************
- */
-extern int pthread_key_create(pthread_key_t *key, void (*destructor)(void*));
-extern int pthread_key_delete(pthread_key_t key);
-extern void *pthread_getspecific(pthread_key_t key);
-extern int pthread_setspecific(pthread_key_t key, const void *value);
+    /*
+     *************************************************************************
+     *                      pthread_key
+     *************************************************************************
+     */
+    extern int pthread_key_create(pthread_key_t* key, void (*destructor)(void*));
+    extern int pthread_key_delete(pthread_key_t key);
+    extern void* pthread_getspecific(pthread_key_t key);
+    extern int pthread_setspecific(pthread_key_t key, const void* value);
 
-/*
- *************************************************************************
- *                      pthread_mutexattr
- *************************************************************************
- */
-extern int pthread_mutexattr_destroy(pthread_mutexattr_t *attr);
-extern int pthread_mutexattr_gettype(const pthread_mutexattr_t *attr,
-        int *type);
-extern int pthread_mutexattr_getprioceiling(const pthread_mutexattr_t *attr,
-        int *prioceiling);
-extern int pthread_mutexattr_getprotocol(const pthread_mutexattr_t *attr,
-        int *protocol);
-extern int pthread_mutexattr_init(pthread_mutexattr_t *attr);
-extern int pthread_mutexattr_setprioceiling(pthread_mutexattr_t *attr,
-        int prioceiling);
-extern int pthread_mutexattr_setprotocol(pthread_mutexattr_t *attr,
-        int protocol);
-extern int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int type);
+    /*
+     *************************************************************************
+     *                      pthread_mutexattr
+     *************************************************************************
+     */
+    extern int pthread_mutexattr_destroy(pthread_mutexattr_t* attr);
+    extern int pthread_mutexattr_gettype(const pthread_mutexattr_t* attr,
+                                         int* type);
+    extern int pthread_mutexattr_getprioceiling(const pthread_mutexattr_t* attr,
+            int* prioceiling);
+    extern int pthread_mutexattr_getprotocol(const pthread_mutexattr_t* attr,
+            int* protocol);
+    extern int pthread_mutexattr_init(pthread_mutexattr_t* attr);
+    extern int pthread_mutexattr_setprioceiling(pthread_mutexattr_t* attr,
+            int prioceiling);
+    extern int pthread_mutexattr_setprotocol(pthread_mutexattr_t* attr,
+            int protocol);
+    extern int pthread_mutexattr_settype(pthread_mutexattr_t* attr, int type);
 
-/*
- *************************************************************************
- *                      pthread_mutex
- *************************************************************************
- */
-extern int pthread_mutex_destroy(pthread_mutex_t *mutex);
-extern int pthread_mutex_getprioceiling(const pthread_mutex_t *mutex,
-        int *prioceiling);
-extern int pthread_mutex_init(pthread_mutex_t *mutex,
-            const pthread_mutexattr_t *attr);
-extern int pthread_mutex_lock(pthread_mutex_t *mutex);
-extern int pthread_mutex_setprioceiling(pthread_mutex_t *mutex,
-        int prioceiling, int *oldceiling);
-extern int pthread_mutex_timedlock(pthread_mutex_t *mutex,
-            const struct timespec *abstime);
-extern int pthread_mutex_trylock(pthread_mutex_t *mutex);
+    /*
+     *************************************************************************
+     *                      pthread_mutex
+     *************************************************************************
+     */
+    extern int pthread_mutex_destroy(pthread_mutex_t* mutex);
+    extern int pthread_mutex_getprioceiling(const pthread_mutex_t* mutex,
+                                            int* prioceiling);
+    extern int pthread_mutex_init(pthread_mutex_t* mutex,
+                                  const pthread_mutexattr_t* attr);
+    extern int pthread_mutex_lock(pthread_mutex_t* mutex);
+    extern int pthread_mutex_setprioceiling(pthread_mutex_t* mutex,
+                                            int prioceiling, int* oldceiling);
+    extern int pthread_mutex_timedlock(pthread_mutex_t* mutex,
+                                       const struct timespec* abstime);
+    extern int pthread_mutex_trylock(pthread_mutex_t* mutex);
 
-extern int pthread_mutex_unlock(pthread_mutex_t *mutex);
+    extern int pthread_mutex_unlock(pthread_mutex_t* mutex);
 
-/*
- *************************************************************************
- *                      pthread_rwlockattr
- *************************************************************************
- */
-extern int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr);
-extern int pthread_rwlockattr_init(pthread_rwlockattr_t * attr);
+    /*
+     *************************************************************************
+     *                      pthread_rwlockattr
+     *************************************************************************
+     */
+    extern int pthread_rwlockattr_destroy(pthread_rwlockattr_t* attr);
+    extern int pthread_rwlockattr_init(pthread_rwlockattr_t* attr);
 
-/*
- *************************************************************************
- *                      pthread_rwlock
- *************************************************************************
- */
-extern int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
-extern int pthread_rwlock_init(pthread_rwlock_t *rwlock,
-        const pthread_rwlockattr_t *attr);
+    /*
+     *************************************************************************
+     *                      pthread_rwlock
+     *************************************************************************
+     */
+    extern int pthread_rwlock_destroy(pthread_rwlock_t* rwlock);
+    extern int pthread_rwlock_init(pthread_rwlock_t* rwlock,
+                                   const pthread_rwlockattr_t* attr);
 
-extern int pthread_rwlock_rdlock(pthread_rwlock_t *rwlock);
-extern int pthread_rwlock_timedrdlock(pthread_rwlock_t *rwlock,
-        const struct timespec *abstime);
-extern int pthread_rwlock_timedwrlock(pthread_rwlock_t *rwlock,
-        const struct timespec *abstime);
-extern int pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock);
-extern int pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock);
-extern int pthread_rwlock_unlock(pthread_rwlock_t *rwlock);
-extern int pthread_rwlock_wrlock(pthread_rwlock_t *rwlock);
+    extern int pthread_rwlock_rdlock(pthread_rwlock_t* rwlock);
+    extern int pthread_rwlock_timedrdlock(pthread_rwlock_t* rwlock,
+                                          const struct timespec* abstime);
+    extern int pthread_rwlock_timedwrlock(pthread_rwlock_t* rwlock,
+                                          const struct timespec* abstime);
+    extern int pthread_rwlock_tryrdlock(pthread_rwlock_t* rwlock);
+    extern int pthread_rwlock_trywrlock(pthread_rwlock_t* rwlock);
+    extern int pthread_rwlock_unlock(pthread_rwlock_t* rwlock);
+    extern int pthread_rwlock_wrlock(pthread_rwlock_t* rwlock);
 
 #ifdef __cplusplus
 }

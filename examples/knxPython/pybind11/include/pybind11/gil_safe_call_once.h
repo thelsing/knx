@@ -43,49 +43,55 @@ PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 // normal Python code. However, this will be unnoticeable for quick call-once
 // functions, which is usually the case.
 template <typename T>
-class gil_safe_call_once_and_store {
-public:
-    // PRECONDITION: The GIL must be held when `call_once_and_store_result()` is called.
-    template <typename Callable>
-    gil_safe_call_once_and_store &call_once_and_store_result(Callable &&fn) {
-        if (!is_initialized_) { // This read is guarded by the GIL.
-            // Multiple threads may enter here, because the GIL is released in the next line and
-            // CPython API calls in the `fn()` call below may release and reacquire the GIL.
-            gil_scoped_release gil_rel; // Needed to establish lock ordering.
-            std::call_once(once_flag_, [&] {
-                // Only one thread will ever enter here.
-                gil_scoped_acquire gil_acq;
-                ::new (storage_) T(fn()); // fn may release, but will reacquire, the GIL.
-                is_initialized_ = true;   // This write is guarded by the GIL.
-            });
-            // All threads will observe `is_initialized_` as true here.
+class gil_safe_call_once_and_store
+{
+    public:
+        // PRECONDITION: The GIL must be held when `call_once_and_store_result()` is called.
+        template <typename Callable>
+        gil_safe_call_once_and_store& call_once_and_store_result(Callable&& fn)
+        {
+            if (!is_initialized_)   // This read is guarded by the GIL.
+            {
+                // Multiple threads may enter here, because the GIL is released in the next line and
+                // CPython API calls in the `fn()` call below may release and reacquire the GIL.
+                gil_scoped_release gil_rel; // Needed to establish lock ordering.
+                std::call_once(once_flag_, [&]
+                {
+                    // Only one thread will ever enter here.
+                    gil_scoped_acquire gil_acq;
+                    ::new (storage_) T(fn()); // fn may release, but will reacquire, the GIL.
+                    is_initialized_ = true;   // This write is guarded by the GIL.
+                });
+                // All threads will observe `is_initialized_` as true here.
+            }
+
+            // Intentionally not returning `T &` to ensure the calling code is self-documenting.
+            return *this;
         }
-        // Intentionally not returning `T &` to ensure the calling code is self-documenting.
-        return *this;
-    }
 
-    // This must only be called after `call_once_and_store_result()` was called.
-    T &get_stored() {
-        assert(is_initialized_);
-        PYBIND11_WARNING_PUSH
+        // This must only be called after `call_once_and_store_result()` was called.
+        T& get_stored()
+        {
+            assert(is_initialized_);
+            PYBIND11_WARNING_PUSH
 #if !defined(__clang__) && defined(__GNUC__) && __GNUC__ < 5
-        // Needed for gcc 4.8.5
-        PYBIND11_WARNING_DISABLE_GCC("-Wstrict-aliasing")
+            // Needed for gcc 4.8.5
+            PYBIND11_WARNING_DISABLE_GCC("-Wstrict-aliasing")
 #endif
-        return *reinterpret_cast<T *>(storage_);
-        PYBIND11_WARNING_POP
-    }
+            return *reinterpret_cast<T*>(storage_);
+            PYBIND11_WARNING_POP
+        }
 
-    constexpr gil_safe_call_once_and_store() = default;
-    PYBIND11_DTOR_CONSTEXPR ~gil_safe_call_once_and_store() = default;
+        constexpr gil_safe_call_once_and_store() = default;
+        PYBIND11_DTOR_CONSTEXPR ~gil_safe_call_once_and_store() = default;
 
-private:
-    alignas(T) char storage_[sizeof(T)] = {};
-    std::once_flag once_flag_ = {};
-    bool is_initialized_ = false;
-    // The `is_initialized_`-`storage_` pair is very similar to `std::optional`,
-    // but the latter does not have the triviality properties of former,
-    // therefore `std::optional` is not a viable alternative here.
+    private:
+        alignas(T) char storage_[sizeof(T)] = {};
+        std::once_flag once_flag_ = {};
+        bool is_initialized_ = false;
+        // The `is_initialized_`-`storage_` pair is very similar to `std::optional`,
+        // but the latter does not have the triviality properties of former,
+        // therefore `std::optional` is not a viable alternative here.
 };
 
 PYBIND11_NAMESPACE_END(PYBIND11_NAMESPACE)

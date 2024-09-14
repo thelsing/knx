@@ -101,7 +101,8 @@ extern const SD_FxnTable SDSPI_fxnTable;
  *  };
  *  @endcode
  */
-typedef struct SDSPI_HWAttrs_ {
+typedef struct SDSPI_HWAttrs_
+{
     uint_least8_t spiIndex;
     uint16_t      spiCsGpioIndex;
 } SDSPI_HWAttrs;
@@ -111,7 +112,8 @@ typedef struct SDSPI_HWAttrs_ {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct SDSPI_Object_ {
+typedef struct SDSPI_Object_
+{
     SemaphoreP_Handle lockSem;
     SPI_Handle        spiHandle;
     SD_CardType       cardType;

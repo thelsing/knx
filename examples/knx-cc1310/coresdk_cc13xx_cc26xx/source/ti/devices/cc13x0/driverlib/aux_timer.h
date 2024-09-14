@@ -82,11 +82,11 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AUXTimerConfigure               NOROM_AUXTimerConfigure
-    #define AUXTimerStart                   NOROM_AUXTimerStart
-    #define AUXTimerStop                    NOROM_AUXTimerStop
-    #define AUXTimerPrescaleSet             NOROM_AUXTimerPrescaleSet
-    #define AUXTimerPrescaleGet             NOROM_AUXTimerPrescaleGet
+#define AUXTimerConfigure               NOROM_AUXTimerConfigure
+#define AUXTimerStart                   NOROM_AUXTimerStart
+#define AUXTimerStop                    NOROM_AUXTimerStop
+#define AUXTimerPrescaleSet             NOROM_AUXTimerPrescaleSet
+#define AUXTimerPrescaleGet             NOROM_AUXTimerPrescaleGet
 #endif
 
 //*****************************************************************************
@@ -355,9 +355,9 @@ AUXTimerTargetValGet(uint32_t ui32Timer)
     // Check the arguments.
     ASSERT((ui32Timer == AUX_TIMER_0) || (ui32Timer == AUX_TIMER_1));
 
-    return(HWREG((ui32Timer & AUX_TIMER_0) ?
-                 (AUX_TIMER_BASE + AUX_TIMER_O_T0TARGET) :
-                 (AUX_TIMER_BASE + AUX_TIMER_O_T1TARGET)));
+    return (HWREG((ui32Timer & AUX_TIMER_0) ?
+                  (AUX_TIMER_BASE + AUX_TIMER_O_T0TARGET) :
+                  (AUX_TIMER_BASE + AUX_TIMER_O_T1TARGET)));
 }
 
 //*****************************************************************************
@@ -439,27 +439,27 @@ extern uint32_t AUXTimerPrescaleGet(uint32_t ui32Timer);
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AUXTimerConfigure
-        #undef  AUXTimerConfigure
-        #define AUXTimerConfigure               ROM_AUXTimerConfigure
-    #endif
-    #ifdef ROM_AUXTimerStart
-        #undef  AUXTimerStart
-        #define AUXTimerStart                   ROM_AUXTimerStart
-    #endif
-    #ifdef ROM_AUXTimerStop
-        #undef  AUXTimerStop
-        #define AUXTimerStop                    ROM_AUXTimerStop
-    #endif
-    #ifdef ROM_AUXTimerPrescaleSet
-        #undef  AUXTimerPrescaleSet
-        #define AUXTimerPrescaleSet             ROM_AUXTimerPrescaleSet
-    #endif
-    #ifdef ROM_AUXTimerPrescaleGet
-        #undef  AUXTimerPrescaleGet
-        #define AUXTimerPrescaleGet             ROM_AUXTimerPrescaleGet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AUXTimerConfigure
+#undef  AUXTimerConfigure
+#define AUXTimerConfigure               ROM_AUXTimerConfigure
+#endif
+#ifdef ROM_AUXTimerStart
+#undef  AUXTimerStart
+#define AUXTimerStart                   ROM_AUXTimerStart
+#endif
+#ifdef ROM_AUXTimerStop
+#undef  AUXTimerStop
+#define AUXTimerStop                    ROM_AUXTimerStop
+#endif
+#ifdef ROM_AUXTimerPrescaleSet
+#undef  AUXTimerPrescaleSet
+#define AUXTimerPrescaleSet             ROM_AUXTimerPrescaleSet
+#endif
+#ifdef ROM_AUXTimerPrescaleGet
+#undef  AUXTimerPrescaleGet
+#define AUXTimerPrescaleGet             ROM_AUXTimerPrescaleGet
+#endif
 #endif
 
 //*****************************************************************************

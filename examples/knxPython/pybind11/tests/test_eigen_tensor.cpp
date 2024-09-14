@@ -8,7 +8,7 @@
 #define PYBIND11_TEST_EIGEN_TENSOR_NAMESPACE eigen_tensor
 
 #ifdef EIGEN_AVOID_STL_ARRAY
-#    undef EIGEN_AVOID_STL_ARRAY
+    #undef EIGEN_AVOID_STL_ARRAY
 #endif
 
 #include "test_eigen_tensor.inl"

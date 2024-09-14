@@ -109,8 +109,8 @@ extern "C"
 static bool
 ADIBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == ADI2_BASE || ui32Base == ADI3_BASE ||
-           ui32Base == AUX_ADI4_BASE);
+    return (ui32Base == ADI2_BASE || ui32Base == ADI3_BASE ||
+            ui32Base == AUX_ADI4_BASE);
 }
 #endif
 
@@ -153,9 +153,12 @@ ADI8RegWrite(uint32_t ui32Base, uint32_t ui32Reg, uint8_t ui8Val)
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Write the value to the register.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32Reg, ui8Val, 1);
-    } else {
+    }
+    else
+    {
         HWREGB(ui32Base + ui32Reg) = ui8Val;
     }
 }
@@ -199,9 +202,12 @@ ADI16RegWrite(uint32_t ui32Base, uint32_t ui32Reg,
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Write the value to the register.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + (ui32Reg & 0xFE), ui16Val, 2);
-    } else {
+    }
+    else
+    {
         HWREGH(ui32Base + (ui32Reg & 0xFE)) = ui16Val;
     }
 }
@@ -244,9 +250,12 @@ ADI32RegWrite(uint32_t ui32Base, uint32_t ui32Reg, uint32_t ui32Val)
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Write the value to the register.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + (ui32Reg & 0xFC), ui32Val, 4);
-    } else {
+    }
+    else
+    {
         HWREG(ui32Base + (ui32Reg & 0xFC)) = ui32Val;
     }
 }
@@ -280,10 +289,13 @@ ADI8RegRead(uint32_t ui32Base, uint32_t ui32Reg)
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Read the register and return the value.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         return AuxAdiDdiSafeRead(ui32Base + ui32Reg, 1);
-    } else {
-        return(HWREGB(ui32Base + ui32Reg));
+    }
+    else
+    {
+        return (HWREGB(ui32Base + ui32Reg));
     }
 }
 
@@ -319,10 +331,13 @@ ADI16RegRead(uint32_t ui32Base, uint32_t ui32Reg)
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Read the registers and return the value.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         return AuxAdiDdiSafeRead(ui32Base + (ui32Reg & 0xFE), 2);
-    } else {
-        return(HWREGH(ui32Base + (ui32Reg & 0xFE)));
+    }
+    else
+    {
+        return (HWREGH(ui32Base + (ui32Reg & 0xFE)));
     }
 }
 
@@ -356,10 +371,13 @@ ADI32RegRead(uint32_t ui32Base, uint32_t ui32Reg)
     ASSERT(ui32Reg < ADI_SLAVE_REGS);
 
     // Read the registers and return the value.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         return AuxAdiDdiSafeRead(ui32Base + (ui32Reg & 0xFC), 4);
-    } else {
-        return(HWREG(ui32Base + (ui32Reg & 0xFC)));
+    }
+    else
+    {
+        return (HWREG(ui32Base + (ui32Reg & 0xFC)));
     }
 }
 
@@ -407,9 +425,12 @@ ADI8BitsSet(uint32_t ui32Base, uint32_t ui32Reg, uint8_t ui8Val)
     ui32RegOffset = ADI_O_SET;
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset + ui32Reg, ui8Val, 1);
-    } else {
+    }
+    else
+    {
         HWREGB(ui32Base + ui32RegOffset + ui32Reg) = ui8Val;
     }
 }
@@ -458,9 +479,12 @@ ADI16BitsSet(uint32_t ui32Base, uint32_t ui32Reg, uint16_t ui16Val)
     ui32RegOffset = ADI_O_SET;
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset + (ui32Reg & 0xFE), ui16Val, 2);
-    } else {
+    }
+    else
+    {
         HWREGH(ui32Base + ui32RegOffset + (ui32Reg & 0xFE)) = ui16Val;
     }
 }
@@ -509,9 +533,12 @@ ADI32BitsSet(uint32_t ui32Base, uint32_t ui32Reg, uint32_t ui32Val)
     ui32RegOffset = ADI_O_SET;
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset + (ui32Reg & 0xFC), ui32Val, 4);
-    } else {
+    }
+    else
+    {
         HWREG(ui32Base + ui32RegOffset + (ui32Reg & 0xFC)) = ui32Val;
     }
 }
@@ -560,9 +587,12 @@ ADI8BitsClear(uint32_t ui32Base, uint32_t ui32Reg, uint8_t ui8Val)
     ui32RegOffset = ADI_O_CLR;
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset + ui32Reg, ui8Val, 1);
-    } else {
+    }
+    else
+    {
         HWREGB(ui32Base + ui32RegOffset + ui32Reg) = ui8Val;
     }
 }
@@ -611,9 +641,12 @@ ADI16BitsClear(uint32_t ui32Base, uint32_t ui32Reg, uint16_t ui16Val)
     ui32RegOffset = ADI_O_CLR;
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset + (ui32Reg & 0xFE), ui16Val, 2);
-    } else {
+    }
+    else
+    {
         HWREGH(ui32Base + ui32RegOffset + (ui32Reg & 0xFE)) = ui16Val;
     }
 }
@@ -662,9 +695,12 @@ ADI32BitsClear(uint32_t ui32Base, uint32_t ui32Reg, uint32_t ui32Val)
     ui32RegOffset = ADI_O_CLR;
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset + (ui32Reg & 0xFC), ui32Val, 4);
-    } else {
+    }
+    else
+    {
         HWREG(ui32Base + ui32RegOffset + (ui32Reg & 0xFC)) = ui32Val;
     }
 }
@@ -719,9 +755,12 @@ ADI4SetValBit(uint32_t ui32Base, uint32_t ui32Reg, bool bWriteHigh,
     ui32RegOffset = ADI_O_MASK4B + (ui32Reg << 1) + (bWriteHigh ? 1 : 0);
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset, (ui8Mask << 4) | ui8Val, 1);
-    } else {
+    }
+    else
+    {
         HWREGB(ui32Base + ui32RegOffset) = (ui8Mask << 4) | ui8Val;
     }
 }
@@ -771,9 +810,12 @@ ADI8SetValBit(uint32_t ui32Base, uint32_t ui32Reg, uint16_t ui16Mask,
     ui32RegOffset = ADI_O_MASK8B + (ui32Reg << 1);
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset, (ui16Mask << 8) | ui16Val, 2);
-    } else {
+    }
+    else
+    {
         HWREGH(ui32Base + ui32RegOffset) = (ui16Mask << 8) | ui16Val;
     }
 }
@@ -824,9 +866,12 @@ ADI16SetValBit(uint32_t ui32Base, uint32_t ui32Reg, uint32_t ui32Mask,
     ui32RegOffset = ADI_O_MASK16B + ((ui32Reg << 1) & 0xFC);
 
     // Set the selected bits.
-    if (ui32Base==AUX_ADI4_BASE) {
+    if (ui32Base == AUX_ADI4_BASE)
+    {
         AuxAdiDdiSafeWrite(ui32Base + ui32RegOffset, (ui32Mask << 16) | ui32Val, 4);
-    } else {
+    }
+    else
+    {
         HWREG(ui32Base + ui32RegOffset) = (ui32Mask << 16) | ui32Val;
     }
 }

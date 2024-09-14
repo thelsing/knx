@@ -262,7 +262,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from a TRNG_open() call.
  */
-typedef struct TRNG_Config  *TRNG_Handle;
+typedef struct TRNG_Config*  TRNG_Handle;
 
 /*!
  * @brief   The way in which TRNG function calls return after generating
@@ -285,7 +285,8 @@ typedef struct TRNG_Config  *TRNG_Handle;
  * |TRNG_RETURN_BEHAVIOR_POLLING  | X     | X     | X     |
  *
  */
-typedef enum {
+typedef enum
+{
     TRNG_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
                                              *   TRNG operation goes on in the background. The registered
                                              *   callback function is called after the operation completes.
@@ -313,12 +314,13 @@ typedef enum {
  *
  *  @sa     TRNG_init()
  */
-typedef struct TRNG_Config {
+typedef struct TRNG_Config
+{
     /*! Pointer to a driver specific data object */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } TRNG_Config;
 
 /*!
@@ -334,7 +336,7 @@ typedef struct TRNG_Config {
  */
 typedef void (*TRNG_CallbackFxn) (TRNG_Handle handle,
                                   int_fast16_t returnValue,
-                                  CryptoKey *entropy);
+                                  CryptoKey* entropy);
 
 /*!
  *  @brief  TRNG Parameters
@@ -344,13 +346,14 @@ typedef void (*TRNG_CallbackFxn) (TRNG_Handle handle,
  *
  *  @sa     TRNG_Params_init()
  */
-typedef struct {
+typedef struct
+{
     TRNG_ReturnBehavior     returnBehavior;             /*!< Blocking, callback, or polling return behavior */
     TRNG_CallbackFxn        callbackFxn;                /*!< Callback function pointer */
     uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
                                                          *   ::TRNG_RETURN_BEHAVIOR_BLOCKING
                                                          */
-    void                   *custom;                     /*!< Custom argument used by driver
+    void*                   custom;                     /*!< Custom argument used by driver
                                                          *   implementation
                                                          */
 } TRNG_Params;
@@ -384,7 +387,7 @@ void TRNG_init(void);
  *      timeout                     = SemaphoreP_WAIT_FOREVER
  *      custom                      = NULL
  */
-void TRNG_Params_init(TRNG_Params *params);
+void TRNG_Params_init(TRNG_Params* params);
 
 /*!
  *  @brief  This function opens a given TRNG peripheral.
@@ -403,7 +406,7 @@ void TRNG_Params_init(TRNG_Params *params);
  *  @sa     TRNG_init()
  *  @sa     TRNG_close()
  */
-TRNG_Handle TRNG_open(uint_least8_t index, TRNG_Params *params);
+TRNG_Handle TRNG_open(uint_least8_t index, TRNG_Params* params);
 
 /*!
  *  @brief  Function to close a TRNG peripheral specified by the TRNG handle
@@ -435,7 +438,7 @@ void TRNG_close(TRNG_Handle handle);
  *  @retval #TRNG_STATUS_ERROR                 The operation failed.
  *  @retval #TRNG_STATUS_RESOURCE_UNAVAILABLE  The required hardware resource was not available. Try again later.
  */
-int_fast16_t TRNG_generateEntropy(TRNG_Handle handle, CryptoKey *entropy);
+int_fast16_t TRNG_generateEntropy(TRNG_Handle handle, CryptoKey* entropy);
 
 
 

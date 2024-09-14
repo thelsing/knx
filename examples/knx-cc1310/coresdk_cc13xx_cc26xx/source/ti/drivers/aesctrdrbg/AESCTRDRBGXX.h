@@ -78,7 +78,7 @@ extern "C" {
  *  and reducing stack size requirements.
  */
 #ifndef AESCTRDRBG_MAX_KEY_LENGTH
-    #define AESCTRDRBG_MAX_KEY_LENGTH AESCTRDRBG_AES_KEY_LENGTH_256
+#define AESCTRDRBG_MAX_KEY_LENGTH AESCTRDRBG_AES_KEY_LENGTH_256
 #endif
 
 /*! @brief Define that specifies the maximum seed length used by the driver */
@@ -90,7 +90,8 @@ extern "C" {
  *  AESCTR26XX hardware attributes should be included in the board file
  *  and pointed to by the AESCTR_config struct.
  */
-typedef struct {
+typedef struct
+{
     uint_least8_t   aesctrIndex;    /*! Index into AESCTR_config array */
 } AESCTRDRBGXX_HWAttrs;
 
@@ -99,7 +100,8 @@ typedef struct {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct {
+typedef struct
+{
     uint8_t                         keyingMaterial[AESCTRDRBG_AES_KEY_LENGTH_256];
     uint8_t                         counter[AESCTRDRBG_AES_BLOCK_SIZE_BYTES];
     CryptoKey                       key;

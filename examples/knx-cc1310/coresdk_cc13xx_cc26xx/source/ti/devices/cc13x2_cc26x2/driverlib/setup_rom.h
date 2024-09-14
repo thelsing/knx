@@ -78,26 +78,26 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define SetupAfterColdResetWakeupFromShutDownCfg1 NOROM_SetupAfterColdResetWakeupFromShutDownCfg1
-    #define SetupAfterColdResetWakeupFromShutDownCfg2 NOROM_SetupAfterColdResetWakeupFromShutDownCfg2
-    #define SetupAfterColdResetWakeupFromShutDownCfg3 NOROM_SetupAfterColdResetWakeupFromShutDownCfg3
-    #define SetupGetTrimForAdcShModeEn      NOROM_SetupGetTrimForAdcShModeEn
-    #define SetupGetTrimForAdcShVbufEn      NOROM_SetupGetTrimForAdcShVbufEn
-    #define SetupGetTrimForAmpcompCtrl      NOROM_SetupGetTrimForAmpcompCtrl
-    #define SetupGetTrimForAmpcompTh1       NOROM_SetupGetTrimForAmpcompTh1
-    #define SetupGetTrimForAmpcompTh2       NOROM_SetupGetTrimForAmpcompTh2
-    #define SetupGetTrimForAnabypassValue1  NOROM_SetupGetTrimForAnabypassValue1
-    #define SetupGetTrimForDblrLoopFilterResetVoltage NOROM_SetupGetTrimForDblrLoopFilterResetVoltage
-    #define SetupGetTrimForRadcExtCfg       NOROM_SetupGetTrimForRadcExtCfg
-    #define SetupGetTrimForRcOscLfIBiasTrim NOROM_SetupGetTrimForRcOscLfIBiasTrim
-    #define SetupGetTrimForRcOscLfRtuneCtuneTrim NOROM_SetupGetTrimForRcOscLfRtuneCtuneTrim
-    #define SetupGetTrimForXoscHfCtl        NOROM_SetupGetTrimForXoscHfCtl
-    #define SetupGetTrimForXoscHfFastStart  NOROM_SetupGetTrimForXoscHfFastStart
-    #define SetupGetTrimForXoscHfIbiastherm NOROM_SetupGetTrimForXoscHfIbiastherm
-    #define SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio NOROM_SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio
-    #define SetupSetCacheModeAccordingToCcfgSetting NOROM_SetupSetCacheModeAccordingToCcfgSetting
-    #define SetupSetAonRtcSubSecInc         NOROM_SetupSetAonRtcSubSecInc
-    #define SetupStepVddrTrimTo             NOROM_SetupStepVddrTrimTo
+#define SetupAfterColdResetWakeupFromShutDownCfg1 NOROM_SetupAfterColdResetWakeupFromShutDownCfg1
+#define SetupAfterColdResetWakeupFromShutDownCfg2 NOROM_SetupAfterColdResetWakeupFromShutDownCfg2
+#define SetupAfterColdResetWakeupFromShutDownCfg3 NOROM_SetupAfterColdResetWakeupFromShutDownCfg3
+#define SetupGetTrimForAdcShModeEn      NOROM_SetupGetTrimForAdcShModeEn
+#define SetupGetTrimForAdcShVbufEn      NOROM_SetupGetTrimForAdcShVbufEn
+#define SetupGetTrimForAmpcompCtrl      NOROM_SetupGetTrimForAmpcompCtrl
+#define SetupGetTrimForAmpcompTh1       NOROM_SetupGetTrimForAmpcompTh1
+#define SetupGetTrimForAmpcompTh2       NOROM_SetupGetTrimForAmpcompTh2
+#define SetupGetTrimForAnabypassValue1  NOROM_SetupGetTrimForAnabypassValue1
+#define SetupGetTrimForDblrLoopFilterResetVoltage NOROM_SetupGetTrimForDblrLoopFilterResetVoltage
+#define SetupGetTrimForRadcExtCfg       NOROM_SetupGetTrimForRadcExtCfg
+#define SetupGetTrimForRcOscLfIBiasTrim NOROM_SetupGetTrimForRcOscLfIBiasTrim
+#define SetupGetTrimForRcOscLfRtuneCtuneTrim NOROM_SetupGetTrimForRcOscLfRtuneCtuneTrim
+#define SetupGetTrimForXoscHfCtl        NOROM_SetupGetTrimForXoscHfCtl
+#define SetupGetTrimForXoscHfFastStart  NOROM_SetupGetTrimForXoscHfFastStart
+#define SetupGetTrimForXoscHfIbiastherm NOROM_SetupGetTrimForXoscHfIbiastherm
+#define SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio NOROM_SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio
+#define SetupSetCacheModeAccordingToCcfgSetting NOROM_SetupSetCacheModeAccordingToCcfgSetting
+#define SetupSetAonRtcSubSecInc         NOROM_SetupSetAonRtcSubSecInc
+#define SetupStepVddrTrimTo             NOROM_SetupStepVddrTrimTo
 #endif
 
 //*****************************************************************************
@@ -319,9 +319,12 @@ SetupSignExtendVddrTrimValue( uint32_t ui32VddrTrimVal )
     // The VDDR trim value is 5 bits representing the range from -10 to +21
     // (where -10=0x16, -1=0x1F, 0=0x00, 1=0x01 and +21=0x15)
     int32_t i32SignedVddrVal = ui32VddrTrimVal;
-    if ( i32SignedVddrVal > 0x15 ) {
+
+    if ( i32SignedVddrVal > 0x15 )
+    {
         i32SignedVddrVal -= 0x20;
     }
+
     return ( i32SignedVddrVal );
 }
 
@@ -366,87 +369,87 @@ extern void SetupStepVddrTrimTo( uint32_t toCode );
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_SetupAfterColdResetWakeupFromShutDownCfg1
-        #undef  SetupAfterColdResetWakeupFromShutDownCfg1
-        #define SetupAfterColdResetWakeupFromShutDownCfg1 ROM_SetupAfterColdResetWakeupFromShutDownCfg1
-    #endif
-    #ifdef ROM_SetupAfterColdResetWakeupFromShutDownCfg2
-        #undef  SetupAfterColdResetWakeupFromShutDownCfg2
-        #define SetupAfterColdResetWakeupFromShutDownCfg2 ROM_SetupAfterColdResetWakeupFromShutDownCfg2
-    #endif
-    #ifdef ROM_SetupAfterColdResetWakeupFromShutDownCfg3
-        #undef  SetupAfterColdResetWakeupFromShutDownCfg3
-        #define SetupAfterColdResetWakeupFromShutDownCfg3 ROM_SetupAfterColdResetWakeupFromShutDownCfg3
-    #endif
-    #ifdef ROM_SetupGetTrimForAdcShModeEn
-        #undef  SetupGetTrimForAdcShModeEn
-        #define SetupGetTrimForAdcShModeEn      ROM_SetupGetTrimForAdcShModeEn
-    #endif
-    #ifdef ROM_SetupGetTrimForAdcShVbufEn
-        #undef  SetupGetTrimForAdcShVbufEn
-        #define SetupGetTrimForAdcShVbufEn      ROM_SetupGetTrimForAdcShVbufEn
-    #endif
-    #ifdef ROM_SetupGetTrimForAmpcompCtrl
-        #undef  SetupGetTrimForAmpcompCtrl
-        #define SetupGetTrimForAmpcompCtrl      ROM_SetupGetTrimForAmpcompCtrl
-    #endif
-    #ifdef ROM_SetupGetTrimForAmpcompTh1
-        #undef  SetupGetTrimForAmpcompTh1
-        #define SetupGetTrimForAmpcompTh1       ROM_SetupGetTrimForAmpcompTh1
-    #endif
-    #ifdef ROM_SetupGetTrimForAmpcompTh2
-        #undef  SetupGetTrimForAmpcompTh2
-        #define SetupGetTrimForAmpcompTh2       ROM_SetupGetTrimForAmpcompTh2
-    #endif
-    #ifdef ROM_SetupGetTrimForAnabypassValue1
-        #undef  SetupGetTrimForAnabypassValue1
-        #define SetupGetTrimForAnabypassValue1  ROM_SetupGetTrimForAnabypassValue1
-    #endif
-    #ifdef ROM_SetupGetTrimForDblrLoopFilterResetVoltage
-        #undef  SetupGetTrimForDblrLoopFilterResetVoltage
-        #define SetupGetTrimForDblrLoopFilterResetVoltage ROM_SetupGetTrimForDblrLoopFilterResetVoltage
-    #endif
-    #ifdef ROM_SetupGetTrimForRadcExtCfg
-        #undef  SetupGetTrimForRadcExtCfg
-        #define SetupGetTrimForRadcExtCfg       ROM_SetupGetTrimForRadcExtCfg
-    #endif
-    #ifdef ROM_SetupGetTrimForRcOscLfIBiasTrim
-        #undef  SetupGetTrimForRcOscLfIBiasTrim
-        #define SetupGetTrimForRcOscLfIBiasTrim ROM_SetupGetTrimForRcOscLfIBiasTrim
-    #endif
-    #ifdef ROM_SetupGetTrimForRcOscLfRtuneCtuneTrim
-        #undef  SetupGetTrimForRcOscLfRtuneCtuneTrim
-        #define SetupGetTrimForRcOscLfRtuneCtuneTrim ROM_SetupGetTrimForRcOscLfRtuneCtuneTrim
-    #endif
-    #ifdef ROM_SetupGetTrimForXoscHfCtl
-        #undef  SetupGetTrimForXoscHfCtl
-        #define SetupGetTrimForXoscHfCtl        ROM_SetupGetTrimForXoscHfCtl
-    #endif
-    #ifdef ROM_SetupGetTrimForXoscHfFastStart
-        #undef  SetupGetTrimForXoscHfFastStart
-        #define SetupGetTrimForXoscHfFastStart  ROM_SetupGetTrimForXoscHfFastStart
-    #endif
-    #ifdef ROM_SetupGetTrimForXoscHfIbiastherm
-        #undef  SetupGetTrimForXoscHfIbiastherm
-        #define SetupGetTrimForXoscHfIbiastherm ROM_SetupGetTrimForXoscHfIbiastherm
-    #endif
-    #ifdef ROM_SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio
-        #undef  SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio
-        #define SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio ROM_SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio
-    #endif
-    #ifdef ROM_SetupSetCacheModeAccordingToCcfgSetting
-        #undef  SetupSetCacheModeAccordingToCcfgSetting
-        #define SetupSetCacheModeAccordingToCcfgSetting ROM_SetupSetCacheModeAccordingToCcfgSetting
-    #endif
-    #ifdef ROM_SetupSetAonRtcSubSecInc
-        #undef  SetupSetAonRtcSubSecInc
-        #define SetupSetAonRtcSubSecInc         ROM_SetupSetAonRtcSubSecInc
-    #endif
-    #ifdef ROM_SetupStepVddrTrimTo
-        #undef  SetupStepVddrTrimTo
-        #define SetupStepVddrTrimTo             ROM_SetupStepVddrTrimTo
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_SetupAfterColdResetWakeupFromShutDownCfg1
+#undef  SetupAfterColdResetWakeupFromShutDownCfg1
+#define SetupAfterColdResetWakeupFromShutDownCfg1 ROM_SetupAfterColdResetWakeupFromShutDownCfg1
+#endif
+#ifdef ROM_SetupAfterColdResetWakeupFromShutDownCfg2
+#undef  SetupAfterColdResetWakeupFromShutDownCfg2
+#define SetupAfterColdResetWakeupFromShutDownCfg2 ROM_SetupAfterColdResetWakeupFromShutDownCfg2
+#endif
+#ifdef ROM_SetupAfterColdResetWakeupFromShutDownCfg3
+#undef  SetupAfterColdResetWakeupFromShutDownCfg3
+#define SetupAfterColdResetWakeupFromShutDownCfg3 ROM_SetupAfterColdResetWakeupFromShutDownCfg3
+#endif
+#ifdef ROM_SetupGetTrimForAdcShModeEn
+#undef  SetupGetTrimForAdcShModeEn
+#define SetupGetTrimForAdcShModeEn      ROM_SetupGetTrimForAdcShModeEn
+#endif
+#ifdef ROM_SetupGetTrimForAdcShVbufEn
+#undef  SetupGetTrimForAdcShVbufEn
+#define SetupGetTrimForAdcShVbufEn      ROM_SetupGetTrimForAdcShVbufEn
+#endif
+#ifdef ROM_SetupGetTrimForAmpcompCtrl
+#undef  SetupGetTrimForAmpcompCtrl
+#define SetupGetTrimForAmpcompCtrl      ROM_SetupGetTrimForAmpcompCtrl
+#endif
+#ifdef ROM_SetupGetTrimForAmpcompTh1
+#undef  SetupGetTrimForAmpcompTh1
+#define SetupGetTrimForAmpcompTh1       ROM_SetupGetTrimForAmpcompTh1
+#endif
+#ifdef ROM_SetupGetTrimForAmpcompTh2
+#undef  SetupGetTrimForAmpcompTh2
+#define SetupGetTrimForAmpcompTh2       ROM_SetupGetTrimForAmpcompTh2
+#endif
+#ifdef ROM_SetupGetTrimForAnabypassValue1
+#undef  SetupGetTrimForAnabypassValue1
+#define SetupGetTrimForAnabypassValue1  ROM_SetupGetTrimForAnabypassValue1
+#endif
+#ifdef ROM_SetupGetTrimForDblrLoopFilterResetVoltage
+#undef  SetupGetTrimForDblrLoopFilterResetVoltage
+#define SetupGetTrimForDblrLoopFilterResetVoltage ROM_SetupGetTrimForDblrLoopFilterResetVoltage
+#endif
+#ifdef ROM_SetupGetTrimForRadcExtCfg
+#undef  SetupGetTrimForRadcExtCfg
+#define SetupGetTrimForRadcExtCfg       ROM_SetupGetTrimForRadcExtCfg
+#endif
+#ifdef ROM_SetupGetTrimForRcOscLfIBiasTrim
+#undef  SetupGetTrimForRcOscLfIBiasTrim
+#define SetupGetTrimForRcOscLfIBiasTrim ROM_SetupGetTrimForRcOscLfIBiasTrim
+#endif
+#ifdef ROM_SetupGetTrimForRcOscLfRtuneCtuneTrim
+#undef  SetupGetTrimForRcOscLfRtuneCtuneTrim
+#define SetupGetTrimForRcOscLfRtuneCtuneTrim ROM_SetupGetTrimForRcOscLfRtuneCtuneTrim
+#endif
+#ifdef ROM_SetupGetTrimForXoscHfCtl
+#undef  SetupGetTrimForXoscHfCtl
+#define SetupGetTrimForXoscHfCtl        ROM_SetupGetTrimForXoscHfCtl
+#endif
+#ifdef ROM_SetupGetTrimForXoscHfFastStart
+#undef  SetupGetTrimForXoscHfFastStart
+#define SetupGetTrimForXoscHfFastStart  ROM_SetupGetTrimForXoscHfFastStart
+#endif
+#ifdef ROM_SetupGetTrimForXoscHfIbiastherm
+#undef  SetupGetTrimForXoscHfIbiastherm
+#define SetupGetTrimForXoscHfIbiastherm ROM_SetupGetTrimForXoscHfIbiastherm
+#endif
+#ifdef ROM_SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio
+#undef  SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio
+#define SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio ROM_SetupGetTrimForXoscLfRegulatorAndCmirrwrRatio
+#endif
+#ifdef ROM_SetupSetCacheModeAccordingToCcfgSetting
+#undef  SetupSetCacheModeAccordingToCcfgSetting
+#define SetupSetCacheModeAccordingToCcfgSetting ROM_SetupSetCacheModeAccordingToCcfgSetting
+#endif
+#ifdef ROM_SetupSetAonRtcSubSecInc
+#undef  SetupSetAonRtcSubSecInc
+#define SetupSetAonRtcSubSecInc         ROM_SetupSetAonRtcSubSecInc
+#endif
+#ifdef ROM_SetupStepVddrTrimTo
+#undef  SetupStepVddrTrimTo
+#define SetupStepVddrTrimTo             ROM_SetupStepVddrTrimTo
+#endif
 #endif
 
 //*****************************************************************************

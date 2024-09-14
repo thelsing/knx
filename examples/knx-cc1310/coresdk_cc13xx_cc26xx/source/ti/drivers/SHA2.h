@@ -281,7 +281,8 @@ extern "C" {
  * |SHA2_RETURN_BEHAVIOR_POLLING    | X     | X     | X     |
  *
  */
-typedef enum {
+typedef enum
+{
     SHA2_RETURN_BEHAVIOR_CALLBACK = 1,      /*!< The function call will return immediately while the
                                              *   SHA2 operation goes on in the background. The registered
                                              *   callback function is called after the operation completes.
@@ -301,7 +302,8 @@ typedef enum {
 /*!
  *  @brief  Enum for the hash types supported by the driver.
  */
-typedef enum {
+typedef enum
+{
     SHA2_HASH_TYPE_224 = 0,
     SHA2_HASH_TYPE_256 = 1,
     SHA2_HASH_TYPE_384 = 2,
@@ -311,7 +313,8 @@ typedef enum {
 /*!
  *  @brief  Enum for the hash digest lengths in bytes supported by the driver.
  */
-typedef enum {
+typedef enum
+{
     SHA2_DIGEST_LENGTH_BYTES_224 = 28,
     SHA2_DIGEST_LENGTH_BYTES_256 = 32,
     SHA2_DIGEST_LENGTH_BYTES_384 = 48,
@@ -331,7 +334,8 @@ typedef enum {
  *  the segment lengths for all but the last segment
  *  must be multiples of the relevant block size.
  */
-typedef enum {
+typedef enum
+{
     SHA2_BLOCK_SIZE_BYTES_224 = 64,
     SHA2_BLOCK_SIZE_BYTES_256 = 64,
     SHA2_BLOCK_SIZE_BYTES_384 = 128,
@@ -349,12 +353,13 @@ typedef enum {
  *
  *  @sa     SHA2_init()
  */
-typedef struct SHA2_Config {
+typedef struct SHA2_Config
+{
     /*! Pointer to a driver specific data object */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } SHA2_Config;
 
 /*!
@@ -382,7 +387,8 @@ typedef void (*SHA2_CallbackFxn) (SHA2_Handle handle, int_fast16_t returnStatus)
  *
  *  @sa     SHA2_Params_init()
  */
-typedef struct {
+typedef struct
+{
     SHA2_HashType           hashType;                   /*!< SHA2 variant to use. This determines the output digest
                                                          *   length.
                                                          */
@@ -442,7 +448,7 @@ void SHA2_init(void);
  *      timeout                     = SemaphoreP_WAIT_FOREVER
  *      custom                      = NULL
  */
-void SHA2_Params_init(SHA2_Params *params);
+void SHA2_Params_init(SHA2_Params* params);
 
 /*!
  *  @brief  Initializes a SHA2 driver instance and returns a handle.
@@ -460,7 +466,7 @@ void SHA2_Params_init(SHA2_Params *params);
  *
  *  @sa     #SHA2_init(), #SHA2_close()
  */
-SHA2_Handle SHA2_open(uint_least8_t index, const SHA2_Params *params);
+SHA2_Handle SHA2_open(uint_least8_t index, const SHA2_Params* params);
 
 /*!
  *  @brief  Closes a SHA2 peripheral specified by \a handle.
@@ -530,7 +536,7 @@ int_fast16_t SHA2_addData(SHA2_Handle handle, const void* data, size_t length);
  *
  *  @sa     #SHA2_open()
  */
-int_fast16_t SHA2_hashData(SHA2_Handle handle, const void* data, size_t size, void *digest);
+int_fast16_t SHA2_hashData(SHA2_Handle handle, const void* data, size_t size, void* digest);
 
 /*!
  *  @brief  Finishes hash a operation and writes the result to \a digest.
@@ -554,7 +560,7 @@ int_fast16_t SHA2_hashData(SHA2_Handle handle, const void* data, size_t size, vo
  *
  *  @sa     #SHA2_open(), #SHA2_addData()
  */
-int_fast16_t SHA2_finalize(SHA2_Handle handle, void *digest);
+int_fast16_t SHA2_finalize(SHA2_Handle handle, void* digest);
 
 /*!
  *  @brief Clears internal buffers and aborts an ongoing SHA2 operation.

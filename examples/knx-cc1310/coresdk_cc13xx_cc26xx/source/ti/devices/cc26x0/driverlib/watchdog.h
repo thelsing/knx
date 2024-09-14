@@ -114,7 +114,7 @@ __STATIC_INLINE bool
 WatchdogRunning(void)
 {
     // See if the watchdog timer module is enabled, and return.
-    return((HWREG(WDT_BASE + WDT_O_CTL) & WDT_CTL_INTEN) ? true : false);
+    return ((HWREG(WDT_BASE + WDT_O_CTL) & WDT_CTL_INTEN) ? true : false);
 }
 
 //*****************************************************************************
@@ -231,8 +231,8 @@ __STATIC_INLINE bool
 WatchdogLockState(void)
 {
     // Get the lock state.
-    return((HWREG(WDT_BASE + WDT_O_LOCK) == WATCHDOG_LOCK_LOCKED) ?
-               true : false);
+    return ((HWREG(WDT_BASE + WDT_O_LOCK) == WATCHDOG_LOCK_LOCKED) ?
+            true : false);
 }
 
 //*****************************************************************************
@@ -277,7 +277,7 @@ __STATIC_INLINE uint32_t
 WatchdogReloadGet(void)
 {
     // Get the load register.
-    return(HWREG(WDT_BASE + WDT_O_LOAD));
+    return (HWREG(WDT_BASE + WDT_O_LOAD));
 }
 
 //*****************************************************************************
@@ -293,7 +293,7 @@ __STATIC_INLINE uint32_t
 WatchdogValueGet(void)
 {
     // Get the current watchdog timer register value.
-    return(HWREG(WDT_BASE + WDT_O_VALUE));
+    return (HWREG(WDT_BASE + WDT_O_VALUE));
 }
 
 //*****************************************************************************
@@ -397,7 +397,7 @@ WatchdogIntStatus(void)
 {
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    return(HWREG(WDT_BASE + WDT_O_RIS));
+    return (HWREG(WDT_BASE + WDT_O_RIS));
 }
 
 //*****************************************************************************
@@ -458,7 +458,7 @@ WatchdogIntTypeSet(uint32_t ui32Type)
            (ui32Type == WATCHDOG_INT_TYPE_NMI));
 
     // Set the interrupt type.
-    HWREGBITW(WDT_BASE + WDT_O_CTL, WDT_CTL_INTTYPE_BITN) = (ui32Type == WATCHDOG_INT_TYPE_INT)? 0 : 1;
+    HWREGBITW(WDT_BASE + WDT_O_CTL, WDT_CTL_INTTYPE_BITN) = (ui32Type == WATCHDOG_INT_TYPE_INT) ? 0 : 1;
 }
 
 //*****************************************************************************

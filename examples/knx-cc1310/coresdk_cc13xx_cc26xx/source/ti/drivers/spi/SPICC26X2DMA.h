@@ -819,7 +819,8 @@ extern const SPI_FxnTable SPICC26X2DMA_fxnTable;
  *  - SPICC26X2DMA_8bit:  txBuf and rxBuf are arrays of uint8_t elements
  *  - SPICC26X2DMA_16bit: txBuf and rxBuf are arrays of uint16_t elements
  */
-typedef enum SPICC26X2DMA_FrameSize {
+typedef enum SPICC26X2DMA_FrameSize
+{
     SPICC26X2DMA_8bit  = 0,
     SPICC26X2DMA_16bit = 1
 } SPICC26X2DMA_FrameSize;
@@ -831,7 +832,8 @@ typedef enum SPICC26X2DMA_FrameSize {
  *  partial mode and the associated pin interrupt. This field is for internal
  *  use only.
  */
-typedef enum SPICC26X2DMA_ReturnPartial {
+typedef enum SPICC26X2DMA_ReturnPartial
+{
     SPICC26X2DMA_retPartDisabled  = 0,
     SPICC26X2DMA_retPartEnabledIntNotSet = 1,
     SPICC26X2DMA_retPartEnabledIntSet = 2
@@ -891,7 +893,8 @@ typedef enum SPICC26X2DMA_ReturnPartial {
  *  };
  *  @endcode
  */
-typedef struct SPICC26X2DMA_HWAttrs {
+typedef struct SPICC26X2DMA_HWAttrs
+{
     /*! @brief SPI Peripheral's base address */
     uint32_t         baseAddr;
     /*! SPI CC26XXDMA Peripheral's interrupt vector */
@@ -944,7 +947,8 @@ typedef struct SPICC26X2DMA_HWAttrs {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct SPICC26X2DMA_Object {
+typedef struct SPICC26X2DMA_Object
+{
     HwiP_Struct                hwi;
     PIN_Handle                 pinHandle;
     PIN_State                  pinState;
@@ -953,9 +957,9 @@ typedef struct SPICC26X2DMA_Object {
     SemaphoreP_Struct          transferComplete;
 
     SPI_CallbackFxn            transferCallbackFxn;
-    SPI_Transaction            *headPtr;
-    SPI_Transaction            *tailPtr;
-    SPI_Transaction            *completedTransfers;
+    SPI_Transaction*            headPtr;
+    SPI_Transaction*            tailPtr;
+    SPI_Transaction*            completedTransfers;
     UDMACC26XX_Handle          udmaHandle;
 
     size_t                     framesQueued;

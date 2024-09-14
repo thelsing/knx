@@ -307,7 +307,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from an AESECB_open() call.
  */
-typedef struct AESECB_Config    *AESECB_Handle;
+typedef struct AESECB_Config*    AESECB_Handle;
 
 /*!
  * @brief   The way in which ECB function calls return after performing an
@@ -330,7 +330,8 @@ typedef struct AESECB_Config    *AESECB_Handle;
  * |AESECB_RETURN_BEHAVIOR_POLLING  | X     | X     | X     |
  *
  */
-typedef enum {
+typedef enum
+{
     AESECB_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
                                              *   ECB operation goes on in the background. The registered
                                              *   callback function is called after the operation completes.
@@ -350,7 +351,8 @@ typedef enum {
 /*!
  *  @brief  Enum for the direction of the ECB operation.
  */
-typedef enum {
+typedef enum
+{
     AESECB_MODE_ENCRYPT = 1,
     AESECB_MODE_DECRYPT = 2,
 } AESECB_Mode;
@@ -359,20 +361,21 @@ typedef enum {
  *  @brief  Struct containing the parameters required for encrypting/decrypting
  *          and a message.
  */
-typedef struct {
-   CryptoKey                *key;                       /*!< A previously initialized CryptoKey */
-   uint8_t                  *input;                     /*!<
+typedef struct
+{
+    CryptoKey*                key;                       /*!< A previously initialized CryptoKey */
+    uint8_t*                  input;                     /*!<
                                                          *   - Encryption: The plaintext buffer to be encrypted
                                                          *   in the ECB operation.
                                                          *   - Decryption: The ciphertext to be decrypted.
                                                          */
-   uint8_t                  *output;                    /*!<
+    uint8_t*                  output;                    /*!<
                                                          *   - Encryption: The output ciphertext buffer that the encrypted plaintext
                                                          *   is copied to.
                                                          *   - Decryption: The plaintext derived from the decrypted
                                                          *   ciphertext is copied here.
                                                          */
-   size_t                   inputLength;                /*!< Length of the input and output in bytes. Must be a multiple of the
+    size_t                   inputLength;                /*!< Length of the input and output in bytes. Must be a multiple of the
                                                          *   AES block size (16 bytes)
                                                          */
 } AESECB_Operation;
@@ -380,7 +383,8 @@ typedef struct {
 /*!
  *  @brief  Enum for the operation types supported by the driver.
  */
-typedef enum {
+typedef enum
+{
     AESECB_OPERATION_TYPE_ENCRYPT = 1,
     AESECB_OPERATION_TYPE_DECRYPT = 2,
 } AESECB_OperationType;
@@ -396,12 +400,13 @@ typedef enum {
  *
  *  @sa     AESECB_init()
  */
-typedef struct AESECB_Config {
+typedef struct AESECB_Config
+{
     /*! Pointer to a driver specific data object */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } AESECB_Config;
 
 /*!
@@ -421,7 +426,7 @@ typedef struct AESECB_Config {
  */
 typedef void (*AESECB_CallbackFxn) (AESECB_Handle handle,
                                     int_fast16_t returnValue,
-                                    AESECB_Operation *operation,
+                                    AESECB_Operation* operation,
                                     AESECB_OperationType operationType);
 
 /*!
@@ -432,13 +437,14 @@ typedef void (*AESECB_CallbackFxn) (AESECB_Handle handle,
  *
  *  @sa     AESECB_Params_init()
  */
-typedef struct {
+typedef struct
+{
     AESECB_ReturnBehavior   returnBehavior;             /*!< Blocking, callback, or polling return behavior */
     AESECB_CallbackFxn      callbackFxn;                /*!< Callback function pointer */
     uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
                                                          *   ::AESECB_RETURN_BEHAVIOR_BLOCKING
                                                          */
-    void                   *custom;                     /*!< Custom argument used by driver
+    void*                   custom;                     /*!< Custom argument used by driver
                                                          *   implementation
                                                          */
 } AESECB_Params;
@@ -472,7 +478,7 @@ void AESECB_init(void);
  *      timeout                     = SemaphoreP_WAIT_FOREVER
  *      custom                      = NULL
  */
-void AESECB_Params_init(AESECB_Params *params);
+void AESECB_Params_init(AESECB_Params* params);
 
 /*!
  *  @brief  This function opens a given ECB peripheral.
@@ -491,7 +497,7 @@ void AESECB_Params_init(AESECB_Params *params);
  *  @sa     AESECB_init()
  *  @sa     AESECB_close()
  */
-AESECB_Handle AESECB_open(uint_least8_t index, AESECB_Params *params);
+AESECB_Handle AESECB_open(uint_least8_t index, AESECB_Params* params);
 
 /*!
  *  @brief  Function to close an ECB peripheral specified by the ECB handle
@@ -512,7 +518,7 @@ void AESECB_close(AESECB_Handle handle);
  *
  *  Defaults values are all zeros.
  */
-void AESECB_Operation_init(AESECB_Operation *operationStruct);
+void AESECB_Operation_init(AESECB_Operation* operationStruct);
 
 /*!
  *  @brief  Function to perform an AESECB encryption operation in one call.
@@ -533,7 +539,7 @@ void AESECB_Operation_init(AESECB_Operation *operationStruct);
  *
  *  @sa     AESECB_oneStepDecrypt()
  */
-int_fast16_t AESECB_oneStepEncrypt(AESECB_Handle handle, AESECB_Operation *operation);
+int_fast16_t AESECB_oneStepEncrypt(AESECB_Handle handle, AESECB_Operation* operation);
 
 /*!
  *  @brief  Function to perform an AESECB decryption in one call.
@@ -554,7 +560,7 @@ int_fast16_t AESECB_oneStepEncrypt(AESECB_Handle handle, AESECB_Operation *opera
  *
  *  @sa     AESECB_oneStepEncrypt()
  */
-int_fast16_t AESECB_oneStepDecrypt(AESECB_Handle handle, AESECB_Operation *operation);
+int_fast16_t AESECB_oneStepDecrypt(AESECB_Handle handle, AESECB_Operation* operation);
 
 /*!
  *  @brief Cancels an ongoing AESECB operation.

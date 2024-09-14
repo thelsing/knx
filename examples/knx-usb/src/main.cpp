@@ -19,16 +19,16 @@ Adafruit_USBD_HID usb_hid;
 // received data on interrupt OUT endpoint
 void setReportCallback(uint8_t report_id, hid_report_type_t report_type, uint8_t const* data, uint16_t bufSize)
 {
-	// we don't use multiple report and report ID
-	(void) report_id;
-	(void) report_type;
+    // we don't use multiple report and report ID
+    (void) report_id;
+    (void) report_type;
 
     UsbTunnelInterface::receiveHidReport(data, bufSize);
 }
 
 bool sendHidReport(uint8_t* data, uint16_t length)
 {
-	// We do not use reportId of the TinyUSB sendReport()-API here but instead provide it in the first byte of the buffer
+    // We do not use reportId of the TinyUSB sendReport()-API here but instead provide it in the first byte of the buffer
     return usb_hid.sendReport(0, data, length);
 }
 
@@ -68,7 +68,8 @@ void setup(void)
     usb_hid.begin();
 
     // wait until device mounted
-    while( !USBDevice.mounted() ) delay(1);
+    while ( !USBDevice.mounted() )
+        delay(1);
 
     println("KNX USB Interface enabled.");
 
@@ -76,7 +77,7 @@ void setup(void)
     knx.readMemory();
 
     if (knx.individualAddress() == 0)
-      knx.progMode(true);
+        knx.progMode(true);
 
 
     if (knx.configured())
@@ -101,10 +102,11 @@ void loop(void)
     knx.loop();
 
     // only run the application code if the device was configured with ETS
-    if(!knx.configured())
+    if (!knx.configured())
         return;
 
     long now = millis();
+
     if ((now - lastsend) < 3000)
         return;
 
@@ -116,11 +118,11 @@ void loop(void)
     output += ", " + String(temp);
     output += ", " + String(humi);
     Serial1.println(output);
-        
+
     if (sendCounter++ == cyclSend)
     {
         sendCounter = 0;
-    
+
         goTemperature.value(temp);
         goHumidity.value(humi);
     }

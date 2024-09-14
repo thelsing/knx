@@ -295,7 +295,7 @@ extern const NVS_FxnTable NVSCC26XX_fxnTable;
  */
 typedef struct
 {
-    void        *regionBase;    /*!< The regionBase field specifies the base
+    void*        regionBase;    /*!< The regionBase field specifies the base
                                      address of the on-chip flash memory to be
                                      managed. The regionBase must be aligned
                                      to the flash sector size. This memory
@@ -314,7 +314,7 @@ typedef struct
                                      configuration registers. */
 
 #if defined(NVSCC26XX_INSTRUMENTED)
-    uint8_t     *scoreboard;         /*!< Pointer to scoreboard */
+    uint8_t*     scoreboard;         /*!< Pointer to scoreboard */
     size_t       scoreboardSize;     /*!< Scoreboard size in bytes */
     uint32_t     flashPageSize;      /*!< Size of a memory page in bytes */
 #endif
@@ -337,18 +337,18 @@ typedef struct
 
 extern void         NVSCC26XX_close(NVS_Handle handle);
 extern int_fast16_t NVSCC26XX_control(NVS_Handle handle, uint_fast16_t cmd,
-                        uintptr_t arg);
+                                      uintptr_t arg);
 extern int_fast16_t NVSCC26XX_erase(NVS_Handle handle, size_t offset,
-                        size_t size);
-extern void         NVSCC26XX_getAttrs(NVS_Handle handle, NVS_Attrs *attrs);
+                                    size_t size);
+extern void         NVSCC26XX_getAttrs(NVS_Handle handle, NVS_Attrs* attrs);
 extern void         NVSCC26XX_init();
 extern int_fast16_t NVSCC26XX_lock(NVS_Handle handle, uint32_t timeout);
-extern NVS_Handle   NVSCC26XX_open(uint_least8_t index, NVS_Params *params);
+extern NVS_Handle   NVSCC26XX_open(uint_least8_t index, NVS_Params* params);
 extern int_fast16_t NVSCC26XX_read(NVS_Handle handle, size_t offset,
-                        void *buffer, size_t bufferSize);
+                                   void* buffer, size_t bufferSize);
 extern void         NVSCC26XX_unlock(NVS_Handle handle);
 extern int_fast16_t NVSCC26XX_write(NVS_Handle handle, size_t offset,
-                        void *buffer, size_t bufferSize, uint_fast16_t flags);
+                                    void* buffer, size_t bufferSize, uint_fast16_t flags);
 /*! @endcond */
 
 #if defined (__cplusplus)

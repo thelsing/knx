@@ -82,14 +82,14 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define I2SEnable                       NOROM_I2SEnable
-    #define I2SAudioFormatConfigure         NOROM_I2SAudioFormatConfigure
-    #define I2SChannelConfigure             NOROM_I2SChannelConfigure
-    #define I2SBufferConfig                 NOROM_I2SBufferConfig
-    #define I2SPointerUpdate                NOROM_I2SPointerUpdate
-    #define I2SPointerSet                   NOROM_I2SPointerSet
-    #define I2SSampleStampConfigure         NOROM_I2SSampleStampConfigure
-    #define I2SSampleStampGet               NOROM_I2SSampleStampGet
+#define I2SEnable                       NOROM_I2SEnable
+#define I2SAudioFormatConfigure         NOROM_I2SAudioFormatConfigure
+#define I2SChannelConfigure             NOROM_I2SChannelConfigure
+#define I2SBufferConfig                 NOROM_I2SBufferConfig
+#define I2SPointerUpdate                NOROM_I2SPointerUpdate
+#define I2SPointerSet                   NOROM_I2SPointerSet
+#define I2SSampleStampConfigure         NOROM_I2SSampleStampConfigure
+#define I2SSampleStampGet               NOROM_I2SSampleStampGet
 #endif
 
 //*****************************************************************************
@@ -142,7 +142,7 @@ typedef struct
 //
 //*****************************************************************************
 #ifndef DEPRECATED
-extern I2SControlTable *g_pControlTable;
+extern I2SControlTable* g_pControlTable;
 #endif
 
 //*****************************************************************************
@@ -233,7 +233,7 @@ extern I2SControlTable *g_pControlTable;
 #define I2S_STMP1               0x00000002  // Sample stamp counter channel 1
 #endif
 #define I2S_STMP_SATURATION     0x0000FFFF  // The saturation value used when
-                                            // calculating the sample stamp
+// calculating the sample stamp
 
 //*****************************************************************************
 //
@@ -272,7 +272,7 @@ extern I2SControlTable *g_pControlTable;
 static bool
 I2SBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == I2S0_BASE);
+    return (ui32Base == I2S0_BASE);
 }
 #endif
 
@@ -459,8 +459,8 @@ I2SClockConfigure(uint32_t ui32Base, uint32_t ui32ClkConfig)
 
     // Setup register WCLK Source.
     HWREG(I2S0_BASE + I2S_O_AIFWCLKSRC) = ui32ClkConfig &
-                                         (I2S_AIFWCLKSRC_WCLK_INV_M |
-                                          I2S_AIFWCLKSRC_WCLK_SRC_M);
+                                          (I2S_AIFWCLKSRC_WCLK_INV_M |
+                                           I2S_AIFWCLKSRC_WCLK_SRC_M);
 }
 #endif
 
@@ -550,7 +550,7 @@ extern void I2SPointerUpdate(uint32_t ui32Base, bool bInput);
 //
 //****************************************************************************
 #ifndef DEPRECATED
-extern void I2SPointerSet(uint32_t ui32Base, bool bInput, void * pNextPointer);
+extern void I2SPointerSet(uint32_t ui32Base, bool bInput, void* pNextPointer);
 #endif
 
 //*****************************************************************************
@@ -742,14 +742,14 @@ I2SIntStatus(uint32_t ui32Base, bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    if(bMasked)
+    if (bMasked)
     {
         ui32Mask = HWREG(I2S0_BASE + I2S_O_IRQFLAGS);
-        return(ui32Mask & HWREG(I2S0_BASE + I2S_O_IRQMASK));
+        return (ui32Mask & HWREG(I2S0_BASE + I2S_O_IRQMASK));
     }
     else
     {
-        return(HWREG(I2S0_BASE + I2S_O_IRQFLAGS));
+        return (HWREG(I2S0_BASE + I2S_O_IRQFLAGS));
     }
 }
 
@@ -969,11 +969,11 @@ I2SFormatConfigure(uint32_t ui32Base,
 
     // Setup register AIFFMTCFG Source.
     HWREGH(I2S0_BASE + I2S_O_AIFFMTCFG) =
-                                (ui8iDataDelay      << I2S_AIFFMTCFG_DATA_DELAY_S) |
-                                (ui8iMemory24Bits   << I2S_AIFFMTCFG_MEM_LEN_24_S) |
-                                (ui8iSamplingEdge   << I2S_AIFFMTCFG_SMPL_EDGE_S ) |
-                                (boolDualPhase      << I2S_AIFFMTCFG_DUAL_PHASE_S) |
-                                (ui8BitsPerSample   << I2S_AIFFMTCFG_WORD_LEN_S  );
+        (ui8iDataDelay      << I2S_AIFFMTCFG_DATA_DELAY_S) |
+        (ui8iMemory24Bits   << I2S_AIFFMTCFG_MEM_LEN_24_S) |
+        (ui8iSamplingEdge   << I2S_AIFFMTCFG_SMPL_EDGE_S ) |
+        (boolDualPhase      << I2S_AIFFMTCFG_DUAL_PHASE_S) |
+        (ui8BitsPerSample   << I2S_AIFFMTCFG_WORD_LEN_S  );
 
     // Number of WCLK periods before the first read / write
     HWREGH(I2S0_BASE + I2S_O_STMPWPER) = ui16transmissionDelay;
@@ -1071,8 +1071,8 @@ I2SWclkConfigure(uint32_t ui32Base,
 
     // Setup register WCLK Source.
     HWREGB(I2S0_BASE + I2S_O_AIFWCLKSRC) =
-                               ((ui8ClkSource       << I2S_AIFWCLKSRC_WCLK_SRC_S) |
-                                (boolWCLKInvert     << I2S_AIFWCLKSRC_WCLK_INV_S ));
+        ((ui8ClkSource       << I2S_AIFWCLKSRC_WCLK_SRC_S) |
+         (boolWCLKInvert     << I2S_AIFWCLKSRC_WCLK_INV_S ));
 }
 
 //****************************************************************************
@@ -1304,39 +1304,39 @@ I2SWclkCounterReset(uint32_t ui32Base)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_I2SEnable
-        #undef  I2SEnable
-        #define I2SEnable                       ROM_I2SEnable
-    #endif
-    #ifdef ROM_I2SAudioFormatConfigure
-        #undef  I2SAudioFormatConfigure
-        #define I2SAudioFormatConfigure         ROM_I2SAudioFormatConfigure
-    #endif
-    #ifdef ROM_I2SChannelConfigure
-        #undef  I2SChannelConfigure
-        #define I2SChannelConfigure             ROM_I2SChannelConfigure
-    #endif
-    #ifdef ROM_I2SBufferConfig
-        #undef  I2SBufferConfig
-        #define I2SBufferConfig                 ROM_I2SBufferConfig
-    #endif
-    #ifdef ROM_I2SPointerUpdate
-        #undef  I2SPointerUpdate
-        #define I2SPointerUpdate                ROM_I2SPointerUpdate
-    #endif
-    #ifdef ROM_I2SPointerSet
-        #undef  I2SPointerSet
-        #define I2SPointerSet                   ROM_I2SPointerSet
-    #endif
-    #ifdef ROM_I2SSampleStampConfigure
-        #undef  I2SSampleStampConfigure
-        #define I2SSampleStampConfigure         ROM_I2SSampleStampConfigure
-    #endif
-    #ifdef ROM_I2SSampleStampGet
-        #undef  I2SSampleStampGet
-        #define I2SSampleStampGet               ROM_I2SSampleStampGet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_I2SEnable
+#undef  I2SEnable
+#define I2SEnable                       ROM_I2SEnable
+#endif
+#ifdef ROM_I2SAudioFormatConfigure
+#undef  I2SAudioFormatConfigure
+#define I2SAudioFormatConfigure         ROM_I2SAudioFormatConfigure
+#endif
+#ifdef ROM_I2SChannelConfigure
+#undef  I2SChannelConfigure
+#define I2SChannelConfigure             ROM_I2SChannelConfigure
+#endif
+#ifdef ROM_I2SBufferConfig
+#undef  I2SBufferConfig
+#define I2SBufferConfig                 ROM_I2SBufferConfig
+#endif
+#ifdef ROM_I2SPointerUpdate
+#undef  I2SPointerUpdate
+#define I2SPointerUpdate                ROM_I2SPointerUpdate
+#endif
+#ifdef ROM_I2SPointerSet
+#undef  I2SPointerSet
+#define I2SPointerSet                   ROM_I2SPointerSet
+#endif
+#ifdef ROM_I2SSampleStampConfigure
+#undef  I2SSampleStampConfigure
+#define I2SSampleStampConfigure         ROM_I2SSampleStampConfigure
+#endif
+#ifdef ROM_I2SSampleStampGet
+#undef  I2SSampleStampGet
+#define I2SSampleStampGet               ROM_I2SSampleStampGet
+#endif
 #endif
 
 //*****************************************************************************

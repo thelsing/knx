@@ -251,7 +251,7 @@ extern "C" {
 /*!
 *  @brief      Watchdog Handle
 */
-typedef struct Watchdog_Config_ *Watchdog_Handle;
+typedef struct Watchdog_Config_* Watchdog_Handle;
 
 /*!
  *  @brief      Watchdog debug stall settings
@@ -261,7 +261,8 @@ typedef struct Watchdog_Config_ *Watchdog_Handle;
  *  session is halted. To avoid unwanted resets, the Watchdog can be set to
  *  stall while the processor is stopped by the debugger.
  */
-typedef enum Watchdog_DebugMode_ {
+typedef enum Watchdog_DebugMode_
+{
     Watchdog_DEBUG_STALL_ON, /*!< Watchdog will be stalled at breakpoints */
     Watchdog_DEBUG_STALL_OFF /*!< Watchdog will keep running at breakpoints */
 } Watchdog_DebugMode;
@@ -273,7 +274,8 @@ typedef enum Watchdog_DebugMode_ {
  *  be configured to either generate a reset upon timeout or simply produce a
  *  periodic interrupt.
  */
-typedef enum Watchdog_ResetMode_ {
+typedef enum Watchdog_ResetMode_
+{
     Watchdog_RESET_OFF, /*!< Timeouts generate interrupts only */
     Watchdog_RESET_ON   /*!< Generates reset after timeout */
 } Watchdog_ResetMode;
@@ -296,14 +298,15 @@ typedef void (*Watchdog_Callback)(uintptr_t handle);
  *
  *  @sa         Watchdog_Params_init()
  */
-typedef struct Watchdog_Params_ {
+typedef struct Watchdog_Params_
+{
     Watchdog_Callback   callbackFxn;    /*!< Pointer to callback. Not supported
                                              on all targets. */
     Watchdog_ResetMode  resetMode;      /*!< Mode to enable resets.
                                              Not supported on all targets. */
     Watchdog_DebugMode  debugStallMode; /*!< Mode to stall WDT at breakpoints.
                                              Not supported on all targets. */
-    void               *custom;         /*!< Custom argument used by driver
+    void*               custom;         /*!< Custom argument used by driver
                                              implementation */
 } Watchdog_Params;
 
@@ -324,8 +327,8 @@ typedef void (*Watchdog_CloseFxn)       (Watchdog_Handle handle);
  *              Watchdog_control().
  */
 typedef int_fast16_t (*Watchdog_ControlFxn) (Watchdog_Handle handle,
-                                             uint_fast16_t cmd,
-                                             void *arg);
+        uint_fast16_t cmd,
+        void* arg);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
@@ -338,28 +341,29 @@ typedef void (*Watchdog_InitFxn)        (Watchdog_Handle handle);
  *              Watchdog_open().
  */
 typedef Watchdog_Handle (*Watchdog_OpenFxn)  (Watchdog_Handle handle,
-                                              Watchdog_Params *params);
+        Watchdog_Params* params);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
  *              Watchdog_setReload().
  */
 typedef int_fast16_t (*Watchdog_SetReloadFxn)(Watchdog_Handle handle,
-    uint32_t ticks);
+        uint32_t ticks);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
  *              Watchdog_ConvertMsToTicksFxn().
  */
 typedef uint32_t (*Watchdog_ConvertMsToTicksFxn)   (Watchdog_Handle handle,
-                                                    uint32_t milliseconds);
+        uint32_t milliseconds);
 
 /*!
  *  @brief      The definition of a Watchdog function table that contains the
  *              required set of functions to control a specific Watchdog driver
  *              implementation.
  */
-typedef struct Watchdog_FxnTable_ {
+typedef struct Watchdog_FxnTable_
+{
     Watchdog_ClearFxn             watchdogClear;
     Watchdog_CloseFxn             watchdogClose;
     Watchdog_ControlFxn           watchdogControl;
@@ -380,17 +384,18 @@ typedef struct Watchdog_FxnTable_ {
  *
  *  @sa     Watchdog_init()
  */
-typedef struct Watchdog_Config_ {
+typedef struct Watchdog_Config_
+{
     /*!
      * Pointer to a table of driver-specific implementations of Watchdog APIs
      */
-    Watchdog_FxnTable const *fxnTablePtr;
+    Watchdog_FxnTable const* fxnTablePtr;
 
     /*! Pointer to a driver specific data object */
-    void                    *object;
+    void*                    object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void              const *hwAttrs;
+    void              const* hwAttrs;
 } Watchdog_Config;
 
 /*!
@@ -455,7 +460,7 @@ extern void Watchdog_close(Watchdog_Handle handle);
  */
 extern int_fast16_t Watchdog_control(Watchdog_Handle handle,
                                      uint_fast16_t cmd,
-                                     void *arg);
+                                     void* arg);
 
 /*!
  *  @brief      Initializes the Watchdog module
@@ -486,7 +491,7 @@ extern void Watchdog_init(void);
  *  @sa     Watchdog_init()
  *  @sa     Watchdog_close()
  */
-extern Watchdog_Handle Watchdog_open(uint_least8_t index, Watchdog_Params *params);
+extern Watchdog_Handle Watchdog_open(uint_least8_t index, Watchdog_Params* params);
 
 /*!
  *  @brief  Function to initialize the #Watchdog_Params structure to its defaults
@@ -499,7 +504,7 @@ extern Watchdog_Handle Watchdog_open(uint_least8_t index, Watchdog_Params *param
  *      resetMode = #Watchdog_RESET_ON
  *      debugStallMode = #Watchdog_DEBUG_STALL_ON
  */
-extern void Watchdog_Params_init(Watchdog_Params *params);
+extern void Watchdog_Params_init(Watchdog_Params* params);
 
 /*!
  *  @brief      Sets the Watchdog reload value
@@ -546,7 +551,7 @@ extern int_fast16_t Watchdog_setReload(Watchdog_Handle handle, uint32_t ticks);
  *  @sa     Watchdog_setReload()
  */
 extern uint32_t Watchdog_convertMsToTicks(Watchdog_Handle handle,
-    uint32_t milliseconds);
+        uint32_t milliseconds);
 
 #ifdef __cplusplus
 }

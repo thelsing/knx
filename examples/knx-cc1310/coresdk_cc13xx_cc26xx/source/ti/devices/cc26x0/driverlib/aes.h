@@ -84,15 +84,15 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AESStartDMAOperation            NOROM_AESStartDMAOperation
-    #define AESSetInitializationVector      NOROM_AESSetInitializationVector
-    #define AESWriteCCMInitializationVector NOROM_AESWriteCCMInitializationVector
-    #define AESReadTag                      NOROM_AESReadTag
-    #define AESVerifyTag                    NOROM_AESVerifyTag
-    #define AESWriteToKeyStore              NOROM_AESWriteToKeyStore
-    #define AESReadFromKeyStore             NOROM_AESReadFromKeyStore
-    #define AESWaitForIRQFlags              NOROM_AESWaitForIRQFlags
-    #define AESConfigureCCMCtrl             NOROM_AESConfigureCCMCtrl
+#define AESStartDMAOperation            NOROM_AESStartDMAOperation
+#define AESSetInitializationVector      NOROM_AESSetInitializationVector
+#define AESWriteCCMInitializationVector NOROM_AESWriteCCMInitializationVector
+#define AESReadTag                      NOROM_AESReadTag
+#define AESVerifyTag                    NOROM_AESVerifyTag
+#define AESWriteToKeyStore              NOROM_AESWriteToKeyStore
+#define AESReadFromKeyStore             NOROM_AESReadFromKeyStore
+#define AESWaitForIRQFlags              NOROM_AESWaitForIRQFlags
+#define AESConfigureCCMCtrl             NOROM_AESConfigureCCMCtrl
 #endif
 
 
@@ -213,7 +213,7 @@ extern "C"
 //! \return None
 //
 //*****************************************************************************
-extern void AESStartDMAOperation(const uint8_t *channel0Addr, uint32_t channel0Length,  uint8_t *channel1Addr, uint32_t channel1Length);
+extern void AESStartDMAOperation(const uint8_t* channel0Addr, uint32_t channel0Length,  uint8_t* channel1Addr, uint32_t channel1Length);
 
 //*****************************************************************************
 //
@@ -254,7 +254,7 @@ extern void AESStartDMAOperation(const uint8_t *channel0Addr, uint32_t channel0L
 //! \return None
 //
 //*****************************************************************************
-extern void AESSetInitializationVector(const uint32_t *initializationVector);
+extern void AESSetInitializationVector(const uint32_t* initializationVector);
 
 //*****************************************************************************
 //
@@ -269,7 +269,7 @@ extern void AESSetInitializationVector(const uint32_t *initializationVector);
 //! \return None
 //
 //*****************************************************************************
-extern void AESWriteCCMInitializationVector(const uint8_t *nonce, uint32_t nonceLength);
+extern void AESWriteCCMInitializationVector(const uint8_t* nonce, uint32_t nonceLength);
 
 //*****************************************************************************
 //
@@ -287,7 +287,7 @@ extern void AESWriteCCMInitializationVector(const uint8_t *nonce, uint32_t nonce
 //! - \ref AES_SUCCESS otherwise
 //
 //*****************************************************************************
-extern uint32_t AESReadTag(uint8_t *tag, uint32_t tagLength);
+extern uint32_t AESReadTag(uint8_t* tag, uint32_t tagLength);
 
 //*****************************************************************************
 //
@@ -308,7 +308,7 @@ extern uint32_t AESReadTag(uint8_t *tag, uint32_t tagLength);
 //! - \ref AES_SUCCESS otherwise
 //
 //*****************************************************************************
-extern uint32_t AESVerifyTag(const uint8_t *tag, uint32_t tagLength);
+extern uint32_t AESVerifyTag(const uint8_t* tag, uint32_t tagLength);
 
 //*****************************************************************************
 //
@@ -367,7 +367,7 @@ extern uint32_t AESVerifyTag(const uint8_t *tag, uint32_t tagLength);
 //! \sa AESReadFromKeyStore
 //
 //*****************************************************************************
-extern uint32_t AESWriteToKeyStore(const uint8_t *aesKey, uint32_t aesKeyLength, uint32_t keyStoreArea);
+extern uint32_t AESWriteToKeyStore(const uint8_t* aesKey, uint32_t aesKeyLength, uint32_t keyStoreArea);
 
 //*****************************************************************************
 //
@@ -666,7 +666,7 @@ __STATIC_INLINE uint32_t AESIntStatusMasked(void)
 
     // Return the masked interrupt status
     mask = HWREG(CRYPTO_BASE + CRYPTO_O_IRQEN);
-    return(mask & HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
+    return (mask & HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
 }
 
 //*****************************************************************************
@@ -688,7 +688,7 @@ __STATIC_INLINE uint32_t AESIntStatusMasked(void)
 __STATIC_INLINE uint32_t AESIntStatusRaw(void)
 {
     // Return either the raw interrupt status
-    return(HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
+    return (HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
 }
 
 //*****************************************************************************
@@ -784,43 +784,43 @@ __STATIC_INLINE void AESIntUnregister(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AESStartDMAOperation
-        #undef  AESStartDMAOperation
-        #define AESStartDMAOperation            ROM_AESStartDMAOperation
-    #endif
-    #ifdef ROM_AESSetInitializationVector
-        #undef  AESSetInitializationVector
-        #define AESSetInitializationVector      ROM_AESSetInitializationVector
-    #endif
-    #ifdef ROM_AESWriteCCMInitializationVector
-        #undef  AESWriteCCMInitializationVector
-        #define AESWriteCCMInitializationVector ROM_AESWriteCCMInitializationVector
-    #endif
-    #ifdef ROM_AESReadTag
-        #undef  AESReadTag
-        #define AESReadTag                      ROM_AESReadTag
-    #endif
-    #ifdef ROM_AESVerifyTag
-        #undef  AESVerifyTag
-        #define AESVerifyTag                    ROM_AESVerifyTag
-    #endif
-    #ifdef ROM_AESWriteToKeyStore
-        #undef  AESWriteToKeyStore
-        #define AESWriteToKeyStore              ROM_AESWriteToKeyStore
-    #endif
-    #ifdef ROM_AESReadFromKeyStore
-        #undef  AESReadFromKeyStore
-        #define AESReadFromKeyStore             ROM_AESReadFromKeyStore
-    #endif
-    #ifdef ROM_AESWaitForIRQFlags
-        #undef  AESWaitForIRQFlags
-        #define AESWaitForIRQFlags              ROM_AESWaitForIRQFlags
-    #endif
-    #ifdef ROM_AESConfigureCCMCtrl
-        #undef  AESConfigureCCMCtrl
-        #define AESConfigureCCMCtrl             ROM_AESConfigureCCMCtrl
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AESStartDMAOperation
+#undef  AESStartDMAOperation
+#define AESStartDMAOperation            ROM_AESStartDMAOperation
+#endif
+#ifdef ROM_AESSetInitializationVector
+#undef  AESSetInitializationVector
+#define AESSetInitializationVector      ROM_AESSetInitializationVector
+#endif
+#ifdef ROM_AESWriteCCMInitializationVector
+#undef  AESWriteCCMInitializationVector
+#define AESWriteCCMInitializationVector ROM_AESWriteCCMInitializationVector
+#endif
+#ifdef ROM_AESReadTag
+#undef  AESReadTag
+#define AESReadTag                      ROM_AESReadTag
+#endif
+#ifdef ROM_AESVerifyTag
+#undef  AESVerifyTag
+#define AESVerifyTag                    ROM_AESVerifyTag
+#endif
+#ifdef ROM_AESWriteToKeyStore
+#undef  AESWriteToKeyStore
+#define AESWriteToKeyStore              ROM_AESWriteToKeyStore
+#endif
+#ifdef ROM_AESReadFromKeyStore
+#undef  AESReadFromKeyStore
+#define AESReadFromKeyStore             ROM_AESReadFromKeyStore
+#endif
+#ifdef ROM_AESWaitForIRQFlags
+#undef  AESWaitForIRQFlags
+#define AESWaitForIRQFlags              ROM_AESWaitForIRQFlags
+#endif
+#ifdef ROM_AESConfigureCCMCtrl
+#undef  AESConfigureCCMCtrl
+#define AESConfigureCCMCtrl             ROM_AESConfigureCCMCtrl
+#endif
 #endif
 
 //*****************************************************************************

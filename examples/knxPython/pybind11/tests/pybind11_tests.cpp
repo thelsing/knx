@@ -27,42 +27,51 @@ productively.
 Instead, see the "How can I reduce the build time?" question in the "Frequently asked questions"
 section of the documentation for good practice on splitting binding code over multiple files.
 */
-std::list<std::function<void(py::module_ &)>> &initializers() {
-    static std::list<std::function<void(py::module_ &)>> inits;
+std::list<std::function<void(py::module_&)>>& initializers()
+{
+    static std::list<std::function<void(py::module_&)>> inits;
     return inits;
 }
 
-test_initializer::test_initializer(Initializer init) { initializers().emplace_back(init); }
+test_initializer::test_initializer(Initializer init)
+{
+    initializers().emplace_back(init);
+}
 
-test_initializer::test_initializer(const char *submodule_name, Initializer init) {
-    initializers().emplace_back([=](py::module_ &parent) {
+test_initializer::test_initializer(const char* submodule_name, Initializer init)
+{
+    initializers().emplace_back([ = ](py::module_ & parent)
+    {
         auto m = parent.def_submodule(submodule_name);
         init(m);
     });
 }
 
-void bind_ConstructorStats(py::module_ &m) {
+void bind_ConstructorStats(py::module_ &m)
+{
     py::class_<ConstructorStats>(m, "ConstructorStats")
-        .def("alive", &ConstructorStats::alive)
-        .def("values", &ConstructorStats::values)
-        .def_readwrite("default_constructions", &ConstructorStats::default_constructions)
-        .def_readwrite("copy_assignments", &ConstructorStats::copy_assignments)
-        .def_readwrite("move_assignments", &ConstructorStats::move_assignments)
-        .def_readwrite("copy_constructions", &ConstructorStats::copy_constructions)
-        .def_readwrite("move_constructions", &ConstructorStats::move_constructions)
-        .def_static("get",
-                    (ConstructorStats & (*) (py::object)) & ConstructorStats::get,
-                    py::return_value_policy::reference_internal)
+    .def("alive", &ConstructorStats::alive)
+    .def("values", &ConstructorStats::values)
+    .def_readwrite("default_constructions", &ConstructorStats::default_constructions)
+    .def_readwrite("copy_assignments", &ConstructorStats::copy_assignments)
+    .def_readwrite("move_assignments", &ConstructorStats::move_assignments)
+    .def_readwrite("copy_constructions", &ConstructorStats::copy_constructions)
+    .def_readwrite("move_constructions", &ConstructorStats::move_constructions)
+    .def_static("get",
+                (ConstructorStats & (*) (py::object)) & ConstructorStats::get,
+                py::return_value_policy::reference_internal)
 
-        // Not exactly ConstructorStats, but related: expose the internal pybind number of
-        // registered instances to allow instance cleanup checks (invokes a GC first)
-        .def_static("detail_reg_inst", []() {
-            ConstructorStats::gc();
-            return py::detail::num_registered_instances();
-        });
+    // Not exactly ConstructorStats, but related: expose the internal pybind number of
+    // registered instances to allow instance cleanup checks (invokes a GC first)
+    .def_static("detail_reg_inst", []()
+    {
+        ConstructorStats::gc();
+        return py::detail::num_registered_instances();
+    });
 }
 
-const char *cpp_std() {
+const char* cpp_std()
+{
     return
 #if defined(PYBIND11_CPP20)
         "C++20";
@@ -75,7 +84,8 @@ const char *cpp_std() {
 #endif
 }
 
-PYBIND11_MODULE(pybind11_tests, m, py::mod_gil_not_used()) {
+PYBIND11_MODULE(pybind11_tests, m, py::mod_gil_not_used())
+{
     m.doc() = "pybind11 test module";
 
     // Intentionally kept minimal to not create a maintenance chore
@@ -113,19 +123,26 @@ PYBIND11_MODULE(pybind11_tests, m, py::mod_gil_not_used()) {
 #endif
 
     py::class_<UserType>(m, "UserType", "A `py::class_` type for testing")
-        .def(py::init<>())
-        .def(py::init<int>())
-        .def("get_value", &UserType::value, "Get value using a method")
-        .def("set_value", &UserType::set, "Set value using a method")
-        .def_property("value", &UserType::value, &UserType::set, "Get/set value using a property")
-        .def("__repr__", [](const UserType &u) { return "UserType({})"_s.format(u.value()); });
+    .def(py::init<>())
+    .def(py::init<int>())
+    .def("get_value", &UserType::value, "Get value using a method")
+    .def("set_value", &UserType::set, "Set value using a method")
+    .def_property("value", &UserType::value, &UserType::set, "Get/set value using a property")
+    .def("__repr__", [](const UserType & u)
+    {
+        return "UserType({})"_s.format(u.value());
+    });
 
     py::class_<IncType, UserType>(m, "IncType")
-        .def(py::init<>())
-        .def(py::init<int>())
-        .def("__repr__", [](const IncType &u) { return "IncType({})"_s.format(u.value()); });
+    .def(py::init<>())
+    .def(py::init<int>())
+    .def("__repr__", [](const IncType & u)
+    {
+        return "IncType({})"_s.format(u.value());
+    });
 
-    for (const auto &initializer : initializers()) {
+    for (const auto& initializer : initializers())
+    {
         initializer(m);
     }
 }

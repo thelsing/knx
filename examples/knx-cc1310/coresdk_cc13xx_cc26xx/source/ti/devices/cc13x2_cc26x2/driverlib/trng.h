@@ -83,8 +83,8 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define TRNGConfigure                   NOROM_TRNGConfigure
-    #define TRNGNumberGet                   NOROM_TRNGNumberGet
+#define TRNGConfigure                   NOROM_TRNGConfigure
+#define TRNGNumberGet                   NOROM_TRNGNumberGet
 #endif
 
 //*****************************************************************************
@@ -304,14 +304,14 @@ TRNGIntStatus(bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    if(bMasked)
+    if (bMasked)
     {
         ui32Mask = HWREG(TRNG_BASE + TRNG_O_IRQFLAGMASK);
-        return(ui32Mask & HWREG(TRNG_BASE + TRNG_O_IRQFLAGSTAT));
+        return (ui32Mask & HWREG(TRNG_BASE + TRNG_O_IRQFLAGSTAT));
     }
     else
     {
-        return(HWREG(TRNG_BASE + TRNG_O_IRQFLAGSTAT) & 0x00000003);
+        return (HWREG(TRNG_BASE + TRNG_O_IRQFLAGSTAT) & 0x00000003);
     }
 }
 
@@ -420,15 +420,15 @@ TRNGIntUnregister(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_TRNGConfigure
-        #undef  TRNGConfigure
-        #define TRNGConfigure                   ROM_TRNGConfigure
-    #endif
-    #ifdef ROM_TRNGNumberGet
-        #undef  TRNGNumberGet
-        #define TRNGNumberGet                   ROM_TRNGNumberGet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_TRNGConfigure
+#undef  TRNGConfigure
+#define TRNGConfigure                   ROM_TRNGConfigure
+#endif
+#ifdef ROM_TRNGNumberGet
+#undef  TRNGNumberGet
+#define TRNGNumberGet                   ROM_TRNGNumberGet
+#endif
 #endif
 
 //*****************************************************************************

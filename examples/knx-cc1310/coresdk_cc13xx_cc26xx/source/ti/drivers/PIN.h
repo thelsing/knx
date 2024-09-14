@@ -688,7 +688,7 @@ typedef struct PIN_State_s PIN_State;
 /** @brief A handle that is returned from a PIN_open() call
  *  Used for further PIN client interaction with the PIN driver
  */
-typedef PIN_State *PIN_Handle;
+typedef PIN_State* PIN_Handle;
 
 
 /** @brief I/O Interrupt callback function pointer type
@@ -705,7 +705,8 @@ typedef void (*PIN_IntCb)(PIN_Handle handle, PIN_Id pinId);
 
 /** @brief underlying data structure for type #PIN_State
  */
-struct PIN_State_s {
+struct PIN_State_s
+{
     PIN_IntCb   callbackFxn;        ///< Pointer to interrupt callback function
     uint32_t    portMask;           ///< Bitmask for pins allocated in port
     uintptr_t   userArg;            ///< User argument for whole handle
@@ -713,7 +714,8 @@ struct PIN_State_s {
 };
 
 /// @brief Return value for many functions in the PIN driver interface
-typedef enum {
+typedef enum
+{
     PIN_SUCCESS              = 0,    ///< Operation succeeded
     PIN_ALREADY_ALLOCATED    = 1,    ///< Operation failed, some pin already allocated
     PIN_NO_ACCESS            = 2,    ///< Operation failed, client does not have access to pin
@@ -754,7 +756,7 @@ extern PIN_Status PIN_init(const PIN_Config aPinCfg[]);
  *  @return A handle for further PIN driver calls or NULL if an error occurred
  *          (already allocated pin in pinList or non-existent pin in pinList)
  */
-extern PIN_Handle PIN_open(PIN_State *state, const PIN_Config pinList[]);
+extern PIN_Handle PIN_open(PIN_State* state, const PIN_Config pinList[]);
 
 
 /** @brief  Add pin to pin set for open PIN handle
@@ -796,8 +798,10 @@ extern void PIN_close(PIN_Handle handle);
  *  @param handle   handle retrieved through an earlier call to PIN_open().
  *  @param arg      User argument
  */
-static inline void PIN_setUserArg(PIN_Handle handle, uintptr_t arg) {
-    if (handle) {
+static inline void PIN_setUserArg(PIN_Handle handle, uintptr_t arg)
+{
+    if (handle)
+    {
         handle->userArg = arg;
     }
 }
@@ -810,7 +814,8 @@ static inline void PIN_setUserArg(PIN_Handle handle, uintptr_t arg) {
  *  @param handle   handle retrieved through an earlier call to PIN_open().
  *  @return User argument. Has the value 0 if never initialized
  */
-static inline uintptr_t PIN_getUserArg(PIN_Handle handle) {
+static inline uintptr_t PIN_getUserArg(PIN_Handle handle)
+{
     return handle->userArg;
 }
 

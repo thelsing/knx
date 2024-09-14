@@ -39,7 +39,7 @@
 
 /* compiler vendor check */
 #ifndef __IAR_SYSTEMS_ICC__
-#error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
+    #error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
 #endif
 
 #include <stddef.h>
@@ -53,12 +53,13 @@ extern "C" {
 #endif
 
 /* Message queue descriptor */
-typedef void *mqd_t;
+typedef void* mqd_t;
 
 /*
  *  ======== mq_attr ========
  */
-struct mq_attr {
+struct mq_attr
+{
     long    mq_flags;    /* Message queue description flags: 0 or O_NONBLOCK.
                             Initialized from oflag argument of mq_open(). */
     long    mq_maxmsg;   /* Maximum number of messages on queue.  */
@@ -83,19 +84,19 @@ typedef struct mq_attr mq_attr;
 typedef uint32_t mode_t;  /* TODO: sys/stat.h? */
 
 extern int mq_close(mqd_t mqdes);
-extern int mq_getattr(mqd_t mqdes, struct mq_attr *mqstat);
-extern mqd_t mq_open(const char *name, int oflags, ...);
-extern ssize_t mq_receive(mqd_t mqdes, char *msg_ptr, size_t msg_len,
-        unsigned int *msg_prio);
-extern int mq_send(mqd_t mqdes, const char *msg_ptr, size_t msg_len,
-        unsigned int msg_prio);
-extern int mq_setattr(mqd_t mqdes, const struct mq_attr *mqstat,
-        struct mq_attr *omqstat);
-extern ssize_t mq_timedreceive(mqd_t mqdes, char *msg_ptr, size_t msg_len,
-        unsigned int *msg_prio, const struct timespec *abstime);
-extern int mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len,
-        unsigned int msg_prio, const struct timespec *abstime);
-extern int mq_unlink(const char *name);
+extern int mq_getattr(mqd_t mqdes, struct mq_attr* mqstat);
+extern mqd_t mq_open(const char* name, int oflags, ...);
+extern ssize_t mq_receive(mqd_t mqdes, char* msg_ptr, size_t msg_len,
+                          unsigned int* msg_prio);
+extern int mq_send(mqd_t mqdes, const char* msg_ptr, size_t msg_len,
+                   unsigned int msg_prio);
+extern int mq_setattr(mqd_t mqdes, const struct mq_attr* mqstat,
+                      struct mq_attr* omqstat);
+extern ssize_t mq_timedreceive(mqd_t mqdes, char* msg_ptr, size_t msg_len,
+                               unsigned int* msg_prio, const struct timespec* abstime);
+extern int mq_timedsend(mqd_t mqdes, const char* msg_ptr, size_t msg_len,
+                        unsigned int msg_prio, const struct timespec* abstime);
+extern int mq_unlink(const char* name);
 
 #ifdef __cplusplus
 }

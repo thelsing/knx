@@ -96,7 +96,7 @@
 #define FCFG1_BASE              0x50001000 // FCFG1
 #define FCFG2_BASE              0x50002000 // FCFG2
 #ifndef CCFG_BASE
-#define CCFG_BASE               0x50003000 // CCFG
+    #define CCFG_BASE               0x50003000 // CCFG
 #endif
 #define CCFG_BASE_DEFAULT       0x50003000 // CCFG
 #define SSI0_NONBUF_BASE        0x60000000 // SSI CPU nonbuf base
@@ -132,9 +132,9 @@
 #define AON_IOC_NONBUF_BASE     0x60094000 // AON_IOC CPU nonbuf base
 #define AON_BATMON_NONBUF_BASE  0x60095000 // AON_BATMON CPU nonbuf base
 #define AUX_AIODIO0_NONBUF_BASE \
-                                0x600C1000 // AUX_AIODIO CPU nonbuf base
+    0x600C1000 // AUX_AIODIO CPU nonbuf base
 #define AUX_AIODIO1_NONBUF_BASE \
-                                0x600C2000 // AUX_AIODIO CPU nonbuf base
+    0x600C2000 // AUX_AIODIO CPU nonbuf base
 #define AUX_TDC_NONBUF_BASE     0x600C4000 // AUX_TDC CPU nonbuf base
 #define AUX_EVCTL_NONBUF_BASE   0x600C5000 // AUX_EVCTL CPU nonbuf base
 #define AUX_WUC_NONBUF_BASE     0x600C6000 // AUX_WUC CPU nonbuf base
@@ -142,7 +142,7 @@
 #define AUX_SMPH_NONBUF_BASE    0x600C8000 // AUX_SMPH CPU nonbuf base
 #define AUX_ANAIF_NONBUF_BASE   0x600C9000 // AUX_ANAIF CPU nonbuf base
 #define AUX_DDI0_OSC_NONBUF_BASE \
-                                0x600CA000 // DDI CPU nonbuf base
+    0x600CA000 // DDI CPU nonbuf base
 #define AUX_ADI4_NONBUF_BASE    0x600CB000 // ADI CPU nonbuf base
 #define AUX_RAM_NONBUF_BASE     0x600E0000 // AUX_RAM CPU nonbuf base
 #define AUX_SCE_NONBUF_BASE     0x600E1000 // AUX_SCE CPU nonbuf base

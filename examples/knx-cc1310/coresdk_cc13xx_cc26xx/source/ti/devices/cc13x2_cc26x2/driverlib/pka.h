@@ -83,31 +83,31 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define PKAClearPkaRam                  NOROM_PKAClearPkaRam
-    #define PKAGetOpsStatus                 NOROM_PKAGetOpsStatus
-    #define PKAArrayAllZeros                NOROM_PKAArrayAllZeros
-    #define PKAZeroOutArray                 NOROM_PKAZeroOutArray
-    #define PKABigNumModStart               NOROM_PKABigNumModStart
-    #define PKABigNumModGetResult           NOROM_PKABigNumModGetResult
-    #define PKABigNumDivideStart            NOROM_PKABigNumDivideStart
-    #define PKABigNumDivideGetQuotient      NOROM_PKABigNumDivideGetQuotient
-    #define PKABigNumDivideGetRemainder     NOROM_PKABigNumDivideGetRemainder
-    #define PKABigNumCmpStart               NOROM_PKABigNumCmpStart
-    #define PKABigNumCmpGetResult           NOROM_PKABigNumCmpGetResult
-    #define PKABigNumInvModStart            NOROM_PKABigNumInvModStart
-    #define PKABigNumInvModGetResult        NOROM_PKABigNumInvModGetResult
-    #define PKABigNumMultiplyStart          NOROM_PKABigNumMultiplyStart
-    #define PKABigNumMultGetResult          NOROM_PKABigNumMultGetResult
-    #define PKABigNumAddStart               NOROM_PKABigNumAddStart
-    #define PKABigNumAddGetResult           NOROM_PKABigNumAddGetResult
-    #define PKABigNumSubStart               NOROM_PKABigNumSubStart
-    #define PKABigNumSubGetResult           NOROM_PKABigNumSubGetResult
-    #define PKAEccMultiplyStart             NOROM_PKAEccMultiplyStart
-    #define PKAEccMontgomeryMultiplyStart   NOROM_PKAEccMontgomeryMultiplyStart
-    #define PKAEccMultiplyGetResult         NOROM_PKAEccMultiplyGetResult
-    #define PKAEccAddStart                  NOROM_PKAEccAddStart
-    #define PKAEccAddGetResult              NOROM_PKAEccAddGetResult
-    #define PKAEccVerifyPublicKeyWeierstrassStart NOROM_PKAEccVerifyPublicKeyWeierstrassStart
+#define PKAClearPkaRam                  NOROM_PKAClearPkaRam
+#define PKAGetOpsStatus                 NOROM_PKAGetOpsStatus
+#define PKAArrayAllZeros                NOROM_PKAArrayAllZeros
+#define PKAZeroOutArray                 NOROM_PKAZeroOutArray
+#define PKABigNumModStart               NOROM_PKABigNumModStart
+#define PKABigNumModGetResult           NOROM_PKABigNumModGetResult
+#define PKABigNumDivideStart            NOROM_PKABigNumDivideStart
+#define PKABigNumDivideGetQuotient      NOROM_PKABigNumDivideGetQuotient
+#define PKABigNumDivideGetRemainder     NOROM_PKABigNumDivideGetRemainder
+#define PKABigNumCmpStart               NOROM_PKABigNumCmpStart
+#define PKABigNumCmpGetResult           NOROM_PKABigNumCmpGetResult
+#define PKABigNumInvModStart            NOROM_PKABigNumInvModStart
+#define PKABigNumInvModGetResult        NOROM_PKABigNumInvModGetResult
+#define PKABigNumMultiplyStart          NOROM_PKABigNumMultiplyStart
+#define PKABigNumMultGetResult          NOROM_PKABigNumMultGetResult
+#define PKABigNumAddStart               NOROM_PKABigNumAddStart
+#define PKABigNumAddGetResult           NOROM_PKABigNumAddGetResult
+#define PKABigNumSubStart               NOROM_PKABigNumSubStart
+#define PKABigNumSubGetResult           NOROM_PKABigNumSubGetResult
+#define PKAEccMultiplyStart             NOROM_PKAEccMultiplyStart
+#define PKAEccMontgomeryMultiplyStart   NOROM_PKAEccMontgomeryMultiplyStart
+#define PKAEccMultiplyGetResult         NOROM_PKAEccMultiplyGetResult
+#define PKAEccAddStart                  NOROM_PKAEccAddStart
+#define PKAEccAddGetResult              NOROM_PKAEccAddGetResult
+#define PKAEccVerifyPublicKeyWeierstrassStart NOROM_PKAEccVerifyPublicKeyWeierstrassStart
 #endif
 
 
@@ -199,27 +199,32 @@ extern "C"
 // Union for parameters that forces 32-bit alignment on the byte array.
 //
 //*****************************************************************************
-typedef union {
+typedef union
+{
     uint8_t     byte[28];
     uint32_t    word[28 / sizeof(uint32_t)];
 } PKA_EccParam224;
 
-typedef union {
+typedef union
+{
     uint8_t     byte[32];
     uint32_t    word[32 / sizeof(uint32_t)];
 } PKA_EccParam256;
 
-typedef union {
+typedef union
+{
     uint8_t     byte[48];
     uint32_t    word[48 / sizeof(uint32_t)];
 } PKA_EccParam384;
 
-typedef union {
+typedef union
+{
     uint8_t     byte[64];
     uint32_t    word[64 / sizeof(uint32_t)];
 } PKA_EccParam512;
 
-typedef union {
+typedef union
+{
     uint8_t     byte[68];
     uint32_t    word[68 / sizeof(uint32_t)];
 } PKA_EccParam521;
@@ -232,27 +237,32 @@ typedef union {
 //*****************************************************************************
 
 
-typedef struct PKA_EccPoint224_ {
+typedef struct PKA_EccPoint224_
+{
     PKA_EccParam224     x;
     PKA_EccParam224     y;
 } PKA_EccPoint224;
 
-typedef struct PKA_EccPoint256_ {
+typedef struct PKA_EccPoint256_
+{
     PKA_EccParam256     x;
     PKA_EccParam256     y;
 } PKA_EccPoint256;
 
-typedef struct PKA_EccPoint384_ {
+typedef struct PKA_EccPoint384_
+{
     PKA_EccParam384     x;
     PKA_EccParam384     y;
 } PKA_EccPoint384;
 
-typedef struct PKA_EccPoint512_ {
+typedef struct PKA_EccPoint512_
+{
     PKA_EccParam512     x;
     PKA_EccParam512     y;
 } PKA_EccPoint512;
 
-typedef struct PKA_EccPoint521_ {
+typedef struct PKA_EccPoint521_
+{
     PKA_EccParam521     x;
     PKA_EccParam521     y;
 } PKA_EccPoint521;
@@ -640,7 +650,7 @@ extern uint32_t  PKAGetOpsStatus(void);
 //! or more bits are set.
 //
 //*****************************************************************************
-extern bool PKAArrayAllZeros(const uint8_t *array, uint32_t arrayLength);
+extern bool PKAArrayAllZeros(const uint8_t* array, uint32_t arrayLength);
 
 //*****************************************************************************
 //
@@ -651,7 +661,7 @@ extern bool PKAArrayAllZeros(const uint8_t *array, uint32_t arrayLength);
 //! \param [in] arrayLength is the length of the array.
 //
 //*****************************************************************************
-extern void PKAZeroOutArray(const uint8_t *array, uint32_t arrayLength);
+extern void PKAZeroOutArray(const uint8_t* array, uint32_t arrayLength);
 
 //*****************************************************************************
 //
@@ -681,7 +691,7 @@ extern void PKAZeroOutArray(const uint8_t *array, uint32_t arrayLength);
 //! \sa PKABigNumModGetResult()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumModStart(const uint8_t *bigNum, uint32_t bigNumLength, const uint8_t *modulus, uint32_t modulusLength, uint32_t *resultPKAMemAddr);
+extern uint32_t  PKABigNumModStart(const uint8_t* bigNum, uint32_t bigNumLength, const uint8_t* modulus, uint32_t modulusLength, uint32_t* resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -711,7 +721,7 @@ extern uint32_t  PKABigNumModStart(const uint8_t *bigNum, uint32_t bigNumLength,
 //! \sa PKABigNumModStart()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumModGetResult(uint8_t *resultBuf, uint32_t length, uint32_t resultPKAMemAddr);
+extern uint32_t  PKABigNumModGetResult(uint8_t* resultBuf, uint32_t length, uint32_t resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -743,12 +753,12 @@ extern uint32_t  PKABigNumModGetResult(uint8_t *resultBuf, uint32_t length, uint
 //! \sa PKABigNumDivideGetResult()
 //
 //*****************************************************************************
-extern uint32_t PKABigNumDivideStart(const uint8_t *dividend,
+extern uint32_t PKABigNumDivideStart(const uint8_t* dividend,
                                      uint32_t dividendLength,
-                                     const uint8_t *divisor,
+                                     const uint8_t* divisor,
                                      uint32_t divisorLength,
-                                     uint32_t *resultQuotientMemAddr,
-                                     uint32_t *resultRemainderMemAddr);
+                                     uint32_t* resultQuotientMemAddr,
+                                     uint32_t* resultRemainderMemAddr);
 
 //*****************************************************************************
 //
@@ -776,7 +786,7 @@ extern uint32_t PKABigNumDivideStart(const uint8_t *dividend,
 //! \sa PKABigNumDivideStart()
 //
 //*****************************************************************************
-extern uint32_t PKABigNumDivideGetQuotient(uint8_t *resultBuf, uint32_t *length, uint32_t resultQuotientMemAddr);
+extern uint32_t PKABigNumDivideGetQuotient(uint8_t* resultBuf, uint32_t* length, uint32_t resultQuotientMemAddr);
 
 //*****************************************************************************
 //
@@ -804,7 +814,7 @@ extern uint32_t PKABigNumDivideGetQuotient(uint8_t *resultBuf, uint32_t *length,
 //! \sa PKABigNumDivideStart()
 //
 //*****************************************************************************
-extern uint32_t PKABigNumDivideGetRemainder(uint8_t *resultBuf, uint32_t *length, uint32_t resultRemainderMemAddr);
+extern uint32_t PKABigNumDivideGetRemainder(uint8_t* resultBuf, uint32_t* length, uint32_t resultRemainderMemAddr);
 
 //*****************************************************************************
 //
@@ -829,7 +839,7 @@ extern uint32_t PKABigNumDivideGetRemainder(uint8_t *resultBuf, uint32_t *length
 //! \sa PKABigNumCmpGetResult()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumCmpStart(const uint8_t *bigNum1, const uint8_t *bigNum2, uint32_t length);
+extern uint32_t  PKABigNumCmpStart(const uint8_t* bigNum1, const uint8_t* bigNum2, uint32_t length);
 
 //*****************************************************************************
 //
@@ -877,7 +887,7 @@ extern uint32_t  PKABigNumCmpGetResult(void);
 //! \sa PKABigNumInvModGetResult()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumInvModStart(const uint8_t *bigNum, uint32_t bigNumLength, const uint8_t *modulus, uint32_t modulusLength, uint32_t *resultPKAMemAddr);
+extern uint32_t  PKABigNumInvModStart(const uint8_t* bigNum, uint32_t bigNumLength, const uint8_t* modulus, uint32_t modulusLength, uint32_t* resultPKAMemAddr);
 
 
 //*****************************************************************************
@@ -908,7 +918,7 @@ extern uint32_t  PKABigNumInvModStart(const uint8_t *bigNum, uint32_t bigNumLeng
 //! \sa PKABigNumInvModStart()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumInvModGetResult(uint8_t *resultBuf, uint32_t length, uint32_t resultPKAMemAddr);
+extern uint32_t  PKABigNumInvModGetResult(uint8_t* resultBuf, uint32_t length, uint32_t resultPKAMemAddr);
 
 
 //*****************************************************************************
@@ -936,7 +946,7 @@ extern uint32_t  PKABigNumInvModGetResult(uint8_t *resultBuf, uint32_t length, u
 //! \sa PKABigNumMultGetResult()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumMultiplyStart(const uint8_t *multiplicand, uint32_t multiplicandLength, const uint8_t *multiplier, uint32_t multiplierLength, uint32_t *resultPKAMemAddr);
+extern uint32_t  PKABigNumMultiplyStart(const uint8_t* multiplicand, uint32_t multiplicandLength, const uint8_t* multiplier, uint32_t multiplierLength, uint32_t* resultPKAMemAddr);
 
 
 //*****************************************************************************
@@ -968,7 +978,7 @@ extern uint32_t  PKABigNumMultiplyStart(const uint8_t *multiplicand, uint32_t mu
 //! \sa PKABigNumMultiplyStart()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumMultGetResult(uint8_t *resultBuf, uint32_t *resultLength, uint32_t resultPKAMemAddr);
+extern uint32_t  PKABigNumMultGetResult(uint8_t* resultBuf, uint32_t* resultLength, uint32_t resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -995,7 +1005,7 @@ extern uint32_t  PKABigNumMultGetResult(uint8_t *resultBuf, uint32_t *resultLeng
 //! \sa PKABigNumAddGetResult()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumAddStart(const uint8_t *bigNum1, uint32_t bigNum1Length, const uint8_t *bigNum2, uint32_t bigNum2Length, uint32_t *resultPKAMemAddr);
+extern uint32_t  PKABigNumAddStart(const uint8_t* bigNum1, uint32_t bigNum1Length, const uint8_t* bigNum2, uint32_t bigNum2Length, uint32_t* resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -1024,7 +1034,7 @@ extern uint32_t  PKABigNumAddStart(const uint8_t *bigNum1, uint32_t bigNum1Lengt
 //! \sa PKABigNumAddStart()
 //
 //*****************************************************************************
-extern uint32_t  PKABigNumAddGetResult(uint8_t *resultBuf, uint32_t *resultLength, uint32_t resultPKAMemAddr);
+extern uint32_t  PKABigNumAddGetResult(uint8_t* resultBuf, uint32_t* resultLength, uint32_t resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -1051,7 +1061,7 @@ extern uint32_t  PKABigNumAddGetResult(uint8_t *resultBuf, uint32_t *resultLengt
 //! \sa PKABigNumSubGetResult()
 //
 //*****************************************************************************
-extern uint32_t PKABigNumSubStart(const uint8_t *minuend, uint32_t minuendLength, const uint8_t *subtrahend, uint32_t subtrahendLength, uint32_t *resultPKAMemAddr);
+extern uint32_t PKABigNumSubStart(const uint8_t* minuend, uint32_t minuendLength, const uint8_t* subtrahend, uint32_t subtrahendLength, uint32_t* resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -1080,7 +1090,7 @@ extern uint32_t PKABigNumSubStart(const uint8_t *minuend, uint32_t minuendLength
 //! \sa PKABigNumSubStart()
 //
 //*****************************************************************************
-extern uint32_t PKABigNumSubGetResult(uint8_t *resultBuf, uint32_t *resultLength, uint32_t resultPKAMemAddr);
+extern uint32_t PKABigNumSubGetResult(uint8_t* resultBuf, uint32_t* resultLength, uint32_t resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -1118,14 +1128,14 @@ extern uint32_t PKABigNumSubGetResult(uint8_t *resultBuf, uint32_t *resultLength
 //! \sa PKAEccMultiplyGetResult()
 //
 //*****************************************************************************
-extern uint32_t  PKAEccMultiplyStart(const uint8_t *scalar,
-                                     const uint8_t *curvePointX,
-                                     const uint8_t *curvePointY,
-                                     const uint8_t *prime,
-                                     const uint8_t *a,
-                                     const uint8_t *b,
+extern uint32_t  PKAEccMultiplyStart(const uint8_t* scalar,
+                                     const uint8_t* curvePointX,
+                                     const uint8_t* curvePointY,
+                                     const uint8_t* prime,
+                                     const uint8_t* a,
+                                     const uint8_t* b,
                                      uint32_t length,
-                                     uint32_t *resultPKAMemAddr);
+                                     uint32_t* resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -1156,12 +1166,12 @@ extern uint32_t  PKAEccMultiplyStart(const uint8_t *scalar,
 //! \sa PKAEccMultiplyGetResult()
 //
 //*****************************************************************************
-extern uint32_t PKAEccMontgomeryMultiplyStart(const uint8_t *scalar,
-                                              const uint8_t *curvePointX,
-                                              const uint8_t *prime,
-                                              const uint8_t *a,
-                                              uint32_t length,
-                                              uint32_t *resultPKAMemAddr);
+extern uint32_t PKAEccMontgomeryMultiplyStart(const uint8_t* scalar,
+        const uint8_t* curvePointX,
+        const uint8_t* prime,
+        const uint8_t* a,
+        uint32_t length,
+        uint32_t* resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -1192,7 +1202,7 @@ extern uint32_t PKAEccMontgomeryMultiplyStart(const uint8_t *scalar,
 //! \sa PKAEccMultiplyStart()
 //
 //*****************************************************************************
-extern uint32_t  PKAEccMultiplyGetResult(uint8_t *curvePointX, uint8_t *curvePointY, uint32_t resultPKAMemAddr, uint32_t length);
+extern uint32_t  PKAEccMultiplyGetResult(uint8_t* curvePointX, uint8_t* curvePointY, uint32_t resultPKAMemAddr, uint32_t length);
 
 //*****************************************************************************
 //
@@ -1232,14 +1242,14 @@ extern uint32_t  PKAEccMultiplyGetResult(uint8_t *curvePointX, uint8_t *curvePoi
 //! \sa PKAEccAddGetResult()
 //
 //*****************************************************************************
-extern uint32_t  PKAEccAddStart(const uint8_t *curvePoint1X,
-                                const uint8_t *curvePoint1Y,
-                                const uint8_t *curvePoint2X,
-                                const uint8_t *curvePoint2Y,
-                                const uint8_t *prime,
-                                const uint8_t *a,
+extern uint32_t  PKAEccAddStart(const uint8_t* curvePoint1X,
+                                const uint8_t* curvePoint1Y,
+                                const uint8_t* curvePoint2X,
+                                const uint8_t* curvePoint2Y,
+                                const uint8_t* prime,
+                                const uint8_t* a,
                                 uint32_t length,
-                                uint32_t *resultPKAMemAddr);
+                                uint32_t* resultPKAMemAddr);
 
 //*****************************************************************************
 //
@@ -1269,7 +1279,7 @@ extern uint32_t  PKAEccAddStart(const uint8_t *curvePoint1X,
 //! \sa PKAEccAddStart()
 //
 //*****************************************************************************
-extern uint32_t  PKAEccAddGetResult(uint8_t *curvePointX, uint8_t *curvePointY, uint32_t resultPKAMemAddr, uint32_t length);
+extern uint32_t  PKAEccAddGetResult(uint8_t* curvePointX, uint8_t* curvePointY, uint32_t resultPKAMemAddr, uint32_t length);
 
 
 //*****************************************************************************
@@ -1317,13 +1327,13 @@ extern uint32_t  PKAEccAddGetResult(uint8_t *curvePointX, uint8_t *curvePointY, 
 //! \sa PKAEccVerifyPublicKeyGetResult()
 //
 //*****************************************************************************
-extern uint32_t PKAEccVerifyPublicKeyWeierstrassStart(const uint8_t *curvePointX,
-                                                      const uint8_t *curvePointY,
-                                                      const uint8_t *prime,
-                                                      const uint8_t *a,
-                                                      const uint8_t *b,
-                                                      const uint8_t *order,
-                                                      uint32_t length);
+extern uint32_t PKAEccVerifyPublicKeyWeierstrassStart(const uint8_t* curvePointX,
+        const uint8_t* curvePointY,
+        const uint8_t* prime,
+        const uint8_t* a,
+        const uint8_t* b,
+        const uint8_t* order,
+        uint32_t length);
 
 //*****************************************************************************
 //
@@ -1332,107 +1342,107 @@ extern uint32_t PKAEccVerifyPublicKeyWeierstrassStart(const uint8_t *curvePointX
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_PKAClearPkaRam
-        #undef  PKAClearPkaRam
-        #define PKAClearPkaRam                  ROM_PKAClearPkaRam
-    #endif
-    #ifdef ROM_PKAGetOpsStatus
-        #undef  PKAGetOpsStatus
-        #define PKAGetOpsStatus                 ROM_PKAGetOpsStatus
-    #endif
-    #ifdef ROM_PKAArrayAllZeros
-        #undef  PKAArrayAllZeros
-        #define PKAArrayAllZeros                ROM_PKAArrayAllZeros
-    #endif
-    #ifdef ROM_PKAZeroOutArray
-        #undef  PKAZeroOutArray
-        #define PKAZeroOutArray                 ROM_PKAZeroOutArray
-    #endif
-    #ifdef ROM_PKABigNumModStart
-        #undef  PKABigNumModStart
-        #define PKABigNumModStart               ROM_PKABigNumModStart
-    #endif
-    #ifdef ROM_PKABigNumModGetResult
-        #undef  PKABigNumModGetResult
-        #define PKABigNumModGetResult           ROM_PKABigNumModGetResult
-    #endif
-    #ifdef ROM_PKABigNumDivideStart
-        #undef  PKABigNumDivideStart
-        #define PKABigNumDivideStart            ROM_PKABigNumDivideStart
-    #endif
-    #ifdef ROM_PKABigNumDivideGetQuotient
-        #undef  PKABigNumDivideGetQuotient
-        #define PKABigNumDivideGetQuotient      ROM_PKABigNumDivideGetQuotient
-    #endif
-    #ifdef ROM_PKABigNumDivideGetRemainder
-        #undef  PKABigNumDivideGetRemainder
-        #define PKABigNumDivideGetRemainder     ROM_PKABigNumDivideGetRemainder
-    #endif
-    #ifdef ROM_PKABigNumCmpStart
-        #undef  PKABigNumCmpStart
-        #define PKABigNumCmpStart               ROM_PKABigNumCmpStart
-    #endif
-    #ifdef ROM_PKABigNumCmpGetResult
-        #undef  PKABigNumCmpGetResult
-        #define PKABigNumCmpGetResult           ROM_PKABigNumCmpGetResult
-    #endif
-    #ifdef ROM_PKABigNumInvModStart
-        #undef  PKABigNumInvModStart
-        #define PKABigNumInvModStart            ROM_PKABigNumInvModStart
-    #endif
-    #ifdef ROM_PKABigNumInvModGetResult
-        #undef  PKABigNumInvModGetResult
-        #define PKABigNumInvModGetResult        ROM_PKABigNumInvModGetResult
-    #endif
-    #ifdef ROM_PKABigNumMultiplyStart
-        #undef  PKABigNumMultiplyStart
-        #define PKABigNumMultiplyStart          ROM_PKABigNumMultiplyStart
-    #endif
-    #ifdef ROM_PKABigNumMultGetResult
-        #undef  PKABigNumMultGetResult
-        #define PKABigNumMultGetResult          ROM_PKABigNumMultGetResult
-    #endif
-    #ifdef ROM_PKABigNumAddStart
-        #undef  PKABigNumAddStart
-        #define PKABigNumAddStart               ROM_PKABigNumAddStart
-    #endif
-    #ifdef ROM_PKABigNumAddGetResult
-        #undef  PKABigNumAddGetResult
-        #define PKABigNumAddGetResult           ROM_PKABigNumAddGetResult
-    #endif
-    #ifdef ROM_PKABigNumSubStart
-        #undef  PKABigNumSubStart
-        #define PKABigNumSubStart               ROM_PKABigNumSubStart
-    #endif
-    #ifdef ROM_PKABigNumSubGetResult
-        #undef  PKABigNumSubGetResult
-        #define PKABigNumSubGetResult           ROM_PKABigNumSubGetResult
-    #endif
-    #ifdef ROM_PKAEccMultiplyStart
-        #undef  PKAEccMultiplyStart
-        #define PKAEccMultiplyStart             ROM_PKAEccMultiplyStart
-    #endif
-    #ifdef ROM_PKAEccMontgomeryMultiplyStart
-        #undef  PKAEccMontgomeryMultiplyStart
-        #define PKAEccMontgomeryMultiplyStart   ROM_PKAEccMontgomeryMultiplyStart
-    #endif
-    #ifdef ROM_PKAEccMultiplyGetResult
-        #undef  PKAEccMultiplyGetResult
-        #define PKAEccMultiplyGetResult         ROM_PKAEccMultiplyGetResult
-    #endif
-    #ifdef ROM_PKAEccAddStart
-        #undef  PKAEccAddStart
-        #define PKAEccAddStart                  ROM_PKAEccAddStart
-    #endif
-    #ifdef ROM_PKAEccAddGetResult
-        #undef  PKAEccAddGetResult
-        #define PKAEccAddGetResult              ROM_PKAEccAddGetResult
-    #endif
-    #ifdef ROM_PKAEccVerifyPublicKeyWeierstrassStart
-        #undef  PKAEccVerifyPublicKeyWeierstrassStart
-        #define PKAEccVerifyPublicKeyWeierstrassStart ROM_PKAEccVerifyPublicKeyWeierstrassStart
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_PKAClearPkaRam
+#undef  PKAClearPkaRam
+#define PKAClearPkaRam                  ROM_PKAClearPkaRam
+#endif
+#ifdef ROM_PKAGetOpsStatus
+#undef  PKAGetOpsStatus
+#define PKAGetOpsStatus                 ROM_PKAGetOpsStatus
+#endif
+#ifdef ROM_PKAArrayAllZeros
+#undef  PKAArrayAllZeros
+#define PKAArrayAllZeros                ROM_PKAArrayAllZeros
+#endif
+#ifdef ROM_PKAZeroOutArray
+#undef  PKAZeroOutArray
+#define PKAZeroOutArray                 ROM_PKAZeroOutArray
+#endif
+#ifdef ROM_PKABigNumModStart
+#undef  PKABigNumModStart
+#define PKABigNumModStart               ROM_PKABigNumModStart
+#endif
+#ifdef ROM_PKABigNumModGetResult
+#undef  PKABigNumModGetResult
+#define PKABigNumModGetResult           ROM_PKABigNumModGetResult
+#endif
+#ifdef ROM_PKABigNumDivideStart
+#undef  PKABigNumDivideStart
+#define PKABigNumDivideStart            ROM_PKABigNumDivideStart
+#endif
+#ifdef ROM_PKABigNumDivideGetQuotient
+#undef  PKABigNumDivideGetQuotient
+#define PKABigNumDivideGetQuotient      ROM_PKABigNumDivideGetQuotient
+#endif
+#ifdef ROM_PKABigNumDivideGetRemainder
+#undef  PKABigNumDivideGetRemainder
+#define PKABigNumDivideGetRemainder     ROM_PKABigNumDivideGetRemainder
+#endif
+#ifdef ROM_PKABigNumCmpStart
+#undef  PKABigNumCmpStart
+#define PKABigNumCmpStart               ROM_PKABigNumCmpStart
+#endif
+#ifdef ROM_PKABigNumCmpGetResult
+#undef  PKABigNumCmpGetResult
+#define PKABigNumCmpGetResult           ROM_PKABigNumCmpGetResult
+#endif
+#ifdef ROM_PKABigNumInvModStart
+#undef  PKABigNumInvModStart
+#define PKABigNumInvModStart            ROM_PKABigNumInvModStart
+#endif
+#ifdef ROM_PKABigNumInvModGetResult
+#undef  PKABigNumInvModGetResult
+#define PKABigNumInvModGetResult        ROM_PKABigNumInvModGetResult
+#endif
+#ifdef ROM_PKABigNumMultiplyStart
+#undef  PKABigNumMultiplyStart
+#define PKABigNumMultiplyStart          ROM_PKABigNumMultiplyStart
+#endif
+#ifdef ROM_PKABigNumMultGetResult
+#undef  PKABigNumMultGetResult
+#define PKABigNumMultGetResult          ROM_PKABigNumMultGetResult
+#endif
+#ifdef ROM_PKABigNumAddStart
+#undef  PKABigNumAddStart
+#define PKABigNumAddStart               ROM_PKABigNumAddStart
+#endif
+#ifdef ROM_PKABigNumAddGetResult
+#undef  PKABigNumAddGetResult
+#define PKABigNumAddGetResult           ROM_PKABigNumAddGetResult
+#endif
+#ifdef ROM_PKABigNumSubStart
+#undef  PKABigNumSubStart
+#define PKABigNumSubStart               ROM_PKABigNumSubStart
+#endif
+#ifdef ROM_PKABigNumSubGetResult
+#undef  PKABigNumSubGetResult
+#define PKABigNumSubGetResult           ROM_PKABigNumSubGetResult
+#endif
+#ifdef ROM_PKAEccMultiplyStart
+#undef  PKAEccMultiplyStart
+#define PKAEccMultiplyStart             ROM_PKAEccMultiplyStart
+#endif
+#ifdef ROM_PKAEccMontgomeryMultiplyStart
+#undef  PKAEccMontgomeryMultiplyStart
+#define PKAEccMontgomeryMultiplyStart   ROM_PKAEccMontgomeryMultiplyStart
+#endif
+#ifdef ROM_PKAEccMultiplyGetResult
+#undef  PKAEccMultiplyGetResult
+#define PKAEccMultiplyGetResult         ROM_PKAEccMultiplyGetResult
+#endif
+#ifdef ROM_PKAEccAddStart
+#undef  PKAEccAddStart
+#define PKAEccAddStart                  ROM_PKAEccAddStart
+#endif
+#ifdef ROM_PKAEccAddGetResult
+#undef  PKAEccAddGetResult
+#define PKAEccAddGetResult              ROM_PKAEccAddGetResult
+#endif
+#ifdef ROM_PKAEccVerifyPublicKeyWeierstrassStart
+#undef  PKAEccVerifyPublicKeyWeierstrassStart
+#define PKAEccVerifyPublicKeyWeierstrassStart ROM_PKAEccVerifyPublicKeyWeierstrassStart
+#endif
 #endif
 
 //*****************************************************************************

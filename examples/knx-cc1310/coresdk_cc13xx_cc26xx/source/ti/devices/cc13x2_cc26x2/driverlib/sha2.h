@@ -85,12 +85,12 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define SHA2StartDMAOperation           NOROM_SHA2StartDMAOperation
-    #define SHA2WaitForIRQFlags             NOROM_SHA2WaitForIRQFlags
-    #define SHA2ComputeInitialHash          NOROM_SHA2ComputeInitialHash
-    #define SHA2ComputeIntermediateHash     NOROM_SHA2ComputeIntermediateHash
-    #define SHA2ComputeFinalHash            NOROM_SHA2ComputeFinalHash
-    #define SHA2ComputeHash                 NOROM_SHA2ComputeHash
+#define SHA2StartDMAOperation           NOROM_SHA2StartDMAOperation
+#define SHA2WaitForIRQFlags             NOROM_SHA2WaitForIRQFlags
+#define SHA2ComputeInitialHash          NOROM_SHA2ComputeInitialHash
+#define SHA2ComputeIntermediateHash     NOROM_SHA2ComputeIntermediateHash
+#define SHA2ComputeFinalHash            NOROM_SHA2ComputeFinalHash
+#define SHA2ComputeHash                 NOROM_SHA2ComputeHash
 #endif
 
 //*****************************************************************************
@@ -186,7 +186,7 @@ extern "C"
 //! \return None
 //
 //*****************************************************************************
-extern void SHA2StartDMAOperation(uint8_t *channel0Addr, uint32_t channel0Length,  uint8_t *channel1Addr, uint32_t channel1Length);
+extern void SHA2StartDMAOperation(uint8_t* channel0Addr, uint32_t channel0Length,  uint8_t* channel1Addr, uint32_t channel1Length);
 
 //*****************************************************************************
 //
@@ -274,7 +274,7 @@ extern uint32_t SHA2WaitForIRQFlags(uint32_t irqFlags);
 //! \sa SHA2ComputeFinalHash()
 //
 //*****************************************************************************
-extern uint32_t SHA2ComputeInitialHash(const uint8_t *message, uint32_t *intermediateDigest, uint32_t hashAlgorithm, uint32_t initialMessageLength);
+extern uint32_t SHA2ComputeInitialHash(const uint8_t* message, uint32_t* intermediateDigest, uint32_t hashAlgorithm, uint32_t initialMessageLength);
 
 //*****************************************************************************
 //
@@ -334,7 +334,7 @@ extern uint32_t SHA2ComputeInitialHash(const uint8_t *message, uint32_t *interme
 //! \sa SHA2ComputeFinalHash()
 //
 //*****************************************************************************
-extern uint32_t SHA2ComputeIntermediateHash(const uint8_t *message, uint32_t *intermediateDigest, uint32_t hashAlgorithm, uint32_t intermediateMessageLength);
+extern uint32_t SHA2ComputeIntermediateHash(const uint8_t* message, uint32_t* intermediateDigest, uint32_t hashAlgorithm, uint32_t intermediateMessageLength);
 
 //*****************************************************************************
 //
@@ -393,7 +393,7 @@ extern uint32_t SHA2ComputeIntermediateHash(const uint8_t *message, uint32_t *in
 //! \sa SHA2ComputeIntermediateHash()
 //
 //*****************************************************************************
-extern uint32_t SHA2ComputeFinalHash(const uint8_t *message, uint8_t *resultDigest, uint32_t *intermediateDigest, uint32_t totalMsgLength, uint32_t messageLength, uint32_t hashAlgorithm);
+extern uint32_t SHA2ComputeFinalHash(const uint8_t* message, uint8_t* resultDigest, uint32_t* intermediateDigest, uint32_t totalMsgLength, uint32_t messageLength, uint32_t hashAlgorithm);
 
 //*****************************************************************************
 //
@@ -433,7 +433,7 @@ extern uint32_t SHA2ComputeFinalHash(const uint8_t *message, uint8_t *resultDige
 //!
 //
 //*****************************************************************************
-extern uint32_t SHA2ComputeHash(const uint8_t *message, uint8_t *resultDigest, uint32_t totalMsgLength, uint32_t hashAlgorithm);
+extern uint32_t SHA2ComputeHash(const uint8_t* message, uint8_t* resultDigest, uint32_t totalMsgLength, uint32_t hashAlgorithm);
 
 //*****************************************************************************
 //
@@ -503,7 +503,7 @@ __STATIC_INLINE void SHA2SetMessageLength(uint32_t length)
 //!
 //
 //*****************************************************************************
-__STATIC_INLINE void SHA2SetDigest(uint32_t *digest, uint8_t digestLength)
+__STATIC_INLINE void SHA2SetDigest(uint32_t* digest, uint8_t digestLength)
 {
     // Check the arguments.
     ASSERT(!(digest == NULL) && !((uint32_t)digest & 0x03));
@@ -514,7 +514,9 @@ __STATIC_INLINE void SHA2SetDigest(uint32_t *digest, uint8_t digestLength)
 
     // Write digest
     uint32_t i = 0;
-    for (i = 0; i < (digestLength / sizeof(uint32_t)); i++) {
+
+    for (i = 0; i < (digestLength / sizeof(uint32_t)); i++)
+    {
         HWREG(CRYPTO_BASE + CRYPTO_O_HASHDIGESTA + (i * sizeof(uint32_t))) = digest[i];
     }
 
@@ -538,7 +540,7 @@ __STATIC_INLINE void SHA2SetDigest(uint32_t *digest, uint8_t digestLength)
 //! - \ref SHA2_SUCCESS
 //
 //*****************************************************************************
-__STATIC_INLINE uint32_t SHA2GetDigest(uint32_t *digest, uint8_t digestLength)
+__STATIC_INLINE uint32_t SHA2GetDigest(uint32_t* digest, uint8_t digestLength)
 {
     // Check the arguments.
     ASSERT(!(digest == NULL) && !((uint32_t)digest & 0x03));
@@ -547,15 +549,20 @@ __STATIC_INLINE uint32_t SHA2GetDigest(uint32_t *digest, uint8_t digestLength)
            (digestLength == SHA2_SHA384_DIGEST_LENGTH_BYTES) ||
            (digestLength == SHA2_SHA512_DIGEST_LENGTH_BYTES));
 
-    if (HWREG(CRYPTO_BASE + CRYPTO_O_HASHIOBUFCTRL) & CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL_M) {
+    if (HWREG(CRYPTO_BASE + CRYPTO_O_HASHIOBUFCTRL) & CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL_M)
+    {
         return SHA2_OLD_DIGEST_NOT_READ;
     }
-    else {
-         // Read digest
+    else
+    {
+        // Read digest
         uint32_t i = 0;
-        for (i = 0; i < (digestLength / sizeof(uint32_t)); i++) {
+
+        for (i = 0; i < (digestLength / sizeof(uint32_t)); i++)
+        {
             digest[i] = HWREG(CRYPTO_BASE + CRYPTO_O_HASHDIGESTA + (i * sizeof(uint32_t)));
         }
+
         return SHA2_SUCCESS;
     }
 }
@@ -640,7 +647,7 @@ __STATIC_INLINE uint32_t SHA2IntStatusMasked(void)
 
     // Return the masked interrupt status
     mask = HWREG(CRYPTO_BASE + CRYPTO_O_IRQEN);
-    return(mask & HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
+    return (mask & HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
 }
 
 //*****************************************************************************
@@ -660,7 +667,7 @@ __STATIC_INLINE uint32_t SHA2IntStatusMasked(void)
 __STATIC_INLINE uint32_t SHA2IntStatusRaw(void)
 {
     // Return either the raw interrupt status
-    return(HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
+    return (HWREG(CRYPTO_BASE + CRYPTO_O_IRQSTAT));
 }
 
 //*****************************************************************************
@@ -755,31 +762,31 @@ __STATIC_INLINE void SHA2IntUnregister(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_SHA2StartDMAOperation
-        #undef  SHA2StartDMAOperation
-        #define SHA2StartDMAOperation           ROM_SHA2StartDMAOperation
-    #endif
-    #ifdef ROM_SHA2WaitForIRQFlags
-        #undef  SHA2WaitForIRQFlags
-        #define SHA2WaitForIRQFlags             ROM_SHA2WaitForIRQFlags
-    #endif
-    #ifdef ROM_SHA2ComputeInitialHash
-        #undef  SHA2ComputeInitialHash
-        #define SHA2ComputeInitialHash          ROM_SHA2ComputeInitialHash
-    #endif
-    #ifdef ROM_SHA2ComputeIntermediateHash
-        #undef  SHA2ComputeIntermediateHash
-        #define SHA2ComputeIntermediateHash     ROM_SHA2ComputeIntermediateHash
-    #endif
-    #ifdef ROM_SHA2ComputeFinalHash
-        #undef  SHA2ComputeFinalHash
-        #define SHA2ComputeFinalHash            ROM_SHA2ComputeFinalHash
-    #endif
-    #ifdef ROM_SHA2ComputeHash
-        #undef  SHA2ComputeHash
-        #define SHA2ComputeHash                 ROM_SHA2ComputeHash
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_SHA2StartDMAOperation
+#undef  SHA2StartDMAOperation
+#define SHA2StartDMAOperation           ROM_SHA2StartDMAOperation
+#endif
+#ifdef ROM_SHA2WaitForIRQFlags
+#undef  SHA2WaitForIRQFlags
+#define SHA2WaitForIRQFlags             ROM_SHA2WaitForIRQFlags
+#endif
+#ifdef ROM_SHA2ComputeInitialHash
+#undef  SHA2ComputeInitialHash
+#define SHA2ComputeInitialHash          ROM_SHA2ComputeInitialHash
+#endif
+#ifdef ROM_SHA2ComputeIntermediateHash
+#undef  SHA2ComputeIntermediateHash
+#define SHA2ComputeIntermediateHash     ROM_SHA2ComputeIntermediateHash
+#endif
+#ifdef ROM_SHA2ComputeFinalHash
+#undef  SHA2ComputeFinalHash
+#define SHA2ComputeFinalHash            ROM_SHA2ComputeFinalHash
+#endif
+#ifdef ROM_SHA2ComputeHash
+#undef  SHA2ComputeHash
+#define SHA2ComputeHash                 ROM_SHA2ComputeHash
+#endif
 #endif
 
 //*****************************************************************************

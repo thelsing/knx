@@ -126,24 +126,24 @@ extern "C"
  * \return None
  */
 //*****************************************************************************
- extern void ECC_initialize(uint32_t *pWorkzone);
+extern void ECC_initialize(uint32_t* pWorkzone);
 
 //*****************************************************************************
- /*!
- * \brief Generate a key.
- *
- * This is used for both ECDH and ECDSA.
- *
- * \param randString  Pointer to random string, input.
- * \param privateKey  Pointer to the private key, output.
- * \param publicKey_x Pointer to public key X-coordinate, output.
- * \param publicKey_y Pointer to public key Y-coordinate, output.
- *
- * \return Status
- */
+/*!
+* \brief Generate a key.
+*
+* This is used for both ECDH and ECDSA.
+*
+* \param randString  Pointer to random string, input.
+* \param privateKey  Pointer to the private key, output.
+* \param publicKey_x Pointer to public key X-coordinate, output.
+* \param publicKey_y Pointer to public key Y-coordinate, output.
+*
+* \return Status
+*/
 //*****************************************************************************
-extern uint8_t ECC_generateKey(uint32_t *randString, uint32_t *privateKey,
-                               uint32_t *publicKey_x, uint32_t *publicKey_y);
+extern uint8_t ECC_generateKey(uint32_t* randString, uint32_t* privateKey,
+                               uint32_t* publicKey_x, uint32_t* publicKey_y);
 
 //*****************************************************************************
 /*!
@@ -158,8 +158,8 @@ extern uint8_t ECC_generateKey(uint32_t *randString, uint32_t *privateKey,
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t ECC_ECDSA_sign(uint32_t *secretKey, uint32_t *text, uint32_t *randString,
-                              uint32_t *sign1, uint32_t *sign2);
+extern uint8_t ECC_ECDSA_sign(uint32_t* secretKey, uint32_t* text, uint32_t* randString,
+                              uint32_t* sign1, uint32_t* sign2);
 
 //*****************************************************************************
 /*!
@@ -174,8 +174,8 @@ extern uint8_t ECC_ECDSA_sign(uint32_t *secretKey, uint32_t *text, uint32_t *ran
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t ECC_ECDSA_verify(uint32_t *publicKey_x, uint32_t *publicKey_y,
-                                uint32_t *text, uint32_t *sign1, uint32_t *sign2);
+extern uint8_t ECC_ECDSA_verify(uint32_t* publicKey_x, uint32_t* publicKey_y,
+                                uint32_t* text, uint32_t* sign1, uint32_t* sign2);
 
 //*****************************************************************************
 /*!
@@ -190,11 +190,11 @@ extern uint8_t ECC_ECDSA_verify(uint32_t *publicKey_x, uint32_t *publicKey_y,
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t ECC_ECDH_computeSharedSecret(uint32_t *privateKey,
-                                            uint32_t *publicKey_x,
-                                            uint32_t *publicKey_y,
-                                            uint32_t *sharedSecret_x,
-                                            uint32_t *sharedSecret_y);
+extern uint8_t ECC_ECDH_computeSharedSecret(uint32_t* privateKey,
+        uint32_t* publicKey_x,
+        uint32_t* publicKey_y,
+        uint32_t* sharedSecret_x,
+        uint32_t* sharedSecret_y);
 
 
 #ifdef __cplusplus

@@ -401,7 +401,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from an ECDH_open() call.
  */
-typedef struct ECDH_Config  *ECDH_Handle;
+typedef struct ECDH_Config*  ECDH_Handle;
 
 /*!
  * @brief   The way in which ECC function calls return after performing an
@@ -424,7 +424,8 @@ typedef struct ECDH_Config  *ECDH_Handle;
  * |ECDH_RETURN_BEHAVIOR_POLLING    | X     | X     | X     |
  *
  */
-typedef enum {
+typedef enum
+{
     ECDH_RETURN_BEHAVIOR_CALLBACK = 1,      /*!< The function call will return immediately while the
                                              *   ECC operation goes on in the background. The registered
                                              *   callback function is called after the operation completes.
@@ -453,23 +454,25 @@ typedef enum {
  *
  *  @sa     ECDH_init()
  */
-typedef struct ECDH_Config {
+typedef struct ECDH_Config
+{
     /*! Pointer to a driver specific data object */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } ECDH_Config;
 
 /*!
  *  @brief  Struct containing the parameters required to generate a public key.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;             /*!< A pointer to the elliptic curve parameters for myPrivateKey */
-    const CryptoKey                 *myPrivateKey;      /*!< A pointer to the private ECC key from which the new public
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;             /*!< A pointer to the elliptic curve parameters for myPrivateKey */
+    const CryptoKey*                 myPrivateKey;      /*!< A pointer to the private ECC key from which the new public
                                                          *   key will be generated. (maybe your static key)
                                                          */
-    CryptoKey                       *myPublicKey;       /*!< A pointer to a public ECC key which has been initialized blank.
+    CryptoKey*                       myPublicKey;       /*!< A pointer to a public ECC key which has been initialized blank.
                                                          *   Newly generated key will be placed in this location.
                                                          */
 } ECDH_OperationGeneratePublicKey;
@@ -477,17 +480,18 @@ typedef struct {
 /*!
  *  @brief  Struct containing the parameters required to compute the shared secret.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;             /*!< A pointer to the elliptic curve parameters for myPrivateKey.
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;             /*!< A pointer to the elliptic curve parameters for myPrivateKey.
                                                          *   If ECDH_generateKey() was used, this should be the same private key.
                                                          */
-    const CryptoKey                 *myPrivateKey;      /*!< A pointer to the private ECC key which will be used in to
+    const CryptoKey*                 myPrivateKey;      /*!< A pointer to the private ECC key which will be used in to
                                                          *   compute the shared secret.
                                                          */
-    const CryptoKey                 *theirPublicKey;    /*!< A pointer to the public key of the party with whom the
+    const CryptoKey*                 theirPublicKey;    /*!< A pointer to the public key of the party with whom the
                                                          *   shared secret will be generated.
                                                          */
-    CryptoKey                       *sharedSecret;      /*!< A pointer to a CryptoKey which has been initialized blank.
+    CryptoKey*                       sharedSecret;      /*!< A pointer to a CryptoKey which has been initialized blank.
                                                          *   The shared secret will be placed here.
                                                          */
 } ECDH_OperationComputeSharedSecret;
@@ -495,15 +499,17 @@ typedef struct {
 /*!
  *  @brief  Union containing pointers to all supported operation structs.
  */
-typedef union {
-    ECDH_OperationGeneratePublicKey      *generatePublicKey;    /*!< A pointer to an ECDH_OperationGeneratePublicKey struct */
-    ECDH_OperationComputeSharedSecret    *computeSharedSecret;  /*!< A pointer to an ECDH_OperationGeneratePublicKey struct */
+typedef union
+{
+    ECDH_OperationGeneratePublicKey*      generatePublicKey;    /*!< A pointer to an ECDH_OperationGeneratePublicKey struct */
+    ECDH_OperationComputeSharedSecret*    computeSharedSecret;  /*!< A pointer to an ECDH_OperationGeneratePublicKey struct */
 } ECDH_Operation;
 
 /*!
  *  @brief  Enum for the operation types supported by the driver.
  */
-typedef enum {
+typedef enum
+{
     ECDH_OPERATION_TYPE_GENERATE_PUBLIC_KEY = 1,
     ECDH_OPERATION_TYPE_COMPUTE_SHARED_SECRET = 2,
 } ECDH_OperationType;
@@ -539,11 +545,12 @@ typedef void (*ECDH_CallbackFxn) (ECDH_Handle handle,
  *
  *  @sa     ECDH_Params_init()
  */
-typedef struct {
+typedef struct
+{
     ECDH_ReturnBehavior     returnBehavior;             /*!< Blocking, callback, or polling return behavior */
     ECDH_CallbackFxn        callbackFxn;                /*!< Callback function pointer */
     uint32_t                timeout;                    /*!< Timeout of the operation */
-    void                   *custom;                     /*!< Custom argument used by driver
+    void*                   custom;                     /*!< Custom argument used by driver
                                                          *   implementation
                                                          */
 } ECDH_Params;
@@ -577,7 +584,7 @@ void ECDH_init(void);
  *      timeout                     = SemaphoreP_WAIT_FOREVER
  *      custom                      = NULL
  */
-void ECDH_Params_init(ECDH_Params *params);
+void ECDH_Params_init(ECDH_Params* params);
 
 /*!
  *  @brief  This function opens a given ECC peripheral.
@@ -596,7 +603,7 @@ void ECDH_Params_init(ECDH_Params *params);
  *  @sa     ECDH_init()
  *  @sa     ECDH_close()
  */
-ECDH_Handle ECDH_open(uint_least8_t index, ECDH_Params *params);
+ECDH_Handle ECDH_open(uint_least8_t index, ECDH_Params* params);
 
 /*!
  *  @brief  Function to close an ECC peripheral specified by the ECC handle
@@ -617,7 +624,7 @@ void ECDH_close(ECDH_Handle handle);
  *
  *  Defaults values are all zeros.
  */
-void ECDH_OperationGeneratePublicKey_init(ECDH_OperationGeneratePublicKey *operation);
+void ECDH_OperationGeneratePublicKey_init(ECDH_OperationGeneratePublicKey* operation);
 
 /*!
  *  @brief  Function to initialize an ECDH_OperationComputeSharedSecret struct to its defaults
@@ -627,7 +634,7 @@ void ECDH_OperationGeneratePublicKey_init(ECDH_OperationGeneratePublicKey *opera
  *
  *  Defaults values are all zeros.
  */
-void ECDH_OperationComputeSharedSecret_init(ECDH_OperationComputeSharedSecret *operation);
+void ECDH_OperationComputeSharedSecret_init(ECDH_OperationComputeSharedSecret* operation);
 
 /*!
  * @brief Generates a public key for use in key agreement.
@@ -651,7 +658,7 @@ void ECDH_OperationComputeSharedSecret_init(ECDH_OperationComputeSharedSecret *o
  *  @retval #ECDH_STATUS_PRIVATE_KEY_ZERO       The provided private key is zero.
  *
  */
-int_fast16_t ECDH_generatePublicKey(ECDH_Handle handle, ECDH_OperationGeneratePublicKey *operation);
+int_fast16_t ECDH_generatePublicKey(ECDH_Handle handle, ECDH_OperationGeneratePublicKey* operation);
 
 /*!
  *  @brief Computes a shared secret
@@ -672,7 +679,7 @@ int_fast16_t ECDH_generatePublicKey(ECDH_Handle handle, ECDH_OperationGeneratePu
  *  @retval #ECDH_STATUS_PUBLIC_KEY_NOT_ON_CURVE        The foreign public key is not a point on the specified curve.
  *  @retval #ECDH_STATUS_PUBLIC_KEY_LARGER_THAN_PRIME   One of the public key coordinates is larger the the curve's prime.
  */
-int_fast16_t ECDH_computeSharedSecret(ECDH_Handle handle, ECDH_OperationComputeSharedSecret *operation);
+int_fast16_t ECDH_computeSharedSecret(ECDH_Handle handle, ECDH_OperationComputeSharedSecret* operation);
 
 /*!
  *  @brief Cancels an ongoing ECDH operation.

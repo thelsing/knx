@@ -78,7 +78,7 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define SetupTrimDevice                 NOROM_SetupTrimDevice
+#define SetupTrimDevice                 NOROM_SetupTrimDevice
 #endif
 
 //*****************************************************************************
@@ -114,11 +114,11 @@ extern void SetupTrimDevice( void );
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_SetupTrimDevice
-        #undef  SetupTrimDevice
-        #define SetupTrimDevice                 ROM_SetupTrimDevice
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_SetupTrimDevice
+#undef  SetupTrimDevice
+#define SetupTrimDevice                 ROM_SetupTrimDevice
+#endif
 #endif
 
 //*****************************************************************************
