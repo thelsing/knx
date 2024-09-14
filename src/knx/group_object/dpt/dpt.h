@@ -3,17 +3,6 @@
 #include "../group_object.h"
 namespace Knx
 {
-#define DPT_Value_2_Ucount Dpt(7, 1)
-#define DPT_TimePeriodMsec Dpt(7, 2)
-#define DPT_TimePeriod10MSec Dpt(7, 3)
-#define DPT_TimePeriod100MSec Dpt(7, 4)
-#define DPT_TimePeriodSec Dpt(7, 5)
-#define DPT_TimePeriodMin Dpt(7, 6)
-#define DPT_TimePeriodHrs Dpt(7, 7)
-#define DPT_PropDataType Dpt(7, 10)
-#define DPT_Length_mm Dpt(7, 11)
-#define DPT_UElCurrentmA Dpt(7, 12)
-#define DPT_Brightness Dpt(7, 13)
 #define DPT_Value_2_Count Dpt(8, 1)
 #define DPT_DeltaTimeMsec Dpt(8, 2)
 #define DPT_DeltaTime10MSec Dpt(8, 3)

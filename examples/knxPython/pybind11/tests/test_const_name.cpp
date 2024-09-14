@@ -41,11 +41,10 @@
 CONST_NAME_TESTS(const_name_tests, py::detail::const_name)
 
 #ifdef PYBIND11_DETAIL_UNDERSCORE_BACKWARD_COMPATIBILITY
-    CONST_NAME_TESTS(underscore_tests, py::detail::_)
+CONST_NAME_TESTS(underscore_tests, py::detail::_)
 #endif
 
-TEST_SUBMODULE(const_name, m)
-{
+TEST_SUBMODULE(const_name, m) {
     m.def("const_name_tests", const_name_tests);
 
 #if defined(PYBIND11_DETAIL_UNDERSCORE_BACKWARD_COMPATIBILITY)

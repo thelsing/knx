@@ -18,14 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-            // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
-            if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || (datatype.subGroup == 600)) && !datatype.index)
-                return busValueToUnsigned16(payload, payload_length, datatype, value);
-
-            // DPT 7.002-DPT 7.007 - Time Period
-            if (datatype.mainGroup == 7 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
-                return busValueToTimePeriod(payload, payload_length, datatype, value);
-
             // DPT 8.001/8.010/8.011 - Signed 16 Bit Integer
             if (datatype.mainGroup == 8 && (datatype.subGroup == 1 || datatype.subGroup == 10 || datatype.subGroup == 11) && !datatype.index)
                 return busValueToSigned16(payload, payload_length, datatype, value);
@@ -148,14 +140,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-        // DPT 7.001/7.010/7.011/7.012/7.013/7.600 - Unsigned 16 Bit Integer
-        if (datatype.mainGroup == 7 && (datatype.subGroup == 1 || (datatype.subGroup >= 10 && datatype.subGroup <= 13) || datatype.subGroup == 600) && !datatype.index)
-            return valueToBusValueUnsigned16(value, payload, payload_length, datatype);
-
-        // DPT 7.002-DPT 7.007 - Time Period
-        if (datatype.mainGroup == 7 && datatype.subGroup >= 2 && datatype.subGroup <= 7 && !datatype.index)
-            return valueToBusValueTimePeriod(value, payload, payload_length, datatype);
-
         // DPT 8.001/8.010/8.011 - Signed 16 Bit Integer
         if (datatype.mainGroup == 8 && (datatype.subGroup == 1 || datatype.subGroup == 10 || datatype.subGroup == 11) && !datatype.index)
             return valueToBusValueSigned16(value, payload, payload_length, datatype);
@@ -273,22 +257,6 @@ namespace Knx
             return valueToBusValueRGBW(value, payload, payload_length, datatype);
 
         return false;
-    }
-
-    int busValueToUnsigned16(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(2);
-        value = unsigned16FromPayload(payload, 0);
-        return true;
-    }
-
-    int busValueToTimePeriod(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(2);
-
-        int64_t duration = unsigned16FromPayload(payload, 0);
-        value = duration;
-        return true;
     }
 
     int busValueToSigned16(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
@@ -828,27 +796,6 @@ namespace Knx
     }
 
     //-------------------------------------------------------------------------------------------------------------------------------------
-
-    int valueToBusValueUnsigned16(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(65535))
-            return false;
-
-        unsigned16ToPayload(payload, 0, (uint64_t)value, 0xFFFF);
-        return true;
-    }
-
-    int valueToBusValueTimePeriod(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        struct tm tmp = value;
-        time_t timeSinceEpoch = mktime(&tmp);
-
-        if (timeSinceEpoch < INT64_C(0) || timeSinceEpoch > INT64_C(65535))
-            return false;
-
-        unsigned16ToPayload(payload, 0, timeSinceEpoch, 0xFFFF);
-        return true;
-    }
 
     int valueToBusValueSigned16(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {

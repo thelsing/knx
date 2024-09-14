@@ -6,4 +6,5 @@
 #include "dpt4.h"
 #include "dpt5.h"
 #include "dpt6.h"
+#include "dpt7.h"
 #include "dpt9.h"
