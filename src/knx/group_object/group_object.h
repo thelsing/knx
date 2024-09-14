@@ -303,7 +303,7 @@ namespace Knx
     class GroupObject
     {
             friend class GroupObjectTableObject;
-
+            GroupObject(const GroupObject& other) = delete;
         public:
             /**
              * The constructor.
