@@ -3,17 +3,6 @@
 #include "../group_object.h"
 namespace Knx
 {
-#define DPT_Date Dpt(11, 1)
-#define DPT_Value_4_Ucount Dpt(12, 1)
-#define DPT_Value_4_Count Dpt(13, 1)
-#define DPT_FlowRate_m3 Dpt(13, 2) / h
-#define DPT_ActiveEnergy Dpt(13, 10)
-#define DPT_ApparantEnergy Dpt(13, 11)
-#define DPT_ReactiveEnergy Dpt(13, 12)
-#define DPT_ActiveEnergy_kWh Dpt(13, 13)
-#define DPT_ApparantEnergy_kVAh Dpt(13, 14)
-#define DPT_ReactiveEnergy_kVARh Dpt(13, 15)
-#define DPT_LongDeltaTimeSec Dpt(13, 100)
 #define DPT_Value_Acceleration Dpt(14, 0)
 #define DPT_Value_Acceleration_Angular Dpt(14, 1)
 #define DPT_Value_Activation_Energy Dpt(14, 2)

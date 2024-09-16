@@ -18,22 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-            // DPT 11.* - Date
-            if (datatype.mainGroup == 11 && datatype.subGroup == 1 && !datatype.index)
-                return busValueToDate(payload, payload_length, datatype, value);
-
-            // DPT 12.* - Unsigned 32 Bit Integer
-            if (datatype.mainGroup == 12 && datatype.subGroup == 1 && !datatype.index)
-                return busValueToUnsigned32(payload, payload_length, datatype, value);
-
-            // DPT 13.001/13.002/13.010-13.015 - Signed 32 Bit Integer
-            if (datatype.mainGroup == 13 && (datatype.subGroup == 1 || datatype.subGroup == 2 || (datatype.subGroup >= 10 && datatype.subGroup <= 15)) && !datatype.index)
-                return busValueToSigned32(payload, payload_length, datatype, value);
-
-            // DPT 13.100 - Long Time Period
-            if (datatype.mainGroup == 13 && datatype.subGroup == 100 && !datatype.index)
-                return busValueToLongTimePeriod(payload, payload_length, datatype, value);
-
             // DPT 14.* - 32 Bit Float
             if (datatype.mainGroup == 14 && datatype.subGroup <= 79 && !datatype.index)
                 return busValueToFloat32(payload, payload_length, datatype, value);
@@ -128,22 +112,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-        // DPT 11.* - Date
-        if (datatype.mainGroup == 11 && datatype.subGroup == 1 && !datatype.index)
-            return valueToBusValueDate(value, payload, payload_length, datatype);
-
-        // DPT 12.* - Unsigned 32 Bit Integer
-        if (datatype.mainGroup == 12 && datatype.subGroup == 1 && !datatype.index)
-            return valueToBusValueUnsigned32(value, payload, payload_length, datatype);
-
-        // DPT 13.001/13.002/13.010-13.015 - Signed 32 Bit Integer
-        if (datatype.mainGroup == 13 && (datatype.subGroup == 1 || datatype.subGroup == 2 || (datatype.subGroup >= 10 && datatype.subGroup <= 15)) && !datatype.index)
-            return valueToBusValueSigned32(value, payload, payload_length, datatype);
-
-        // DPT 13.100 - Long Time Period
-        if (datatype.mainGroup == 13 && datatype.subGroup == 100 && !datatype.index)
-            return valueToBusValueLongTimePeriod(value, payload, payload_length, datatype);
-
         // DPT 14.* - 32 Bit Float
         if (datatype.mainGroup == 14 && datatype.subGroup <= 79 && !datatype.index)
             return valueToBusValueFloat32(value, payload, payload_length, datatype);
@@ -233,25 +201,6 @@ namespace Knx
             return valueToBusValueRGBW(value, payload, payload_length, datatype);
 
         return false;
-    }
-
-    int busValueToDate(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(3);
-        unsigned short year = unsigned8FromPayload(payload, 2) & 0x7F;
-        unsigned char month = unsigned8FromPayload(payload, 1) & 0x0F;
-        unsigned char day = unsigned8FromPayload(payload, 0) & 0x1F;
-
-        if (year > 99 || month < 1 || month > 12 || day < 1)
-            return false;
-
-        struct tm tmp = {0};
-        year += year >= 90 ? 1900 : 2000;
-        tmp.tm_mday = day;
-        tmp.tm_year = year;
-        tmp.tm_mon = month;
-        value = tmp;
-        return true;
     }
 
     int busValueToUnsigned32(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
@@ -716,34 +665,12 @@ namespace Knx
 
     //-------------------------------------------------------------------------------------------------------------------------------------
 
-    int valueToBusValueDate(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        struct tm tmp = value;
-
-        if (tmp.tm_year < 1990 || tmp.tm_year > 2089)
-            return false;
-
-        unsigned8ToPayload(payload, 0, tmp.tm_mday, 0x1F);
-        unsigned8ToPayload(payload, 1, tmp.tm_mon, 0x0F);
-        unsigned8ToPayload(payload, 2, tmp.tm_year % 100, 0x7F);
-        return true;
-    }
-
     int valueToBusValueUnsigned32(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
         if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(4294967295))
             return false;
 
         unsigned32ToPayload(payload, 0, (uint64_t)value, 0xFFFFFFFF);
-        return true;
-    }
-
-    int valueToBusValueSigned32(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        if ((int64_t)value < INT64_C(-2147483648) || (int64_t)value > INT64_C(2147483647))
-            return false;
-
-        signed32ToPayload(payload, 0, (uint64_t)value, 0xFFFFFFFF);
         return true;
     }
 

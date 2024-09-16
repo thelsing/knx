@@ -4,7 +4,7 @@
 
 Knx::Go_SizeCode Knx::Dpt9::size() const
 {
-    return Go_1_Bit;
+    return Go_2_Octets;
 }
 
 void Knx::Dpt9::encode(uint8_t* data) const

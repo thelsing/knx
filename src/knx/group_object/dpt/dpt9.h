@@ -60,5 +60,5 @@ namespace Knx
     typedef Dpt9 DPT_Rain_Amount;
     typedef Dpt9 DPT_Value_Wsp_kmh;
     typedef Dpt9GeZero DPT_Value_Absolute_Humidity;
-    typedef Dpt9GeZero DPT_Concentration_µgm3;
+    typedef Dpt9GeZero DPT_Concentration_ugm3;
 }

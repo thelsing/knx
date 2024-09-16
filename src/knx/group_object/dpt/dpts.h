@@ -9,3 +9,7 @@
 #include "dpt7.h"
 #include "dpt8.h"
 #include "dpt9.h"
+#include "dpt10.h"
+#include "dpt11.h"
+#include "dpt12.h"
+#include "dpt13.h"
