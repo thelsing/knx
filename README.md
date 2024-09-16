@@ -15,6 +15,9 @@ See the examples for basic usage options
 
 ## Changelog
 
+### V2.1.1 - 2024-09-16
+- fix minor bug in TP-Uart Driver (RX queue out of boundary)
+
 ### V2.1.0 - 2024-07-03
 - complete rework of the TPUart DataLinkLayer with support interrupt-based handling and optimized queue handling
 - added DMA support for RP2040 platform
