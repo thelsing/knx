@@ -49,8 +49,6 @@ namespace Knx
     //KNX to internal
     int busValueToUnsigned32(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToSigned32(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
-    int busValueToLongTimePeriod(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
-    int busValueToFloat32(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToAccess(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToString(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
     int busValueToScene(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value);
@@ -74,8 +72,6 @@ namespace Knx
     //Internal to KNX
     int valueToBusValueUnsigned32(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueSigned32(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
-    int valueToBusValueLongTimePeriod(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
-    int valueToBusValueFloat32(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueAccess(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueString(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);
     int valueToBusValueScene(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype);

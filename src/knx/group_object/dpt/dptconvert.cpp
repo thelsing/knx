@@ -18,10 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-            // DPT 14.* - 32 Bit Float
-            if (datatype.mainGroup == 14 && datatype.subGroup <= 79 && !datatype.index)
-                return busValueToFloat32(payload, payload_length, datatype, value);
-
             // DPT 15.* - Access Data
             if (datatype.mainGroup == 15 && !datatype.subGroup && datatype.index <= 5)
                 return busValueToAccess(payload, payload_length, datatype, value);
@@ -203,31 +199,10 @@ namespace Knx
         return false;
     }
 
-    int busValueToUnsigned32(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(4);
-        value = unsigned32FromPayload(payload, 0);
-        return true;
-    }
-
     int busValueToSigned32(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
     {
         ASSERT_PAYLOAD(4);
         value = signed32FromPayload(payload, 0);
-        return true;
-    }
-
-    int busValueToLongTimePeriod(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(4);
-        value = signed32FromPayload(payload, 0);
-        return true;
-    }
-
-    int busValueToFloat32(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(4);
-        value = float32FromPayload(payload, 0);
         return true;
     }
 
@@ -671,26 +646,6 @@ namespace Knx
             return false;
 
         unsigned32ToPayload(payload, 0, (uint64_t)value, 0xFFFFFFFF);
-        return true;
-    }
-
-    int valueToBusValueLongTimePeriod(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        if ((int64_t)value < INT64_C(-2147483648) || (int64_t)value > INT64_C(2147483647))
-            return false;
-
-        signed32ToPayload(payload, 0, (uint64_t)value, 0xFFFFFFFF);
-        return true;
-    }
-
-    int valueToBusValueFloat32(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        double numValue = value;
-
-        if (numValue < (-8388608.0 * pow(2, 255)) || numValue > (8388607.0 * pow(2, 255)))
-            return false;
-
-        float32ToPayload(payload, 0, numValue, 0xFFFFFFFF);
         return true;
     }
 
