@@ -108,10 +108,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-        // DPT 14.* - 32 Bit Float
-        if (datatype.mainGroup == 14 && datatype.subGroup <= 79 && !datatype.index)
-            return valueToBusValueFloat32(value, payload, payload_length, datatype);
-
         // DPT 15.* - Access Data
         if (datatype.mainGroup == 15 && !datatype.subGroup && datatype.index <= 5)
             return valueToBusValueAccess(value, payload, payload_length, datatype);
