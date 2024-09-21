@@ -18,10 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-            // DPT 15.* - Access Data
-            if (datatype.mainGroup == 15 && !datatype.subGroup && datatype.index <= 5)
-                return busValueToAccess(payload, payload_length, datatype, value);
-
             // DPT 16.* - String
             if (datatype.mainGroup == 16 && datatype.subGroup <= 1 && !datatype.index)
                 return busValueToString(payload, payload_length, datatype, value);
@@ -108,10 +104,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-        // DPT 15.* - Access Data
-        if (datatype.mainGroup == 15 && !datatype.subGroup && datatype.index <= 5)
-            return valueToBusValueAccess(value, payload, payload_length, datatype);
-
         // DPT 16.* - String
         if (datatype.mainGroup == 16 && datatype.subGroup <= 1 && !datatype.index)
             return valueToBusValueString(value, payload, payload_length, datatype);
@@ -200,45 +192,6 @@ namespace Knx
         ASSERT_PAYLOAD(4);
         value = signed32FromPayload(payload, 0);
         return true;
-    }
-
-    int busValueToAccess(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(4);
-
-        switch (datatype.index)
-        {
-            case 0:
-            {
-                int32_t digits = 0;
-
-                for (int n = 0, factor = 100000; n < 6; ++n, factor /= 10)
-                {
-                    unsigned char digit = bcdFromPayload(payload, n);
-
-                    if (digit > 9)
-                        return false;
-
-                    digits += digit * factor;
-                }
-
-                value = digits;
-                return true;
-            }
-
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                value = bitFromPayload(payload, 23 + datatype.index);
-                return true;
-
-            case 5:
-                value = bcdFromPayload(payload, 7);
-                return true;
-        }
-
-        return false;
     }
 
     int busValueToString(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
@@ -642,46 +595,6 @@ namespace Knx
             return false;
 
         unsigned32ToPayload(payload, 0, (uint64_t)value, 0xFFFFFFFF);
-        return true;
-    }
-
-    int valueToBusValueAccess(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        switch (datatype.index)
-        {
-            case 0:
-            {
-                if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(999999))
-                    return false;
-
-                ENSURE_PAYLOAD(4);
-
-                for (int n = 0, factor = 100000; n < 6; ++n, factor /= 10)
-                    bcdToPayload(payload, n, ((uint64_t)value / factor) % 10);
-
-                break;
-            }
-
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                bitToPayload(payload, 23 + datatype.index, value);
-                break;
-
-            case 5:
-            {
-                if ((uint64_t)value > INT64_C(15))
-                    return false;
-
-                bcdToPayload(payload, 7, (uint64_t)value);
-                break;
-            }
-
-            default:
-                return false;
-        }
-
         return true;
     }
 
