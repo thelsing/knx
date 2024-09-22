@@ -3,7 +3,6 @@
 #include "../group_object.h"
 namespace Knx
 {
-#define DPT_SceneNumber Dpt(17, 1)
 #define DPT_SceneControl Dpt(18, 1)
 #define DPT_DateTime Dpt(19, 1)
 #define DPT_SCLOMode Dpt(20, 1)

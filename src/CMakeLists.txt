@@ -70,6 +70,8 @@ set(SOURCES
 ./knx/group_object/dpt/dpt15.h
 ./knx/group_object/dpt/dpt16.cpp
 ./knx/group_object/dpt/dpt16.h
+./knx/group_object/dpt/dpt17.cpp
+./knx/group_object/dpt/dpt17.h
 ./knx/group_object/dpt/dptconvert.cpp
 ./knx/group_object/dpt/dptconvert.h
 ./knx/group_object/group_object.cpp

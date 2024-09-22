@@ -16,3 +16,4 @@
 #include "dpt14.h"
 #include "dpt15.h"
 #include "dpt16.h"
+#include "dpt17.h"

@@ -18,10 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-            // DPT 17.* - Scene Number
-            if (datatype.mainGroup == 17 && datatype.subGroup == 1 && !datatype.index)
-                return busValueToScene(payload, payload_length, datatype, value);
-
             // DPT 18.* - Scene Control
             if (datatype.mainGroup == 18 && datatype.subGroup == 1 && datatype.index <= 1)
                 return busValueToSceneControl(payload, payload_length, datatype, value);
@@ -100,10 +96,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-        // DPT 17.* - Scene Number
-        if (datatype.mainGroup == 17 && datatype.subGroup == 1 && !datatype.index)
-            return valueToBusValueScene(value, payload, payload_length, datatype);
-
         // DPT 18.* - Scene Control
         if (datatype.mainGroup == 18 && datatype.subGroup == 1 && datatype.index <= 1)
             return valueToBusValueSceneControl(value, payload, payload_length, datatype);
@@ -183,31 +175,6 @@ namespace Knx
     {
         ASSERT_PAYLOAD(4);
         value = signed32FromPayload(payload, 0);
-        return true;
-    }
-
-    int busValueToString(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(14);
-        char strValue[15];
-        strValue[14] = '\0';
-
-        for (int n = 0; n < 14; ++n)
-        {
-            strValue[n] = signed8FromPayload(payload, n);
-
-            if (!datatype.subGroup && (strValue[n] & 0x80))
-                return false;
-        }
-
-        value = strValue;
-        return true;
-    }
-
-    int busValueToScene(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
-    {
-        ASSERT_PAYLOAD(1);
-        value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x3F);
         return true;
     }
 
@@ -587,15 +554,6 @@ namespace Knx
             return false;
 
         unsigned32ToPayload(payload, 0, (uint64_t)value, 0xFFFFFFFF);
-        return true;
-    }
-
-    int valueToBusValueScene(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
-            return false;
-
-        unsigned8ToPayload(payload, 0, (uint64_t)value, 0xFF);
         return true;
     }
 
