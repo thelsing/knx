@@ -3,8 +3,6 @@
 #include "../group_object.h"
 namespace Knx
 {
-#define DPT_String_ASCII Dpt(16, 0)
-#define DPT_String_8859_1 Dpt(16, 1)
 #define DPT_SceneNumber Dpt(17, 1)
 #define DPT_SceneControl Dpt(18, 1)
 #define DPT_DateTime Dpt(19, 1)

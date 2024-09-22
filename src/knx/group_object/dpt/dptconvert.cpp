@@ -18,10 +18,6 @@ namespace Knx
     {
         if (payload_length > 0)
         {
-            // DPT 16.* - String
-            if (datatype.mainGroup == 16 && datatype.subGroup <= 1 && !datatype.index)
-                return busValueToString(payload, payload_length, datatype, value);
-
             // DPT 17.* - Scene Number
             if (datatype.mainGroup == 17 && datatype.subGroup == 1 && !datatype.index)
                 return busValueToScene(payload, payload_length, datatype, value);
@@ -104,10 +100,6 @@ namespace Knx
 
     int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-        // DPT 16.* - String
-        if (datatype.mainGroup == 16 && datatype.subGroup <= 1 && !datatype.index)
-            return valueToBusValueString(value, payload, payload_length, datatype);
-
         // DPT 17.* - Scene Number
         if (datatype.mainGroup == 17 && datatype.subGroup == 1 && !datatype.index)
             return valueToBusValueScene(value, payload, payload_length, datatype);
@@ -595,22 +587,6 @@ namespace Knx
             return false;
 
         unsigned32ToPayload(payload, 0, (uint64_t)value, 0xFFFFFFFF);
-        return true;
-    }
-
-    int valueToBusValueString(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
-    {
-        const char* strValue = value;
-        uint8_t val = strValue[0];
-
-        for (int n = 0; n < 14; n++)
-        {
-            if (val)
-                val = strValue[n]; //string terminator 0x00 will stop further assignments and init the remainig payload with zero
-
-            unsigned8ToPayload(payload, n, val, 0xff);
-        }
-
         return true;
     }
 
