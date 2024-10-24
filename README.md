@@ -22,6 +22,7 @@ See the examples for basic usage options
 - update examples and ci to current arduino-pico core version
 - better Routing and Tunneling support
 - add DPT 27.001
+- increase device object api version to 2 (invalidation of knx flash data stored by older versions)
 
 ### V2.1.1 - 2024-09-16
 - fix minor bug in TP-Uart Driver (RX queue out of boundary)
