@@ -15,6 +15,14 @@ See the examples for basic usage options
 
 ## Changelog
 
+### v1dev (replace this with version and date when releasing to v1)
+- only set pinMode of Prog button pin if valid (PROG_BUTTON_PIN >= 0)
+- Strings are now \0 terminated in group objects (#25)
+- change defines in the rp2040 plattform for LAN / WLAN usage to KNX_IP_LAN or KNX_IP_WIFI, remove KNX_IP_GENERIC
+- update examples and ci to current arduino-pico core version
+- better Routing and Tunneling support
+- add DPT 27.001
+
 ### V2.1.1 - 2024-09-16
 - fix minor bug in TP-Uart Driver (RX queue out of boundary)
 
