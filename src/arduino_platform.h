@@ -1,3 +1,5 @@
+#pragma once
+
 #include "knx/platform.h"
 
 #include "Arduino.h"
