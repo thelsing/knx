@@ -107,6 +107,10 @@ int KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& datatyp
         if (datatype.mainGroup == 19 && datatype.subGroup == 1 && (datatype.index <= 3 || datatype.index == 9 || datatype.index == 10))
             return busValueToDateTime(payload, payload_length, datatype, value);
 
+        // DPT 20.* - HVAC Control mode Unsigned 8 Bit Integer
+        if (datatype.mainGroup == 20 && !datatype.index)
+            return busValueToUnsigned8(payload, payload_length, datatype, value);
+
         // DPT 26.* - Scene Info
         if (datatype.mainGroup == 26 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToSceneInfo(payload, payload_length, datatype, value);
@@ -267,6 +271,10 @@ int KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_len
     // DPT 19.* - Date and Time
     if (datatype.mainGroup == 19 && datatype.subGroup == 1 && (datatype.index <= 3 || datatype.index == 9 || datatype.index == 10))
         return valueToBusValueDateTime(value, payload, payload_length, datatype);
+
+    // DPT 20.* - HVAC Control mode Unsigned 8 Bit Integer
+    if (datatype.mainGroup == 20 && !datatype.index)
+        return valueToBusValueUnsigned8(value, payload, payload_length, datatype);
 
     // DPT 26.* - Scene Info
     if (datatype.mainGroup == 26 && datatype.subGroup == 1 && datatype.index <= 1)
