@@ -212,6 +212,7 @@ void BauSystemBDevice::groupValueReadIndication(uint16_t asap, Priority priority
     if (secCtrl.dataSecurity != requiredGoSecurity)
     {
         println("GroupValueRead: access denied due to wrong security flags");
+        KNX_LOGE(KTAG, "GroupValueRead: access denied due to wrong security flags");
         return;
     }
 
@@ -248,6 +249,7 @@ void BauSystemBDevice::groupValueWriteIndication(uint16_t asap, Priority priorit
     if (secCtrl.dataSecurity != requiredGoSecurity)
     {
         println("GroupValueWrite: access denied due to wrong security flags");
+        KNX_LOGE(KTAG, "GroupValueWrite: access denied due to wrong security flags");
         return;
     }
 

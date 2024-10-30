@@ -166,6 +166,7 @@ TPAckType Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
     if (address == 0)
     {
         println("Invalid broadcast detected: destination address is 0, but address type is \"individual\"");
+        KNX_LOGE(KTAG, "Invalid broadcast detected: destination address is 0, but address type is \"individual\"");
     }
 
     return TPAckType::AckReqNone;

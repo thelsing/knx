@@ -56,6 +56,7 @@ uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channe
         case EraseCode::ConfirmedRestart:
         {
             println("Confirmed restart requested.");
+            KNX_LOGI(KTAG, "Confirmed restart requested.");
             return successCode;
         }
 
@@ -63,6 +64,7 @@ uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channe
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
             println("ResetAP requested. Not implemented yet.");
+            KNX_LOGW(KTAG, "ResetAP requested. Not implemented yet.");
             return successCode;
         }
 
@@ -70,6 +72,7 @@ uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channe
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
             println("ResetIA requested. Not implemented yet.");
+            KNX_LOGW(KTAG, "ResetIA requested. Not implemented yet.");
             return successCode;
         }
 
@@ -77,6 +80,7 @@ uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channe
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
             println("ResetLinks requested. Not implemented yet.");
+            KNX_LOGW(KTAG, "ResetLinks requested. Not implemented yet.");
             return successCode;
         }
 
@@ -84,6 +88,7 @@ uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channe
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
             println("ResetParam requested. Not implemented yet.");
+            KNX_LOGW(KTAG, "ResetParam requested. Not implemented yet.");
             return successCode;
         }
 
@@ -91,6 +96,7 @@ uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channe
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
             println("Factory reset requested. type: with IA");
+            KNX_LOGI(KTAG, "Factory reset requested. type: with IA");
             return successCode;
         }
 
@@ -98,11 +104,13 @@ uint8_t BauSystemB::checkmasterResetValidity(EraseCode eraseCode, uint8_t channe
         {
             // TODO: increase download counter except for confirmed restart (PID_DOWNLOAD_COUNTER)
             println("Factory reset requested. type: without IA");
+            KNX_LOGI(KTAG, "Factory reset requested. type: without IA");
             return successCode;
         }
 
         default:
         {
+            KNX_LOGW(KTAG, "Unhandled erase code: %02X", eraseCode);
             print("Unhandled erase code: ");
             println(eraseCode, HEX);
             return invalidEraseCode;
@@ -211,7 +219,7 @@ void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopTyp
     if (restartType == RestartType::BasicRestart)
     {
         println("Basic restart requested");
-
+        KNX_LOGI(KTAG, "Basic restart requested");
         if (_beforeRestart != 0)
             _beforeRestart();
     }
@@ -227,6 +235,7 @@ void BauSystemB::restartRequestIndication(Priority priority, HopCountType hopTyp
     {
         // Cannot happen as restartType is just one bit
         println("Unhandled restart type.");
+        KNX_LOGI(KTAG, "Unhandled restart type.");
         _platform.fatalError();
     }
 
@@ -280,12 +289,14 @@ void BauSystemB::propertyExtDescriptionReadIndication(Priority priority, HopCoun
     if (propertyId > 0xFF || propertyIndex > 0xFF)
     {
         println("BauSystemB::propertyExtDescriptionReadIndication: propertyId or Idx > 256 are not supported");
+        KNX_LOGI(KTAG, "BauSystemB::propertyExtDescriptionReadIndication: propertyId or Idx > 256 are not supported");
         return;
     }
 
     if (descriptionType != 0)
     {
         println("BauSystemB::propertyExtDescriptionReadIndication: only descriptionType 0 supported");
+        KNX_LOGI(KTAG, "BauSystemB::propertyExtDescriptionReadIndication: only descriptionType 0 supported");
         return;
     }
 

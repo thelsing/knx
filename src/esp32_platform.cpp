@@ -73,6 +73,7 @@ uint32_t Esp32Platform::uniqueSerialNumber()
 void Esp32Platform::restart()
 {
     println("restart");
+    KNX_LOGI(KTAG, "restart");
     ESP.restart();
 }
 
@@ -110,7 +111,7 @@ int Esp32Platform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen, uint32_t
     if (len > maxLen)
     {
         println("Unexpected UDP data packet length - drop packet");
-
+        KNX_LOGW(KTAG, "Unexpected UDP data packet length - drop packet");
         for (size_t i = 0; i < len; i++)
             _udp.read();
 
@@ -144,11 +145,15 @@ bool Esp32Platform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buff
     {
         _udp.write(buffer, len);
 
-        if (_udp.endPacket() == 0)
+        if (_udp.endPacket() == 0){
             println("sendBytesUniCast endPacket fail");
+            KNX_LOGE(KTAG, "endBytesUniCast endPacket fail");
+        }
     }
-    else
+    else{
         println("sendBytesUniCast beginPacket fail");
+        KNX_LOGE(KTAG, "endBytesUniCast beginPacket fail");
+    }
 
     return true;
 }

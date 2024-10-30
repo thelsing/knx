@@ -14,6 +14,7 @@ Memory::~Memory()
 void Memory::readMemory()
 {
     println("readMemory");
+    KNX_LOGW(KTAG, "readMemory");
 
     uint8_t* flashStart = _platform.getNonVolatileMemoryStart();
     size_t flashSize = _platform.getNonVolatileMemorySize();
@@ -21,6 +22,7 @@ void Memory::readMemory()
     if (flashStart == nullptr)
     {
         println("no user flash available;");
+        KNX_LOGW(KTAG, "no user flash available;");
         return;
     }
 
@@ -76,6 +78,9 @@ void Memory::readMemory()
             print(", stored hardwareType: ");
             printHex("", hardwareType, LEN_HARDWARE_TYPE);
             println("");
+            KNX_LOGW(KTAG, "manufacturerId or hardwareType are different");
+            KNX_LOGW(KTAG, "expexted manufacturerId: %02X , stored manufacturerId: %02X, expexted hardwareType: %02X, stored hardwareType: %02X",
+            (unsigned int)_deviceObject.manufacturerId(), (unsigned int)manufacturerId, (unsigned int)_deviceObject.hardwareType(), (unsigned int)hardwareType);
         }
     }
     else
@@ -85,17 +90,21 @@ void Memory::readMemory()
         print(_deviceObject.apiVersion, HEX);
         print(", stored api version: ");
         println(apiVersion, HEX);
+        KNX_LOGW(KTAG, "DataObject api changed, any data stored in flash is invalid. expexted DataObject api version: %02X, stored api version: %02X",
+        (unsigned int)_deviceObject.apiVersion, (unsigned int)apiVersion);
     }
 
     if (versionCheck == FlashAllInvalid)
     {
         println("ETS has to reprogram PA and application!");
+        KNX_LOGW(KTAG, "ETS has to reprogram PA and application!");
         return;
     }
 
     println("restoring data from flash...");
     print("saverestores ");
     println(_saveCount);
+    KNX_LOGI(KTAG, "restoring data from flash...saverestores %d", _saveCount);
 
     for (int i = 0; i < _saveCount; i++)
     {
@@ -105,15 +114,17 @@ void Memory::readMemory()
     }
 
     println("restored saveRestores");
-
+    KNX_LOGI(KTAG, "restored saveRestores");
     if (versionCheck == FlashTablesInvalid)
     {
         println("TableObjects are referring to an older firmware version and are not loaded");
+        KNX_LOGW(KTAG, "TableObjects are referring to an older firmware version and are not loaded");
         return;
     }
 
     print("tableObjs ");
     println(_tableObjCount);
+    KNX_LOGI(KTAG, "tableObjs %d", _tableObjCount);
 
     for (int i = 0; i < _tableObjCount; i++)
     {
@@ -132,6 +143,7 @@ void Memory::readMemory()
     }
 
     println("restored Tableobjects");
+    KNX_LOGI(KTAG, "restored Tableobjects");
 }
 
 void Memory::writeMemory()
@@ -158,6 +170,7 @@ void Memory::writeMemory()
 
     print("save saveRestores ");
     println(_saveCount);
+    KNX_LOGI(KTAG, "save saveRestores %d", _saveCount);
 
     for (int i = 0; i < _saveCount; i++)
     {
@@ -167,6 +180,7 @@ void Memory::writeMemory()
 
     print("save tableobjs ");
     println(_tableObjCount);
+    KNX_LOGI(KTAG, "save tableobjs %d", _tableObjCount);
 
     for (int i = 0; i < _tableObjCount; i++)
     {
@@ -180,6 +194,7 @@ void Memory::writeMemory()
             if (block == nullptr)
             {
                 println("_data of TableObject not in _usedList");
+                KNX_LOGW(KTAG, "_data of TableObject not in _usedList");
                 _platform.fatalError();
             }
 
@@ -245,6 +260,7 @@ uint8_t* Memory::allocMemory(size_t size)
     if (!blockToUse)
     {
         println("No available non volatile memory!");
+        KNX_LOGE(KTAG, "No available non volatile memory!");
         _platform.fatalError();
     }
 
@@ -288,6 +304,7 @@ void Memory::freeMemory(uint8_t* ptr)
     if (!found)
     {
         println("freeMemory for not used pointer called");
+        KNX_LOGE(KTAG, "freeMemory for not used pointer called");
         _platform.fatalError();
     }
 
@@ -329,6 +346,7 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
     if (!head || !item)
     {
         println("invalid parameters of Memory::removeFromList");
+        KNX_LOGE(KTAG, "invalid parameters of Memory::removeFromList");
         _platform.fatalError();
     }
 
@@ -350,6 +368,7 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
     if (!found)
     {
         println("tried to remove block from list not in it");
+        KNX_LOGW(KTAG, "tried to remove block from list not in it");
         _platform.fatalError();
     }
 
@@ -476,12 +495,14 @@ void Memory::addNewUsedBlock(uint8_t* address, size_t size)
     if (smallerFreeBlock == nullptr)
     {
         println("addNewUsedBlock: no smallerBlock found");
+        KNX_LOGW(KTAG, "addNewUsedBlock: no smallerBlock found");
         _platform.fatalError();
     }
 
     if ((smallerFreeBlock->address + smallerFreeBlock->size) < (address + size))
     {
         println("addNewUsedBlock: found block can't contain new block");
+        KNX_LOGW(KTAG, "addNewUsedBlock: found block can't contain new block");
         _platform.fatalError();
     }
 

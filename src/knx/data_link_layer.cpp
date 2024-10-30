@@ -219,6 +219,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     if (!frame.valid())
     {
         println("invalid frame");
+        KNX_LOGW(KTAG, "invalid frame");
         return false;
     }
 

@@ -224,11 +224,13 @@ template <class P, class B> class KnxFacade : private SaveRestore
                 if (_progLedState)
                 {
                     println("progmode on");
+                    KNX_LOGI(KTAG, "progmode on");
                     progLedOn();
                 }
                 else
                 {
                     println("progmode off");
+                    KNX_LOGI(KTAG, "progmode off");
                     progLedOff();
                 }
             }

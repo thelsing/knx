@@ -602,6 +602,7 @@ bool TpUartDataLinkLayer::sendFrame(CemiFrame& cemiFrame)
         if (_txQueueCount > MAX_TX_QUEUE)
         {
             println("Ignore frame because transmit queue is full!");
+            KNX_LOGW(KTAG, "Ignore frame because transmit queue is full!");
         }
 
         dataConReceived(cemiFrame, false);
@@ -703,10 +704,14 @@ void TpUartDataLinkLayer::clearUartBuffer()
 
 void TpUartDataLinkLayer::connected(bool state /* = true */)
 {
-    if (state)
+    if (state){
         println("TP is connected");
-    else
+        KNX_LOGI(KTAG, "TP is connected");
+    }
+    else{
         println("TP is disconnected");
+        KNX_LOGI(KTAG, "TP is disconnected");
+    }
 
     _connected = state;
 }
@@ -934,6 +939,7 @@ void TpUartDataLinkLayer::loop()
     if (_rxOverflow)
     {
         println("TPUart overflow detected!");
+        KNX_LOGE(KTAG, "TPUart overflow detected!");
         _rxOverflow = false;
         _rxState = RX_INVALID;
     }
@@ -941,6 +947,7 @@ void TpUartDataLinkLayer::loop()
     if (_tpState)
     {
         print("TPUart state error: ");
+        KNX_LOGE(KTAG, "TPUart state error: %d", _tpState);
         println(_tpState, 2);
         _tpState = 0;
     }
