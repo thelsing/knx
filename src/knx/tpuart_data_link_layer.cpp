@@ -710,7 +710,7 @@ void TpUartDataLinkLayer::connected(bool state /* = true */)
     }
     else{
         println("TP is disconnected");
-        KNX_LOGI(KTAG, "TP is disconnected");
+        KNX_LOGE(KTAG, "TP is disconnected");
     }
 
     _connected = state;
