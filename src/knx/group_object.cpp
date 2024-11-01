@@ -226,8 +226,11 @@ GroupObjectUpdatedHandler GroupObject::callback()
 
 void GroupObject::value(const KNXValue& value, const Dpt& type)
 {
-    valueNoSend(value, type);
-    objectWritten();
+    if (_valueNoSend(value, type))
+    {
+        // write on successful conversion/setting value only
+        objectWritten();
+    }
 }
 
 
@@ -282,11 +285,19 @@ void GroupObject::valueNoSend(const KNXValue& value)
 
 void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 {
+    // ignore actual updating TODO check replacing valueNoSend with _valueNoSend
+    _valueNoSend(value, type);
+}
+
+bool GroupObject::_valueNoSend(const KNXValue& value, const Dpt& type)
+{
     const bool encodingDone = KNX_Encode_Value(value, _data, _dataLength, type);
 
     // initialize on succesful conversion only
     if (encodingDone && _commFlagEx.uninitialized)
         commFlag(Ok);
+
+    return encodingDone;
 }
 
 bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
@@ -294,8 +305,7 @@ bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
     if (_commFlagEx.uninitialized)
     {
         // always set first value
-        this->valueNoSend(value, type);
-        return true;
+        return _valueNoSend(value, type);
     }
     else
     {

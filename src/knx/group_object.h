@@ -284,4 +284,16 @@ class GroupObject
     GroupObjectUpdatedHandler _updateHandler;
     Dpt _datapointType;
 #endif
+
+    /**
+     * set the current value of the group object and show success.
+     * @param value the value the group object is set to
+     * @param type the datapoint type used for the conversion.
+     * 
+     * The parameters must fit the group object. Otherwise it will stay unchanged.
+     * 
+     * @returns true if the value of the group object was updated after successful conversion.
+     */
+    bool _valueNoSend(const KNXValue& value, const Dpt& type);
+
 };
