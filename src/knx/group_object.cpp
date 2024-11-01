@@ -282,10 +282,11 @@ void GroupObject::valueNoSend(const KNXValue& value)
 
 void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 {
-    if (_commFlagEx.uninitialized)
-        commFlag(Ok);
+    const bool encodingDone = KNX_Encode_Value(value, _data, _dataLength, type);
 
-    KNX_Encode_Value(value, _data, _dataLength, type);
+    // initialize on succesful conversion only
+    if (encodingDone && _commFlagEx.uninitialized)
+        commFlag(Ok);
 }
 
 bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
