@@ -301,7 +301,13 @@ bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
         // convert new value to given dtp
         uint8_t newData[_dataLength];
         memset(newData, 0, _dataLength);
-        KNX_Encode_Value(value, newData, _dataLength, type);
+        const bool encodingDone = KNX_Encode_Value(value, newData, _dataLength, type);
+        if (!encodingDone)
+        {
+            // value conversion to DPT failed
+            // do NOT update the value of the KO!
+            return false;
+        }
 
         // check for change in converted value / update value on change only
         const bool dataChanged = memcmp(_data, newData, _dataLength);
