@@ -69,70 +69,71 @@ extern "C"
 #endif
 
 
-CPE_PATCH_TYPE patchImageMultiProtocol[] = {
-   0x21004061,
-   0x210040cb,
-   0x2100408d,
-   0x2100410d,
-   0x210040ed,
-   0x79654c07,
-   0xf809f000,
-   0x40697961,
-   0xd5030749,
-   0x4a042101,
-   0x60110389,
-   0xb570bd70,
-   0x47084902,
-   0x21000380,
-   0x40041108,
-   0x0000592d,
-   0xf819f000,
-   0x296cb2e1,
-   0x2804d00b,
-   0x2806d001,
-   0x490ed107,
-   0x07c97809,
-   0x7821d103,
-   0xd4000709,
-   0x490b2002,
-   0x210c780a,
-   0xd0024211,
-   0x22804909,
-   0xb003600a,
-   0xb5f0bdf0,
-   0x4907b083,
-   0x48044708,
-   0x22407801,
-   0x70014391,
-   0x47004804,
-   0x210000c8,
-   0x21000133,
-   0xe000e200,
-   0x00031641,
-   0x00031b23,
-   0x21014805,
-   0x438a6802,
-   0x6b836002,
-   0x6383438b,
-   0x6002430a,
-   0x47004801,
-   0x40046000,
-   0x00005b3f,
-   0x490cb510,
-   0x4a0c4788,
-   0x5e512106,
-   0xd0072900,
-   0xd0052902,
-   0xd0032909,
-   0xd0012910,
-   0xd1072911,
-   0x43c92177,
-   0xdd014288,
-   0xdd012800,
-   0x43c0207f,
-   0x0000bd10,
-   0x000065a9,
-   0x21000380,
+CPE_PATCH_TYPE patchImageMultiProtocol[] =
+{
+    0x21004061,
+    0x210040cb,
+    0x2100408d,
+    0x2100410d,
+    0x210040ed,
+    0x79654c07,
+    0xf809f000,
+    0x40697961,
+    0xd5030749,
+    0x4a042101,
+    0x60110389,
+    0xb570bd70,
+    0x47084902,
+    0x21000380,
+    0x40041108,
+    0x0000592d,
+    0xf819f000,
+    0x296cb2e1,
+    0x2804d00b,
+    0x2806d001,
+    0x490ed107,
+    0x07c97809,
+    0x7821d103,
+    0xd4000709,
+    0x490b2002,
+    0x210c780a,
+    0xd0024211,
+    0x22804909,
+    0xb003600a,
+    0xb5f0bdf0,
+    0x4907b083,
+    0x48044708,
+    0x22407801,
+    0x70014391,
+    0x47004804,
+    0x210000c8,
+    0x21000133,
+    0xe000e200,
+    0x00031641,
+    0x00031b23,
+    0x21014805,
+    0x438a6802,
+    0x6b836002,
+    0x6383438b,
+    0x6002430a,
+    0x47004801,
+    0x40046000,
+    0x00005b3f,
+    0x490cb510,
+    0x4a0c4788,
+    0x5e512106,
+    0xd0072900,
+    0xd0052902,
+    0xd0032909,
+    0xd0012910,
+    0xd1072911,
+    0x43c92177,
+    0xdd014288,
+    0xdd012800,
+    0x43c0207f,
+    0x0000bd10,
+    0x000065a9,
+    0x21000380,
 };
 #define _NWORD_PATCHIMAGE_MULTI_PROTOCOL 63
 
@@ -166,18 +167,18 @@ static uint8_t bMultiProtocolPatchEntered = 0;
 PATCH_FUN_SPEC void enterMultiProtocolCpePatch(void)
 {
 #if (_NWORD_PATCHIMAGE_MULTI_PROTOCOL > 0)
-   uint32_t *pPatchVec = (uint32_t *) (_MULTI_PROTOCOL_CPERAM_START + _MULTI_PROTOCOL_PATCH_VEC_OFFSET);
+    uint32_t* pPatchVec = (uint32_t*) (_MULTI_PROTOCOL_CPERAM_START + _MULTI_PROTOCOL_PATCH_VEC_OFFSET);
 
-   memcpy(pPatchVec, patchImageMultiProtocol, sizeof(patchImageMultiProtocol));
+    memcpy(pPatchVec, patchImageMultiProtocol, sizeof(patchImageMultiProtocol));
 #endif
 }
 
 PATCH_FUN_SPEC void enterMultiProtocolCpeHdPatch(void)
 {
 #if (_NWORD_PATCHCPEHD_MULTI_PROTOCOL > 0)
-   uint32_t *pPatchCpeHd = (uint32_t *) (_MULTI_PROTOCOL_CPERAM_START + _MULTI_PROTOCOL_PATCH_CPEHD_OFFSET);
+    uint32_t* pPatchCpeHd = (uint32_t*) (_MULTI_PROTOCOL_CPERAM_START + _MULTI_PROTOCOL_PATCH_CPEHD_OFFSET);
 
-   memcpy(pPatchCpeHd, patchCpeHd, sizeof(patchCpeHd));
+    memcpy(pPatchCpeHd, patchCpeHd, sizeof(patchCpeHd));
 #endif
 }
 
@@ -187,49 +188,51 @@ PATCH_FUN_SPEC void enterMultiProtocolSysPatch(void)
 
 PATCH_FUN_SPEC void configureMultiProtocolPatch(void)
 {
-   uint8_t *pPatchTab = (uint8_t *) (_MULTI_PROTOCOL_CPERAM_START + _MULTI_PROTOCOL_PATCH_TAB_OFFSET);
+    uint8_t* pPatchTab = (uint8_t*) (_MULTI_PROTOCOL_CPERAM_START + _MULTI_PROTOCOL_PATCH_TAB_OFFSET);
 
 
-   pPatchTab[76] = 0;
-   pPatchTab[62] = 1;
-   pPatchTab[64] = 2;
-   pPatchTab[91] = 3;
-   pPatchTab[79] = 4;
+    pPatchTab[76] = 0;
+    pPatchTab[62] = 1;
+    pPatchTab[64] = 2;
+    pPatchTab[91] = 3;
+    pPatchTab[79] = 4;
 }
 
 PATCH_FUN_SPEC void applyMultiProtocolPatch(void)
 {
 #ifdef _MULTI_PROTOCOL_NO_PROG_STATE_VAR
-   enterMultiProtocolSysPatch();
-   enterMultiProtocolCpePatch();
+    enterMultiProtocolSysPatch();
+    enterMultiProtocolCpePatch();
 #else
-   if (!bMultiProtocolPatchEntered)
-   {
-      enterMultiProtocolSysPatch();
-      enterMultiProtocolCpePatch();
-      bMultiProtocolPatchEntered = 1;
-   }
+
+    if (!bMultiProtocolPatchEntered)
+    {
+        enterMultiProtocolSysPatch();
+        enterMultiProtocolCpePatch();
+        bMultiProtocolPatchEntered = 1;
+    }
+
 #endif
-   enterMultiProtocolCpeHdPatch();
-   configureMultiProtocolPatch();
+    enterMultiProtocolCpeHdPatch();
+    configureMultiProtocolPatch();
 }
 
 PATCH_FUN_SPEC void refreshMultiProtocolPatch(void)
 {
-   enterMultiProtocolCpeHdPatch();
-   configureMultiProtocolPatch();
+    enterMultiProtocolCpeHdPatch();
+    configureMultiProtocolPatch();
 }
 
 #ifndef _MULTI_PROTOCOL_NO_PROG_STATE_VAR
 PATCH_FUN_SPEC void cleanMultiProtocolPatch(void)
 {
-   bMultiProtocolPatchEntered = 0;
+    bMultiProtocolPatchEntered = 0;
 }
 #endif
 
 PATCH_FUN_SPEC void rf_patch_cpe_multi_protocol(void)
 {
-   applyMultiProtocolPatch();
+    applyMultiProtocolPatch();
 }
 
 

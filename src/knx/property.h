@@ -31,7 +31,7 @@ enum PropertyDataType
     PDT_POLL_GROUP_SETTING = 0x0d, //!< length: 3
     PDT_SHORT_CHAR_BLOCK   = 0x0e, //!< length: 5
     PDT_DATE_TIME          = 0x0f, //!< length: 8
-    PDT_VARIABLE_LENGTH    = 0x10, 
+    PDT_VARIABLE_LENGTH    = 0x10,
     PDT_GENERIC_01         = 0x11, //!< length: 1
     PDT_GENERIC_02         = 0x12, //!< length: 2
     PDT_GENERIC_03         = 0x13, //!< length: 3
@@ -88,7 +88,7 @@ enum PropertyID
     PID_ERROR_CODE = 28,
     PID_OBJECT_INDEX = 29,
     PID_DOWNLOAD_COUNTER = 30,
-    
+
     /** Properties in the Device Object */
     PID_ROUTING_COUNT = 51,
     PID_PROG_MODE = 54,
@@ -139,6 +139,8 @@ enum PropertyID
     PID_MSG_TRANSMIT_TO_KNX = 75,
     PID_FRIENDLY_NAME = 76,
     PID_ROUTING_BUSY_WAIT_TIME = 78,
+    PID_CUSTOM_RESERVED_TUNNELS_CTRL = 201, // custom propertiy to control the stacks behaviour for reserverd tunnels, not in Spec (PID >= 200)
+    PID_CUSTOM_RESERVED_TUNNELS_IP = 202, // custom propertiy to control the stacks behaviour for reserverd tunnels, not in Spec (PID >= 200)
 
     /** cEMI Server Object */
     PID_MEDIUM_TYPE = 51,
@@ -211,7 +213,7 @@ enum LoadEvents
     LE_UNLOAD = 4
 };
 
-// 20.011 DPT_ErrorClass_System 
+// 20.011 DPT_ErrorClass_System
 enum ErrorCode
 {
     E_NO_FAULT = 0,
@@ -259,32 +261,32 @@ struct PropertyDescription
 
 class Property : public SaveRestore
 {
-  public:
-    Property(PropertyID id, bool writeEnable, PropertyDataType type, uint16_t maxElements, uint8_t access);
-    virtual ~Property();
-    PropertyID Id() const;
-    bool WriteEnable() const;
-    PropertyDataType Type() const;
-    uint16_t MaxElements() const;
-    uint8_t Access() const;
-    uint8_t ElementSize() const;
-    virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) const = 0;
-    virtual uint8_t write(uint16_t start, uint8_t count, const uint8_t* data) = 0;
-    virtual void command(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
-    virtual void state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
-    uint8_t read(uint8_t& value) const;
-    uint8_t read(uint16_t& value) const;
-    uint8_t read(uint32_t& value) const;
-    uint8_t read(uint8_t* value) const;
-    uint8_t write(uint8_t value);
-    uint8_t write(uint16_t value);
-    uint8_t write(uint16_t position, uint16_t value);
-    uint8_t write(uint32_t value);
-    uint8_t write(const uint8_t* value);
-  protected:
-    PropertyID _id;
-    bool _writeEnable;
-    PropertyDataType _type;
-    uint16_t _maxElements;
-    uint8_t _access;
+    public:
+        Property(PropertyID id, bool writeEnable, PropertyDataType type, uint16_t maxElements, uint8_t access);
+        virtual ~Property();
+        PropertyID Id() const;
+        bool WriteEnable() const;
+        PropertyDataType Type() const;
+        uint16_t MaxElements() const;
+        uint8_t Access() const;
+        uint8_t ElementSize() const;
+        virtual uint8_t read(uint16_t start, uint8_t count, uint8_t* data) const = 0;
+        virtual uint8_t write(uint16_t start, uint8_t count, const uint8_t* data) = 0;
+        virtual void command(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+        virtual void state(uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength);
+        uint8_t read(uint8_t& value) const;
+        uint8_t read(uint16_t& value) const;
+        uint8_t read(uint32_t& value) const;
+        uint8_t read(uint8_t* value) const;
+        uint8_t write(uint8_t value);
+        uint8_t write(uint16_t value);
+        uint8_t write(uint16_t position, uint16_t value);
+        uint8_t write(uint32_t value);
+        uint8_t write(const uint8_t* value);
+    protected:
+        PropertyID _id;
+        bool _writeEnable;
+        PropertyDataType _type;
+        uint16_t _maxElements;
+        uint8_t _access;
 };

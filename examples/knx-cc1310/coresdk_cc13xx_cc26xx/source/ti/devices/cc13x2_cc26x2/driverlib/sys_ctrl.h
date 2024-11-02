@@ -99,14 +99,14 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define SysCtrlIdle                     NOROM_SysCtrlIdle
-    #define SysCtrlShutdownWithAbort        NOROM_SysCtrlShutdownWithAbort
-    #define SysCtrlShutdown                 NOROM_SysCtrlShutdown
-    #define SysCtrlStandby                  NOROM_SysCtrlStandby
-    #define SysCtrlSetRechargeBeforePowerDown NOROM_SysCtrlSetRechargeBeforePowerDown
-    #define SysCtrlAdjustRechargeAfterPowerDown NOROM_SysCtrlAdjustRechargeAfterPowerDown
-    #define SysCtrl_DCDC_VoltageConditionalControl NOROM_SysCtrl_DCDC_VoltageConditionalControl
-    #define SysCtrlResetSourceGet           NOROM_SysCtrlResetSourceGet
+#define SysCtrlIdle                     NOROM_SysCtrlIdle
+#define SysCtrlShutdownWithAbort        NOROM_SysCtrlShutdownWithAbort
+#define SysCtrlShutdown                 NOROM_SysCtrlShutdown
+#define SysCtrlStandby                  NOROM_SysCtrlStandby
+#define SysCtrlSetRechargeBeforePowerDown NOROM_SysCtrlSetRechargeBeforePowerDown
+#define SysCtrlAdjustRechargeAfterPowerDown NOROM_SysCtrlAdjustRechargeAfterPowerDown
+#define SysCtrl_DCDC_VoltageConditionalControl NOROM_SysCtrl_DCDC_VoltageConditionalControl
+#define SysCtrlResetSourceGet           NOROM_SysCtrlResetSourceGet
 #endif
 
 //*****************************************************************************
@@ -149,7 +149,7 @@ extern "C"
 //
 //*****************************************************************************
 #define SYSCTRL_PREFERRED_RECHARGE_MODE                                       \
-                                0xFFFFFFFF // Preferred recharge mode
+    0xFFFFFFFF // Preferred recharge mode
 
 //*****************************************************************************
 //
@@ -316,7 +316,7 @@ __STATIC_INLINE uint32_t
 SysCtrlClockGet( void )
 {
     // Return fixed clock speed
-    return( GET_MCU_CLOCK );
+    return ( GET_MCU_CLOCK );
 }
 
 //*****************************************************************************
@@ -461,14 +461,16 @@ extern uint32_t SysCtrlResetSourceGet( void );
 __STATIC_INLINE void
 SysCtrlSystemReset( void )
 {
-   // Disable CPU interrupts
-   CPUcpsid();
-   // Write reset register
-   HWREGBITW( AON_PMCTL_BASE + AON_PMCTL_O_RESETCTL, AON_PMCTL_RESETCTL_SYSRESET_BITN ) = 1;
-   // Finally, wait until the above write propagates
-   while ( 1 ) {
-      // Do nothing, just wait for the reset (and never return from here)
-   }
+    // Disable CPU interrupts
+    CPUcpsid();
+    // Write reset register
+    HWREGBITW( AON_PMCTL_BASE + AON_PMCTL_O_RESETCTL, AON_PMCTL_RESETCTL_SYSRESET_BITN ) = 1;
+
+    // Finally, wait until the above write propagates
+    while ( 1 )
+    {
+        // Do nothing, just wait for the reset (and never return from here)
+    }
 }
 
 //*****************************************************************************
@@ -522,39 +524,39 @@ SysCtrlClockLossResetDisable(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_SysCtrlIdle
-        #undef  SysCtrlIdle
-        #define SysCtrlIdle                     ROM_SysCtrlIdle
-    #endif
-    #ifdef ROM_SysCtrlShutdownWithAbort
-        #undef  SysCtrlShutdownWithAbort
-        #define SysCtrlShutdownWithAbort        ROM_SysCtrlShutdownWithAbort
-    #endif
-    #ifdef ROM_SysCtrlShutdown
-        #undef  SysCtrlShutdown
-        #define SysCtrlShutdown                 ROM_SysCtrlShutdown
-    #endif
-    #ifdef ROM_SysCtrlStandby
-        #undef  SysCtrlStandby
-        #define SysCtrlStandby                  ROM_SysCtrlStandby
-    #endif
-    #ifdef ROM_SysCtrlSetRechargeBeforePowerDown
-        #undef  SysCtrlSetRechargeBeforePowerDown
-        #define SysCtrlSetRechargeBeforePowerDown ROM_SysCtrlSetRechargeBeforePowerDown
-    #endif
-    #ifdef ROM_SysCtrlAdjustRechargeAfterPowerDown
-        #undef  SysCtrlAdjustRechargeAfterPowerDown
-        #define SysCtrlAdjustRechargeAfterPowerDown ROM_SysCtrlAdjustRechargeAfterPowerDown
-    #endif
-    #ifdef ROM_SysCtrl_DCDC_VoltageConditionalControl
-        #undef  SysCtrl_DCDC_VoltageConditionalControl
-        #define SysCtrl_DCDC_VoltageConditionalControl ROM_SysCtrl_DCDC_VoltageConditionalControl
-    #endif
-    #ifdef ROM_SysCtrlResetSourceGet
-        #undef  SysCtrlResetSourceGet
-        #define SysCtrlResetSourceGet           ROM_SysCtrlResetSourceGet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_SysCtrlIdle
+#undef  SysCtrlIdle
+#define SysCtrlIdle                     ROM_SysCtrlIdle
+#endif
+#ifdef ROM_SysCtrlShutdownWithAbort
+#undef  SysCtrlShutdownWithAbort
+#define SysCtrlShutdownWithAbort        ROM_SysCtrlShutdownWithAbort
+#endif
+#ifdef ROM_SysCtrlShutdown
+#undef  SysCtrlShutdown
+#define SysCtrlShutdown                 ROM_SysCtrlShutdown
+#endif
+#ifdef ROM_SysCtrlStandby
+#undef  SysCtrlStandby
+#define SysCtrlStandby                  ROM_SysCtrlStandby
+#endif
+#ifdef ROM_SysCtrlSetRechargeBeforePowerDown
+#undef  SysCtrlSetRechargeBeforePowerDown
+#define SysCtrlSetRechargeBeforePowerDown ROM_SysCtrlSetRechargeBeforePowerDown
+#endif
+#ifdef ROM_SysCtrlAdjustRechargeAfterPowerDown
+#undef  SysCtrlAdjustRechargeAfterPowerDown
+#define SysCtrlAdjustRechargeAfterPowerDown ROM_SysCtrlAdjustRechargeAfterPowerDown
+#endif
+#ifdef ROM_SysCtrl_DCDC_VoltageConditionalControl
+#undef  SysCtrl_DCDC_VoltageConditionalControl
+#define SysCtrl_DCDC_VoltageConditionalControl ROM_SysCtrl_DCDC_VoltageConditionalControl
+#endif
+#ifdef ROM_SysCtrlResetSourceGet
+#undef  SysCtrlResetSourceGet
+#define SysCtrlResetSourceGet           ROM_SysCtrlResetSourceGet
+#endif
 #endif
 
 //*****************************************************************************

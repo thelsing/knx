@@ -377,7 +377,8 @@ extern "C" {
  * |AESCTR_RETURN_BEHAVIOR_POLLING  | X     | X     | X     |
  *
  */
-typedef enum {
+typedef enum
+{
     AESCTR_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
                                              *   CTR operation goes on in the background. The registered
                                              *   callback function is called after the operation completes.
@@ -397,7 +398,8 @@ typedef enum {
 /*!
  *  @brief  Enum for the direction of the CTR operation.
  */
-typedef enum {
+typedef enum
+{
     AESCTR_MODE_ENCRYPT = 1,
     AESCTR_MODE_DECRYPT = 2,
 } AESCTR_Mode;
@@ -409,31 +411,33 @@ typedef enum {
  *  The driver may access it at any point during the operation. It must remain
  *  in scope for the entire duration of the operation.
  */
-typedef struct {
-   const CryptoKey          *key;                       /*!< A previously initialized CryptoKey. */
-   const uint8_t            *input;                     /*!<
+typedef struct
+{
+    const CryptoKey*          key;                       /*!< A previously initialized CryptoKey. */
+    const uint8_t*            input;                     /*!<
                                                          *   - Encryption: The plaintext buffer to be
                                                          *     encrypted in the CTR operation.
                                                          *   - Decryption: The ciphertext to be decrypted.
                                                          */
-   uint8_t                  *output;                    /*!<
+    uint8_t*                  output;                    /*!<
                                                          *   - Encryption: The output ciphertext buffer that
                                                          *     the encrypted plaintext is copied to.
                                                          *   - Decryption: The plaintext derived from the
                                                          *     decrypted ciphertext is copied here.
                                                          */
-   const uint8_t            *initialCounter;            /*!< A buffer containing an initial counter. Under
+    const uint8_t*            initialCounter;            /*!< A buffer containing an initial counter. Under
                                                          *   the same key, each counter value may only be
                                                          *   used to encrypt or decrypt a single input
                                                          *   block.
                                                          */
-   size_t                   inputLength;                /*!< Length of the input and output in bytes. */
+    size_t                   inputLength;                /*!< Length of the input and output in bytes. */
 } AESCTR_Operation;
 
 /*!
  *  @brief  Enum for the operation types supported by the driver.
  */
-typedef enum {
+typedef enum
+{
     AESCTR_OPERATION_TYPE_ENCRYPT = 1,
     AESCTR_OPERATION_TYPE_DECRYPT = 2,
 } AESCTR_OperationType;
@@ -449,18 +453,19 @@ typedef enum {
  *
  *  @sa     #AESCTR_init()
  */
-typedef struct AESCTR_Config {
+typedef struct AESCTR_Config
+{
     /*! Pointer to a driver specific data object */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } AESCTR_Config;
 
 /*!
  *  @brief  A handle that is returned from an #AESCTR_open() call.
  */
-typedef AESCTR_Config *AESCTR_Handle;
+typedef AESCTR_Config* AESCTR_Handle;
 
 /*!
  *  @brief  The definition of a callback function used by the AESCTR driver
@@ -479,7 +484,7 @@ typedef AESCTR_Config *AESCTR_Handle;
  */
 typedef void (*AESCTR_CallbackFxn) (AESCTR_Handle handle,
                                     int_fast16_t returnValue,
-                                    AESCTR_Operation *operation,
+                                    AESCTR_Operation* operation,
                                     AESCTR_OperationType operationType);
 
 /*!
@@ -490,13 +495,14 @@ typedef void (*AESCTR_CallbackFxn) (AESCTR_Handle handle,
  *
  *  @sa     #AESCTR_Params_init()
  */
-typedef struct {
+typedef struct
+{
     AESCTR_ReturnBehavior   returnBehavior;             /*!< Blocking, callback, or polling return behavior */
     AESCTR_CallbackFxn      callbackFxn;                /*!< Callback function pointer */
     uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
                                                          *   ::AESCTR_RETURN_BEHAVIOR_BLOCKING
                                                          */
-    void                   *custom;                     /*!< Custom argument used by driver
+    void*                   custom;                     /*!< Custom argument used by driver
                                                          *   implementation
                                                          */
 } AESCTR_Params;
@@ -530,7 +536,7 @@ void AESCTR_init(void);
  *      timeout                     = SemaphoreP_WAIT_FOREVER
  *      custom                      = NULL
  */
-void AESCTR_Params_init(AESCTR_Params *params);
+void AESCTR_Params_init(AESCTR_Params* params);
 
 /*!
  *  @brief  This function opens a given AESCTR peripheral.
@@ -549,7 +555,7 @@ void AESCTR_Params_init(AESCTR_Params *params);
  *  @sa     #AESCTR_init()
  *  @sa     #AESCTR_close()
  */
-AESCTR_Handle AESCTR_open(uint_least8_t index, const AESCTR_Params *params);
+AESCTR_Handle AESCTR_open(uint_least8_t index, const AESCTR_Params* params);
 
 /*!
  *  @brief  Function to close a CTR peripheral specified by the CTR handle
@@ -570,7 +576,7 @@ void AESCTR_close(AESCTR_Handle handle);
  *
  *  Defaults values are all zeros.
  */
-void AESCTR_Operation_init(AESCTR_Operation *operationStruct);
+void AESCTR_Operation_init(AESCTR_Operation* operationStruct);
 
 /*!
  *  @brief  Function to perform an AESCTR encryption operation in one call.
@@ -591,7 +597,7 @@ void AESCTR_Operation_init(AESCTR_Operation *operationStruct);
  *
  *  @sa     #AESCTR_oneStepDecrypt()
  */
-int_fast16_t AESCTR_oneStepEncrypt(AESCTR_Handle handle, AESCTR_Operation *operationStruct);
+int_fast16_t AESCTR_oneStepEncrypt(AESCTR_Handle handle, AESCTR_Operation* operationStruct);
 
 /*!
  *  @brief  Function to perform an AESCTR decryption operation in one call.
@@ -612,7 +618,7 @@ int_fast16_t AESCTR_oneStepEncrypt(AESCTR_Handle handle, AESCTR_Operation *opera
  *
  *  @sa     AESCTR_oneStepEncrypt()
  */
-int_fast16_t AESCTR_oneStepDecrypt(AESCTR_Handle handle, AESCTR_Operation *operationStruct);
+int_fast16_t AESCTR_oneStepDecrypt(AESCTR_Handle handle, AESCTR_Operation* operationStruct);
 
 /*!
  *  @brief Cancels an ongoing AESCTR operation.

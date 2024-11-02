@@ -3,11 +3,11 @@
 
 #include <Arduino.h>
 #ifndef KNX_NO_SPI
-#include <SPI.h>
+    #include <SPI.h>
 #endif
 
 #ifndef KNX_NO_PRINT
-Stream* ArduinoPlatform::SerialDebug = &KNX_DEBUG_SERIAL;
+    Stream* ArduinoPlatform::SerialDebug = &KNX_DEBUG_SERIAL;
 #endif
 
 ArduinoPlatform::ArduinoPlatform() : _knxSerial(nullptr)
@@ -29,6 +29,7 @@ void ArduinoPlatform::fatalError()
             digitalWrite(KNX_LED, HIGH);
         else
             digitalWrite(KNX_LED, LOW);
+
 #endif
     }
 }
@@ -37,6 +38,7 @@ void ArduinoPlatform::knxUart( HardwareSerial* serial )
 {
     if (_knxSerial)
         closeUart();
+
     _knxSerial = serial;
     setupUart();
 }
@@ -49,7 +51,8 @@ HardwareSerial* ArduinoPlatform::knxUart()
 void ArduinoPlatform::setupUart()
 {
     _knxSerial->begin(19200, SERIAL_8E1);
-    while (!_knxSerial) 
+
+    while (!_knxSerial)
         ;
 }
 
@@ -73,7 +76,7 @@ size_t ArduinoPlatform::writeUart(const uint8_t data)
 }
 
 
-size_t ArduinoPlatform::writeUart(const uint8_t *buffer, size_t size)
+size_t ArduinoPlatform::writeUart(const uint8_t* buffer, size_t size)
 {
     //printHex("<p", buffer, size);
     return _knxSerial->write(buffer, size);
@@ -89,16 +92,18 @@ int ArduinoPlatform::readUart()
 }
 
 
-size_t ArduinoPlatform::readBytesUart(uint8_t *buffer, size_t length)
+size_t ArduinoPlatform::readBytesUart(uint8_t* buffer, size_t length)
 {
     size_t toRead = length;
     uint8_t* pos = buffer;
+
     while (toRead > 0)
     {
         size_t val = _knxSerial->readBytes(pos, toRead);
         pos += val;
         toRead -= val;
     }
+
     //printHex("p>", buffer, length);
     return length;
 }
@@ -121,7 +126,7 @@ void ArduinoPlatform::closeSpi()
     SPI.end();
 }
 
-int ArduinoPlatform::readWriteSpi(uint8_t *data, size_t len)
+int ArduinoPlatform::readWriteSpi(uint8_t* data, size_t len)
 {
     SPI.transfer(data, len);
     return 0;
@@ -130,20 +135,22 @@ int ArduinoPlatform::readWriteSpi(uint8_t *data, size_t len)
 
 #ifndef KNX_NO_PRINT
 void printUint64(uint64_t value, int base = DEC)
-  {
+{
     char buf[8 * sizeof(uint64_t) + 1];
     char* str = &buf[sizeof(buf) - 1];
     *str = '\0';
 
     uint64_t n = value;
-    do {
-      char c = n % base;
-      n /= base;
 
-      *--str = c < 10 ? c + '0' : c + 'A' - 10;
+    do
+    {
+        char c = n % base;
+        n /= base;
+
+        *--str = c < 10 ? c + '0' : c + 'A' - 10;
     } while (n > 0);
 
-     print(str);
+    print(str);
 }
 
 void print(const char* s)

@@ -41,28 +41,33 @@ void TPDU::type(TpduType type)
 {
     switch (type)
     {
-    case DataBroadcast:
-    case DataGroup:
-    case DataInduvidual:
-        _data[0] &= 0x3;
-        break;
-    case DataConnected:
-        _data[0] &= 0xC3;
-        _data[0] |= 0x40;
-        break;
-    case Connect:
-        _data[0] = 0x80;
-        break;
-    case Disconnect:
-        _data[0] = 0x81;
-        break;
-    case Ack:
-        _data[0] &= ~0xC3;
-        _data[0] |= 0xC2;
-        break;
-    case Nack:
-        _data[0] |= 0xC3;
-        break;
+        case DataBroadcast:
+        case DataGroup:
+        case DataInduvidual:
+            _data[0] &= 0x3;
+            break;
+
+        case DataConnected:
+            _data[0] &= 0xC3;
+            _data[0] |= 0x40;
+            break;
+
+        case Connect:
+            _data[0] = 0x80;
+            break;
+
+        case Disconnect:
+            _data[0] = 0x81;
+            break;
+
+        case Ack:
+            _data[0] &= ~0xC3;
+            _data[0] |= 0xC2;
+            break;
+
+        case Nack:
+            _data[0] |= 0xC3;
+            break;
     }
 }
 
@@ -115,13 +120,13 @@ CemiFrame& TPDU::frame()
 
 void TPDU::printPDU()
 {
-/*    print.print("TPDU: ");
-    print.print(type(), HEX, 2);
-    print.print("    ");
-    for (uint8_t i = 0; i < apdu().length() + 1; ++i)
-    {
-        if (i) print.print(" ");
-        print.print(_data[i], HEX, 2);
-    }
-    print.println()*/;
+    /*    print.print("TPDU: ");
+        print.print(type(), HEX, 2);
+        print.print("    ");
+        for (uint8_t i = 0; i < apdu().length() + 1; ++i)
+        {
+            if (i) print.print(" ");
+            print.print(_data[i], HEX, 2);
+        }
+        print.println()*/;
 }

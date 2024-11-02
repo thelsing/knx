@@ -4,7 +4,7 @@
 #include "cemi_frame.h"
 #include "bits.h"
 
-NetworkLayerDevice::NetworkLayerDevice(DeviceObject &deviceObj, TransportLayer& layer) :
+NetworkLayerDevice::NetworkLayerDevice(DeviceObject& deviceObj, TransportLayer& layer) :
     NetworkLayer(deviceObj, layer),
     _netLayerEntities { {*this, kInterfaceIndex} }
 {
@@ -96,11 +96,13 @@ void NetworkLayerDevice::dataIndication(AckType ack, AddressType addrType, uint1
 void NetworkLayerDevice::dataConfirm(AckType ack, AddressType addressType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
+
     if (addressType == IndividualAddress)
     {
         _transportLayer.dataIndividualConfirm(ack, destination, hopType, priority, npdu.tpdu(), status);
         return;
     }
+
     // group-address type
     if (destination != 0)
     {
@@ -119,7 +121,7 @@ void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NP
     // so we "translate" it to system broadcast like a coupler does when routing
     // between closed and open media
     if ( ((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
-          isApciSystemBroadcast(npdu.tpdu().apdu()))
+            isApciSystemBroadcast(npdu.tpdu().apdu()))
     {
         npdu.frame().systemBroadcast(SysBroadcast);
         _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());

@@ -40,17 +40,17 @@
 #define __DATA_ENTRY_H
 
 #ifndef __RFC_STRUCT
-#define __RFC_STRUCT
+    #define __RFC_STRUCT
 #endif
 
 #ifndef __RFC_STRUCT_ATTR
-#if defined(__GNUC__)
-#define __RFC_STRUCT_ATTR __attribute__ ((aligned (4)))
-#elif defined(__TI_ARM__)
-#define __RFC_STRUCT_ATTR __attribute__ ((__packed__,aligned (4)))
-#else
-#define __RFC_STRUCT_ATTR
-#endif
+    #if defined(__GNUC__)
+        #define __RFC_STRUCT_ATTR __attribute__ ((aligned (4)))
+    #elif defined(__TI_ARM__)
+        #define __RFC_STRUCT_ATTR __attribute__ ((__packed__,aligned (4)))
+    #else
+        #define __RFC_STRUCT_ATTR
+    #endif
 #endif
 
 //! \addtogroup rfc
@@ -70,25 +70,27 @@ typedef struct __RFC_STRUCT rfc_dataEntryPartial_s rfc_dataEntryPartial_t;
 
 //! \addtogroup dataEntry
 //! @{
-struct __RFC_STRUCT rfc_dataEntry_s {
-   uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
-   uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
-   struct {
-      uint8_t type:2;                   //!< \brief Type of data entry structure<br>
-                                        //!<        0: General data entry <br>
-                                        //!<        1: Multi-element Rx entry<br>
-                                        //!<        2: Pointer entry<br>
-                                        //!<        3: Partial read Rx entry
-      uint8_t lenSz:2;                  //!< \brief Size of length word in start of each Rx entry element<br>
-                                        //!<        0: No length indicator<br>
-                                        //!<        1: One byte length indicator<br>
-                                        //!<        2: Two bytes length indicator<br>
-                                        //!<        3: <i>Reserved</i>
-      uint8_t irqIntv:4;                //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
-                                        //!<        by the radio CPU (0: 16 bytes)
-   } config;
-   uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
-                                        //!<        For other entries: Number of bytes following this length field
+struct __RFC_STRUCT rfc_dataEntry_s
+{
+    uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
+    uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
+    struct
+    {
+        uint8_t type: 2;                  //!< \brief Type of data entry structure<br>
+        //!<        0: General data entry <br>
+        //!<        1: Multi-element Rx entry<br>
+        //!<        2: Pointer entry<br>
+        //!<        3: Partial read Rx entry
+        uint8_t lenSz: 2;                 //!< \brief Size of length word in start of each Rx entry element<br>
+        //!<        0: No length indicator<br>
+        //!<        1: One byte length indicator<br>
+        //!<        2: Two bytes length indicator<br>
+        //!<        3: <i>Reserved</i>
+        uint8_t irqIntv: 4;               //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
+        //!<        by the radio CPU (0: 16 bytes)
+    } config;
+    uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
+    //!<        For other entries: Number of bytes following this length field
 } __RFC_STRUCT_ATTR;
 
 //! @}
@@ -97,26 +99,28 @@ struct __RFC_STRUCT rfc_dataEntry_s {
 //! @{
 //! General data entry structure (type = 0)
 
-struct __RFC_STRUCT rfc_dataEntryGeneral_s {
-   uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
-   uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
-   struct {
-      uint8_t type:2;                   //!< \brief Type of data entry structure<br>
-                                        //!<        0: General data entry <br>
-                                        //!<        1: Multi-element Rx entry<br>
-                                        //!<        2: Pointer entry<br>
-                                        //!<        3: Partial read Rx entry
-      uint8_t lenSz:2;                  //!< \brief Size of length word in start of each Rx entry element<br>
-                                        //!<        0: No length indicator<br>
-                                        //!<        1: One byte length indicator<br>
-                                        //!<        2: Two bytes length indicator<br>
-                                        //!<        3: <i>Reserved</i>
-      uint8_t irqIntv:4;                //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
-                                        //!<        by the radio CPU (0: 16 bytes)
-   } config;
-   uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
-                                        //!<        For other entries: Number of bytes following this length field
-   uint8_t data;                        //!<        First byte of the data array to be received or transmitted
+struct __RFC_STRUCT rfc_dataEntryGeneral_s
+{
+    uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
+    uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
+    struct
+    {
+        uint8_t type: 2;                  //!< \brief Type of data entry structure<br>
+        //!<        0: General data entry <br>
+        //!<        1: Multi-element Rx entry<br>
+        //!<        2: Pointer entry<br>
+        //!<        3: Partial read Rx entry
+        uint8_t lenSz: 2;                 //!< \brief Size of length word in start of each Rx entry element<br>
+        //!<        0: No length indicator<br>
+        //!<        1: One byte length indicator<br>
+        //!<        2: Two bytes length indicator<br>
+        //!<        3: <i>Reserved</i>
+        uint8_t irqIntv: 4;               //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
+        //!<        by the radio CPU (0: 16 bytes)
+    } config;
+    uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
+    //!<        For other entries: Number of bytes following this length field
+    uint8_t data;                        //!<        First byte of the data array to be received or transmitted
 } __RFC_STRUCT_ATTR;
 
 //! @}
@@ -125,28 +129,30 @@ struct __RFC_STRUCT rfc_dataEntryGeneral_s {
 //! @{
 //! Multi-element data entry structure (type = 1)
 
-struct __RFC_STRUCT rfc_dataEntryMulti_s {
-   uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
-   uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
-   struct {
-      uint8_t type:2;                   //!< \brief Type of data entry structure<br>
-                                        //!<        0: General data entry <br>
-                                        //!<        1: Multi-element Rx entry<br>
-                                        //!<        2: Pointer entry<br>
-                                        //!<        3: Partial read Rx entry
-      uint8_t lenSz:2;                  //!< \brief Size of length word in start of each Rx entry element<br>
-                                        //!<        0: No length indicator<br>
-                                        //!<        1: One byte length indicator<br>
-                                        //!<        2: Two bytes length indicator<br>
-                                        //!<        3: <i>Reserved</i>
-      uint8_t irqIntv:4;                //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
-                                        //!<        by the radio CPU (0: 16 bytes)
-   } config;
-   uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
-                                        //!<        For other entries: Number of bytes following this length field
-   uint16_t numElements;                //!<        Number of entry elements committed in the entry
-   uint16_t nextIndex;                  //!<        Index to the byte after the last byte of the last entry element committed by the radio CPU
-   uint8_t rxData;                      //!<        First byte of the data array of received data entry elements
+struct __RFC_STRUCT rfc_dataEntryMulti_s
+{
+    uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
+    uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
+    struct
+    {
+        uint8_t type: 2;                  //!< \brief Type of data entry structure<br>
+        //!<        0: General data entry <br>
+        //!<        1: Multi-element Rx entry<br>
+        //!<        2: Pointer entry<br>
+        //!<        3: Partial read Rx entry
+        uint8_t lenSz: 2;                 //!< \brief Size of length word in start of each Rx entry element<br>
+        //!<        0: No length indicator<br>
+        //!<        1: One byte length indicator<br>
+        //!<        2: Two bytes length indicator<br>
+        //!<        3: <i>Reserved</i>
+        uint8_t irqIntv: 4;               //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
+        //!<        by the radio CPU (0: 16 bytes)
+    } config;
+    uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
+    //!<        For other entries: Number of bytes following this length field
+    uint16_t numElements;                //!<        Number of entry elements committed in the entry
+    uint16_t nextIndex;                  //!<        Index to the byte after the last byte of the last entry element committed by the radio CPU
+    uint8_t rxData;                      //!<        First byte of the data array of received data entry elements
 } __RFC_STRUCT_ATTR;
 
 //! @}
@@ -155,26 +161,28 @@ struct __RFC_STRUCT rfc_dataEntryMulti_s {
 //! @{
 //! Pointer data entry structure (type = 2)
 
-struct __RFC_STRUCT rfc_dataEntryPointer_s {
-   uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
-   uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
-   struct {
-      uint8_t type:2;                   //!< \brief Type of data entry structure<br>
-                                        //!<        0: General data entry <br>
-                                        //!<        1: Multi-element Rx entry<br>
-                                        //!<        2: Pointer entry<br>
-                                        //!<        3: Partial read Rx entry
-      uint8_t lenSz:2;                  //!< \brief Size of length word in start of each Rx entry element<br>
-                                        //!<        0: No length indicator<br>
-                                        //!<        1: One byte length indicator<br>
-                                        //!<        2: Two bytes length indicator<br>
-                                        //!<        3: <i>Reserved</i>
-      uint8_t irqIntv:4;                //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
-                                        //!<        by the radio CPU (0: 16 bytes)
-   } config;
-   uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
-                                        //!<        For other entries: Number of bytes following this length field
-   uint8_t* pData;                      //!<        Pointer to data buffer of data to be received ro transmitted
+struct __RFC_STRUCT rfc_dataEntryPointer_s
+{
+    uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
+    uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
+    struct
+    {
+        uint8_t type: 2;                  //!< \brief Type of data entry structure<br>
+        //!<        0: General data entry <br>
+        //!<        1: Multi-element Rx entry<br>
+        //!<        2: Pointer entry<br>
+        //!<        3: Partial read Rx entry
+        uint8_t lenSz: 2;                 //!< \brief Size of length word in start of each Rx entry element<br>
+        //!<        0: No length indicator<br>
+        //!<        1: One byte length indicator<br>
+        //!<        2: Two bytes length indicator<br>
+        //!<        3: <i>Reserved</i>
+        uint8_t irqIntv: 4;               //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
+        //!<        by the radio CPU (0: 16 bytes)
+    } config;
+    uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
+    //!<        For other entries: Number of bytes following this length field
+    uint8_t* pData;                      //!<        Pointer to data buffer of data to be received ro transmitted
 } __RFC_STRUCT_ATTR;
 
 //! @}
@@ -183,33 +191,36 @@ struct __RFC_STRUCT rfc_dataEntryPointer_s {
 //! @{
 //! Partial read data entry structure (type = 3)
 
-struct __RFC_STRUCT rfc_dataEntryPartial_s {
-   uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
-   uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
-   struct {
-      uint8_t type:2;                   //!< \brief Type of data entry structure<br>
-                                        //!<        0: General data entry <br>
-                                        //!<        1: Multi-element Rx entry<br>
-                                        //!<        2: Pointer entry<br>
-                                        //!<        3: Partial read Rx entry
-      uint8_t lenSz:2;                  //!< \brief Size of length word in start of each Rx entry element<br>
-                                        //!<        0: No length indicator<br>
-                                        //!<        1: One byte length indicator<br>
-                                        //!<        2: Two bytes length indicator<br>
-                                        //!<        3: <i>Reserved</i>
-      uint8_t irqIntv:4;                //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
-                                        //!<        by the radio CPU (0: 16 bytes)
-   } config;
-   uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
-                                        //!<        For other entries: Number of bytes following this length field
-   struct {
-      uint16_t numElements:13;          //!<        Number of entry elements committed in the entry
-      uint16_t bEntryOpen:1;            //!<        1 if the entry contains an element that is still open for appending data
-      uint16_t bFirstCont:1;            //!<        1 if the first element is a continuation of the last packet from the previous entry
-      uint16_t bLastCont:1;             //!<        1 if the packet in the last element continues in the next entry
-   } pktStatus;
-   uint16_t nextIndex;                  //!<        Index to the byte after the last byte of the last entry element committed by the radio CPU
-   uint8_t rxData;                      //!<        First byte of the data array of received data entry elements
+struct __RFC_STRUCT rfc_dataEntryPartial_s
+{
+    uint8_t* pNextEntry;                 //!<        Pointer to next entry in the queue, NULL if this is the last entry
+    uint8_t status;                      //!<        Indicates status of entry, including whether it is free for the system CPU to write to
+    struct
+    {
+        uint8_t type: 2;                  //!< \brief Type of data entry structure<br>
+        //!<        0: General data entry <br>
+        //!<        1: Multi-element Rx entry<br>
+        //!<        2: Pointer entry<br>
+        //!<        3: Partial read Rx entry
+        uint8_t lenSz: 2;                 //!< \brief Size of length word in start of each Rx entry element<br>
+        //!<        0: No length indicator<br>
+        //!<        1: One byte length indicator<br>
+        //!<        2: Two bytes length indicator<br>
+        //!<        3: <i>Reserved</i>
+        uint8_t irqIntv: 4;               //!< \brief For partial read Rx entry only: The number of bytes between interrupt generated
+        //!<        by the radio CPU (0: 16 bytes)
+    } config;
+    uint16_t length;                     //!< \brief For pointer entries: Number of bytes in the data buffer pointed to<br>
+    //!<        For other entries: Number of bytes following this length field
+    struct
+    {
+        uint16_t numElements: 13;         //!<        Number of entry elements committed in the entry
+        uint16_t bEntryOpen: 1;           //!<        1 if the entry contains an element that is still open for appending data
+        uint16_t bFirstCont: 1;           //!<        1 if the first element is a continuation of the last packet from the previous entry
+        uint16_t bLastCont: 1;            //!<        1 if the packet in the last element continues in the next entry
+    } pktStatus;
+    uint16_t nextIndex;                  //!<        Index to the byte after the last byte of the last entry element committed by the radio CPU
+    uint8_t rxData;                      //!<        First byte of the data array of received data entry elements
 } __RFC_STRUCT_ATTR;
 
 //! @}

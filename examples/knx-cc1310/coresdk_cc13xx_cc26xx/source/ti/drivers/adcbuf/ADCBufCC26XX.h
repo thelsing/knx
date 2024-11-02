@@ -387,7 +387,8 @@ extern const ADCBuf_FxnTable ADCBufCC26XX_fxnTable;
  *  In ADCBufCC26XX_SYNCHRONOUS mode, the ADC goes into IDLE in between conversions and uses less power.
  *  The minimum sample time for full precision in ADCBufCC26XX_SAMPING_MODE_SYNCHRONOUS is dependent on the input load.
  */
-typedef enum ADCBufCC26XX_Sampling_Mode {
+typedef enum ADCBufCC26XX_Sampling_Mode
+{
     ADCBufCC26XX_SAMPING_MODE_SYNCHRONOUS,
     ADCBufCC26XX_SAMPING_MODE_ASYNCHRONOUS
 } ADCBufCC26XX_Sampling_Mode;
@@ -400,7 +401,8 @@ typedef enum ADCBufCC26XX_Sampling_Mode {
  *  analogue input signal. Larger input loads require longer sample times for the most accurate
  *  results. In ADCBufCC26XX_SAMPING_MODE_SYNCHRONOUS mode, this enum specifies the sampling times available.
  */
-typedef enum ADCBufCC26XX_Sampling_Duration {
+typedef enum ADCBufCC26XX_Sampling_Duration
+{
     ADCBufCC26XX_SAMPLING_DURATION_2P7_US    = AUXADC_SAMPLE_TIME_2P7_US,
     ADCBufCC26XX_SAMPLING_DURATION_5P3_US    = AUXADC_SAMPLE_TIME_5P3_US,
     ADCBufCC26XX_SAMPLING_DURATION_10P6_US   = AUXADC_SAMPLE_TIME_10P6_US,
@@ -437,7 +439,8 @@ typedef enum ADCBufCC26XX_Sampling_Duration {
  *  @warning    Even though the upper voltage range of the ADC is 4.3 volts in fixed mode with input scaling enabled, the input should never exceed
  *              VDDS as per the data sheet.
  */
-typedef enum ADCBufCC26XX_Reference_Source {
+typedef enum ADCBufCC26XX_Reference_Source
+{
     ADCBufCC26XX_FIXED_REFERENCE       = AUXADC_REF_FIXED,
     ADCBufCC26XX_VDDS_REFERENCE        = AUXADC_REF_VDDS_REL
 } ADCBufCC26XX_Reference_Source;
@@ -450,13 +453,14 @@ typedef enum ADCBufCC26XX_Reference_Source {
  * =============================================================================
  */
 
- /*!
- *  @brief  Table entry that maps a virtual adc channel to a dio and its corresponding internal analogue signal
- *
- *  Non-dio signals can be used as well. To do this, compBInput is set to the driverlib define corresponding to the
- *  desired non-dio signal and dio is set to PIN_UNASSIGNED.
- */
-typedef struct ADCBufCC26XX_AdcChannelLutEntry{
+/*!
+*  @brief  Table entry that maps a virtual adc channel to a dio and its corresponding internal analogue signal
+*
+*  Non-dio signals can be used as well. To do this, compBInput is set to the driverlib define corresponding to the
+*  desired non-dio signal and dio is set to PIN_UNASSIGNED.
+*/
+typedef struct ADCBufCC26XX_AdcChannelLutEntry
+{
     uint8_t dio;            /*!< DIO that this virtual channel is mapped to */
     uint8_t compBInput;     /*!< CompBInput that this virtual channel is mapped to */
 } ADCBufCC26XX_AdcChannelLutEntry;
@@ -468,7 +472,8 @@ typedef struct ADCBufCC26XX_AdcChannelLutEntry{
  *  to an instance of this struct must be specified in ADCBuf_Params::custom. Alternatively,
  *  these values can be set using the control function after calling ADCBuf_open().
  */
-typedef struct ADCBufCC26XX_ParamsExtension{
+typedef struct ADCBufCC26XX_ParamsExtension
+{
     /*! Amount of time the ADC spends sampling the analogue input */
     ADCBufCC26XX_Sampling_Duration     samplingDuration;
     /*! Specifies whether the ADC spends a fixed amount of time sampling or the entire time since the last conversion */
@@ -513,7 +518,8 @@ typedef struct ADCBufCC26XX_ParamsExtension{
  *  };
  *  @endcode
  */
-typedef struct ADCBufCC26XX_HWAttrs{
+typedef struct ADCBufCC26XX_HWAttrs
+{
     /*! @brief ADC SWI priority.
         The higher the number, the higher the priority.
         The minimum is 0 and the maximum is 15 by default.
@@ -535,7 +541,7 @@ typedef struct ADCBufCC26XX_HWAttrs{
     */
     uint8_t             intPriority;
     /*! Pointer to a table of ADCBufCC26XX_AdcChannelLutEntry's mapping internal CompBInput to DIO */
-    ADCBufCC26XX_AdcChannelLutEntry  const *adcChannelLut;
+    ADCBufCC26XX_AdcChannelLutEntry  const* adcChannelLut;
 } ADCBufCC26XX_HWAttrs;
 
 
@@ -545,7 +551,8 @@ typedef struct ADCBufCC26XX_HWAttrs{
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct ADCBufCC26XX_Object{
+typedef struct ADCBufCC26XX_Object
+{
     /* ADC control variables */
     bool                            isOpen;                     /*!< Has the obj been opened */
     bool                            conversionInProgress;       /*!< Is the ADC currently doing conversions */
@@ -555,18 +562,18 @@ typedef struct ADCBufCC26XX_Object{
     uint8_t                         currentChannel;             /*!< The current virtual channel the ADCBuf driver is sampling on */
     ADCBufCC26XX_Reference_Source   refSource;                  /*!< Reference source for the ADC to use */
     ADCBufCC26XX_Sampling_Mode      samplingMode;               /*!< Synchronous or asynchronous sampling mode */
-   ADCBufCC26XX_Sampling_Duration   samplingDuration;           /*!< Time the ADC spends sampling in ADCBufCC26XX_SAMPING_MODE_SYNCHRONOUS */
+    ADCBufCC26XX_Sampling_Duration   samplingDuration;           /*!< Time the ADC spends sampling in ADCBufCC26XX_SAMPING_MODE_SYNCHRONOUS */
     ADCBuf_Callback                 callbackFxn;                /*!< Pointer to callback function */
     ADCBuf_Recurrence_Mode          recurrenceMode;             /*!< Should we convert continuously or one-shot */
     ADCBuf_Return_Mode              returnMode;                 /*!< Mode for all conversions */
-    uint16_t                        *activeSampleBuffer;        /*!< The last complete sample buffer used by the DMA */
+    uint16_t*                        activeSampleBuffer;        /*!< The last complete sample buffer used by the DMA */
 
     /* ADC SYS/BIOS objects */
     HwiP_Struct                      hwi;                        /*!< Hwi object */
     SwiP_Struct                      swi;                        /*!< Swi object */
     SemaphoreP_Struct                conversionComplete;         /*!< ADC semaphore */
 
-    ADCBuf_Conversion               *currentConversion;         /*!< Pointer to the current conversion struct */
+    ADCBuf_Conversion*               currentConversion;         /*!< Pointer to the current conversion struct */
 
     /* PIN driver state object and handle */
     PIN_State                       pinState;                   /*!< Pin state object */

@@ -54,7 +54,8 @@ int32_t dptFromFloat(uint16_t dptValue)
 
     if (dptValue >= 0x8000)
         value = dptValue | (-1L & ~2047);
-    else value = dptValue & 2047;
+    else
+        value = dptValue & 2047;
 
     for (; exp; --exp)
         value <<= 1;

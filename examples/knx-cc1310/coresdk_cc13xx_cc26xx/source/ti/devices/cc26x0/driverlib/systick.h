@@ -247,7 +247,7 @@ __STATIC_INLINE uint32_t
 SysTickPeriodGet(void)
 {
     // Return the period of the SysTick counter.
-    return(HWREG(NVIC_ST_RELOAD) + 1);
+    return (HWREG(NVIC_ST_RELOAD) + 1);
 }
 
 //*****************************************************************************
@@ -264,7 +264,7 @@ __STATIC_INLINE uint32_t
 SysTickValueGet(void)
 {
     // Return the current value of the SysTick counter.
-    return(HWREG(NVIC_ST_CURRENT));
+    return (HWREG(NVIC_ST_CURRENT));
 }
 
 //*****************************************************************************

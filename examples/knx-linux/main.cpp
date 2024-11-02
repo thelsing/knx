@@ -19,10 +19,10 @@
 volatile sig_atomic_t loopActive = 1;
 void signalHandler(int sig)
 {
-  (void)sig;
+    (void)sig;
 
-  // can be called asynchronously
-  loopActive = 0;
+    // can be called asynchronously
+    loopActive = 0;
 }
 
 bool sendHidReport(uint8_t* data, uint16_t length)
@@ -35,13 +35,13 @@ bool isSendHidReportPossible()
 }
 
 #if MASK_VERSION == 0x57B0
-KnxFacade<LinuxPlatform, Bau57B0> knx;
+    KnxFacade<LinuxPlatform, Bau57B0> knx;
 #elif MASK_VERSION == 0x27B0
-KnxFacade<LinuxPlatform, Bau27B0> knx;
+    KnxFacade<LinuxPlatform, Bau27B0> knx;
 #elif MASK_VERSION == 0x07B0
-KnxFacade<LinuxPlatform, Bau07B0> knx;
+    KnxFacade<LinuxPlatform, Bau07B0> knx;
 #else
-#error Mask version not supported yet!
+    #error Mask version not supported yet!
 #endif
 
 long lastsend = 0;
@@ -54,6 +54,7 @@ long lastsend = 0;
 void measureTemp()
 {
     long now = millis();
+
     if ((now - lastsend) < 10000)
         return;
 
@@ -68,6 +69,7 @@ void measureTemp()
     GO_CURR.value(currentValue);
 
     double max = GO_MAX.value();
+
     if (currentValue > max)
         GO_MAX.value(currentValue);
 
@@ -88,7 +90,7 @@ void appLoop()
 {
     if (!knx.configured())
         return;
-    
+
     measureTemp();
 }
 
@@ -117,10 +119,11 @@ void setup()
     }
     else
         println("not configured");
+
     knx.start();
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     printf("main() start.\n");
 
@@ -146,12 +149,14 @@ int main(int argc, char **argv)
     knx.platform().cmdLineArgs(argc, argv);
 
     setup();
-    
+
     while (loopActive)
     {
         knx.loop();
-        if(knx.configured())
+
+        if (knx.configured())
             appLoop();
+
         delayMicroseconds(100);
     }
 

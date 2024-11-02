@@ -186,7 +186,7 @@ AONIOCDriveStrengthGet(uint32_t ui32DriveLevel)
            (ui32DriveLevel == AONIOC_DRV_LVL_MAX));
 
     // Return the drive strength value.
-    return( HWREG(AON_IOC_BASE + ui32DriveLevel) );
+    return ( HWREG(AON_IOC_BASE + ui32DriveLevel) );
 }
 
 //*****************************************************************************

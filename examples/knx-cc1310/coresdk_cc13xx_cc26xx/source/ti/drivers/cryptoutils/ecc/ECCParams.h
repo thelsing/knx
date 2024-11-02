@@ -92,7 +92,8 @@ extern "C" {
  *  | Edwards           | x^2 + y^2 = 1 + dx^2y^2 mod p |
  *
  */
-typedef enum ECCParams_CurveType_ {
+typedef enum ECCParams_CurveType_
+{
     ECCParams_CURVE_TYPE_SHORT_WEIERSTRASS = 0,
     ECCParams_CURVE_TYPE_MONTGOMERY,
     ECCParams_CURVE_TYPE_EDWARDS,
@@ -108,15 +109,16 @@ typedef enum ECCParams_CurveType_ {
  *  form y^3 = x^2 + a*x + b
  *
  */
-typedef struct ECCParams_CurveParams_ {
+typedef struct ECCParams_CurveParams_
+{
     const ECCParams_CurveType   curveType;
     const size_t                length;         //!< Length of the curve in bytes. All other buffers have this length.
-    const uint8_t               *prime;         //!< The prime that defines the field of the curve.
-    const uint8_t               *order;         //!< Order of the curve.
-    const uint8_t               *a;             //!< Coefficient a of the equation.
-    const uint8_t               *b;             //!< Coefficient b of the equation.
-    const uint8_t               *generatorX;    //!< X coordinate of the generator point of the curve.
-    const uint8_t               *generatorY;    //!< Y coordinate of the generator point of the curve.
+    const uint8_t*               prime;         //!< The prime that defines the field of the curve.
+    const uint8_t*               order;         //!< Order of the curve.
+    const uint8_t*               a;             //!< Coefficient a of the equation.
+    const uint8_t*               b;             //!< Coefficient b of the equation.
+    const uint8_t*               generatorX;    //!< X coordinate of the generator point of the curve.
+    const uint8_t*               generatorY;    //!< Y coordinate of the generator point of the curve.
 }
 ECCParams_CurveParams;
 
@@ -205,7 +207,7 @@ extern const ECCParams_CurveParams ECCParams_Curve25519;
  *
  *  @pre Initialize the CryptoKey with a 32-byte buffer in a compliant location.
  */
-int_fast16_t ECCParams_FormatCurve25519PrivateKey(CryptoKey *myPrivateKey);
+int_fast16_t ECCParams_FormatCurve25519PrivateKey(CryptoKey* myPrivateKey);
 
 #ifdef __cplusplus
 }

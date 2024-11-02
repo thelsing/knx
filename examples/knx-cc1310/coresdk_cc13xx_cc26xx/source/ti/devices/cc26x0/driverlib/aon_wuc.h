@@ -83,9 +83,9 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AONWUCAuxReset                  NOROM_AONWUCAuxReset
-    #define AONWUCRechargeCtrlConfigSet     NOROM_AONWUCRechargeCtrlConfigSet
-    #define AONWUCOscConfig                 NOROM_AONWUCOscConfig
+#define AONWUCAuxReset                  NOROM_AONWUCAuxReset
+#define AONWUCRechargeCtrlConfigSet     NOROM_AONWUCRechargeCtrlConfigSet
+#define AONWUCOscConfig                 NOROM_AONWUCOscConfig
 #endif
 
 //*****************************************************************************
@@ -94,11 +94,11 @@ extern "C"
 //
 //*****************************************************************************
 #define AONWUC_CLOCK_SRC_HF     0x00000003  // System clock high frequency -
-                                            // 48 MHz.
+// 48 MHz.
 #define AONWUC_CLOCK_SRC_LF     0x00000001  // System clock low frequency -
-                                            // 32 kHz.
+// 32 kHz.
 #define AONWUC_NO_CLOCK         0x00000000  // System clock low frequency -
-                                            // 32 kHz.
+// 32 kHz.
 
 //*****************************************************************************
 //
@@ -186,15 +186,15 @@ extern "C"
 
 //*****************************************************************************
 #define RC_RATE_MAX                   768   // Maximum recharge rate for the
-                                            // recharge controller.
+// recharge controller.
 #define RC_RATE_MIN                     2   // Minimum recharge rate for the
-                                            // recharge controller.
+// recharge controller.
 
 //*****************************************************************************
 #define AONWUC_MCU_RESET_SRC    0x00000002  // MCU reset source can be SW or
-                                            // JTAG
+// JTAG
 #define AONWUC_MCU_WARM_RESET   0x00000001  // MCU reset type and can be warm
-                                            // or not warm.
+// or not warm.
 
 //*****************************************************************************
 //
@@ -235,8 +235,8 @@ AONWUCMcuPowerDownConfig(uint32_t ui32ClkSrc)
     ui32Reg = HWREG(AON_WUC_BASE + AON_WUC_O_MCUCLK);
     ui32Reg &= ~AON_WUC_MCUCLK_PWR_DWN_SRC_M;
     HWREG(AON_WUC_BASE + AON_WUC_O_MCUCLK) = ui32Reg |
-                                             (ui32ClkSrc <<
-                                              AON_WUC_MCUCLK_PWR_DWN_SRC_S);
+            (ui32ClkSrc <<
+             AON_WUC_MCUCLK_PWR_DWN_SRC_S);
 }
 
 //*****************************************************************************
@@ -365,7 +365,7 @@ AONWUCAuxClockConfigGet(void)
     // Return the clock divider value.
     return ((HWREG(AON_WUC_BASE + AON_WUC_O_AUXCLK) &
              AON_WUC_AUXCLK_SCLK_HF_DIV_M) >>
-             AON_WUC_AUXCLK_SCLK_HF_DIV_S);
+            AON_WUC_AUXCLK_SCLK_HF_DIV_S);
 }
 
 //*****************************************************************************
@@ -399,8 +399,8 @@ AONWUCAuxPowerDownConfig(uint32_t ui32ClkSrc)
     ui32Reg = HWREG(AON_WUC_BASE + AON_WUC_O_AUXCLK);
     ui32Reg &= ~AON_WUC_AUXCLK_PWR_DWN_SRC_M;
     HWREG(AON_WUC_BASE + AON_WUC_O_AUXCLK) = ui32Reg |
-                                             (ui32ClkSrc <<
-                                              AON_WUC_AUXCLK_PWR_DWN_SRC_S);
+            (ui32ClkSrc <<
+             AON_WUC_AUXCLK_PWR_DWN_SRC_S);
 }
 
 
@@ -734,7 +734,7 @@ __STATIC_INLINE uint32_t
 AONWUCRechargeCtrlConfigGet(void)
 {
     // Return the current configuration.
-    return(HWREG(AON_WUC_BASE + AON_WUC_O_RECHARGECFG));
+    return (HWREG(AON_WUC_BASE + AON_WUC_O_RECHARGECFG));
 }
 
 //*****************************************************************************
@@ -803,19 +803,19 @@ AONWUCJtagPowerOff(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AONWUCAuxReset
-        #undef  AONWUCAuxReset
-        #define AONWUCAuxReset                  ROM_AONWUCAuxReset
-    #endif
-    #ifdef ROM_AONWUCRechargeCtrlConfigSet
-        #undef  AONWUCRechargeCtrlConfigSet
-        #define AONWUCRechargeCtrlConfigSet     ROM_AONWUCRechargeCtrlConfigSet
-    #endif
-    #ifdef ROM_AONWUCOscConfig
-        #undef  AONWUCOscConfig
-        #define AONWUCOscConfig                 ROM_AONWUCOscConfig
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AONWUCAuxReset
+#undef  AONWUCAuxReset
+#define AONWUCAuxReset                  ROM_AONWUCAuxReset
+#endif
+#ifdef ROM_AONWUCRechargeCtrlConfigSet
+#undef  AONWUCRechargeCtrlConfigSet
+#define AONWUCRechargeCtrlConfigSet     ROM_AONWUCRechargeCtrlConfigSet
+#endif
+#ifdef ROM_AONWUCOscConfig
+#undef  AONWUCOscConfig
+#define AONWUCOscConfig                 ROM_AONWUCOscConfig
+#endif
 #endif
 
 //*****************************************************************************

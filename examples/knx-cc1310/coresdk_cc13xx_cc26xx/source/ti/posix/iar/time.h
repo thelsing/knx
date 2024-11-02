@@ -39,7 +39,7 @@
 
 /* compiler vendor check */
 #ifndef __IAR_SYSTEMS_ICC__
-#error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
+    #error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
 #endif
 
 #include <stddef.h>
@@ -47,12 +47,12 @@
 
 /* include compiler time.h */
 #if defined(__430_CORE__) || defined(__430X_CORE__)
-#include <../inc/dlib/c/time.h>
+    #include <../inc/dlib/c/time.h>
 #else
 
-/* disable IAR inline definition of time() */
-#define _NO_DEFINITIONS_IN_HEADER_FILES 1
-#include <../inc/c/time.h>
+    /* disable IAR inline definition of time() */
+    #define _NO_DEFINITIONS_IN_HEADER_FILES 1
+    #include <../inc/c/time.h>
 #endif
 
 #include "signal.h"
@@ -88,7 +88,8 @@ extern "C" {
 #define TIMER_ABSTIME 4
 #endif
 
-struct itimerspec {
+struct itimerspec
+{
     struct timespec it_interval;  /* Timer interval */
     struct timespec it_value;     /* Timer expiration */
 };
@@ -102,30 +103,30 @@ struct itimerspec {
  *  For clockId = CLOCK_MONOTONIC, clock_gettime() returns a time based on
  *  ti.sysbios.knl.Clock ticks.
  */
-extern int clock_gettime(clockid_t clockId, struct timespec *ts);
+extern int clock_gettime(clockid_t clockId, struct timespec* ts);
 
 extern int clock_nanosleep(clockid_t clock_id, int flags,
-        const struct timespec *rqtp, struct timespec *rmtp);
+                           const struct timespec* rqtp, struct timespec* rmtp);
 
 /*
  *  Only clockId = CLOCK_REALTIME is supported for clock_settime(). Only
  *  the value of ts->tv_sec is used is used in clock_settime().
  *  Returns EINVAL if clockId = CLOCK_MONOTONIC.
  */
-extern int clock_settime(clockid_t clockId, const struct timespec *ts);
+extern int clock_settime(clockid_t clockId, const struct timespec* ts);
 
 /*
  *  Create a timer based on the BIOS Clock module.  To reduce code size,
  *  the clockId parameter is ignored.
  */
-extern int timer_create(clockid_t clockId, struct sigevent *evp,
-       timer_t *timerid);
+extern int timer_create(clockid_t clockId, struct sigevent* evp,
+                        timer_t* timerid);
 extern int timer_delete(timer_t timerid);
-extern int timer_gettime(timer_t timerid, struct itimerspec *its);
+extern int timer_gettime(timer_t timerid, struct itimerspec* its);
 extern int timer_settime(timer_t timerid, int flags,
-        const struct itimerspec *value, struct itimerspec *ovalue);
+                         const struct itimerspec* value, struct itimerspec* ovalue);
 
-extern int nanosleep(const struct timespec *rqtp, struct timespec *rmtp);
+extern int nanosleep(const struct timespec* rqtp, struct timespec* rmtp);
 
 #ifdef __cplusplus
 }

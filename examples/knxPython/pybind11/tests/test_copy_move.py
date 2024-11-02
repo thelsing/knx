@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 import pytest
+
 from pybind11_tests import copy_move_policies as m
 
 
@@ -119,7 +121,20 @@ def test_private_op_new():
 def test_move_fallback():
     """#389: rvp::move should fall-through to copy on non-movable objects"""
 
-    m2 = m.get_moveissue2(2)
-    assert m2.value == 2
     m1 = m.get_moveissue1(1)
     assert m1.value == 1
+    m2 = m.get_moveissue2(2)
+    assert m2.value == 2
+
+
+def test_pytype_rvalue_cast():
+    """Make sure that cast from pytype rvalue to other pytype works"""
+
+    value = m.get_pytype_rvalue_castissue(1.0)
+    assert value == 1
+
+
+def test_unusual_op_ref():
+    # Merely to test that this still exists and built successfully.
+    assert m.CallCastUnusualOpRefConstRef().__class__.__name__ == "UnusualOpRef"
+    assert m.CallCastUnusualOpRefMovable().__class__.__name__ == "UnusualOpRef"

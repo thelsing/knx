@@ -139,7 +139,8 @@ extern "C" {
  *  The FSM controller will increment the state counter and iterate through
  *  states until it is told to stop or restart.
  */
-typedef enum ECDHCC26X2_FsmState_ {
+typedef enum ECDHCC26X2_FsmState_
+{
     ECDHCC26X2_FSM_ERROR = 0,
 
     ECDHCC26X2_FSM_GEN_PUB_KEY_VALIDATE_PRIVATE_KEY,
@@ -168,7 +169,8 @@ typedef enum ECDHCC26X2_FsmState_ {
  *  ECC26XX hardware attributes should be included in the board file
  *  and pointed to by the ECDH_config struct.
  */
-typedef struct ECDHCC26X2_HWAttrs_ {
+typedef struct ECDHCC26X2_HWAttrs_
+{
     /*! @brief Crypto Peripheral's interrupt priority.
 
         The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
@@ -189,7 +191,8 @@ typedef struct ECDHCC26X2_HWAttrs_ {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct ECDHCC26X2_Object_ {
+typedef struct ECDHCC26X2_Object_
+{
     bool                            isOpen;
     bool                            operationInProgress;
     bool                            operationCanceled;

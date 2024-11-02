@@ -451,7 +451,8 @@ extern "C" {
  *  Defined FIFO thresholds for generation of both TX interrupt and RX interrupt.
  *  The default value (UARTCC26XX_FIFO_THRESHOLD_DEFAULT) is defined for backward compatibility handling.
  */
-typedef enum UARTCC26XX_FifoThreshold {
+typedef enum UARTCC26XX_FifoThreshold
+{
     UARTCC26XX_FIFO_THRESHOLD_DEFAULT = 0, /*!< Default value forces FIFO
                                                 threshold of 1/8 for TX
                                                 interrupt and 4/8 for RX
@@ -526,7 +527,8 @@ extern const UART_FxnTable UARTCC26XX_fxnTable;
  *
  *  The .ctsPin and .rtsPin must be assigned to enable flow control.
  */
-typedef struct UARTCC26XX_HWAttrsV2 {
+typedef struct UARTCC26XX_HWAttrsV2
+{
     uint32_t     baseAddr;    /*!< UART Peripheral's base address */
     uint32_t     powerMngrId; /*!< UART Peripheral's power manager ID */
     int          intNum;      /*!< UART Peripheral's interrupt vector */
@@ -553,7 +555,7 @@ typedef struct UARTCC26XX_HWAttrsV2 {
     uint8_t                  rxPin;        /*!< UART RX pin */
     uint8_t                  ctsPin;       /*!< UART CTS pin */
     uint8_t                  rtsPin;       /*!< UART RTS pin */
-    unsigned char           *ringBufPtr;   /*!< Pointer to an application ring buffer */
+    unsigned char*           ringBufPtr;   /*!< Pointer to an application ring buffer */
     size_t                   ringBufSize;  /*!< Size of ringBufPtr */
     UARTCC26XX_FifoThreshold txIntFifoThr; /*!< UART TX interrupt FIFO threshold select */
     UARTCC26XX_FifoThreshold rxIntFifoThr; /*!< UART RX interrupt FIFO threshold select */
@@ -566,7 +568,8 @@ typedef struct UARTCC26XX_HWAttrsV2 {
  *
  *  The UART Status is used to flag the different Receive Errors.
  */
-typedef enum UART_Status {
+typedef enum UART_Status
+{
     UART_TIMED_OUT     = 0x10,                 /*!< UART timed out */
     UART_PARITY_ERROR  = UART_RXERROR_PARITY,  /*!< UART Parity error */
     UART_BRAKE_ERROR   = UART_RXERROR_BREAK,   /*!< UART Break error */
@@ -580,7 +583,8 @@ typedef enum UART_Status {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct UARTCC26XX_Object {
+typedef struct UARTCC26XX_Object
+{
     /* UART control variables */
     bool                opened;         /*!< Has the obj been opened */
     UART_Mode           readMode;       /*!< Mode for all read calls */
@@ -606,14 +610,14 @@ typedef struct UARTCC26XX_Object {
     UART_Status         status;         /*!< Status variable */
 
     /* UART write variables */
-    const void         *writeBuf;       /*!< Buffer data pointer */
+    const void*         writeBuf;       /*!< Buffer data pointer */
     size_t              writeCount;     /*!< Number of Chars sent */
     size_t              writeSize;      /*!< Chars remaining in buffer */
     bool                writeCR;        /*!< Write a return character */
 
     /* UART receive variables */
     bool                  readRetPartial;     /*!< Return partial RX data if timeout occurs */
-    void                  *readBuf;           /*!< Buffer data pointer */
+    void*                  readBuf;           /*!< Buffer data pointer */
     size_t                readCount;          /*!< Number of Chars read */
     size_t                readSize;           /*!< Chars remaining in buffer */
     RingBuf_Object        ringBuffer;         /*!< local circular buffer object */
@@ -623,7 +627,7 @@ typedef struct UARTCC26XX_Object {
     PIN_Handle             hPin;
 
     /*! UART post-notification function pointer */
-    void             *uartPostFxn;
+    void*             uartPostFxn;
     /*! UART post-notification object */
     Power_NotifyObj  uartPostObj;
 

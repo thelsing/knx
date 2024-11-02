@@ -468,7 +468,7 @@ extern void GPIO_enableInt(uint_least8_t index);
  *  @param      pinConfig   Location to store device specific pin
  *                          configuration settings
  */
-extern void GPIO_getConfig(uint_least8_t index, GPIO_PinConfig *pinConfig);
+extern void GPIO_getConfig(uint_least8_t index, GPIO_PinConfig* pinConfig);
 
 /*!
  *  @brief  Initializes the GPIO module
@@ -531,7 +531,7 @@ extern void GPIO_setCallback(uint_least8_t index, GPIO_CallbackFxn callback);
  *  @param      pinConfig   device specific pin configuration settings
  */
 extern int_fast16_t GPIO_setConfig(uint_least8_t index,
-    GPIO_PinConfig pinConfig);
+                                   GPIO_PinConfig pinConfig);
 
 /*!
  *  @brief      Toggles the current state of a GPIO

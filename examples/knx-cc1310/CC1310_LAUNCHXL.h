@@ -164,7 +164,8 @@ void CC1310_LAUNCHXL_wakeUpExtFlash(void);
  *  @def    CC1310_LAUNCHXL_ADCBufName
  *  @brief  Enum of ADCBufs
  */
-typedef enum CC1310_LAUNCHXL_ADCBufName {
+typedef enum CC1310_LAUNCHXL_ADCBufName
+{
     CC1310_LAUNCHXL_ADCBUF0 = 0,
 
     CC1310_LAUNCHXL_ADCBUFCOUNT
@@ -174,7 +175,8 @@ typedef enum CC1310_LAUNCHXL_ADCBufName {
  *  @def    CC1310_LAUNCHXL_ADCBuf0SourceName
  *  @brief  Enum of ADCBuf channels
  */
-typedef enum CC1310_LAUNCHXL_ADCBuf0ChannelName {
+typedef enum CC1310_LAUNCHXL_ADCBuf0ChannelName
+{
     CC1310_LAUNCHXL_ADCBUF0CHANNEL0 = 0,
     CC1310_LAUNCHXL_ADCBUF0CHANNEL1,
     CC1310_LAUNCHXL_ADCBUF0CHANNEL2,
@@ -194,7 +196,8 @@ typedef enum CC1310_LAUNCHXL_ADCBuf0ChannelName {
  *  @def    CC1310_LAUNCHXL_ADCName
  *  @brief  Enum of ADCs
  */
-typedef enum CC1310_LAUNCHXL_ADCName {
+typedef enum CC1310_LAUNCHXL_ADCName
+{
     CC1310_LAUNCHXL_ADC0 = 0,
     CC1310_LAUNCHXL_ADC1,
     CC1310_LAUNCHXL_ADC2,
@@ -214,7 +217,8 @@ typedef enum CC1310_LAUNCHXL_ADCName {
  *  @def    CC1310_LAUNCHXL_CryptoName
  *  @brief  Enum of Crypto names
  */
-typedef enum CC1310_LAUNCHXL_CryptoName {
+typedef enum CC1310_LAUNCHXL_CryptoName
+{
     CC1310_LAUNCHXL_CRYPTO0 = 0,
 
     CC1310_LAUNCHXL_CRYPTOCOUNT
@@ -224,7 +228,8 @@ typedef enum CC1310_LAUNCHXL_CryptoName {
  *  @def    CC1310_LAUNCHXL_AESCCMName
  *  @brief  Enum of AESCCM names
  */
-typedef enum CC1310_LAUNCHXL_AESCCMName {
+typedef enum CC1310_LAUNCHXL_AESCCMName
+{
     CC1310_LAUNCHXL_AESCCM0 = 0,
 
     CC1310_LAUNCHXL_AESCCMCOUNT
@@ -234,7 +239,8 @@ typedef enum CC1310_LAUNCHXL_AESCCMName {
  *  @def    CC1310_LAUNCHXL_AESGCMName
  *  @brief  Enum of AESGCM names
  */
-typedef enum CC1310_LAUNCHXL_AESGCMName {
+typedef enum CC1310_LAUNCHXL_AESGCMName
+{
     CC1310_LAUNCHXL_AESGCM0 = 0,
 
     CC1310_LAUNCHXL_AESGCMCOUNT
@@ -244,7 +250,8 @@ typedef enum CC1310_LAUNCHXL_AESGCMName {
  *  @def    CC1310_LAUNCHXL_AESCBCName
  *  @brief  Enum of AESCBC names
  */
-typedef enum CC1310_LAUNCHXL_AESCBCName {
+typedef enum CC1310_LAUNCHXL_AESCBCName
+{
     CC1310_LAUNCHXL_AESCBC0 = 0,
 
     CC1310_LAUNCHXL_AESCBCCOUNT
@@ -254,7 +261,8 @@ typedef enum CC1310_LAUNCHXL_AESCBCName {
  *  @def    CC1310_LAUNCHXL_AESCTRName
  *  @brief  Enum of AESCTR names
  */
-typedef enum CC1310_LAUNCHXL_AESCTRName {
+typedef enum CC1310_LAUNCHXL_AESCTRName
+{
     CC1310_LAUNCHXL_AESCTR0 = 0,
 
     CC1310_LAUNCHXL_AESCTRCOUNT
@@ -264,7 +272,8 @@ typedef enum CC1310_LAUNCHXL_AESCTRName {
  *  @def    CC1310_LAUNCHXL_AESECBName
  *  @brief  Enum of AESECB names
  */
-typedef enum CC1310_LAUNCHXL_AESECBName {
+typedef enum CC1310_LAUNCHXL_AESECBName
+{
     CC1310_LAUNCHXL_AESECB0 = 0,
 
     CC1310_LAUNCHXL_AESECBCOUNT
@@ -274,7 +283,8 @@ typedef enum CC1310_LAUNCHXL_AESECBName {
  *  @def    CC1310_LAUNCHXL_AESCTRDRBGName
  *  @brief  Enum of AESCTRDRBG names
  */
-typedef enum CC1310_LAUNCHXL_AESCTRDRBGName {
+typedef enum CC1310_LAUNCHXL_AESCTRDRBGName
+{
     CC1310_LAUNCHXL_AESCTRDRBG0 = 0,
 
     CC1310_LAUNCHXL_AESCTRDRBGCOUNT
@@ -284,7 +294,8 @@ typedef enum CC1310_LAUNCHXL_AESCTRDRBGName {
  *  @def    CC1310_LAUNCHXL_TRNGName
  *  @brief  Enum of TRNG names
  */
-typedef enum CC1310_LAUNCHXL_TRNGName {
+typedef enum CC1310_LAUNCHXL_TRNGName
+{
     CC1310_LAUNCHXL_TRNG0 = 0,
 
     CC1310_LAUNCHXL_TRNGCOUNT
@@ -294,7 +305,8 @@ typedef enum CC1310_LAUNCHXL_TRNGName {
  *  @def    CC1310_LAUNCHXL_GPIOName
  *  @brief  Enum of GPIO names
  */
-typedef enum CC1310_LAUNCHXL_GPIOName {
+typedef enum CC1310_LAUNCHXL_GPIOName
+{
     CC1310_LAUNCHXL_GPIO_S1 = 0,
     CC1310_LAUNCHXL_GPIO_S2,
     CC1310_LAUNCHXL_SPI_MASTER_READY,
@@ -314,7 +326,8 @@ typedef enum CC1310_LAUNCHXL_GPIOName {
  *  @def    CC1310_LAUNCHXL_GPTimerName
  *  @brief  Enum of GPTimer parts
  */
-typedef enum CC1310_LAUNCHXL_GPTimerName {
+typedef enum CC1310_LAUNCHXL_GPTimerName
+{
     CC1310_LAUNCHXL_GPTIMER0A = 0,
     CC1310_LAUNCHXL_GPTIMER0B,
     CC1310_LAUNCHXL_GPTIMER1A,
@@ -331,7 +344,8 @@ typedef enum CC1310_LAUNCHXL_GPTimerName {
  *  @def    CC1310_LAUNCHXL_GPTimers
  *  @brief  Enum of GPTimers
  */
-typedef enum CC1310_LAUNCHXL_GPTimers {
+typedef enum CC1310_LAUNCHXL_GPTimers
+{
     CC1310_LAUNCHXL_GPTIMER0 = 0,
     CC1310_LAUNCHXL_GPTIMER1,
     CC1310_LAUNCHXL_GPTIMER2,
@@ -344,7 +358,8 @@ typedef enum CC1310_LAUNCHXL_GPTimers {
  *  @def    CC1310_LAUNCHXL_I2CName
  *  @brief  Enum of I2C names
  */
-typedef enum CC1310_LAUNCHXL_I2CName {
+typedef enum CC1310_LAUNCHXL_I2CName
+{
     CC1310_LAUNCHXL_I2C0 = 0,
 
     CC1310_LAUNCHXL_I2CCOUNT
@@ -354,7 +369,8 @@ typedef enum CC1310_LAUNCHXL_I2CName {
  *  @def    CC1310_LAUNCHXL_I2SName
  *  @brief  Enum of I2S names
  */
-typedef enum CC1310_LAUNCHXL_I2SName {
+typedef enum CC1310_LAUNCHXL_I2SName
+{
     CC1310_LAUNCHXL_I2S0 = 0,
 
     CC1310_LAUNCHXL_I2SCOUNT
@@ -364,7 +380,8 @@ typedef enum CC1310_LAUNCHXL_I2SName {
  *  @def    CC1310_LAUNCHXL_NVSName
  *  @brief  Enum of NVS names
  */
-typedef enum CC1310_LAUNCHXL_NVSName {
+typedef enum CC1310_LAUNCHXL_NVSName
+{
 #ifndef Board_EXCLUDE_NVS_INTERNAL_FLASH
     CC1310_LAUNCHXL_NVSCC26XX0 = 0,
 #endif
@@ -379,7 +396,8 @@ typedef enum CC1310_LAUNCHXL_NVSName {
  *  @def    CC1310_LAUNCHXL_PWM
  *  @brief  Enum of PWM outputs
  */
-typedef enum CC1310_LAUNCHXL_PWMName {
+typedef enum CC1310_LAUNCHXL_PWMName
+{
     CC1310_LAUNCHXL_PWM0 = 0,
     CC1310_LAUNCHXL_PWM1,
     CC1310_LAUNCHXL_PWM2,
@@ -396,7 +414,8 @@ typedef enum CC1310_LAUNCHXL_PWMName {
  *  @def    CC1310_LAUNCHXL_SDName
  *  @brief  Enum of SD names
  */
-typedef enum CC1310_LAUNCHXL_SDName {
+typedef enum CC1310_LAUNCHXL_SDName
+{
     CC1310_LAUNCHXL_SDSPI0 = 0,
 
     CC1310_LAUNCHXL_SDCOUNT
@@ -406,7 +425,8 @@ typedef enum CC1310_LAUNCHXL_SDName {
  *  @def    CC1310_LAUNCHXL_SPIName
  *  @brief  Enum of SPI names
  */
-typedef enum CC1310_LAUNCHXL_SPIName {
+typedef enum CC1310_LAUNCHXL_SPIName
+{
     CC1310_LAUNCHXL_SPI0 = 0,
     CC1310_LAUNCHXL_SPI1,
 
@@ -417,7 +437,8 @@ typedef enum CC1310_LAUNCHXL_SPIName {
  *  @def    CC1310_LAUNCHXL_UARTName
  *  @brief  Enum of UARTs
  */
-typedef enum CC1310_LAUNCHXL_UARTName {
+typedef enum CC1310_LAUNCHXL_UARTName
+{
     CC1310_LAUNCHXL_UART0 = 0,
 
     CC1310_LAUNCHXL_UARTCOUNT
@@ -427,7 +448,8 @@ typedef enum CC1310_LAUNCHXL_UARTName {
  *  @def    CC1310_LAUNCHXL_UDMAName
  *  @brief  Enum of DMA buffers
  */
-typedef enum CC1310_LAUNCHXL_UDMAName {
+typedef enum CC1310_LAUNCHXL_UDMAName
+{
     CC1310_LAUNCHXL_UDMA0 = 0,
 
     CC1310_LAUNCHXL_UDMACOUNT
@@ -437,7 +459,8 @@ typedef enum CC1310_LAUNCHXL_UDMAName {
  *  @def    CC1310_LAUNCHXL_WatchdogName
  *  @brief  Enum of Watchdogs
  */
-typedef enum CC1310_LAUNCHXL_WatchdogName {
+typedef enum CC1310_LAUNCHXL_WatchdogName
+{
     CC1310_LAUNCHXL_WATCHDOG0 = 0,
 
     CC1310_LAUNCHXL_WATCHDOGCOUNT

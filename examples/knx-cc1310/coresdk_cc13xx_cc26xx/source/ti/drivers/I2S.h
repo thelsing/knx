@@ -578,86 +578,87 @@
 extern "C" {
 #endif
 
- /**
-  *  @defgroup I2S_STATUS Status Codes
-  *  I2S_STATUS_* macros are general status codes used when user callback is called
-  *  @{
-  *  @ingroup I2S_CONTROL
-  */
+/**
+ *  @defgroup I2S_STATUS Status Codes
+ *  I2S_STATUS_* macros are general status codes used when user callback is called
+ *  @{
+ *  @ingroup I2S_CONTROL
+ */
 
- /*!
-  * @brief   Successful status code returned by I2S driver functions.
-  *
-  * I2S driver functions return I2S_ALL_TRANSACTION_SUCCESS if ALL the queued transactions
-  * were executed successfully.
-  */
- #define I2S_ALL_TRANSACTIONS_SUCCESS           (0x0001U)
+/*!
+ * @brief   Successful status code returned by I2S driver functions.
+ *
+ * I2S driver functions return I2S_ALL_TRANSACTION_SUCCESS if ALL the queued transactions
+ * were executed successfully.
+ */
+#define I2S_ALL_TRANSACTIONS_SUCCESS           (0x0001U)
 
- /*!
-  * @brief   Successful status code returned by I2S driver functions.
-  *
-  * I2S driver functions return I2S_TRANSACTION_SUCCESS if ONE queued transaction
-  * was executed successfully.
-  */
- #define I2S_TRANSACTION_SUCCESS                (0x0002U)
+/*!
+ * @brief   Successful status code returned by I2S driver functions.
+ *
+ * I2S driver functions return I2S_TRANSACTION_SUCCESS if ONE queued transaction
+ * was executed successfully.
+ */
+#define I2S_TRANSACTION_SUCCESS                (0x0002U)
 
- /*!
-  * @brief   Error status code returned by I2S driver functions.
-  *
-  * I2S driver functions return I2S_TIMEOUT_ERROR if I2S module lost the audio clock.
-  * If this error has been raised, I2S module must be reseted and restarted.
-  */
- #define I2S_TIMEOUT_ERROR                      (0x0100U)
+/*!
+ * @brief   Error status code returned by I2S driver functions.
+ *
+ * I2S driver functions return I2S_TIMEOUT_ERROR if I2S module lost the audio clock.
+ * If this error has been raised, I2S module must be reseted and restarted.
+ */
+#define I2S_TIMEOUT_ERROR                      (0x0100U)
 
- /*!
-  * @brief   Error status code returned by I2S driver functions.
-  *
-  * I2S driver functions return I2S_BUS_ERROR if I2S module faced problem with the DMA
-  * bus (DMA transfer not completed in time).
-  * If this error has been raised, I2S module must be reseted and restarted.
-  */
- #define I2S_BUS_ERROR                          (0x0200U)
+/*!
+ * @brief   Error status code returned by I2S driver functions.
+ *
+ * I2S driver functions return I2S_BUS_ERROR if I2S module faced problem with the DMA
+ * bus (DMA transfer not completed in time).
+ * If this error has been raised, I2S module must be reseted and restarted.
+ */
+#define I2S_BUS_ERROR                          (0x0200U)
 
- /*!
-  * @brief   Error status code returned by I2S driver functions.
-  *
-  * I2S driver functions return I2S_WS_ERROR if I2S module detect noise on the WS signal.
-  * If this error has been raised, I2S module must be reseted and restarted.
-  */
- #define I2S_WS_ERROR                           (0x0400U)
+/*!
+ * @brief   Error status code returned by I2S driver functions.
+ *
+ * I2S driver functions return I2S_WS_ERROR if I2S module detect noise on the WS signal.
+ * If this error has been raised, I2S module must be reseted and restarted.
+ */
+#define I2S_WS_ERROR                           (0x0400U)
 
- /*!
-  * @brief   Error status code returned by I2S driver functions.
-  *
-  * I2S driver functions return I2S_PTR_READ_ERROR if I2S module ran out of data
-  * on the read interface (DMA pointer not loaded in time).
-  * If this error has been raised, I2S module must be reseted and restarted.
-  */
- #define I2S_PTR_READ_ERROR                     (0x0800U)
+/*!
+ * @brief   Error status code returned by I2S driver functions.
+ *
+ * I2S driver functions return I2S_PTR_READ_ERROR if I2S module ran out of data
+ * on the read interface (DMA pointer not loaded in time).
+ * If this error has been raised, I2S module must be reseted and restarted.
+ */
+#define I2S_PTR_READ_ERROR                     (0x0800U)
 
- /*!
-  * @brief   Error status code returned by I2S driver functions.
-  *
-  * I2S driver functions return I2S_PTR_WRITE_ERROR if I2S module ran out of data
-  * on the write interface (DMA pointer not loaded in time).
-  * If this error has been raised, I2S module must be reseted and restarted.
-  */
- #define I2S_PTR_WRITE_ERROR                     (0x1000U)
- /** @}*/
+/*!
+ * @brief   Error status code returned by I2S driver functions.
+ *
+ * I2S driver functions return I2S_PTR_WRITE_ERROR if I2S module ran out of data
+ * on the write interface (DMA pointer not loaded in time).
+ * If this error has been raised, I2S module must be reseted and restarted.
+ */
+#define I2S_PTR_WRITE_ERROR                     (0x1000U)
+/** @}*/
 
 /*!
  *  @brief      A handle that is returned from a I2S_open() call.
  */
-typedef struct I2S_Config_ *I2S_Handle;
+typedef struct I2S_Config_* I2S_Handle;
 
 /*!
  *  @brief I2S transaction descriptor.
  */
-typedef struct I2S_Transaction_ {
+typedef struct I2S_Transaction_
+{
     /*! Used internally to link descriptors together */
     List_Elem               queueElement;
     /*! Pointer to the buffer */
-    void                    *bufPtr;
+    void*                    bufPtr;
     /*! Size of the buffer. */
     size_t                  bufSize;
     /*! Internal use only. Number of bytes written to or read from the buffer. */
@@ -683,7 +684,7 @@ typedef struct I2S_Transaction_ {
  *                              For error calbacks, transactionPtr points on NULL.
  *
  */
-typedef void (*I2S_Callback)(I2S_Handle handle, int_fast16_t status, I2S_Transaction *transactionPtr);
+typedef void (*I2S_Callback)(I2S_Handle handle, int_fast16_t status, I2S_Transaction* transactionPtr);
 
 /*!
  *  @brief      The definition of a function used to set the I2S register
@@ -701,7 +702,8 @@ typedef void (*I2S_RegUpdate)(uint32_t ui32Base, uint32_t ui32NextPointer);
  *  The enum defines if the module uses a 16 bits or a 24 bits buffer in memory.
  *  This value has no influence on the number of bit transmitted.
  */
-typedef enum I2S_MemoryLength_ {
+typedef enum I2S_MemoryLength_
+{
 
     I2S_MEMORY_LENGTH_8BITS  =  8U,   /*!<    Buffer used is 8 bits length. Not available for CC26XX. */
     I2S_MEMORY_LENGTH_16BITS = 16U,   /*!<    Buffer used is 16 bits length. */
@@ -716,7 +718,8 @@ typedef enum I2S_MemoryLength_ {
  *  The enum defines if the module acts like a master (clocks are internally generated)
  *  or a slave (the clocks are externally generated).
  */
-typedef enum I2S_Role_ {
+typedef enum I2S_Role_
+{
 
     I2S_SLAVE  = 0,    /*!<    Module is a slave, clocks are externally generated. */
     I2S_MASTER = 1     /*!<    Module is a master, clocks are internally generated. */
@@ -728,7 +731,8 @@ typedef enum I2S_Role_ {
  *
  *  The enum defines if sampling is done on BLCK rising or falling edges.
  */
-typedef enum I2S_SamplingEdge_ {
+typedef enum I2S_SamplingEdge_
+{
 
     I2S_SAMPLING_EDGE_FALLING  = 0,    /*!<    Sampling on falling edges. */
     I2S_SAMPLING_EDGE_RISING   = 1     /*!<    Sampling on rising edges. */
@@ -740,7 +744,8 @@ typedef enum I2S_SamplingEdge_ {
  *
  *  The enum defines if the I2S if set with single or dual phase.
  */
-typedef enum I2S_PhaseType_ {
+typedef enum I2S_PhaseType_
+{
 
     I2S_PHASE_TYPE_SINGLE  = 0U,   /*!<    Single phase */
     I2S_PHASE_TYPE_DUAL    = 1U,   /*!<    Dual phase */
@@ -752,7 +757,8 @@ typedef enum I2S_PhaseType_ {
  *
  *  The enum defines the different settings for the data interfaces (SD0 and SD1).
  */
-typedef enum I2S_DataInterfaceUse_ {
+typedef enum I2S_DataInterfaceUse_
+{
 
     I2S_SD0_DISABLED       = 0x00U,   /*!<    SD0 is disabled */
     I2S_SD0_INPUT          = 0x01U,   /*!<    SD0 is an input */
@@ -768,7 +774,8 @@ typedef enum I2S_DataInterfaceUse_ {
  *
  *  The enum defines different settings to activate the expected channels.
  */
-typedef enum I2S_ChannelConfig_ {
+typedef enum I2S_ChannelConfig_
+{
 
     I2S_CHANNELS_NONE       = 0x00U,   /*!<   No channel activated */
     I2S_CHANNELS_MONO       = 0x01U,   /*!<   MONO: only channel one is activated */
@@ -794,7 +801,8 @@ typedef enum I2S_ChannelConfig_ {
  *
  *  @sa       I2S_Params_init()
  */
-typedef struct I2S_Params_ {
+typedef struct I2S_Params_
+{
 
     bool                  invertWS;
     /*!< WS must be internally inverted when using I2S data format.
@@ -928,7 +936,7 @@ typedef struct I2S_Params_ {
     I2S_Callback          errorCallback;
     /*!< Pointer to error callback. Cannot be NULL. */
 
-    void                  *custom;
+    void*                  custom;
     /*!< Pointer to device specific custom params */
 } I2S_Params;
 
@@ -949,12 +957,13 @@ extern const I2S_Params I2S_defaultParams;
  *
  *  @sa     I2S_init()
  */
-typedef struct I2S_Config_ {
+typedef struct I2S_Config_
+{
     /*! Pointer to a driver specific data object */
-    void                   *object;
+    void*                   object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void          const    *hwAttrs;
+    void          const*    hwAttrs;
 } I2S_Config;
 
 /*!
@@ -999,7 +1008,7 @@ extern void I2S_init(void);
  *  @sa     I2S_init()
  *  @sa     I2S_close()
  */
-extern I2S_Handle I2S_open(uint_least8_t index, I2S_Params *params);
+extern I2S_Handle I2S_open(uint_least8_t index, I2S_Params* params);
 
 /*!
  *  @brief  Function to initialize the I2S_Params struct to its defaults
@@ -1035,7 +1044,7 @@ extern I2S_Handle I2S_open(uint_least8_t index, I2S_Params *params);
  *
  *  @param  params  Parameter structure to initialize
  */
-extern void I2S_Params_init(I2S_Params *params);
+extern void I2S_Params_init(I2S_Params* params);
 
 /*!
  *  @brief   Initialize an I2S_Transaction struct to known state.
@@ -1054,7 +1063,7 @@ extern void I2S_Params_init(I2S_Params *params);
  *
  *  @param   [out]    transaction Transaction struct to initialize.
  */
-extern void I2S_Transaction_init(I2S_Transaction *transaction);
+extern void I2S_Transaction_init(I2S_Transaction* transaction);
 
 /*!
  *  @brief Function to set the first read-transaction to consider
@@ -1072,7 +1081,7 @@ extern void I2S_Transaction_init(I2S_Transaction *transaction);
  *
  *  @sa I2S_setWriteQueueHead()
  */
-extern void I2S_setReadQueueHead(I2S_Handle handle, I2S_Transaction *transaction);
+extern void I2S_setReadQueueHead(I2S_Handle handle, I2S_Transaction* transaction);
 
 /*!
  *  @brief Function to set the first write-transaction to consider
@@ -1090,7 +1099,7 @@ extern void I2S_setReadQueueHead(I2S_Handle handle, I2S_Transaction *transaction
  *
  *  @sa I2S_setReadQueueHead()
  */
-extern void I2S_setWriteQueueHead(I2S_Handle handle, I2S_Transaction *transaction);
+extern void I2S_setWriteQueueHead(I2S_Handle handle, I2S_Transaction* transaction);
 
 /*!
  *  @brief Start the WS, SCK and MCLK clocks.

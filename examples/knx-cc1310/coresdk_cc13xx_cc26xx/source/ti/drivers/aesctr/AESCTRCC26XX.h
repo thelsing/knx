@@ -86,7 +86,8 @@ extern "C" {
  *  AESCTR26XX hardware attributes should be included in the board file
  *  and pointed to by the AESCTR_config struct.
  */
-typedef struct {
+typedef struct
+{
     /*! @brief Crypto Peripheral's interrupt priority.
 
         The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
@@ -107,7 +108,8 @@ typedef struct {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct {
+typedef struct
+{
     bool                            isOpen;
     bool                            operationInProgress;
     bool                            operationCanceled;
@@ -117,7 +119,7 @@ typedef struct {
     AESCTR_OperationType            operationType;
     uint32_t                        semaphoreTimeout;
     AESCTR_CallbackFxn              callbackFxn;
-    AESCTR_Operation                *operation;
+    AESCTR_Operation*                operation;
 } AESCTRCC26XX_Object;
 
 #ifdef __cplusplus

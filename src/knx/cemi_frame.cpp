@@ -6,12 +6,18 @@
 /*
 cEMI Frame Format
 
-+---------+--------+--------+--------+--------+---------+---------+--------+---------+
-    | Header  |  Msg   |Add.Info| Ctrl 1 | Ctrl 2 | Source  | Dest.   |  Data  |   APDU  |
-    |         | Code   | Length |        |        | Address | Address | Length |         |
+              +--------+--------+--------+--------+---------+---------+--------+---------+
+              |                               _data                                      |
+              +--------+--------+--------+--------+---------+---------+--------+---------+
+              |                               LPDU                                       |
+              +--------+--------+--------+--------+---------+---------+--------+---------+
+                                                                      |           NPDU   |
     +---------+--------+--------+--------+--------+---------+---------+--------+---------+
-      6 bytes   1 byte   1 byte   1 byte   1 byte   2 bytes   2 bytes   1 byte   2 bytes
- 
+    | Header  |  Msg   |Add.Info| Ctrl 1 | Ctrl 2 | Source  | Dest.   |  Data  |   TPDU  |
+    |         | Code   | Length |        |        | Address | Address | Length |   APDU  |
+    +---------+--------+--------+--------+--------+---------+---------+--------+---------+
+      6 bytes   1 byte   1 byte   1 byte   1 byte   2 bytes   2 bytes   1 byte   n bytes
+
         Header          = See below the structure of a cEMI header
         Message Code    = See below. On Appendix A is the list of all existing EMI and cEMI codes
         Add.Info Length = 0x00 - no additional info
@@ -25,9 +31,9 @@ cEMI Frame Format
                           protocol control information (TPCI), application protocol control
                           information (APCI) and data passed as an argument from higher layers of
                           the KNX communication stack
- 
+
 Control Field 1
- 
+
           Bit  |
          ------+---------------------------------------------------------------
            7   | Frame Type  - 0x0 for extended frame
@@ -54,9 +60,9 @@ Control Field 1
            0   | Confirm      - 0x0 no error
                | (L_Data.con) - 0x1 error
          ------+---------------------------------------------------------------
- 
+
          Control Field 2
- 
+
           Bit  |
          ------+---------------------------------------------------------------
            7   | Destination Address Type - 0x0 individual address
@@ -66,11 +72,11 @@ Control Field 1
          ------+---------------------------------------------------------------
           3-0  | Extended Frame Format - 0x0 standard frame
          ------+---------------------------------------------------------------
-*/ 
+*/
 
 CemiFrame::CemiFrame(uint8_t* data, uint16_t length)
-    : _npdu(data + data[1] + NPDU_LPDU_DIFF, *this), 
-      _tpdu(data + data[1] + TPDU_LPDU_DIFF, *this), 
+    : _npdu(data + data[1] + NPDU_LPDU_DIFF, *this),
+      _tpdu(data + data[1] + TPDU_LPDU_DIFF, *this),
       _apdu(data + data[1] + APDU_LPDU_DIFF, *this)
 {
     _data = data;
@@ -80,25 +86,25 @@ CemiFrame::CemiFrame(uint8_t* data, uint16_t length)
 
 CemiFrame::CemiFrame(uint8_t apduLength)
     : _data(buffer),
-      _npdu(_data + NPDU_LPDU_DIFF, *this), 
-      _tpdu(_data + TPDU_LPDU_DIFF, *this), 
+      _npdu(_data + NPDU_LPDU_DIFF, *this),
+      _tpdu(_data + TPDU_LPDU_DIFF, *this),
       _apdu(_data + APDU_LPDU_DIFF, *this)
 {
     _ctrl1 = _data + CEMI_HEADER_SIZE;
-    _length = 0;
 
     memset(_data, 0, apduLength + APDU_LPDU_DIFF);
     _ctrl1[0] |= Broadcast;
     _npdu.octetCount(apduLength);
+    _length = _npdu.length() + NPDU_LPDU_DIFF;
 }
 
-CemiFrame::CemiFrame(const CemiFrame & other)
+CemiFrame::CemiFrame(const CemiFrame& other)
     : _data(buffer),
       _npdu(_data + NPDU_LPDU_DIFF, *this),
       _tpdu(_data + TPDU_LPDU_DIFF, *this),
       _apdu(_data + APDU_LPDU_DIFF, *this)
 {
-    _ctrl1 = _data + CEMI_HEADER_SIZE; 
+    _ctrl1 = _data + CEMI_HEADER_SIZE;
     _length = other._length;
 
     memcpy(_data, other._data, other.totalLenght());
@@ -116,6 +122,7 @@ CemiFrame& CemiFrame::operator=(CemiFrame other)
     return *this;
 }
 
+
 MessageCode CemiFrame::messageCode() const
 {
     return (MessageCode)_data[0];
@@ -128,9 +135,7 @@ void CemiFrame::messageCode(MessageCode msgCode)
 
 uint16_t CemiFrame::totalLenght() const
 {
-    uint16_t tmp = 
-    _npdu.length() + NPDU_LPDU_DIFF;
-    return tmp;
+    return _length;
 }
 
 uint16_t CemiFrame::telegramLengthtTP() const
@@ -144,7 +149,7 @@ uint16_t CemiFrame::telegramLengthtTP() const
 void CemiFrame::fillTelegramTP(uint8_t* data)
 {
     uint16_t len = telegramLengthtTP();
-    
+
     if (frameType() == StandardFrame)
     {
         uint8_t octet5 = (_ctrl1[1] & 0xF0) | (_ctrl1[6] & 0x0F);
@@ -157,6 +162,7 @@ void CemiFrame::fillTelegramTP(uint8_t* data)
     {
         memcpy(data, _ctrl1, len - 1);
     }
+
     data[len - 1] = calcCrcTP(data, len - 1);
 }
 
@@ -175,7 +181,7 @@ void CemiFrame::fillTelegramRF(uint8_t* data)
     // The packaging into blocks with CRC16 (Format based on FT3 Data Link Layer (IEC 870-5))
     // is done in the RF Data Link Layer code.
     // RF always uses the Extended Frame Format. However, the length field is missing (right before the APDU)
-    // as there is already a length field at the beginning of the raw RF frame which is also used by the 
+    // as there is already a length field at the beginning of the raw RF frame which is also used by the
     // physical layer to control the HW packet engine of the transceiver.
 
     data[0] = _ctrl1[1] & 0x0F; // KNX CTRL field for RF (bits 3..0 EFF only), bits 7..4 are set to 0 for asynchronous RF frames
@@ -196,13 +202,13 @@ uint16_t CemiFrame::dataLength()
     return _length;
 }
 
-uint8_t CemiFrame::calcCrcTP(uint8_t * buffer, uint16_t len)
+uint8_t CemiFrame::calcCrcTP(uint8_t* buffer, uint16_t len)
 {
     uint8_t crc = 0xFF;
-    
+
     for (uint16_t i = 0; i < len; i++)
         crc ^= buffer[i];
-    
+
     return crc;
 }
 
@@ -369,14 +375,29 @@ bool CemiFrame::valid() const
     uint8_t apduLen = _data[_data[1] + NPDU_LPDU_DIFF];
 
     if (_length != 0 && _length != (addInfoLen + apduLen + NPDU_LPDU_DIFF + 2))
+    {
+        print("length issue, length: ");
+        print(_length);
+        print(" addInfoLen: ");
+        print(addInfoLen);
+        print(" apduLen: ");
+        print(apduLen);
+        print(" expected length: ");
+        println(addInfoLen + apduLen + NPDU_LPDU_DIFF + 2);
+        printHex("Frame: ", _data, _length, true);
+
         return false;
-    
+    }
+
     if ((_ctrl1[0] & 0x40) > 0 // Bit 6 has do be 0
-        || (_ctrl1[1] & 0xF) > 0 // only standard or extended frames
-        || _npdu.octetCount() == 0xFF // not allowed
-        || (_npdu.octetCount() > 15 && frameType() == StandardFrame)
-        )
+            || (_ctrl1[1] & 0xF) > 0 // only standard or extended frames
+            || _npdu.octetCount() == 0xFF // not allowed
+            || (_npdu.octetCount() > 15 && frameType() == StandardFrame)
+       )
+    {
+        print("Other issue");
         return false;
+    }
 
     return true;
 }

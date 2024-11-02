@@ -82,11 +82,11 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define DDI32RegWrite                   NOROM_DDI32RegWrite
-    #define DDI16BitWrite                   NOROM_DDI16BitWrite
-    #define DDI16BitfieldWrite              NOROM_DDI16BitfieldWrite
-    #define DDI16BitRead                    NOROM_DDI16BitRead
-    #define DDI16BitfieldRead               NOROM_DDI16BitfieldRead
+#define DDI32RegWrite                   NOROM_DDI32RegWrite
+#define DDI16BitWrite                   NOROM_DDI16BitWrite
+#define DDI16BitfieldWrite              NOROM_DDI16BitfieldWrite
+#define DDI16BitRead                    NOROM_DDI16BitRead
+#define DDI16BitfieldRead               NOROM_DDI16BitfieldRead
 #endif
 
 //*****************************************************************************
@@ -138,16 +138,31 @@ AuxAdiDdiSafeWrite(uint32_t nAddr, uint32_t nData, uint32_t nSize)
 {
     // Disable interrupts and remember whether to re-enable
     bool bIrqEnabled = !CPUcpsid();
+
     // Acquire semaphore for accessing ADI/DDI in AUX, perform access, release semaphore
     while (!HWREG(AUX_SMPH_BASE + AUX_SMPH_O_SMPH0));
-    switch (nSize) {
-    case 1:             HWREGB(nAddr) = (uint8_t)nData; break;
-    case 2:             HWREGH(nAddr) = (uint16_t)nData; break;
-    case 4: default:    HWREG(nAddr)  = nData; break;
+
+    switch (nSize)
+    {
+        case 1:
+            HWREGB(nAddr) = (uint8_t)nData;
+            break;
+
+        case 2:
+            HWREGH(nAddr) = (uint16_t)nData;
+            break;
+
+        case 4:
+        default:
+            HWREG(nAddr)  = nData;
+            break;
     }
+
     HWREG(AUX_SMPH_BASE + AUX_SMPH_O_SMPH0) = 1;
+
     // Restore interrupt enable
-    if (bIrqEnabled) {
+    if (bIrqEnabled)
+    {
         CPUcpsie();
     }
 }
@@ -171,18 +186,34 @@ AuxAdiDdiSafeRead(uint32_t nAddr, uint32_t nSize)
     uint32_t nRet;
     // Disable interrupts and remember whether to re-enable
     bool bIrqEnabled = !CPUcpsid();
+
     // Acquire semaphore for accessing ADI/DDI in AUX, perform access, release semaphore
     while (!HWREG(AUX_SMPH_BASE + AUX_SMPH_O_SMPH0));
-    switch (nSize) {
-    case 1:             nRet = HWREGB(nAddr); break;
-    case 2:             nRet = HWREGH(nAddr); break;
-    case 4: default:    nRet = HWREG(nAddr); break;
+
+    switch (nSize)
+    {
+        case 1:
+            nRet = HWREGB(nAddr);
+            break;
+
+        case 2:
+            nRet = HWREGH(nAddr);
+            break;
+
+        case 4:
+        default:
+            nRet = HWREG(nAddr);
+            break;
     }
+
     HWREG(AUX_SMPH_BASE + AUX_SMPH_O_SMPH0) = 1;
+
     // Restore interrupt enable
-    if (bIrqEnabled) {
+    if (bIrqEnabled)
+    {
         CPUcpsie();
     }
+
     return nRet;
 }
 
@@ -206,7 +237,7 @@ AuxAdiDdiSafeRead(uint32_t nAddr, uint32_t nSize)
 static bool
 DDIBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == AUX_DDI0_OSC_BASE);
+    return (ui32Base == AUX_DDI0_OSC_BASE);
 }
 #endif
 
@@ -516,27 +547,27 @@ extern uint16_t DDI16BitfieldRead(uint32_t ui32Base, uint32_t ui32Reg,
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_DDI32RegWrite
-        #undef  DDI32RegWrite
-        #define DDI32RegWrite                   ROM_DDI32RegWrite
-    #endif
-    #ifdef ROM_DDI16BitWrite
-        #undef  DDI16BitWrite
-        #define DDI16BitWrite                   ROM_DDI16BitWrite
-    #endif
-    #ifdef ROM_DDI16BitfieldWrite
-        #undef  DDI16BitfieldWrite
-        #define DDI16BitfieldWrite              ROM_DDI16BitfieldWrite
-    #endif
-    #ifdef ROM_DDI16BitRead
-        #undef  DDI16BitRead
-        #define DDI16BitRead                    ROM_DDI16BitRead
-    #endif
-    #ifdef ROM_DDI16BitfieldRead
-        #undef  DDI16BitfieldRead
-        #define DDI16BitfieldRead               ROM_DDI16BitfieldRead
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_DDI32RegWrite
+#undef  DDI32RegWrite
+#define DDI32RegWrite                   ROM_DDI32RegWrite
+#endif
+#ifdef ROM_DDI16BitWrite
+#undef  DDI16BitWrite
+#define DDI16BitWrite                   ROM_DDI16BitWrite
+#endif
+#ifdef ROM_DDI16BitfieldWrite
+#undef  DDI16BitfieldWrite
+#define DDI16BitfieldWrite              ROM_DDI16BitfieldWrite
+#endif
+#ifdef ROM_DDI16BitRead
+#undef  DDI16BitRead
+#define DDI16BitRead                    ROM_DDI16BitRead
+#endif
+#ifdef ROM_DDI16BitfieldRead
+#undef  DDI16BitfieldRead
+#define DDI16BitfieldRead               ROM_DDI16BitfieldRead
+#endif
 #endif
 
 //*****************************************************************************

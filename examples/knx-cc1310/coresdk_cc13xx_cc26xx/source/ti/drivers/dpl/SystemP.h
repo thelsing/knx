@@ -49,8 +49,8 @@
 extern "C" {
 #endif
 
-extern int SystemP_snprintf(char *buf, size_t n, const char *format,...);
-extern int SystemP_vsnprintf(char *buf, size_t n, const char *format, va_list va);
+extern int SystemP_snprintf(char* buf, size_t n, const char* format, ...);
+extern int SystemP_vsnprintf(char* buf, size_t n, const char* format, va_list va);
 
 #ifdef __cplusplus
 }

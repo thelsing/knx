@@ -9,12 +9,11 @@
 using namespace std;
 
 Bau07B0::Bau07B0(Platform& platform)
-    : BauSystemBDevice(platform),
-      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&) *this, (DataLinkLayerCallbacks*) this),
-      DataLinkLayerCallbacks()
+    : BauSystemBDevice(platform), DataLinkLayerCallbacks(),
+      _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&) * this, (DataLinkLayerCallbacks*) this)
 #ifdef USE_CEMI_SERVER
     , _cemiServer(*this)
-#endif           
+#endif
 {
     _netLayer.getInterface().dataLinkLayer(_dlLayer);
 #ifdef USE_CEMI_SERVER
@@ -51,36 +50,46 @@ InterfaceObject* Bau07B0::getInterfaceObject(uint8_t idx)
     {
         case 0:
             return &_deviceObj;
+
         case 1:
             return &_addrTable;
+
         case 2:
             return &_assocTable;
+
         case 3:
             return &_groupObjTable;
+
         case 4:
             return &_appProgram;
+
         case 5: // would be app_program 2
             return nullptr;
 #if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
+
         case 6:
             return &_secIfObj;
+
         case 7:
             return &_cemiServerObject;
 #elif defined(USE_CEMI_SERVER)
+
         case 6:
             return &_cemiServerObject;
 #elif defined(USE_DATASECURE)
+
         case 6:
             return &_secIfObj;
 #endif
+
         default:
             return nullptr;
     }
 }
 
-InterfaceObject* Bau07B0::getInterfaceObject(ObjectType objectType, uint8_t objectInstance)
+InterfaceObject* Bau07B0::getInterfaceObject(ObjectType objectType, uint16_t objectInstance)
 {
-    // We do not use it right now. 
+    // We do not use it right now.
     // Required for coupler mode as there are multiple router objects for example
     (void) objectInstance;
 
@@ -88,22 +97,29 @@ InterfaceObject* Bau07B0::getInterfaceObject(ObjectType objectType, uint8_t obje
     {
         case OT_DEVICE:
             return &_deviceObj;
+
         case OT_ADDR_TABLE:
             return &_addrTable;
+
         case OT_ASSOC_TABLE:
             return &_assocTable;
+
         case OT_GRP_OBJ_TABLE:
             return &_groupObjTable;
+
         case OT_APPLICATION_PROG:
             return &_appProgram;
 #ifdef USE_DATASECURE
+
         case OT_SECURITY:
             return &_secIfObj;
 #endif
 #ifdef USE_CEMI_SERVER
+
         case OT_CEMI_SERVER:
             return &_cemiServerObject;
-#endif            
+#endif
+
         default:
             return nullptr;
     }
@@ -123,35 +139,40 @@ void Bau07B0::loop()
 {
     _dlLayer.loop();
     BauSystemBDevice::loop();
-#ifdef USE_CEMI_SERVER    
+#ifdef USE_CEMI_SERVER
     _cemiServer.loop();
-#endif    
+#endif
 }
 
-bool Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
+TPAckType Bau07B0::isAckRequired(uint16_t address, bool isGrpAddr)
 {
     if (isGrpAddr)
     {
         // ACK for broadcasts
         if (address == 0)
-            return true;
+            return TPAckType::AckReqAck;
+
         // is group address in group address table? ACK if yes.
-        return _addrTable.contains(address);
+        if (_addrTable.contains(address))
+            return TPAckType::AckReqAck;
+        else
+            return TPAckType::AckReqNone;
     }
 
     // Also ACK for our own individual address
     if (address  == _deviceObj.individualAddress())
-        return true;
+        return TPAckType::AckReqAck;
 
     if (address == 0)
     {
         println("Invalid broadcast detected: destination address is 0, but address type is \"individual\"");
     }
 
-    return false;
+    return TPAckType::AckReqNone;
 }
 
-TpUartDataLinkLayer* Bau07B0::getDataLinkLayer() {
+TpUartDataLinkLayer* Bau07B0::getDataLinkLayer()
+{
     return (TpUartDataLinkLayer*)&_dlLayer;
 }
 #endif

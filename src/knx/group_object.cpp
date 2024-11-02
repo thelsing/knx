@@ -5,31 +5,19 @@
 #include "group_object_table_object.h"
 
 #ifdef SMALL_GROUPOBJECT
-GroupObjectUpdatedHandler GroupObject::_updateHandlerStatic = 0;
+    GroupObjectUpdatedHandler GroupObject::_updateHandlerStatic = 0;
 #endif
 GroupObjectTableObject* GroupObject::_table = 0;
 
 GroupObject::GroupObject()
 {
     _data = 0;
-    _commFlagEx.uninitialized = true;
-    _commFlagEx.commFlag = Uninitialized;
+    _uninitialized = true;
+    _commFlag = Uninitialized;
     _dataLength = 0;
 #ifndef SMALL_GROUPOBJECT
     _updateHandler = 0;
 #endif
-}
-
-GroupObject::GroupObject(const GroupObject& other)
-{
-    _data = new uint8_t[other._dataLength];
-    _commFlagEx = other._commFlagEx;
-    _dataLength = other._dataLength;
-    _asap = other._asap;
-#ifndef SMALL_GROUPOBJECT
-    _updateHandler = other._updateHandler;
-#endif
-    memcpy(_data, other._data, _dataLength);
 }
 
 GroupObject::~GroupObject()
@@ -76,7 +64,7 @@ bool GroupObject::readEnable()
         return false;
 
     // we forbid reading of new (uninitialized) go
-    if (_commFlagEx.uninitialized)
+    if (_uninitialized)
         return false;
 
     return bitRead(ntohs(_table->_tableData[_asap]), 11) > 0;
@@ -112,6 +100,7 @@ uint16_t GroupObject::asap()
 size_t GroupObject::goSize()
 {
     size_t size = sizeInTelegram();
+
     if (size == 0)
         return 1;
 
@@ -119,58 +108,73 @@ size_t GroupObject::goSize()
 }
 
 // see knxspec 3.5.1 p. 178
-size_t GroupObject::asapValueSize(uint8_t code)
+size_t GroupObject::asapValueSize(uint8_t code) const
 {
     if (code < 7)
         return 0;
+
     if (code < 8)
         return 1;
+
     if (code < 11 || (code > 20 && code < 255))
         return code - 6;
+
     switch (code)
     {
         case 11:
             return 6;
+
         case 12:
             return 8;
+
         case 13:
             return 10;
+
         case 14:
             return 14;
+
         case 15:
             return 5;
+
         case 16:
             return 7;
+
         case 17:
             return 9;
+
         case 18:
             return 11;
+
         case 19:
             return 12;
+
         case 20:
             return 13;
+
         case 255:
             return 252;
     }
+
     return -1;
 }
 
 
 ComFlag GroupObject::commFlag()
 {
-    return _commFlagEx.commFlag;
+    return _commFlag;
 }
 
 void GroupObject::commFlag(ComFlag value)
 {
-    _commFlagEx.commFlag = value;
+    _commFlag = value;
+
     if (value == WriteRequest || value == Updated || value == Ok)
-        _commFlagEx.uninitialized = false;
+        _uninitialized = false;
 }
 
 bool GroupObject::initialized()
 {
-    return !_commFlagEx.uninitialized;
+    return !_uninitialized;
 }
 
 void GroupObject::requestObjectRead()
@@ -192,6 +196,20 @@ size_t GroupObject::sizeInTelegram()
 {
     uint8_t code = lowByte(ntohs(_table->_tableData[_asap]));
     return asapValueSize(code);
+}
+
+size_t GroupObject::sizeInMemory() const
+{
+    uint8_t code = lowByte(ntohs(_table->_tableData[_asap]));
+    size_t result = asapValueSize(code);
+
+    if (code == 0)
+        return 1;
+
+    if (code == 14)
+        return 14 + 1;
+
+    return result;
 }
 
 #ifdef SMALL_GROUPOBJECT
@@ -294,7 +312,7 @@ bool GroupObject::_valueNoSend(const KNXValue& value, const Dpt& type)
     const bool encodingDone = KNX_Encode_Value(value, _data, _dataLength, type);
 
     // initialize on succesful conversion only
-    if (encodingDone && _commFlagEx.uninitialized)
+    if (encodingDone && _uninitialized)
         commFlag(Ok);
 
     return encodingDone;
@@ -302,7 +320,7 @@ bool GroupObject::_valueNoSend(const KNXValue& value, const Dpt& type)
 
 bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
 {
-    if (_commFlagEx.uninitialized)
+    if (_uninitialized)
     {
         // always set first value
         return _valueNoSend(value, type);
@@ -322,6 +340,7 @@ bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
 
         // check for change in converted value / update value on change only
         const bool dataChanged = memcmp(_data, newData, _dataLength);
+
         if (dataChanged)
             memcpy(_data, newData, _dataLength);
 
@@ -333,8 +352,9 @@ bool GroupObject::valueCompare(const KNXValue& value, const Dpt& type)
 {
     if (valueNoSendCompare(value, type))
     {
-         objectWritten();
-         return true;
+        objectWritten();
+        return true;
     }
+
     return false;
 }

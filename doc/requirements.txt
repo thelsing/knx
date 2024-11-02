@@ -1,3 +1,4 @@
 exhale
 breathe
 sphinx>=2.1.2
+sphinx-rtd-theme

@@ -45,28 +45,28 @@
 #define INT_NMI_FAULT                    2 // NMI Fault
 #define INT_HARD_FAULT                   3 // Hard Fault
 #define INT_MEMMANAGE_FAULT              4 // Memory Management (MemManage)
-                                           // Fault
+// Fault
 #define INT_BUS_FAULT                    5 // Bus Fault
 #define INT_USAGE_FAULT                  6 // Usage Fault
 #define INT_SVCALL                      11 // Supervisor Call (SVCall)
 #define INT_DEBUG                       12 // Debug Monitor
 #define INT_PENDSV                      14 // Pending Service Call (PendSV)
 #define INT_SYSTICK                     15 // SysTick Interrupt from the
-                                           // System Timer in NVIC.
+// System Timer in NVIC.
 #define INT_AON_GPIO_EDGE               16 // Edge detect event from IOC
 #define INT_I2C_IRQ                     17 // Interrupt event from I2C
 #define INT_RFC_CPE_1                   18 // Combined Interrupt for CPE
-                                           // Generated events
+// Generated events
 #define INT_AON_RTC_COMB                20 // Event from AON_RTC
 #define INT_UART0_COMB                  21 // UART0 combined interrupt
 #define INT_AUX_SWEV0                   22 // AUX software event 0
 #define INT_SSI0_COMB                   23 // SSI0 combined interrupt
 #define INT_SSI1_COMB                   24 // SSI1 combined interrupt
 #define INT_RFC_CPE_0                   25 // Combined Interrupt for CPE
-                                           // Generated events
+// Generated events
 #define INT_RFC_HW_COMB                 26 // Combined RFC hardware interrupt
 #define INT_RFC_CMD_ACK                 27 // RFC Doorbell Command
-                                           // Acknowledgement Interrupt
+// Acknowledgement Interrupt
 #define INT_I2S_IRQ                     28 // Interrupt event from I2S
 #define INT_AUX_SWEV1                   29 // AUX software event 1
 #define INT_WDT_IRQ                     30 // Watchdog interrupt event
@@ -79,7 +79,7 @@
 #define INT_GPT3A                       37 // GPT3A interrupt event
 #define INT_GPT3B                       38 // GPT3B interrupt event
 #define INT_CRYPTO_RESULT_AVAIL_IRQ     39 // CRYPTO result available interupt
-                                           // event
+// event
 #define INT_DMA_DONE_COMB               40 // Combined DMA done
 #define INT_DMA_ERR                     41 // DMA bus error
 #define INT_FLASH                       42 // FLASH controller error event

@@ -35,23 +35,23 @@ enum KnxIpServiceType
 
 class KnxIpFrame
 {
-  public:
-    KnxIpFrame(uint8_t* data, uint16_t length);
-    KnxIpFrame(uint16_t totalLength);
-    virtual ~KnxIpFrame();
-    uint8_t headerLength() const;
-    void headerLength(uint8_t length);
-    KnxIpVersion protocolVersion() const;
-    void protocolVersion(KnxIpVersion version);
-    uint16_t serviceTypeIdentifier() const;
-    void serviceTypeIdentifier(uint16_t identifier);
-    uint16_t totalLength() const;
-    void totalLength(uint16_t length);
-    uint8_t* data();
+    public:
+        KnxIpFrame(uint8_t* data, uint16_t length);
+        KnxIpFrame(uint16_t totalLength);
+        virtual ~KnxIpFrame();
+        uint8_t headerLength() const;
+        void headerLength(uint8_t length);
+        KnxIpVersion protocolVersion() const;
+        void protocolVersion(KnxIpVersion version);
+        uint16_t serviceTypeIdentifier() const;
+        void serviceTypeIdentifier(uint16_t identifier);
+        uint16_t totalLength() const;
+        void totalLength(uint16_t length);
+        uint8_t* data();
 
-  protected:
-    bool _freeData = false;
-    uint8_t* _data = 0;
-    uint16_t _dataLength;
+    protected:
+        bool _freeData = false;
+        uint8_t* _data = 0;
+        uint16_t _dataLength;
 };
 #endif

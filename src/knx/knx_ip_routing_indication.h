@@ -6,11 +6,11 @@
 
 class KnxIpRoutingIndication : public KnxIpFrame
 {
-  public:
-    KnxIpRoutingIndication(uint8_t* data, uint16_t length);
-    KnxIpRoutingIndication(CemiFrame frame);
-    CemiFrame& frame();
-  private:
-    CemiFrame _frame;
+    public:
+        KnxIpRoutingIndication(uint8_t* data, uint16_t length);
+        KnxIpRoutingIndication(CemiFrame frame);
+        CemiFrame& frame();
+    private:
+        CemiFrame _frame;
 };
 #endif

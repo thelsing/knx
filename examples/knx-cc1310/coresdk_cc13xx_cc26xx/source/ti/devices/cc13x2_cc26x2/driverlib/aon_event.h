@@ -80,10 +80,10 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AONEventMcuWakeUpSet            NOROM_AONEventMcuWakeUpSet
-    #define AONEventMcuWakeUpGet            NOROM_AONEventMcuWakeUpGet
-    #define AONEventMcuSet                  NOROM_AONEventMcuSet
-    #define AONEventMcuGet                  NOROM_AONEventMcuGet
+#define AONEventMcuWakeUpSet            NOROM_AONEventMcuWakeUpSet
+#define AONEventMcuWakeUpGet            NOROM_AONEventMcuWakeUpGet
+#define AONEventMcuSet                  NOROM_AONEventMcuSet
+#define AONEventMcuGet                  NOROM_AONEventMcuGet
 #endif
 
 //*****************************************************************************
@@ -103,8 +103,8 @@ extern "C"
 #define AON_EVENT_BATMON_TEMP_LL     8 // BATMON event: Temperature level below lower limit
 #define AON_EVENT_BATMON_COMBINED    9 // Combined event from BATMON
 #define AON_EVENT_IO                32 // Edge detect on any DIO. Edge detect is enabled and configured in IOC.
-                                       // Event ID 33 is reserved for future use
-                                       // Event ID 34 is reserved for future use
+// Event ID 33 is reserved for future use
+// Event ID 34 is reserved for future use
 #define AON_EVENT_RTC_CH0           35 // RTC channel 0
 #define AON_EVENT_RTC_CH1           36 // RTC channel 1
 #define AON_EVENT_RTC_CH2           37 // RTC channel 2
@@ -127,7 +127,7 @@ extern "C"
 #define AON_EVENT_BATMON_VOLT       54 // BATMON voltage update event
 #define AON_EVENT_AUX_COMPB_ASYNC   55 // Comparator B triggered. Asynchronous signal directly from the AUX Comparator B
 #define AON_EVENT_AUX_COMPB_ASYNC_N 56 // Comparator B not triggered. Asynchronous signal directly from the AUX Comparator B
-                                       // Event ID 57-62 is reserved for future use
+// Event ID 57-62 is reserved for future use
 #define AON_EVENT_NONE              63 // No event, always low
 
 // Keeping backward compatibility until major revision number is incremented
@@ -525,23 +525,23 @@ AONEventRtcGet(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AONEventMcuWakeUpSet
-        #undef  AONEventMcuWakeUpSet
-        #define AONEventMcuWakeUpSet            ROM_AONEventMcuWakeUpSet
-    #endif
-    #ifdef ROM_AONEventMcuWakeUpGet
-        #undef  AONEventMcuWakeUpGet
-        #define AONEventMcuWakeUpGet            ROM_AONEventMcuWakeUpGet
-    #endif
-    #ifdef ROM_AONEventMcuSet
-        #undef  AONEventMcuSet
-        #define AONEventMcuSet                  ROM_AONEventMcuSet
-    #endif
-    #ifdef ROM_AONEventMcuGet
-        #undef  AONEventMcuGet
-        #define AONEventMcuGet                  ROM_AONEventMcuGet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AONEventMcuWakeUpSet
+#undef  AONEventMcuWakeUpSet
+#define AONEventMcuWakeUpSet            ROM_AONEventMcuWakeUpSet
+#endif
+#ifdef ROM_AONEventMcuWakeUpGet
+#undef  AONEventMcuWakeUpGet
+#define AONEventMcuWakeUpGet            ROM_AONEventMcuWakeUpGet
+#endif
+#ifdef ROM_AONEventMcuSet
+#undef  AONEventMcuSet
+#define AONEventMcuSet                  ROM_AONEventMcuSet
+#endif
+#ifdef ROM_AONEventMcuGet
+#undef  AONEventMcuGet
+#define AONEventMcuGet                  ROM_AONEventMcuGet
+#endif
 #endif
 
 //*****************************************************************************

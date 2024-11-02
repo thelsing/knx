@@ -2,7 +2,7 @@
 #define _AES_HPP_
 
 #ifndef __cplusplus
-#error Do not include the hpp header in a c project!
+    #error Do not include the hpp header in a c project!
 #endif //__cplusplus
 
 extern "C" {

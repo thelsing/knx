@@ -80,7 +80,7 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AUXSYSIFOpModeChange            NOROM_AUXSYSIFOpModeChange
+#define AUXSYSIFOpModeChange            NOROM_AUXSYSIFOpModeChange
 #endif
 
 
@@ -127,11 +127,11 @@ extern void AUXSYSIFOpModeChange(uint32_t targetOpMode);
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AUXSYSIFOpModeChange
-        #undef  AUXSYSIFOpModeChange
-        #define AUXSYSIFOpModeChange            ROM_AUXSYSIFOpModeChange
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AUXSYSIFOpModeChange
+#undef  AUXSYSIFOpModeChange
+#define AUXSYSIFOpModeChange            ROM_AUXSYSIFOpModeChange
+#endif
 #endif
 
 //*****************************************************************************

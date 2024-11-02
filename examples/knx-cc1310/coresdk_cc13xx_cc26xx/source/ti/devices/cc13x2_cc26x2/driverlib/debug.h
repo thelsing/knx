@@ -53,7 +53,7 @@
 //! Function stub for allowing compile with DRIVERLIB_DEBUG flag asserted.
 //
 //*****************************************************************************
-extern void __error__(char *pcFilename, uint32_t ui32Line);
+extern void __error__(char* pcFilename, uint32_t ui32Line);
 
 //*****************************************************************************
 //
@@ -63,11 +63,11 @@ extern void __error__(char *pcFilename, uint32_t ui32Line);
 //*****************************************************************************
 #ifdef DRIVERLIB_DEBUG
 #define ASSERT(expr) {                                      \
-                         if(!(expr))                        \
-                         {                                  \
-                             __error__(__FILE__, __LINE__); \
-                         }                                  \
-                     }
+        if(!(expr))                        \
+        {                                  \
+            __error__(__FILE__, __LINE__); \
+        }                                  \
+    }
 
 #else
 #define ASSERT(expr)

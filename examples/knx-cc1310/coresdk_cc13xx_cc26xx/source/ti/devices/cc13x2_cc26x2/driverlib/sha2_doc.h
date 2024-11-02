@@ -38,7 +38,7 @@
 //! \section sec_sha2 Introduction
 //!
 //! The SHA-2 (Secure Hash Algorithm) API provides access to the SHA-2
-//!	functionality of the crypto core. The AES accelerator and keystore are
+//! functionality of the crypto core. The AES accelerator and keystore are
 //! also contained  within the crypto core. Hence, only one of SHA-2 and AES
 //! may be used at the same time.
 //! This module offers hardware acceleration for the SHA-2 family of hash
@@ -54,7 +54,7 @@
 //!
 //! The crypto core does not have retention and all configuration settings
 //! are lost when going into standby or shutdown. If you wish to continue
-//!	a hash operation after going into standby or shutdown, you must load
+//! a hash operation after going into standby or shutdown, you must load
 //! the intermediate hash into system RAM before entering standby or shutdown
 //! and load the intermediate hash back into the crypto module after resuming
 //! operation.

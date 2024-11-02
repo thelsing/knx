@@ -428,7 +428,7 @@ typedef void (*Power_PolicyFxn)(void);
  *  @sa  @ref ti_drivers_Power_Examples_notify "Using power notify"
  */
 typedef int_fast16_t (*Power_NotifyFxn)(uint_fast16_t eventType,
-     uintptr_t eventArg, uintptr_t clientArg);
+                                        uintptr_t eventArg, uintptr_t clientArg);
 
 /*!
  *  @brief      Power notify object structure.
@@ -440,7 +440,8 @@ typedef int_fast16_t (*Power_NotifyFxn)(uint_fast16_t eventType,
  *
  *  @sa  @ref ti_drivers_Power_Examples_notify "Using power notify"
  */
-typedef struct {
+typedef struct
+{
     List_Elem link;             /*!< for placing on the notify list */
     uint_fast16_t eventTypes;   /*!< the event type */
     Power_NotifyFxn notifyFxn;  /*!< notification function */
@@ -573,7 +574,7 @@ uint_fast16_t Power_getPerformanceLevel(void);
  *  @sa  @ref ti_drivers_Power_Examples_transistion "Power transitions"
  */
 uint_fast32_t Power_getTransitionLatency(uint_fast16_t sleepState,
-    uint_fast16_t type);
+        uint_fast16_t type);
 
 /*!
  *  @brief  Get the current transition state of the Power Manager
@@ -685,7 +686,7 @@ int_fast16_t Power_init(void);
  *  @sa  Power_unregisterNotify()
  *  @sa  @ref ti_drivers_Power_Examples_notify "Using power notify"
  */
-int_fast16_t Power_registerNotify(Power_NotifyObj *pNotifyObj,
+int_fast16_t Power_registerNotify(Power_NotifyObj* pNotifyObj,
                                   uint_fast16_t eventTypes,
                                   Power_NotifyFxn notifyFxn,
                                   uintptr_t clientArg);
@@ -921,7 +922,7 @@ void Power_setPolicy(Power_PolicyFxn policy);
  *  @retval  #Power_EBUSY if another transition is already in progress.
  */
 int_fast16_t Power_shutdown(uint_fast16_t shutdownState,
-    uint_fast32_t shutdownTime);
+                            uint_fast32_t shutdownTime);
 
 /*!
  *  @brief  Transition the device into a sleep state
@@ -961,7 +962,7 @@ int_fast16_t Power_sleep(uint_fast16_t sleepState);
  *  @sa  Power_registerNotify()
  *  @sa  @ref ti_drivers_Power_Examples_notify "Using power notify"
  */
-void Power_unregisterNotify(Power_NotifyObj *pNotifyObj);
+void Power_unregisterNotify(Power_NotifyObj* pNotifyObj);
 
 #ifdef __cplusplus
 }

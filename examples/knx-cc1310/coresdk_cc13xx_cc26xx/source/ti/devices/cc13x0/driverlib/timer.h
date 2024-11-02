@@ -80,14 +80,14 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define TimerConfigure                  NOROM_TimerConfigure
-    #define TimerLevelControl               NOROM_TimerLevelControl
-    #define TimerStallControl               NOROM_TimerStallControl
-    #define TimerWaitOnTriggerControl       NOROM_TimerWaitOnTriggerControl
-    #define TimerIntRegister                NOROM_TimerIntRegister
-    #define TimerIntUnregister              NOROM_TimerIntUnregister
-    #define TimerMatchUpdateMode            NOROM_TimerMatchUpdateMode
-    #define TimerIntervalLoadMode           NOROM_TimerIntervalLoadMode
+#define TimerConfigure                  NOROM_TimerConfigure
+#define TimerLevelControl               NOROM_TimerLevelControl
+#define TimerStallControl               NOROM_TimerStallControl
+#define TimerWaitOnTriggerControl       NOROM_TimerWaitOnTriggerControl
+#define TimerIntRegister                NOROM_TimerIntRegister
+#define TimerIntUnregister              NOROM_TimerIntUnregister
+#define TimerMatchUpdateMode            NOROM_TimerMatchUpdateMode
+#define TimerIntervalLoadMode           NOROM_TimerIntervalLoadMode
 #endif
 
 //*****************************************************************************
@@ -210,8 +210,8 @@ extern "C"
 static bool
 TimerBaseValid(uint32_t ui32Base)
 {
-    return((ui32Base == GPT0_BASE) || (ui32Base == GPT1_BASE) ||
-           (ui32Base == GPT2_BASE) || (ui32Base == GPT3_BASE));
+    return ((ui32Base == GPT0_BASE) || (ui32Base == GPT1_BASE) ||
+            (ui32Base == GPT2_BASE) || (ui32Base == GPT3_BASE));
 }
 #endif
 
@@ -474,13 +474,13 @@ TimerPrescaleSet(uint32_t ui32Base, uint32_t ui32Timer, uint32_t ui32Value)
     ASSERT(ui32Value < 256);
 
     // Set the timer A prescaler if requested.
-    if(ui32Timer & TIMER_A)
+    if (ui32Timer & TIMER_A)
     {
         HWREG(ui32Base + GPT_O_TAPR) = ui32Value;
     }
 
     // Set the timer B prescaler if requested.
-    if(ui32Timer & TIMER_B)
+    if (ui32Timer & TIMER_B)
     {
         HWREG(ui32Base + GPT_O_TBPR) = ui32Value;
     }
@@ -522,8 +522,8 @@ TimerPrescaleGet(uint32_t ui32Base, uint32_t ui32Timer)
            (ui32Timer == TIMER_BOTH));
 
     // Return the appropriate prescale value.
-    return((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAPR) :
-           HWREG(ui32Base + GPT_O_TBPR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAPR) :
+            HWREG(ui32Base + GPT_O_TBPR));
 }
 
 //*****************************************************************************
@@ -558,13 +558,13 @@ TimerPrescaleMatchSet(uint32_t ui32Base, uint32_t ui32Timer, uint32_t ui32Value)
     ASSERT(ui32Value < 256);
 
     // Set the timer A prescale match if requested.
-    if(ui32Timer & TIMER_A)
+    if (ui32Timer & TIMER_A)
     {
         HWREG(ui32Base + GPT_O_TAPMR) = ui32Value;
     }
 
     // Set the timer B prescale match if requested.
-    if(ui32Timer & TIMER_B)
+    if (ui32Timer & TIMER_B)
     {
         HWREG(ui32Base + GPT_O_TBPMR) = ui32Value;
     }
@@ -597,8 +597,8 @@ TimerPrescaleMatchGet(uint32_t ui32Base, uint32_t ui32Timer)
     ASSERT((ui32Timer == TIMER_A) || (ui32Timer == TIMER_B));
 
     // Return the appropriate prescale match value.
-    return((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAPMR) :
-           HWREG(ui32Base + GPT_O_TBPMR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAPMR) :
+            HWREG(ui32Base + GPT_O_TBPMR));
 }
 
 //*****************************************************************************
@@ -633,13 +633,13 @@ TimerLoadSet(uint32_t ui32Base, uint32_t ui32Timer, uint32_t ui32Value)
            (ui32Timer == TIMER_BOTH));
 
     // Set the timer A load value if requested.
-    if(ui32Timer & TIMER_A)
+    if (ui32Timer & TIMER_A)
     {
         HWREG(ui32Base + GPT_O_TAILR) = ui32Value;
     }
 
     // Set the timer B load value if requested.
-    if(ui32Timer & TIMER_B)
+    if (ui32Timer & TIMER_B)
     {
         HWREG(ui32Base + GPT_O_TBILR) = ui32Value;
     }
@@ -674,8 +674,8 @@ TimerLoadGet(uint32_t ui32Base, uint32_t ui32Timer)
     ASSERT((ui32Timer == TIMER_A) || (ui32Timer == TIMER_B));
 
     // Return the appropriate load value.
-    return((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAILR) :
-           HWREG(ui32Base + GPT_O_TBILR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAILR) :
+            HWREG(ui32Base + GPT_O_TBILR));
 }
 
 //*****************************************************************************
@@ -706,8 +706,8 @@ TimerValueGet(uint32_t ui32Base, uint32_t ui32Timer)
     ASSERT((ui32Timer == TIMER_A) || (ui32Timer == TIMER_B));
 
     // Return the appropriate timer value.
-    return((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAR) :
-           HWREG(ui32Base + GPT_O_TBR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAR) :
+            HWREG(ui32Base + GPT_O_TBR));
 }
 
 //*****************************************************************************
@@ -745,13 +745,13 @@ TimerMatchSet(uint32_t ui32Base, uint32_t ui32Timer, uint32_t ui32Value)
            (ui32Timer == TIMER_BOTH));
 
     // Set the timer A match value if requested.
-    if(ui32Timer & TIMER_A)
+    if (ui32Timer & TIMER_A)
     {
         HWREG(ui32Base + GPT_O_TAMATCHR) = ui32Value;
     }
 
     // Set the timer B match value if requested.
-    if(ui32Timer & TIMER_B)
+    if (ui32Timer & TIMER_B)
     {
         HWREG(ui32Base + GPT_O_TBMATCHR) = ui32Value;
     }
@@ -786,8 +786,8 @@ TimerMatchGet(uint32_t ui32Base, uint32_t ui32Timer)
     ASSERT((ui32Timer == TIMER_A) || (ui32Timer == TIMER_B));
 
     // Return the appropriate match value.
-    return((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAMATCHR) :
-           HWREG(ui32Base + GPT_O_TBMATCHR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAMATCHR) :
+            HWREG(ui32Base + GPT_O_TBMATCHR));
 }
 
 //*****************************************************************************
@@ -936,8 +936,8 @@ TimerIntStatus(uint32_t ui32Base, bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    return(bMasked ? HWREG(ui32Base + GPT_O_MIS) :
-           HWREG(ui32Base + GPT_O_RIS));
+    return (bMasked ? HWREG(ui32Base + GPT_O_MIS) :
+            HWREG(ui32Base + GPT_O_RIS));
 }
 
 //*****************************************************************************
@@ -1121,39 +1121,39 @@ extern void TimerIntervalLoadMode(uint32_t ui32Base, uint32_t ui32Timer, uint32_
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_TimerConfigure
-        #undef  TimerConfigure
-        #define TimerConfigure                  ROM_TimerConfigure
-    #endif
-    #ifdef ROM_TimerLevelControl
-        #undef  TimerLevelControl
-        #define TimerLevelControl               ROM_TimerLevelControl
-    #endif
-    #ifdef ROM_TimerStallControl
-        #undef  TimerStallControl
-        #define TimerStallControl               ROM_TimerStallControl
-    #endif
-    #ifdef ROM_TimerWaitOnTriggerControl
-        #undef  TimerWaitOnTriggerControl
-        #define TimerWaitOnTriggerControl       ROM_TimerWaitOnTriggerControl
-    #endif
-    #ifdef ROM_TimerIntRegister
-        #undef  TimerIntRegister
-        #define TimerIntRegister                ROM_TimerIntRegister
-    #endif
-    #ifdef ROM_TimerIntUnregister
-        #undef  TimerIntUnregister
-        #define TimerIntUnregister              ROM_TimerIntUnregister
-    #endif
-    #ifdef ROM_TimerMatchUpdateMode
-        #undef  TimerMatchUpdateMode
-        #define TimerMatchUpdateMode            ROM_TimerMatchUpdateMode
-    #endif
-    #ifdef ROM_TimerIntervalLoadMode
-        #undef  TimerIntervalLoadMode
-        #define TimerIntervalLoadMode           ROM_TimerIntervalLoadMode
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_TimerConfigure
+#undef  TimerConfigure
+#define TimerConfigure                  ROM_TimerConfigure
+#endif
+#ifdef ROM_TimerLevelControl
+#undef  TimerLevelControl
+#define TimerLevelControl               ROM_TimerLevelControl
+#endif
+#ifdef ROM_TimerStallControl
+#undef  TimerStallControl
+#define TimerStallControl               ROM_TimerStallControl
+#endif
+#ifdef ROM_TimerWaitOnTriggerControl
+#undef  TimerWaitOnTriggerControl
+#define TimerWaitOnTriggerControl       ROM_TimerWaitOnTriggerControl
+#endif
+#ifdef ROM_TimerIntRegister
+#undef  TimerIntRegister
+#define TimerIntRegister                ROM_TimerIntRegister
+#endif
+#ifdef ROM_TimerIntUnregister
+#undef  TimerIntUnregister
+#define TimerIntUnregister              ROM_TimerIntUnregister
+#endif
+#ifdef ROM_TimerMatchUpdateMode
+#undef  TimerMatchUpdateMode
+#define TimerMatchUpdateMode            ROM_TimerMatchUpdateMode
+#endif
+#ifdef ROM_TimerIntervalLoadMode
+#undef  TimerIntervalLoadMode
+#define TimerIntervalLoadMode           ROM_TimerIntervalLoadMode
+#endif
 #endif
 
 //*****************************************************************************

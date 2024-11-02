@@ -59,7 +59,7 @@
  *       :
  *  }
  *  @endcode
- *  
+ *
  *  ## Initializing the hardware ##
  *
  *  \p Board_init() must be called before any other driver API. This function
@@ -74,7 +74,7 @@
  *
  *  @anchor ti_drivers_I2C_Example_portable
  *  For example, the I2C driver adds \p Board.h symbol definitions of the form
- *  * <I>bus_name</I> - the I2C bus instance ID, 
+ *  * <I>bus_name</I> - the I2C bus instance ID,
  *  * <I>bus_name</I>_MAXBITRATE - the maximum supported BITRATE for the bus
  *    <I>bus_name</I>, and
  *  * Board_I2C_<I>comp_name</I>_ADDR - the slave address for the named I2C

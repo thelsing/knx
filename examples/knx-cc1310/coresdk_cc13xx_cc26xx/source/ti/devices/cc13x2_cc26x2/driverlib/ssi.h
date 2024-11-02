@@ -82,13 +82,13 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define SSIConfigSetExpClk              NOROM_SSIConfigSetExpClk
-    #define SSIDataPut                      NOROM_SSIDataPut
-    #define SSIDataPutNonBlocking           NOROM_SSIDataPutNonBlocking
-    #define SSIDataGet                      NOROM_SSIDataGet
-    #define SSIDataGetNonBlocking           NOROM_SSIDataGetNonBlocking
-    #define SSIIntRegister                  NOROM_SSIIntRegister
-    #define SSIIntUnregister                NOROM_SSIIntUnregister
+#define SSIConfigSetExpClk              NOROM_SSIConfigSetExpClk
+#define SSIDataPut                      NOROM_SSIDataPut
+#define SSIDataPutNonBlocking           NOROM_SSIDataPutNonBlocking
+#define SSIDataGet                      NOROM_SSIDataGet
+#define SSIDataGetNonBlocking           NOROM_SSIDataGetNonBlocking
+#define SSIIntRegister                  NOROM_SSIIntRegister
+#define SSIIntUnregister                NOROM_SSIIntUnregister
 #endif
 
 //*****************************************************************************
@@ -161,7 +161,7 @@ extern "C"
 static bool
 SSIBaseValid(uint32_t ui32Base)
 {
-    return(ui32Base == SSI0_BASE || ui32Base == SSI1_BASE);
+    return (ui32Base == SSI0_BASE || ui32Base == SSI1_BASE);
 }
 #endif
 
@@ -331,7 +331,7 @@ extern int32_t SSIDataPutNonBlocking(uint32_t ui32Base, uint32_t ui32Data);
 //! \return None
 //
 //*****************************************************************************
-extern void SSIDataGet(uint32_t ui32Base, uint32_t *pui32Data);
+extern void SSIDataGet(uint32_t ui32Base, uint32_t* pui32Data);
 
 //*****************************************************************************
 //
@@ -355,7 +355,7 @@ extern void SSIDataGet(uint32_t ui32Base, uint32_t *pui32Data);
 //! \return Returns the number of elements read from the SSI receive FIFO.
 //
 //*****************************************************************************
-extern int32_t SSIDataGetNonBlocking(uint32_t ui32Base, uint32_t *pui32Data);
+extern int32_t SSIDataGetNonBlocking(uint32_t ui32Base, uint32_t* pui32Data);
 
 //*****************************************************************************
 //
@@ -380,7 +380,7 @@ SSIBusy(uint32_t ui32Base)
     ASSERT(SSIBaseValid(ui32Base));
 
     // Determine if the SSI is busy.
-    return((HWREG(ui32Base + SSI_O_SR) & SSI_SR_BSY) ? true : false);
+    return ((HWREG(ui32Base + SSI_O_SR) & SSI_SR_BSY) ? true : false);
 }
 
 //*****************************************************************************
@@ -577,13 +577,13 @@ SSIIntStatus(uint32_t ui32Base, bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    if(bMasked)
+    if (bMasked)
     {
-        return(HWREG(ui32Base + SSI_O_MIS));
+        return (HWREG(ui32Base + SSI_O_MIS));
     }
     else
     {
-        return(HWREG(ui32Base + SSI_O_RIS));
+        return (HWREG(ui32Base + SSI_O_RIS));
     }
 }
 
@@ -649,35 +649,35 @@ SSIDMADisable(uint32_t ui32Base, uint32_t ui32DMAFlags)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_SSIConfigSetExpClk
-        #undef  SSIConfigSetExpClk
-        #define SSIConfigSetExpClk              ROM_SSIConfigSetExpClk
-    #endif
-    #ifdef ROM_SSIDataPut
-        #undef  SSIDataPut
-        #define SSIDataPut                      ROM_SSIDataPut
-    #endif
-    #ifdef ROM_SSIDataPutNonBlocking
-        #undef  SSIDataPutNonBlocking
-        #define SSIDataPutNonBlocking           ROM_SSIDataPutNonBlocking
-    #endif
-    #ifdef ROM_SSIDataGet
-        #undef  SSIDataGet
-        #define SSIDataGet                      ROM_SSIDataGet
-    #endif
-    #ifdef ROM_SSIDataGetNonBlocking
-        #undef  SSIDataGetNonBlocking
-        #define SSIDataGetNonBlocking           ROM_SSIDataGetNonBlocking
-    #endif
-    #ifdef ROM_SSIIntRegister
-        #undef  SSIIntRegister
-        #define SSIIntRegister                  ROM_SSIIntRegister
-    #endif
-    #ifdef ROM_SSIIntUnregister
-        #undef  SSIIntUnregister
-        #define SSIIntUnregister                ROM_SSIIntUnregister
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_SSIConfigSetExpClk
+#undef  SSIConfigSetExpClk
+#define SSIConfigSetExpClk              ROM_SSIConfigSetExpClk
+#endif
+#ifdef ROM_SSIDataPut
+#undef  SSIDataPut
+#define SSIDataPut                      ROM_SSIDataPut
+#endif
+#ifdef ROM_SSIDataPutNonBlocking
+#undef  SSIDataPutNonBlocking
+#define SSIDataPutNonBlocking           ROM_SSIDataPutNonBlocking
+#endif
+#ifdef ROM_SSIDataGet
+#undef  SSIDataGet
+#define SSIDataGet                      ROM_SSIDataGet
+#endif
+#ifdef ROM_SSIDataGetNonBlocking
+#undef  SSIDataGetNonBlocking
+#define SSIDataGetNonBlocking           ROM_SSIDataGetNonBlocking
+#endif
+#ifdef ROM_SSIIntRegister
+#undef  SSIIntRegister
+#define SSIIntRegister                  ROM_SSIIntRegister
+#endif
+#ifdef ROM_SSIIntUnregister
+#undef  SSIIntUnregister
+#define SSIIntUnregister                ROM_SSIIntUnregister
+#endif
 #endif
 
 //*****************************************************************************

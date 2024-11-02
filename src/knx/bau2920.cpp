@@ -14,10 +14,10 @@ Bau2920::Bau2920(Platform& platform)
       _rtObjPrimary(memory()),
       _rtObjSecondary(memory()),
       _rfMediumObject(),
-      _dlLayerPrimary(_deviceObj, _netLayer.getPrimaryInterface(), _platform, (ITpUartCallBacks&) *this),
+      _dlLayerPrimary(_deviceObj, _netLayer.getPrimaryInterface(), _platform, (ITpUartCallBacks&) * this),
       _dlLayerSecondary(_deviceObj, _rfMediumObject, _netLayer.getSecondaryInterface(), platform)
 #ifdef USE_CEMI_SERVER
-      ,
+    ,
       _cemiServer(*this)
 #endif
 {
@@ -72,34 +72,43 @@ InterfaceObject* Bau2920::getInterfaceObject(uint8_t idx)
     {
         case 0:
             return &_deviceObj;
+
         case 1:
             return &_rtObjPrimary;
+
         case 2:
             return &_rtObjSecondary;
+
         case 3:
             return &_appProgram;
+
         case 4:
             return &_rfMediumObject;
 #if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
+
         case 5:
             return &_secIfObj;
+
         case 6:
             return &_cemiServerObject;
 #elif defined(USE_CEMI_SERVER)
+
         case 5:
             return &_cemiServerObject;
 #elif defined(USE_DATASECURE)
+
         case 5:
             return &_secIfObj;
 #endif
+
         default:
             return nullptr;
     }
 }
 
-InterfaceObject* Bau2920::getInterfaceObject(ObjectType objectType, uint8_t objectInstance)
+InterfaceObject* Bau2920::getInterfaceObject(ObjectType objectType, uint16_t objectInstance)
 {
-    // We do not use it right now. 
+    // We do not use it right now.
     // Required for coupler mode as there are multiple router objects for example
     (void) objectInstance;
 
@@ -107,20 +116,26 @@ InterfaceObject* Bau2920::getInterfaceObject(ObjectType objectType, uint8_t obje
     {
         case OT_DEVICE:
             return &_deviceObj;
+
         case OT_ROUTER:
             return objectInstance == 0 ? &_rtObjPrimary : &_rtObjSecondary;
+
         case OT_APPLICATION_PROG:
             return &_appProgram;
+
         case OT_RF_MEDIUM:
             return &_rfMediumObject;
 #ifdef USE_DATASECURE
+
         case OT_SECURITY:
             return &_secIfObj;
 #endif
 #ifdef USE_CEMI_SERVER
+
         case OT_CEMI_SERVER:
             return &_cemiServerObject;
 #endif
+
         default:
             return nullptr;
     }
@@ -154,11 +169,13 @@ void Bau2920::loop()
     BauSystemBCoupler::loop();
 }
 
-TpUartDataLinkLayer* Bau2920::getPrimaryDataLinkLayer() {
+TpUartDataLinkLayer* Bau2920::getPrimaryDataLinkLayer()
+{
     return (TpUartDataLinkLayer*)&_dlLayerPrimary;
 }
 
-RfDataLinkLayer* Bau2920::getSecondaryDataLinkLayer() {
+RfDataLinkLayer* Bau2920::getSecondaryDataLinkLayer()
+{
     return (RfDataLinkLayer*)&_dlLayerSecondary;
 }
 #endif

@@ -41,8 +41,9 @@ extern "C" {
 #include <stddef.h>
 #include <stdbool.h>
 
-typedef struct RingBuf_Object {
-    unsigned char      *buffer;
+typedef struct RingBuf_Object
+{
+    unsigned char*      buffer;
     size_t              length;
     size_t              count;
     size_t              head;
@@ -61,8 +62,8 @@ typedef struct RingBuf_Object {
  *
  *  @param  bufSize The size of bufPtr in number of unsigned chars.
  */
-void RingBuf_construct(RingBuf_Handle object, unsigned char *bufPtr,
-    size_t bufSize);
+void RingBuf_construct(RingBuf_Handle object, unsigned char* bufPtr,
+                       size_t bufSize);
 
 /*!
  *  @brief  Get an unsigned char from the end of the circular buffer and remove
@@ -78,7 +79,7 @@ void RingBuf_construct(RingBuf_Handle object, unsigned char *bufPtr,
  *                  of the circular buffer. If it returns -1, the circular
  *                  buffer was already empty and data is invalid.
  */
-int RingBuf_get(RingBuf_Handle object, unsigned char *data);
+int RingBuf_get(RingBuf_Handle object, unsigned char* data);
 
 /*!
  *  @brief  Get the number of unsigned chars currently stored on the circular
@@ -126,7 +127,7 @@ int RingBuf_getMaxCount(RingBuf_Handle object);
  *                  number != 0, then data will contain the unsigned char at the
  *                  end of the circular buffer.
  */
-int RingBuf_peek(RingBuf_Handle object, unsigned char *data);
+int RingBuf_peek(RingBuf_Handle object, unsigned char* data);
 
 /*!
  *  @brief  Put an unsigned char into the end of the circular buffer.

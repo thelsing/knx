@@ -15,6 +15,7 @@ uint8_t KnxIpSupportedServiceDIB::serviceVersion(ServiceFamily family)
         if (*it == family)
             return it[1];
     }
+
     return 0;
 }
 

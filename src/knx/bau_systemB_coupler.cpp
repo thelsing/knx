@@ -17,7 +17,6 @@ BauSystemBCoupler::BauSystemBCoupler(Platform& platform) :
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);
     _memory.addSaveRestore(&_deviceObj);
-    _memory.addSaveRestore(&_appProgram);
 #ifdef USE_DATASECURE
     _memory.addSaveRestore(&_secIfObj);
 #endif
@@ -39,15 +38,15 @@ void BauSystemBCoupler::loop()
 bool BauSystemBCoupler::configured()
 {
     // _configured is set to true initially, if the device was configured with ETS it will be set to true after restart
-    
+
     if (!_configured)
         return false;
-    
+
     _configured = _appProgram.loadState() == LS_LOADED;
 #ifdef USE_DATASECURE
     _configured &= _secIfObj.loadState() == LS_LOADED;
 #endif
-    
+
     return _configured;
 }
 

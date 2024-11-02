@@ -7,11 +7,11 @@
 
 class CemiServerObject: public InterfaceObject
 {
-public:
-  CemiServerObject();
+    public:
+        CemiServerObject();
 
-  void setMediumTypeAsSupported(DptMedium dptMedium);
-  void clearSupportedMediaTypes();
+        void setMediumTypeAsSupported(DptMedium dptMedium);
+        void clearSupportedMediaTypes();
 };
 
 #endif

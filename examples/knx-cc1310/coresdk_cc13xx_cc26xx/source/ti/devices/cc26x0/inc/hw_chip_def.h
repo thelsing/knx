@@ -65,132 +65,132 @@ extern "C"
 //*****************************************************************************
 /* CC2620F128 */
 #if   defined(CC2620F128RGZ_R20) || defined(CC2620F128RGZ_R21)
-    #define CC_CHIP_ID 0x26200720
+#define CC_CHIP_ID 0x26200720
 #elif defined(CC2620F128RHB_R20) || defined(CC2620F128RHB_R21)
-    #define CC_CHIP_ID 0x26200520
+#define CC_CHIP_ID 0x26200520
 #elif defined(CC2620F128RSM_R20) || defined(CC2620F128RSM_R21)
-    #define CC_CHIP_ID 0x26200420
+#define CC_CHIP_ID 0x26200420
 #elif defined(CC2620F128_R20)    || defined(CC2620F128_R21)
-    #define CC_CHIP_ID 0x26200020
+#define CC_CHIP_ID 0x26200020
 #elif defined(CC2620F128RGZ_R22) || defined(CC2620F128RGZ)
-    #define CC_CHIP_ID 0x26200722
+#define CC_CHIP_ID 0x26200722
 #elif defined(CC2620F128RHB_R22) || defined(CC2620F128RHB)
-    #define CC_CHIP_ID 0x26200522
+#define CC_CHIP_ID 0x26200522
 #elif defined(CC2620F128RSM_R22) || defined(CC2620F128RSM)
-    #define CC_CHIP_ID 0x26200422
+#define CC_CHIP_ID 0x26200422
 #elif defined(CC2620F128_R22)    || defined(CC2620F128)
-    #define CC_CHIP_ID 0x26200022
+#define CC_CHIP_ID 0x26200022
 /* CC2630F128 */
 #elif defined(CC2630F128RGZ_R20) || defined(CC2630F128RGZ_R21)
-    #define CC_CHIP_ID 0x26300720
+#define CC_CHIP_ID 0x26300720
 #elif defined(CC2630F128RHB_R20) || defined(CC2630F128RHB_R21)
-    #define CC_CHIP_ID 0x26300520
+#define CC_CHIP_ID 0x26300520
 #elif defined(CC2630F128RSM_R20) || defined(CC2630F128RSM_R21)
-    #define CC_CHIP_ID 0x26300420
+#define CC_CHIP_ID 0x26300420
 #elif defined(CC2630F128_R20)    || defined(CC2630F128_R21)
-    #define CC_CHIP_ID 0x26300020
+#define CC_CHIP_ID 0x26300020
 #elif defined(CC2630F128RGZ_R22) || defined(CC2630F128RGZ)
-    #define CC_CHIP_ID 0x26300722
+#define CC_CHIP_ID 0x26300722
 #elif defined(CC2630F128RHB_R22) || defined(CC2630F128RHB)
-    #define CC_CHIP_ID 0x26300522
+#define CC_CHIP_ID 0x26300522
 #elif defined(CC2630F128RSM_R22) || defined(CC2630F128RSM)
-    #define CC_CHIP_ID 0x26300422
+#define CC_CHIP_ID 0x26300422
 #elif defined(CC2630F128_R22)    || defined(CC2630F128)
-    #define CC_CHIP_ID 0x26300022
+#define CC_CHIP_ID 0x26300022
 /* CC2640F128 */
 #elif defined(CC2640F128RGZ_R20) || defined(CC2640F128RGZ_R21)
-    #define CC_CHIP_ID 0x26400720
+#define CC_CHIP_ID 0x26400720
 #elif defined(CC2640F128RHB_R20) || defined(CC2640F128RHB_R21)
-    #define CC_CHIP_ID 0x26400520
+#define CC_CHIP_ID 0x26400520
 #elif defined(CC2640F128RSM_R20) || defined(CC2640F128RSM_R21)
-    #define CC_CHIP_ID 0x26400420
+#define CC_CHIP_ID 0x26400420
 #elif defined(CC2640F128_R20)    || defined(CC2640F128_R21)
-    #define CC_CHIP_ID 0x26400020
+#define CC_CHIP_ID 0x26400020
 #elif defined(CC2640F128RGZ_R22) || defined(CC2640F128RGZ)
-    #define CC_CHIP_ID 0x26400722
+#define CC_CHIP_ID 0x26400722
 #elif defined(CC2640F128RHB_R22) || defined(CC2640F128RHB)
-    #define CC_CHIP_ID 0x26400522
+#define CC_CHIP_ID 0x26400522
 #elif defined(CC2640F128RSM_R22) || defined(CC2640F128RSM)
-    #define CC_CHIP_ID 0x26400422
+#define CC_CHIP_ID 0x26400422
 #elif defined(CC2640F128_R22)    || defined(CC2640F128)
-    #define CC_CHIP_ID 0x26400022
+#define CC_CHIP_ID 0x26400022
 /* CC2650F128 */
 #elif defined(CC2650F128RGZ_R20) || defined(CC2650F128RGZ_R21)
-    #define CC_CHIP_ID 0x26500720
+#define CC_CHIP_ID 0x26500720
 #elif defined(CC2650F128RHB_R20) || defined(CC2650F128RHB_R21)
-    #define CC_CHIP_ID 0x26500520
+#define CC_CHIP_ID 0x26500520
 #elif defined(CC2650F128RSM_R20) || defined(CC2650F128RSM_R21)
-    #define CC_CHIP_ID 0x26500420
+#define CC_CHIP_ID 0x26500420
 #elif defined(CC2650F128_R20)    || defined(CC2650F128_R21)
-    #define CC_CHIP_ID 0x26500020
+#define CC_CHIP_ID 0x26500020
 #elif defined(CC2650F128RGZ_R22) || defined(CC2650F128RGZ)
-    #define CC_CHIP_ID 0x26500722
+#define CC_CHIP_ID 0x26500722
 #elif defined(CC2650F128RHB_R22) || defined(CC2650F128RHB)
-    #define CC_CHIP_ID 0x26500522
+#define CC_CHIP_ID 0x26500522
 #elif defined(CC2650F128RSM_R22) || defined(CC2650F128RSM)
-    #define CC_CHIP_ID 0x26500422
+#define CC_CHIP_ID 0x26500422
 #elif defined(CC2650F128_R22)    || defined(CC2650F128)
-    #define CC_CHIP_ID 0x26500022
+#define CC_CHIP_ID 0x26500022
 /* CC2650L128 (OTP) */
 #elif defined(CC2650L128)
-    #define CC_CHIP_ID 0x26501710
+#define CC_CHIP_ID 0x26501710
 /* CC1310F128 */
 #elif defined(CC1310F128RGZ_R20) || defined(CC1310F128RGZ)
-    #define CC_CHIP_ID 0x13100720
+#define CC_CHIP_ID 0x13100720
 #elif defined(CC1310F128RHB_R20) || defined(CC1310F128RHB)
-    #define CC_CHIP_ID 0x13100520
+#define CC_CHIP_ID 0x13100520
 #elif defined(CC1310F128RSM_R20) || defined(CC1310F128RSM)
-    #define CC_CHIP_ID 0x13100420
+#define CC_CHIP_ID 0x13100420
 #elif defined(CC1310F128_R20)    || defined(CC1310F128)
-    #define CC_CHIP_ID 0x13100020
+#define CC_CHIP_ID 0x13100020
 /* CC1350F128 */
 #elif defined(CC1350F128RGZ_R20) || defined(CC1350F128RGZ)
-    #define CC_CHIP_ID 0x13500720
+#define CC_CHIP_ID 0x13500720
 #elif defined(CC1350F128RHB_R20) || defined(CC1350F128RHB)
-    #define CC_CHIP_ID 0x13500520
+#define CC_CHIP_ID 0x13500520
 #elif defined(CC1350F128RSM_R20) || defined(CC1350F128RSM)
-    #define CC_CHIP_ID 0x13500420
+#define CC_CHIP_ID 0x13500420
 #elif defined(CC1350F128_R20)    || defined(CC1350F128)
-    #define CC_CHIP_ID 0x13500020
+#define CC_CHIP_ID 0x13500020
 /* CC2640R2F */
 #elif defined(CC2640R2FRGZ_R25) || defined(CC2640R2FRGZ)
-    #define CC_CHIP_ID 0x26401710
+#define CC_CHIP_ID 0x26401710
 #elif defined(CC2640R2FRHB_R25) || defined(CC2640R2FRHB)
-    #define CC_CHIP_ID 0x26401510
+#define CC_CHIP_ID 0x26401510
 #elif defined(CC2640R2FRSM_R25) || defined(CC2640R2FRSM)
-    #define CC_CHIP_ID 0x26401410
+#define CC_CHIP_ID 0x26401410
 #elif defined(CC2640R2F_R25)    || defined(CC2640R2F)
-    #define CC_CHIP_ID 0x26401010
+#define CC_CHIP_ID 0x26401010
 /* CC2652R1F */
 #elif defined(CC2652R1FRGZ_R10) || defined(CC2652R1FRGZ)
-    #define CC_CHIP_ID 0x26523710
+#define CC_CHIP_ID 0x26523710
 #elif defined(CC2652R1F_R10)    || defined(CC2652R1F)
-    #define CC_CHIP_ID 0x26523010
+#define CC_CHIP_ID 0x26523010
 /* CC2644R1F */
 #elif defined(CC2644R1FRGZ_R10) || defined(CC2644R1FRGZ)
-    #define CC_CHIP_ID 0x26443710
+#define CC_CHIP_ID 0x26443710
 #elif defined(CC2644R1F_R10)    || defined(CC2644R1F)
-    #define CC_CHIP_ID 0x26443010
+#define CC_CHIP_ID 0x26443010
 /* CC2642R1F */
 #elif defined(CC2642R1FRGZ_R10) || defined(CC2642R1FRGZ)
-    #define CC_CHIP_ID 0x26423710
+#define CC_CHIP_ID 0x26423710
 #elif defined(CC2642R1F_R10)    || defined(CC2642R1F)
-    #define CC_CHIP_ID 0x26423010
+#define CC_CHIP_ID 0x26423010
 /* CC1354R1F */
 #elif defined(CC1354R1FRGZ_R10) || defined(CC1354R1FRGZ)
-    #define CC_CHIP_ID 0x13543710
+#define CC_CHIP_ID 0x13543710
 #elif defined(CC1354R1F_R10)    || defined(CC1354R1F)
-    #define CC_CHIP_ID 0x13543010
+#define CC_CHIP_ID 0x13543010
 /* CC1352R1F */
 #elif defined(CC1352R1FRGZ_R10) || defined(CC1352R1FRGZ)
-    #define CC_CHIP_ID 0x13523710
+#define CC_CHIP_ID 0x13523710
 #elif defined(CC1352R1F_R10)    || defined(CC1352R1F)
-    #define CC_CHIP_ID 0x13523010
+#define CC_CHIP_ID 0x13523010
 /* CC1312R1F */
 #elif defined(CC1312R1FRGZ_R10) || defined(CC1312R1FRGZ)
-    #define CC_CHIP_ID 0x13123710
+#define CC_CHIP_ID 0x13123710
 #elif defined(CC1312R1F_R10)    || defined(CC1312R1F)
-    #define CC_CHIP_ID 0x13123010
+#define CC_CHIP_ID 0x13123010
 #endif
 
 #define CC_GET_CHIP_FAMILY 0x26
@@ -198,24 +198,24 @@ extern "C"
 #define CC_GET_CHIP_HWREV 0x22
 
 #ifdef CC_CHIP_ID
-    /* Define chip package only if specified */
-    #if (CC_CHIP_ID & 0x00000F00) != 0
-        #define CC_GET_CHIP_PACKAGE (((CC_CHIP_ID) & 0x00000F00) >> 8)
-    #endif
+/* Define chip package only if specified */
+#if (CC_CHIP_ID & 0x00000F00) != 0
+#define CC_GET_CHIP_PACKAGE (((CC_CHIP_ID) & 0x00000F00) >> 8)
+#endif
 
-    /* Define chip device */
-    #define CC_GET_CHIP_DEVICE (((CC_CHIP_ID) & 0xFFFF0000) >> 16)
+/* Define chip device */
+#define CC_GET_CHIP_DEVICE (((CC_CHIP_ID) & 0xFFFF0000) >> 16)
 
-    /* The chip family, option and package shall match the DriverLib release */
-    #if (CC_GET_CHIP_FAMILY != ((CC_CHIP_ID & 0xFF000000) >> 24))
-        #error "Specified chip family does not match DriverLib release"
-    #endif
-    #if (CC_GET_CHIP_OPTION != ((CC_CHIP_ID & 0x0000F000) >> 12))
-        #error "Specified chip option does not match DriverLib release"
-    #endif
-    #if (CC_GET_CHIP_HWREV  != ((CC_CHIP_ID & 0x000000FF) >> 0))
-        #error "Specified chip hardware revision does not match DriverLib release"
-    #endif
+/* The chip family, option and package shall match the DriverLib release */
+#if (CC_GET_CHIP_FAMILY != ((CC_CHIP_ID & 0xFF000000) >> 24))
+#error "Specified chip family does not match DriverLib release"
+#endif
+#if (CC_GET_CHIP_OPTION != ((CC_CHIP_ID & 0x0000F000) >> 12))
+#error "Specified chip option does not match DriverLib release"
+#endif
+#if (CC_GET_CHIP_HWREV  != ((CC_CHIP_ID & 0x000000FF) >> 0))
+#error "Specified chip hardware revision does not match DriverLib release"
+#endif
 #endif
 
 //*****************************************************************************

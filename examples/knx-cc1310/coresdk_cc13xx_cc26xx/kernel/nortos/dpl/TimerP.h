@@ -33,41 +33,46 @@
  *  ======== TimerP.h ========
  */
 
-typedef void *TimerP_Handle;
+typedef void* TimerP_Handle;
 typedef void (*TimerP_Fxn)(uintptr_t arg);
 
 #define TimerP_STRUCT_SIZE 60
 
-typedef enum {
+typedef enum
+{
     TimerP_Status_INUSE,
     TimerP_Status_FREE,
 } TimerP_Status;
 
-typedef enum {
+typedef enum
+{
     TimerP_StartMode_AUTO,
     TimerP_StartMode_USER,
 } TimerP_StartMode;
 
-typedef struct _TimerP_FreqHz {
+typedef struct _TimerP_FreqHz
+{
     uint32_t hi;
     uint32_t lo;
 } TimerP_FreqHz;
 
-typedef struct _TimerP_Params {
+typedef struct _TimerP_Params
+{
     TimerP_StartMode startMode;
     uintptr_t arg;
     uint32_t period;    /* in microseconds */
 } TimerP_Params;
 
-typedef union _TimerP_Struct {
+typedef union _TimerP_Struct
+{
     uint64_t dummy;
     char data[TimerP_STRUCT_SIZE];
 } TimerP_Struct;
 
-void TimerP_Params_init(TimerP_Params *params);
-TimerP_Handle TimerP_construct(TimerP_Struct *handle, TimerP_Fxn timerFxn, TimerP_Params *params);
-TimerP_Handle TimerP_create(TimerP_Fxn timerFxn, TimerP_Params *params);
-void TimerP_getFreq(TimerP_Handle handle, TimerP_FreqHz *freq);
+void TimerP_Params_init(TimerP_Params* params);
+TimerP_Handle TimerP_construct(TimerP_Struct* handle, TimerP_Fxn timerFxn, TimerP_Params* params);
+TimerP_Handle TimerP_create(TimerP_Fxn timerFxn, TimerP_Params* params);
+void TimerP_getFreq(TimerP_Handle handle, TimerP_FreqHz* freq);
 uint32_t TimerP_getMaxTicks(TimerP_Handle handle);
 void TimerP_setThreshold(TimerP_Handle handle, uint32_t next, bool wrap);
 void TimerP_setNextTick(TimerP_Handle handle, uint32_t ticks);

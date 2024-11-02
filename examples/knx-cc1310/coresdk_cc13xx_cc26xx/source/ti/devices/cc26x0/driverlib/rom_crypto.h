@@ -67,7 +67,7 @@ extern "C"
  * \return None
  */
 //*****************************************************************************
-extern void AES_ECB_EncryptData(uint8_t *text, uint16_t textLen, uint8_t *aesKey);
+extern void AES_ECB_EncryptData(uint8_t* text, uint16_t textLen, uint8_t* aesKey);
 
 //*****************************************************************************
 /*!
@@ -81,7 +81,7 @@ extern void AES_ECB_EncryptData(uint8_t *text, uint16_t textLen, uint8_t *aesKey
  * \return None
  */
 //*****************************************************************************
-extern void AES_ECB_DecryptData(uint8_t *text, uint16_t textLen, uint8_t *aesKey);
+extern void AES_ECB_DecryptData(uint8_t* text, uint16_t textLen, uint8_t* aesKey);
 
 //*****************************************************************************
 /*!
@@ -103,10 +103,10 @@ extern void AES_ECB_DecryptData(uint8_t *text, uint16_t textLen, uint8_t *aesKey
  * \return Zero when successful.
  */
 //*****************************************************************************
-extern int8_t AES_CCM_EncryptData(uint8_t encryptFlag, uint8_t MACLen, uint8_t *nonce,
-                                  uint8_t *plainText, uint16_t textLen,
-                                  uint8_t *addDataBuf, uint16_t addBufLen,
-                                  uint8_t *aesKey, uint8_t *MAC, uint8_t ccmLVal);
+extern int8_t AES_CCM_EncryptData(uint8_t encryptFlag, uint8_t MACLen, uint8_t* nonce,
+                                  uint8_t* plainText, uint16_t textLen,
+                                  uint8_t* addDataBuf, uint16_t addBufLen,
+                                  uint8_t* aesKey, uint8_t* MAC, uint8_t ccmLVal);
 
 //*****************************************************************************
 /*!
@@ -128,10 +128,10 @@ extern int8_t AES_CCM_EncryptData(uint8_t encryptFlag, uint8_t MACLen, uint8_t *
  * \return Zero when Successful.
  */
 //*****************************************************************************
-extern int8_t AES_CCM_DecryptData(uint8_t decryptFlag, uint8_t MACLen, uint8_t *nonce,
-                                  uint8_t *cipherText, uint16_t textLen,
-                                  uint8_t *addDataBuf, uint16_t addBufLen,
-                                  uint8_t *aesKey, uint8_t *MAC, uint8_t ccmLVal);
+extern int8_t AES_CCM_DecryptData(uint8_t decryptFlag, uint8_t MACLen, uint8_t* nonce,
+                                  uint8_t* cipherText, uint16_t textLen,
+                                  uint8_t* addDataBuf, uint16_t addBufLen,
+                                  uint8_t* aesKey, uint8_t* MAC, uint8_t ccmLVal);
 
 //*****************************************************************************
 /*!
@@ -146,9 +146,9 @@ extern int8_t AES_CCM_DecryptData(uint8_t decryptFlag, uint8_t MACLen, uint8_t *
  * \return None
  */
 //*****************************************************************************
-extern uint8_t AES_CTR_EncryptData(uint8_t *plainText, uint16_t textLen,
-                                   uint8_t *aesKey, uint8_t *nonce,
-                                   uint8_t *initVector);
+extern uint8_t AES_CTR_EncryptData(uint8_t* plainText, uint16_t textLen,
+                                   uint8_t* aesKey, uint8_t* nonce,
+                                   uint8_t* initVector);
 
 //*****************************************************************************
 /*!
@@ -163,9 +163,9 @@ extern uint8_t AES_CTR_EncryptData(uint8_t *plainText, uint16_t textLen,
  * \return None
  */
 //*****************************************************************************
-extern uint8_t AES_CTR_DecryptData(uint8_t *cipherText, uint16_t textLen,
-                                   uint8_t *aesKey, uint8_t *nonce,
-                                   uint8_t *initVector);
+extern uint8_t AES_CTR_DecryptData(uint8_t* cipherText, uint16_t textLen,
+                                   uint8_t* aesKey, uint8_t* nonce,
+                                   uint8_t* initVector);
 
 ////////////////////////////////////* ECC */////////////////////////////////////
 
@@ -239,24 +239,24 @@ extern uint8_t AES_CTR_DecryptData(uint8_t *cipherText, uint16_t textLen,
  * \return None
  */
 //*****************************************************************************
- extern void ECC_initialize(uint32_t *pWorkzone);
+extern void ECC_initialize(uint32_t* pWorkzone);
 
 //*****************************************************************************
- /*!
- * \brief Generate a key.
- *
- * This is used for both ECDH and ECDSA.
- *
- * \param randString  Pointer to random string, input.
- * \param privateKey  Pointer to the private key, output.
- * \param publicKey_x Pointer to public key X-coordinate, output.
- * \param publicKey_y Pointer to public key Y-coordinate, output.
- *
- * \return Status
- */
+/*!
+* \brief Generate a key.
+*
+* This is used for both ECDH and ECDSA.
+*
+* \param randString  Pointer to random string, input.
+* \param privateKey  Pointer to the private key, output.
+* \param publicKey_x Pointer to public key X-coordinate, output.
+* \param publicKey_y Pointer to public key Y-coordinate, output.
+*
+* \return Status
+*/
 //*****************************************************************************
-extern uint8_t ECC_generateKey(uint32_t *randString, uint32_t *privateKey,
-                               uint32_t *publicKey_x, uint32_t *publicKey_y);
+extern uint8_t ECC_generateKey(uint32_t* randString, uint32_t* privateKey,
+                               uint32_t* publicKey_x, uint32_t* publicKey_y);
 
 //*****************************************************************************
 /*!
@@ -271,8 +271,8 @@ extern uint8_t ECC_generateKey(uint32_t *randString, uint32_t *privateKey,
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t ECC_ECDSA_sign(uint32_t *secretKey, uint32_t *text, uint32_t *randString,
-                              uint32_t *sign1, uint32_t *sign2);
+extern uint8_t ECC_ECDSA_sign(uint32_t* secretKey, uint32_t* text, uint32_t* randString,
+                              uint32_t* sign1, uint32_t* sign2);
 
 //*****************************************************************************
 /*!
@@ -287,8 +287,8 @@ extern uint8_t ECC_ECDSA_sign(uint32_t *secretKey, uint32_t *text, uint32_t *ran
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t ECC_ECDSA_verify(uint32_t *publicKey_x, uint32_t *publicKey_y,
-                                uint32_t *text, uint32_t *sign1, uint32_t *sign2);
+extern uint8_t ECC_ECDSA_verify(uint32_t* publicKey_x, uint32_t* publicKey_y,
+                                uint32_t* text, uint32_t* sign1, uint32_t* sign2);
 
 //*****************************************************************************
 /*!
@@ -303,11 +303,11 @@ extern uint8_t ECC_ECDSA_verify(uint32_t *publicKey_x, uint32_t *publicKey_y,
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t ECC_ECDH_computeSharedSecret(uint32_t *privateKey,
-                                            uint32_t *publicKey_x,
-                                            uint32_t *publicKey_y,
-                                            uint32_t *sharedSecret_x,
-                                            uint32_t *sharedSecret_y);
+extern uint8_t ECC_ECDH_computeSharedSecret(uint32_t* privateKey,
+        uint32_t* publicKey_x,
+        uint32_t* publicKey_y,
+        uint32_t* sharedSecret_x,
+        uint32_t* sharedSecret_y);
 
 
 ///////////////////////////////////* SHA-256 *//////////////////////////////////
@@ -316,9 +316,9 @@ extern uint8_t ECC_ECDH_computeSharedSecret(uint32_t *privateKey,
 //!        SHA256 functions.
 typedef struct
 {
-  uint32_t state[8];
-  uint32_t textLen[2];
-  uint32_t W[16];
+    uint32_t state[8];
+    uint32_t textLen[2];
+    uint32_t W[16];
 } SHA256_memory_t;
 
 //*****************************************************************************
@@ -337,8 +337,8 @@ typedef struct
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t SHA256_runFullAlgorithm(SHA256_memory_t *memory, uint8_t *pBufIn,
-                                       uint32_t bufLen, uint8_t *pBufOut);
+extern uint8_t SHA256_runFullAlgorithm(SHA256_memory_t* memory, uint8_t* pBufIn,
+                                       uint32_t bufLen, uint8_t* pBufOut);
 
 //*****************************************************************************
 /*!
@@ -352,7 +352,7 @@ extern uint8_t SHA256_runFullAlgorithm(SHA256_memory_t *memory, uint8_t *pBufIn,
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t SHA256_initialize(SHA256_memory_t *workZone);
+extern uint8_t SHA256_initialize(SHA256_memory_t* workZone);
 
 //*****************************************************************************
 /*!
@@ -367,7 +367,7 @@ extern uint8_t SHA256_initialize(SHA256_memory_t *workZone);
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t SHA256_execute(SHA256_memory_t *config, uint8_t *pBufIn,
+extern uint8_t SHA256_execute(SHA256_memory_t* config, uint8_t* pBufIn,
                               uint32_t bufLen);
 
 //*****************************************************************************
@@ -380,7 +380,7 @@ extern uint8_t SHA256_execute(SHA256_memory_t *config, uint8_t *pBufIn,
  * \return Status
  */
 //*****************************************************************************
-extern uint8_t SHA256_output(SHA256_memory_t *memory, uint8_t *pBufOut);
+extern uint8_t SHA256_output(SHA256_memory_t* memory, uint8_t* pBufOut);
 
 #ifdef __cplusplus
 }

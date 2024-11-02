@@ -245,7 +245,7 @@ extern "C" {
 /*!
  *  @brief      A handle that is returned from an ADC_open() call.
  */
-typedef struct ADC_Config     *ADC_Handle;
+typedef struct ADC_Config*     ADC_Handle;
 
 /*!
  *  @brief  ADC Parameters used with ADC_open().
@@ -255,8 +255,9 @@ typedef struct ADC_Config     *ADC_Handle;
  *
  *  @sa     ADC_Params_init()
  */
-typedef struct {
-    void    *custom;        /*!< Custom argument used by driver
+typedef struct
+{
+    void*    custom;        /*!< Custom argument used by driver
                                 implementation */
     bool    isProtected;    /*!< By default ADC uses a semaphore
                                 to guarantee thread safety. Setting
@@ -280,14 +281,14 @@ typedef void (*ADC_CloseFxn) (ADC_Handle handle);
  *              ADC_control().
  */
 typedef int_fast16_t (*ADC_ControlFxn) (ADC_Handle handle, uint_fast16_t cmd,
-    void *arg);
+                                        void* arg);
 
 /*!
  *  @private
  *  @brief      A function pointer to a driver specific implementation of
  *              ADC_ConvertFxn().
  */
-typedef int_fast16_t (*ADC_ConvertFxn) (ADC_Handle handle, uint16_t *value);
+typedef int_fast16_t (*ADC_ConvertFxn) (ADC_Handle handle, uint16_t* value);
 
 /*!
  *  @private
@@ -295,7 +296,7 @@ typedef int_fast16_t (*ADC_ConvertFxn) (ADC_Handle handle, uint16_t *value);
  *              ADC_convertToMicroVolts().
  */
 typedef uint32_t (*ADC_ConvertToMicroVoltsFxn) (ADC_Handle handle,
-    uint16_t adcValue);
+        uint16_t adcValue);
 
 /*!
  *  @private
@@ -309,14 +310,15 @@ typedef void (*ADC_InitFxn) (ADC_Handle handle);
  *  @brief      A function pointer to a driver specific implementation of
  *              ADC_open().
  */
-typedef ADC_Handle (*ADC_OpenFxn) (ADC_Handle handle, ADC_Params *params);
+typedef ADC_Handle (*ADC_OpenFxn) (ADC_Handle handle, ADC_Params* params);
 
 /*!
  *  @brief      The definition of an ADC function table that contains the
  *              required set of functions to control a specific ADC driver
  *              implementation.
  */
-typedef struct {
+typedef struct
+{
     /*! Function to close the specified peripheral */
     ADC_CloseFxn      closeFxn;
 
@@ -343,17 +345,18 @@ typedef struct {
  *  @sa     ADC_init()
  *  @sa     ADC_open()
  */
-typedef struct ADC_Config {
+typedef struct ADC_Config
+{
     /*! Pointer to a @ref driver_function_table "function pointer table"
      *  with driver-specific implementations of ADC APIs */
-    ADC_FxnTable const *fxnTablePtr;
+    ADC_FxnTable const* fxnTablePtr;
 
     /*! Pointer to a driver specific @ref driver_objects "data object". */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific @ref driver_hardware_attributes
      *  "hardware attributes structure". */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } ADC_Config;
 
 /*!
@@ -387,7 +390,7 @@ extern void ADC_close(ADC_Handle handle);
  *                                   the device specific implementation.
  */
 extern int_fast16_t ADC_control(ADC_Handle handle, uint_fast16_t cmd,
-    void *arg);
+                                void* arg);
 
 /*!
  *  @brief  Function to perform an ADC conversion
@@ -406,7 +409,7 @@ extern int_fast16_t ADC_control(ADC_Handle handle, uint_fast16_t cmd,
  *
  *  @sa     ADC_convertToMicroVolts()
  */
-extern int_fast16_t ADC_convert(ADC_Handle handle, uint16_t *value);
+extern int_fast16_t ADC_convert(ADC_Handle handle, uint16_t* value);
 
 /*!
  *  @brief  Function to convert a raw ADC sample into microvolts.
@@ -422,7 +425,7 @@ extern int_fast16_t ADC_convert(ADC_Handle handle, uint16_t *value);
  *  @sa     ADC_convert()
  */
 extern uint32_t ADC_convertToMicroVolts(ADC_Handle handle,
-    uint16_t adcValue);
+                                        uint16_t adcValue);
 
 /*!
  *  @brief  Function to initialize the ADC driver.
@@ -448,7 +451,7 @@ extern void ADC_init(void);
  *  @sa     ADC_init()
  *  @sa     ADC_close()
  */
-extern ADC_Handle ADC_open(uint_least8_t index, ADC_Params *params);
+extern ADC_Handle ADC_open(uint_least8_t index, ADC_Params* params);
 
 /*!
  *  @brief  Initialize an #ADC_Params structure to its default values.
@@ -459,7 +462,7 @@ extern ADC_Handle ADC_open(uint_least8_t index, ADC_Params *params);
  *  @arg #ADC_Params.custom = NULL
  *  @arg #ADC_Params.isProtected = true
  */
-extern void ADC_Params_init(ADC_Params *params);
+extern void ADC_Params_init(ADC_Params* params);
 
 #ifdef __cplusplus
 }

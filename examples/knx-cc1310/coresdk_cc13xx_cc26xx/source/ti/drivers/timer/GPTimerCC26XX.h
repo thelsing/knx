@@ -209,9 +209,9 @@ typedef enum GPTimerCC26XX_Mode
 typedef enum GPTimerCC26XX_Interrupt
 {
     GPT_INT_TIMEOUT           = 1 << 0,
-        GPT_INT_CAPTURE_MATCH = 1 << 1,
-        GPT_INT_CAPTURE       = 1 << 2,
-        GPT_INT_MATCH         = 1 << 3,
+    GPT_INT_CAPTURE_MATCH = 1 << 1,
+    GPT_INT_CAPTURE       = 1 << 2,
+    GPT_INT_MATCH         = 1 << 3,
 } GPTimerCC26XX_Interrupt;
 
 /* Number of entries in GPTimerCC26XX_Interrupt */
@@ -304,7 +304,7 @@ typedef enum GPTimerCC26XX_Edge
 typedef struct GPTimerCC26XX_Config   GPTimerCC26XX_Config;
 
 /* GPTimer handle is pointer to configuration structure */
-typedef GPTimerCC26XX_Config *              GPTimerCC26XX_Handle;
+typedef GPTimerCC26XX_Config*               GPTimerCC26XX_Handle;
 
 /* Interrupt bit vector. See GPTimerCC26XX_Interrupt for available interrupts */
 typedef uint16_t                            GPTimerCC26XX_IntMask;
@@ -405,8 +405,8 @@ typedef struct GPTimerCC26XX_Object
  */
 struct GPTimerCC26XX_Config
 {
-    GPTimerCC26XX_Object        *object;
-    const GPTimerCC26XX_HWAttrs *hwAttrs;
+    GPTimerCC26XX_Object*        object;
+    const GPTimerCC26XX_HWAttrs* hwAttrs;
     GPTimerCC26XX_Part          timerPart;
 };
 
@@ -440,7 +440,7 @@ typedef struct GPTimerCC26XX_Params
  *      - Periodic mode counting upwards
  *      - Debug stall mode disabled
  */
-extern void GPTimerCC26XX_Params_init(GPTimerCC26XX_Params *params);
+extern void GPTimerCC26XX_Params_init(GPTimerCC26XX_Params* params);
 
 /*!
  *  @brief  This function opens a given GPTimer peripheral. Will set dependency
@@ -458,7 +458,7 @@ extern void GPTimerCC26XX_Params_init(GPTimerCC26XX_Params *params);
  *
  *  @sa     GPTimerCC26XX_close()
  */
-extern GPTimerCC26XX_Handle GPTimerCC26XX_open(unsigned int index, const GPTimerCC26XX_Params *params);
+extern GPTimerCC26XX_Handle GPTimerCC26XX_open(unsigned int index, const GPTimerCC26XX_Params* params);
 
 /*!
  *  @brief  Function to close a GPTimer peripheral specified by the GPTimer handle.

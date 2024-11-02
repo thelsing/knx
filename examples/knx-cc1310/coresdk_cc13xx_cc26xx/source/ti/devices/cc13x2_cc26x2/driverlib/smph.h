@@ -80,7 +80,7 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define SMPHAcquire                     NOROM_SMPHAcquire
+#define SMPHAcquire                     NOROM_SMPHAcquire
 #endif
 
 //*****************************************************************************
@@ -285,11 +285,11 @@ SMPHRelease(uint32_t ui32Semaphore)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_SMPHAcquire
-        #undef  SMPHAcquire
-        #define SMPHAcquire                     ROM_SMPHAcquire
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_SMPHAcquire
+#undef  SMPHAcquire
+#define SMPHAcquire                     ROM_SMPHAcquire
+#endif
 #endif
 
 //*****************************************************************************

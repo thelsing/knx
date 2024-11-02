@@ -79,12 +79,12 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define ChipInfo_GetSupportedProtocol_BV NOROM_ChipInfo_GetSupportedProtocol_BV
-    #define ChipInfo_GetPackageType         NOROM_ChipInfo_GetPackageType
-    #define ChipInfo_GetChipType            NOROM_ChipInfo_GetChipType
-    #define ChipInfo_GetChipFamily          NOROM_ChipInfo_GetChipFamily
-    #define ChipInfo_GetHwRevision          NOROM_ChipInfo_GetHwRevision
-    #define ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated NOROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
+#define ChipInfo_GetSupportedProtocol_BV NOROM_ChipInfo_GetSupportedProtocol_BV
+#define ChipInfo_GetPackageType         NOROM_ChipInfo_GetPackageType
+#define ChipInfo_GetChipType            NOROM_ChipInfo_GetChipType
+#define ChipInfo_GetChipFamily          NOROM_ChipInfo_GetChipFamily
+#define ChipInfo_GetHwRevision          NOROM_ChipInfo_GetHwRevision
+#define ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated NOROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
 #endif
 
 //*****************************************************************************
@@ -96,11 +96,12 @@ extern "C"
 //! E.g: 0x06 means that the chip supports both BLE and IEEE 802.15.4
 //
 //*****************************************************************************
-typedef enum {
-   PROTOCOL_Unknown          = 0   , //!< None of the known protocols are supported.
-   PROTOCOLBIT_BLE           = 0x02, //!< Bit[1] set, indicates that Bluetooth Low Energy is supported.
-   PROTOCOLBIT_IEEE_802_15_4 = 0x04, //!< Bit[2] set, indicates that IEEE 802.15.4 is supported.
-   PROTOCOLBIT_Proprietary   = 0x08  //!< Bit[3] set, indicates that proprietary protocols are supported.
+typedef enum
+{
+    PROTOCOL_Unknown          = 0,    //!< None of the known protocols are supported.
+    PROTOCOLBIT_BLE           = 0x02, //!< Bit[1] set, indicates that Bluetooth Low Energy is supported.
+    PROTOCOLBIT_IEEE_802_15_4 = 0x04, //!< Bit[2] set, indicates that IEEE 802.15.4 is supported.
+    PROTOCOLBIT_Proprietary   = 0x08  //!< Bit[3] set, indicates that proprietary protocols are supported.
 } ProtocolBitVector_t;
 
 //*****************************************************************************
@@ -124,7 +125,7 @@ extern ProtocolBitVector_t ChipInfo_GetSupportedProtocol_BV( void );
 __STATIC_INLINE bool
 ChipInfo_SupportsBLE( void )
 {
-   return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_BLE ) != 0 );
+    return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_BLE ) != 0 );
 }
 
 //*****************************************************************************
@@ -138,7 +139,7 @@ ChipInfo_SupportsBLE( void )
 __STATIC_INLINE bool
 ChipInfo_SupportsIEEE_802_15_4( void )
 {
-   return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_IEEE_802_15_4 ) != 0 );
+    return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_IEEE_802_15_4 ) != 0 );
 }
 
 //*****************************************************************************
@@ -152,7 +153,7 @@ ChipInfo_SupportsIEEE_802_15_4( void )
 __STATIC_INLINE bool
 ChipInfo_SupportsPROPRIETARY( void )
 {
-   return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_Proprietary ) != 0 );
+    return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_Proprietary ) != 0 );
 }
 
 //*****************************************************************************
@@ -163,14 +164,15 @@ ChipInfo_SupportsPROPRIETARY( void )
 //! Packages available for a specific device are shown in the device datasheet.
 //
 //*****************************************************************************
-typedef enum {
-   PACKAGE_Unknown   = -1, //!< -1 means that current package type is unknown.
-   PACKAGE_4x4       =  0, //!<  0 means that this is a 4x4 mm QFN (RHB) package.
-   PACKAGE_5x5       =  1, //!<  1 means that this is a 5x5 mm QFN (RSM) package.
-   PACKAGE_7x7       =  2, //!<  2 means that this is a 7x7 mm QFN (RGZ) package.
-   PACKAGE_WAFER     =  3, //!<  3 means that this is a wafer sale package (naked die).
-   PACKAGE_WCSP      =  4, //!<  4 means that this is a 2.7x2.7 mm WCSP (YFV).
-   PACKAGE_7x7_Q1    =  5  //!<  5 means that this is a 7x7 mm QFN package with Wettable Flanks.
+typedef enum
+{
+    PACKAGE_Unknown   = -1, //!< -1 means that current package type is unknown.
+    PACKAGE_4x4       =  0, //!<  0 means that this is a 4x4 mm QFN (RHB) package.
+    PACKAGE_5x5       =  1, //!<  1 means that this is a 5x5 mm QFN (RSM) package.
+    PACKAGE_7x7       =  2, //!<  2 means that this is a 7x7 mm QFN (RGZ) package.
+    PACKAGE_WAFER     =  3, //!<  3 means that this is a wafer sale package (naked die).
+    PACKAGE_WCSP      =  4, //!<  4 means that this is a 2.7x2.7 mm WCSP (YFV).
+    PACKAGE_7x7_Q1    =  5  //!<  5 means that this is a 7x7 mm QFN package with Wettable Flanks.
 } PackageType_t;
 
 //*****************************************************************************
@@ -194,7 +196,7 @@ extern PackageType_t ChipInfo_GetPackageType( void );
 __STATIC_INLINE bool
 ChipInfo_PackageTypeIs4x4( void )
 {
-   return ( ChipInfo_GetPackageType() == PACKAGE_4x4 );
+    return ( ChipInfo_GetPackageType() == PACKAGE_4x4 );
 }
 
 //*****************************************************************************
@@ -208,7 +210,7 @@ ChipInfo_PackageTypeIs4x4( void )
 __STATIC_INLINE bool
 ChipInfo_PackageTypeIs5x5( void )
 {
-   return ( ChipInfo_GetPackageType() == PACKAGE_5x5 );
+    return ( ChipInfo_GetPackageType() == PACKAGE_5x5 );
 }
 
 //*****************************************************************************
@@ -222,7 +224,7 @@ ChipInfo_PackageTypeIs5x5( void )
 __STATIC_INLINE bool
 ChipInfo_PackageTypeIs7x7( void )
 {
-   return ( ChipInfo_GetPackageType() == PACKAGE_7x7 );
+    return ( ChipInfo_GetPackageType() == PACKAGE_7x7 );
 }
 
 //*****************************************************************************
@@ -236,7 +238,7 @@ ChipInfo_PackageTypeIs7x7( void )
 __STATIC_INLINE bool
 ChipInfo_PackageTypeIsWAFER( void )
 {
-   return ( ChipInfo_GetPackageType() == PACKAGE_WAFER );
+    return ( ChipInfo_GetPackageType() == PACKAGE_WAFER );
 }
 
 //*****************************************************************************
@@ -250,7 +252,7 @@ ChipInfo_PackageTypeIsWAFER( void )
 __STATIC_INLINE bool
 ChipInfo_PackageTypeIsWCSP( void )
 {
-   return ( ChipInfo_GetPackageType() == PACKAGE_WCSP );
+    return ( ChipInfo_GetPackageType() == PACKAGE_WCSP );
 }
 
 //*****************************************************************************
@@ -264,7 +266,7 @@ ChipInfo_PackageTypeIsWCSP( void )
 __STATIC_INLINE bool
 ChipInfo_PackageTypeIs7x7Q1( void )
 {
-   return ( ChipInfo_GetPackageType() == PACKAGE_7x7_Q1 );
+    return ( ChipInfo_GetPackageType() == PACKAGE_7x7_Q1 );
 }
 
 //*****************************************************************************
@@ -277,8 +279,8 @@ ChipInfo_PackageTypeIs7x7Q1( void )
 __STATIC_INLINE uint32_t
 ChipInfo_GetDeviceIdHwRevCode( void )
 {
-   // Returns HwRevCode = FCFG1_O_ICEPICK_DEVICE_ID[31:28]
-   return ( HWREG( FCFG1_BASE + FCFG1_O_ICEPICK_DEVICE_ID ) >> 28 );
+    // Returns HwRevCode = FCFG1_O_ICEPICK_DEVICE_ID[31:28]
+    return ( HWREG( FCFG1_BASE + FCFG1_O_ICEPICK_DEVICE_ID ) >> 28 );
 }
 
 //*****************************************************************************
@@ -295,15 +297,16 @@ ChipInfo_GetDeviceIdHwRevCode( void )
 __STATIC_INLINE uint32_t
 ChipInfo_GetMinorHwRev( void )
 {
-   uint32_t minorRev = (( HWREG( FCFG1_BASE + FCFG1_O_MISC_CONF_1 ) &
-                             FCFG1_MISC_CONF_1_DEVICE_MINOR_REV_M ) >>
-                             FCFG1_MISC_CONF_1_DEVICE_MINOR_REV_S ) ;
+    uint32_t minorRev = (( HWREG( FCFG1_BASE + FCFG1_O_MISC_CONF_1 ) &
+                           FCFG1_MISC_CONF_1_DEVICE_MINOR_REV_M ) >>
+                         FCFG1_MISC_CONF_1_DEVICE_MINOR_REV_S ) ;
 
-   if ( minorRev >= 0x80 ) {
-      minorRev = 0;
-   }
+    if ( minorRev >= 0x80 )
+    {
+        minorRev = 0;
+    }
 
-   return( minorRev );
+    return ( minorRev );
 }
 
 //*****************************************************************************
@@ -319,7 +322,7 @@ ChipInfo_GetMinorHwRev( void )
 __STATIC_INLINE uint32_t
 ChipInfo_GetUserId( void )
 {
-   return ( HWREG( FCFG1_BASE + FCFG1_O_USER_ID ));
+    return ( HWREG( FCFG1_BASE + FCFG1_O_USER_ID ));
 }
 
 //*****************************************************************************
@@ -327,23 +330,24 @@ ChipInfo_GetUserId( void )
 //! \brief Chip type enumeration
 //
 //*****************************************************************************
-typedef enum {
-   CHIP_TYPE_Unknown       = -1, //!< -1 means that the chip type is unknown.
-   CHIP_TYPE_CC1310        =  0, //!<  0 means that this is a CC1310 chip.
-   CHIP_TYPE_CC1350        =  1, //!<  1 means that this is a CC1350 chip.
-   CHIP_TYPE_CC2620        =  2, //!<  2 means that this is a CC2620 chip.
-   CHIP_TYPE_CC2630        =  3, //!<  3 means that this is a CC2630 chip.
-   CHIP_TYPE_CC2640        =  4, //!<  4 means that this is a CC2640 chip.
-   CHIP_TYPE_CC2650        =  5, //!<  5 means that this is a CC2650 chip.
-   CHIP_TYPE_CUSTOM_0      =  6, //!<  6 means that this is a CUSTOM_0 chip.
-   CHIP_TYPE_CUSTOM_1      =  7, //!<  7 means that this is a CUSTOM_1 chip.
-   CHIP_TYPE_CC2640R2      =  8, //!<  8 means that this is a CC2640R2 chip.
-   CHIP_TYPE_CC2642        =  9, //!<  9 means that this is a CC2642 chip.
-   CHIP_TYPE_unused        =  10,//!< 10 unused value
-   CHIP_TYPE_CC2652        =  11,//!< 11 means that this is a CC2652 chip.
-   CHIP_TYPE_CC1312        =  12,//!< 12 means that this is a CC1312 chip.
-   CHIP_TYPE_CC1352        =  13,//!< 13 means that this is a CC1352 chip.
-   CHIP_TYPE_CC1352P       =  14 //!< 14 means that this is a CC1352P chip.
+typedef enum
+{
+    CHIP_TYPE_Unknown       = -1, //!< -1 means that the chip type is unknown.
+    CHIP_TYPE_CC1310        =  0, //!<  0 means that this is a CC1310 chip.
+    CHIP_TYPE_CC1350        =  1, //!<  1 means that this is a CC1350 chip.
+    CHIP_TYPE_CC2620        =  2, //!<  2 means that this is a CC2620 chip.
+    CHIP_TYPE_CC2630        =  3, //!<  3 means that this is a CC2630 chip.
+    CHIP_TYPE_CC2640        =  4, //!<  4 means that this is a CC2640 chip.
+    CHIP_TYPE_CC2650        =  5, //!<  5 means that this is a CC2650 chip.
+    CHIP_TYPE_CUSTOM_0      =  6, //!<  6 means that this is a CUSTOM_0 chip.
+    CHIP_TYPE_CUSTOM_1      =  7, //!<  7 means that this is a CUSTOM_1 chip.
+    CHIP_TYPE_CC2640R2      =  8, //!<  8 means that this is a CC2640R2 chip.
+    CHIP_TYPE_CC2642        =  9, //!<  9 means that this is a CC2642 chip.
+    CHIP_TYPE_unused        =  10,//!< 10 unused value
+    CHIP_TYPE_CC2652        =  11,//!< 11 means that this is a CC2652 chip.
+    CHIP_TYPE_CC1312        =  12,//!< 12 means that this is a CC1312 chip.
+    CHIP_TYPE_CC1352        =  13,//!< 13 means that this is a CC1352 chip.
+    CHIP_TYPE_CC1352P       =  14 //!< 14 means that this is a CC1352P chip.
 } ChipType_t;
 
 //*****************************************************************************
@@ -361,13 +365,14 @@ extern ChipType_t ChipInfo_GetChipType( void );
 //! \brief Chip family enumeration
 //
 //*****************************************************************************
-typedef enum {
-   FAMILY_Unknown          = -1, //!< -1 means that the chip's family member is unknown.
-   FAMILY_CC26x0           =  0, //!<  0 means that the chip is a CC26x0 family member.
-   FAMILY_CC13x0           =  1, //!<  1 means that the chip is a CC13x0 family member.
-   FAMILY_CC26x1           =  2, //!<  2 means that the chip is a CC26x1 family member.
-   FAMILY_CC26x0R2         =  3, //!<  3 means that the chip is a CC26x0R2 family (new ROM contents).
-   FAMILY_CC13x2_CC26x2    =  4  //!<  4 means that the chip is a CC13x2, CC26x2 family member.
+typedef enum
+{
+    FAMILY_Unknown          = -1, //!< -1 means that the chip's family member is unknown.
+    FAMILY_CC26x0           =  0, //!<  0 means that the chip is a CC26x0 family member.
+    FAMILY_CC13x0           =  1, //!<  1 means that the chip is a CC13x0 family member.
+    FAMILY_CC26x1           =  2, //!<  2 means that the chip is a CC26x1 family member.
+    FAMILY_CC26x0R2         =  3, //!<  3 means that the chip is a CC26x0R2 family (new ROM contents).
+    FAMILY_CC13x2_CC26x2    =  4  //!<  4 means that the chip is a CC13x2, CC26x2 family member.
 } ChipFamily_t;
 
 //*****************************************************************************
@@ -411,7 +416,7 @@ extern ChipFamily_t ChipInfo_GetChipFamily( void );
 __STATIC_INLINE bool
 ChipInfo_ChipFamilyIs_CC13x0( void )
 {
-   return ( ChipInfo_GetChipFamily() == FAMILY_CC13x0 );
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC13x0 );
 }
 
 //*****************************************************************************
@@ -425,7 +430,7 @@ ChipInfo_ChipFamilyIs_CC13x0( void )
 __STATIC_INLINE bool
 ChipInfo_ChipFamilyIs_CC26x0( void )
 {
-   return ( ChipInfo_GetChipFamily() == FAMILY_CC26x0 );
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC26x0 );
 }
 
 //*****************************************************************************
@@ -439,7 +444,7 @@ ChipInfo_ChipFamilyIs_CC26x0( void )
 __STATIC_INLINE bool
 ChipInfo_ChipFamilyIs_CC26x0R2( void )
 {
-   return ( ChipInfo_GetChipFamily() == FAMILY_CC26x0R2 );
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC26x0R2 );
 }
 
 //*****************************************************************************
@@ -453,7 +458,7 @@ ChipInfo_ChipFamilyIs_CC26x0R2( void )
 __STATIC_INLINE bool
 ChipInfo_ChipFamilyIs_CC26x1( void )
 {
-   return ( ChipInfo_GetChipFamily() == FAMILY_CC26x1 );
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC26x1 );
 }
 
 //*****************************************************************************
@@ -467,7 +472,7 @@ ChipInfo_ChipFamilyIs_CC26x1( void )
 __STATIC_INLINE bool
 ChipInfo_ChipFamilyIs_CC13x2_CC26x2( void )
 {
-   return ( ChipInfo_GetChipFamily() == FAMILY_CC13x2_CC26x2 );
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC13x2_CC26x2 );
 }
 
 //*****************************************************************************
@@ -475,15 +480,16 @@ ChipInfo_ChipFamilyIs_CC13x2_CC26x2( void )
 //! \brief HW revision enumeration.
 //
 //*****************************************************************************
-typedef enum {
-   HWREV_Unknown     = -1, //!< -1 means that the chip's HW revision is unknown.
-   HWREV_1_0         = 10, //!< 10 means that the chip's HW revision is 1.0
-   HWREV_1_1         = 11, //!< 11 means that the chip's HW revision is 1.1
-   HWREV_2_0         = 20, //!< 20 means that the chip's HW revision is 2.0
-   HWREV_2_1         = 21, //!< 21 means that the chip's HW revision is 2.1
-   HWREV_2_2         = 22, //!< 22 means that the chip's HW revision is 2.2
-   HWREV_2_3         = 23, //!< 23 means that the chip's HW revision is 2.3
-   HWREV_2_4         = 24  //!< 24 means that the chip's HW revision is 2.4
+typedef enum
+{
+    HWREV_Unknown     = -1, //!< -1 means that the chip's HW revision is unknown.
+    HWREV_1_0         = 10, //!< 10 means that the chip's HW revision is 1.0
+    HWREV_1_1         = 11, //!< 11 means that the chip's HW revision is 1.1
+    HWREV_2_0         = 20, //!< 20 means that the chip's HW revision is 2.0
+    HWREV_2_1         = 21, //!< 21 means that the chip's HW revision is 2.1
+    HWREV_2_2         = 22, //!< 22 means that the chip's HW revision is 2.2
+    HWREV_2_3         = 23, //!< 23 means that the chip's HW revision is 2.3
+    HWREV_2_4         = 24  //!< 24 means that the chip's HW revision is 2.4
 } HwRevision_t;
 
 //*****************************************************************************
@@ -507,7 +513,7 @@ extern HwRevision_t ChipInfo_GetHwRevision( void );
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_1_0( void )
 {
-   return ( ChipInfo_GetHwRevision() == HWREV_1_0 );
+    return ( ChipInfo_GetHwRevision() == HWREV_1_0 );
 }
 
 //*****************************************************************************
@@ -521,7 +527,7 @@ ChipInfo_HwRevisionIs_1_0( void )
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_2_0( void )
 {
-   return ( ChipInfo_GetHwRevision() == HWREV_2_0 );
+    return ( ChipInfo_GetHwRevision() == HWREV_2_0 );
 }
 
 //*****************************************************************************
@@ -535,7 +541,7 @@ ChipInfo_HwRevisionIs_2_0( void )
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_GTEQ_2_0( void )
 {
-   return ( ChipInfo_GetHwRevision() >= HWREV_2_0 );
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_0 );
 }
 
 //*****************************************************************************
@@ -549,7 +555,7 @@ ChipInfo_HwRevisionIs_GTEQ_2_0( void )
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_2_1( void )
 {
-   return ( ChipInfo_GetHwRevision() == HWREV_2_1 );
+    return ( ChipInfo_GetHwRevision() == HWREV_2_1 );
 }
 
 //*****************************************************************************
@@ -563,7 +569,7 @@ ChipInfo_HwRevisionIs_2_1( void )
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_GTEQ_2_1( void )
 {
-   return ( ChipInfo_GetHwRevision() >= HWREV_2_1 );
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_1 );
 }
 
 //*****************************************************************************
@@ -577,7 +583,7 @@ ChipInfo_HwRevisionIs_GTEQ_2_1( void )
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_2_2( void )
 {
-   return ( ChipInfo_GetHwRevision() == HWREV_2_2 );
+    return ( ChipInfo_GetHwRevision() == HWREV_2_2 );
 }
 
 //*****************************************************************************
@@ -591,7 +597,7 @@ ChipInfo_HwRevisionIs_2_2( void )
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_GTEQ_2_2( void )
 {
-   return ( ChipInfo_GetHwRevision() >= HWREV_2_2 );
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_2 );
 }
 
 //*****************************************************************************
@@ -605,7 +611,7 @@ ChipInfo_HwRevisionIs_GTEQ_2_2( void )
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_GTEQ_2_3( void )
 {
-   return ( ChipInfo_GetHwRevision() >= HWREV_2_3 );
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_3 );
 }
 
 //*****************************************************************************
@@ -619,7 +625,7 @@ ChipInfo_HwRevisionIs_GTEQ_2_3( void )
 __STATIC_INLINE bool
 ChipInfo_HwRevisionIs_GTEQ_2_4( void )
 {
-   return ( ChipInfo_GetHwRevision() >= HWREV_2_4 );
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_4 );
 }
 
 //*****************************************************************************
@@ -638,31 +644,31 @@ extern void ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated( void );
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_ChipInfo_GetSupportedProtocol_BV
-        #undef  ChipInfo_GetSupportedProtocol_BV
-        #define ChipInfo_GetSupportedProtocol_BV ROM_ChipInfo_GetSupportedProtocol_BV
-    #endif
-    #ifdef ROM_ChipInfo_GetPackageType
-        #undef  ChipInfo_GetPackageType
-        #define ChipInfo_GetPackageType         ROM_ChipInfo_GetPackageType
-    #endif
-    #ifdef ROM_ChipInfo_GetChipType
-        #undef  ChipInfo_GetChipType
-        #define ChipInfo_GetChipType            ROM_ChipInfo_GetChipType
-    #endif
-    #ifdef ROM_ChipInfo_GetChipFamily
-        #undef  ChipInfo_GetChipFamily
-        #define ChipInfo_GetChipFamily          ROM_ChipInfo_GetChipFamily
-    #endif
-    #ifdef ROM_ChipInfo_GetHwRevision
-        #undef  ChipInfo_GetHwRevision
-        #define ChipInfo_GetHwRevision          ROM_ChipInfo_GetHwRevision
-    #endif
-    #ifdef ROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
-        #undef  ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
-        #define ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated ROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_ChipInfo_GetSupportedProtocol_BV
+#undef  ChipInfo_GetSupportedProtocol_BV
+#define ChipInfo_GetSupportedProtocol_BV ROM_ChipInfo_GetSupportedProtocol_BV
+#endif
+#ifdef ROM_ChipInfo_GetPackageType
+#undef  ChipInfo_GetPackageType
+#define ChipInfo_GetPackageType         ROM_ChipInfo_GetPackageType
+#endif
+#ifdef ROM_ChipInfo_GetChipType
+#undef  ChipInfo_GetChipType
+#define ChipInfo_GetChipType            ROM_ChipInfo_GetChipType
+#endif
+#ifdef ROM_ChipInfo_GetChipFamily
+#undef  ChipInfo_GetChipFamily
+#define ChipInfo_GetChipFamily          ROM_ChipInfo_GetChipFamily
+#endif
+#ifdef ROM_ChipInfo_GetHwRevision
+#undef  ChipInfo_GetHwRevision
+#define ChipInfo_GetHwRevision          ROM_ChipInfo_GetHwRevision
+#endif
+#ifdef ROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
+#undef  ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
+#define ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated ROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
+#endif
 #endif
 
 //*****************************************************************************

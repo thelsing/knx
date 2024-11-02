@@ -60,9 +60,10 @@ typedef uint32_t ratmr_t;
 
 
 /// Type definition for a data queue
-typedef struct {
-   uint8_t *pCurrEntry;   ///< Pointer to the data queue entry to be used, NULL for an empty queue
-   uint8_t *pLastEntry;   ///< Pointer to the last entry in the queue, NULL for a circular queue
+typedef struct
+{
+    uint8_t* pCurrEntry;   ///< Pointer to the data queue entry to be used, NULL for an empty queue
+    uint8_t* pLastEntry;   ///< Pointer to the last entry in the queue, NULL for a circular queue
 } dataQueue_t;
 
 
@@ -144,17 +145,17 @@ typedef struct {
 #define CMDSTA_IllegalPointer 0x81       ///< The pointer signaled in CMDR is not valid
 #define CMDSTA_UnknownCommand 0x82       ///< The command number in the command structure is unknown
 #define CMDSTA_UnknownDirCommand 0x83    ///< The command number for a direct command is unknown, or the
-                                         ///< command is not a direct command
+///< command is not a direct command
 #define CMDSTA_ContextError 0x85         ///< An immediate or direct command was issued in a context
-                                         ///< where it is not supported
+///< where it is not supported
 #define CMDSTA_SchedulingError 0x86      ///< A radio operation command was attempted to be scheduled
-                                         ///< while another operation was already running in the RF core
+///< while another operation was already running in the RF core
 #define CMDSTA_ParError 0x87             ///< There were errors in the command parameters that are parsed
-                                         ///< on submission.
+///< on submission.
 #define CMDSTA_QueueError 0x88           ///< An operation on a data entry queue was attempted that was
-                                         ///< not supported by the queue in its current state
+///< not supported by the queue in its current state
 #define CMDSTA_QueueBusy 0x89            ///< An operation on a data entry was attempted while that entry
-                                         ///< was busy
+///< was busy
 ///@}
 
 
@@ -188,7 +189,7 @@ typedef struct {
 #define TRIG_REL_EVT2 9       ///< Trigs at a time relative to the context defined "Event 2"
 #define TRIG_EXTERNAL 10      ///< Trigs at an external event to the radio timer
 #define TRIG_PAST_BM 0x80     ///< Bitmask for setting pastTrig bit in order to trig immediately if
-                              ///< trigger happened in the past
+///< trigger happened in the past
 ///@}
 
 
@@ -197,13 +198,13 @@ typedef struct {
 #define COND_ALWAYS 0         ///< Always run next command (except in case of Abort)
 #define COND_NEVER 1          ///< Never run next command
 #define COND_STOP_ON_FALSE 2  ///< Run next command if this command returned True, stop if it returned
-                              ///< False
+///< False
 #define COND_STOP_ON_TRUE 3   ///< Stop if this command returned True, run next command if it returned
-                              ///< False
+///< False
 #define COND_SKIP_ON_FALSE 4  ///< Run next command if this command returned True, skip a number of
-                              ///< commands if it returned False
+///< commands if it returned False
 #define COND_SKIP_ON_TRUE 5   ///< Skip a number of commands if this command returned True, run next
-                              ///< command if it returned False
+///< command if it returned False
 ///@}
 
 
@@ -235,7 +236,7 @@ typedef struct {
 #define ERROR_PAR        0x0803   ///< Error in a command specific parameter
 #define ERROR_POINTER    0x0804   ///< Invalid pointer to next operation
 #define ERROR_CMDID      0x0805   ///< Next operation has a command ID that is undefined or not a radio
-                                  ///< operation command
+///< operation command
 #define ERROR_WRONG_BG   0x0806   ///< FG level command not compatible with running BG level command
 #define ERROR_NO_SETUP   0x0807   ///< Operation using Rx or Tx attemted without CMD_RADIO_SETUP
 #define ERROR_NO_FS      0x0808   ///< Operation using Rx or Tx attemted without frequency synth configured
@@ -272,56 +273,56 @@ typedef struct {
 ///@{
 /// Macro for ADI half-size value-mask combination
 #define ADI_VAL_MASK(addr, mask, value) \
-(((addr) & 1) ? (((mask) & 0x0F) | (((value) & 0x0F) << 4)) : \
- ((((mask) & 0x0F) << 4) | ((value) & 0x0F)))
+    (((addr) & 1) ? (((mask) & 0x0F) | (((value) & 0x0F) << 4)) : \
+     ((((mask) & 0x0F) << 4) | ((value) & 0x0F)))
 /// 32-bit write of 16-bit value
 #define HW_REG_OVERRIDE(addr, val) ((((uintptr_t) (addr)) & 0xFFFC) | ((uint32_t)(val) << 16))
 /// ADI register, full-size write
 #define ADI_REG_OVERRIDE(adiNo, addr, val) (2 | ((uint32_t)(val) << 16) | \
-(((addr) & 0x3F) << 24) | (((adiNo) ? 1U : 0) << 31))
+        (((addr) & 0x3F) << 24) | (((adiNo) ? 1U : 0) << 31))
 /// 2 ADI registers, full-size write
 #define ADI_2REG_OVERRIDE(adiNo, addr, val, addr2, val2) \
-(2 | ((uint32_t)(val2) << 2) | (((addr2) & 0x3F) << 10) | ((uint32_t)(val) << 16) | \
-(((addr) & 0x3F) << 24) | (((adiNo) ? 1U : 0) << 31))
+    (2 | ((uint32_t)(val2) << 2) | (((addr2) & 0x3F) << 10) | ((uint32_t)(val) << 16) | \
+     (((addr) & 0x3F) << 24) | (((adiNo) ? 1U : 0) << 31))
 /// ADI register, half-size read-modify-write
 #define ADI_HALFREG_OVERRIDE(adiNo, addr, mask, val) (2 | (ADI_VAL_MASK(addr, mask, val) << 16) | \
-(((addr) & 0x3F) << 24) | (1U << 30) | (((adiNo) ? 1U : 0) << 31))
+        (((addr) & 0x3F) << 24) | (1U << 30) | (((adiNo) ? 1U : 0) << 31))
 /// 2 ADI registers, half-size read-modify-write
 #define ADI_2HALFREG_OVERRIDE(adiNo, addr, mask, val, addr2, mask2, val2) \
-(2 | (ADI_VAL_MASK(addr2, mask2, val2) << 2) | (((addr2) & 0x3F) << 10) | \
-(ADI_VAL_MASK(addr, mask, val) << 16) | (((addr) & 0x3F) << 24) | (1U << 30) | (((adiNo) ? 1U : 0) << 31))
+    (2 | (ADI_VAL_MASK(addr2, mask2, val2) << 2) | (((addr2) & 0x3F) << 10) | \
+     (ADI_VAL_MASK(addr, mask, val) << 16) | (((addr) & 0x3F) << 24) | (1U << 30) | (((adiNo) ? 1U : 0) << 31))
 
 /// 16-bit SW register as defined in radio_par_def.txt
 #define SW_REG_OVERRIDE(cmd, field, val) (3 | ((_POSITION_##cmd##_##field) << 4) | ((uint32_t)(val) << 16))
 /// SW register as defined in radio_par_def.txt with added index (for use with registers > 16 bits).
 #define SW_REG_IND_OVERRIDE(cmd, field, offset, val) (3 | \
-(((_POSITION_##cmd##_##field) + ((offset) << 1)) << 4) | ((uint32_t)(val) << 16))
+        (((_POSITION_##cmd##_##field) + ((offset) << 1)) << 4) | ((uint32_t)(val) << 16))
 /// 8-bit SW register as defined in radio_par_def.txt
 #define SW_REG_BYTE_OVERRIDE(cmd, field, val) (0x8003 | ((_POSITION_##cmd##_##field) << 4) | \
-((uint32_t)(val) << 16))
+        ((uint32_t)(val) << 16))
 /// Two 8-bit SW registers as defined in radio_par_def.txt; the one given by field and the next byte.
 #define SW_REG_2BYTE_OVERRIDE(cmd, field, val0, val1) (3 | (((_POSITION_##cmd##_##field) & 0xFFFE) << 4) | \
-                                                       (((uint32_t)(val0) << 16) & 0x00FF0000) | ((uint32_t)(val1) << 24))
+        (((uint32_t)(val0) << 16) & 0x00FF0000) | ((uint32_t)(val1) << 24))
 #define HW16_ARRAY_OVERRIDE(addr, length) (1 | (((uintptr_t) (addr)) & 0xFFFC) | ((uint32_t)(length) << 16))
 #define HW32_ARRAY_OVERRIDE(addr, length) (1 | (((uintptr_t) (addr)) & 0xFFFC) | \
-((uint32_t)(length) << 16) | (1U << 30))
+        ((uint32_t)(length) << 16) | (1U << 30))
 #define ADI_ARRAY_OVERRIDE(adiNo, addr, bHalfSize, length) (1 | ((((addr) & 0x3F) << 2)) | \
-((!!(bHalfSize)) << 8) | ((!!(adiNo)) << 9) | ((uint32_t)(length) << 16) | (2U << 30))
+        ((!!(bHalfSize)) << 8) | ((!!(adiNo)) << 9) | ((uint32_t)(length) << 16) | (2U << 30))
 #define SW_ARRAY_OVERRIDE(cmd, firstfield, length) (1 | (((_POSITION_##cmd##_##firstfield)) << 2) | \
-((uint32_t)(length) << 16) | (3U << 30))
+        ((uint32_t)(length) << 16) | (3U << 30))
 #define MCE_RFE_OVERRIDE(bMceRam, mceRomBank, mceMode, bRfeRam, rfeRomBank, rfeMode) \
-   (7 | ((!!(bMceRam)) << 8) | (((mceRomBank) & 0x07) << 9) | ((!!(bRfeRam)) << 12) | (((rfeRomBank) & 0x07) << 13) | \
-    (((mceMode) & 0x00FF) << 16) | (((rfeMode) & 0x00FF) << 24))
+    (7 | ((!!(bMceRam)) << 8) | (((mceRomBank) & 0x07) << 9) | ((!!(bRfeRam)) << 12) | (((rfeRomBank) & 0x07) << 13) | \
+     (((mceMode) & 0x00FF) << 16) | (((rfeMode) & 0x00FF) << 24))
 #define NEW_OVERRIDE_SEGMENT(address) (((((uintptr_t)(address)) & 0x03FFFFFC) << 6) | 0x000F | \
-   (((((uintptr_t)(address) >> 24) == 0x20) ? 0x01 : \
-     (((uintptr_t)(address) >> 24) == 0x21) ? 0x02 : \
-     (((uintptr_t)(address) >> 24) == 0xA0) ? 0x03 : \
-     (((uintptr_t)(address) >> 24) == 0x00) ? 0x04 : \
-     (((uintptr_t)(address) >> 24) == 0x10) ? 0x05 : \
-     (((uintptr_t)(address) >> 24) == 0x11) ? 0x06 : \
-     (((uintptr_t)(address) >> 24) == 0x40) ? 0x07 : \
-     (((uintptr_t)(address) >> 24) == 0x50) ? 0x08 : \
-     0x09) << 4)) // Use illegal value for illegal address range
+                                       (((((uintptr_t)(address) >> 24) == 0x20) ? 0x01 : \
+                                               (((uintptr_t)(address) >> 24) == 0x21) ? 0x02 : \
+                                               (((uintptr_t)(address) >> 24) == 0xA0) ? 0x03 : \
+                                               (((uintptr_t)(address) >> 24) == 0x00) ? 0x04 : \
+                                               (((uintptr_t)(address) >> 24) == 0x10) ? 0x05 : \
+                                               (((uintptr_t)(address) >> 24) == 0x11) ? 0x06 : \
+                                               (((uintptr_t)(address) >> 24) == 0x40) ? 0x07 : \
+                                               (((uintptr_t)(address) >> 24) == 0x50) ? 0x08 : \
+                                               0x09) << 4)) // Use illegal value for illegal address range
 /// End of string for override register
 #define END_OVERRIDE 0xFFFFFFFF
 

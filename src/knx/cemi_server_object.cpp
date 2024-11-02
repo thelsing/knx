@@ -26,20 +26,23 @@ void CemiServerObject::setMediumTypeAsSupported(DptMedium dptMedium)
     uint16_t mediaTypesSupported;
     property(PID_MEDIUM_TYPE)->read(mediaTypesSupported);
 
-    switch(dptMedium)
+    switch (dptMedium)
     {
-    case DptMedium::KNX_IP:
-        mediaTypesSupported |= 1 << 1;
-        break;
-    case DptMedium::KNX_RF:
-        mediaTypesSupported |= 1 << 4;
-        break;
-    case DptMedium::KNX_TP1:
-        mediaTypesSupported |= 1 << 5;
-        break;
-    case DptMedium::KNX_PL110:
-        mediaTypesSupported |= 1 << 2;
-        break;
+        case DptMedium::KNX_IP:
+            mediaTypesSupported |= 1 << 1;
+            break;
+
+        case DptMedium::KNX_RF:
+            mediaTypesSupported |= 1 << 4;
+            break;
+
+        case DptMedium::KNX_TP1:
+            mediaTypesSupported |= 1 << 5;
+            break;
+
+        case DptMedium::KNX_PL110:
+            mediaTypesSupported |= 1 << 2;
+            break;
     }
 
     property(PID_MEDIUM_TYPE)->write(mediaTypesSupported);

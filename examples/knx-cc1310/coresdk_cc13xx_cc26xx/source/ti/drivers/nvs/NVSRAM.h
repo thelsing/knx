@@ -130,7 +130,7 @@ extern const NVS_FxnTable NVSRAM_fxnTable;
  */
 typedef struct
 {
-    void   *regionBase;    /*!< Base address of RAM region */
+    void*   regionBase;    /*!< Base address of RAM region */
     size_t  regionSize;    /*!< The size of the region in bytes */
     size_t  sectorSize;    /*!< Sector size in bytes */
 } NVSRAM_HWAttrs;
@@ -153,18 +153,18 @@ typedef struct
 
 extern void NVSRAM_close(NVS_Handle handle);
 extern int_fast16_t NVSRAM_control(NVS_Handle handle, uint_fast16_t cmd,
-    uintptr_t arg);
+                                   uintptr_t arg);
 extern int_fast16_t NVSRAM_erase(NVS_Handle handle, size_t offset,
-    size_t size);
-extern void NVSRAM_getAttrs(NVS_Handle handle, NVS_Attrs *attrs);
+                                 size_t size);
+extern void NVSRAM_getAttrs(NVS_Handle handle, NVS_Attrs* attrs);
 extern void NVSRAM_init();
 extern int_fast16_t NVSRAM_lock(NVS_Handle handle, uint32_t timeout);
-extern NVS_Handle NVSRAM_open(uint_least8_t index, NVS_Params *params);
+extern NVS_Handle NVSRAM_open(uint_least8_t index, NVS_Params* params);
 extern int_fast16_t NVSRAM_read(NVS_Handle handle, size_t offset,
-    void *buffer, size_t bufferSize);
+                                void* buffer, size_t bufferSize);
 extern void NVSRAM_unlock(NVS_Handle handle);
 extern int_fast16_t NVSRAM_write(NVS_Handle handle, size_t offset,
-    void *buffer, size_t bufferSize, uint_fast16_t flags);
+                                 void* buffer, size_t bufferSize, uint_fast16_t flags);
 
 /*! @endcond */
 

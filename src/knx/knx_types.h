@@ -20,6 +20,15 @@ enum AckType
     AckRequested = 0x2, //!< We want a DataLinkLayer acknowledgement.
 };
 
+enum TPAckType
+{
+    // see U_ACK_REQ defines in tpuart_data_link_layer.cpp
+    AckReqNack = 0x04,
+    AckReqBusy = 0x02,
+    AckReqAck = 0x01,
+    AckReqNone = 0x0,
+};
+
 enum AddressType
 {
     IndividualAddress = 0,
@@ -41,14 +50,14 @@ enum MessageCode
     M_PropInfo_ind = 0xF7,
 
     // Function Properties
-     M_FuncPropCommand_req = 0xF8,
-     M_FuncPropCommand_con = 0xFA,
-     M_FuncPropStateRead_req = 0xF9,
-     M_FuncPropStateRead_con = 0xFA, // same as M_FuncPropStateRead_con (see 3/6/3 p.105)
+    M_FuncPropCommand_req = 0xF8,
+    M_FuncPropCommand_con = 0xFA,
+    M_FuncPropStateRead_req = 0xF9,
+    M_FuncPropStateRead_con = 0xFA, // same as M_FuncPropStateRead_con (see 3/6/3 p.105)
 
-     // Further cEMI servies
-     M_Reset_req = 0xF1,
-     M_Reset_ind = 0xF0,
+    // Further cEMI servies
+    M_Reset_req = 0xF1,
+    M_Reset_ind = 0xF0,
 };
 
 enum cEmiErrorCode
@@ -131,7 +140,7 @@ enum TpduType
 
 enum ApduType
 {
-    // Application Layer services on Multicast Communication Mode 
+    // Application Layer services on Multicast Communication Mode
     GroupValueRead = 0x000,
     GroupValueResponse = 0x040,
     GroupValueWrite = 0x080,
@@ -156,7 +165,7 @@ enum ApduType
     DomainAddressSerialNumberRead = 0x3ec,
     DomainAddressSerialNumberResponse = 0x3ed,
     DomainAddressSerialNumberWrite = 0x3ee,
-    
+
     // Application Layer Services on Point-to-point Connection-Oriented Communication Mode (mandatory)
     // Application Layer Services on Point-to-point Connectionless Communication Mode (either optional or mandatory)
     ADCRead = 0x0180,
@@ -190,6 +199,12 @@ enum ApduType
     DeviceDescriptorResponse = 0x340,
     Restart = 0x380,
     RestartMasterReset = 0x381,
+    RoutingTableOpen = 0x3C0,
+    RoutingTableRead = 0x3C1,
+    RoutingTableReadResponse = 0x3C2,
+    RoutingTableWrite = 0x3C3,
+    MemoryRouterWrite = 0x3CA,
+    MemoryRouterReadResponse = 0x3C9,
     AuthorizeRequest = 0x3d1,
     AuthorizeResponse = 0x3d2,
     KeyWrite = 0x3d3,
@@ -243,4 +258,33 @@ enum DptMedium
     KNX_PL110 = 0x01,
     KNX_RF = 0x02,
     KNX_IP = 0x05
+};
+
+enum LCGRPCONFIG
+{
+    GROUP_6FFF =        0b00000011,
+    GROUP_7000 =        0b00001100,
+    GROUP_REPEAT =      0b00010000,
+    GROUP_6FFFUNLOCK =  0b00000001,
+    GROUP_6FFFLOCK =    0b00000010,
+    GROUP_6FFFROUTE =   0b00000011,
+    GROUP_7000UNLOCK =  0b00000100,
+    GROUP_7000LOCK =    0b00001000,
+    GROUP_7000ROUTE =   0b00001100
+};
+
+enum LCCONFIG
+{
+    PHYS_FRAME =        0b00000011,
+    PHYS_FRAME_UNLOCK = 0b00000001,
+    PHYS_FRAME_LOCK =   0b00000010,
+    PHYS_FRAME_ROUT =   0b00000011,
+    PHYS_REPEAT =       0b00000100,
+    BROADCAST_LOCK =    0b00001000,
+    BROADCAST_REPEAT =  0b00010000,
+    GROUP_IACK_ROUT =   0b00100000,
+    PHYS_IACK =         0b11000000,
+    PHYS_IACK_NORMAL =  0b01000000,
+    PHYS_IACK_ALL =     0b10000000,
+    PHYS_IACK_NACK =    0b11000000
 };

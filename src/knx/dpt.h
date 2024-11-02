@@ -286,7 +286,7 @@
 #define DPT_TimePeriodHrs_Z Dpt(203, 7)
 #define DPT_UFlowRateLiter_per_h_Z Dpt(203, 11)
 #define DPT_UCountValue16_Z Dpt(203, 12)
-#define DPT_UElCurrent_Z Dpt(203, 13) 
+#define DPT_UElCurrent_Z Dpt(203, 13)
 #define DPT_PowerKW_Z Dpt(203, 14)
 #define DPT_AtmPressureAbs_Z Dpt(203, 15)
 #define DPT_PercentU16_Z Dpt(203, 17)
@@ -362,12 +362,12 @@
 
 class Dpt
 {
-  public:
-    Dpt();
-    Dpt(short mainGroup, short subGroup, short index = 0);
-    unsigned short mainGroup;
-    unsigned short subGroup;
-    unsigned short index;
-    bool operator==(const Dpt& other) const;
-    bool operator!=(const Dpt& other) const;
+    public:
+        Dpt();
+        Dpt(short mainGroup, short subGroup, short index = 0);
+        unsigned short mainGroup;
+        unsigned short subGroup;
+        unsigned short index;
+        bool operator==(const Dpt& other) const;
+        bool operator!=(const Dpt& other) const;
 };

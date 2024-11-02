@@ -447,7 +447,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from an ECDSA_open() call.
  */
-typedef struct ECDSA_Config *ECDSA_Handle;
+typedef struct ECDSA_Config* ECDSA_Handle;
 
 /*!
  * @brief   The way in which ECDSA function calls return after performing an
@@ -470,7 +470,8 @@ typedef struct ECDSA_Config *ECDSA_Handle;
  * |ECDSA_RETURN_BEHAVIOR_POLLING   | X     | X     | X     |
  *
  */
-typedef enum {
+typedef enum
+{
     ECDSA_RETURN_BEHAVIOR_CALLBACK = 1,     /*!< The function call will return immediately while the
                                              *   ECDSA operation goes on in the background. The registered
                                              *   callback function is called after the operation completes.
@@ -498,37 +499,39 @@ typedef enum {
  *
  *  @sa     ECDSA_init()
  */
-typedef struct ECDSA_Config {
+typedef struct ECDSA_Config
+{
     /*! Pointer to a driver specific data object */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } ECDSA_Config;
 
 /*!
  *  @brief  Struct containing the parameters required for signing a message.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;                     /*!< A pointer to the elliptic curve parameters */
-    const CryptoKey                 *myPrivateKey;              /*!< A pointer to the private ECC key that will
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;                     /*!< A pointer to the elliptic curve parameters */
+    const CryptoKey*                 myPrivateKey;              /*!< A pointer to the private ECC key that will
                                                                  *   sign the hash of the message
                                                                  */
-    const CryptoKey                 *pmsn;                      /*!< A pointer to a per message secret number (PMSN).
+    const CryptoKey*                 pmsn;                      /*!< A pointer to a per message secret number (PMSN).
                                                                  *   The number must be provided by the
                                                                  *   application and be (0 < PMSN < curve order).
                                                                  *   Must be of the same length as
                                                                  *   other params of the curve used.
                                                                  */
-    const uint8_t                   *hash;                      /*!< A pointer to the hash of the message.
+    const uint8_t*                   hash;                      /*!< A pointer to the hash of the message.
                                                                  *   Must be the same length as the other curve parameters.
                                                                  */
-    uint8_t                         *r;                         /*!< A pointer to the buffer the r component of
+    uint8_t*                         r;                         /*!< A pointer to the buffer the r component of
                                                                  *   the signature will be written to.
                                                                  *   Must be of the same length as other
                                                                  *   params of the curve used.
                                                                  */
-    uint8_t                         *s;                         /*!< A pointer to the buffer the s component of
+    uint8_t*                         s;                         /*!< A pointer to the buffer the s component of
                                                                  *   the signature will be written to.
                                                                  *   Must be of the same length as other
                                                                  *   params of the curve used.
@@ -538,19 +541,20 @@ typedef struct {
 /*!
  *  @brief  Struct containing the parameters required for verifying a message.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;             /*!< A pointer to the elliptic curve parameters */
-    const CryptoKey                 *theirPublicKey;    /*!< A pointer to the public key of the party
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;             /*!< A pointer to the elliptic curve parameters */
+    const CryptoKey*                 theirPublicKey;    /*!< A pointer to the public key of the party
                                                          *   that signed the hash of the message
                                                          */
-    const uint8_t                   *hash;              /*!< A pointer to the hash of the message.
+    const uint8_t*                   hash;              /*!< A pointer to the hash of the message.
                                                          *   Must be the same length as the other curve parameters.
                                                          */
-    const uint8_t                   *r;                 /*!< A pointer to the r component of the received
+    const uint8_t*                   r;                 /*!< A pointer to the r component of the received
                                                          *   signature. Must be of the same length
                                                          *   as other params of the curve used.
                                                          */
-    const uint8_t                   *s;                 /*!< A pointer to the s component of the received
+    const uint8_t*                   s;                 /*!< A pointer to the s component of the received
                                                          *   signature. Must be of the same length
                                                          *   as other params of the curve used.
                                                          */
@@ -559,15 +563,17 @@ typedef struct {
 /*!
  *  @brief  Union containing pointers to all supported operation structs.
  */
-typedef union {
-    ECDSA_OperationSign     *sign;      /*!< A pointer to an ECDSA_OperationSign struct */
-    ECDSA_OperationVerify   *verify;    /*!< A pointer to an ECDSA_OperationVerify struct */
+typedef union
+{
+    ECDSA_OperationSign*     sign;      /*!< A pointer to an ECDSA_OperationSign struct */
+    ECDSA_OperationVerify*   verify;    /*!< A pointer to an ECDSA_OperationVerify struct */
 } ECDSA_Operation;
 
 /*!
  *  @brief  Enum for the operation types supported by the driver.
  */
-typedef enum {
+typedef enum
+{
     ECDSA_OPERATION_TYPE_SIGN = 1,
     ECDSA_OPERATION_TYPE_VERIFY = 2,
 } ECDSA_OperationType;
@@ -603,13 +609,14 @@ typedef void (*ECDSA_CallbackFxn) (ECDSA_Handle handle,
  *
  *  @sa     ECDSA_Params_init()
  */
-typedef struct {
+typedef struct
+{
     ECDSA_ReturnBehavior    returnBehavior;             /*!< Blocking, callback, or polling return behavior */
     ECDSA_CallbackFxn       callbackFxn;                /*!< Callback function pointer */
     uint32_t                timeout;                    /*!< Timeout in system ticks before the operation fails
                                                          *   and returns
                                                          */
-    void                   *custom;                     /*!< Custom argument used by driver
+    void*                   custom;                     /*!< Custom argument used by driver
                                                          *   implementation
                                                          */
 } ECDSA_Params;
@@ -652,7 +659,7 @@ void ECDSA_close(ECDSA_Handle handle);
  *  @sa     ECDSA_init()
  *  @sa     ECDSA_close()
  */
-ECDSA_Handle ECDSA_open(uint_least8_t index, ECDSA_Params *params);
+ECDSA_Handle ECDSA_open(uint_least8_t index, ECDSA_Params* params);
 
 /*!
  *  @brief  Function to initialize the ECDSA_Params struct to its defaults
@@ -666,7 +673,7 @@ ECDSA_Handle ECDSA_open(uint_least8_t index, ECDSA_Params *params);
  *      timeout                     = SemaphoreP_WAIT_FOREVER
  *      custom                      = NULL
  */
-void ECDSA_Params_init(ECDSA_Params *params);
+void ECDSA_Params_init(ECDSA_Params* params);
 
 /*!
  *  @brief  Function to initialize an ECDSA_OperationSign struct to its defaults
@@ -676,7 +683,7 @@ void ECDSA_Params_init(ECDSA_Params *params);
  *
  *  Defaults values are all zeros.
  */
-void ECDSA_OperationSign_init(ECDSA_OperationSign *operation);
+void ECDSA_OperationSign_init(ECDSA_OperationSign* operation);
 
 /*!
  *  @brief  Function to initialize an ECDSA_OperationSign struct to its defaults
@@ -686,7 +693,7 @@ void ECDSA_OperationSign_init(ECDSA_OperationSign *operation);
  *
  *  Defaults values are all zeros.
  */
-void ECDSA_OperationVerify_init(ECDSA_OperationVerify *operation);
+void ECDSA_OperationVerify_init(ECDSA_OperationVerify* operation);
 
 /*!
  *  @brief Signs a hashed message.
@@ -708,7 +715,7 @@ void ECDSA_OperationVerify_init(ECDSA_OperationVerify *operation);
  *  @retval #ECDSA_STATUS_CANCELED              The operation was canceled.
  *  @retval #ECDSA_STATUS_INVALID_PMSN          The PMSN passed into the the call is invalid.
  */
-int_fast16_t ECDSA_sign(ECDSA_Handle handle, ECDSA_OperationSign *operation);
+int_fast16_t ECDSA_sign(ECDSA_Handle handle, ECDSA_OperationSign* operation);
 
 /*!
  *  @brief Verifies a received signature matches a hash and public key
@@ -733,7 +740,7 @@ int_fast16_t ECDSA_sign(ECDSA_Handle handle, ECDSA_OperationSign *operation);
  *  @retval #ECDSA_STATUS_PUBLIC_KEY_LARGER_THAN_PRIME  One of the public key coordinates is larger the the curve's prime.
  *  @retval #ECDSA_STATUS_POINT_AT_INFINITY             The public key to verify against is the point at infinity.
  */
-int_fast16_t ECDSA_verify(ECDSA_Handle handle, ECDSA_OperationVerify *operation);
+int_fast16_t ECDSA_verify(ECDSA_Handle handle, ECDSA_OperationVerify* operation);
 
 /*!
  *  @brief Cancels an ongoing ECDSA operation.

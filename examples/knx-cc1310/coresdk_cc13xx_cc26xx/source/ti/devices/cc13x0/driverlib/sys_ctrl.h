@@ -103,10 +103,10 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define SysCtrlSetRechargeBeforePowerDown NOROM_SysCtrlSetRechargeBeforePowerDown
-    #define SysCtrlAdjustRechargeAfterPowerDown NOROM_SysCtrlAdjustRechargeAfterPowerDown
-    #define SysCtrl_DCDC_VoltageConditionalControl NOROM_SysCtrl_DCDC_VoltageConditionalControl
-    #define SysCtrlResetSourceGet           NOROM_SysCtrlResetSourceGet
+#define SysCtrlSetRechargeBeforePowerDown NOROM_SysCtrlSetRechargeBeforePowerDown
+#define SysCtrlAdjustRechargeAfterPowerDown NOROM_SysCtrlAdjustRechargeAfterPowerDown
+#define SysCtrl_DCDC_VoltageConditionalControl NOROM_SysCtrl_DCDC_VoltageConditionalControl
+#define SysCtrlResetSourceGet           NOROM_SysCtrlResetSourceGet
 #endif
 
 //*****************************************************************************
@@ -156,7 +156,7 @@ __STATIC_INLINE uint32_t
 SysCtrlClockGet( void )
 {
     // Return fixed clock speed
-    return( GET_MCU_CLOCK );
+    return ( GET_MCU_CLOCK );
 }
 
 //*****************************************************************************
@@ -318,14 +318,16 @@ extern uint32_t SysCtrlResetSourceGet( void );
 __STATIC_INLINE void
 SysCtrlSystemReset( void )
 {
-   // Disable CPU interrupts
-   CPUcpsid();
-   // Write reset register
-   HWREGBITW( AON_SYSCTL_BASE + AON_SYSCTL_O_RESETCTL, AON_SYSCTL_RESETCTL_SYSRESET_BITN ) = 1;
-   // Finally, wait until the above write propagates
-   while ( 1 ) {
-      // Do nothing, just wait for the reset (and never return from here)
-   }
+    // Disable CPU interrupts
+    CPUcpsid();
+    // Write reset register
+    HWREGBITW( AON_SYSCTL_BASE + AON_SYSCTL_O_RESETCTL, AON_SYSCTL_RESETCTL_SYSRESET_BITN ) = 1;
+
+    // Finally, wait until the above write propagates
+    while ( 1 )
+    {
+        // Do nothing, just wait for the reset (and never return from here)
+    }
 }
 
 //*****************************************************************************
@@ -379,23 +381,23 @@ SysCtrlClockLossResetDisable(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_SysCtrlSetRechargeBeforePowerDown
-        #undef  SysCtrlSetRechargeBeforePowerDown
-        #define SysCtrlSetRechargeBeforePowerDown ROM_SysCtrlSetRechargeBeforePowerDown
-    #endif
-    #ifdef ROM_SysCtrlAdjustRechargeAfterPowerDown
-        #undef  SysCtrlAdjustRechargeAfterPowerDown
-        #define SysCtrlAdjustRechargeAfterPowerDown ROM_SysCtrlAdjustRechargeAfterPowerDown
-    #endif
-    #ifdef ROM_SysCtrl_DCDC_VoltageConditionalControl
-        #undef  SysCtrl_DCDC_VoltageConditionalControl
-        #define SysCtrl_DCDC_VoltageConditionalControl ROM_SysCtrl_DCDC_VoltageConditionalControl
-    #endif
-    #ifdef ROM_SysCtrlResetSourceGet
-        #undef  SysCtrlResetSourceGet
-        #define SysCtrlResetSourceGet           ROM_SysCtrlResetSourceGet
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_SysCtrlSetRechargeBeforePowerDown
+#undef  SysCtrlSetRechargeBeforePowerDown
+#define SysCtrlSetRechargeBeforePowerDown ROM_SysCtrlSetRechargeBeforePowerDown
+#endif
+#ifdef ROM_SysCtrlAdjustRechargeAfterPowerDown
+#undef  SysCtrlAdjustRechargeAfterPowerDown
+#define SysCtrlAdjustRechargeAfterPowerDown ROM_SysCtrlAdjustRechargeAfterPowerDown
+#endif
+#ifdef ROM_SysCtrl_DCDC_VoltageConditionalControl
+#undef  SysCtrl_DCDC_VoltageConditionalControl
+#define SysCtrl_DCDC_VoltageConditionalControl ROM_SysCtrl_DCDC_VoltageConditionalControl
+#endif
+#ifdef ROM_SysCtrlResetSourceGet
+#undef  SysCtrlResetSourceGet
+#define SysCtrlResetSourceGet           ROM_SysCtrlResetSourceGet
+#endif
 #endif
 
 //*****************************************************************************

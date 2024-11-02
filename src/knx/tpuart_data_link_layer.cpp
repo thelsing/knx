@@ -13,7 +13,6 @@
  * A new implementation of the tpuart connection.
  * Author Marco Scholl <develop@marco-scholl.de>
  *
- * To avoid misunderstandings (also for myself), this is in German, at least for the time being.
  */
 
 // services Host -> Controller :
@@ -36,13 +35,13 @@
 
 // Only on NCN51xx available
 #ifdef NCN5120
-#define U_CONFIGURE_REQ 0x18
-#define U_CONFIGURE_MARKER_REQ 0x1
-#define U_CONFIGURE_CRC_CCITT_REQ 0x2
-#define U_CONFIGURE_AUTO_POLLING_REQ 0x4
-#define U_SET_REPETITION_REQ 0xF2
+    #define U_CONFIGURE_REQ 0x18
+    #define U_CONFIGURE_MARKER_REQ 0x1
+    #define U_CONFIGURE_CRC_CCITT_REQ 0x2
+    #define U_CONFIGURE_AUTO_POLLING_REQ 0x4
+    #define U_SET_REPETITION_REQ 0xF2
 #else
-#define U_MXRSTCNT 0x24
+    #define U_MXRSTCNT 0x24
 #endif
 
 // knx transmit data commands
@@ -119,20 +118,20 @@ enum
 
 enum
 {
-    // In diesem Zustand wird auf neue Steuerbefehle gewartet.
+    // In this state, the system waits for new control commands.
     RX_IDLE,
 
-    // In diesem Zustand werden alle Bytes als Bytes für ein Frame betrachtet.
+    // In this state, all bytes are regarded as bytes for a frame.
     RX_FRAME,
 
-    // In diesem Zustand werdem alle Bytes verworfen
+    // In this state, all bytes are discarded
     RX_INVALID,
 
-    // Im Monitoring wird noch auf ein ACk gewartet
+    // Monitoring is still waiting for an ACk
     RX_AWAITING_ACK
 };
 
-void printFrame(TpFrame *tpframe)
+void printFrame(TpFrame* tpframe)
 {
     print(tpframe->humanSource().c_str());
     print(" -> ");
@@ -152,7 +151,7 @@ void printFrame(TpFrame *tpframe)
 }
 
 /*
- * Verarbeitet alle Bytes.
+ * Processes all bytes.
  */
 void __isr __time_critical_func(TpUartDataLinkLayer::processRx)(bool isr)
 {
@@ -160,14 +159,14 @@ void __isr __time_critical_func(TpUartDataLinkLayer::processRx)(bool isr)
         return;
 
     /*
-     * Manche Platformen untersützen die Erkennung, ob der Hardwarebuffer übergelaufen ist.
-     * Theoretisch könnte man nun den Buffer verwerfen, aber dann geht ggf. noch ein gültiges Frame verloren.
-     * Daher wird später im loop nur eine Info ausgegben und im Byteprocessing wird "versucht" noch darauf einzugehen.
+     * Some platforms support the detection of whether the hardware buffer has overflowed.
+     * Theoretically, you could now discard the buffer, but then a valid frame may be lost.
+     * Therefore, only one piece of information is output later in the loop and byte processing "tries" to respond to it.
      */
     if (_platform.overflowUart())
         _rxOverflow = true;
 
-    // verarbeiten daten
+    // process data
     while (_platform.uartAvailable())
     {
         processRxByte();
@@ -177,7 +176,7 @@ void __isr __time_critical_func(TpUartDataLinkLayer::processRx)(bool isr)
 }
 
 /*
- * Verarbeitet 1 eigehendes Byte (wenn vorhanden)
+ * Processes 1 incoming byte (if available)
  */
 void TpUartDataLinkLayer::processRxByte()
 {
@@ -188,10 +187,10 @@ void TpUartDataLinkLayer::processRxByte()
         return;
 
     /*
-     * Wenn ich im RX_INVALID Modus bin
-     *   und das letzte Byte vor mehr als 2ms verarbeitet wurde (also pause >2ms)
-     *   und keine weiteren Bytes in der Buffer vorliegen,
-     * dann kann ich den INVALID State verwerfen.
+     * If I am in RX_INVALID mode
+     * and the last byte was processed more than 2ms ago (i.e. pause >2ms)
+     * and there are no more bytes in the buffer,
+     * then I can discard the INVALID state.
      */
     if (_rxState == RX_INVALID && (millis() - _rxLastTime) > 2 && !_platform.uartAvailable())
     {
@@ -202,14 +201,14 @@ void TpUartDataLinkLayer::processRxByte()
     if (_rxState == RX_INVALID)
     {
         /*
-         * Sobald ein Frame ungültig verarbeitet wurde oder ein unbekanntes Kommando eintrifft, wechselt der Zustand in RX_INVALID.
-         * Ab jetzt muss ich davon ausgehen, dass einen Übertragungsfehler gegeben hat und die aktuellen Bytes ungültig sind.
-         * Gleiches gilt auch wenn ein HW Overflow erkannt wurde.
+         * As soon as a frame has been processed invalidly or an unknown command arrives, the status changes to RX_INVALID.
+         * From now on I must assume that there has been a transmission error and the current bytes are invalid.
+         * The same applies if a HW overflow is detected.
          *
-         * - Die Zeit des letzten Frames 3ms vorbei ist und keine Daten mehr im Buffer sind. (Wird übermir geprüft)
-         * - Wenn der Markermodus aktiv ist und ein U_FRAME_END_IND sauber erkannt wurde. (Wird hier geprüft)
+         * The time of the last frame is 3ms past and there is no more data in the buffer. (Is checked by me)
+         * - If the marker mode is active and a U_FRAME_END_IND has been detected correctly. (Checked here)
          *
-         * Ansonsten macht dieser Abschnitt nichts und verwirrft damit die ungültigen Bytes
+         * Otherwise this section does nothing and thus discards the invalid bytes
          */
         if (markerMode())
         {
@@ -219,12 +218,12 @@ void TpUartDataLinkLayer::processRxByte()
             }
             else if (_rxMarker && byte == U_FRAME_END_IND)
             {
-                // doppeltes byte gefunden also marker zurück setzten - kein Frameende
+                // double byte found so reset marker - no frame end
                 _rxMarker = false;
             }
             else if (_rxMarker)
             {
-                // frame ende gefunden. -> RX_IDLE
+                // frame end found. -> RX_IDLE
                 _rxMarker = false;
                 _rxState = RX_IDLE;
             }
@@ -237,12 +236,12 @@ void TpUartDataLinkLayer::processRxByte()
     else if ((byte & L_DATA_MASK) == L_DATA_STANDARD_IND || (byte & L_DATA_MASK) == L_DATA_EXTENDED_IND)
     {
         /*
-         * Verarbeite ein vorheriges Frame falls noch vorhanden. Das dürfte normal nur im Busmonitor auftreten, weil hier noch auch ein ACK gewartet wird
+         * Process a previous frame if still available. This should normally only occur in the bus monitor because an ACK is also being waited for here
          */
         processRxFrameComplete();
         _rxFrame->addByte(byte);
 
-        // Provoziere ungültige Frames für Tests
+        // Provoke invalid frames for tests
         // if (millis() % 20 == 0)
         //     _rxFrame->addByte(0x1);
 
@@ -250,12 +249,12 @@ void TpUartDataLinkLayer::processRxByte()
         _rxState = RX_FRAME;
 
         /*
-         * Hier wird inital ein Ack ohne Addressed gesetzt. Das dient dazu, falls noch ein Ack vom vorherigen Frame gesetzt ist,
-         * zurück gesetzt wird. Das passiert wenn die Verarbeitung zu stark verzögert ist (z.B. weil kein DMA/IRQ genutzt wird).
-         * Das ACK kann beliebig oft gesendet werden, weil es in der BCU nur gespeichert wird und erst bei bedarf genutzt / gesendet wird.
+         * Here an ack is set inital without Addressed. This is used if an Ack is still set from the previous frame,
+         * is set back. This happens if processing is delayed too much (e.g. because no DMA/IRQ is used).
+         * The ACK can be sent as often as required because it is only stored in the BCU and is only used / sent when required.
          *
-         * Das darf man natürlich nur wenn ich nicht gerade selber sende, da man eigene Frames nicht ACKt. Ggf ignoriert die BCU dies,
-         * aber ich wollte hier auf sicher gehen.
+         * Of course, you can only do this if you are not sending yourself, as you do not ACK your own frames. The BCU may ignore this,
+         * but I wanted to be on the safe side here.
          */
         if (_txState == TX_IDLE)
         {
@@ -264,7 +263,7 @@ void TpUartDataLinkLayer::processRxByte()
     }
     else
     {
-        // Hier werden die Commands ausgewertet, falls das noch schon passiert ist.
+        // The commands are evaluated here, if this has already happened.
 
         if (byte == U_RESET_IND)
         {
@@ -275,8 +274,8 @@ void TpUartDataLinkLayer::processRxByte()
             _tpState |= (byte ^ U_STATE_MASK);
 #ifndef NCN5120
             /*
-             * Filtere "Protocol errors" weil auf anderen BCU wie der Siements dies gesetzt, when das timing nicht stimmt.
-             * Leider ist kein perfektes Timing möglich, so dass dieser Fehler ignoriert werden muss. Hat auch keine bekannte Auswirkungen.
+             * Filter "Protocol errors" because this is set on other BCUs such as the Siements when the timing is not correct.
+             * Unfortunately, perfect timing is not possible, so this error must be ignored. Also has no known effects.
              */
             _tpState &= 0b11101000;
 #endif
@@ -292,8 +291,8 @@ void TpUartDataLinkLayer::processRxByte()
         else if ((byte & L_ACKN_MASK) == L_ACKN_IND)
         {
             /*
-             * Wenn ein Frame noch nicht geschlossen wurde und ein Ack rein kommt.
-             * dann setze noch das ACK.
+             * If a frame has not yet been closed and an Ack comes in.
+             * then set the ACK.
              */
             if (_rxFrame->size() > 0)
             {
@@ -306,6 +305,7 @@ void TpUartDataLinkLayer::processRxByte()
                 _rxFrame->addFlags(TP_FRAME_FLAG_ACK);
                 processRxFrameComplete();
             }
+
             // println("L_ACKN_IND");
         }
         else if ((byte & L_DATA_CON_MASK) == L_DATA_CON)
@@ -317,7 +317,7 @@ void TpUartDataLinkLayer::processRxByte()
             }
             else
             {
-                // Dieses Byte wurde nicht erwartet, da garnichts gesendet wurde.
+                // This byte was not expected because nothing was sent.
                 _rxUnkownControlCounter++;
                 _rxState = RX_INVALID;
                 // println("L_DATA_CON");
@@ -344,13 +344,13 @@ void TpUartDataLinkLayer::processRxByte()
 }
 
 /*
- * Verarbeite eigehendes Byte eines Frames
+ * Process incoming byte of a frame
  */
 void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
 {
     /*
-     * Bei aktivem Maker muss das erste U_FRAME_END_IND ignoriert und auf ein Folgebyte gewartet werden.
-     * Das Folgebyte ist also ausschlaggebend wie dieses Byte zu bewerten ist.
+     * If the maker is active, the first U_FRAME_END_IND must be ignored and a subsequent byte must be waited for.
+     * The subsequent byte is therefore decisive for how this byte is to be evaluated.
      */
     if (markerMode() && (byte == U_FRAME_END_IND && !_rxMarker))
     {
@@ -358,8 +358,8 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
     }
 
     /*
-     * Wenn das vorherige Byte ein U_FRAME_END_IND war, und das neue Byte ein U_FRAME_STATE_IND ist,
-     * dann ist der Empfang sauber abgeschlossen und das Frame kann verarbeitet werden.
+     * If the previous byte was a U_FRAME_END_IND and the new byte is a U_FRAME_STATE_IND,
+     * then the reception is cleanly completed and the frame can be processed.
      */
     else if (_rxMarker && (byte & U_FRAME_STATE_MASK) == U_FRAME_STATE_IND)
     {
@@ -367,90 +367,94 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
         processRxFrameComplete();
 
         /*
-         * Setze den Zustand auf RX_IDLE, da durch den Marker sichergestellt ist,
-         * dass das Frame erfolgreich verarbeitet wurde. Nachfolgende Bytes sind also wieder sauber Steuerbefehle,
-         * selbst wenn das Frame aufgrund einer ungültigen Checksumme verworfen wurde (was RX_INVAID) bedeuten würde
+         * Set the status to RX_IDLE, as the marker ensures,
+         * that the frame has been processed successfully. Subsequent bytes are therefore clean again Control commands,
+         * even if the frame was discarded due to an invalid checksum (which would mean RX_INVAID)
          */
         _rxState = RX_IDLE;
     }
 
     /*
-     * Dies ist ein hypotetischer Fall, dass die Frames ohne Marker kommen, obwohl der MarkerModus aktiv ist.
-     * Hier wird der aktuelle Frame abgearbeitet und RX_INVALID gesetzt, da das aktuelle Byte hierbei nicht bearbeitet wird.
-     * Dieser Fall kann eintreffen wenn der Marker Modus von der TPUart nicht unterstützt wird (NCN51xx Feature) aber aktiviert wurde.
+     * This is a hypothetical case in which the frames are sent without markers even though marker mode is active.
+     * Here the current frame is processed and RX_INVALID is set, as the current byte is not processed.
+     * This case can occur if the marker mode is not supported by the TPUart (NCN51xx feature) but has been activated.
      */
     else if (markerMode() && _rxFrame->isFull())
     {
         processRxFrameComplete();
         /*
-         * RX_INVALID weil theoretisch könnte das Frame als gültig verarbeitet worden sein.
-         * Da aber das aktuelle Byte schon "angefangen" wurde zu verarbeiten, fehlt das in der Verarbeitungskette
-         * und somit sind die nachfolgenden Bytes nicht verwertbar.
+         * RX_INVALID because theoretically the frame could have been processed as valid.
+         * However, since the current byte has already been "started" to be processed, it is missing in the processing chain
+         * and therefore the subsequent bytes cannot be used.
          */
         _rxState = RX_INVALID;
     }
 
     /*
-     * Wenn der Markermodus in aktiv ist, soll das Byte normal verarbeitet werden.
-     * Wenn der Markermodus aktiv ist, dann darf ein U_FRAME_END_IND Byte nur verarbeitet werden, wenn des vorherige Byte auch ein U_FRAME_END_IND war.
+     * If marker mode is active, the byte should be processed normally.
+     * If marker mode is active, a U_FRAME_END_IND byte may only be processed if the previous byte was also a U_FRAME_END_IND.
      */
     else if (!markerMode() || byte != U_FRAME_END_IND || (byte == U_FRAME_END_IND && _rxMarker))
     {
-        // Setze den Marker wieder zurück falls aktiv
+        // Reset the marker if active
         _rxMarker = false;
-        // Übernehme das Byte
+        // Accept the byte
         _rxFrame->addByte(byte);
 
-        // Wenn der Busmonitor gestartet wurde, findet keine Verarbeitung - also auch kein ACKing
+        // If the bus monitor has been started, no processing takes place - i.e. no ACKing
         if (!_monitoring)
         {
-            // Wenn mehr als 7 bytes vorhanden kann geschaut werden ob das Frame für "mich" bestimmt ist
+            // If more than 7 bytes are available, you can check whether the frame is intended for "me".
             if (_rxFrame->size() == 7)
             {
-                // Prüfe ob ich für das Frame zuständig bin
-                if (_forceAck || _cb.isAckRequired(_rxFrame->destination(), _rxFrame->isGroupAddress()))
+                // Check whether I am responsible for the frame
+                TPAckType ack = _cb.isAckRequired(_rxFrame->destination(), _rxFrame->isGroupAddress());
+
+                if (_forceAck || ack)
                 {
                     /*
-                     * Speichere die Zuständigkeit dass dieses Frame weiterverarbeitet werden soll.
-                     * Da es keine extra Funktion außer dem isAckRequired gibt, wird das erstmal gleich behandelt.
-                     * Eine spätere Unterscheidung (ggf für Routermodus) muss man dann schauen.
+                     * Save the responsibility that this frame is to be processed further.
+                     * Since there is no extra function apart from the isAckRequired, this is initially treated the same.
+                     * A later differentiation (possibly for router mode) must then be looked at.
                      */
 
                     _rxFrame->addFlags(TP_FRAME_FLAG_ADDRESSED);
 
-                    // Das darf man natürlich nur wenn ich nicht gerade selber sende, da man eigene Frames nicht ACKt
+                    // Of course, this is only allowed if I am not sending myself, as you cannot ACK your own frames
                     if (_txState == TX_IDLE)
                     {
-                        // Speichere das ein Acking erfolgen soll
+                        // Save that Acking should take place
                         _rxFrame->addFlags(TP_FRAME_FLAG_ACK);
 
-                        // und im TPUart damit dieser das ACK schicken kann
-                        _platform.writeUart(U_ACK_REQ | U_ACK_REQ_ADRESSED);
+                        // and in the TPUart so that it can send the ACK
+                        _platform.writeUart(U_ACK_REQ | ack);
                     }
                 }
             }
 
 #ifdef USE_TP_RX_QUEUE
-            // Prüfe nun ob die RxQueue noch Platz hat für Frame + Size (2) + Flags(1)
+
+            // Now check whether the RxQueue still has space for Frame + Size (2) + Flags(1)
             if (_rxFrame->size() == 8 && (_rxFrame->flags() & TP_FRAME_FLAG_ADDRESSED))
             {
                 if (availableInRxQueue() < (_rxFrame->size() + 3))
                 {
-                    // Nur wenn ich nicht selber sende
+                    // Only if I am not sending myself
                     if (_txState == TX_IDLE)
                     {
                         _platform.writeUart(U_ACK_REQ | U_ACK_REQ_ADRESSED | U_ACK_REQ_BUSY);
                     }
                 }
             }
+
 #endif
         }
     }
 
     /*
-     * Wenn kein Markermodus aktiv ist, dann muss anhand des Frame geschaut werden, ob es Vollständig ist.
-     * isFull prüft hier ob die maxSize oder die Längenangabe des Frames überschritten wurde!
-     * In beiden Fällen muss das Frame verarbeitet werden.
+     * If no marker mode is active, the frame must be checked to see if it is complete.
+     * isFull checks here whether the maxSize or the length specification of the frame has been exceeded!
+     * In both cases, the frame must be processed.
      */
     if (!markerMode() && (_rxFrame->isFull()))
     {
@@ -459,61 +463,65 @@ void TpUartDataLinkLayer::processRxFrameByte(uint8_t byte)
 }
 
 /*
- * Verarbeitet das aktuelle Frame und prüft ob dieses vollständig und gültig (checksum) ist.
- * Sollte ein Frame vollständig und gültig sein, so wird deses falls für "mich" bestimmt in die Queue gelegt und der Modus ist wieder RX_IDLE.
- * Ansonsten wird das Frame als ungültig verworfen und der Zustand ist RX_INVALID, da nicht sichergestellt ist das Folgebytes wieder Steuercodes sind.
- * Ausnahme im Markermodus, hier wird der Status RX_INVALID an einer anderen Stelle direkt wieder auf RX_IDLE geändert, weil
- * dann ist sicher gestellt, dass das das Frame auf TP Ebene kaputt gegangen ist.
+ * Processes the current frame and checks whether it is complete and valid (checksum).
+ * If a frame is complete and valid, it is placed in the queue if it is intended for "me" and the mode is RX_IDLE again.
+ * Otherwise the frame is discarded as invalid and the status is RX_INVALID, as it is not guaranteed that subsequent bytes are control codes again.
+ * Exception in marker mode, here the status RX_INVALID is changed directly back to RX_IDLE at another point because
+ * it is then ensured that the frame has been broken at TP level.
  */
 void TpUartDataLinkLayer::processRxFrameComplete()
 {
-    // Sollte aktuell kein Frame in der Bearbeitung sein, dann breche ab
+    // If no frame is currently being edited, then cancel
     if (!_rxFrame->size())
         return;
 
-    // Ist das Frame vollständig und gültig
+    // Is the frame complete and valid
     if (_rxFrame->isValid())
     {
-        // Wenn ein Frame gesendet wurde
+        // When a frame has been sent
         if (_txState == TX_FRAME)
         {
-            // prüfe ob das Empfangen diesem entspricht: Vergleich der Quelladresse und Zieladresse sowie Startbyte ohne Berücksichtigung des Retry-Bits
-            if(!((_rxFrame->data(0) ^ _txFrame->data(0)) & ~0x20) && _rxFrame->destination() == _txFrame->destination() && _rxFrame->source() == _txFrame->source())
+            // check whether the receive corresponds to this: comparison of the source address and destination address and start byte without taking the retry bit into account
+            if (!((_rxFrame->data(0) ^ _txFrame->data(0)) & ~0x20) && _rxFrame->destination() == _txFrame->destination() && _rxFrame->source() == _txFrame->source())
             {
-                // und markiere das entsprechend
+                // and mark this accordingly
                 // println("MATCH");
                 _rxFrame->addFlags(TP_FRAME_FLAG_ECHO);
             }
-            // Jetzt warte noch auf das L_DATA_CON
+
+            // Now wait for the L_DATA_CON
         }
-        // wenn das frame für mich ist oder ich im busmonitor modus bin dann möchte ich es weiter verarbeiten
+
+        // if the frame is for me or i am in busmonitor mode then i want to process it further
         if (_rxFrame->flags() & TP_FRAME_FLAG_ADDRESSED || _monitoring)
         {
             /*
-             * Im Busmonitormodus muss noch auf ein Ack gewartet werden.
-             * Daher wird hier der Status geändert und vor dem echten abschließen zurück gesprungen.
-             * Sobald ein weiteres mal aufgerufen wird, (egal ob geackt oder nicht) wird das Frame geschlossen.
+             * In bus monitor mode, you still have to wait for an Ack.
+             * Therefore, the status is changed here and jumps back before the real completion.
+             * As soon as another call is made (regardless of whether or not the frame has been acked), the frame is closed.
              */
             if (_monitoring && _rxState != RX_AWAITING_ACK)
             {
                 _rxState = RX_AWAITING_ACK;
                 return;
             }
+
             _rxProcessdFrameCounter++;
         }
         else
         {
-            // Sonst verwerfe das Paket und gebe den Speicher frei -> da nicht in die Queue gepackt wird
+            // Otherwise, discard the package and release the memory -> as it is not packed into the queue
             _rxIgnoredFrameCounter++;
         }
-        // Und wieder bereit für Steuercodes
+
+        // And ready for control codes again
         _rxState = RX_IDLE;
     }
     else
     {
         /*
-         * Ist das Frame unvollständig oder ungültig dann wechsle in RX_INVALID Modus da ich nicht unterscheiden kann,
-         * ob es sich um einen TPBus Error oder ein UART Error oder ein Timming Error handelt.
+         * If the frame is incomplete or invalid then switch to RX_INVALID mode as I cannot distinguish,
+         * whether it is a TPBus error or a UART error or a Timming error.
          */
         _rxInvalidFrameCounter++;
         _rxFrame->addFlags(TP_FRAME_FLAG_INVALID);
@@ -526,7 +534,7 @@ void TpUartDataLinkLayer::processRxFrameComplete()
     processRxFrame(_rxFrame);
 #endif
 
-    // resete den aktuellen Framepointer
+    // resets the current frame pointer
     _rxFrame->reset();
 }
 
@@ -545,7 +553,7 @@ void TpUartDataLinkLayer::clearTxFrameQueue()
 
 void TpUartDataLinkLayer::processTxFrameComplete(bool success)
 {
-    uint8_t *cemiData = _txFrame->cemiData();
+    uint8_t* cemiData = _txFrame->cemiData();
     CemiFrame cemiFrame(cemiData, _txFrame->cemiSize());
     dataConReceived(cemiFrame, success);
     free(cemiData);
@@ -555,11 +563,11 @@ void TpUartDataLinkLayer::processTxFrameComplete(bool success)
 }
 
 /*
- * Steckt das zu sendende Frame in eine Queue, da der TpUart vielleicht gerade noch nicht sende bereit ist.
+ * Puts the frame to be sent into a queue, as the TpUart may not yet be ready to send.
  */
-void TpUartDataLinkLayer::pushTxFrameQueue(TpFrame *tpFrame)
+void TpUartDataLinkLayer::pushTxFrameQueue(TpFrame* tpFrame)
 {
-    knx_tx_queue_entry_t *entry = new knx_tx_queue_entry_t(tpFrame);
+    knx_tx_queue_entry_t* entry = new knx_tx_queue_entry_t(tpFrame);
 
     if (_txFrameQueue.back == nullptr)
     {
@@ -585,7 +593,7 @@ void TpUartDataLinkLayer::setFrameRepetition(uint8_t nack, uint8_t busy)
     setRepetitions(nack, busy);
 }
 
-bool TpUartDataLinkLayer::sendFrame(CemiFrame &cemiFrame)
+bool TpUartDataLinkLayer::sendFrame(CemiFrame& cemiFrame)
 {
     _txFrameCounter++;
 
@@ -600,16 +608,16 @@ bool TpUartDataLinkLayer::sendFrame(CemiFrame &cemiFrame)
         return false;
     }
 
-    TpFrame *tpFrame = new TpFrame(cemiFrame);
+    TpFrame* tpFrame = new TpFrame(cemiFrame);
     // printHex("  TP>: ", tpFrame->data(), tpFrame->size());
     pushTxFrameQueue(tpFrame);
     return true;
 }
 
 /*
- * Es soll regelmäßig der Status abgefragt werden um ein Disconnect des TPUart und dessen Status zu erkennen.
- * Außerdem soll regelmäßig die aktuelle Config bzw der Modus übermittelt werden, so dass nach einem Disconnect,
- * der TPUart im richtigen Zustand ist.
+ * The status should be queried regularly to detect a disconnect of the TPUart and its status.
+ * In addition, the current config or mode should be transmitted regularly so that after a disconnect,
+ * the TPUart is in the correct state.
  */
 void TpUartDataLinkLayer::requestState(bool force /* = false */)
 {
@@ -618,20 +626,20 @@ void TpUartDataLinkLayer::requestState(bool force /* = false */)
         if (!(_rxState == RX_IDLE || _rxState == RX_INVALID))
             return;
 
-        // Nur 1x pro Sekunde
+        // Only 1x per second
         if ((millis() - _lastStateRequest) < 1000)
             return;
     }
 
     // println("requestState");
 
-    // Sende Konfiguration bzw. Modus
+    // Send configuration or mode
     if (_monitoring)
         _platform.writeUart(U_BUSMON_REQ);
     else
         requestConfig();
 
-    // Frage status an - wenn monitoring inaktiv
+    // Question status on - if monitoring inactive
     if (!_monitoring)
         _platform.writeUart(U_STATE_REQ);
 
@@ -639,7 +647,7 @@ void TpUartDataLinkLayer::requestState(bool force /* = false */)
 }
 
 /*
- * Sendet die aktuelle Config an den Chip
+ * Sends the current config to the chip
  */
 void TpUartDataLinkLayer::requestConfig()
 {
@@ -647,9 +655,10 @@ void TpUartDataLinkLayer::requestConfig()
 #ifdef NCN5120
     if (markerMode())
         _platform.writeUart(U_CONFIGURE_REQ | U_CONFIGURE_MARKER_REQ);
+
 #endif
 
-    // Abweichende Config
+    // Deviating Config
     if (_repetitions != 0b00110011)
     {
 #ifdef NCN5120
@@ -659,14 +668,14 @@ void TpUartDataLinkLayer::requestConfig()
         _platform.writeUart(0x0); // dummy, see NCN5120 datasheet
 #else
         _platform.writeUart(U_MXRSTCNT);
-        _platform.writeUart(((_repetitions & 0xF0) << 1) || (_repetitions & 0x0F));
+        _platform.writeUart(((_repetitions & 0xF0) << 1) | (_repetitions & 0x0F));
 #endif
     }
 }
 
 /*
- * Ein vereinfachter Lockmechanismus der nur auf dem gleichen Core funktionert.
- * Also perfekt für ISR
+ * A simplified lock mechanism that only works on the same core.
+ * Perfect for ISR
  */
 bool TpUartDataLinkLayer::isrLock(bool blocking /* = false */)
 {
@@ -734,6 +743,7 @@ bool TpUartDataLinkLayer::reset()
     {
         _rxFrame->reset();
     }
+
     _rxState = RX_IDLE;
     _connected = false;
     _stopped = false;
@@ -746,10 +756,12 @@ bool TpUartDataLinkLayer::reset()
     bool success = false;
 
     const uint32_t start = millis();
+
     // During startup answer took up to 2ms and normal 1ms
     do
     {
         const int byte = _platform.readUart();
+
         if (byte == -1)
             continue; // empty
 
@@ -758,10 +770,10 @@ bool TpUartDataLinkLayer::reset()
             success = true;
             break; // next run for U_CONFIGURE_IND
         }
-
     } while (!((millis() - start) >= 10));
 
     connected(success);
+
     if (success)
     {
         _lastStateRequest = 0; // Force
@@ -827,9 +839,9 @@ bool TpUartDataLinkLayer::enabled() const
 }
 
 /*
- * Wenn ein TxFrame gesendet wurde, wird eine Bestätigung für den Versand erwartet.
- * Kam es aber zu einem ungültigen Frame oder Busdisconnect, bleibt die Bestätigung aus und der STack hängt im TX_FRAME fest.
- * Daher muss nach einer kurzen Wartezeit das Warten beendet werden.
+ * If a TxFrame has been sent, a confirmation for the transmission is expected.
+ * However, if there was an invalid frame or bus disconnect, the confirmation is not received and the STack is stuck in the TX_FRAME.
+ * The wait must therefore be ended after a short waiting time.
  */
 void TpUartDataLinkLayer::clearOutdatedTxFrame()
 {
@@ -838,8 +850,8 @@ void TpUartDataLinkLayer::clearOutdatedTxFrame()
 }
 
 /*
- * Hier werden die ausgehenden Frames aus der Warteschlange genomnmen und versendet.
- * Das passiert immer nur einzelnd, da nach jedem Frame, gewartet werden muss bis das Frame wieder reingekommen ist und das L_DATA_CON rein kommt.
+ * Here the outgoing frames are taken from the queue and sent.
+ * This only happens one at a time, as after each frame it is necessary to wait until the frame has come in again and the L_DATA_CON comes in.
  *
  */
 void TpUartDataLinkLayer::processTxQueue()
@@ -849,7 +861,7 @@ void TpUartDataLinkLayer::processTxQueue()
 
     if (_txFrameQueue.front != nullptr)
     {
-        knx_tx_queue_entry_t *entry = _txFrameQueue.front;
+        knx_tx_queue_entry_t* entry = _txFrameQueue.front;
         _txFrameQueue.front = entry->next;
 
         if (_txFrameQueue.front == nullptr)
@@ -879,10 +891,10 @@ void TpUartDataLinkLayer::processTxQueue()
 }
 
 /*
- * Prüfe ob ich zu lange keine Daten mehr erhalten habe und setzte den Status auf nicht verbunden.
- * Im normalen Modus wird jede Sekunde der Status angefragt. Daher kann hier eine kurze Zeit gewählt werden.
- * Im Monitoringmodus gibt es eigentlichen Frames, daher ist hier eine längere Zeit verwendet.
- * Dennoch kommt es bei größeren Datenmengen zu vermuteten Disconnect, daher wird auch noch die RxQueue beachtet.
+ * Check whether I have not received any data for too long and set the status to not connected.
+ * In normal mode, the status is requested every second. A short time can therefore be selected here.
+ * In monitoring mode there are actual frames, so a longer time is used here.
+ * Nevertheless, there are suspected disconnects with larger data volumes, so the RxQueue is also taken into account.
  */
 void TpUartDataLinkLayer::checkConnected()
 {
@@ -916,8 +928,8 @@ void TpUartDataLinkLayer::loop()
         return;
 
     /*
-     * Sollte ein overflow erkannt worden sein, so wechsle in RX_INVALID.
-     * Das greift aber nur im loop und nicht im ISR. Aber bei Nutzung von ISR und DMA sollte dieser Fall nie passieren.
+     * If an overflow has been detected, change to RX_INVALID.
+     * However, this only applies in the loop and not in ISR. But when using ISR and DMA, this should never happen.
      */
     if (_rxOverflow)
     {
@@ -944,16 +956,18 @@ void TpUartDataLinkLayer::loop()
     checkConnected();
 }
 
-void TpUartDataLinkLayer::rxFrameReceived(TpFrame *tpFrame)
+void TpUartDataLinkLayer::rxFrameReceived(TpFrame* tpFrame)
 {
-    uint8_t *cemiData = tpFrame->cemiData();
+    uint8_t* cemiData = tpFrame->cemiData();
     CemiFrame cemiFrame(cemiData, tpFrame->cemiSize());
     // printHex("  TP<: ", tpFrame->data(), tpFrame->size());
     // printHex("  CEMI<: ", cemiFrame.data(), cemiFrame.dataLength());
 
 #ifdef KNX_ACTIVITYCALLBACK
+
     if (_dllcb)
         _dllcb->activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_RECV << KNX_ACTIVITYCALLBACK_DIR));
+
 #endif
 
     frameReceived(cemiFrame);
@@ -966,12 +980,13 @@ DptMedium TpUartDataLinkLayer::mediumType() const
 }
 
 /*
- * Hiermit kann die Stromversorgung des V20V (VCC2)
+ * This can be used to switch the power supply to the V20V (VCC2)
  */
 #ifdef NCN5120
 void TpUartDataLinkLayer::powerControl(bool state)
 {
     _platform.writeUart(U_INT_REG_WR_REQ_ACR0);
+
     if (state)
         _platform.writeUart(ACR0_FLAG_DC2EN | ACR0_FLAG_V20VEN | ACR0_FLAG_XCLKEN | ACR0_FLAG_V20VCLIMIT);
     else
@@ -984,13 +999,13 @@ bool TpUartDataLinkLayer::processTxFrameBytes()
     // println("processTxFrameBytes");
 
     /*
-     * Jedes Frame muss mit einem U_L_DATA_START_REQ eingeleitet werden und jedes Folgebyte mit einem weiteren Positionsbyte (6bit).
-     * Da das Positionsbyte aus dem U_L_DATA_START_REQ + Position besteht und wir sowieso mit 0 starten, ist eine weitere
-     * Unterscheidung nicht nötig.
+     * Each frame must be introduced with a U_L_DATA_START_REQ and each subsequent byte with a further position byte (6bit).
+     * Since the position byte consists of the U_L_DATA_START_REQ + position and we start with 0 anyway, a further distinction is not necessary.
+     * distinction is not necessary.
      *
-     * Das letzte Byte (Checksumme) verwendet allerdings das U_L_DATA_END_REQ + Postion!
-     * Außerdem gibt es eine weitere Besondertheit bei Extendedframes bis 263 Bytes lang sein können reichen die 6bit nicht mehr.
-     * Hier muss ein U_L_DATA_OFFSET_REQ + Position (3bit) vorangestellt werden. Somit stehten 9bits für die Postion bereit.
+     * However, the last byte (checksum) uses the U_L_DATA_END_REQ + position!
+     * In addition, there is another special feature for extended frames up to 263 bytes long, the 6 bits are no longer sufficient.
+     * Here a U_L_DATA_OFFSET_REQ + Position (3bit) must be prefixed. This means that 9 bits are available for the position.
      */
     for (uint16_t i = 0; i < _txFrame->size(); i++)
     {
@@ -1003,7 +1018,7 @@ bool TpUartDataLinkLayer::processTxFrameBytes()
             _platform.writeUart(U_L_DATA_OFFSET_REQ | offset);
         }
 
-        if (i == (_txFrame->size() - 1)) // Letztes Bytes (Checksumme)
+        if (i == (_txFrame->size() - 1)) // Last bytes (checksum)
             _platform.writeUart(U_L_DATA_END_REQ | position);
         else
             _platform.writeUart(U_L_DATA_START_REQ | position);
@@ -1012,18 +1027,20 @@ bool TpUartDataLinkLayer::processTxFrameBytes()
     }
 
 #ifdef KNX_ACTIVITYCALLBACK
+
     if (_dllcb)
         _dllcb->activity((_netIndex << KNX_ACTIVITYCALLBACK_NET) | (KNX_ACTIVITYCALLBACK_DIR_SEND << KNX_ACTIVITYCALLBACK_DIR));
+
 #endif
 
     return true;
 }
 
-TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject &devObj,
-                                         NetworkLayerEntity &netLayerEntity,
-                                         Platform &platform,
-                                         ITpUartCallBacks &cb,
-                                         DataLinkLayerCallbacks *dllcb)
+TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
+        NetworkLayerEntity& netLayerEntity,
+        Platform& platform,
+        ITpUartCallBacks& cb,
+        DataLinkLayerCallbacks* dllcb)
     : DataLinkLayer(devObj, netLayerEntity, platform),
       _cb(cb),
       _dllcb(dllcb)
@@ -1032,7 +1049,7 @@ TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject &devObj,
 }
 
 /*
- * Liefert die Anzahl der Frames, die nicht verarbeitet werden konnte.
+ * Returns the number of frames that could not be processed.
  */
 uint32_t TpUartDataLinkLayer::getRxInvalidFrameCounter()
 {
@@ -1040,7 +1057,7 @@ uint32_t TpUartDataLinkLayer::getRxInvalidFrameCounter()
 }
 
 /*
- * Liefert die Anzahl der Frames, welche gültig und für das Geräte bestimmt sind
+ * Returns the number of frames that are valid and intended for the device
  */
 uint32_t TpUartDataLinkLayer::getRxProcessdFrameCounter()
 {
@@ -1048,7 +1065,7 @@ uint32_t TpUartDataLinkLayer::getRxProcessdFrameCounter()
 }
 
 /*
- * Liefert die Anzahl der Frames, welche gültig aber nicht f+r das Gerät bestimmt sind
+ * Returns the number of frames that are valid but not intended for the device
  */
 uint32_t TpUartDataLinkLayer::getRxIgnoredFrameCounter()
 {
@@ -1056,7 +1073,7 @@ uint32_t TpUartDataLinkLayer::getRxIgnoredFrameCounter()
 }
 
 /*
- * Liefert die Anzahl der gezählten Steuerbytes, welche nicht erkannt wurden
+ * Returns the number of control bytes counted that were not recognized
  */
 uint32_t TpUartDataLinkLayer::getRxUnknownControlCounter()
 {
@@ -1064,14 +1081,14 @@ uint32_t TpUartDataLinkLayer::getRxUnknownControlCounter()
 }
 
 /*
- * Liefert die Anzahl der zusendenden Frames
+ * Returns the number of frames sent
  */
 uint32_t TpUartDataLinkLayer::getTxFrameCounter()
 {
     return _txFrameCounter;
 }
 /*
- * Liefert die Anzahl der versendeten Frames
+ * Returns the number of frames sent
  */
 uint32_t TpUartDataLinkLayer::getTxProcessedFrameCounter()
 {
@@ -1104,13 +1121,13 @@ bool TpUartDataLinkLayer::markerMode()
         return false;
 
 #ifdef NCN5120
-        // return true;
+    // return true;
 #endif
 
     return false;
 }
 
-void TpUartDataLinkLayer::processRxFrame(TpFrame *tpFrame)
+void TpUartDataLinkLayer::processRxFrame(TpFrame* tpFrame)
 {
     if (_monitoring)
     {
@@ -1136,6 +1153,7 @@ void TpUartDataLinkLayer::processRxFrame(TpFrame *tpFrame)
         printFrame(tpFrame);
         println();
 #endif
+
         if (!(tpFrame->flags() & TP_FRAME_FLAG_ECHO))
             rxFrameReceived(tpFrame);
     }
@@ -1146,8 +1164,8 @@ void TpUartDataLinkLayer::processRxFrame(TpFrame *tpFrame)
  * This method allows the processing of the incoming bytes to be handled additionally via an interrupt (ISR).
  * The prerequisite is that the interrupt runs on the same core as the knx.loop!
  *
- * Bei einem RP2040 wo beim "erase" eines Blocks auch der ISR gesperrt sind,
- * kann zwischern den Erases die Verarbeitung nachgeholt werden. So wird das Risiko von Frameverlusten deutlich minimiert.
+ * With an RP2040 where the ISR is also locked when a block is erased,
+ * processing can be caught up between the erases. This significantly minimizes the risk of frame losses.
  */
 void __isr __time_critical_func(TpUartDataLinkLayer::processRxISR)()
 {
@@ -1155,9 +1173,9 @@ void __isr __time_critical_func(TpUartDataLinkLayer::processRxISR)()
 }
 
 /*
- * Steckt das empfangene Frame in eine Queue. Diese Queue ist notwendig,
- * weil ein Frame optional über ein ISR empfangen werden kann und die verarbeitung noch normal im knx.loop statt finden muss.
- * Außerdem ist diese Queue statisch vorallokierte, da in einem ISR keine malloc u.ä. gemacht werden kann.
+ * Puts the received frame into a queue. This queue is necessary,
+ * because a frame can optionally be received via an ISR and processing must still take place normally in the knx.loop.
+ * In addition, this queue is statically preallocated, as no malloc etc. can be made in an ISR.
  */
 void TpUartDataLinkLayer::pushRxFrameQueue()
 {

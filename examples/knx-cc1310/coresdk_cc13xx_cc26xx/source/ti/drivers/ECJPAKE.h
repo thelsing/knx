@@ -740,7 +740,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from an ECJPAKE_open() call.
  */
-typedef struct ECJPAKE_Config   *ECJPAKE_Handle;
+typedef struct ECJPAKE_Config*   ECJPAKE_Handle;
 
 /*!
  * @brief   The way in which ECJPAKE function calls return after performing an
@@ -763,7 +763,8 @@ typedef struct ECJPAKE_Config   *ECJPAKE_Handle;
  * |ECJPAKE_RETURN_BEHAVIOR_POLLING   | X     | X     | X     |
  *
  */
-typedef enum {
+typedef enum
+{
     ECJPAKE_RETURN_BEHAVIOR_CALLBACK = 1,   /*!< The function call will return immediately while the
                                              *   ECJPAKE operation goes on in the background. The registered
                                              *   callback function is called after the operation completes.
@@ -791,54 +792,56 @@ typedef enum {
  *
  *  @sa     ECJPAKE_init()
  */
-typedef struct ECJPAKE_Config {
+typedef struct ECJPAKE_Config
+{
     /*! Pointer to a driver specific data object */
-    void               *object;
+    void*               object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void         const *hwAttrs;
+    void         const* hwAttrs;
 } ECJPAKE_Config;
 
 /*!
  *  @brief  Struct containing the parameters required to generate the first round of keys.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;                     /*!< A pointer to the elliptic curve parameters
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;                     /*!< A pointer to the elliptic curve parameters
                                                                  *   used in the operation.
                                                                  */
-    CryptoKey                       *myPrivateKey1;             /*!< A pointer to a private ECC key. Must
+    CryptoKey*                       myPrivateKey1;             /*!< A pointer to a private ECC key. Must
                                                                  *   be of the same length as other params
                                                                  *   of the curve used.
                                                                  */
-    CryptoKey                       *myPrivateKey2;             /*!< A pointer to a private ECC key. Must
+    CryptoKey*                       myPrivateKey2;             /*!< A pointer to a private ECC key. Must
                                                                  *   be of the same length as other params
                                                                  *   of the curve used.
                                                                  */
-    CryptoKey                       *myPublicKey1;              /*!< A pointer to the blank public key of \c
+    CryptoKey*                       myPublicKey1;              /*!< A pointer to the blank public key of \c
                                                                  *   myPrivateKey1. The keying material will be
                                                                  *   written to the buffer specified in the
                                                                  *   CryptoKey.
                                                                  */
-    CryptoKey                       *myPublicKey2;              /*!< A pointer to the blank public key of \c
+    CryptoKey*                       myPublicKey2;              /*!< A pointer to the blank public key of \c
                                                                  *   myPrivateKey2. The keying material will be
                                                                  *   written to the buffer specified in the
                                                                  *   CryptoKey.
                                                                  */
-    CryptoKey                       *myPrivateV1;               /*!< A pointer to a private ECC key used in the
+    CryptoKey*                       myPrivateV1;               /*!< A pointer to a private ECC key used in the
                                                                  *   first Schnorr ZKP.
                                                                  *   Must be of the same length as other params
                                                                  *   of the curve used. The CryptoKey and keying material
                                                                  *   may be deleted or go out of scope after
                                                                  *   generating the ZKP.
                                                                  */
-    CryptoKey                       *myPrivateV2;                /*!< A pointer to a private ECC key used in the
+    CryptoKey*                       myPrivateV2;                /*!< A pointer to a private ECC key used in the
                                                                  *   second Schnorr ZKP.
                                                                  *   Must be of the same length as other params
                                                                  *   of the curve used. The CryptoKey and keying material
                                                                  *   may be deleted or go out of scope after
                                                                  *   generating the ZKP.
                                                                  */
-    CryptoKey                       *myPublicV1;                /*!< A pointer to the blank public key of \c
+    CryptoKey*                       myPublicV1;                /*!< A pointer to the blank public key of \c
                                                                  *   myPrivateV1. The keying material will be
                                                                  *   written to the buffer specified in the
                                                                  *   CryptoKey. The CryptoKey and keying material
@@ -847,7 +850,7 @@ typedef struct {
                                                                  *   to the other party with the rest of the
                                                                  *   parameters.
                                                                  */
-    CryptoKey                       *myPublicV2;                /*!< A pointer to the blank public key of \c
+    CryptoKey*                       myPublicV2;                /*!< A pointer to the blank public key of \c
                                                                  *   myPrivateV2. The keying material will be
                                                                  *   written to the buffer specified in the
                                                                  *   CryptoKey. The CryptoKey and keying material
@@ -861,24 +864,25 @@ typedef struct {
 /*!
  *  @brief  Struct containing the parameters required to generate a ZKP.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;                     /*!< A pointer to the elliptic curve parameters
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;                     /*!< A pointer to the elliptic curve parameters
                                                                  *   used in the operation.
                                                                  */
-    const CryptoKey                 *myPrivateKey;              /*!< A pointer to a private ECC key to be signed. Must
+    const CryptoKey*                 myPrivateKey;              /*!< A pointer to a private ECC key to be signed. Must
                                                                  *   be of the same length as other params
                                                                  *   of the curve used.
                                                                  */
-    const CryptoKey                 *myPrivateV;                /*!< A pointer to a private ECC key that will be
+    const CryptoKey*                 myPrivateV;                /*!< A pointer to a private ECC key that will be
                                                                  *   used only to generate a ZKP signature.
                                                                  *   Must be of the same length as other params
                                                                  *   of the curve used.
                                                                  */
-    const uint8_t                   *hash;                      /*!< A pointer to the hash of the message.
+    const uint8_t*                   hash;                      /*!< A pointer to the hash of the message.
                                                                  *   Must be of the same length as other params
                                                                  *   of the curve used.
                                                                  */
-    uint8_t                         *r;                         /*!< A pointer to where the r component of the
+    uint8_t*                         r;                         /*!< A pointer to where the r component of the
                                                                  *   ZKP will be written to.
                                                                  */
 } ECJPAKE_OperationGenerateZKP;
@@ -886,27 +890,28 @@ typedef struct {
 /*!
  *  @brief  Struct containing the parameters required to verify a ZKP.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;                     /*!< A pointer to the elliptic curve parameters
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;                     /*!< A pointer to the elliptic curve parameters
                                                                  *   used in the operation.
                                                                  */
-    const CryptoKey                 *theirGenerator;            /*!< A CryptoKey describing the generator point
+    const CryptoKey*                 theirGenerator;            /*!< A CryptoKey describing the generator point
                                                                  *   to be used. In the first round, this will
                                                                  *   be the default generator of the curve.
                                                                  *   In the second round, this parameter is
                                                                  *   computed by ECJPAKE_roundTwoGenerateKeys().
                                                                  */
-    const CryptoKey                 *theirPublicKey;            /*!< A CryptoKey describing the public key
+    const CryptoKey*                 theirPublicKey;            /*!< A CryptoKey describing the public key
                                                                  *   received from the other party that the
                                                                  *   ZKP to be verified supposedly signed.
                                                                  */
-    const CryptoKey                 *theirPublicV;              /*!< A CryptoKey describing the public V of the
+    const CryptoKey*                 theirPublicV;              /*!< A CryptoKey describing the public V of the
                                                                  *   ZKP. Received from the other party.
                                                                  */
-    const uint8_t                   *hash;                      /*!< The hash of the ZKP generated as the
+    const uint8_t*                   hash;                      /*!< The hash of the ZKP generated as the
                                                                  *   other party generated it to compute r.
                                                                  */
-    const uint8_t                   *r;                         /*!< R component of the ZKP signature. Received
+    const uint8_t*                   r;                         /*!< R component of the ZKP signature. Received
                                                                  *   from the other party.
                                                                  */
 } ECJPAKE_OperationVerifyZKP;
@@ -914,27 +919,28 @@ typedef struct {
 /*!
  *  @brief  Struct containing the parameters required to generate the second round keys.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;                     /*!< A pointer to the elliptic curve parameters
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;                     /*!< A pointer to the elliptic curve parameters
                                                                  *   used in the operation.
                                                                  */
-    const CryptoKey                 *myPrivateKey2;             /*!< A pointer to a private ECC key. Must
+    const CryptoKey*                 myPrivateKey2;             /*!< A pointer to a private ECC key. Must
                                                                  *   be of the same length as other params
                                                                  *   of the curve used. Generated in round one.
                                                                  */
-    const CryptoKey                 *myPublicKey1;              /*!< A pointer to the public key of
+    const CryptoKey*                 myPublicKey1;              /*!< A pointer to the public key of
                                                                  *   myPrivateKey1. Generated in round one.
                                                                  */
-    const CryptoKey                 *myPublicKey2;              /*!< A pointer to the second public key.
+    const CryptoKey*                 myPublicKey2;              /*!< A pointer to the second public key.
                                                                  *   Generated in round one.
                                                                  */
-    const CryptoKey                 *theirPublicKey1;           /*!< A CryptoKey describing the first public key
+    const CryptoKey*                 theirPublicKey1;           /*!< A CryptoKey describing the first public key
                                                                  *   received from the other party.
                                                                  */
-    const CryptoKey                 *theirPublicKey2;           /*!< A CryptoKey describing the second public key
+    const CryptoKey*                 theirPublicKey2;           /*!< A CryptoKey describing the second public key
                                                                  *   received from the other party.
                                                                  */
-    const CryptoKey                 *preSharedSecret;           /*!< A CryptoKey describing the secret shared between
+    const CryptoKey*                 preSharedSecret;           /*!< A CryptoKey describing the secret shared between
                                                                  *   the two parties prior to starting the scheme.
                                                                  *   This exchange would have happened through some
                                                                  *   offline commissioning scheme most likely.
@@ -943,34 +949,34 @@ typedef struct {
                                                                  *   keying material even if the original pre-shared
                                                                  *   secret is shorter than this length.
                                                                  */
-    CryptoKey                       *theirNewGenerator;         /*!< A blank CryptoKey describing the generator point
+    CryptoKey*                       theirNewGenerator;         /*!< A blank CryptoKey describing the generator point
                                                                  *   used by the other party in the second round.
                                                                  *   After it is computed, the keying material will
                                                                  *   be written to the location described in the
                                                                  *   CryptoKey.
                                                                  */
-    CryptoKey                       *myNewGenerator;            /*!< A blank CryptoKey describing the generator point
+    CryptoKey*                       myNewGenerator;            /*!< A blank CryptoKey describing the generator point
                                                                  *   used by the application in the second round.
                                                                  *   After it is computed, the keying material will
                                                                  *   be written to the location described in the
                                                                  *   CryptoKey.
                                                                  */
-    CryptoKey                       *myCombinedPrivateKey;      /*!< A pointer to a public ECC key. Must
+    CryptoKey*                       myCombinedPrivateKey;      /*!< A pointer to a public ECC key. Must
                                                                  *   be of the same length as other params
                                                                  *   of the curve used. Result of multiplying
                                                                  *   \c myCombinedPrivateKey by \c myNewGenerator.
                                                                  */
-    CryptoKey                       *myCombinedPublicKey;       /*!< A pointer to a public ECC key. Result of multiplying
+    CryptoKey*                       myCombinedPublicKey;       /*!< A pointer to a public ECC key. Result of multiplying
                                                                  *   \c myCombinedPrivateKey by \c myNewGenerator.
                                                                  */
-    CryptoKey                       *myPrivateV;                /*!< A pointer to a private ECC key used in the
+    CryptoKey*                       myPrivateV;                /*!< A pointer to a private ECC key used in the
                                                                  *   only second-round Schnorr ZKP.
                                                                  *   Must be of the same length as other params
                                                                  *   of the curve used. The CryptoKey and keying material
                                                                  *   may be deleted or go out of scope after
                                                                  *   generating the ZKP.
                                                                  */
-    CryptoKey                       *myPublicV;                 /*!< A pointer to the blank public key of \c
+    CryptoKey*                       myPublicV;                 /*!< A pointer to the blank public key of \c
                                                                  *   myPrivateV. The keying material will be
                                                                  *   written to the buffer specified in the
                                                                  *   CryptoKey. The CryptoKey and keying material
@@ -984,27 +990,28 @@ typedef struct {
 /*!
  *  @brief  Struct containing the parameters required to compute the shared secret.
  */
-typedef struct {
-    const ECCParams_CurveParams     *curve;                     /*!< A pointer to the elliptic curve parameters
+typedef struct
+{
+    const ECCParams_CurveParams*     curve;                     /*!< A pointer to the elliptic curve parameters
                                                                  *   used in the operation.
                                                                  */
-    const CryptoKey                 *myCombinedPrivateKey;      /*!< A pointer to a private ECC key. Must
+    const CryptoKey*                 myCombinedPrivateKey;      /*!< A pointer to a private ECC key. Must
                                                                  *   be of the same length as other params
                                                                  *   of the curve used. Generated in round one.
                                                                  */
-    const CryptoKey                 *theirCombinedPublicKey;    /*!< A CryptoKey describing the second public key
+    const CryptoKey*                 theirCombinedPublicKey;    /*!< A CryptoKey describing the second public key
                                                                  *   received from the other party.
                                                                  */
-    const CryptoKey                 *theirPublicKey2;           /*!< A pointer to a private ECC key. Must
+    const CryptoKey*                 theirPublicKey2;           /*!< A pointer to a private ECC key. Must
                                                                  *   be of the same length as other params
                                                                  *   of the curve used. Result of multiplying
                                                                  *   \c myPrivateKey2 by \c preSharedSecret.
                                                                  */
-    const CryptoKey                 *myPrivateKey2;             /*!< Combined public key received in the second
+    const CryptoKey*                 myPrivateKey2;             /*!< Combined public key received in the second
                                                                  *   round and verified by the application against
                                                                  *   the second round ZKP signature.
                                                                  */
-    CryptoKey                       *sharedSecret;              /*!< The shared secret that is identical between both
+    CryptoKey*                       sharedSecret;              /*!< The shared secret that is identical between both
                                                                  *   parties.
                                                                  */
 } ECJPAKE_OperationComputeSharedSecret;
@@ -1013,18 +1020,20 @@ typedef struct {
 /*!
  *  @brief  Union containing pointers to all supported operation structs.
  */
-typedef union {
-    ECJPAKE_OperationRoundOneGenerateKeys   *generateRoundOneKeys;  /*!< A pointer to an ECJPAKE_OperationRoundOneGenerateKeys struct */
-    ECJPAKE_OperationGenerateZKP            *generateZKP;           /*!< A pointer to an ECJPAKE_OperationGenerateZKP struct */
-    ECJPAKE_OperationVerifyZKP              *verifyZKP;             /*!< A pointer to an ECJPAKE_OperationVerifyZKP struct */
-    ECJPAKE_OperationRoundTwoGenerateKeys   *generateRoundTwoKeys;  /*!< A pointer to an ECJPAKE_OperationRoundTwoGenerateKeys struct */
-    ECJPAKE_OperationComputeSharedSecret    *computeSharedSecret;   /*!< A pointer to an ECJPAKE_OperationComputeSharedSecret struct */
+typedef union
+{
+    ECJPAKE_OperationRoundOneGenerateKeys*   generateRoundOneKeys;  /*!< A pointer to an ECJPAKE_OperationRoundOneGenerateKeys struct */
+    ECJPAKE_OperationGenerateZKP*            generateZKP;           /*!< A pointer to an ECJPAKE_OperationGenerateZKP struct */
+    ECJPAKE_OperationVerifyZKP*              verifyZKP;             /*!< A pointer to an ECJPAKE_OperationVerifyZKP struct */
+    ECJPAKE_OperationRoundTwoGenerateKeys*   generateRoundTwoKeys;  /*!< A pointer to an ECJPAKE_OperationRoundTwoGenerateKeys struct */
+    ECJPAKE_OperationComputeSharedSecret*    computeSharedSecret;   /*!< A pointer to an ECJPAKE_OperationComputeSharedSecret struct */
 } ECJPAKE_Operation;
 
 /*!
  *  @brief  Enum for the operation types supported by the driver.
  */
-typedef enum {
+typedef enum
+{
     ECJPAKE_OPERATION_TYPE_ROUND_ONE_GENERATE_KEYS = 1,
     ECJPAKE_OPERATION_TYPE_GENERATE_ZKP = 2,
     ECJPAKE_OPERATION_TYPE_VERIFY_ZKP = 3,
@@ -1063,13 +1072,14 @@ typedef void (*ECJPAKE_CallbackFxn) (ECJPAKE_Handle handle,
  *
  *  @sa     ECJPAKE_Params_init()
  */
-typedef struct {
+typedef struct
+{
     ECJPAKE_ReturnBehavior  returnBehavior;                     /*!< Blocking, callback, or polling return behavior */
     ECJPAKE_CallbackFxn     callbackFxn;                        /*!< Callback function pointer */
     uint32_t                timeout;                            /*!< Timeout in system ticks before the operation fails
                                                                  *   and returns
                                                                  */
-    void                   *custom;                             /*!< Custom argument used by driver
+    void*                   custom;                             /*!< Custom argument used by driver
                                                                  *   implementation
                                                                  */
 } ECJPAKE_Params;
@@ -1092,7 +1102,7 @@ void ECJPAKE_init(void);
  *
  *  Defaults values are all zeros.
  */
-void ECJPAKE_OperationRoundOneGenerateKeys_init(ECJPAKE_OperationRoundOneGenerateKeys *operation);
+void ECJPAKE_OperationRoundOneGenerateKeys_init(ECJPAKE_OperationRoundOneGenerateKeys* operation);
 
 /*!
  *  @brief  Function to initialize an ECJPAKE_OperationGenerateZKP struct to its defaults
@@ -1102,7 +1112,7 @@ void ECJPAKE_OperationRoundOneGenerateKeys_init(ECJPAKE_OperationRoundOneGenerat
  *
  *  Defaults values are all zeros.
  */
-void ECJPAKE_OperationGenerateZKP_init(ECJPAKE_OperationGenerateZKP *operation);
+void ECJPAKE_OperationGenerateZKP_init(ECJPAKE_OperationGenerateZKP* operation);
 
 /*!
  *  @brief  Function to initialize an ECJPAKE_OperationVerifyZKP struct to its defaults
@@ -1112,7 +1122,7 @@ void ECJPAKE_OperationGenerateZKP_init(ECJPAKE_OperationGenerateZKP *operation);
  *
  *  Defaults values are all zeros.
  */
-void ECJPAKE_OperationVerifyZKP_init(ECJPAKE_OperationVerifyZKP *operation);
+void ECJPAKE_OperationVerifyZKP_init(ECJPAKE_OperationVerifyZKP* operation);
 
 /*!
  *  @brief  Function to initialize an ECJPAKE_OperationRoundTwoGenerateKeys struct to its defaults
@@ -1122,7 +1132,7 @@ void ECJPAKE_OperationVerifyZKP_init(ECJPAKE_OperationVerifyZKP *operation);
  *
  *  Defaults values are all zeros.
  */
-void ECJPAKE_OperationRoundTwoGenerateKeys_init(ECJPAKE_OperationRoundTwoGenerateKeys *operation);
+void ECJPAKE_OperationRoundTwoGenerateKeys_init(ECJPAKE_OperationRoundTwoGenerateKeys* operation);
 
 
 /*!
@@ -1133,7 +1143,7 @@ void ECJPAKE_OperationRoundTwoGenerateKeys_init(ECJPAKE_OperationRoundTwoGenerat
  *
  *  Defaults values are all zeros.
  */
-void ECJPAKE_OperationComputeSharedSecret_init(ECJPAKE_OperationComputeSharedSecret *operation);
+void ECJPAKE_OperationComputeSharedSecret_init(ECJPAKE_OperationComputeSharedSecret* operation);
 
 /*!
  *  @brief  Function to close an ECJPAKE peripheral specified by the ECJPAKE handle
@@ -1163,7 +1173,7 @@ void ECJPAKE_close(ECJPAKE_Handle handle);
  *  @sa     ECJPAKE_init()
  *  @sa     ECJPAKE_close()
  */
-ECJPAKE_Handle ECJPAKE_open(uint_least8_t index, ECJPAKE_Params *params);
+ECJPAKE_Handle ECJPAKE_open(uint_least8_t index, ECJPAKE_Params* params);
 
 /*!
  *  @brief  Function to initialize the ECJPAKE_Params struct to its defaults
@@ -1177,7 +1187,7 @@ ECJPAKE_Handle ECJPAKE_open(uint_least8_t index, ECJPAKE_Params *params);
  *      timeout                     = SemaphoreP_WAIT_FOREVER
  *      custom                      = NULL
  */
-void ECJPAKE_Params_init(ECJPAKE_Params *params);
+void ECJPAKE_Params_init(ECJPAKE_Params* params);
 
 /*!
  *  @brief Generates all public and private keying material for the first round of
@@ -1204,7 +1214,7 @@ void ECJPAKE_Params_init(ECJPAKE_Params *params);
  *  @retval #ECJPAKE_STATUS_INVALID_PRIVATE_V      The private v passed into the the call is invalid.
  *
  */
-int_fast16_t ECJPAKE_roundOneGenerateKeys(ECJPAKE_Handle handle, ECJPAKE_OperationRoundOneGenerateKeys *operation);
+int_fast16_t ECJPAKE_roundOneGenerateKeys(ECJPAKE_Handle handle, ECJPAKE_OperationRoundOneGenerateKeys* operation);
 
 /*!
  *  @brief Generates the \c r component of a Schnorr Zero-Knowledge Proof (ZKP) signature.
@@ -1238,32 +1248,32 @@ int_fast16_t ECJPAKE_roundOneGenerateKeys(ECJPAKE_Handle handle, ECJPAKE_Operati
  *  @retval #ECJPAKE_STATUS_RESOURCE_UNAVAILABLE   The required hardware resource was not available. Try again later.
  *  @retval #ECJPAKE_STATUS_CANCELED               The operation was canceled.
  */
-int_fast16_t ECJPAKE_generateZKP(ECJPAKE_Handle handle, ECJPAKE_OperationGenerateZKP *operation);
+int_fast16_t ECJPAKE_generateZKP(ECJPAKE_Handle handle, ECJPAKE_OperationGenerateZKP* operation);
 
- /*!
- *  @brief Verifies a Schnorr Zero-Knowledge Proof (ZKP) signature.
- *
- *  This function computes if a received Schnorr ZKP correctly verifies
- *  a received public key.
- *
- *  @param [in]     handle          An ECJPAKE handle returned from ECJPAKE_open()
- *
- *  @param [in]     operation       A pointer to a struct containing the requisite
- *                                  parameters to execute the function.
- *
- *  @pre    Receive the relevant ZKP signature parameters. Compute the hash.
- *          If in the second round, compute the generator first by calling
- *          ECJPAKE_roundTwoGenerateKeys().
- *          Call ECJPAKE_OperationVerifyZKP_init() on /c operation.
- *
- *  @retval #ECJPAKE_STATUS_SUCCESS                         The operation succeeded.
- *  @retval #ECJPAKE_STATUS_ERROR                           The operation failed. Signature did not verify correctly.
- *  @retval #ECJPAKE_STATUS_RESOURCE_UNAVAILABLE            The required hardware resource was not available. Try again later.
- *  @retval #ECJPAKE_STATUS_CANCELED                        The operation was canceled.
- *  @retval #ECJPAKE_STATUS_PUBLIC_KEY_NOT_ON_CURVE         The public key of the other party does not lie upon the curve.
- *  @retval #ECJPAKE_STATUS_PUBLIC_KEY_LARGER_THAN_PRIME    A coordinate of the public key of the other party is too large.
- */
-int_fast16_t ECJPAKE_verifyZKP(ECJPAKE_Handle handle, ECJPAKE_OperationVerifyZKP *operation);
+/*!
+*  @brief Verifies a Schnorr Zero-Knowledge Proof (ZKP) signature.
+*
+*  This function computes if a received Schnorr ZKP correctly verifies
+*  a received public key.
+*
+*  @param [in]     handle          An ECJPAKE handle returned from ECJPAKE_open()
+*
+*  @param [in]     operation       A pointer to a struct containing the requisite
+*                                  parameters to execute the function.
+*
+*  @pre    Receive the relevant ZKP signature parameters. Compute the hash.
+*          If in the second round, compute the generator first by calling
+*          ECJPAKE_roundTwoGenerateKeys().
+*          Call ECJPAKE_OperationVerifyZKP_init() on /c operation.
+*
+*  @retval #ECJPAKE_STATUS_SUCCESS                         The operation succeeded.
+*  @retval #ECJPAKE_STATUS_ERROR                           The operation failed. Signature did not verify correctly.
+*  @retval #ECJPAKE_STATUS_RESOURCE_UNAVAILABLE            The required hardware resource was not available. Try again later.
+*  @retval #ECJPAKE_STATUS_CANCELED                        The operation was canceled.
+*  @retval #ECJPAKE_STATUS_PUBLIC_KEY_NOT_ON_CURVE         The public key of the other party does not lie upon the curve.
+*  @retval #ECJPAKE_STATUS_PUBLIC_KEY_LARGER_THAN_PRIME    A coordinate of the public key of the other party is too large.
+*/
+int_fast16_t ECJPAKE_verifyZKP(ECJPAKE_Handle handle, ECJPAKE_OperationVerifyZKP* operation);
 
 /*!
  *  @brief Generates all public and private keying material for the first round of
@@ -1288,7 +1298,7 @@ int_fast16_t ECJPAKE_verifyZKP(ECJPAKE_Handle handle, ECJPAKE_OperationVerifyZKP
  *  @retval #ECJPAKE_STATUS_INVALID_PRIVATE_KEY    The private key passed into the the call is invalid.
  *  @retval #ECJPAKE_STATUS_INVALID_PRIVATE_V      The private v passed into the the call is invalid.
  */
-int_fast16_t ECJPAKE_roundTwoGenerateKeys(ECJPAKE_Handle handle, ECJPAKE_OperationRoundTwoGenerateKeys *operation);
+int_fast16_t ECJPAKE_roundTwoGenerateKeys(ECJPAKE_Handle handle, ECJPAKE_OperationRoundTwoGenerateKeys* operation);
 
 /*!
  *  @brief Computes the shared secret.
@@ -1315,7 +1325,7 @@ int_fast16_t ECJPAKE_roundTwoGenerateKeys(ECJPAKE_Handle handle, ECJPAKE_Operati
  *  @retval #ECJPAKE_STATUS_RESOURCE_UNAVAILABLE   The required hardware resource was not available. Try again later.
  *  @retval #ECJPAKE_STATUS_CANCELED               The operation was canceled.
  */
-int_fast16_t ECJPAKE_computeSharedSecret(ECJPAKE_Handle handle, ECJPAKE_OperationComputeSharedSecret *operation);
+int_fast16_t ECJPAKE_computeSharedSecret(ECJPAKE_Handle handle, ECJPAKE_OperationComputeSharedSecret* operation);
 
 /*!
  *  @brief Cancels an ongoing ECJPAKE operation.

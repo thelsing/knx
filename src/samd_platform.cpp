@@ -5,15 +5,15 @@
 
 #include <Arduino.h>
 #ifdef USE_SAMD_EEPROM_EMULATION
-#include <FlashAsEEPROM.h>
+    #include <FlashAsEEPROM.h>
 #endif
 
 #if KNX_FLASH_SIZE % 1024
-#error "KNX_FLASH_SIZE must be multiple of 1024"
+    #error "KNX_FLASH_SIZE must be multiple of 1024"
 #endif
 
 #ifndef KNX_SERIAL
-#define KNX_SERIAL Serial1
+    #define KNX_SERIAL Serial1
 #endif
 
 SamdPlatform::SamdPlatform()
@@ -35,20 +35,20 @@ SamdPlatform::SamdPlatform( HardwareSerial* s) : ArduinoPlatform(s)
 
 uint32_t SamdPlatform::uniqueSerialNumber()
 {
-    #if defined (__SAMD51__)
-      // SAMD51 from section 9.6 of the datasheet
-      #define SERIAL_NUMBER_WORD_0	*(volatile uint32_t*)(0x008061FC)
-      #define SERIAL_NUMBER_WORD_1	*(volatile uint32_t*)(0x00806010)
-      #define SERIAL_NUMBER_WORD_2	*(volatile uint32_t*)(0x00806014)
-      #define SERIAL_NUMBER_WORD_3	*(volatile uint32_t*)(0x00806018)
-    #else
+#if defined (__SAMD51__)
+    // SAMD51 from section 9.6 of the datasheet
+#define SERIAL_NUMBER_WORD_0  *(volatile uint32_t*)(0x008061FC)
+#define SERIAL_NUMBER_WORD_1  *(volatile uint32_t*)(0x00806010)
+#define SERIAL_NUMBER_WORD_2  *(volatile uint32_t*)(0x00806014)
+#define SERIAL_NUMBER_WORD_3  *(volatile uint32_t*)(0x00806018)
+#else
     //#elif defined (__SAMD21E17A__) || defined(__SAMD21G18A__)  || defined(__SAMD21E18A__) || defined(__SAMD21J18A__)
     // SAMD21 from section 9.3.3 of the datasheet
-      #define SERIAL_NUMBER_WORD_0	*(volatile uint32_t*)(0x0080A00C)
-      #define SERIAL_NUMBER_WORD_1	*(volatile uint32_t*)(0x0080A040)
-      #define SERIAL_NUMBER_WORD_2	*(volatile uint32_t*)(0x0080A044)
-      #define SERIAL_NUMBER_WORD_3	*(volatile uint32_t*)(0x0080A048)
-    #endif
+#define SERIAL_NUMBER_WORD_0  *(volatile uint32_t*)(0x0080A00C)
+#define SERIAL_NUMBER_WORD_1  *(volatile uint32_t*)(0x0080A040)
+#define SERIAL_NUMBER_WORD_2  *(volatile uint32_t*)(0x0080A044)
+#define SERIAL_NUMBER_WORD_3  *(volatile uint32_t*)(0x0080A048)
+#endif
 
     return SERIAL_NUMBER_WORD_0 ^ SERIAL_NUMBER_WORD_1 ^ SERIAL_NUMBER_WORD_2 ^ SERIAL_NUMBER_WORD_3;
 }
@@ -64,9 +64,9 @@ void SamdPlatform::restart()
 uint8_t* SamdPlatform::getEepromBuffer(uint32_t size)
 {
     //EEPROM.begin(size);
-    if(size > EEPROM_EMULATION_SIZE)
+    if (size > EEPROM_EMULATION_SIZE)
         fatalError();
-    
+
     return EEPROM.getDataPtr();
 }
 
@@ -98,8 +98,10 @@ void SamdPlatform::init()
     _MemoryStart = getRowAddr(_pageSize * _pageCnt - KNX_FLASH_SIZE - 1);        // 23295
     _MemoryEnd = getRowAddr(_pageSize * _pageCnt - 1);
 #endif
+
     // chosen flash size is not available anymore
-    if (_MemoryStart < endEddr) {
+    if (_MemoryStart < endEddr)
+    {
         println("KNX_FLASH_SIZE is not available (possible too much flash use by firmware)");
         fatalError();
     }
@@ -132,7 +134,7 @@ void SamdPlatform::flashErase(uint16_t eraseBlockNum)
 {
     noInterrupts();
 
-    eraseRow((void *)(_MemoryStart + eraseBlockNum * _rowSize));
+    eraseRow((void*)(_MemoryStart + eraseBlockNum * _rowSize));
     // flash_range_erase(KNX_FLASH_OFFSET + eraseBlockNum * flashPageSize() * flashEraseBlockSize(), flashPageSize() * flashEraseBlockSize());
 
     interrupts();
@@ -142,7 +144,7 @@ void SamdPlatform::flashWritePage(uint16_t pageNumber, uint8_t* data)
 {
     noInterrupts();
 
-    write((void *)(_MemoryStart + pageNumber * _pageSize), data, _pageSize);
+    write((void*)(_MemoryStart + pageNumber * _pageSize), data, _pageSize);
     // flash_range_program(KNX_FLASH_OFFSET + pageNumber * flashPageSize(), data, flashPageSize());
 
     interrupts();
@@ -154,8 +156,8 @@ void SamdPlatform::writeBufferedEraseBlock()
     {
         noInterrupts();
 
-        eraseRow((void *)(_MemoryStart + _bufferedEraseblockNumber * _rowSize));
-        write((void *)(_MemoryStart + _bufferedEraseblockNumber * _rowSize), _eraseblockBuffer, _rowSize);
+        eraseRow((void*)(_MemoryStart + _bufferedEraseblockNumber * _rowSize));
+        write((void*)(_MemoryStart + _bufferedEraseblockNumber * _rowSize), _eraseblockBuffer, _rowSize);
         // flash_range_erase(KNX_FLASH_OFFSET + _bufferedEraseblockNumber * flashPageSize() * flashEraseBlockSize(), flashPageSize() * flashEraseBlockSize());
         // flash_range_program(KNX_FLASH_OFFSET + _bufferedEraseblockNumber * flashPageSize() * flashEraseBlockSize(), _eraseblockBuffer, flashPageSize() * flashEraseBlockSize());
 
@@ -170,12 +172,12 @@ uint32_t SamdPlatform::getRowAddr(uint32_t flasAddr)
     return flasAddr & ~(_rowSize - 1);
 }
 
-void SamdPlatform::write(const volatile void *flash_ptr, const void *data, uint32_t size)
+void SamdPlatform::write(const volatile void* flash_ptr, const void* data, uint32_t size)
 {
     // Calculate data boundaries
     size = (size + 3) / 4;
-    volatile uint32_t *src_addr = (volatile uint32_t *)data;
-    volatile uint32_t *dst_addr = (volatile uint32_t *)flash_ptr;
+    volatile uint32_t* src_addr = (volatile uint32_t*)data;
+    volatile uint32_t* dst_addr = (volatile uint32_t*)flash_ptr;
     // volatile uint32_t *dst_addr = (volatile uint32_t *)flash_ptr;
     // const uint8_t *src_addr = (uint8_t *)data;
 
@@ -187,12 +189,14 @@ void SamdPlatform::write(const volatile void *flash_ptr, const void *data, uint3
     {
         // Execute "PBC" Page Buffer Clear
         NVMCTRL->CTRLA.reg = NVMCTRL_CTRLA_CMDEX_KEY | NVMCTRL_CTRLA_CMD_PBC;
+
         while (NVMCTRL->INTFLAG.bit.READY == 0)
         {
         }
 
         // Fill page buffer
         uint32_t i;
+
         for (i = 0; i < (_pageSize / 4) && size; i++)
         {
             *dst_addr = *src_addr;
@@ -203,28 +207,32 @@ void SamdPlatform::write(const volatile void *flash_ptr, const void *data, uint3
 
         // Execute "WP" Write Page
         NVMCTRL->CTRLA.reg = NVMCTRL_CTRLA_CMDEX_KEY | NVMCTRL_CTRLA_CMD_WP;
+
         while (NVMCTRL->INTFLAG.bit.READY == 0)
         {
         }
     }
 }
 
-void SamdPlatform::erase(const volatile void *flash_ptr, uint32_t size)
+void SamdPlatform::erase(const volatile void* flash_ptr, uint32_t size)
 {
-    const uint8_t *ptr = (const uint8_t *)flash_ptr;
+    const uint8_t* ptr = (const uint8_t*)flash_ptr;
+
     while (size > _rowSize)
     {
         eraseRow(ptr);
         ptr += _rowSize;
         size -= _rowSize;
     }
+
     eraseRow(ptr);
 }
 
-void SamdPlatform::eraseRow(const volatile void *flash_ptr)
+void SamdPlatform::eraseRow(const volatile void* flash_ptr)
 {
     NVMCTRL->ADDR.reg = ((uint32_t)flash_ptr) / 2;
     NVMCTRL->CTRLA.reg = NVMCTRL_CTRLA_CMDEX_KEY | NVMCTRL_CTRLA_CMD_ER;
+
     while (!NVMCTRL->INTFLAG.bit.READY)
     {
     }

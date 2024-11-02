@@ -81,7 +81,7 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-    #define AONBatMonTemperatureGetDegC     NOROM_AONBatMonTemperatureGetDegC
+#define AONBatMonTemperatureGetDegC     NOROM_AONBatMonTemperatureGetDegC
 #endif
 
 
@@ -224,7 +224,7 @@ AONBatMonNewBatteryMeasureReady(void)
               AON_BATMON_BATUPD_STAT ? true : false;
 
     // Clear status bit if set.
-    if(bStatus)
+    if (bStatus)
     {
         HWREG(AON_BATMON_BASE + AON_BATMON_O_BATUPD) = 1;
     }
@@ -263,7 +263,7 @@ AONBatMonNewTempMeasureReady(void)
               AON_BATMON_TEMPUPD_STAT ? true : false;
 
     // Clear status bit if set.
-    if(bStatus)
+    if (bStatus)
     {
         HWREG(AON_BATMON_BASE + AON_BATMON_O_TEMPUPD) = 1;
     }
@@ -279,11 +279,11 @@ AONBatMonNewTempMeasureReady(void)
 //
 //*****************************************************************************
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
-    #include "../driverlib/rom.h"
-    #ifdef ROM_AONBatMonTemperatureGetDegC
-        #undef  AONBatMonTemperatureGetDegC
-        #define AONBatMonTemperatureGetDegC     ROM_AONBatMonTemperatureGetDegC
-    #endif
+#include "../driverlib/rom.h"
+#ifdef ROM_AONBatMonTemperatureGetDegC
+#undef  AONBatMonTemperatureGetDegC
+#define AONBatMonTemperatureGetDegC     ROM_AONBatMonTemperatureGetDegC
+#endif
 #endif
 
 //*****************************************************************************

@@ -117,7 +117,8 @@ extern "C" {
  *  The FSM controller will increment the state counter and iterate through
  *  states until it is told to stop or restart.
  */
-typedef enum ECDSACC26X2_FsmState_ {
+typedef enum ECDSACC26X2_FsmState_
+{
     ECDSACC26X2_FSM_ERROR = 0,
 
     ECDSACC26X2_FSM_SIGN_VALIDATE_PMSN,
@@ -176,7 +177,8 @@ typedef int_fast16_t (*ECDSACC26X2_stateMachineFxn) (ECDSA_Handle handle);
  *  ECDSACC26X2 hardware attributes should be included in the board file
  *  and pointed to by the ECDSA_config struct.
  */
-typedef struct ECDSACC26X2_HWAttrs_ {
+typedef struct ECDSACC26X2_HWAttrs_
+{
     /*! @brief PKA Peripheral's interrupt priority.
 
         The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
@@ -197,7 +199,8 @@ typedef struct ECDSACC26X2_HWAttrs_ {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct ECDSACC26X2_Object_ {
+typedef struct ECDSACC26X2_Object_
+{
     bool                            isOpen;
     bool                            operationInProgress;
     bool                            operationCanceled;
@@ -210,8 +213,8 @@ typedef struct ECDSACC26X2_Object_ {
     ECDSACC26X2_FsmState            fsmState;
     uint32_t                        semaphoreTimeout;
     uint32_t                        resultAddress;
-    uint32_t                       *scratchNumber1;
-    uint32_t                       *scratchNumber2;
+    uint32_t*                       scratchNumber1;
+    uint32_t*                       scratchNumber2;
 } ECDSACC26X2_Object;
 
 #ifdef __cplusplus

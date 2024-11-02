@@ -93,7 +93,8 @@ extern "C" {
  *  AESECB26XX hardware attributes should be included in the board file
  *  and pointed to by the AESECB_config struct.
  */
-typedef struct AESECBCC26XX_HWAttrs {
+typedef struct AESECBCC26XX_HWAttrs
+{
     /*! @brief Crypto Peripheral's interrupt priority.
 
         The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
@@ -114,7 +115,8 @@ typedef struct AESECBCC26XX_HWAttrs {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct AESECBCC26XX_Object {
+typedef struct AESECBCC26XX_Object
+{
     bool                            isOpen;
     bool                            operationInProgress;
     bool                            operationCanceled;
@@ -123,7 +125,7 @@ typedef struct AESECBCC26XX_Object {
     AESECB_OperationType            operationType;
     uint32_t                        semaphoreTimeout;
     AESECB_CallbackFxn              callbackFxn;
-    AESECB_Operation                *operation;
+    AESECB_Operation*                operation;
 } AESECBCC26XX_Object;
 
 #ifdef __cplusplus

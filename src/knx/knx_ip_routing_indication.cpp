@@ -8,8 +8,8 @@ CemiFrame& KnxIpRoutingIndication::frame()
 }
 
 
-KnxIpRoutingIndication::KnxIpRoutingIndication(uint8_t* data, 
-    uint16_t length) : KnxIpFrame(data, length), _frame(data + headerLength(), length - headerLength())
+KnxIpRoutingIndication::KnxIpRoutingIndication(uint8_t* data,
+        uint16_t length) : KnxIpFrame(data, length), _frame(data + headerLength(), length - headerLength())
 {
 }
 

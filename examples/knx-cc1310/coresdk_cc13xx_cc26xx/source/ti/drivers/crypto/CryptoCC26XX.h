@@ -418,8 +418,8 @@ extern "C" {
 #include DeviceFamily_constructPath(driverlib/crypto.h)
 
 #if DeviceFamily_PARENT == DeviceFamily_PARENT_CC13X2_CC26X2
-    #warning "This driver is deprecated for the CC26x2 and CC13x2 families.\
-              It is superceded by AESECB and AESCCM."
+#warning "This driver is deprecated for the CC26x2 and CC13x2 families.\
+It is superceded by AESECB and AESCCM."
 #endif
 
 /**
@@ -480,7 +480,7 @@ extern "C" {
 /*!
  *  @brief      A handle that is returned from a CryptoCC26XX_open() call.
  */
-typedef struct CryptoCC26XX_Config      *CryptoCC26XX_Handle;
+typedef struct CryptoCC26XX_Config*      CryptoCC26XX_Handle;
 
 /*!
  *  @brief      CryptoCC26XX Mode Settings
@@ -488,7 +488,8 @@ typedef struct CryptoCC26XX_Config      *CryptoCC26XX_Handle;
  *  This enum defines the read and write modes for the
  *  configured CryptoCC26XX.
  */
-typedef enum CryptoCC26XX_Mode {
+typedef enum CryptoCC26XX_Mode
+{
     /*!
       *  Uses a semaphore to block while data is being sent. Context of the call
       *  must be a Task.
@@ -524,7 +525,8 @@ typedef uint8_t CryptoCC26XX_Operation;
  *  This enumeration defines the possible key locations in CryptoCC26XX.
  *
  */
-typedef enum CryptoCC26XX_KeyLocation {
+typedef enum CryptoCC26XX_KeyLocation
+{
     CRYPTOCC26XX_KEY_0 = 0,
     CRYPTOCC26XX_KEY_1,
     CRYPTOCC26XX_KEY_2,
@@ -538,7 +540,8 @@ typedef enum CryptoCC26XX_KeyLocation {
 /*!
  *  @brief    CryptoCC26XX Parameters
  */
-typedef struct CryptoCC26XX_Params {
+typedef struct CryptoCC26XX_Params
+{
     uint32_t        timeout;  /*!< Timeout for read semaphore */
 } CryptoCC26XX_Params;
 
@@ -558,7 +561,8 @@ typedef uint8_t CryptoCC26XX_KeyStore;
  *  functions. The first data of all transactions must hold a type field indicating
  *  which type of transaction to be performed.
  */
-typedef struct CryptoCC26XX_Transaction {
+typedef struct CryptoCC26XX_Transaction
+{
     CryptoCC26XX_Operation    opType;          /*!< The type of the crypto operation */
     CryptoCC26XX_Mode         mode;            /*!< The mode of current transaction */
     uint8_t                   data[];          /*!< A void pointer to rest of transaction (transac. specific) */
@@ -614,13 +618,14 @@ typedef struct CryptoCC26XX_Transaction {
  *  The CryptoCC26XX_AESCCM_Transaction structure defines all necessary
  *  parameters for a AES-CCM transaction.
  */
-typedef struct CryptoCC26XX_AESCCM_Transaction {
+typedef struct CryptoCC26XX_AESCCM_Transaction
+{
     CryptoCC26XX_Operation  opType;         /*!< The type of the crypto operation */
     CryptoCC26XX_Mode       mode;           /*!< The mode of current transaction. Set by transact function. */
     uint8_t                 keyIndex;       /*!< The key store index to be used */
     uint8_t                 authLength;     /*!< Is the the length of the authentication field */
-                                            /*!< 0, 2, 4, 6, 8, 10, 12, 14 or 16 octets. */
-    char                   *nonce;          /*!< A pointer to a nonce. It must satisfy the equation 15 = q + n,
+    /*!< 0, 2, 4, 6, 8, 10, 12, 14 or 16 octets. */
+    char*                   nonce;          /*!< A pointer to a nonce. It must satisfy the equation 15 = q + n,
                                              *   where q is the fieldLength and n is the length of the nonce.
                                              *
                                              *   The minimum size of the array containing the nonce is 12 bytes.
@@ -637,14 +642,14 @@ typedef struct CryptoCC26XX_AESCCM_Transaction {
                                              *
                                              *   Valid nonce lengths are {7, 8, 9, 10, 11, 12, 13}.
                                              */
-    char                   *msgIn;          /*!<
+    char*                   msgIn;          /*!<
                                              *   - Encryption: A pointer to the octet string input message and after the transaction,
                                              *     the location of the encrypted cleartext. The cleatext is encrypted in place.
                                              *   - Decryption:  A pointer to the encrypted ciphertext composed of the encrypted cleartext
                                              *     concatenated with the encrypted message authentication code.
                                              */
-    char                   *header;         /*!< The Additional Authentication Data (AAD). This header is authenticated but not encrypted. */
-    void                   *msgOut;         /*!< A pointer to where the encrypted CBC-MAC shall be written to.
+    char*                   header;         /*!< The Additional Authentication Data (AAD). This header is authenticated but not encrypted. */
+    void*                   msgOut;         /*!< A pointer to where the encrypted CBC-MAC shall be written to.
                                              *   - Encryption: It is recommended to set this to msgIn + msgInLength. The cyphertext sent out
                                              *     must be the concatenation of the encrypted message and encrypted MAC anyway.
                                              *   - Decyption: Do NOT set msgOut to the same location as the received MAC in the
@@ -672,13 +677,14 @@ typedef struct CryptoCC26XX_AESCCM_Transaction {
  *  This structure defines the nature of the AES-CBC transaction. An object of this structure must
  *  be initialized by calling CryptoCC26XX_Transac_init().
  */
-typedef struct CryptoCC26XX_AESCBC_Transaction {
+typedef struct CryptoCC26XX_AESCBC_Transaction
+{
     CryptoCC26XX_Operation  opType;         /*!< The type of the crypto operation */
     CryptoCC26XX_Mode       mode;           /*!< The mode of current transaction. Set by transact function. */
     uint8_t                 keyIndex;       /*!< The key store index to be used */
-    void                    *nonce;         /*!< A pointer to 16 byte Nonce. */
-    void                    *msgIn;         /*!< A pointer to the octet string input message */
-    void                    *msgOut;        /*!< A pointer to the output message location */
+    void*                    nonce;         /*!< A pointer to 16 byte Nonce. */
+    void*                    msgIn;         /*!< A pointer to the octet string input message */
+    void*                    msgOut;        /*!< A pointer to the output message location */
     uint16_t                msgInLength;    /*!< The length of the message */
 } CryptoCC26XX_AESCBC_Transaction;
 
@@ -688,12 +694,13 @@ typedef struct CryptoCC26XX_AESCBC_Transaction {
  *  This structure defines the nature of the AES-ECB transaction. An object of this structure must
  *  be initialized by calling CryptoCC26XX_Transac_init().
  */
-typedef struct CryptoCC26XX_AESECB_Transaction {
+typedef struct CryptoCC26XX_AESECB_Transaction
+{
     CryptoCC26XX_Operation    opType;    /*!< The type of the crypto operation */
     CryptoCC26XX_Mode         mode;      /*!< The mode of current transaction. Set by transact function. */
     uint8_t                   keyIndex;  /*!< The key store index to be used. */
-    void                     *msgIn;     /*!< A poiner to the octet string input message */
-    void                     *msgOut;    /*!< A pointer to the output message location */
+    void*                     msgIn;     /*!< A poiner to the octet string input message */
+    void*                     msgOut;    /*!< A pointer to the output message location */
 } CryptoCC26XX_AESECB_Transaction;
 
 /*!
@@ -725,7 +732,8 @@ typedef struct CryptoCC26XX_AESECB_Transaction {
  *  };
  *  @endcode
  */
-typedef struct CryptoCC26XX_HWAttrs {
+typedef struct CryptoCC26XX_HWAttrs
+{
     /*! Crypto Peripheral's base address */
     uint32_t   baseAddr;
     /*! Crypto Peripheral's power manager ID */
@@ -752,12 +760,13 @@ typedef struct CryptoCC26XX_HWAttrs {
  *
  *  The application must not access any member variables of this structure!
  */
-typedef struct CryptoCC26XX_Object {
+typedef struct CryptoCC26XX_Object
+{
     /* CryptoCC26XX control variables */
     int                       openCnt;          /*!< Counting number of clients */
     uint32_t                  timeout;          /*!< Timeout for encrypt/decrypt operation */
     CryptoCC26XX_KeyStore     keyStore;         /*!< Key store for Crypto */
-    CryptoCC26XX_Transaction *currentTransact;  /*!< Pointer to ongoing transaction */
+    CryptoCC26XX_Transaction* currentTransact;  /*!< Pointer to ongoing transaction */
 
     /*! Crypto notification object */
     Power_NotifyObj           cryptoNotiObj;
@@ -767,12 +776,13 @@ typedef struct CryptoCC26XX_Object {
 } CryptoCC26XX_Object;
 
 /*! @brief CryptoCC26XX Global Configuration */
-typedef struct CryptoCC26XX_Config {
+typedef struct CryptoCC26XX_Config
+{
     /*! Pointer to a driver specific data object */
-    void                   *object;
+    void*                   object;
 
     /*! Pointer to a driver specific hardware attributes structure */
-    void          const    *hwAttrs;
+    void          const*    hwAttrs;
 } CryptoCC26XX_Config;
 
 /*!
@@ -826,7 +836,7 @@ void CryptoCC26XX_init(void);
  *
  *  @sa     CryptoCC26XX_close(), CryptoCC26XX_init()
  */
-CryptoCC26XX_Handle CryptoCC26XX_open(unsigned int index, bool exclusiveAccess, CryptoCC26XX_Params *params);
+CryptoCC26XX_Handle CryptoCC26XX_open(unsigned int index, bool exclusiveAccess, CryptoCC26XX_Params* params);
 
 /*!
  *  @brief  Function to initialize the CryptoCC26XX_Params struct to its defaults.
@@ -838,7 +848,7 @@ CryptoCC26XX_Handle CryptoCC26XX_open(unsigned int index, bool exclusiveAccess, 
  *
  *  @param  params  Parameter structure to initialize.
  */
-void CryptoCC26XX_Params_init(CryptoCC26XX_Params *params);
+void CryptoCC26XX_Params_init(CryptoCC26XX_Params* params);
 
 /*!
  *  @brief  Function to initialize the CryptoCC26XX_Transaction struct to its defaults.
@@ -850,7 +860,7 @@ void CryptoCC26XX_Params_init(CryptoCC26XX_Params *params);
  *  @param  opType  Cryto Operation type to perform in the transaction. See
  *                  ::CryptoCC26XX_Operation for currently supported types.
  */
-void CryptoCC26XX_Transac_init(CryptoCC26XX_Transaction *trans, CryptoCC26XX_Operation opType);
+void CryptoCC26XX_Transac_init(CryptoCC26XX_Transaction* trans, CryptoCC26XX_Operation opType);
 
 /*!
  *  @brief  Function that allocates key, writes key into key store RAM and returns
@@ -880,7 +890,7 @@ void CryptoCC26XX_Transac_init(CryptoCC26XX_Transaction *trans, CryptoCC26XX_Ope
  *  @sa     CryptoCC26XX_releaseKey()
  *  @sa     CryptoCC26XX_loadKey()
  */
-int CryptoCC26XX_allocateKey(CryptoCC26XX_Handle handle, CryptoCC26XX_KeyLocation keyLocation, const uint32_t *keySrc);
+int CryptoCC26XX_allocateKey(CryptoCC26XX_Handle handle, CryptoCC26XX_KeyLocation keyLocation, const uint32_t* keySrc);
 
 
 /*!
@@ -906,7 +916,7 @@ int CryptoCC26XX_allocateKey(CryptoCC26XX_Handle handle, CryptoCC26XX_KeyLocatio
  *  @sa     CryptoCC26XX_releaseKey()
  *  @sa     CryptoCC26XX_loadKey()
  */
-int CryptoCC26XX_loadKey(CryptoCC26XX_Handle handle, int keyIndex, const uint32_t *keySrc);
+int CryptoCC26XX_loadKey(CryptoCC26XX_Handle handle, int keyIndex, const uint32_t* keySrc);
 
 /*!
  *  @brief  Function that releases the specified CryptoCC26XX Key.
@@ -925,7 +935,7 @@ int CryptoCC26XX_loadKey(CryptoCC26XX_Handle handle, int keyIndex, const uint32_
  *
  *  @sa     CryptoCC26XX_allocateKey()
  */
-int CryptoCC26XX_releaseKey(CryptoCC26XX_Handle handle, int *keyIndex);
+int CryptoCC26XX_releaseKey(CryptoCC26XX_Handle handle, int* keyIndex);
 
 /*!
  *  @brief  Function to do a Crypto operation (encryption or decryption) in blocking mode.
@@ -947,7 +957,7 @@ int CryptoCC26XX_releaseKey(CryptoCC26XX_Handle handle, int *keyIndex);
  *
  *  @sa     CryptoCC26XX_open(), CryptoCC26XX_allocateKey(), CryptoCC26XX_transactPolling()
  */
-int CryptoCC26XX_transact(CryptoCC26XX_Handle handle, CryptoCC26XX_Transaction *transaction);
+int CryptoCC26XX_transact(CryptoCC26XX_Handle handle, CryptoCC26XX_Transaction* transaction);
 
 /*!
  *  @brief  Function to do a Crypto transaction operation (encryption or decryption) in polling mode.
@@ -968,7 +978,7 @@ int CryptoCC26XX_transact(CryptoCC26XX_Handle handle, CryptoCC26XX_Transaction *
  *
  *  @sa     CryptoCC26XX_open(), CryptoCC26XX_allocateKey(), CryptoCC26XX_transact()
  */
-int CryptoCC26XX_transactPolling(CryptoCC26XX_Handle handle, CryptoCC26XX_Transaction *transaction);
+int CryptoCC26XX_transactPolling(CryptoCC26XX_Handle handle, CryptoCC26XX_Transaction* transaction);
 
 /*!
  *  @brief  Function to do a Crypto transaction operation (encryption or decryption) in
@@ -993,7 +1003,7 @@ int CryptoCC26XX_transactPolling(CryptoCC26XX_Handle handle, CryptoCC26XX_Transa
  *
  *  @sa     CryptoCC26XX_open(), CryptoCC26XX_allocateKey(), CryptoCC26XX_transact()
  */
-int CryptoCC26XX_transactCallback(CryptoCC26XX_Handle handle, CryptoCC26XX_Transaction *transaction);
+int CryptoCC26XX_transactCallback(CryptoCC26XX_Handle handle, CryptoCC26XX_Transaction* transaction);
 
 #ifdef __cplusplus
 }

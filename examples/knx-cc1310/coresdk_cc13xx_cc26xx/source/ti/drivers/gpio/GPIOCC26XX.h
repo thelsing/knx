@@ -174,12 +174,13 @@ extern "C" {
  *  };
  *  @endcode
  */
-typedef struct GPIOCC26XX_Config {
+typedef struct GPIOCC26XX_Config
+{
     /*! Pointer to the board's GPIO_PinConfig array */
-    GPIO_PinConfig  *pinConfigs;
+    GPIO_PinConfig*  pinConfigs;
 
     /*! Pointer to the board's GPIO_CallbackFxn array */
-    GPIO_CallbackFxn  *callbacks;
+    GPIO_CallbackFxn*  callbacks;
 
     /*! Number of GPIO_PinConfigs defined */
     uint32_t numberOfPinConfigs;

@@ -611,11 +611,11 @@
 //
 // Step size = 0.67% of VDDR level.
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP0_TRIM_RECHARGE_COMP_REFLEVEL_W \
-                                                                             4
+    4
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP0_TRIM_RECHARGE_COMP_REFLEVEL_M \
-                                                                    0x0000000F
+    0x0000000F
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP0_TRIM_RECHARGE_COMP_REFLEVEL_S \
-                                                                             0
+    0
 
 //*****************************************************************************
 //
@@ -631,13 +631,13 @@
 // DIS                      Disable. VDDR input is connected to VDDR itself
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_VTRIG_EN      0x00000080
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_VTRIG_EN_M     \
-                                                                    0x00000080
+    0x00000080
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_VTRIG_EN_S     \
-                                                                             7
+    7
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_VTRIG_EN_EN    \
-                                                                    0x00000080
+    0x00000080
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_VTRIG_EN_DIS   \
-                                                                    0x00000000
+    0x00000000
 
 // Field:     [6] RECHARGE_BLOCK_ATEST_EN
 //
@@ -647,13 +647,13 @@
 // DIS                      Disable
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_ATEST_EN      0x00000040
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_ATEST_EN_M     \
-                                                                    0x00000040
+    0x00000040
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_ATEST_EN_S     \
-                                                                             6
+    6
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_ATEST_EN_EN    \
-                                                                    0x00000040
+    0x00000040
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_RECHARGE_BLOCK_ATEST_EN_DIS   \
-                                                                    0x00000000
+    0x00000000
 
 // Field:     [5] FORCE_SAMPLE_VDDR
 //
@@ -675,11 +675,11 @@
 // 0x1F:  Maximum degeneration on reference side from cap divider.
 // 0x10: Nominal code.
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_TRIM_RECHARGE_COMP_OFFSET_W   \
-                                                                             5
+    5
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_TRIM_RECHARGE_COMP_OFFSET_M   \
-                                                                    0x0000001F
+    0x0000001F
 #define ADI_3_REFSYS_CTL_RECHARGE_CMP1_TRIM_RECHARGE_COMP_OFFSET_S   \
-                                                                             0
+    0
 
 
 #endif // __ADI_3_REFSYS__

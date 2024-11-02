@@ -39,7 +39,7 @@
 
 /* compiler vendor check */
 #ifndef __GNUC__
-#error Incompatible compiler: use this include path (.../ti/posix/gcc) only with a GNU compiler. You appear to be using a different compiler.
+    #error Incompatible compiler: use this include path (.../ti/posix/gcc) only with a GNU compiler. You appear to be using a different compiler.
 #endif
 
 #include <stddef.h>
@@ -82,9 +82,10 @@ extern "C" {
 /*
  *  ======== pthread_attr_t ========
  */
-typedef struct pthread_attr_t {
+typedef struct pthread_attr_t
+{
     int priority;
-    void *stack;
+    void* stack;
     size_t stacksize;
     size_t guardsize;
     int  detachstate;
@@ -93,9 +94,10 @@ typedef struct pthread_attr_t {
 typedef uint32_t pthread_barrierattr_t;
 typedef uint32_t pthread_condattr_t;
 
-typedef void *pthread_key_t;
+typedef void* pthread_key_t;
 
-typedef struct pthread_mutexattr_t {
+typedef struct pthread_mutexattr_t
+{
     int type;
     int protocol;
     int prioceiling;
@@ -103,36 +105,41 @@ typedef struct pthread_mutexattr_t {
 
 typedef uint32_t pthread_rwlockattr_t;
 
-typedef void *pthread_t;
+typedef void* pthread_t;
 
-typedef union {
+typedef union
+{
     struct sysbios_Barrier sysbios;
     struct freertos_Barrier freertos;
 } pthread_barrier_t;
 
-typedef union {
+typedef union
+{
     struct sysbios_Cond sysbios;
     struct freertos_Cond freertos;
 } pthread_cond_t;
 
-typedef union {
+typedef union
+{
     struct sysbios_Mutex sysbios;
     struct freertos_Mutex freertos;
 } pthread_mutex_t;
 
 typedef uint32_t pthread_once_t;
 
-typedef union {
+typedef union
+{
     struct sysbios_RWLock sysbios;
     struct freertos_RWLock freertos;
 } pthread_rwlock_t;
 
-struct _pthread_cleanup_context {
+struct _pthread_cleanup_context
+{
     pthread_t  thread;
-    void       (*fxn)(void *);
-    void      *arg;
+    void       (*fxn)(void*);
+    void*      arg;
     int        cancelType;
-    struct _pthread_cleanup_context *next;
+    struct _pthread_cleanup_context* next;
 };
 
 #ifdef __cplusplus
