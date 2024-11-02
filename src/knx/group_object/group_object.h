@@ -512,10 +512,12 @@ namespace Knx
         if (value.size() != sizeCode())
             return;
 
-        if (_uninitialized)
-            commFlag(Ok);
-
+        const bool encodingDone = true; // TODO FIXME for devel! value.encode needs success indicator
         value.encode(_data);
+
+        // initialize on succesful conversion only
+        if (encodingDone && _uninitialized)
+            commFlag(Ok);
     }
 
     template<class DPT> bool GroupObject::valueNoSendCompare(const DPT& value)
