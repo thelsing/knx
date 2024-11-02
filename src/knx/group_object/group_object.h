@@ -531,7 +531,7 @@ namespace Knx
         }
         else
         {
-            // convert new value to given dtp
+            // convert new value to given DPT
             uint8_t newData[_dataLength];
             memset(newData, 0, _dataLength);
 
