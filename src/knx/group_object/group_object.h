@@ -478,14 +478,29 @@ namespace Knx
             ComFlag _commFlag : 7;
             uint8_t* _data = 0;
             uint8_t _dataLength = 0;
+
+            /**
+             * set the current value of the group object and show success.
+             * @param value the value the group object is set to
+             * @param type the datapoint type used for the conversion.
+             *
+             * The parameters must fit the group object. Otherwise it will stay unchanged.
+             *
+             * @returns true if the value of the group object was updated after successful conversion.
+             */
+            template<class DPT> bool _valueNoSend(const DPT& value);
+
     };
 
     bool operator==(const GroupObject& lhs, const GroupObject& rhs);
 
     template<class DPT> void GroupObject::value(const DPT& value)
     {
-        valueNoSend(value);
-        objectWritten();
+        if (_valueNoSend(value))
+        {
+            // write on successful conversion/setting value only
+            objectWritten();
+        }
     }
 
     template<class DPT> DPT GroupObject::value()
@@ -509,6 +524,12 @@ namespace Knx
 
     template<class DPT> void GroupObject::valueNoSend(const DPT& value)
     {
+        // ignore actual updating TODO check replacing valueNoSend with _valueNoSend
+        _valueNoSend(value);
+    }
+
+    template<class DPT> bool GroupObject::_valueNoSend(const KNXValue& value)
+    {
         if (value.size() != sizeCode())
             return;
 
@@ -518,6 +539,8 @@ namespace Knx
         // initialize on succesful conversion only
         if (encodingDone && _uninitialized)
             commFlag(Ok);
+
+        return encodingDone;
     }
 
     template<class DPT> bool GroupObject::valueNoSendCompare(const DPT& value)
@@ -528,8 +551,7 @@ namespace Knx
         if (_uninitialized)
         {
             // always set first value
-            this->valueNoSend(value);
-            return true;
+            return _valueNoSend(value);
         }
         else
         {
