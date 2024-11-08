@@ -287,5 +287,4 @@ class GroupObject
      * @returns true if the value of the group object was updated after successful conversion.
      */
     bool _valueNoSend(const KNXValue& value, const Dpt& type);
-
 };
