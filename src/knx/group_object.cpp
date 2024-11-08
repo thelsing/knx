@@ -333,8 +333,8 @@ bool GroupObject::valueCompare(const KNXValue& value, const Dpt& type)
 {
     if (valueNoSendCompare(value, type))
     {
-         objectWritten();
-         return true;
+        objectWritten();
+        return true;
     }
     return false;
 }
