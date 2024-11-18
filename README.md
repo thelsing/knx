@@ -16,6 +16,11 @@ See the examples for basic usage options
 ## Changelog
 
 ### v1dev (replace this with version and date when releasing to v1)
+- Fix [#30](https://github.com/OpenKNX/knx/pull/30): Unexpected behaviour of `GroupObject` on failed conversion to DPT
+  - `GroupObject::value[No]SendCompare(..)` resulted in value 0 (and returned change based on this value)
+  - `GroupObject::valueNoSend(..)` updated state from unitialized to OK, without updating the value
+  - `GroupObject::value(..)` wrote to GA without setting the KO value
+- Extension [#30](https://github.com/OpenKNX/knx/pull/30): Return successful conversion to DPT on values update operations in `GroupObject` (changed result-type of some methods from `void` to `bool`) 
 - only set pinMode of Prog button pin if valid (PROG_BUTTON_PIN >= 0)
 - Strings are now \0 terminated in group objects (#25)
 - change defines in the rp2040 plattform for LAN / WLAN usage to KNX_IP_LAN or KNX_IP_WIFI, remove KNX_IP_GENERIC

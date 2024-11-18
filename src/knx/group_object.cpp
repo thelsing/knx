@@ -223,10 +223,15 @@ GroupObjectUpdatedHandler GroupObject::callback()
 }
 #endif
 
-void GroupObject::value(const KNXValue& value, const Dpt& type)
+bool GroupObject::value(const KNXValue& value, const Dpt& type)
 {
-    valueNoSend(value, type);
-    objectWritten();
+    if (valueNoSend(value, type))
+    {
+        // write on successful conversion/setting value only
+        objectWritten();
+        return true;
+    }
+    return false;
 }
 
 
@@ -261,9 +266,9 @@ bool GroupObject::tryValue(KNXValue& value)
 }
 
 
-void GroupObject::value(const KNXValue& value)
+bool GroupObject::value(const KNXValue& value)
 {
-    this->value(value, _datapointType);
+    return this->value(value, _datapointType);
 }
 
 
@@ -273,18 +278,21 @@ KNXValue GroupObject::value()
 }
 
 
-void GroupObject::valueNoSend(const KNXValue& value)
+bool GroupObject::valueNoSend(const KNXValue& value)
 {
-    valueNoSend(value, _datapointType);
+    return valueNoSend(value, _datapointType);
 }
 #endif
 
-void GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
+bool GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
 {
-    if (_commFlagEx.uninitialized)
+    const bool encodingDone = KNX_Encode_Value(value, _data, _dataLength, type);
+
+    // initialize on succesful conversion only
+    if (encodingDone && _commFlagEx.uninitialized)
         commFlag(Ok);
 
-    KNX_Encode_Value(value, _data, _dataLength, type);
+    return encodingDone;
 }
 
 bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
@@ -292,15 +300,20 @@ bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)
     if (_commFlagEx.uninitialized)
     {
         // always set first value
-        this->valueNoSend(value, type);
-        return true;
+        return valueNoSend(value, type);
     }
     else
     {
-        // convert new value to given dtp
+        // convert new value to given DPT
         uint8_t newData[_dataLength];
         memset(newData, 0, _dataLength);
-        KNX_Encode_Value(value, newData, _dataLength, type);
+        const bool encodingDone = KNX_Encode_Value(value, newData, _dataLength, type);
+        if (!encodingDone)
+        {
+            // value conversion to DPT failed
+            // do NOT update the value of the KO!
+            return false;
+        }
 
         // check for change in converted value / update value on change only
         const bool dataChanged = memcmp(_data, newData, _dataLength);
@@ -315,8 +328,8 @@ bool GroupObject::valueCompare(const KNXValue& value, const Dpt& type)
 {
     if (valueNoSendCompare(value, type))
     {
-         objectWritten();
-         return true;
+        objectWritten();
+        return true;
     }
     return false;
 }
