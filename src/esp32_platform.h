@@ -1,8 +1,9 @@
 #ifdef ARDUINO_ARCH_ESP32
 #include "arduino_platform.h"
-#include <WiFi.h>
-#include <WiFiUdp.h>
 
+
+
+#include <WiFiUdp.h>
 
 class Esp32Platform : public ArduinoPlatform
 {
