@@ -30,6 +30,7 @@ See the examples for basic usage options
 - increase device object api version to 2 (invalidation of knx flash data stored by older versions)
 - add #pragma once to Arduino plattform to allow derived plattforms
 - change esp32 plattform to use KNX_NETIF
+- fix out-of-boundary write and dereferenced nullpointer access in tunneling support 
 
 ### V2.1.1 - 2024-09-16
 - fix minor bug in TP-Uart Driver (RX queue out of boundary)

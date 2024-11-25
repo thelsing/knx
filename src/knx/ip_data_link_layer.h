@@ -54,7 +54,7 @@ class IpDataLinkLayer : public DataLinkLayer
     DataLinkLayerCallbacks* _dllcb;
 #ifdef KNX_TUNNELING
     KnxIpTunnelConnection tunnels[KNX_TUNNELING];
-    uint8_t _lastChannelId = 1;
+    uint8_t _lastChannelId = 0;
 #endif
 };
 #endif
