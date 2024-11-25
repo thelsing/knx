@@ -29,6 +29,7 @@ See the examples for basic usage options
 - add DPT 27.001
 - increase device object api version to 2 (invalidation of knx flash data stored by older versions)
 - add #pragma once to Arduino plattform to allow derived plattforms
+- change esp32 plattform to use KNX_NETIF
 
 ### V2.1.1 - 2024-09-16
 - fix minor bug in TP-Uart Driver (RX queue out of boundary)
