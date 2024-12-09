@@ -15,6 +15,9 @@ See the examples for basic usage options
 
 ## Changelog
 
+### V2.1.2 - 2024-12-09
+- adds unicast auto ack
+
 ### V2.1.1 - 2024-09-16
 - fix minor bug in TP-Uart Driver (RX queue out of boundary)
 
