@@ -650,6 +650,15 @@ void TpUartDataLinkLayer::requestConfig()
         _platform.writeUart(U_CONFIGURE_REQ | U_CONFIGURE_MARKER_REQ);
 #endif
 
+    // Set Address for AutoACK Unicast
+    const uint16_t address = _deviceObject.individualAddress();
+    _platform.writeUart(U_SET_ADDRESS_REQ);
+    _platform.writeUart((address >> 8) & 0xFF);
+    _platform.writeUart(address & 0xFF);
+#ifdef NCN5120
+    _platform.writeUart(0xFF); // Dummy Byte needed by NCN only
+#endif
+
     // Abweichende Config
     if (_repetitions != 0b00110011)
     {
