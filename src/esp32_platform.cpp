@@ -10,9 +10,9 @@
     #define KNX_SERIAL Serial1
     #pragma warn "KNX_SERIAL not defined, using Serial1"
 #endif
-
+ 
 #ifdef KNX_IP_LAN
-    #include "Eth.h"
+    #include "ETH.h"
     #define KNX_NETIF ETH
 #else // KNX_IP_WIFI
     #include <WiFi.h>
