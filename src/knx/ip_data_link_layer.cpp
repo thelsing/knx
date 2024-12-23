@@ -654,8 +654,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
             tunnelResOptions[i] = (*(tunCtrlBytes+i) & 0x60) >> 5;
         }
 
-
-        if(tunnelResActive[i])   // tunnel reserve feature active for this tunnel
+        if(resTunActive && tunnelResActive[i])   // tunnel reserve feature active for this tunnel
         {
             #ifdef KNX_LOG_TUNNELING
             print("tunnel reserve feature active for this tunnel: ");
