@@ -217,7 +217,6 @@ TPAckType Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
 #endif
 
     }
-    printf("ack %u\n", ack);
     return ack;
 }
 
