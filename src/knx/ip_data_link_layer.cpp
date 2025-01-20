@@ -460,7 +460,7 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
 
     if(searchRequest.srpRequestDIBs)
     {
-        println("srpRequestDIBs");
+        //println("srpRequestDIBs");
         if(searchRequest.requestedDIB(IP_CONFIG))
             dibLength += LEN_IP_CONFIG_DIB; //16
 
@@ -510,9 +510,9 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
             searchResponse.setTunnelingInfo(_ipParameters, _deviceObject, tunnels);
     }
 
-    if(searchResponse.totalLength() > 150)
+    if(searchResponse.totalLength() > 500)
     {
-        println("skipped response cause length is not plausible");
+        printf("skipped response length > 500. Length: %d bytes\n", searchResponse.totalLength());
         return;
     }
 
