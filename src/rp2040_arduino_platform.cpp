@@ -461,12 +461,7 @@ uint32_t RP2040ArduinoPlatform::currentDefaultGateway()
 }
 void RP2040ArduinoPlatform::macAddress(uint8_t* addr)
 {
-#if defined(KNX_IP_LAN)
-    addr = KNX_NETIF.getNetIf()->hwaddr;
-#else
-    uint8_t macaddr[6] = {0, 0, 0, 0, 0, 0};
-    addr = KNX_NETIF.macAddress(macaddr);
-#endif
+    KNX_NETIF.macAddress(addr);
 }
 
 // multicast

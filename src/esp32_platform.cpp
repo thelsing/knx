@@ -67,7 +67,7 @@ uint32_t Esp32Platform::currentDefaultGateway()
 
 void Esp32Platform::macAddress(uint8_t * addr)
 {
-    esp_wifi_get_mac(WIFI_IF_STA, addr);
+    KNX_NETIF.macAddress(addr);
 }
 
 uint32_t Esp32Platform::uniqueSerialNumber()
