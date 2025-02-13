@@ -799,7 +799,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
         _lastChannelId = 0;
 
     tun->IpAddress = srcIP;
-    tun->PortData = srcPort;
+    tun->PortData = connRequest.hpaiData().ipPortNumber()?connRequest.hpaiData().ipPortNumber():srcPort;
     tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber()?connRequest.hpaiCtrl().ipPortNumber():srcPort;
 
     print("New Tunnel-Connection[");
