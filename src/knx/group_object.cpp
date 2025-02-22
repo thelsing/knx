@@ -312,6 +312,7 @@ bool GroupObject::valueNoSend(const KNXValue& value, const Dpt& type)
         commFlag(Ok);
 
     return encodingDone;
+    return encodingDone;
 }
 
 bool GroupObject::valueNoSendCompare(const KNXValue& value, const Dpt& type)

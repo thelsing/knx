@@ -17,7 +17,8 @@ KnxIpConnectResponse::KnxIpConnectResponse(IpParameterObject& parameters, uint16
 
     _crd.length((type == 4) ? 4 : 2); //TunnelConnectionResponse length = 4; ConfigConnectionResponse length = 2;
     _crd.type(type);
-    _crd.address(address);
+    if(type == 4) // only fill address when it is a TunnelConnectionResponse
+        _crd.address(address);
 }
 
 KnxIpConnectResponse::KnxIpConnectResponse(uint8_t channel, uint8_t errorCode)

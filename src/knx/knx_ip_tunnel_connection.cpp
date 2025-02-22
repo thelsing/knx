@@ -7,6 +7,11 @@ KnxIpTunnelConnection::KnxIpTunnelConnection()
 
 void KnxIpTunnelConnection::Reset()
 {
+    print("Close Tunnel-Connection[");
+    print("?");
+    print("], Channel: 0x");
+    println(ChannelId, 16);
+
     ChannelId = 0;
     IpAddress = 0;
     PortData = 0;

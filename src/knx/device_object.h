@@ -6,15 +6,15 @@
 
 class DeviceObject: public InterfaceObject
 {
-    public:
-        // increase this version anytime DeviceObject-API changes
-        // the following value represents the serialized representation of DeviceObject.
-        const uint16_t apiVersion = 1;
-
-        DeviceObject();
-        uint8_t* save(uint8_t* buffer) override;
-        const uint8_t* restore(const uint8_t* buffer) override;
-        uint16_t saveSize() override;
+public:
+    // increase this version anytime DeviceObject-API changes 
+    // the following value represents the serialized representation of DeviceObject.
+    const uint16_t apiVersion = 2;
+    
+    DeviceObject();
+    uint8_t* save(uint8_t* buffer) override;
+    const uint8_t* restore(const uint8_t* buffer) override;
+    uint16_t saveSize() override;
 
         uint16_t individualAddress();
         void individualAddress(uint16_t value);

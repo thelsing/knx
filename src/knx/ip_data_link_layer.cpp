@@ -504,9 +504,8 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
 
     if (searchRequest.srpRequestDIBs)
     {
-        println("srpRequestDIBs");
-
-        if (searchRequest.requestedDIB(IP_CONFIG))
+        //println("srpRequestDIBs");
+        if(searchRequest.requestedDIB(IP_CONFIG))
             dibLength += LEN_IP_CONFIG_DIB; //16
 
         if (searchRequest.requestedDIB(IP_CUR_CONFIG))
@@ -556,9 +555,9 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
             searchResponse.setTunnelingInfo(_ipParameters, _deviceObject, tunnels);
     }
 
-    if (searchResponse.totalLength() > 150)
+    if(searchResponse.totalLength() > 500)
     {
-        println("skipped response cause length is not plausible");
+        printf("skipped response length > 500. Length: %d bytes\n", searchResponse.totalLength());
         return;
     }
 
@@ -715,8 +714,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
             tunnelResOptions[i] = (*(tunCtrlBytes + i) & 0x60) >> 5;
         }
 
-
-        if (tunnelResActive[i])  // tunnel reserve feature active for this tunnel
+        if(resTunActive && tunnelResActive[i])   // tunnel reserve feature active for this tunnel
         {
 #ifdef KNX_LOG_TUNNELING
             print("tunnel reserve feature active for this tunnel: ");
@@ -834,8 +832,9 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
                 tun = nullptr;
                 break;
             }
+        if(tun)
+            tun->IndividualAddress = tunPa;
 
-        tun->IndividualAddress = tunPa;
     }
 
     if (tun == nullptr)
@@ -869,8 +868,8 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
         _lastChannelId = 0;
 
     tun->IpAddress = srcIP;
-    tun->PortData = srcPort;
-    tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber() ? connRequest.hpaiCtrl().ipPortNumber() : srcPort;
+    tun->PortData = connRequest.hpaiData().ipPortNumber()?connRequest.hpaiData().ipPortNumber():srcPort;
+    tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber()?connRequest.hpaiCtrl().ipPortNumber():srcPort;
 
     print("New Tunnel-Connection[");
     print(tunIdx);
