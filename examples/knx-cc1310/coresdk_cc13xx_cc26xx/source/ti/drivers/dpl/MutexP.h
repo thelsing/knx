@@ -59,9 +59,9 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /*!
  *  @brief    Number of bytes greater than or equal to the size of any RTOS
@@ -70,7 +70,7 @@ extern "C" {
  *  nortos:   12
  *  SysBIOS:  40
  */
-#define MutexP_STRUCT_SIZE   (40)
+#define MutexP_STRUCT_SIZE (40)
 
 /*!
  *  @brief    MutexP structure.
@@ -80,8 +80,8 @@ extern "C" {
  */
 typedef union MutexP_Struct
 {
-    uint32_t dummy;  /*!< Align object */
-    char     data[MutexP_STRUCT_SIZE];
+        uint32_t dummy; /*!< Align object */
+        char data[MutexP_STRUCT_SIZE];
 } MutexP_Struct;
 
 /*!
@@ -115,9 +115,8 @@ typedef void* MutexP_Handle;
  */
 typedef struct MutexP_Params
 {
-    void (*callback)(void); /*!< Callback while waiting for mutex unlock */
+        void (*callback)(void); /*!< Callback while waiting for mutex unlock */
 } MutexP_Params;
-
 
 /*!
  *  @brief  Function to construct a mutex.

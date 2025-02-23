@@ -21,4 +21,4 @@ namespace Knx
             uint8_t serviceVersion(ServiceFamily family);
             void serviceVersion(ServiceFamily family, uint8_t version);
     };
-}
+} // namespace Knx

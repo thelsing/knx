@@ -39,17 +39,17 @@
 
 /* compiler vendor check */
 #ifndef __IAR_SYSTEMS_ICC__
-    #error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
+#error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
 #endif
 
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /* include compiler time.h */
 #if defined(__430_CORE__) || defined(__430X_CORE__)
-    #include <../inc/dlib/c/time.h>
+#include <../inc/dlib/c/time.h>
 #else
-    #include <../inc/c/time.h>
+#include <../inc/c/time.h>
 #endif
 
 #include "types.h"
@@ -60,8 +60,8 @@ extern "C" {
 
 struct timeval
 {
-    time_t      tv_sec;
-    suseconds_t tv_usec;
+        time_t tv_sec;
+        suseconds_t tv_usec;
 };
 
 #ifdef __cplusplus

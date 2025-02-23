@@ -2,7 +2,8 @@
 
 namespace Knx
 {
-    KnxIpCH::KnxIpCH(uint8_t* data) : _data(data)
+    KnxIpCH::KnxIpCH(uint8_t* data)
+        : _data(data)
     {}
 
     KnxIpCH::~KnxIpCH()
@@ -47,4 +48,4 @@ namespace Knx
     {
         return _data[3];
     }
-}
+} // namespace Knx

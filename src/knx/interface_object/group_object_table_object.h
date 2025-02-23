@@ -1,7 +1,7 @@
 #pragma once
 
-#include "table_object.h"
 #include "../group_object/group_object.h"
+#include "table_object.h"
 
 namespace Knx
 {
@@ -22,6 +22,7 @@ namespace Knx
             {
                 return "GroupObjectTable";
             }
+
         protected:
             void beforeStateChange(LoadState& newState) override;
 
@@ -32,4 +33,4 @@ namespace Knx
             GroupObject* _groupObjects = 0;
             uint16_t _groupObjectCount = 0;
     };
-}
+} // namespace Knx

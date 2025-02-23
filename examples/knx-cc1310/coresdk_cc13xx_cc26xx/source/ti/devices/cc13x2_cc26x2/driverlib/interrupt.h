@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       interrupt.h
-*  Revised:        2017-11-14 15:26:03 +0100 (Tue, 14 Nov 2017)
-*  Revision:       50272
-*
-*  Description:    Defines and prototypes for the NVIC Interrupt Controller
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       interrupt.h
+ *  Revised:        2017-11-14 15:26:03 +0100 (Tue, 14 Nov 2017)
+ *  Revision:       50272
+ *
+ *  Description:    Defines and prototypes for the NVIC Interrupt Controller
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,17 +55,16 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
+#include "../inc/hw_ints.h"
+#include "../inc/hw_nvic.h"
+#include "../inc/hw_types.h"
+#include "cpu.h"
+#include "debug.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include "../inc/hw_ints.h"
-#include "../inc/hw_types.h"
-#include "../inc/hw_nvic.h"
-#include "debug.h"
-#include "cpu.h"
 
 //*****************************************************************************
 //
@@ -81,17 +80,17 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define IntRegister                     NOROM_IntRegister
-#define IntUnregister                   NOROM_IntUnregister
-#define IntPriorityGroupingSet          NOROM_IntPriorityGroupingSet
-#define IntPriorityGroupingGet          NOROM_IntPriorityGroupingGet
-#define IntPrioritySet                  NOROM_IntPrioritySet
-#define IntPriorityGet                  NOROM_IntPriorityGet
-#define IntEnable                       NOROM_IntEnable
-#define IntDisable                      NOROM_IntDisable
-#define IntPendSet                      NOROM_IntPendSet
-#define IntPendGet                      NOROM_IntPendGet
-#define IntPendClear                    NOROM_IntPendClear
+#define IntRegister NOROM_IntRegister
+#define IntUnregister NOROM_IntUnregister
+#define IntPriorityGroupingSet NOROM_IntPriorityGroupingSet
+#define IntPriorityGroupingGet NOROM_IntPriorityGroupingGet
+#define IntPrioritySet NOROM_IntPrioritySet
+#define IntPriorityGet NOROM_IntPriorityGet
+#define IntEnable NOROM_IntEnable
+#define IntDisable NOROM_IntDisable
+#define IntPendSet NOROM_IntPendSet
+#define IntPendGet NOROM_IntPendGet
+#define IntPendClear NOROM_IntPendClear
 #endif
 
 //*****************************************************************************
@@ -104,15 +103,15 @@ extern "C"
 // INT_PRIORITY_MASK = ((0xFF << (8 - NUM_PRIORITY_BITS)) & 0xFF)
 //
 //*****************************************************************************
-#define INT_PRIORITY_MASK       0x000000E0
-#define INT_PRI_LEVEL0          0x00000000
-#define INT_PRI_LEVEL1          0x00000020
-#define INT_PRI_LEVEL2          0x00000040
-#define INT_PRI_LEVEL3          0x00000060
-#define INT_PRI_LEVEL4          0x00000080
-#define INT_PRI_LEVEL5          0x000000A0
-#define INT_PRI_LEVEL6          0x000000C0
-#define INT_PRI_LEVEL7          0x000000E0
+#define INT_PRIORITY_MASK 0x000000E0
+#define INT_PRI_LEVEL0 0x00000000
+#define INT_PRI_LEVEL1 0x00000020
+#define INT_PRI_LEVEL2 0x00000040
+#define INT_PRI_LEVEL3 0x00000060
+#define INT_PRI_LEVEL4 0x00000080
+#define INT_PRI_LEVEL5 0x000000A0
+#define INT_PRI_LEVEL6 0x000000C0
+#define INT_PRI_LEVEL7 0x000000E0
 
 //*****************************************************************************
 //
@@ -653,48 +652,48 @@ IntPriorityMaskGet(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_IntRegister
-#undef  IntRegister
-#define IntRegister                     ROM_IntRegister
+#undef IntRegister
+#define IntRegister ROM_IntRegister
 #endif
 #ifdef ROM_IntUnregister
-#undef  IntUnregister
-#define IntUnregister                   ROM_IntUnregister
+#undef IntUnregister
+#define IntUnregister ROM_IntUnregister
 #endif
 #ifdef ROM_IntPriorityGroupingSet
-#undef  IntPriorityGroupingSet
-#define IntPriorityGroupingSet          ROM_IntPriorityGroupingSet
+#undef IntPriorityGroupingSet
+#define IntPriorityGroupingSet ROM_IntPriorityGroupingSet
 #endif
 #ifdef ROM_IntPriorityGroupingGet
-#undef  IntPriorityGroupingGet
-#define IntPriorityGroupingGet          ROM_IntPriorityGroupingGet
+#undef IntPriorityGroupingGet
+#define IntPriorityGroupingGet ROM_IntPriorityGroupingGet
 #endif
 #ifdef ROM_IntPrioritySet
-#undef  IntPrioritySet
-#define IntPrioritySet                  ROM_IntPrioritySet
+#undef IntPrioritySet
+#define IntPrioritySet ROM_IntPrioritySet
 #endif
 #ifdef ROM_IntPriorityGet
-#undef  IntPriorityGet
-#define IntPriorityGet                  ROM_IntPriorityGet
+#undef IntPriorityGet
+#define IntPriorityGet ROM_IntPriorityGet
 #endif
 #ifdef ROM_IntEnable
-#undef  IntEnable
-#define IntEnable                       ROM_IntEnable
+#undef IntEnable
+#define IntEnable ROM_IntEnable
 #endif
 #ifdef ROM_IntDisable
-#undef  IntDisable
-#define IntDisable                      ROM_IntDisable
+#undef IntDisable
+#define IntDisable ROM_IntDisable
 #endif
 #ifdef ROM_IntPendSet
-#undef  IntPendSet
-#define IntPendSet                      ROM_IntPendSet
+#undef IntPendSet
+#define IntPendSet ROM_IntPendSet
 #endif
 #ifdef ROM_IntPendGet
-#undef  IntPendGet
-#define IntPendGet                      ROM_IntPendGet
+#undef IntPendGet
+#define IntPendGet ROM_IntPendGet
 #endif
 #ifdef ROM_IntPendClear
-#undef  IntPendClear
-#define IntPendClear                    ROM_IntPendClear
+#undef IntPendClear
+#define IntPendClear ROM_IntPendClear
 #endif
 #endif
 

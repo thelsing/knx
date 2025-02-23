@@ -344,19 +344,17 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
+#include <ti/drivers/Power.h>
+#include <ti/drivers/UART.h>
 #include <ti/drivers/dpl/ClockP.h>
 #include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
 #include <ti/drivers/dpl/SwiP.h>
-#include <ti/drivers/Power.h>
-#include <ti/drivers/UART.h>
 #include <ti/drivers/pin/PINCC26XX.h>
 #include <ti/drivers/utils/RingBuf.h>
-
-
 
 /*!
  * @brief No hardware flow control
@@ -399,7 +397,7 @@ extern "C" {
  * reception is inactive for a given 32-bit period.  With this command @b arg
  * is @a don't @a care and it returns UART_STATUS_SUCCESS.
  */
-#define UARTCC26X0_CMD_RETURN_PARTIAL_ENABLE    (UART_CMD_RESERVED + 0)
+#define UARTCC26X0_CMD_RETURN_PARTIAL_ENABLE (UART_CMD_RESERVED + 0)
 
 /*!
  * @brief Command used by UART_control to disable partial return
@@ -408,7 +406,7 @@ extern "C" {
  * behavior where UART_read blocks until all data bytes were received. With
  * this comand @b arg is @a don't @a care and it returns UART_STATUS_SUCCESS.
  */
-#define UARTCC26X0_CMD_RETURN_PARTIAL_DISABLE   (UART_CMD_RESERVED + 1)
+#define UARTCC26X0_CMD_RETURN_PARTIAL_DISABLE (UART_CMD_RESERVED + 1)
 
 /*!
  * @brief Command used by UART_control to flush the RX FIFO
@@ -416,8 +414,7 @@ extern "C" {
  * This control command flushes any contents in the RX FIFO. With this command
  * @b arg is @a don't @a care and it returns UART_STATUS_SUCCESS.
  */
-#define UARTCC26X0_CMD_RX_FIFO_FLUSH            (UART_CMD_RESERVED + 2)
-
+#define UARTCC26X0_CMD_RX_FIFO_FLUSH (UART_CMD_RESERVED + 2)
 
 /** @}*/
 
@@ -455,7 +452,7 @@ typedef enum UARTCC26X0_FifoThreshold
  *  @param      error                   The current value of the receive
  *                                      status register.
  */
-typedef void (*UARTCC26X0_ErrorCallback) (UART_Handle handle, uint32_t error);
+typedef void (*UARTCC26X0_ErrorCallback)(UART_Handle handle, uint32_t error);
 
 /* UART function table pointer */
 extern const UART_FxnTable UARTCC26X0_fxnTable;
@@ -516,38 +513,38 @@ extern const UART_FxnTable UARTCC26X0_fxnTable;
  */
 typedef struct UARTCC26X0_HWAttrs
 {
-    /*! UART Peripheral's base address */
-    uint32_t        baseAddr;
-    /*! UART Peripheral's interrupt vector */
-    int             intNum;
-    /*! UART Peripheral's interrupt priority */
-    uint8_t         intPriority;
-    /*!
-     *  @brief Swi priority.
-     *  The higher the number, the higher the priority.  The minimum
-     *  priority is 0 and the maximum is defined by the underlying OS.
-     */
-    uint32_t        swiPriority;
-    /*! Hardware flow control setting */
-    uint32_t        flowControl;
-    /*! Pointer to an application ring buffer */
-    unsigned char*  ringBufPtr;
-    /*! Size of ringBufPtr */
-    size_t          ringBufSize;
-    /*! UART RX pin assignment */
-    uint8_t         rxPin;
-    /*! UART TX pin assignment */
-    uint8_t         txPin;
-    /*! UART clear to send (CTS) pin assignment */
-    uint8_t         ctsPin;
-    /*! UART request to send (RTS) pin assignment */
-    uint8_t         rtsPin;
-    /*! UART TX interrupt FIFO threshold select */
-    UARTCC26X0_FifoThreshold txIntFifoThr;
-    /*! UART RX interrupt FIFO threshold select */
-    UARTCC26X0_FifoThreshold rxIntFifoThr;
-    /*! Application error function to be called on receive errors */
-    UARTCC26X0_ErrorCallback errorFxn;
+        /*! UART Peripheral's base address */
+        uint32_t baseAddr;
+        /*! UART Peripheral's interrupt vector */
+        int intNum;
+        /*! UART Peripheral's interrupt priority */
+        uint8_t intPriority;
+        /*!
+         *  @brief Swi priority.
+         *  The higher the number, the higher the priority.  The minimum
+         *  priority is 0 and the maximum is defined by the underlying OS.
+         */
+        uint32_t swiPriority;
+        /*! Hardware flow control setting */
+        uint32_t flowControl;
+        /*! Pointer to an application ring buffer */
+        unsigned char* ringBufPtr;
+        /*! Size of ringBufPtr */
+        size_t ringBufSize;
+        /*! UART RX pin assignment */
+        uint8_t rxPin;
+        /*! UART TX pin assignment */
+        uint8_t txPin;
+        /*! UART clear to send (CTS) pin assignment */
+        uint8_t ctsPin;
+        /*! UART request to send (RTS) pin assignment */
+        uint8_t rtsPin;
+        /*! UART TX interrupt FIFO threshold select */
+        UARTCC26X0_FifoThreshold txIntFifoThr;
+        /*! UART RX interrupt FIFO threshold select */
+        UARTCC26X0_FifoThreshold rxIntFifoThr;
+        /*! Application error function to be called on receive errors */
+        UARTCC26X0_ErrorCallback errorFxn;
 } UARTCC26X0_HWAttrs;
 
 /*!
@@ -557,74 +554,74 @@ typedef struct UARTCC26X0_HWAttrs
  */
 typedef struct UARTCC26X0_Object
 {
-    /* UART state variable */
-    struct
-    {
-        bool             opened: 1;        /* Has the obj been opened */
-        UART_Mode        readMode: 1;      /* Mode for all read calls */
-        UART_Mode        writeMode: 1;     /* Mode for all write calls */
-        UART_DataMode    readDataMode: 1;  /* Type of data being read */
-        UART_DataMode    writeDataMode: 1; /* Type of data being written */
-        UART_ReturnMode  readReturnMode: 1; /* Receive return mode */
-        UART_Echo        readEcho: 1;      /* Echo received data back */
-        /*
-         * Flag to determine if a timeout has occurred when the user called
-         * UART_read(). This flag is set by the timeoutClk clock object.
-         */
-        bool             bufTimeout: 1;
-        /*
-         * Flag to determine when an ISR needs to perform a callback; in both
-         * UART_MODE_BLOCKING or UART_MODE_CALLBACK
-         */
-        bool             callCallback: 1;
-        /*
-         * Flag to determine if the ISR is in control draining the ring buffer
-         * when in UART_MODE_CALLBACK
-         */
-        bool             drainByISR: 1;
-        /* Keep track of RX enabled state set by app with UART_control() */
-        bool             ctrlRxEnabled: 1;
-        /* Flag to keep the state of the read Power constraints */
-        bool             rxEnabled: 1;
-        /* Flag to keep the state of the write Power constraints */
-        bool             txEnabled: 1;
-    } state;
+        /* UART state variable */
+        struct
+        {
+                bool opened : 1;                    /* Has the obj been opened */
+                UART_Mode readMode : 1;             /* Mode for all read calls */
+                UART_Mode writeMode : 1;            /* Mode for all write calls */
+                UART_DataMode readDataMode : 1;     /* Type of data being read */
+                UART_DataMode writeDataMode : 1;    /* Type of data being written */
+                UART_ReturnMode readReturnMode : 1; /* Receive return mode */
+                UART_Echo readEcho : 1;             /* Echo received data back */
+                /*
+                 * Flag to determine if a timeout has occurred when the user called
+                 * UART_read(). This flag is set by the timeoutClk clock object.
+                 */
+                bool bufTimeout : 1;
+                /*
+                 * Flag to determine when an ISR needs to perform a callback; in both
+                 * UART_MODE_BLOCKING or UART_MODE_CALLBACK
+                 */
+                bool callCallback : 1;
+                /*
+                 * Flag to determine if the ISR is in control draining the ring buffer
+                 * when in UART_MODE_CALLBACK
+                 */
+                bool drainByISR : 1;
+                /* Keep track of RX enabled state set by app with UART_control() */
+                bool ctrlRxEnabled : 1;
+                /* Flag to keep the state of the read Power constraints */
+                bool rxEnabled : 1;
+                /* Flag to keep the state of the write Power constraints */
+                bool txEnabled : 1;
+        } state;
 
-    HwiP_Struct          hwi;              /* Hwi object for interrupts */
-    SwiP_Struct          swi;              /* Swi for read/write callbacks */
-    ClockP_Struct        timeoutClk;       /* Clock object to for timeouts */
-    ClockP_Struct        txFifoEmptyClk;   /* UART TX FIFO empty clock */
-    uint32_t             baudRate;         /* Baud rate for UART */
-    UART_LEN             dataLength;       /* Data length for UART */
-    UART_STOP            stopBits;         /* Stop bits for UART */
-    UART_PAR             parityType;       /* Parity bit type for UART */
-    uint32_t             status;           /* RX status */
+        HwiP_Struct hwi;              /* Hwi object for interrupts */
+        SwiP_Struct swi;              /* Swi for read/write callbacks */
+        ClockP_Struct timeoutClk;     /* Clock object to for timeouts */
+        ClockP_Struct txFifoEmptyClk; /* UART TX FIFO empty clock */
+        uint32_t baudRate;            /* Baud rate for UART */
+        UART_LEN dataLength;          /* Data length for UART */
+        UART_STOP stopBits;           /* Stop bits for UART */
+        UART_PAR parityType;          /* Parity bit type for UART */
+        uint32_t status;              /* RX status */
 
-    /* UART read variables */
-    RingBuf_Object       ringBuffer;       /* local circular buffer object */
-    unsigned char*       readBuf;          /* Buffer data pointer */
-    size_t               readSize;         /* Desired number of bytes to read */
-    size_t               readCount;        /* Number of bytes left to read */
-    SemaphoreP_Struct    readSem;          /* UART read semaphore */
-    unsigned int         readTimeout;      /* Timeout for read semaphore */
-    UART_Callback        readCallback;     /* Pointer to read callback */
-    bool                 readRetPartial;   /* Return partial RX data if timeout occurs */
+        /* UART read variables */
+        RingBuf_Object ringBuffer;  /* local circular buffer object */
+        unsigned char* readBuf;     /* Buffer data pointer */
+        size_t readSize;            /* Desired number of bytes to read */
+        size_t readCount;           /* Number of bytes left to read */
+        SemaphoreP_Struct readSem;  /* UART read semaphore */
+        unsigned int readTimeout;   /* Timeout for read semaphore */
+        UART_Callback readCallback; /* Pointer to read callback */
+        bool readRetPartial;        /* Return partial RX data if timeout occurs */
 
-    /* UART write variables */
-    const unsigned char* writeBuf;         /* Buffer data pointer */
-    size_t               writeSize;        /* Desired number of bytes to write*/
-    size_t               writeCount;       /* Number of bytes left to write */
-    SemaphoreP_Struct    writeSem;         /* UART write semaphore*/
-    unsigned int         writeTimeout;     /* Timeout for write semaphore */
-    UART_Callback        writeCallback;    /* Pointer to write callback */
-    unsigned int         writeEmptyClkTimeout; /* TX FIFO timeout tick count */
+        /* UART write variables */
+        const unsigned char* writeBuf;     /* Buffer data pointer */
+        size_t writeSize;                  /* Desired number of bytes to write*/
+        size_t writeCount;                 /* Number of bytes left to write */
+        SemaphoreP_Struct writeSem;        /* UART write semaphore*/
+        unsigned int writeTimeout;         /* Timeout for write semaphore */
+        UART_Callback writeCallback;       /* Pointer to write callback */
+        unsigned int writeEmptyClkTimeout; /* TX FIFO timeout tick count */
 
-    /* PIN driver state object and handle */
-    PIN_State            pinState;
-    PIN_Handle           hPin;
+        /* PIN driver state object and handle */
+        PIN_State pinState;
+        PIN_Handle hPin;
 
-    /* For Power management */
-    Power_NotifyObj      postNotify;
+        /* For Power management */
+        Power_NotifyObj postNotify;
 } UARTCC26X0_Object, *UARTCC26X0_Handle;
 
 #ifdef __cplusplus

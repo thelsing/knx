@@ -30,4 +30,4 @@ namespace Knx
             uint8_t* _data = 0;
             CemiFrame& _frame;
     };
-}
+} // namespace Knx

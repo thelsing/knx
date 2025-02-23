@@ -249,6 +249,6 @@ knx-->Platform
 @enduml
 
  */
-#include "knx/knx_facade.h"
 #include "knx/group_object/dpt/dpts.h"
+#include "knx/knx_facade.h"
 using namespace Knx;

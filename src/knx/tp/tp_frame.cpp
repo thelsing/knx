@@ -27,4 +27,4 @@ namespace Knx
         printHex("( ", data(), size(), false);
         print(")");
     }
-}
+} // namespace Knx

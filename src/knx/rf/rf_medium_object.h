@@ -4,7 +4,7 @@
 
 namespace Knx
 {
-    class RfMediumObject: public InterfaceObject
+    class RfMediumObject : public InterfaceObject
     {
         public:
             RfMediumObject();
@@ -14,8 +14,59 @@ namespace Knx
             {
                 return "RfMediumObject";
             }
+
         private:
-            uint8_t _rfDiagSourceAddressFilterTable[24] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
-            uint8_t _rfDiagLinkBudgetTable[24] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
+            uint8_t _rfDiagSourceAddressFilterTable[24] = {
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            };
+            uint8_t _rfDiagLinkBudgetTable[24] = {
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            };
     };
-}
+} // namespace Knx

@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       osc.h
-*  Revised:        2019-02-14 09:35:31 +0100 (Thu, 14 Feb 2019)
-*  Revision:       54539
-*
-*  Description:    Defines and prototypes for the system oscillator control.
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       osc.h
+ *  Revised:        2019-02-14 09:35:31 +0100 (Thu, 14 Feb 2019)
+ *  Revision:       54539
+ *
+ *  Description:    Defines and prototypes for the system oscillator control.
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,22 +55,21 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-#include <stdbool.h>
-#include <stdint.h>
 #include "../inc/hw_aon_pmctl.h"
 #include "../inc/hw_ccfg.h"
-#include "../inc/hw_fcfg1.h"
-#include "../inc/hw_types.h"
-#include "../inc/hw_memmap.h"
 #include "../inc/hw_ddi.h"
 #include "../inc/hw_ddi_0_osc.h"
-#include "rom.h"
+#include "../inc/hw_fcfg1.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
 #include "ddi.h"
 #include "debug.h"
+#include "rom.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 //*****************************************************************************
 //
@@ -86,20 +85,20 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define OSCClockSourceSet               NOROM_OSCClockSourceSet
-#define OSCClockSourceGet               NOROM_OSCClockSourceGet
-#define OSCHF_GetStartupTime            NOROM_OSCHF_GetStartupTime
-#define OSCHF_TurnOnXosc                NOROM_OSCHF_TurnOnXosc
-#define OSCHF_AttemptToSwitchToXosc     NOROM_OSCHF_AttemptToSwitchToXosc
-#define OSCHF_SwitchToRcOscTurnOffXosc  NOROM_OSCHF_SwitchToRcOscTurnOffXosc
-#define OSCHF_DebugGetCrystalAmplitude  NOROM_OSCHF_DebugGetCrystalAmplitude
+#define OSCClockSourceSet NOROM_OSCClockSourceSet
+#define OSCClockSourceGet NOROM_OSCClockSourceGet
+#define OSCHF_GetStartupTime NOROM_OSCHF_GetStartupTime
+#define OSCHF_TurnOnXosc NOROM_OSCHF_TurnOnXosc
+#define OSCHF_AttemptToSwitchToXosc NOROM_OSCHF_AttemptToSwitchToXosc
+#define OSCHF_SwitchToRcOscTurnOffXosc NOROM_OSCHF_SwitchToRcOscTurnOffXosc
+#define OSCHF_DebugGetCrystalAmplitude NOROM_OSCHF_DebugGetCrystalAmplitude
 #define OSCHF_DebugGetExpectedAverageCrystalAmplitude NOROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
 #define OSC_HPOSC_Debug_InitFreqOffsetParams NOROM_OSC_HPOSC_Debug_InitFreqOffsetParams
 #define OSC_HPOSCInitializeFrequencyOffsetParameters NOROM_OSC_HPOSCInitializeFrequencyOffsetParameters
 #define OSC_HPOSCRelativeFrequencyOffsetGet NOROM_OSC_HPOSCRelativeFrequencyOffsetGet
-#define OSC_AdjustXoscHfCapArray        NOROM_OSC_AdjustXoscHfCapArray
+#define OSC_AdjustXoscHfCapArray NOROM_OSC_AdjustXoscHfCapArray
 #define OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert NOROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
-#define OSC_HPOSCRtcCompensate          NOROM_OSC_HPOSCRtcCompensate
+#define OSC_HPOSCRtcCompensate NOROM_OSC_HPOSCRtcCompensate
 #endif
 
 //*****************************************************************************
@@ -107,29 +106,29 @@ extern "C"
 // Defines for the High Frequency XTAL Power mode
 //
 //*****************************************************************************
-#define LOW_POWER_XOSC          1
-#define HIGH_POWER_XOSC         0
+#define LOW_POWER_XOSC 1
+#define HIGH_POWER_XOSC 0
 
 //*****************************************************************************
 //
 // Defines for the High Frequency XTAL Power mode
 //
 //*****************************************************************************
-#define OSC_SRC_CLK_HF          0x00000001
-#define OSC_SRC_CLK_LF          0x00000004
+#define OSC_SRC_CLK_HF 0x00000001
+#define OSC_SRC_CLK_LF 0x00000004
 
-#define OSC_RCOSC_HF            0x00000000
-#define OSC_XOSC_HF             0x00000001
-#define OSC_RCOSC_LF            0x00000002
-#define OSC_XOSC_LF             0x00000003
+#define OSC_RCOSC_HF 0x00000000
+#define OSC_XOSC_HF 0x00000001
+#define OSC_RCOSC_LF 0x00000002
+#define OSC_XOSC_LF 0x00000003
 
-#define SCLK_HF_RCOSC_HF        0
-#define SCLK_HF_XOSC_HF         1
+#define SCLK_HF_RCOSC_HF 0
+#define SCLK_HF_XOSC_HF 1
 
-#define SCLK_LF_FROM_RCOSC_HF   0
-#define SCLK_LF_FROM_XOSC_HF    1
-#define SCLK_LF_FROM_RCOSC_LF   2
-#define SCLK_LF_FROM_XOSC_LF    3
+#define SCLK_LF_FROM_RCOSC_HF 0
+#define SCLK_LF_FROM_XOSC_HF 1
+#define SCLK_LF_FROM_RCOSC_LF 2
+#define SCLK_LF_FROM_XOSC_LF 3
 
 //*****************************************************************************
 //
@@ -176,11 +175,11 @@ OSCXHfPowerModeSet(uint32_t ui32Mode)
 //
 //*****************************************************************************
 __STATIC_INLINE void
-OSCClockLossEventEnable( void )
+OSCClockLossEventEnable(void)
 {
-    DDI16BitfieldWrite( AUX_DDI0_OSC_BASE, DDI_0_OSC_O_CTL0,
-                        DDI_0_OSC_CTL0_CLK_LOSS_EN_M,
-                        DDI_0_OSC_CTL0_CLK_LOSS_EN_S, 1 );
+    DDI16BitfieldWrite(AUX_DDI0_OSC_BASE, DDI_0_OSC_O_CTL0,
+                       DDI_0_OSC_CTL0_CLK_LOSS_EN_M,
+                       DDI_0_OSC_CTL0_CLK_LOSS_EN_S, 1);
 }
 
 //*****************************************************************************
@@ -199,11 +198,11 @@ OSCClockLossEventEnable( void )
 //
 //*****************************************************************************
 __STATIC_INLINE void
-OSCClockLossEventDisable( void )
+OSCClockLossEventDisable(void)
 {
-    DDI16BitfieldWrite( AUX_DDI0_OSC_BASE, DDI_0_OSC_O_CTL0,
-                        DDI_0_OSC_CTL0_CLK_LOSS_EN_M,
-                        DDI_0_OSC_CTL0_CLK_LOSS_EN_S, 0 );
+    DDI16BitfieldWrite(AUX_DDI0_OSC_BASE, DDI_0_OSC_O_CTL0,
+                       DDI_0_OSC_CTL0_CLK_LOSS_EN_M,
+                       DDI_0_OSC_CTL0_CLK_LOSS_EN_S, 0);
 }
 
 //*****************************************************************************
@@ -287,8 +286,9 @@ OSCHfSourceReady(void)
     // Return the readiness of the HF clock source
     return (DDI16BitfieldRead(AUX_DDI0_OSC_BASE, DDI_0_OSC_O_STAT0,
                               DDI_0_OSC_STAT0_PENDINGSCLKHFSWITCHING_M,
-                              DDI_0_OSC_STAT0_PENDINGSCLKHFSWITCHING_S)) ?
-           true : false;
+                              DDI_0_OSC_STAT0_PENDINGSCLKHFSWITCHING_S))
+               ? true
+               : false;
 }
 
 //*****************************************************************************
@@ -352,8 +352,8 @@ OSC_IsHPOSCEnabled(void)
 {
     bool enabled = false;
 
-    if ((( HWREG(CCFG_BASE + CCFG_O_MODE_CONF) & CCFG_MODE_CONF_XOSC_FREQ_M) == CCFG_MODE_CONF_XOSC_FREQ_HPOSC) &&
-            (( HWREG(FCFG1_BASE + FCFG1_O_OSC_CONF) & FCFG1_OSC_CONF_HPOSC_OPTION) == 0))
+    if (((HWREG(CCFG_BASE + CCFG_O_MODE_CONF) & CCFG_MODE_CONF_XOSC_FREQ_M) == CCFG_MODE_CONF_XOSC_FREQ_HPOSC) &&
+        ((HWREG(FCFG1_BASE + FCFG1_O_OSC_CONF) & FCFG1_OSC_CONF_HPOSC_OPTION) == 0))
     {
         enabled = true;
     }
@@ -382,8 +382,8 @@ OSC_IsHPOSCEnabledWithHfDerivedLfClock(void)
     // Check configuration by reading lower half of the 32-bit CTL0 register
     uint16_t regVal = HWREGH(AUX_DDI0_OSC_BASE + DDI_0_OSC_O_CTL0);
 
-    if ( ( ( regVal & DDI_0_OSC_CTL0_SCLK_LF_SRC_SEL_M ) == DDI_0_OSC_CTL0_SCLK_LF_SRC_SEL_XOSCHFDLF ) &&
-            ( ( regVal & DDI_0_OSC_CTL0_HPOSC_MODE_EN_M   ) == DDI_0_OSC_CTL0_HPOSC_MODE_EN             )   )
+    if (((regVal & DDI_0_OSC_CTL0_SCLK_LF_SRC_SEL_M) == DDI_0_OSC_CTL0_SCLK_LF_SRC_SEL_XOSCHFDLF) &&
+        ((regVal & DDI_0_OSC_CTL0_HPOSC_MODE_EN_M) == DDI_0_OSC_CTL0_HPOSC_MODE_EN))
     {
         enabled = true;
     }
@@ -404,7 +404,7 @@ OSC_IsHPOSCEnabledWithHfDerivedLfClock(void)
 //! \return Time margin to use in microseconds.
 //
 //*****************************************************************************
-extern uint32_t OSCHF_GetStartupTime( uint32_t timeUntilWakeupInMs );
+extern uint32_t OSCHF_GetStartupTime(uint32_t timeUntilWakeupInMs);
 
 //*****************************************************************************
 //
@@ -416,7 +416,7 @@ extern uint32_t OSCHF_GetStartupTime( uint32_t timeUntilWakeupInMs );
 //! \return None
 //
 //*****************************************************************************
-extern void OSCHF_TurnOnXosc( void );
+extern void OSCHF_TurnOnXosc(void);
 
 //*****************************************************************************
 //
@@ -431,7 +431,7 @@ extern void OSCHF_TurnOnXosc( void );
 //! - \c false : Switching has not occurred.
 //
 //*****************************************************************************
-extern bool OSCHF_AttemptToSwitchToXosc( void );
+extern bool OSCHF_AttemptToSwitchToXosc(void);
 
 //*****************************************************************************
 //
@@ -443,7 +443,7 @@ extern bool OSCHF_AttemptToSwitchToXosc( void );
 //! \return None
 //
 //*****************************************************************************
-extern void OSCHF_SwitchToRcOscTurnOffXosc( void );
+extern void OSCHF_SwitchToRcOscTurnOffXosc(void);
 
 //*****************************************************************************
 //
@@ -463,7 +463,7 @@ extern void OSCHF_SwitchToRcOscTurnOffXosc( void );
 //! \sa OSCHF_DebugGetExpectedAverageCrystalAmplitude()
 //
 //*****************************************************************************
-extern uint32_t OSCHF_DebugGetCrystalAmplitude( void );
+extern uint32_t OSCHF_DebugGetCrystalAmplitude(void);
 
 //*****************************************************************************
 //
@@ -480,7 +480,7 @@ extern uint32_t OSCHF_DebugGetCrystalAmplitude( void );
 //! \sa OSCHF_DebugGetCrystalAmplitude()
 //
 //*****************************************************************************
-extern uint32_t OSCHF_DebugGetExpectedAverageCrystalAmplitude( void );
+extern uint32_t OSCHF_DebugGetExpectedAverageCrystalAmplitude(void);
 
 //*****************************************************************************
 //
@@ -494,13 +494,13 @@ extern uint32_t OSCHF_DebugGetExpectedAverageCrystalAmplitude( void );
 //*****************************************************************************
 typedef struct
 {
-    uint32_t    meas_1   ; //!< Measurement set 1 (typically at room temp)
-    uint32_t    meas_2   ; //!< Measurement set 2 (typically at high temp)
-    uint32_t    meas_3   ; //!< Measurement set 3 (typically at low temp)
-    int32_t     offsetD1 ; //!< Offset to measurement set 1
-    int32_t     offsetD2 ; //!< Offset to measurement set 2
-    int32_t     offsetD3 ; //!< Offset to measurement set 3
-    int32_t     polyP3   ; //!< The P3 polynomial
+        uint32_t meas_1;  //!< Measurement set 1 (typically at room temp)
+        uint32_t meas_2;  //!< Measurement set 2 (typically at high temp)
+        uint32_t meas_3;  //!< Measurement set 3 (typically at low temp)
+        int32_t offsetD1; //!< Offset to measurement set 1
+        int32_t offsetD2; //!< Offset to measurement set 2
+        int32_t offsetD3; //!< Offset to measurement set 3
+        int32_t polyP3;   //!< The P3 polynomial
 } HposcDebugData_t;
 
 //*****************************************************************************
@@ -514,7 +514,7 @@ typedef struct
 //! \sa OSC_HPOSCInitializeFrequencyOffsetParameters()
 //
 //*****************************************************************************
-extern void OSC_HPOSC_Debug_InitFreqOffsetParams( HposcDebugData_t* pDebugData );
+extern void OSC_HPOSC_Debug_InitFreqOffsetParams(HposcDebugData_t* pDebugData);
 
 //*****************************************************************************
 //
@@ -528,7 +528,7 @@ extern void OSC_HPOSC_Debug_InitFreqOffsetParams( HposcDebugData_t* pDebugData )
 //! \sa OSC_HPOSC_Debug_InitFreqOffsetParams()
 //
 //*****************************************************************************
-extern void OSC_HPOSCInitializeFrequencyOffsetParameters( void );
+extern void OSC_HPOSCInitializeFrequencyOffsetParameters(void);
 
 //*****************************************************************************
 //
@@ -559,7 +559,7 @@ extern void OSC_HPOSCInitializeFrequencyOffsetParameters( void );
 //! \sa OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert(), AONBatMonTemperatureGetDegC()
 //
 //*****************************************************************************
-extern int32_t OSC_HPOSCRelativeFrequencyOffsetGet( int32_t tempDegC );
+extern int32_t OSC_HPOSCRelativeFrequencyOffsetGet(int32_t tempDegC);
 
 //*****************************************************************************
 //
@@ -577,7 +577,7 @@ extern int32_t OSC_HPOSCRelativeFrequencyOffsetGet( int32_t tempDegC );
 //! \return None
 //
 //*****************************************************************************
-extern void OSC_AdjustXoscHfCapArray( int32_t capArrDelta );
+extern void OSC_AdjustXoscHfCapArray(int32_t capArrDelta);
 
 //*****************************************************************************
 //
@@ -607,7 +607,7 @@ extern void OSC_AdjustXoscHfCapArray( int32_t capArrDelta );
 //! \sa OSC_HPOSCRelativeFrequencyOffsetGet()
 //
 //*****************************************************************************
-extern int16_t OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert( int32_t HPOSC_RelFreqOffset );
+extern int16_t OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert(int32_t HPOSC_RelFreqOffset);
 
 //*****************************************************************************
 //
@@ -644,7 +644,7 @@ extern int16_t OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert( int32_t HP
 //!
 //
 //*****************************************************************************
-extern void OSC_HPOSCRtcCompensate( int32_t relFreqOffset );
+extern void OSC_HPOSCRtcCompensate(int32_t relFreqOffset);
 
 //*****************************************************************************
 //
@@ -655,60 +655,60 @@ extern void OSC_HPOSCRtcCompensate( int32_t relFreqOffset );
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_OSCClockSourceSet
-#undef  OSCClockSourceSet
-#define OSCClockSourceSet               ROM_OSCClockSourceSet
+#undef OSCClockSourceSet
+#define OSCClockSourceSet ROM_OSCClockSourceSet
 #endif
 #ifdef ROM_OSCClockSourceGet
-#undef  OSCClockSourceGet
-#define OSCClockSourceGet               ROM_OSCClockSourceGet
+#undef OSCClockSourceGet
+#define OSCClockSourceGet ROM_OSCClockSourceGet
 #endif
 #ifdef ROM_OSCHF_GetStartupTime
-#undef  OSCHF_GetStartupTime
-#define OSCHF_GetStartupTime            ROM_OSCHF_GetStartupTime
+#undef OSCHF_GetStartupTime
+#define OSCHF_GetStartupTime ROM_OSCHF_GetStartupTime
 #endif
 #ifdef ROM_OSCHF_TurnOnXosc
-#undef  OSCHF_TurnOnXosc
-#define OSCHF_TurnOnXosc                ROM_OSCHF_TurnOnXosc
+#undef OSCHF_TurnOnXosc
+#define OSCHF_TurnOnXosc ROM_OSCHF_TurnOnXosc
 #endif
 #ifdef ROM_OSCHF_AttemptToSwitchToXosc
-#undef  OSCHF_AttemptToSwitchToXosc
-#define OSCHF_AttemptToSwitchToXosc     ROM_OSCHF_AttemptToSwitchToXosc
+#undef OSCHF_AttemptToSwitchToXosc
+#define OSCHF_AttemptToSwitchToXosc ROM_OSCHF_AttemptToSwitchToXosc
 #endif
 #ifdef ROM_OSCHF_SwitchToRcOscTurnOffXosc
-#undef  OSCHF_SwitchToRcOscTurnOffXosc
-#define OSCHF_SwitchToRcOscTurnOffXosc  ROM_OSCHF_SwitchToRcOscTurnOffXosc
+#undef OSCHF_SwitchToRcOscTurnOffXosc
+#define OSCHF_SwitchToRcOscTurnOffXosc ROM_OSCHF_SwitchToRcOscTurnOffXosc
 #endif
 #ifdef ROM_OSCHF_DebugGetCrystalAmplitude
-#undef  OSCHF_DebugGetCrystalAmplitude
-#define OSCHF_DebugGetCrystalAmplitude  ROM_OSCHF_DebugGetCrystalAmplitude
+#undef OSCHF_DebugGetCrystalAmplitude
+#define OSCHF_DebugGetCrystalAmplitude ROM_OSCHF_DebugGetCrystalAmplitude
 #endif
 #ifdef ROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
-#undef  OSCHF_DebugGetExpectedAverageCrystalAmplitude
+#undef OSCHF_DebugGetExpectedAverageCrystalAmplitude
 #define OSCHF_DebugGetExpectedAverageCrystalAmplitude ROM_OSCHF_DebugGetExpectedAverageCrystalAmplitude
 #endif
 #ifdef ROM_OSC_HPOSC_Debug_InitFreqOffsetParams
-#undef  OSC_HPOSC_Debug_InitFreqOffsetParams
+#undef OSC_HPOSC_Debug_InitFreqOffsetParams
 #define OSC_HPOSC_Debug_InitFreqOffsetParams ROM_OSC_HPOSC_Debug_InitFreqOffsetParams
 #endif
 #ifdef ROM_OSC_HPOSCInitializeFrequencyOffsetParameters
-#undef  OSC_HPOSCInitializeFrequencyOffsetParameters
+#undef OSC_HPOSCInitializeFrequencyOffsetParameters
 #define OSC_HPOSCInitializeFrequencyOffsetParameters ROM_OSC_HPOSCInitializeFrequencyOffsetParameters
 #endif
 #ifdef ROM_OSC_HPOSCRelativeFrequencyOffsetGet
-#undef  OSC_HPOSCRelativeFrequencyOffsetGet
+#undef OSC_HPOSCRelativeFrequencyOffsetGet
 #define OSC_HPOSCRelativeFrequencyOffsetGet ROM_OSC_HPOSCRelativeFrequencyOffsetGet
 #endif
 #ifdef ROM_OSC_AdjustXoscHfCapArray
-#undef  OSC_AdjustXoscHfCapArray
-#define OSC_AdjustXoscHfCapArray        ROM_OSC_AdjustXoscHfCapArray
+#undef OSC_AdjustXoscHfCapArray
+#define OSC_AdjustXoscHfCapArray ROM_OSC_AdjustXoscHfCapArray
 #endif
 #ifdef ROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
-#undef  OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
+#undef OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
 #define OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert ROM_OSC_HPOSCRelativeFrequencyOffsetToRFCoreFormatConvert
 #endif
 #ifdef ROM_OSC_HPOSCRtcCompensate
-#undef  OSC_HPOSCRtcCompensate
-#define OSC_HPOSCRtcCompensate          ROM_OSC_HPOSCRtcCompensate
+#undef OSC_HPOSCRtcCompensate
+#define OSC_HPOSCRtcCompensate ROM_OSC_HPOSCRtcCompensate
 #endif
 #endif
 

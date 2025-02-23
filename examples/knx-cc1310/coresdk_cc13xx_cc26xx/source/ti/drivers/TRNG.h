@@ -231,7 +231,7 @@ extern "C" {
  * #define TRNGXYZ_STATUS_ERROR2    TRNG_STATUS_RESERVED - 2
  * @endcode
  */
-#define TRNG_STATUS_RESERVED        (-32)
+#define TRNG_STATUS_RESERVED (-32)
 
 /*!
  * @brief   Successful status code.
@@ -239,7 +239,7 @@ extern "C" {
  * Functions return TRNG_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define TRNG_STATUS_SUCCESS         (0)
+#define TRNG_STATUS_SUCCESS (0)
 
 /*!
  * @brief   Generic error status code.
@@ -247,7 +247,7 @@ extern "C" {
  * Functions return TRNG_STATUS_ERROR if the function was not executed
  * successfully.
  */
-#define TRNG_STATUS_ERROR           (-1)
+#define TRNG_STATUS_ERROR (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -262,7 +262,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from a TRNG_open() call.
  */
-typedef struct TRNG_Config*  TRNG_Handle;
+typedef struct TRNG_Config* TRNG_Handle;
 
 /*!
  * @brief   The way in which TRNG function calls return after generating
@@ -287,20 +287,20 @@ typedef struct TRNG_Config*  TRNG_Handle;
  */
 typedef enum
 {
-    TRNG_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
-                                             *   TRNG operation goes on in the background. The registered
-                                             *   callback function is called after the operation completes.
-                                             *   The context the callback function is called (task, HWI, SWI)
-                                             *   is implementation-dependent.
-                                             */
-    TRNG_RETURN_BEHAVIOR_BLOCKING = 2,    /*!< The function call will block while TRNG operation goes
-                                             *   on in the background. TRNG operation results are available
-                                             *   after the function returns.
-                                             */
-    TRNG_RETURN_BEHAVIOR_POLLING  = 4,    /*!< The function call will continuously poll a flag while TRNG
-                                             *   operation goes on in the background. TRNG operation results
-                                             *   are available after the function returns.
-                                             */
+    TRNG_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
+                                        *   TRNG operation goes on in the background. The registered
+                                        *   callback function is called after the operation completes.
+                                        *   The context the callback function is called (task, HWI, SWI)
+                                        *   is implementation-dependent.
+                                        */
+    TRNG_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while TRNG operation goes
+                                        *   on in the background. TRNG operation results are available
+                                        *   after the function returns.
+                                        */
+    TRNG_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while TRNG
+                                        *   operation goes on in the background. TRNG operation results
+                                        *   are available after the function returns.
+                                        */
 } TRNG_ReturnBehavior;
 
 /*!
@@ -316,11 +316,11 @@ typedef enum
  */
 typedef struct TRNG_Config
 {
-    /*! Pointer to a driver specific data object */
-    void*               object;
+        /*! Pointer to a driver specific data object */
+        void* object;
 
-    /*! Pointer to a driver specific hardware attributes structure */
-    void         const* hwAttrs;
+        /*! Pointer to a driver specific hardware attributes structure */
+        void const* hwAttrs;
 } TRNG_Config;
 
 /*!
@@ -334,9 +334,9 @@ typedef struct TRNG_Config
  *  @param  entropy     The CryptoKey that describes the location the generated
  *                      entropy will be copied to.
  */
-typedef void (*TRNG_CallbackFxn) (TRNG_Handle handle,
-                                  int_fast16_t returnValue,
-                                  CryptoKey* entropy);
+typedef void (*TRNG_CallbackFxn)(TRNG_Handle handle,
+                                 int_fast16_t returnValue,
+                                 CryptoKey* entropy);
 
 /*!
  *  @brief  TRNG Parameters
@@ -348,14 +348,14 @@ typedef void (*TRNG_CallbackFxn) (TRNG_Handle handle,
  */
 typedef struct
 {
-    TRNG_ReturnBehavior     returnBehavior;             /*!< Blocking, callback, or polling return behavior */
-    TRNG_CallbackFxn        callbackFxn;                /*!< Callback function pointer */
-    uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
-                                                         *   ::TRNG_RETURN_BEHAVIOR_BLOCKING
-                                                         */
-    void*                   custom;                     /*!< Custom argument used by driver
-                                                         *   implementation
-                                                         */
+        TRNG_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
+        TRNG_CallbackFxn callbackFxn;       /*!< Callback function pointer */
+        uint32_t timeout;                   /*!< Timeout before the driver returns an error in
+                                             *   ::TRNG_RETURN_BEHAVIOR_BLOCKING
+                                             */
+        void* custom;                       /*!< Custom argument used by driver
+                                             *   implementation
+                                             */
 } TRNG_Params;
 
 /*!
@@ -439,9 +439,6 @@ void TRNG_close(TRNG_Handle handle);
  *  @retval #TRNG_STATUS_RESOURCE_UNAVAILABLE  The required hardware resource was not available. Try again later.
  */
 int_fast16_t TRNG_generateEntropy(TRNG_Handle handle, CryptoKey* entropy);
-
-
-
 
 #ifdef __cplusplus
 }

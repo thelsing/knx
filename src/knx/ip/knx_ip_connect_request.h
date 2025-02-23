@@ -1,8 +1,8 @@
 #pragma once
 
-#include "knx_ip_frame.h"
-#include "knx_ip_cri.h"
 #include "ip_host_protocol_address_information.h"
+#include "knx_ip_cri.h"
+#include "knx_ip_frame.h"
 
 namespace Knx
 {
@@ -13,9 +13,10 @@ namespace Knx
             IpHostProtocolAddressInformation& hpaiCtrl();
             IpHostProtocolAddressInformation& hpaiData();
             KnxIpCRI& cri();
+
         private:
             IpHostProtocolAddressInformation _hpaiCtrl;
             IpHostProtocolAddressInformation _hpaiData;
             KnxIpCRI _cri;
     };
-}
+} // namespace Knx

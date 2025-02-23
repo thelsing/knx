@@ -6,7 +6,7 @@
 
 namespace Knx
 {
-    //TODO vervollständigen
+    // TODO vervollständigen
     enum ConnectionType : uint8_t
     {
         DEVICE_MGMT_CONNECTION = 3,
@@ -32,4 +32,4 @@ namespace Knx
         protected:
             uint8_t* _data = 0;
     };
-}
+} // namespace Knx

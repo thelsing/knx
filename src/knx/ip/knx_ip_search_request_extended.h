@@ -1,8 +1,8 @@
 #pragma once
 
-#include "service_families.h"
-#include "knx_ip_frame.h"
 #include "ip_host_protocol_address_information.h"
+#include "knx_ip_frame.h"
+#include "service_families.h"
 
 namespace Knx
 {
@@ -19,8 +19,9 @@ namespace Knx
             bool srpRequestDIBs = false;
             uint8_t* srpMacAddr = nullptr;
             uint8_t* srpServiceFamilies = nullptr;
+
         private:
             IpHostProtocolAddressInformation _hpai;
-            bool requestedDIBs[REQUESTED_DIBS_MAX]; //for now only 1 to 8
+            bool requestedDIBs[REQUESTED_DIBS_MAX]; // for now only 1 to 8
     };
-}
+} // namespace Knx

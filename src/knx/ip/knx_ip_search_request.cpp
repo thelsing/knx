@@ -7,9 +7,8 @@ namespace Knx
     {
     }
 
-
     IpHostProtocolAddressInformation& KnxIpSearchRequest::hpai()
     {
         return _hpai;
     }
-}
+} // namespace Knx

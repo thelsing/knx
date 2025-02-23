@@ -2,11 +2,12 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt9: public ValueDpt<float>
+    class Dpt9 : public ValueDpt<float>
     {
         public:
-            Dpt9() {};
-            Dpt9(float value) : ValueDpt(value) {}
+            Dpt9(){};
+            Dpt9(float value)
+                : ValueDpt(value) {}
             Go_SizeCode size() const override;
 
             void encode(uint8_t* data) const override;
@@ -16,28 +17,29 @@ namespace Knx
     class DPT_Value_Temp : public Dpt9
     {
         public:
-            DPT_Value_Temp() {};
-            DPT_Value_Temp(float value) : Dpt9(value) {}
+            DPT_Value_Temp(){};
+            DPT_Value_Temp(float value)
+                : Dpt9(value) {}
             bool decode(uint8_t* data) override;
             void value(float value) override;
-
     };
 
     class DPT_Value_Temp_F : public Dpt9
     {
         public:
-            DPT_Value_Temp_F() {};
-            DPT_Value_Temp_F(float value) : Dpt9(value) {}
+            DPT_Value_Temp_F(){};
+            DPT_Value_Temp_F(float value)
+                : Dpt9(value) {}
             bool decode(uint8_t* data) override;
             void value(float value) override;
-
     };
 
     class Dpt9GeZero : public Dpt9
     {
         public:
-            Dpt9GeZero() {};
-            Dpt9GeZero(float value) : Dpt9(value) {}
+            Dpt9GeZero(){};
+            Dpt9GeZero(float value)
+                : Dpt9(value) {}
             bool decode(uint8_t* data) override;
             void value(float value) override;
     };
@@ -61,4 +63,4 @@ namespace Knx
     typedef Dpt9 DPT_Value_Wsp_kmh;
     typedef Dpt9GeZero DPT_Value_Absolute_Humidity;
     typedef Dpt9GeZero DPT_Concentration_ugm3;
-}
+} // namespace Knx

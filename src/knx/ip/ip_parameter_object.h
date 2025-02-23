@@ -16,8 +16,9 @@ namespace Knx
             {
                 return "IpParameterObject";
             }
+
         private:
             DeviceObject& _deviceObject;
             Platform& _platform;
     };
-}
+} // namespace Knx

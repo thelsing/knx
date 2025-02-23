@@ -1,10 +1,10 @@
 #include "data_link_layer.h"
 
-#include "../platform/platform.h"
-#include "../interface_object/device_object.h"
-#include "../cemi_server/cemi_server.h"
-#include "../util/logger.h"
 #include "../bits.h"
+#include "../cemi_server/cemi_server.h"
+#include "../interface_object/device_object.h"
+#include "../platform/platform.h"
+#include "../util/logger.h"
 
 #define LOGGER Logger::logger("DataLinkLayer")
 
@@ -22,8 +22,8 @@ namespace Knx
         _activityCallback = activityCallback;
     }
 
-    DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform) :
-        _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform)
+    DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform)
+        : _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform)
     {
 #ifdef KNX_ACTIVITYCALLBACK
         _netIndex = netLayerEntity.getEntityIndex();
@@ -161,17 +161,15 @@ namespace Knx
         uint16_t ownAddr = _deviceObject.individualAddress();
         SystemBroadcast systemBroadcast = frame.systemBroadcast();
 
-
         LOGGER.info("frameReceived ", frame);
-
 
 #ifdef USE_CEMI_SERVER
         // Do not send our own message back to the tunnel
 #ifdef KNX_TUNNELING
 
-        //we dont need to check it here
-        // send inbound frames to the tunnel if we are the secondary (TP) interface
-        if ( _networkLayerEntity.getEntityIndex() == 1)
+        // we dont need to check it here
+        //  send inbound frames to the tunnel if we are the secondary (TP) interface
+        if (_networkLayerEntity.getEntityIndex() == 1)
             _cemiServer->dataIndicationToTunnel(frame);
 
 #else
@@ -234,7 +232,6 @@ namespace Knx
         bool sendTheFrame = true;
         bool success = true;
 
-
 #ifdef KNX_TUNNELING
         // TunnelOpti
         // Optimize performance when sending unicast data over tunnel wich is not meant to be used on the physical TP line
@@ -242,14 +239,13 @@ namespace Knx
         // a) we are the secondary interface (e.g. TP) AND
         // b) destination == PA of a Tunnel (TODO)
 
-        if (_networkLayerEntity.getEntityIndex() == 1 && addrType == AddressType::IndividualAddress)   // don't send to tp if we are the secondary (TP) interface AND the destination is a tunnel-PA
+        if (_networkLayerEntity.getEntityIndex() == 1 && addrType == AddressType::IndividualAddress) // don't send to tp if we are the secondary (TP) interface AND the destination is a tunnel-PA
         {
             if (isTunnelingPA(destinationAddr))
                 sendTheFrame = false;
         }
 
 #endif
-
 
         // The data link layer might be an open media link layer
         // and will setup rfSerialOrDoA, rfInfo and rfLfn that we also
@@ -270,7 +266,7 @@ namespace Knx
 #endif
         tmpFrame.confirm(ConfirmNoError);
 
-        if (_networkLayerEntity.getEntityIndex() == 1)   // only send to tunnel if we are the secondary (TP) interface
+        if (_networkLayerEntity.getEntityIndex() == 1) // only send to tunnel if we are the secondary (TP) interface
             _cemiServer->dataIndicationToTunnel(tmpFrame);
 
 #endif
@@ -312,4 +308,4 @@ namespace Knx
     }
 #endif
 
-}
+} // namespace Knx

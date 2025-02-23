@@ -36,7 +36,7 @@ For usage of KNX-IP you have to define either
 #include <pico/unique_id.h>    // from Pico SDK
 
 #ifdef KNX_IP_LAN
-    extern Wiznet5500lwIP KNX_NETIF;
+extern Wiznet5500lwIP KNX_NETIF;
 #elif defined(KNX_IP_WIFI)
 #elif defined(KNX_IP_GENERIC)
 
@@ -104,13 +104,13 @@ namespace Knx
 #define FLASHPTR ((uint8_t*)XIP_BASE + KNX_FLASH_OFFSET)
 
 #ifndef USE_RP2040_EEPROM_EMULATION
-    #if KNX_FLASH_SIZE % 4096
-        #error "KNX_FLASH_SIZE must be multiple of 4096"
-    #endif
+#if KNX_FLASH_SIZE % 4096
+#error "KNX_FLASH_SIZE must be multiple of 4096"
+#endif
 
-    #if KNX_FLASH_OFFSET % 4096
-        #error "KNX_FLASH_OFFSET must be multiple of 4096"
-    #endif
+#if KNX_FLASH_OFFSET % 4096
+#error "KNX_FLASH_OFFSET must be multiple of 4096"
+#endif
 #endif
 
     RP2040ArduinoPlatform::RP2040ArduinoPlatform()
@@ -552,8 +552,8 @@ namespace Knx
         if (!port)
             port = _remotePort;
 
-        // print("sendBytesUniCast to:");
-        // println(ucastaddr.toString().c_str());
+            // print("sendBytesUniCast to:");
+            // println(ucastaddr.toString().c_str());
 
 #ifdef KNX_IP_GENERIC
 
@@ -575,5 +575,5 @@ namespace Knx
         return true;
     }
 #endif
-}
+} // namespace Knx
 #endif

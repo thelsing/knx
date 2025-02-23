@@ -25,5 +25,5 @@ namespace Knx
             uint8_t* getEepromBuffer(uint32_t size) final;
             void commitToEeprom() final;
     };
-}
-#endif //DeviceFamily_CC13X0
+} // namespace Knx
+#endif // DeviceFamily_CC13X0

@@ -25,9 +25,9 @@ namespace Knx
 
             bool isRoutedGroupAddress(uint16_t groupAddress, uint8_t sourceInterfaceIndex);
 
-            void rtObjPrimary(RouterObject& rtObjPrimary); // Coupler model 2.0
+            void rtObjPrimary(RouterObject& rtObjPrimary);     // Coupler model 2.0
             void rtObjSecondary(RouterObject& rtObjSecondary); // Coupler model 2.0
-            void rtObj(RouterObject& rtObj); // Coupler model 1.x
+            void rtObj(RouterObject& rtObj);                   // Coupler model 1.x
 
             // from transport layer
             void dataIndividualRequest(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu) override;
@@ -73,10 +73,10 @@ namespace Knx
             // Support a maximum of two physical interfaces for couplers
             NetworkLayerEntity _netLayerEntities[2];
 
-            RouterObject* _rtObjPrimary {nullptr};
-            RouterObject* _rtObjSecondary {nullptr};
+            RouterObject* _rtObjPrimary{nullptr};
+            RouterObject* _rtObjSecondary{nullptr};
 
             CouplerType _couplerType;
             uint16_t _currentAddress;
     };
-}
+} // namespace Knx

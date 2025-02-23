@@ -10,4 +10,4 @@ namespace Knx
         _data[LEN_KNXIP_HEADER] = channel;
         _data[LEN_KNXIP_HEADER + 1] = status;
     }
-}
+} // namespace Knx

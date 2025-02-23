@@ -2,7 +2,8 @@
 
 namespace Knx
 {
-    KnxIpDIB::KnxIpDIB(uint8_t* data) : _data(data)
+    KnxIpDIB::KnxIpDIB(uint8_t* data)
+        : _data(data)
     {}
 
     KnxIpDIB::~KnxIpDIB()
@@ -27,4 +28,4 @@ namespace Knx
     {
         _data[1] = value;
     }
-}
+} // namespace Knx

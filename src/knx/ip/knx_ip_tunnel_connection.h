@@ -20,6 +20,5 @@ namespace Knx
             void Reset();
 
         private:
-
     };
-}
+} // namespace Knx

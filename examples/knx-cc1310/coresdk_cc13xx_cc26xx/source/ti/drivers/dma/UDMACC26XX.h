@@ -115,15 +115,15 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include <ti/drivers/Power.h>
 #include <ti/drivers/power/PowerCC26XX.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(inc/hw_types.h)
-#include DeviceFamily_constructPath(driverlib/udma.h)
+#include DeviceFamily_constructPath(inc / hw_types.h)
+#include DeviceFamily_constructPath(driverlib / udma.h)
 
 /**
  *  @addtogroup DMA_STATUS
@@ -161,28 +161,29 @@ extern "C" {
 #endif
 
 /*! Make sure DMA control table base address is 1024 bytes aligned */
-#if(UDMACC26XX_CONFIG_BASE & 0x3FF)
+#if (UDMACC26XX_CONFIG_BASE & 0x3FF)
 #error "Base address for DMA control table 'UDMACC26XX_CONFIG_BASE' must be 1024 bytes aligned."
 #endif
 
 /*! Compiler specific macros to allocate DMA control table entries */
 #if defined(__IAR_SYSTEMS_ICC__)
 #define ALLOCATE_CONTROL_TABLE_ENTRY(ENTRY_NAME, CHANNEL_INDEX) \
-    __no_init static volatile tDMAControlTable ENTRY_NAME @ UDMACC26XX_CONFIG_BASE + CHANNEL_INDEX * sizeof(tDMAControlTable)
+    __no_init static volatile tDMAControlTable ENTRY_NAME @UDMACC26XX_CONFIG_BASE + CHANNEL_INDEX * sizeof(tDMAControlTable)
 #elif defined(__TI_COMPILER_VERSION__)
-#define ALLOCATE_CONTROL_TABLE_ENTRY(ENTRY_NAME, CHANNEL_INDEX) \
-    PRAGMA(LOCATION( ENTRY_NAME , UDMACC26XX_CONFIG_BASE + CHANNEL_INDEX * sizeof(tDMAControlTable) );)\
+#define ALLOCATE_CONTROL_TABLE_ENTRY(ENTRY_NAME, CHANNEL_INDEX)                                      \
+    PRAGMA(LOCATION(ENTRY_NAME, UDMACC26XX_CONFIG_BASE + CHANNEL_INDEX * sizeof(tDMAControlTable));) \
     static volatile tDMAControlTable ENTRY_NAME
 #define PRAGMA(x) _Pragma(#x)
 #elif defined(__GNUC__)
 #define ALLOCATE_CONTROL_TABLE_ENTRY(ENTRY_NAME, CHANNEL_INDEX) \
-    extern int UDMACC26XX_ ## ENTRY_NAME ## _is_placed; __attribute__ ((section("."#ENTRY_NAME))) static volatile tDMAControlTable ENTRY_NAME = {&UDMACC26XX_ ## ENTRY_NAME ## _is_placed}
+    extern int UDMACC26XX_##ENTRY_NAME##_is_placed;             \
+    __attribute__((section("." #ENTRY_NAME))) static volatile tDMAControlTable ENTRY_NAME = {&UDMACC26XX_##ENTRY_NAME##_is_placed}
 #else
 #error "don't know how to define ALLOCATE_CONTROL_TABLE_ENTRY for this toolchain"
 #endif
 
 /*! Sets the DMA transfer size in number of items */
-#define UDMACC26XX_SET_TRANSFER_SIZE(SIZE)    (((SIZE - 1) << UDMA_XFER_SIZE_S) & UDMA_XFER_SIZE_M)
+#define UDMACC26XX_SET_TRANSFER_SIZE(SIZE) (((SIZE - 1) << UDMA_XFER_SIZE_S) & UDMA_XFER_SIZE_M)
 /*! Gets the DMA transfer size in number of items*/
 #define UDMACC26XX_GET_TRANSFER_SIZE(CONTROL) (((CONTROL & UDMA_XFER_SIZE_M) >> UDMA_XFER_SIZE_S) + 1)
 
@@ -191,8 +192,8 @@ extern "C" {
  */
 typedef struct UDMACC26XX_Object
 {
-    bool             isOpen;           /*!< Flag for open/close status */
-    HwiP_Struct hwi;  /*!< Embedded Hwi Object */
+        bool isOpen;     /*!< Flag for open/close status */
+        HwiP_Struct hwi; /*!< Embedded Hwi Object */
 } UDMACC26XX_Object;
 
 /*!
@@ -200,31 +201,31 @@ typedef struct UDMACC26XX_Object
  */
 typedef struct UDMACC26XX_HWAttrs
 {
-    uint32_t        baseAddr;    /*!< Base adddress for UDMACC26XX */
-    PowerCC26XX_Resource  powerMngrId; /*!< UDMACC26XX Peripheral's power manager ID */
-    uint8_t         intNum;      /*!< UDMACC26XX error interrupt number */
-    /*! @brief UDMACC26XX error interrupt priority.
-     *  intPriority is the DMA peripheral's interrupt priority, as
-     *  defined by the underlying OS.  It is passed unmodified to the
-     *  underlying OS's interrupt handler creation code, so you need to
-     *  refer to the OS documentation for usage.  If the
-     *  driver uses the ti.dpl interface instead of making OS
-     *  calls directly, then the HwiP port handles the interrupt priority
-     *  in an OS specific way.  In the case of the SYS/BIOS port,
-     *  intPriority is passed unmodified to Hwi_create().
-     *
-     *  The CC26xx uses three of the priority bits,
-     *  meaning ~0 has the same effect as (7 << 5).
-     *
-     *  (7 << 5) will apply the lowest priority.
-     *
-     *  (1 << 5) will apply the highest priority.
-     *
-     *  Setting the priority to 0 is not supported by this driver.
-     *
-     *  HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-     */
-    uint8_t         intPriority;
+        uint32_t baseAddr;                /*!< Base adddress for UDMACC26XX */
+        PowerCC26XX_Resource powerMngrId; /*!< UDMACC26XX Peripheral's power manager ID */
+        uint8_t intNum;                   /*!< UDMACC26XX error interrupt number */
+        /*! @brief UDMACC26XX error interrupt priority.
+         *  intPriority is the DMA peripheral's interrupt priority, as
+         *  defined by the underlying OS.  It is passed unmodified to the
+         *  underlying OS's interrupt handler creation code, so you need to
+         *  refer to the OS documentation for usage.  If the
+         *  driver uses the ti.dpl interface instead of making OS
+         *  calls directly, then the HwiP port handles the interrupt priority
+         *  in an OS specific way.  In the case of the SYS/BIOS port,
+         *  intPriority is passed unmodified to Hwi_create().
+         *
+         *  The CC26xx uses three of the priority bits,
+         *  meaning ~0 has the same effect as (7 << 5).
+         *
+         *  (7 << 5) will apply the lowest priority.
+         *
+         *  (1 << 5) will apply the highest priority.
+         *
+         *  Setting the priority to 0 is not supported by this driver.
+         *
+         *  HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+         */
+        uint8_t intPriority;
 } UDMACC26XX_HWAttrs;
 
 /*!
@@ -232,14 +233,14 @@ typedef struct UDMACC26XX_HWAttrs
  */
 typedef struct UDMACC26XX_Config
 {
-    void*              object;            /*!< Pointer to UDMACC26XX object */
-    void const*        hwAttrs;           /*!< Pointer to hardware attribute */
+        void* object;        /*!< Pointer to UDMACC26XX object */
+        void const* hwAttrs; /*!< Pointer to hardware attribute */
 } UDMACC26XX_Config;
 
 /*!
  *  @brief      A handle that is returned from a UDMACC26XX_open() call.
  */
-typedef struct UDMACC26XX_Config*      UDMACC26XX_Handle;
+typedef struct UDMACC26XX_Config* UDMACC26XX_Handle;
 
 /* Extern'd hwiIntFxn */
 extern void UDMACC26XX_hwiIntFxn(uintptr_t callbacks);
@@ -258,7 +259,7 @@ extern void UDMACC26XX_hwiIntFxn(uintptr_t callbacks);
  */
 __STATIC_INLINE void UDMACC26XX_init(UDMACC26XX_Handle handle)
 {
-    UDMACC26XX_Object*           object;
+    UDMACC26XX_Object* object;
 
     /* Get the pointer to the object */
     object = (UDMACC26XX_Object*)(handle->object);
@@ -410,9 +411,9 @@ __STATIC_INLINE void UDMACC26XX_channelDisable(UDMACC26XX_Handle handle, uint32_
  *  @sa     UDMACC26XX_channelEnable
  */
 __STATIC_INLINE void UDMACC26XX_disableAttribute(UDMACC26XX_Handle handle,
-        uint32_t channelNum, uint32_t attr)
+                                                 uint32_t channelNum, uint32_t attr)
 {
-    UDMACC26XX_HWAttrs const* hwAttrs = (UDMACC26XX_HWAttrs*) handle->hwAttrs;
+    UDMACC26XX_HWAttrs const* hwAttrs = (UDMACC26XX_HWAttrs*)handle->hwAttrs;
 
     uDMAChannelAttributeDisable(hwAttrs->baseAddr, channelNum, attr);
 }

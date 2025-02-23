@@ -2,7 +2,7 @@
 #include "dpt.h"
 namespace Knx
 {
-    class DPT_Date: public Dpt
+    class DPT_Date : public Dpt
     {
         public:
             Go_SizeCode size() const override;
@@ -18,11 +18,11 @@ namespace Knx
 
             uint16_t year() const;
             void year(uint16_t value);
+
         private:
             uint8_t _day;
             uint8_t _month;
             uint16_t _year;
     };
 
-
-}
+} // namespace Knx

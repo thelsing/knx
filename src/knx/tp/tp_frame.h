@@ -3,8 +3,8 @@
 #include "../datalink_layer/cemi_frame.h"
 #include "../util/logger.h"
 
-#include <cstring>
 #include <cstdint>
+#include <cstring>
 
 // Means that the frame is invalid
 #define TP_FRAME_FLAG_INVALID 0b10000000
@@ -289,4 +289,4 @@ namespace Knx
             }
             void printIt() const;
     };
-}
+} // namespace Knx

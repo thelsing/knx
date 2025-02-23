@@ -11,7 +11,7 @@ namespace Knx
     {
         public:
             Samd21Platform();
-            Samd21Platform( HardwareSerial* s);
+            Samd21Platform(HardwareSerial* s);
 
             // unique serial number
             uint32_t uniqueSerialNumber() override;
@@ -52,5 +52,5 @@ namespace Knx
 
 #endif
     };
-}
+} // namespace Knx
 #endif

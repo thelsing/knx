@@ -1,13 +1,12 @@
 #pragma once
 
+#include "../cemi_server/cemi_server_object.h"
+#include "../config.h"
+#include "../ip/ip_data_link_layer.h"
+#include "../ip/ip_parameter_object.h"
+#include "../tp/tpuart_data_link_layer.h"
 #include "bau_systemB_coupler.h"
 #include "router_object.h"
-#include "../config.h"
-#include "../ip/ip_parameter_object.h"
-#include "../ip/ip_data_link_layer.h"
-#include "../tp/tpuart_data_link_layer.h"
-#include "../cemi_server/cemi_server_object.h"
-
 
 namespace Knx
 {
@@ -22,6 +21,7 @@ namespace Knx
 
             IpDataLinkLayer* getPrimaryDataLinkLayer();
             TpUartDataLinkLayer* getSecondaryDataLinkLayer();
+
         protected:
             InterfaceObject* getInterfaceObject(uint8_t idx);
             InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
@@ -30,6 +30,7 @@ namespace Knx
             TPAckType isAckRequired(uint16_t address, bool isGrpAddr) override;
 
             void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+
         private:
             RouterObject _routerObj;
             IpParameterObject _ipParameters;
@@ -40,4 +41,4 @@ namespace Knx
             CemiServerObject _cemiServerObject;
 #endif
     };
-}
+} // namespace Knx

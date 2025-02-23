@@ -1,8 +1,8 @@
 #pragma once
 
-#include "knx_ip_frame.h"
-#include "knx_ip_ch.h"
 #include "../datalink_layer/cemi_frame.h"
+#include "knx_ip_ch.h"
+#include "knx_ip_frame.h"
 
 namespace Knx
 {
@@ -13,8 +13,9 @@ namespace Knx
             KnxIpTunnelingRequest(CemiFrame frame);
             CemiFrame& frame();
             KnxIpCH& connectionHeader();
+
         private:
             CemiFrame _frame;
             KnxIpCH _ch;
     };
-}
+} // namespace Knx

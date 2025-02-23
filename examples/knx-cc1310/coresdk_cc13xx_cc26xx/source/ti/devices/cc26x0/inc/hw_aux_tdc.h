@@ -1,38 +1,38 @@
 /******************************************************************************
-*  Filename:       hw_aux_tdc_h
-*  Revised:        2017-05-16 19:35:21 +0200 (Tue, 16 May 2017)
-*  Revision:       49005
-*
-* Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* 1) Redistributions of source code must retain the above copyright notice,
-*    this list of conditions and the following disclaimer.
-*
-* 2) Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution.
-*
-* 3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*    be used to endorse or promote products derived from this software without
-*    specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       hw_aux_tdc_h
+ *  Revised:        2017-05-16 19:35:21 +0200 (Tue, 16 May 2017)
+ *  Revision:       49005
+ *
+ * Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1) Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2) Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 #ifndef __HW_AUX_TDC_H__
 #define __HW_AUX_TDC_H__
@@ -44,34 +44,34 @@
 //
 //*****************************************************************************
 // Control
-#define AUX_TDC_O_CTL                                               0x00000000
+#define AUX_TDC_O_CTL 0x00000000
 
 // Status
-#define AUX_TDC_O_STAT                                              0x00000004
+#define AUX_TDC_O_STAT 0x00000004
 
 // Result
-#define AUX_TDC_O_RESULT                                            0x00000008
+#define AUX_TDC_O_RESULT 0x00000008
 
 // Saturation Configuration
-#define AUX_TDC_O_SATCFG                                            0x0000000C
+#define AUX_TDC_O_SATCFG 0x0000000C
 
 // Trigger Source
-#define AUX_TDC_O_TRIGSRC                                           0x00000010
+#define AUX_TDC_O_TRIGSRC 0x00000010
 
 // Trigger Counter
-#define AUX_TDC_O_TRIGCNT                                           0x00000014
+#define AUX_TDC_O_TRIGCNT 0x00000014
 
 // Trigger Counter Load
-#define AUX_TDC_O_TRIGCNTLOAD                                       0x00000018
+#define AUX_TDC_O_TRIGCNTLOAD 0x00000018
 
 // Trigger Counter Configuration
-#define AUX_TDC_O_TRIGCNTCFG                                        0x0000001C
+#define AUX_TDC_O_TRIGCNTCFG 0x0000001C
 
 // Prescaler Control
-#define AUX_TDC_O_PRECTL                                            0x00000020
+#define AUX_TDC_O_PRECTL 0x00000020
 
 // Prescaler Counter
-#define AUX_TDC_O_PRECNT                                            0x00000024
+#define AUX_TDC_O_PRECNT 0x00000024
 
 //*****************************************************************************
 //
@@ -107,13 +107,13 @@
 //                          This is not needed as
 //                          prerequisite for a measurement. Reliable clear
 //                          is only guaranteed from IDLE state.
-#define AUX_TDC_CTL_CMD_W                                                    2
-#define AUX_TDC_CTL_CMD_M                                           0x00000003
-#define AUX_TDC_CTL_CMD_S                                                    0
-#define AUX_TDC_CTL_CMD_ABORT                                       0x00000003
-#define AUX_TDC_CTL_CMD_RUN                                         0x00000002
-#define AUX_TDC_CTL_CMD_RUN_SYNC_START                              0x00000001
-#define AUX_TDC_CTL_CMD_CLR_RESULT                                  0x00000000
+#define AUX_TDC_CTL_CMD_W 2
+#define AUX_TDC_CTL_CMD_M 0x00000003
+#define AUX_TDC_CTL_CMD_S 0
+#define AUX_TDC_CTL_CMD_ABORT 0x00000003
+#define AUX_TDC_CTL_CMD_RUN 0x00000002
+#define AUX_TDC_CTL_CMD_RUN_SYNC_START 0x00000001
+#define AUX_TDC_CTL_CMD_CLR_RESULT 0x00000000
 
 //*****************************************************************************
 //
@@ -129,10 +129,10 @@
 //
 // This field is cleared when a new measurement is started or when CLR_RESULT
 // is written to CTL.CMD.
-#define AUX_TDC_STAT_SAT                                            0x00000080
-#define AUX_TDC_STAT_SAT_BITN                                                7
-#define AUX_TDC_STAT_SAT_M                                          0x00000080
-#define AUX_TDC_STAT_SAT_S                                                   7
+#define AUX_TDC_STAT_SAT 0x00000080
+#define AUX_TDC_STAT_SAT_BITN 7
+#define AUX_TDC_STAT_SAT_M 0x00000080
+#define AUX_TDC_STAT_SAT_S 7
 
 // Field:     [6] DONE
 //
@@ -143,10 +143,10 @@
 //
 // This field clears when a new TDC measurement starts or when you write
 // CLR_RESULT to CTL.CMD.
-#define AUX_TDC_STAT_DONE                                           0x00000040
-#define AUX_TDC_STAT_DONE_BITN                                               6
-#define AUX_TDC_STAT_DONE_M                                         0x00000040
-#define AUX_TDC_STAT_DONE_S                                                  6
+#define AUX_TDC_STAT_DONE 0x00000040
+#define AUX_TDC_STAT_DONE_BITN 6
+#define AUX_TDC_STAT_DONE_M 0x00000040
+#define AUX_TDC_STAT_DONE_S 6
 
 // Field:   [5:0] STATE
 //
@@ -192,20 +192,20 @@
 //                          looks for the start condition. The state
 //                          machine waits for the fast-counter to
 //                          increment.
-#define AUX_TDC_STAT_STATE_W                                                 6
-#define AUX_TDC_STAT_STATE_M                                        0x0000003F
-#define AUX_TDC_STAT_STATE_S                                                 0
-#define AUX_TDC_STAT_STATE_FORCE_STOP                               0x0000002E
-#define AUX_TDC_STAT_STATE_START_FALL                               0x0000001E
-#define AUX_TDC_STAT_STATE_WAIT_CLR_CNT_DONE                        0x00000016
-#define AUX_TDC_STAT_STATE_POR                                      0x0000000F
-#define AUX_TDC_STAT_STATE_GET_RESULT                               0x0000000E
-#define AUX_TDC_STAT_STATE_WAIT_STOP_CNTDWN                         0x0000000C
-#define AUX_TDC_STAT_STATE_WAIT_STOP                                0x00000008
-#define AUX_TDC_STAT_STATE_CLR_CNT                                  0x00000007
-#define AUX_TDC_STAT_STATE_IDLE                                     0x00000006
-#define AUX_TDC_STAT_STATE_WAIT_START_STOP_CNT_EN                   0x00000004
-#define AUX_TDC_STAT_STATE_WAIT_START                               0x00000000
+#define AUX_TDC_STAT_STATE_W 6
+#define AUX_TDC_STAT_STATE_M 0x0000003F
+#define AUX_TDC_STAT_STATE_S 0
+#define AUX_TDC_STAT_STATE_FORCE_STOP 0x0000002E
+#define AUX_TDC_STAT_STATE_START_FALL 0x0000001E
+#define AUX_TDC_STAT_STATE_WAIT_CLR_CNT_DONE 0x00000016
+#define AUX_TDC_STAT_STATE_POR 0x0000000F
+#define AUX_TDC_STAT_STATE_GET_RESULT 0x0000000E
+#define AUX_TDC_STAT_STATE_WAIT_STOP_CNTDWN 0x0000000C
+#define AUX_TDC_STAT_STATE_WAIT_STOP 0x00000008
+#define AUX_TDC_STAT_STATE_CLR_CNT 0x00000007
+#define AUX_TDC_STAT_STATE_IDLE 0x00000006
+#define AUX_TDC_STAT_STATE_WAIT_START_STOP_CNT_EN 0x00000004
+#define AUX_TDC_STAT_STATE_WAIT_START 0x00000000
 
 //*****************************************************************************
 //
@@ -224,9 +224,9 @@
 // takes a non-zero time to stop the measurement. Hence, the maximum value of
 // this field becomes slightly higher than 2^24 if you configure SATCFG.LIMIT
 // to R24.
-#define AUX_TDC_RESULT_VALUE_W                                              25
-#define AUX_TDC_RESULT_VALUE_M                                      0x01FFFFFF
-#define AUX_TDC_RESULT_VALUE_S                                               0
+#define AUX_TDC_RESULT_VALUE_W 25
+#define AUX_TDC_RESULT_VALUE_M 0x01FFFFFF
+#define AUX_TDC_RESULT_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -267,22 +267,22 @@
 //                          when RESULT.VALUE[13] is set.
 // R12                      Result bit 12: TDC conversion saturates and stops
 //                          when RESULT.VALUE[12] is set.
-#define AUX_TDC_SATCFG_LIMIT_W                                               4
-#define AUX_TDC_SATCFG_LIMIT_M                                      0x0000000F
-#define AUX_TDC_SATCFG_LIMIT_S                                               0
-#define AUX_TDC_SATCFG_LIMIT_R24                                    0x0000000F
-#define AUX_TDC_SATCFG_LIMIT_R23                                    0x0000000E
-#define AUX_TDC_SATCFG_LIMIT_R22                                    0x0000000D
-#define AUX_TDC_SATCFG_LIMIT_R21                                    0x0000000C
-#define AUX_TDC_SATCFG_LIMIT_R20                                    0x0000000B
-#define AUX_TDC_SATCFG_LIMIT_R19                                    0x0000000A
-#define AUX_TDC_SATCFG_LIMIT_R18                                    0x00000009
-#define AUX_TDC_SATCFG_LIMIT_R17                                    0x00000008
-#define AUX_TDC_SATCFG_LIMIT_R16                                    0x00000007
-#define AUX_TDC_SATCFG_LIMIT_R15                                    0x00000006
-#define AUX_TDC_SATCFG_LIMIT_R14                                    0x00000005
-#define AUX_TDC_SATCFG_LIMIT_R13                                    0x00000004
-#define AUX_TDC_SATCFG_LIMIT_R12                                    0x00000003
+#define AUX_TDC_SATCFG_LIMIT_W 4
+#define AUX_TDC_SATCFG_LIMIT_M 0x0000000F
+#define AUX_TDC_SATCFG_LIMIT_S 0
+#define AUX_TDC_SATCFG_LIMIT_R24 0x0000000F
+#define AUX_TDC_SATCFG_LIMIT_R23 0x0000000E
+#define AUX_TDC_SATCFG_LIMIT_R22 0x0000000D
+#define AUX_TDC_SATCFG_LIMIT_R21 0x0000000C
+#define AUX_TDC_SATCFG_LIMIT_R20 0x0000000B
+#define AUX_TDC_SATCFG_LIMIT_R19 0x0000000A
+#define AUX_TDC_SATCFG_LIMIT_R18 0x00000009
+#define AUX_TDC_SATCFG_LIMIT_R17 0x00000008
+#define AUX_TDC_SATCFG_LIMIT_R16 0x00000007
+#define AUX_TDC_SATCFG_LIMIT_R15 0x00000006
+#define AUX_TDC_SATCFG_LIMIT_R14 0x00000005
+#define AUX_TDC_SATCFG_LIMIT_R13 0x00000004
+#define AUX_TDC_SATCFG_LIMIT_R12 0x00000003
 
 //*****************************************************************************
 //
@@ -297,12 +297,12 @@
 // ENUMs:
 // LOW                      TDC conversion stops when low level is detected.
 // HIGH                     TDC conversion stops when high level is detected.
-#define AUX_TDC_TRIGSRC_STOP_POL                                    0x00002000
-#define AUX_TDC_TRIGSRC_STOP_POL_BITN                                       13
-#define AUX_TDC_TRIGSRC_STOP_POL_M                                  0x00002000
-#define AUX_TDC_TRIGSRC_STOP_POL_S                                          13
-#define AUX_TDC_TRIGSRC_STOP_POL_LOW                                0x00002000
-#define AUX_TDC_TRIGSRC_STOP_POL_HIGH                               0x00000000
+#define AUX_TDC_TRIGSRC_STOP_POL 0x00002000
+#define AUX_TDC_TRIGSRC_STOP_POL_BITN 13
+#define AUX_TDC_TRIGSRC_STOP_POL_M 0x00002000
+#define AUX_TDC_TRIGSRC_STOP_POL_S 13
+#define AUX_TDC_TRIGSRC_STOP_POL_LOW 0x00002000
+#define AUX_TDC_TRIGSRC_STOP_POL_HIGH 0x00000000
 
 // Field:  [12:8] STOP_SRC
 //
@@ -343,41 +343,41 @@
 // AUX_COMPB                AUX_EVCTL:EVSTAT0.AUX_COMPB
 // AUX_COMPA                AUX_EVCTL:EVSTAT0.AUX_COMPA
 // AON_RTC_CH2              AUX_EVCTL:EVSTAT0.AON_RTC_CH2
-#define AUX_TDC_TRIGSRC_STOP_SRC_W                                           5
-#define AUX_TDC_TRIGSRC_STOP_SRC_M                                  0x00001F00
-#define AUX_TDC_TRIGSRC_STOP_SRC_S                                           8
-#define AUX_TDC_TRIGSRC_STOP_SRC_TDC_PRE                            0x00001F00
-#define AUX_TDC_TRIGSRC_STOP_SRC_MCU_EV                             0x00001E00
-#define AUX_TDC_TRIGSRC_STOP_SRC_ACLK_REF                           0x00001D00
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO15                            0x00001C00
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO14                            0x00001B00
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO13                            0x00001A00
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO12                            0x00001900
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO11                            0x00001800
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO10                            0x00001700
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO9                             0x00001600
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO8                             0x00001500
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO7                             0x00001400
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO6                             0x00001300
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO5                             0x00001200
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO4                             0x00001100
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO3                             0x00001000
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO2                             0x00000F00
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO1                             0x00000E00
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO0                             0x00000D00
-#define AUX_TDC_TRIGSRC_STOP_SRC_AON_PROG_WU                        0x00000C00
-#define AUX_TDC_TRIGSRC_STOP_SRC_AON_SW                             0x00000B00
-#define AUX_TDC_TRIGSRC_STOP_SRC_OBSMUX1                            0x00000A00
-#define AUX_TDC_TRIGSRC_STOP_SRC_OBSMUX0                            0x00000900
-#define AUX_TDC_TRIGSRC_STOP_SRC_ADC_FIFO_ALMOST_FULL               0x00000800
-#define AUX_TDC_TRIGSRC_STOP_SRC_ADC_DONE                           0x00000700
-#define AUX_TDC_TRIGSRC_STOP_SRC_SMPH_AUTOTAKE_DONE                 0x00000600
-#define AUX_TDC_TRIGSRC_STOP_SRC_TIMER1_EV                          0x00000500
-#define AUX_TDC_TRIGSRC_STOP_SRC_TIMER0_EV                          0x00000400
-#define AUX_TDC_TRIGSRC_STOP_SRC_ISRC_RESET                         0x00000300
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUX_COMPB                          0x00000200
-#define AUX_TDC_TRIGSRC_STOP_SRC_AUX_COMPA                          0x00000100
-#define AUX_TDC_TRIGSRC_STOP_SRC_AON_RTC_CH2                        0x00000000
+#define AUX_TDC_TRIGSRC_STOP_SRC_W 5
+#define AUX_TDC_TRIGSRC_STOP_SRC_M 0x00001F00
+#define AUX_TDC_TRIGSRC_STOP_SRC_S 8
+#define AUX_TDC_TRIGSRC_STOP_SRC_TDC_PRE 0x00001F00
+#define AUX_TDC_TRIGSRC_STOP_SRC_MCU_EV 0x00001E00
+#define AUX_TDC_TRIGSRC_STOP_SRC_ACLK_REF 0x00001D00
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO15 0x00001C00
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO14 0x00001B00
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO13 0x00001A00
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO12 0x00001900
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO11 0x00001800
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO10 0x00001700
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO9 0x00001600
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO8 0x00001500
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO7 0x00001400
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO6 0x00001300
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO5 0x00001200
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO4 0x00001100
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO3 0x00001000
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO2 0x00000F00
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO1 0x00000E00
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUXIO0 0x00000D00
+#define AUX_TDC_TRIGSRC_STOP_SRC_AON_PROG_WU 0x00000C00
+#define AUX_TDC_TRIGSRC_STOP_SRC_AON_SW 0x00000B00
+#define AUX_TDC_TRIGSRC_STOP_SRC_OBSMUX1 0x00000A00
+#define AUX_TDC_TRIGSRC_STOP_SRC_OBSMUX0 0x00000900
+#define AUX_TDC_TRIGSRC_STOP_SRC_ADC_FIFO_ALMOST_FULL 0x00000800
+#define AUX_TDC_TRIGSRC_STOP_SRC_ADC_DONE 0x00000700
+#define AUX_TDC_TRIGSRC_STOP_SRC_SMPH_AUTOTAKE_DONE 0x00000600
+#define AUX_TDC_TRIGSRC_STOP_SRC_TIMER1_EV 0x00000500
+#define AUX_TDC_TRIGSRC_STOP_SRC_TIMER0_EV 0x00000400
+#define AUX_TDC_TRIGSRC_STOP_SRC_ISRC_RESET 0x00000300
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUX_COMPB 0x00000200
+#define AUX_TDC_TRIGSRC_STOP_SRC_AUX_COMPA 0x00000100
+#define AUX_TDC_TRIGSRC_STOP_SRC_AON_RTC_CH2 0x00000000
 
 // Field:     [5] START_POL
 //
@@ -387,12 +387,12 @@
 // ENUMs:
 // LOW                      TDC conversion starts when low level is detected.
 // HIGH                     TDC conversion starts when high level is detected.
-#define AUX_TDC_TRIGSRC_START_POL                                   0x00000020
-#define AUX_TDC_TRIGSRC_START_POL_BITN                                       5
-#define AUX_TDC_TRIGSRC_START_POL_M                                 0x00000020
-#define AUX_TDC_TRIGSRC_START_POL_S                                          5
-#define AUX_TDC_TRIGSRC_START_POL_LOW                               0x00000020
-#define AUX_TDC_TRIGSRC_START_POL_HIGH                              0x00000000
+#define AUX_TDC_TRIGSRC_START_POL 0x00000020
+#define AUX_TDC_TRIGSRC_START_POL_BITN 5
+#define AUX_TDC_TRIGSRC_START_POL_M 0x00000020
+#define AUX_TDC_TRIGSRC_START_POL_S 5
+#define AUX_TDC_TRIGSRC_START_POL_LOW 0x00000020
+#define AUX_TDC_TRIGSRC_START_POL_HIGH 0x00000000
 
 // Field:   [4:0] START_SRC
 //
@@ -433,41 +433,41 @@
 // AUX_COMPB                AUX_EVCTL:EVSTAT0.AUX_COMPB
 // AUX_COMPA                AUX_EVCTL:EVSTAT0.AUX_COMPA
 // AON_RTC_CH2              AUX_EVCTL:EVSTAT0.AON_RTC_CH2
-#define AUX_TDC_TRIGSRC_START_SRC_W                                          5
-#define AUX_TDC_TRIGSRC_START_SRC_M                                 0x0000001F
-#define AUX_TDC_TRIGSRC_START_SRC_S                                          0
-#define AUX_TDC_TRIGSRC_START_SRC_TDC_PRE                           0x0000001F
-#define AUX_TDC_TRIGSRC_START_SRC_MCU_EV                            0x0000001E
-#define AUX_TDC_TRIGSRC_START_SRC_ACLK_REF                          0x0000001D
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO15                           0x0000001C
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO14                           0x0000001B
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO13                           0x0000001A
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO12                           0x00000019
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO11                           0x00000018
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO10                           0x00000017
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO9                            0x00000016
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO8                            0x00000015
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO7                            0x00000014
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO6                            0x00000013
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO5                            0x00000012
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO4                            0x00000011
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO3                            0x00000010
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO2                            0x0000000F
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO1                            0x0000000E
-#define AUX_TDC_TRIGSRC_START_SRC_AUXIO0                            0x0000000D
-#define AUX_TDC_TRIGSRC_START_SRC_AON_PROG_WU                       0x0000000C
-#define AUX_TDC_TRIGSRC_START_SRC_AON_SW                            0x0000000B
-#define AUX_TDC_TRIGSRC_START_SRC_OBSMUX1                           0x0000000A
-#define AUX_TDC_TRIGSRC_START_SRC_OBSMUX0                           0x00000009
-#define AUX_TDC_TRIGSRC_START_SRC_ADC_FIFO_ALMOST_FULL              0x00000008
-#define AUX_TDC_TRIGSRC_START_SRC_ADC_DONE                          0x00000007
-#define AUX_TDC_TRIGSRC_START_SRC_SMPH_AUTOTAKE_DONE                0x00000006
-#define AUX_TDC_TRIGSRC_START_SRC_TIMER1_EV                         0x00000005
-#define AUX_TDC_TRIGSRC_START_SRC_TIMER0_EV                         0x00000004
-#define AUX_TDC_TRIGSRC_START_SRC_ISRC_RESET                        0x00000003
-#define AUX_TDC_TRIGSRC_START_SRC_AUX_COMPB                         0x00000002
-#define AUX_TDC_TRIGSRC_START_SRC_AUX_COMPA                         0x00000001
-#define AUX_TDC_TRIGSRC_START_SRC_AON_RTC_CH2                       0x00000000
+#define AUX_TDC_TRIGSRC_START_SRC_W 5
+#define AUX_TDC_TRIGSRC_START_SRC_M 0x0000001F
+#define AUX_TDC_TRIGSRC_START_SRC_S 0
+#define AUX_TDC_TRIGSRC_START_SRC_TDC_PRE 0x0000001F
+#define AUX_TDC_TRIGSRC_START_SRC_MCU_EV 0x0000001E
+#define AUX_TDC_TRIGSRC_START_SRC_ACLK_REF 0x0000001D
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO15 0x0000001C
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO14 0x0000001B
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO13 0x0000001A
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO12 0x00000019
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO11 0x00000018
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO10 0x00000017
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO9 0x00000016
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO8 0x00000015
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO7 0x00000014
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO6 0x00000013
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO5 0x00000012
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO4 0x00000011
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO3 0x00000010
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO2 0x0000000F
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO1 0x0000000E
+#define AUX_TDC_TRIGSRC_START_SRC_AUXIO0 0x0000000D
+#define AUX_TDC_TRIGSRC_START_SRC_AON_PROG_WU 0x0000000C
+#define AUX_TDC_TRIGSRC_START_SRC_AON_SW 0x0000000B
+#define AUX_TDC_TRIGSRC_START_SRC_OBSMUX1 0x0000000A
+#define AUX_TDC_TRIGSRC_START_SRC_OBSMUX0 0x00000009
+#define AUX_TDC_TRIGSRC_START_SRC_ADC_FIFO_ALMOST_FULL 0x00000008
+#define AUX_TDC_TRIGSRC_START_SRC_ADC_DONE 0x00000007
+#define AUX_TDC_TRIGSRC_START_SRC_SMPH_AUTOTAKE_DONE 0x00000006
+#define AUX_TDC_TRIGSRC_START_SRC_TIMER1_EV 0x00000005
+#define AUX_TDC_TRIGSRC_START_SRC_TIMER0_EV 0x00000004
+#define AUX_TDC_TRIGSRC_START_SRC_ISRC_RESET 0x00000003
+#define AUX_TDC_TRIGSRC_START_SRC_AUX_COMPB 0x00000002
+#define AUX_TDC_TRIGSRC_START_SRC_AUX_COMPA 0x00000001
+#define AUX_TDC_TRIGSRC_START_SRC_AON_RTC_CH2 0x00000000
 
 //*****************************************************************************
 //
@@ -487,9 +487,9 @@
 //
 // When AUX_TDC:TRIGCNTCFG.EN is 1, TRIGCNTLOAD.CNT is loaded into CNT at the
 // start of the measurement.
-#define AUX_TDC_TRIGCNT_CNT_W                                               16
-#define AUX_TDC_TRIGCNT_CNT_M                                       0x0000FFFF
-#define AUX_TDC_TRIGCNT_CNT_S                                                0
+#define AUX_TDC_TRIGCNT_CNT_W 16
+#define AUX_TDC_TRIGCNT_CNT_M 0x0000FFFF
+#define AUX_TDC_TRIGCNT_CNT_S 0
 
 //*****************************************************************************
 //
@@ -518,9 +518,9 @@
 //
 // When AUX_TDC:TRIGCNTCFG.EN is 1, CNT is loaded into TRIGCNT.CNT at the start
 // of the measurement.
-#define AUX_TDC_TRIGCNTLOAD_CNT_W                                           16
-#define AUX_TDC_TRIGCNTLOAD_CNT_M                                   0x0000FFFF
-#define AUX_TDC_TRIGCNTLOAD_CNT_S                                            0
+#define AUX_TDC_TRIGCNTLOAD_CNT_W 16
+#define AUX_TDC_TRIGCNTLOAD_CNT_M 0x0000FFFF
+#define AUX_TDC_TRIGCNTLOAD_CNT_S 0
 
 //*****************************************************************************
 //
@@ -535,10 +535,10 @@
 // 1: Enable stop-counter.
 //
 // Change only while STAT.STATE is IDLE.
-#define AUX_TDC_TRIGCNTCFG_EN                                       0x00000001
-#define AUX_TDC_TRIGCNTCFG_EN_BITN                                           0
-#define AUX_TDC_TRIGCNTCFG_EN_M                                     0x00000001
-#define AUX_TDC_TRIGCNTCFG_EN_S                                              0
+#define AUX_TDC_TRIGCNTCFG_EN 0x00000001
+#define AUX_TDC_TRIGCNTCFG_EN_BITN 0
+#define AUX_TDC_TRIGCNTCFG_EN_M 0x00000001
+#define AUX_TDC_TRIGCNTCFG_EN_S 0
 
 //*****************************************************************************
 //
@@ -553,10 +553,10 @@
 // 1: Release reset of prescaler.
 //
 // AUX_TDC_PRE event becomes 0 when you reset the prescaler.
-#define AUX_TDC_PRECTL_RESET_N                                      0x00000080
-#define AUX_TDC_PRECTL_RESET_N_BITN                                          7
-#define AUX_TDC_PRECTL_RESET_N_M                                    0x00000080
-#define AUX_TDC_PRECTL_RESET_N_S                                             7
+#define AUX_TDC_PRECTL_RESET_N 0x00000080
+#define AUX_TDC_PRECTL_RESET_N_BITN 7
+#define AUX_TDC_PRECTL_RESET_N_M 0x00000080
+#define AUX_TDC_PRECTL_RESET_N_S 7
 
 // Field:     [6] RATIO
 //
@@ -576,12 +576,12 @@
 //                          rising edge for every 16 rising edges of the
 //                          input. AUX_TDC_PRE event toggles on every 8th
 //                          rising edge of the input.
-#define AUX_TDC_PRECTL_RATIO                                        0x00000040
-#define AUX_TDC_PRECTL_RATIO_BITN                                            6
-#define AUX_TDC_PRECTL_RATIO_M                                      0x00000040
-#define AUX_TDC_PRECTL_RATIO_S                                               6
-#define AUX_TDC_PRECTL_RATIO_DIV64                                  0x00000040
-#define AUX_TDC_PRECTL_RATIO_DIV16                                  0x00000000
+#define AUX_TDC_PRECTL_RATIO 0x00000040
+#define AUX_TDC_PRECTL_RATIO_BITN 6
+#define AUX_TDC_PRECTL_RATIO_M 0x00000040
+#define AUX_TDC_PRECTL_RATIO_S 6
+#define AUX_TDC_PRECTL_RATIO_DIV64 0x00000040
+#define AUX_TDC_PRECTL_RATIO_DIV16 0x00000000
 
 // Field:   [4:0] SRC
 //
@@ -624,41 +624,41 @@
 // AUX_COMPB                AUX_EVCTL:EVSTAT0.AUX_COMPB
 // AUX_COMPA                AUX_EVCTL:EVSTAT0.AUX_COMPA
 // AON_RTC_CH2              AUX_EVCTL:EVSTAT0.AON_RTC_CH2
-#define AUX_TDC_PRECTL_SRC_W                                                 5
-#define AUX_TDC_PRECTL_SRC_M                                        0x0000001F
-#define AUX_TDC_PRECTL_SRC_S                                                 0
-#define AUX_TDC_PRECTL_SRC_ADC_IRQ                                  0x0000001F
-#define AUX_TDC_PRECTL_SRC_MCU_EV                                   0x0000001E
-#define AUX_TDC_PRECTL_SRC_ACLK_REF                                 0x0000001D
-#define AUX_TDC_PRECTL_SRC_AUXIO15                                  0x0000001C
-#define AUX_TDC_PRECTL_SRC_AUXIO14                                  0x0000001B
-#define AUX_TDC_PRECTL_SRC_AUXIO13                                  0x0000001A
-#define AUX_TDC_PRECTL_SRC_AUXIO12                                  0x00000019
-#define AUX_TDC_PRECTL_SRC_AUXIO11                                  0x00000018
-#define AUX_TDC_PRECTL_SRC_AUXIO10                                  0x00000017
-#define AUX_TDC_PRECTL_SRC_AUXIO9                                   0x00000016
-#define AUX_TDC_PRECTL_SRC_AUXIO8                                   0x00000015
-#define AUX_TDC_PRECTL_SRC_AUXIO7                                   0x00000014
-#define AUX_TDC_PRECTL_SRC_AUXIO6                                   0x00000013
-#define AUX_TDC_PRECTL_SRC_AUXIO5                                   0x00000012
-#define AUX_TDC_PRECTL_SRC_AUXIO4                                   0x00000011
-#define AUX_TDC_PRECTL_SRC_AUXIO3                                   0x00000010
-#define AUX_TDC_PRECTL_SRC_AUXIO2                                   0x0000000F
-#define AUX_TDC_PRECTL_SRC_AUXIO1                                   0x0000000E
-#define AUX_TDC_PRECTL_SRC_AUXIO0                                   0x0000000D
-#define AUX_TDC_PRECTL_SRC_AON_PROG_WU                              0x0000000C
-#define AUX_TDC_PRECTL_SRC_AON_SW                                   0x0000000B
-#define AUX_TDC_PRECTL_SRC_OBSMUX1                                  0x0000000A
-#define AUX_TDC_PRECTL_SRC_OBSMUX0                                  0x00000009
-#define AUX_TDC_PRECTL_SRC_ADC_FIFO_ALMOST_FULL                     0x00000008
-#define AUX_TDC_PRECTL_SRC_ADC_DONE                                 0x00000007
-#define AUX_TDC_PRECTL_SRC_SMPH_AUTOTAKE_DONE                       0x00000006
-#define AUX_TDC_PRECTL_SRC_TIMER1_EV                                0x00000005
-#define AUX_TDC_PRECTL_SRC_TIMER0_EV                                0x00000004
-#define AUX_TDC_PRECTL_SRC_ISRC_RESET                               0x00000003
-#define AUX_TDC_PRECTL_SRC_AUX_COMPB                                0x00000002
-#define AUX_TDC_PRECTL_SRC_AUX_COMPA                                0x00000001
-#define AUX_TDC_PRECTL_SRC_AON_RTC_CH2                              0x00000000
+#define AUX_TDC_PRECTL_SRC_W 5
+#define AUX_TDC_PRECTL_SRC_M 0x0000001F
+#define AUX_TDC_PRECTL_SRC_S 0
+#define AUX_TDC_PRECTL_SRC_ADC_IRQ 0x0000001F
+#define AUX_TDC_PRECTL_SRC_MCU_EV 0x0000001E
+#define AUX_TDC_PRECTL_SRC_ACLK_REF 0x0000001D
+#define AUX_TDC_PRECTL_SRC_AUXIO15 0x0000001C
+#define AUX_TDC_PRECTL_SRC_AUXIO14 0x0000001B
+#define AUX_TDC_PRECTL_SRC_AUXIO13 0x0000001A
+#define AUX_TDC_PRECTL_SRC_AUXIO12 0x00000019
+#define AUX_TDC_PRECTL_SRC_AUXIO11 0x00000018
+#define AUX_TDC_PRECTL_SRC_AUXIO10 0x00000017
+#define AUX_TDC_PRECTL_SRC_AUXIO9 0x00000016
+#define AUX_TDC_PRECTL_SRC_AUXIO8 0x00000015
+#define AUX_TDC_PRECTL_SRC_AUXIO7 0x00000014
+#define AUX_TDC_PRECTL_SRC_AUXIO6 0x00000013
+#define AUX_TDC_PRECTL_SRC_AUXIO5 0x00000012
+#define AUX_TDC_PRECTL_SRC_AUXIO4 0x00000011
+#define AUX_TDC_PRECTL_SRC_AUXIO3 0x00000010
+#define AUX_TDC_PRECTL_SRC_AUXIO2 0x0000000F
+#define AUX_TDC_PRECTL_SRC_AUXIO1 0x0000000E
+#define AUX_TDC_PRECTL_SRC_AUXIO0 0x0000000D
+#define AUX_TDC_PRECTL_SRC_AON_PROG_WU 0x0000000C
+#define AUX_TDC_PRECTL_SRC_AON_SW 0x0000000B
+#define AUX_TDC_PRECTL_SRC_OBSMUX1 0x0000000A
+#define AUX_TDC_PRECTL_SRC_OBSMUX0 0x00000009
+#define AUX_TDC_PRECTL_SRC_ADC_FIFO_ALMOST_FULL 0x00000008
+#define AUX_TDC_PRECTL_SRC_ADC_DONE 0x00000007
+#define AUX_TDC_PRECTL_SRC_SMPH_AUTOTAKE_DONE 0x00000006
+#define AUX_TDC_PRECTL_SRC_TIMER1_EV 0x00000005
+#define AUX_TDC_PRECTL_SRC_TIMER0_EV 0x00000004
+#define AUX_TDC_PRECTL_SRC_ISRC_RESET 0x00000003
+#define AUX_TDC_PRECTL_SRC_AUX_COMPB 0x00000002
+#define AUX_TDC_PRECTL_SRC_AUX_COMPA 0x00000001
+#define AUX_TDC_PRECTL_SRC_AON_RTC_CH2 0x00000000
 
 //*****************************************************************************
 //
@@ -686,9 +686,8 @@
 // - The prescaler counter is reset to 2 by PRECTL.RESET_N.
 // - The captured value is 2 when the number of rising edges on prescaler input
 // is less than 3. Otherwise, captured value equals number of event pulses - 1.
-#define AUX_TDC_PRECNT_CNT_W                                                16
-#define AUX_TDC_PRECNT_CNT_M                                        0x0000FFFF
-#define AUX_TDC_PRECNT_CNT_S                                                 0
-
+#define AUX_TDC_PRECNT_CNT_W 16
+#define AUX_TDC_PRECNT_CNT_M 0x0000FFFF
+#define AUX_TDC_PRECNT_CNT_S 0
 
 #endif // __AUX_TDC__

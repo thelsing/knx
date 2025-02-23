@@ -1,6 +1,5 @@
 #include "bau.h"
 
-
 namespace Knx
 {
 
@@ -73,7 +72,7 @@ namespace Knx
     }
 
     void BusAccessUnit::individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint16_t newIndividualAddress,
-            uint8_t* knxSerialNumber)
+                                                                     uint8_t* knxSerialNumber)
     {
     }
 
@@ -86,7 +85,7 @@ namespace Knx
     }
 
     void BusAccessUnit::deviceDescriptorReadResponseConfirm(AckType ack, Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t descriptor_type,
-            uint8_t* device_descriptor, bool status)
+                                                            uint8_t* device_descriptor, bool status)
     {
     }
 
@@ -111,7 +110,7 @@ namespace Knx
     }
 
     void BusAccessUnit::propertyValueExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ObjectType objectType, uint8_t objectInstance,
-            uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
+                                                       uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex)
     {
     }
 
@@ -164,7 +163,7 @@ namespace Knx
     }
 
     void BusAccessUnit::propertyExtDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
-            uint16_t objectType, uint16_t objectInstance, uint16_t propertyId, uint8_t descriptionType, uint16_t propertyIndex)
+                                                             uint16_t objectType, uint16_t objectInstance, uint16_t propertyId, uint8_t descriptionType, uint16_t propertyIndex)
     {
     }
 
@@ -329,12 +328,12 @@ namespace Knx
     }
 
     void BusAccessUnit::systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint16_t objectType,
-            uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
+                                                             uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength)
     {
     }
 
     void BusAccessUnit::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, const uint8_t* rfDoA,
-            const uint8_t* knxSerialNumber)
+                                                                 const uint8_t* knxSerialNumber)
     {
     }
 
@@ -343,12 +342,12 @@ namespace Knx
     }
 
     void BusAccessUnit::systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint16_t objectType,
-            uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status)
+                                                               uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status)
     {
     }
 
     void BusAccessUnit::domainAddressSerialNumberWriteLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, const uint8_t* rfDoA,
-            const uint8_t* knxSerialNumber, bool status)
+                                                                   const uint8_t* knxSerialNumber, bool status)
     {
     }
 
@@ -394,4 +393,4 @@ namespace Knx
     {
         return 0;
     }
-}
+} // namespace Knx

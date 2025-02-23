@@ -3,7 +3,8 @@
 
 namespace Knx
 {
-    KnxIpConfigDIB::KnxIpConfigDIB(uint8_t* data, bool isCurrent) : KnxIpDIB(data)
+    KnxIpConfigDIB::KnxIpConfigDIB(uint8_t* data, bool isCurrent)
+        : KnxIpDIB(data)
     {
         _isCurrent = isCurrent;
     }
@@ -93,4 +94,4 @@ namespace Knx
         else
             _data[19] = addr;
     }
-}
+} // namespace Knx

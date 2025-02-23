@@ -2,8 +2,8 @@
 
 #include "../bits.h"
 
-#include <cstring>
 #include <cstdlib>
+#include <cstring>
 
 namespace Knx
 {
@@ -189,7 +189,7 @@ namespace Knx
 
                 free(_eraseblockBuffer);
                 _eraseblockBuffer = nullptr;
-                _bufferedEraseblockNumber = -1;  // does that make sense?
+                _bufferedEraseblockNumber = -1; // does that make sense?
             }
         }
 
@@ -219,7 +219,7 @@ namespace Knx
             {
                 loadEraseblockContaining(relativeAddress);
                 uint32_t start = _bufferedEraseblockNumber * (flashEraseBlockSize() * flashPageSize());
-                uint32_t end = start +  (flashEraseBlockSize() * flashPageSize());
+                uint32_t end = start + (flashEraseBlockSize() * flashPageSize());
 
                 uint32_t offset = relativeAddress - start;
                 uint32_t length = end - relativeAddress;
@@ -337,7 +337,7 @@ namespace Knx
             {
                 loadEraseblockContaining(relativeAddress);
                 uint32_t start = _bufferedEraseblockNumber * (flashEraseBlockSize() * flashPageSize());
-                uint32_t end = start +  (flashEraseBlockSize() * flashPageSize());
+                uint32_t end = start + (flashEraseBlockSize() * flashPageSize());
 
                 uint32_t offset = relativeAddress - start;
                 uint32_t length = end - relativeAddress;
@@ -382,7 +382,6 @@ namespace Knx
         return relativeAddress / (flashEraseBlockSize() * flashPageSize());
     }
 
-
     void Platform::writeBufferedEraseBlock()
     {
         if (_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
@@ -400,7 +399,6 @@ namespace Knx
         }
     }
 
-
     void Platform::bufferEraseBlock(int32_t eraseBlockNumber)
     {
         if (_bufferedEraseblockNumber == eraseBlockNumber)
@@ -416,7 +414,6 @@ namespace Knx
         _bufferedEraseblockNumber = eraseBlockNumber;
         _bufferedEraseblockDirty = false;
     }
-
 
 #ifdef KNX_FLASH_CALLBACK
     void Platform::registerFlashCallbacks(
@@ -451,4 +448,4 @@ namespace Knx
         return _callbackFlashCommit;
     }
 #endif
-}
+} // namespace Knx

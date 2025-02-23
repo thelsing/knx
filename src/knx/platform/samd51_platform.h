@@ -1,10 +1,10 @@
-#include <Arduino.h>
 #include "arduino_platform.h"
+#include <Arduino.h>
 
 #ifdef __SAMD51__
-#include <SPI.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>
+#include <SPI.h>
 
 namespace Knx
 {
@@ -12,7 +12,7 @@ namespace Knx
     {
         public:
             Samd51Platform();
-            Samd51Platform( HardwareSerial* s);
+            Samd51Platform(HardwareSerial* s);
 
             // unique serial number
             uint32_t uniqueSerialNumber() override;
@@ -26,7 +26,7 @@ namespace Knx
             uint32_t currentDefaultGateway() override;
             void macAddress(uint8_t* data) override;
 
-            //multicast
+            // multicast
             void setupMultiCast(uint32_t addr, uint16_t port) override;
             void closeMultiCast() override;
             bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
@@ -75,5 +75,5 @@ namespace Knx
             EthernetUDP _udp;
 #endif
     };
-}
+} // namespace Knx
 #endif

@@ -25,4 +25,4 @@ namespace Knx
     {
         _data[LEN_KNXIP_HEADER] = channelId;
     }
-}
+} // namespace Knx

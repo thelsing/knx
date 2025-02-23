@@ -125,7 +125,8 @@ namespace Knx
         if (prop == nullptr)
         {
             resultLength = 0;
-            return;;
+            return;
+            ;
         }
 
         prop->command(data, length, resultData, resultLength);
@@ -138,7 +139,8 @@ namespace Knx
         if (prop == nullptr)
         {
             resultLength = 0;
-            return;;
+            return;
+            ;
         }
 
         prop->state(data, length, resultData, resultLength);
@@ -151,7 +153,6 @@ namespace Knx
         memcpy(_properties, properties, propertiesSize);
     }
 
-
     Property* InterfaceObject::property(PropertyID id)
     {
         for (int i = 0; i < _propertyCount; i++)
@@ -160,7 +161,6 @@ namespace Knx
 
         return nullptr;
     }
-
 
     uint8_t* InterfaceObject::save(uint8_t* buffer)
     {
@@ -177,7 +177,6 @@ namespace Knx
         return buffer;
     }
 
-
     const uint8_t* InterfaceObject::restore(const uint8_t* buffer)
     {
         for (int i = 0; i < _propertyCount; i++)
@@ -192,7 +191,6 @@ namespace Knx
 
         return buffer;
     }
-
 
     uint16_t InterfaceObject::saveSize()
     {
@@ -211,7 +209,6 @@ namespace Knx
         return size;
     }
 
-
     const Property* InterfaceObject::property(PropertyID id) const
     {
         for (int i = 0; i < _propertyCount; i++)
@@ -220,7 +217,6 @@ namespace Knx
 
         return nullptr;
     }
-
 
     const uint8_t* InterfaceObject::propertyData(PropertyID id)
     {
@@ -233,4 +229,4 @@ namespace Knx
         DataProperty* prop = (DataProperty*)property(id);
         return prop->data(elementIndex);
     }
-}
+} // namespace Knx

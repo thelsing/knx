@@ -8,6 +8,7 @@ namespace Knx
     {
         public:
             KnxIpStateResponse(uint8_t channelId, uint8_t errorCode);
+
         private:
     };
-}
+} // namespace Knx

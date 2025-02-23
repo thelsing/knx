@@ -227,7 +227,7 @@ extern "C" {
  * #define SHA2XYZ_STATUS_ERROR2    SHA2_STATUS_RESERVED - 2
  * @endcode
  */
-#define SHA2_STATUS_RESERVED        (-32)
+#define SHA2_STATUS_RESERVED (-32)
 
 /*!
  * @brief   Successful status code.
@@ -235,7 +235,7 @@ extern "C" {
  * Functions return SHA2_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define SHA2_STATUS_SUCCESS         (0)
+#define SHA2_STATUS_SUCCESS (0)
 
 /*!
  * @brief   Generic error status code.
@@ -243,7 +243,7 @@ extern "C" {
  * Functions return SHA2_STATUS_ERROR if the function was not executed
  * successfully and no more specific error is applicable.
  */
-#define SHA2_STATUS_ERROR           (-1)
+#define SHA2_STATUS_ERROR (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -283,20 +283,20 @@ extern "C" {
  */
 typedef enum
 {
-    SHA2_RETURN_BEHAVIOR_CALLBACK = 1,      /*!< The function call will return immediately while the
-                                             *   SHA2 operation goes on in the background. The registered
-                                             *   callback function is called after the operation completes.
-                                             *   The context the callback function is called (task, HWI, SWI)
-                                             *   is implementation-dependent.
-                                             */
-    SHA2_RETURN_BEHAVIOR_BLOCKING = 2,      /*!< The function call will block while the SHA2 operation goes
-                                             *   on in the background. SHA2 operation results are available
-                                             *   after the function returns.
-                                             */
-    SHA2_RETURN_BEHAVIOR_POLLING  = 4,      /*!< The function call will continuously poll a flag while the SHA2
-                                             *   operation goes on in the background. SHA2 operation results
-                                             *   are available after the function returns.
-                                             */
+    SHA2_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
+                                        *   SHA2 operation goes on in the background. The registered
+                                        *   callback function is called after the operation completes.
+                                        *   The context the callback function is called (task, HWI, SWI)
+                                        *   is implementation-dependent.
+                                        */
+    SHA2_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while the SHA2 operation goes
+                                        *   on in the background. SHA2 operation results are available
+                                        *   after the function returns.
+                                        */
+    SHA2_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while the SHA2
+                                        *   operation goes on in the background. SHA2 operation results
+                                        *   are available after the function returns.
+                                        */
 } SHA2_ReturnBehavior;
 
 /*!
@@ -355,11 +355,11 @@ typedef enum
  */
 typedef struct SHA2_Config
 {
-    /*! Pointer to a driver specific data object */
-    void*               object;
+        /*! Pointer to a driver specific data object */
+        void* object;
 
-    /*! Pointer to a driver specific hardware attributes structure */
-    void         const* hwAttrs;
+        /*! Pointer to a driver specific hardware attributes structure */
+        void const* hwAttrs;
 } SHA2_Config;
 
 /*!
@@ -377,7 +377,7 @@ typedef SHA2_Config* SHA2_Handle;
  *                       Informs the application of why the callback function was
  *                       called.
  */
-typedef void (*SHA2_CallbackFxn) (SHA2_Handle handle, int_fast16_t returnStatus);
+typedef void (*SHA2_CallbackFxn)(SHA2_Handle handle, int_fast16_t returnStatus);
 
 /*!
  *  @brief  SHA2 Parameters
@@ -389,14 +389,14 @@ typedef void (*SHA2_CallbackFxn) (SHA2_Handle handle, int_fast16_t returnStatus)
  */
 typedef struct
 {
-    SHA2_HashType           hashType;                   /*!< SHA2 variant to use. This determines the output digest
-                                                         *   length.
-                                                         */
-    SHA2_ReturnBehavior     returnBehavior;             /*!< Blocking, callback, or polling return behavior */
-    SHA2_CallbackFxn        callbackFxn;                /*!< Callback function pointer */
-    uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
-                                                         *   ::SHA2_RETURN_BEHAVIOR_BLOCKING
-                                                         */
+        SHA2_HashType hashType;             /*!< SHA2 variant to use. This determines the output digest
+                                             *   length.
+                                             */
+        SHA2_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
+        SHA2_CallbackFxn callbackFxn;       /*!< Callback function pointer */
+        uint32_t timeout;                   /*!< Timeout before the driver returns an error in
+                                             *   ::SHA2_RETURN_BEHAVIOR_BLOCKING
+                                             */
 } SHA2_Params;
 
 /*!
@@ -424,7 +424,6 @@ extern const uint_least8_t SHA2_count;
  *  @sa     #SHA2_Params_init()
  */
 extern const SHA2_Params SHA2_defaultParams;
-
 
 /*!
  *  @brief  Initializes the SHA2 driver module.
@@ -609,7 +608,6 @@ int_fast16_t SHA2_cancelOperation(SHA2_Handle handle);
  *  @retval #SHA2_STATUS_ERROR                 Error. Platform may not support this hash type.
  */
 int_fast16_t SHA2_setHashType(SHA2_Handle handle, SHA2_HashType type);
-
 
 #ifdef __cplusplus
 }

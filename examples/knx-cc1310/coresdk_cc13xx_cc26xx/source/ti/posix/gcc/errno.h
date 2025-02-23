@@ -39,7 +39,7 @@
 
 /* compiler vendor check */
 #ifndef __GNUC__
-    #error Incompatible compiler: use this include path (.../ti/posix/gcc) only with a GNU compiler. You appear to be using a different compiler.
+#error Incompatible compiler: use this include path (.../ti/posix/gcc) only with a GNU compiler. You appear to be using a different compiler.
 #endif
 
 /* include toolchain's header file */
@@ -50,7 +50,7 @@ extern "C" {
 #endif
 
 /* custom error codes */
-#define EFREERTOS    2001       /* FreeRTOS function failure */
+#define EFREERTOS 2001 /* FreeRTOS function failure */
 
 #ifdef __cplusplus
 }

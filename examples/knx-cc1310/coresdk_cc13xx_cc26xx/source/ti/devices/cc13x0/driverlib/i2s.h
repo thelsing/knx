@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       i2s.h
-*  Revised:        2018-11-16 11:16:53 +0100 (Fri, 16 Nov 2018)
-*  Revision:       53356
-*
-*  Description:    Defines and prototypes for the I2S.
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       i2s.h
+ *  Revised:        2018-11-16 11:16:53 +0100 (Fri, 16 Nov 2018)
+ *  Revision:       53356
+ *
+ *  Description:    Defines and prototypes for the I2S.
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //****************************************************************************
 //
@@ -55,18 +55,17 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-#include <stdbool.h>
-#include <stdint.h>
-#include "../inc/hw_types.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_ints.h"
 #include "../inc/hw_i2s.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
 #include "debug.h"
 #include "interrupt.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 //*****************************************************************************
 //
@@ -82,14 +81,14 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define I2SEnable                       NOROM_I2SEnable
-#define I2SAudioFormatConfigure         NOROM_I2SAudioFormatConfigure
-#define I2SChannelConfigure             NOROM_I2SChannelConfigure
-#define I2SBufferConfig                 NOROM_I2SBufferConfig
-#define I2SPointerUpdate                NOROM_I2SPointerUpdate
-#define I2SPointerSet                   NOROM_I2SPointerSet
-#define I2SSampleStampConfigure         NOROM_I2SSampleStampConfigure
-#define I2SSampleStampGet               NOROM_I2SSampleStampGet
+#define I2SEnable NOROM_I2SEnable
+#define I2SAudioFormatConfigure NOROM_I2SAudioFormatConfigure
+#define I2SChannelConfigure NOROM_I2SChannelConfigure
+#define I2SBufferConfig NOROM_I2SBufferConfig
+#define I2SPointerUpdate NOROM_I2SPointerUpdate
+#define I2SPointerSet NOROM_I2SPointerSet
+#define I2SSampleStampConfigure NOROM_I2SSampleStampConfigure
+#define I2SSampleStampGet NOROM_I2SSampleStampGet
 #endif
 
 //*****************************************************************************
@@ -118,15 +117,15 @@ extern "C"
 #ifndef DEPRECATED
 typedef struct
 {
-    uint16_t ui16DMABufSize;        //!< Size of DMA buffer in number of samples.
-    uint16_t ui16ChBufSize;         //!< Size of Channel buffer.
-    uint8_t ui8InChan;              //!< Input Channel.
-    uint8_t ui8OutChan;             //!< Output Channel.
-    uint16_t ui16MemLen;            //!< Length of the audio words stored in memory.
-    uint32_t ui32InBase;            //!< Base address of the input buffer.
-    uint32_t ui32InOffset;          //!< Value of the current input pointer offset.
-    uint32_t ui32OutBase;           //!< Base address of the output buffer.
-    uint32_t ui32OutOffset;         //!< Value of the current output pointer offset.
+        uint16_t ui16DMABufSize; //!< Size of DMA buffer in number of samples.
+        uint16_t ui16ChBufSize;  //!< Size of Channel buffer.
+        uint8_t ui8InChan;       //!< Input Channel.
+        uint8_t ui8OutChan;      //!< Output Channel.
+        uint16_t ui16MemLen;     //!< Length of the audio words stored in memory.
+        uint32_t ui32InBase;     //!< Base address of the input buffer.
+        uint32_t ui32InOffset;   //!< Value of the current input pointer offset.
+        uint32_t ui32OutBase;    //!< Base address of the output buffer.
+        uint32_t ui32OutOffset;  //!< Value of the current output pointer offset.
 } I2SControlTable;
 #endif
 
@@ -151,9 +150,9 @@ extern I2SControlTable* g_pControlTable;
 //
 //*****************************************************************************
 #ifndef DEPRECATED
-#define I2S_DMA_BUF_SIZE_64     0x00000040
-#define I2S_DMA_BUF_SIZE_128    0x00000080
-#define I2S_DMA_BUF_SIZE_256    0x00000100
+#define I2S_DMA_BUF_SIZE_64 0x00000040
+#define I2S_DMA_BUF_SIZE_128 0x00000080
+#define I2S_DMA_BUF_SIZE_256 0x00000100
 #endif
 
 //*****************************************************************************
@@ -162,10 +161,10 @@ extern I2SControlTable* g_pControlTable;
 //
 //*****************************************************************************
 #ifndef DEPRECATED
-#define I2S_EXT_WCLK            0x00000001
-#define I2S_INT_WCLK            0x00000002
-#define I2S_INVERT_WCLK         0x00000004
-#define I2S_NORMAL_WCLK         0x00000000
+#define I2S_EXT_WCLK 0x00000001
+#define I2S_INT_WCLK 0x00000002
+#define I2S_INVERT_WCLK 0x00000004
+#define I2S_NORMAL_WCLK 0x00000000
 #endif
 
 //*****************************************************************************
@@ -174,10 +173,10 @@ extern I2SControlTable* g_pControlTable;
 //
 //*****************************************************************************
 #ifndef DEPRECATED
-#define I2S_LINE_UNUSED         0x00000000
-#define I2S_LINE_INPUT          0x00000001
-#define I2S_LINE_OUTPUT         0x00000002
-#define I2S_LINE_MASK           0x00000003
+#define I2S_LINE_UNUSED 0x00000000
+#define I2S_LINE_INPUT 0x00000001
+#define I2S_LINE_OUTPUT 0x00000002
+#define I2S_LINE_MASK 0x00000003
 #endif
 
 //*****************************************************************************
@@ -186,42 +185,42 @@ extern I2SControlTable* g_pControlTable;
 //
 //*****************************************************************************
 #ifndef DEPRECATED
-#define I2S_CHAN0_ACT           0x00000100
-#define I2S_CHAN1_ACT           0x00000200
-#define I2S_CHAN2_ACT           0x00000400
-#define I2S_CHAN3_ACT           0x00000800
-#define I2S_CHAN4_ACT           0x00001000
-#define I2S_CHAN5_ACT           0x00002000
-#define I2S_CHAN6_ACT           0x00004000
-#define I2S_CHAN7_ACT           0x00008000
-#define I2S_MONO_MODE           0x00000100
-#define I2S_STEREO_MODE         0x00000300
-#define I2S_CHAN_CFG_MASK       0x0000FF00
+#define I2S_CHAN0_ACT 0x00000100
+#define I2S_CHAN1_ACT 0x00000200
+#define I2S_CHAN2_ACT 0x00000400
+#define I2S_CHAN3_ACT 0x00000800
+#define I2S_CHAN4_ACT 0x00001000
+#define I2S_CHAN5_ACT 0x00002000
+#define I2S_CHAN6_ACT 0x00004000
+#define I2S_CHAN7_ACT 0x00008000
+#define I2S_MONO_MODE 0x00000100
+#define I2S_STEREO_MODE 0x00000300
+#define I2S_CHAN_CFG_MASK 0x0000FF00
 #endif
 
-#define I2S_CHAN0_MASK          0x00000001
-#define I2S_CHAN1_MASK          0x00000002
-#define I2S_CHAN2_MASK          0x00000004
-#define I2S_CHAN3_MASK          0x00000008
-#define I2S_CHAN4_MASK          0x00000010
-#define I2S_CHAN5_MASK          0x00000020
-#define I2S_CHAN6_MASK          0x00000040
-#define I2S_CHAN7_MASK          0x00000080
+#define I2S_CHAN0_MASK 0x00000001
+#define I2S_CHAN1_MASK 0x00000002
+#define I2S_CHAN2_MASK 0x00000004
+#define I2S_CHAN3_MASK 0x00000008
+#define I2S_CHAN4_MASK 0x00000010
+#define I2S_CHAN5_MASK 0x00000020
+#define I2S_CHAN6_MASK 0x00000040
+#define I2S_CHAN7_MASK 0x00000080
 
 //*****************************************************************************
 //
 // Defines for the audio format configuration
 //
 //*****************************************************************************
-#define I2S_MEM_LENGTH_16       0x00000000  // 16 bit size of word in memory
-#define I2S_MEM_LENGTH_24       0x00000080  // 24 bit size of word in memory
-#define I2S_POS_EDGE            0x00000040  // Sample on positive edge
-#define I2S_NEG_EDGE            0x00000000  // Sample on negative edge
-#define I2S_DUAL_PHASE_FMT      0x00000020  // Dual Phased audio format
-#define I2S_SINGLE_PHASE_FMT    0x00000000  // Single Phased audio format
-#define I2S_WORD_LENGTH_8       0x00000008  // Word length is 8 bits
-#define I2S_WORD_LENGTH_16      0x00000010  // Word length is 16 bits
-#define I2S_WORD_LENGTH_24      0x00000018  // Word length is 24 bits
+#define I2S_MEM_LENGTH_16 0x00000000    // 16 bit size of word in memory
+#define I2S_MEM_LENGTH_24 0x00000080    // 24 bit size of word in memory
+#define I2S_POS_EDGE 0x00000040         // Sample on positive edge
+#define I2S_NEG_EDGE 0x00000000         // Sample on negative edge
+#define I2S_DUAL_PHASE_FMT 0x00000020   // Dual Phased audio format
+#define I2S_SINGLE_PHASE_FMT 0x00000000 // Single Phased audio format
+#define I2S_WORD_LENGTH_8 0x00000008    // Word length is 8 bits
+#define I2S_WORD_LENGTH_16 0x00000010   // Word length is 16 bits
+#define I2S_WORD_LENGTH_24 0x00000018   // Word length is 24 bits
 
 //*****************************************************************************
 //
@@ -229,10 +228,10 @@ extern I2SControlTable* g_pControlTable;
 //
 //*****************************************************************************
 #ifndef DEPRECATED
-#define I2S_STMP0               0x00000001  // Sample stamp counter channel 0
-#define I2S_STMP1               0x00000002  // Sample stamp counter channel 1
+#define I2S_STMP0 0x00000001 // Sample stamp counter channel 0
+#define I2S_STMP1 0x00000002 // Sample stamp counter channel 1
 #endif
-#define I2S_STMP_SATURATION     0x0000FFFF  // The saturation value used when
+#define I2S_STMP_SATURATION 0x0000FFFF // The saturation value used when
 // calculating the sample stamp
 
 //*****************************************************************************
@@ -240,13 +239,13 @@ extern I2SControlTable* g_pControlTable;
 // Defines for the interrupt
 //
 //*****************************************************************************
-#define I2S_INT_DMA_IN          0x00000020  // DMA output buffer full interrupt
-#define I2S_INT_DMA_OUT         0x00000010  // DMA input buffer empty interrupt
-#define I2S_INT_TIMEOUT         0x00000008  // Word Clock Timeout
-#define I2S_INT_BUS_ERR         0x00000004  // DMA Bus error
-#define I2S_INT_WCLK_ERR        0x00000002  // Word Clock error
-#define I2S_INT_PTR_ERR         0x00000001  // Data pointer error (DMA data was not updated in time).
-#define I2S_INT_ALL             0x0000003F  // All interrupts
+#define I2S_INT_DMA_IN 0x00000020   // DMA output buffer full interrupt
+#define I2S_INT_DMA_OUT 0x00000010  // DMA input buffer empty interrupt
+#define I2S_INT_TIMEOUT 0x00000008  // Word Clock Timeout
+#define I2S_INT_BUS_ERR 0x00000004  // DMA Bus error
+#define I2S_INT_WCLK_ERR 0x00000002 // Word Clock error
+#define I2S_INT_PTR_ERR 0x00000001  // Data pointer error (DMA data was not updated in time).
+#define I2S_INT_ALL 0x0000003F      // All interrupts
 
 //*****************************************************************************
 //
@@ -842,7 +841,6 @@ I2SSampleStampDisable(uint32_t ui32Base)
 
     // Clear the enable bit.
     HWREG(I2S0_BASE + I2S_O_STMPCTL) = 0;
-
 }
 
 //*****************************************************************************
@@ -955,11 +953,11 @@ __STATIC_INLINE void I2SStop(uint32_t ui32Base)
 //*****************************************************************************
 __STATIC_INLINE void
 I2SFormatConfigure(uint32_t ui32Base,
-                   uint8_t  ui8iDataDelay,
-                   uint8_t  ui8iMemory24Bits,
-                   uint8_t  ui8iSamplingEdge,
-                   bool     boolDualPhase,
-                   uint8_t  ui8BitsPerSample,
+                   uint8_t ui8iDataDelay,
+                   uint8_t ui8iMemory24Bits,
+                   uint8_t ui8iSamplingEdge,
+                   bool boolDualPhase,
+                   uint8_t ui8BitsPerSample,
                    uint16_t ui16transmissionDelay)
 {
     // Check the arguments.
@@ -969,11 +967,11 @@ I2SFormatConfigure(uint32_t ui32Base,
 
     // Setup register AIFFMTCFG Source.
     HWREGH(I2S0_BASE + I2S_O_AIFFMTCFG) =
-        (ui8iDataDelay      << I2S_AIFFMTCFG_DATA_DELAY_S) |
-        (ui8iMemory24Bits   << I2S_AIFFMTCFG_MEM_LEN_24_S) |
-        (ui8iSamplingEdge   << I2S_AIFFMTCFG_SMPL_EDGE_S ) |
-        (boolDualPhase      << I2S_AIFFMTCFG_DUAL_PHASE_S) |
-        (ui8BitsPerSample   << I2S_AIFFMTCFG_WORD_LEN_S  );
+        (ui8iDataDelay << I2S_AIFFMTCFG_DATA_DELAY_S) |
+        (ui8iMemory24Bits << I2S_AIFFMTCFG_MEM_LEN_24_S) |
+        (ui8iSamplingEdge << I2S_AIFFMTCFG_SMPL_EDGE_S) |
+        (boolDualPhase << I2S_AIFFMTCFG_DUAL_PHASE_S) |
+        (ui8BitsPerSample << I2S_AIFFMTCFG_WORD_LEN_S);
 
     // Number of WCLK periods before the first read / write
     HWREGH(I2S0_BASE + I2S_O_STMPWPER) = ui16transmissionDelay;
@@ -1022,8 +1020,8 @@ I2SFormatConfigure(uint32_t ui32Base,
 //****************************************************************************
 __STATIC_INLINE void
 I2SFrameConfigure(uint32_t ui32Base,
-                  uint8_t  ui8StatusAD0, uint8_t  ui8ChanAD0,
-                  uint8_t  ui8StatusAD1, uint8_t  ui8ChanAD1)
+                  uint8_t ui8StatusAD0, uint8_t ui8ChanAD0,
+                  uint8_t ui8StatusAD1, uint8_t ui8ChanAD1)
 {
     // Check the arguments.
     ASSERT(I2SBaseValid(ui32Base));
@@ -1058,8 +1056,8 @@ I2SFrameConfigure(uint32_t ui32Base,
 //****************************************************************************
 __STATIC_INLINE void
 I2SWclkConfigure(uint32_t ui32Base,
-                 bool     boolMaster,
-                 bool     boolWCLKInvert)
+                 bool boolMaster,
+                 bool boolWCLKInvert)
 {
     // Check the arguments.
     ASSERT(I2SBaseValid(ui32Base));
@@ -1071,8 +1069,8 @@ I2SWclkConfigure(uint32_t ui32Base,
 
     // Setup register WCLK Source.
     HWREGB(I2S0_BASE + I2S_O_AIFWCLKSRC) =
-        ((ui8ClkSource       << I2S_AIFWCLKSRC_WCLK_SRC_S) |
-         (boolWCLKInvert     << I2S_AIFWCLKSRC_WCLK_INV_S ));
+        ((ui8ClkSource << I2S_AIFWCLKSRC_WCLK_SRC_S) |
+         (boolWCLKInvert << I2S_AIFWCLKSRC_WCLK_INV_S));
 }
 
 //****************************************************************************
@@ -1150,7 +1148,6 @@ I2SInPointerNextGet(uint32_t ui32Base)
 
     return (HWREG(I2S0_BASE + I2S_O_AIFINPTRNEXT));
 }
-
 
 //****************************************************************************
 //
@@ -1306,36 +1303,36 @@ I2SWclkCounterReset(uint32_t ui32Base)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_I2SEnable
-#undef  I2SEnable
-#define I2SEnable                       ROM_I2SEnable
+#undef I2SEnable
+#define I2SEnable ROM_I2SEnable
 #endif
 #ifdef ROM_I2SAudioFormatConfigure
-#undef  I2SAudioFormatConfigure
-#define I2SAudioFormatConfigure         ROM_I2SAudioFormatConfigure
+#undef I2SAudioFormatConfigure
+#define I2SAudioFormatConfigure ROM_I2SAudioFormatConfigure
 #endif
 #ifdef ROM_I2SChannelConfigure
-#undef  I2SChannelConfigure
-#define I2SChannelConfigure             ROM_I2SChannelConfigure
+#undef I2SChannelConfigure
+#define I2SChannelConfigure ROM_I2SChannelConfigure
 #endif
 #ifdef ROM_I2SBufferConfig
-#undef  I2SBufferConfig
-#define I2SBufferConfig                 ROM_I2SBufferConfig
+#undef I2SBufferConfig
+#define I2SBufferConfig ROM_I2SBufferConfig
 #endif
 #ifdef ROM_I2SPointerUpdate
-#undef  I2SPointerUpdate
-#define I2SPointerUpdate                ROM_I2SPointerUpdate
+#undef I2SPointerUpdate
+#define I2SPointerUpdate ROM_I2SPointerUpdate
 #endif
 #ifdef ROM_I2SPointerSet
-#undef  I2SPointerSet
-#define I2SPointerSet                   ROM_I2SPointerSet
+#undef I2SPointerSet
+#define I2SPointerSet ROM_I2SPointerSet
 #endif
 #ifdef ROM_I2SSampleStampConfigure
-#undef  I2SSampleStampConfigure
-#define I2SSampleStampConfigure         ROM_I2SSampleStampConfigure
+#undef I2SSampleStampConfigure
+#define I2SSampleStampConfigure ROM_I2SSampleStampConfigure
 #endif
 #ifdef ROM_I2SSampleStampGet
-#undef  I2SSampleStampGet
-#define I2SSampleStampGet               ROM_I2SSampleStampGet
+#undef I2SSampleStampGet
+#define I2SSampleStampGet ROM_I2SSampleStampGet
 #endif
 #endif
 

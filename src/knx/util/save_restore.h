@@ -1,7 +1,6 @@
 #pragma once
 #include <stdint.h>
 
-
 namespace Knx
 {
     /**
@@ -46,4 +45,4 @@ namespace Knx
 
             virtual const char* name() = 0;
     };
-}
+} // namespace Knx

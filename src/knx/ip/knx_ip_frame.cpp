@@ -1,7 +1,7 @@
 #include "knx_ip_frame.h"
 
-#include <cstring>
 #include "../bits.h"
+#include <cstring>
 
 #define KNXIP_HEADER_LEN 0x6
 #define KNXIP_PROTOCOL_VERSION 0x10
@@ -42,7 +42,7 @@ namespace Knx
 
     void KnxIpFrame::serviceTypeIdentifier(KnxIpServiceType identifier)
     {
-        pushWord((uint16_t) identifier, _data + 2);
+        pushWord((uint16_t)identifier, _data + 2);
     }
 
     uint16_t KnxIpFrame::totalLength() const
@@ -60,13 +60,11 @@ namespace Knx
         return _data;
     }
 
-
     KnxIpFrame::~KnxIpFrame()
     {
         if (_freeData)
             delete[] _data;
     }
-
 
     KnxIpFrame::KnxIpFrame(uint16_t length)
     {
@@ -152,4 +150,4 @@ namespace Knx
         return "";
     }
 #endif
-}
+} // namespace Knx

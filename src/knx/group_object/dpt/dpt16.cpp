@@ -8,7 +8,8 @@ Knx::Dpt16::Dpt16()
     memset(_value, 0, 15);
 }
 
-Knx::Dpt16::Dpt16(const char* value) : Dpt16()
+Knx::Dpt16::Dpt16(const char* value)
+    : Dpt16()
 {
     this->value(value);
 }
@@ -25,7 +26,7 @@ void Knx::Dpt16::encode(uint8_t* data) const
     for (int n = 0; n < 14; n++)
     {
         if (val)
-            val = _value[n]; //string terminator 0x00 will stop further assignments and init the remainig payload with zero
+            val = _value[n]; // string terminator 0x00 will stop further assignments and init the remainig payload with zero
 
         unsigned8ToPayload(data, n, val, 0xff);
     }
@@ -55,9 +56,13 @@ void Knx::Dpt16::value(const char* value)
     _value[14] = 0;
 }
 
-Knx::DPT_String_ASCII::DPT_String_ASCII() : Dpt16() {}
+Knx::DPT_String_ASCII::DPT_String_ASCII()
+    : Dpt16()
+{}
 
-Knx::DPT_String_ASCII::DPT_String_ASCII(const char* value) : Dpt16(value) {}
+Knx::DPT_String_ASCII::DPT_String_ASCII(const char* value)
+    : Dpt16(value)
+{}
 
 bool Knx::DPT_String_ASCII::decode(uint8_t* data)
 {

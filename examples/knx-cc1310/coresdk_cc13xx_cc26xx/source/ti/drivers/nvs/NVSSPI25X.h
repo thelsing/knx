@@ -191,12 +191,12 @@
 #ifndef ti_drivers_nvs_NVSSPI25X__include
 #define ti_drivers_nvs_NVSSPI25X__include
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include <ti/drivers/SPI.h>
 
-#if defined (__cplusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -209,7 +209,7 @@ extern "C" {
  *
  *  Mass Erase is the only control command supported.
  */
-#define NVSSPI25X_CMD_MASS_ERASE        (NVS_CMD_RESERVED + 0)
+#define NVSSPI25X_CMD_MASS_ERASE (NVS_CMD_RESERVED + 0)
 
 /*!
  *  @brief Disable internal management of SPI chip select
@@ -221,7 +221,7 @@ extern "C" {
  *  that the SPI peripheral used by the NVS driver is configured
  *  to manage its own chip select signal.
  */
-#define NVSSPI25X_SPI_MANAGES_CS        ((uint16_t)(~0))
+#define NVSSPI25X_SPI_MANAGES_CS ((uint16_t)(~0))
 
 /*!
  *  @internal @brief NVS function pointer table
@@ -294,30 +294,30 @@ extern const NVS_FxnTable NVSSPI25X_fxnTable;
  */
 typedef struct
 {
-    size_t      regionBaseOffset;   /*!< Offset from base of SPI flash */
-    size_t      regionSize;         /*!< The size of the region in bytes */
-    size_t      sectorSize;         /*!< Erase sector size */
-    uint8_t*     verifyBuf;         /*!< Write Pre/Post verify buffer */
-    size_t      verifyBufSize;      /*!< Write Pre/Post verify buffer size */
-    SPI_Handle*  spiHandle;         /*!< ptr to SPI handle if provided by user. */
-    uint16_t    spiIndex;           /*!< SPI instance index from Board file */
-    uint32_t    spiBitRate;         /*!< SPI bit rate in Hz */
-    /*! @brief SPI Flash Chip Select GPIO index
+        size_t regionBaseOffset; /*!< Offset from base of SPI flash */
+        size_t regionSize;       /*!< The size of the region in bytes */
+        size_t sectorSize;       /*!< Erase sector size */
+        uint8_t* verifyBuf;      /*!< Write Pre/Post verify buffer */
+        size_t verifyBufSize;    /*!< Write Pre/Post verify buffer size */
+        SPI_Handle* spiHandle;   /*!< ptr to SPI handle if provided by user. */
+        uint16_t spiIndex;       /*!< SPI instance index from Board file */
+        uint32_t spiBitRate;     /*!< SPI bit rate in Hz */
+        /*! @brief SPI Flash Chip Select GPIO index
 
-        This field should be set to either an index within the
-        GPIO driver's GPIO_Config table, or to #NVSSPI25X_SPI_MANAGES_CS.
-        see [SPI Flash Chip Select Management] (@ref SPI_CS_MGMT) for more
-        details.
-    */
-    uint16_t    spiCsnGpioIndex;
-    /*! @brief External Flash Status Poll Delay
-     *
-     * This field determines how many microseconds the driver waits after
-     * querying the external flash status. Increasing this value can help
-     * mitigate CPU starvation if the external flash is busy for long periods
-     * of time, but may also result in increased latency.
-     */
-    uint32_t    statusPollDelayUs;
+            This field should be set to either an index within the
+            GPIO driver's GPIO_Config table, or to #NVSSPI25X_SPI_MANAGES_CS.
+            see [SPI Flash Chip Select Management] (@ref SPI_CS_MGMT) for more
+            details.
+        */
+        uint16_t spiCsnGpioIndex;
+        /*! @brief External Flash Status Poll Delay
+         *
+         * This field determines how many microseconds the driver waits after
+         * querying the external flash status. Increasing this value can help
+         * mitigate CPU starvation if the external flash is busy for long periods
+         * of time, but may also result in increased latency.
+         */
+        uint32_t statusPollDelayUs;
 } NVSSPI25X_HWAttrs;
 
 /*
@@ -327,9 +327,9 @@ typedef struct
  */
 typedef struct
 {
-    bool        opened;             /* Has this region been opened */
-    SPI_Handle  spiHandle;
-    size_t      sectorBaseMask;
+        bool opened; /* Has this region been opened */
+        SPI_Handle spiHandle;
+        size_t sectorBaseMask;
 } NVSSPI25X_Object;
 
 /*
@@ -337,31 +337,31 @@ typedef struct
  *  NVSSPI25X driver public APIs
  */
 
-extern void         NVSSPI25X_close(NVS_Handle handle);
+extern void NVSSPI25X_close(NVS_Handle handle);
 extern int_fast16_t NVSSPI25X_control(NVS_Handle handle, uint_fast16_t cmd,
                                       uintptr_t arg);
 extern int_fast16_t NVSSPI25X_erase(NVS_Handle handle, size_t offset,
                                     size_t size);
-extern void         NVSSPI25X_getAttrs(NVS_Handle handle, NVS_Attrs* attrs);
-extern void         NVSSPI25X_init();
+extern void NVSSPI25X_getAttrs(NVS_Handle handle, NVS_Attrs* attrs);
+extern void NVSSPI25X_init();
 extern int_fast16_t NVSSPI25X_lock(NVS_Handle handle, uint32_t timeout);
-extern NVS_Handle   NVSSPI25X_open(uint_least8_t index, NVS_Params* params);
+extern NVS_Handle NVSSPI25X_open(uint_least8_t index, NVS_Params* params);
 extern int_fast16_t NVSSPI25X_read(NVS_Handle handle, size_t offset,
                                    void* buffer, size_t bufferSize);
-extern void         NVSSPI25X_unlock(NVS_Handle handle);
+extern void NVSSPI25X_unlock(NVS_Handle handle);
 extern int_fast16_t NVSSPI25X_write(NVS_Handle handle, size_t offset,
                                     void* buffer, size_t bufferSize, uint_fast16_t flags);
 /*
  *  Weakly defined APIs that can be overridden by the user
  */
-extern void         NVSSPI25X_initSpiCs(NVS_Handle spiHandle, uint16_t csId);
-extern void         NVSSPI25X_deinitSpiCs(NVS_Handle spiHandle, uint16_t csId);
-extern void         NVSSPI25X_assertSpiCs(NVS_Handle spiHandle, uint16_t csId);
-extern void         NVSSPI25X_deassertSpiCs(NVS_Handle spiHandle, uint16_t csId);
+extern void NVSSPI25X_initSpiCs(NVS_Handle spiHandle, uint16_t csId);
+extern void NVSSPI25X_deinitSpiCs(NVS_Handle spiHandle, uint16_t csId);
+extern void NVSSPI25X_assertSpiCs(NVS_Handle spiHandle, uint16_t csId);
+extern void NVSSPI25X_deassertSpiCs(NVS_Handle spiHandle, uint16_t csId);
 
 /*! @endcond */
 
-#if defined (__cplusplus)
+#if defined(__cplusplus)
 }
 #endif /* defined (__cplusplus) */
 

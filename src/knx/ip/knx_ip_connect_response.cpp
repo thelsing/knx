@@ -16,7 +16,7 @@ namespace Knx
         _controlEndpoint.ipAddress(parameters.propertyValue<uint32_t>(PID_CURRENT_IP_ADDRESS));
         _controlEndpoint.ipPortNumber(KNXIP_MULTICAST_PORT);
 
-        _crd.length((type == 4) ? 4 : 2); //TunnelConnectionResponse length = 4; ConfigConnectionResponse length = 2;
+        _crd.length((type == 4) ? 4 : 2); // TunnelConnectionResponse length = 4; ConfigConnectionResponse length = 2;
         _crd.type(type);
 
         if (type == 4) // only fill address when it is a TunnelConnectionResponse
@@ -34,7 +34,6 @@ namespace Knx
         _data[LEN_KNXIP_HEADER + 1] = errorCode;
     }
 
-
     IpHostProtocolAddressInformation& KnxIpConnectResponse::controlEndpoint()
     {
         return _controlEndpoint;
@@ -44,4 +43,4 @@ namespace Knx
     {
         return _crd;
     }
-}
+} // namespace Knx

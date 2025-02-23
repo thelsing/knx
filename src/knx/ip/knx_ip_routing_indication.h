@@ -1,7 +1,7 @@
 #pragma once
 
-#include "knx_ip_frame.h"
 #include "../datalink_layer/cemi_frame.h"
+#include "knx_ip_frame.h"
 
 namespace Knx
 {
@@ -11,7 +11,8 @@ namespace Knx
             KnxIpRoutingIndication(uint8_t* data, uint16_t length);
             KnxIpRoutingIndication(CemiFrame frame);
             CemiFrame& frame();
+
         private:
             CemiFrame _frame;
     };
-}
+} // namespace Knx

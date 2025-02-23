@@ -8,9 +8,8 @@
 
 #define ASSERT_PAYLOAD(x)      \
     if (payload_length != (x)) \
-        return false
+    return false
 #define ENSURE_PAYLOAD(x)
-
 
 namespace Knx
 {
@@ -184,14 +183,12 @@ namespace Knx
 
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 value = bitFromPayload(payload, 0);
                 return true;
             }
 
-            case 1:
-            {
+            case 1: {
                 value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x3F);
                 return true;
             }
@@ -206,14 +203,12 @@ namespace Knx
 
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 value = bitFromPayload(payload, 1);
                 return true;
             }
 
-            case 1:
-            {
+            case 1: {
                 value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x3F);
                 return true;
             }
@@ -228,15 +223,13 @@ namespace Knx
 
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 value = (uint8_t)(unsigned8FromPayload(payload, 0) & 0x3F);
                 return true;
             }
 
             case 1:
-            case 2:
-            {
+            case 2: {
                 value = bitFromPayload(payload, 2 - datatype.index);
                 return true;
             }
@@ -259,8 +252,7 @@ namespace Knx
         {
             switch (datatype.index)
             {
-                case 0:
-                {
+                case 0: {
                     if (bitFromPayload(payload, 51) || bitFromPayload(payload, 52))
                         return false;
 
@@ -288,8 +280,7 @@ namespace Knx
                     return true;
                 }
 
-                case 1:
-                {
+                case 1: {
                     if (bitFromPayload(payload, 53))
                         return false;
 
@@ -297,8 +288,7 @@ namespace Knx
                     return true;
                 }
 
-                case 2:
-                {
+                case 2: {
                     if (bitFromPayload(payload, 50))
                         return false;
 
@@ -306,14 +296,12 @@ namespace Knx
                     return true;
                 }
 
-                case 9:
-                {
+                case 9: {
                     value = bitFromPayload(payload, 55);
                     return true;
                 }
 
-                case 10:
-                {
+                case 10: {
                     value = bitFromPayload(payload, 56);
                     return true;
                 }
@@ -325,7 +313,7 @@ namespace Knx
 
     int busValueToUnicode(const uint8_t* payload, size_t payload_length, const Dpt& datatype, KNXValue& value)
     {
-        //TODO
+        // TODO
         return false;
     }
 
@@ -342,8 +330,7 @@ namespace Knx
 
         switch (datatype.index)
         {
-            case 1:
-            {
+            case 1: {
                 unsigned char prio = unsigned8FromPayload(payload, 1);
 
                 if (prio > 3)
@@ -444,8 +431,7 @@ namespace Knx
                 value = unsigned16FromPayload(payload, 0);
                 return true;
 
-            case 1:
-            {
+            case 1: {
                 uint8_t tariff = unsigned8FromPayload(payload, 2);
 
                 if (tariff > 254)
@@ -495,7 +481,7 @@ namespace Knx
                 value = rgbw;
             }
 
-            return true;
+                return true;
 
             case 1: // The mask bits only
                 value = unsigned8FromPayload(payload, 5);
@@ -565,8 +551,7 @@ namespace Knx
                 bitToPayload(payload, 0, value);
                 break;
 
-            case 1:
-            {
+            case 1: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
                     return false;
 
@@ -589,8 +574,7 @@ namespace Knx
                 bitToPayload(payload, 1, value);
                 break;
 
-            case 1:
-            {
+            case 1: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
                     return false;
 
@@ -609,8 +593,7 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
                     return false;
 
@@ -634,12 +617,11 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 struct tm local = value;
                 time_t time = mktime(&local);
 
-                if (!time) //TODO add check if date or time is invalid
+                if (!time) // TODO add check if date or time is invalid
                     return false;
 
                 ENSURE_PAYLOAD(8);
@@ -657,8 +639,7 @@ namespace Knx
                 break;
             }
 
-            case 1:
-            {
+            case 1: {
                 ENSURE_PAYLOAD(8);
 
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(7))
@@ -672,30 +653,26 @@ namespace Knx
                 break;
             }
 
-            case 2:
-            {
+            case 2: {
                 ENSURE_PAYLOAD(8);
                 bitToPayload(payload, 49, value);
                 bitToPayload(payload, 50, false);
                 break;
             }
 
-            case 3:
-            {
+            case 3: {
                 ENSURE_PAYLOAD(8);
                 bitToPayload(payload, 48, value);
                 break;
             }
 
-            case 9:
-            {
+            case 9: {
                 ENSURE_PAYLOAD(8);
                 bitToPayload(payload, 55, value);
                 break;
             }
 
-            case 10:
-            {
+            case 10: {
                 bitToPayload(payload, 56, value);
                 break;
             }
@@ -709,7 +686,7 @@ namespace Knx
 
     int valueToBusValueUnicode(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
     {
-        //TODO
+        // TODO
         return false;
     }
 
@@ -723,8 +700,7 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 1:
-            {
+            case 1: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(3))
                     return false;
 
@@ -735,8 +711,7 @@ namespace Knx
 
             case 0:
             case 2:
-            case 3:
-            {
+            case 3: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(255))
                     return false;
 
@@ -748,8 +723,7 @@ namespace Knx
             case 4:
             case 5:
             case 6:
-            case 7:
-            {
+            case 7: {
                 ENSURE_PAYLOAD(6);
                 bitToPayload(payload, 43 - datatype.index, value);
                 break;
@@ -757,8 +731,7 @@ namespace Knx
 
             case 8:
             case 9:
-            case 10:
-            {
+            case 10: {
                 ENSURE_PAYLOAD(6);
                 bitToPayload(payload, 55 - datatype.index, value);
                 break;
@@ -775,8 +748,7 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(65535))
                     return false;
 
@@ -785,8 +757,7 @@ namespace Knx
                 break;
             }
 
-            case 1:
-            {
+            case 1: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(4294967295))
                     return false;
 
@@ -806,8 +777,7 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(31))
                     return false;
 
@@ -816,8 +786,7 @@ namespace Knx
                 break;
             }
 
-            case 1:
-            {
+            case 1: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(31))
                     return false;
 
@@ -825,8 +794,7 @@ namespace Knx
                 break;
             }
 
-            case 2:
-            {
+            case 2: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(63))
                     return false;
 
@@ -845,8 +813,7 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 uint32_t duration = value;
 
                 if (duration > INT64_C(65535))
@@ -857,8 +824,7 @@ namespace Knx
                 return true;
             }
 
-            case 1:
-            {
+            case 1: {
                 if ((double)value < 0.0 || (double)value > 100.0)
                     return false;
 
@@ -874,8 +840,7 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 uint32_t duration = value;
 
                 if (duration > INT64_C(65535))
@@ -886,8 +851,7 @@ namespace Knx
                 return true;
             }
 
-            case 1:
-            {
+            case 1: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(254))
                     return false;
 
@@ -952,8 +916,7 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 if ((double)value < 0.0 || (double)value > 100.0)
                     return false;
 
@@ -977,8 +940,7 @@ namespace Knx
     {
         switch (datatype.index)
         {
-            case 0:
-            {
+            case 0: {
                 if ((int64_t)value < INT64_C(-2147483648) || (int64_t)value > INT64_C(2147483647))
                     return false;
 
@@ -987,8 +949,7 @@ namespace Knx
                 break;
             }
 
-            case 1:
-            {
+            case 1: {
                 if ((int64_t)value < INT64_C(0) || (int64_t)value > INT64_C(254))
                     return false;
 
@@ -1066,8 +1027,8 @@ namespace Knx
     {
         union
         {
-            float f;
-            uint32_t i;
+                float f;
+                uint32_t i;
         } area;
         area.i = unsigned32FromPayload(payload, index);
         return area.f;
@@ -1076,8 +1037,8 @@ namespace Knx
     {
         union
         {
-            double f;
-            uint64_t i;
+                double f;
+                uint64_t i;
         } area;
         area.i = unsigned64FromPayload(payload, index);
         return area.f;
@@ -1182,8 +1143,8 @@ namespace Knx
     {
         union
         {
-            float f;
-            uint32_t i;
+                float f;
+                uint32_t i;
         } num;
         num.f = value;
         unsigned32ToPayload(payload, index, num.i, mask);
@@ -1209,4 +1170,4 @@ namespace Knx
         else
             payload[index / 2] = (payload[index / 2] & 0x0F) | ((value << 4) & 0xF0);
     }
-}
+} // namespace Knx

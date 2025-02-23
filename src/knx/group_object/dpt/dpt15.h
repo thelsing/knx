@@ -2,11 +2,16 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt15: public Dpt
+    class Dpt15 : public Dpt
     {
-        enum ReadDirectionValue { LeftToRight = 0, RightToLeft = 1};
+            enum ReadDirectionValue
+            {
+                LeftToRight = 0,
+                RightToLeft = 1
+            };
+
         public:
-            Dpt15() {};
+            Dpt15(){};
             Go_SizeCode size() const override;
 
             void encode(uint8_t* data) const override;
@@ -24,6 +29,7 @@ namespace Knx
             void encrypted(const bool value);
             uint8_t index() const;
             void index(const uint8_t value);
+
         private:
             uint32_t _accessCode;
             bool _detectionError;
@@ -34,4 +40,4 @@ namespace Knx
     };
 
     typedef Dpt15 DPT_Access_Data;
-}
+} // namespace Knx

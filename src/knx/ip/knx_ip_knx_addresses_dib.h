@@ -10,7 +10,8 @@ namespace Knx
             uint16_t individualAddress();
             void individualAddress(uint16_t addr);
             void additional(uint16_t addr);
+
         private:
             uint8_t* currentPos = 0;
     };
-}
+} // namespace Knx

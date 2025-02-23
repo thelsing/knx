@@ -65,9 +65,9 @@
 #ifndef ti_drivers_cryptoutils_cyptokey_CryptoKeyPlaintext__include
 #define ti_drivers_cryptoutils_cyptokey_CryptoKeyPlaintext__include
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 #include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
 
@@ -87,7 +87,6 @@ extern "C" {
  *  @return Returns a status code from CryptoKey.h
  */
 int_fast16_t CryptoKeyPlaintext_initKey(CryptoKey* keyHandle, uint8_t* key, size_t keyLength);
-
 
 /*!
  *  @brief Initializes an empty plaintext CryptoKey type
@@ -127,7 +126,6 @@ int_fast16_t CryptoKeyPlaintext_getKeyLength(CryptoKey* keyHandle, size_t* lengt
  *  @return Returns a status code from CryptoKey.h
  */
 int_fast16_t CryptoKeyPlaintext_setKeyLocation(CryptoKey* keyHandle, uint8_t* location);
-
 
 /*!
  *  @brief Gets the length of a plaintext key

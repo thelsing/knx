@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../knx_types.h"
 #include "../application_layer/apdu.h"
-#include "../transport_layer/tpdu.h"
-#include "../network_layer/npdu.h"
 #include "../config.h"
+#include "../knx_types.h"
+#include "../network_layer/npdu.h"
+#include "../transport_layer/tpdu.h"
 #include "../util/logger.h"
 
 #include <stdint.h>
@@ -79,7 +79,7 @@ namespace Knx
             void printIt() const;
 
         private:
-            uint8_t buffer[0xff + NPDU_LPDU_DIFF] = {0}; //only valid of add info is zero
+            uint8_t buffer[0xff + NPDU_LPDU_DIFF] = {0}; // only valid of add info is zero
             uint8_t* _data = 0;
             uint8_t* _ctrl1 = 0;
             NPDU _npdu;
@@ -90,9 +90,9 @@ namespace Knx
             // FIXME: integrate this propery in _data
             // only for RF medium
             uint8_t* _rfSerialOrDoA = 0;
-            uint8_t  _rfInfo = 0;
-            uint8_t  _rfLfn = 0xFF; // RF Data Link layer frame number
+            uint8_t _rfInfo = 0;
+            uint8_t _rfLfn = 0xFF; // RF Data Link layer frame number
 #endif
             uint8_t _sourceInterfaceIndex;
     };
-}
+} // namespace Knx

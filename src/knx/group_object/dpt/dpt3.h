@@ -4,7 +4,8 @@
 #include "dptconvert.h"
 namespace Knx
 {
-    template<typename T> class DPT3: public Dpt
+    template <typename T>
+    class DPT3 : public Dpt
     {
         public:
             Go_SizeCode size() const override
@@ -58,6 +59,7 @@ namespace Knx
             {
                 return _stepCode == 0;
             }
+
         private:
             T _direction;
             uint8_t _stepCode;
@@ -65,4 +67,4 @@ namespace Knx
 
     typedef DPT3<StepValue> DPT_Control_Dimming;
     typedef DPT3<UpDownValue> DPT_Control_Blinds;
-}
+} // namespace Knx

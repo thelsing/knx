@@ -328,7 +328,7 @@ extern "C" {
  * #define AESGCMXYZ_STATUS_ERROR2    AESGCM_STATUS_RESERVED - 2
  * @endcode
  */
-#define AESGCM_STATUS_RESERVED        (-32)
+#define AESGCM_STATUS_RESERVED (-32)
 
 /*!
  * @brief   Successful status code.
@@ -336,7 +336,7 @@ extern "C" {
  * Functions return AESGCM_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define AESGCM_STATUS_SUCCESS         (0)
+#define AESGCM_STATUS_SUCCESS (0)
 
 /*!
  * @brief   Generic error status code.
@@ -344,7 +344,7 @@ extern "C" {
  * Functions return AESGCM_STATUS_ERROR if the function was not executed
  * successfully and no more pertinent error code could be returned.
  */
-#define AESGCM_STATUS_ERROR           (-1)
+#define AESGCM_STATUS_ERROR (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -373,7 +373,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from an AESGCM_open() call.
  */
-typedef struct AESGCM_Config*    AESGCM_Handle;
+typedef struct AESGCM_Config* AESGCM_Handle;
 
 /*!
  * @brief   The way in which GCM function calls return after performing an
@@ -398,20 +398,20 @@ typedef struct AESGCM_Config*    AESGCM_Handle;
  */
 typedef enum
 {
-    AESGCM_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
-                                             *   GCM operation goes on in the background. The registered
-                                             *   callback function is called after the operation completes.
-                                             *   The context the callback function is called (task, HWI, SWI)
-                                             *   is implementation-dependent.
-                                             */
-    AESGCM_RETURN_BEHAVIOR_BLOCKING = 2,    /*!< The function call will block while the GCM operation goes
-                                             *   on in the background. GCM operation results are available
-                                             *   after the function returns.
-                                             */
-    AESGCM_RETURN_BEHAVIOR_POLLING  = 4,    /*!< The function call will continuously poll a flag while GCM
-                                             *   operation goes on in the background. GCM operation results
-                                             *   are available after the function returns.
-                                             */
+    AESGCM_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
+                                          *   GCM operation goes on in the background. The registered
+                                          *   callback function is called after the operation completes.
+                                          *   The context the callback function is called (task, HWI, SWI)
+                                          *   is implementation-dependent.
+                                          */
+    AESGCM_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while the GCM operation goes
+                                          *   on in the background. GCM operation results are available
+                                          *   after the function returns.
+                                          */
+    AESGCM_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while GCM
+                                          *   operation goes on in the background. GCM operation results
+                                          *   are available after the function returns.
+                                          */
 } AESGCM_ReturnBehavior;
 
 /*!
@@ -429,52 +429,52 @@ typedef enum
  */
 typedef struct
 {
-    CryptoKey*                key;                       /*!< A previously initialized CryptoKey */
-    uint8_t*                  aad;                       /*!< A buffer of length \c aadLength containing additional
-                                                         *   authentication data to be authenticated/verified but not
-                                                         *   encrypted/decrypted.
-                                                         */
-    uint8_t*                  input;                     /*!<
-                                                         *   - Encryption: The plaintext buffer to be encrypted and authenticated
-                                                         *   in the GCM operation.
-                                                         *   - Decryption: The ciphertext to be decrypted and verified.
-                                                         */
-    uint8_t*                  output;                    /*!<
-                                                         *   - Encryption: The output ciphertext buffer that the encrypted plaintext
-                                                         *   is copied to.
-                                                         *   - Decryption: The plaintext derived from the decrypted and verified
-                                                         *   ciphertext is copied here.
-                                                         */
-    uint8_t*                  iv;                        /*!< A buffer containing an IV. IVs must be unique to
-                                                         *   each GCM operation and may not be reused. If
-                                                         *   ivInternallyGenerated is set, the IV will be
-                                                         *   generated by this function call and copied to
-                                                         *   this buffer.
-                                                         */
-    uint8_t*                  mac;                       /*!<
-                                                         *   - Encryption: The buffer where the message authentication
-                                                         *   code is copied.
-                                                         *   - Decryption: The buffer containing the received message
-                                                         *   authentication code.
-                                                         */
-    size_t                   aadLength;                  /*!< Length of \c aad in bytes. Either \c aadLength or
-                                                         *   \c plaintextLength must benon-zero.
-                                                         *   encrypted.
-                                                         */
-    size_t                   inputLength;                /*!< Length of the input and output in bytes. Either \c aadLength or
-                                                         *   \c inputLength must be
-                                                         *   non-zero.
-                                                         */
-    uint8_t                  ivLength;                   /*!< Length of \c IV in bytes.
-                                                         *   The only currently supported IV length is 12 bytes.
-                                                         */
-    uint8_t                  macLength;                  /*!< Length of \c mac in bytes.
-                                                         *   Valid MAC lengths are [4, 8, 12, 13, 14, 15, 16].
-                                                         */
-    bool                     ivInternallyGenerated;      /*!< When true, the IV buffer passed into the AESGCM_setupEncrypt()
-                                                         *   and AESGCM_oneStepEncrypt() functions will be overwritten with a
-                                                         *   randomly generated IV. Not supported by all implementations.
-                                                         */
+        CryptoKey* key;             /*!< A previously initialized CryptoKey */
+        uint8_t* aad;               /*!< A buffer of length \c aadLength containing additional
+                                     *   authentication data to be authenticated/verified but not
+                                     *   encrypted/decrypted.
+                                     */
+        uint8_t* input;             /*!<
+                                     *   - Encryption: The plaintext buffer to be encrypted and authenticated
+                                     *   in the GCM operation.
+                                     *   - Decryption: The ciphertext to be decrypted and verified.
+                                     */
+        uint8_t* output;            /*!<
+                                     *   - Encryption: The output ciphertext buffer that the encrypted plaintext
+                                     *   is copied to.
+                                     *   - Decryption: The plaintext derived from the decrypted and verified
+                                     *   ciphertext is copied here.
+                                     */
+        uint8_t* iv;                /*!< A buffer containing an IV. IVs must be unique to
+                                     *   each GCM operation and may not be reused. If
+                                     *   ivInternallyGenerated is set, the IV will be
+                                     *   generated by this function call and copied to
+                                     *   this buffer.
+                                     */
+        uint8_t* mac;               /*!<
+                                     *   - Encryption: The buffer where the message authentication
+                                     *   code is copied.
+                                     *   - Decryption: The buffer containing the received message
+                                     *   authentication code.
+                                     */
+        size_t aadLength;           /*!< Length of \c aad in bytes. Either \c aadLength or
+                                     *   \c plaintextLength must benon-zero.
+                                     *   encrypted.
+                                     */
+        size_t inputLength;         /*!< Length of the input and output in bytes. Either \c aadLength or
+                                     *   \c inputLength must be
+                                     *   non-zero.
+                                     */
+        uint8_t ivLength;           /*!< Length of \c IV in bytes.
+                                     *   The only currently supported IV length is 12 bytes.
+                                     */
+        uint8_t macLength;          /*!< Length of \c mac in bytes.
+                                     *   Valid MAC lengths are [4, 8, 12, 13, 14, 15, 16].
+                                     */
+        bool ivInternallyGenerated; /*!< When true, the IV buffer passed into the AESGCM_setupEncrypt()
+                                     *   and AESGCM_oneStepEncrypt() functions will be overwritten with a
+                                     *   randomly generated IV. Not supported by all implementations.
+                                     */
 } AESGCM_Operation;
 
 /*!
@@ -499,11 +499,11 @@ typedef enum
  */
 typedef struct AESGCM_Config
 {
-    /*! Pointer to a driver specific data object */
-    void*               object;
+        /*! Pointer to a driver specific data object */
+        void* object;
 
-    /*! Pointer to a driver specific hardware attributes structure */
-    void         const* hwAttrs;
+        /*! Pointer to a driver specific hardware attributes structure */
+        void const* hwAttrs;
 } AESGCM_Config;
 
 /*!
@@ -521,10 +521,10 @@ typedef struct AESGCM_Config
  *  @param  operationType This parameter determines which operation the
  *          callback refers to.
  */
-typedef void (*AESGCM_CallbackFxn) (AESGCM_Handle handle,
-                                    int_fast16_t returnValue,
-                                    AESGCM_Operation* operation,
-                                    AESGCM_OperationType operationType);
+typedef void (*AESGCM_CallbackFxn)(AESGCM_Handle handle,
+                                   int_fast16_t returnValue,
+                                   AESGCM_Operation* operation,
+                                   AESGCM_OperationType operationType);
 
 /*!
  *  @brief  GCM Parameters
@@ -536,14 +536,14 @@ typedef void (*AESGCM_CallbackFxn) (AESGCM_Handle handle,
  */
 typedef struct
 {
-    AESGCM_ReturnBehavior   returnBehavior;             /*!< Blocking, callback, or polling return behavior */
-    AESGCM_CallbackFxn      callbackFxn;                /*!< Callback function pointer */
-    uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
-                                                         *   ::AESGCM_RETURN_BEHAVIOR_BLOCKING
-                                                         */
-    void*                   custom;                     /*!< Custom argument used by driver
-                                                         *   implementation
-                                                         */
+        AESGCM_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
+        AESGCM_CallbackFxn callbackFxn;       /*!< Callback function pointer */
+        uint32_t timeout;                     /*!< Timeout before the driver returns an error in
+                                               *   ::AESGCM_RETURN_BEHAVIOR_BLOCKING
+                                               */
+        void* custom;                         /*!< Custom argument used by driver
+                                               *   implementation
+                                               */
 } AESGCM_Params;
 
 /*!

@@ -1,18 +1,18 @@
 /******************************************************************************
-*  Filename:       sw_poly1305-donna-32.h
-*  Revised:        2016-10-05 12:42:03 +0200 (Wed, 05 Oct 2016)
-*  Revision:       47308
-******************************************************************************/
+ *  Filename:       sw_poly1305-donna-32.h
+ *  Revised:        2016-10-05 12:42:03 +0200 (Wed, 05 Oct 2016)
+ *  Revision:       47308
+ ******************************************************************************/
 /*
    poly1305 implementation using 32 bit * 32 bit = 64 bit multiplication and 64 bit addition
 */
 
 #if defined(_MSC_VER)
-    #define POLY1305_NOINLINE __declspec(noinline)
+#define POLY1305_NOINLINE __declspec(noinline)
 #elif defined(__GNUC__)
-    #define POLY1305_NOINLINE __attribute__((noinline))
+#define POLY1305_NOINLINE __attribute__((noinline))
 #else
-    #define POLY1305_NOINLINE
+#define POLY1305_NOINLINE
 #endif
 
 #define poly1305_block_size 16
@@ -20,29 +20,28 @@
 /* 17 + sizeof(size_t) + 14*sizeof(unsigned long) */
 typedef struct
 {
-    unsigned long  r[5];
-    unsigned long  h[5];
-    unsigned long  pad[4];
-    size_t         leftover;
-    unsigned char  buffer[poly1305_block_size];
-    unsigned char  final;
+        unsigned long r[5];
+        unsigned long h[5];
+        unsigned long pad[4];
+        size_t leftover;
+        unsigned char buffer[poly1305_block_size];
+        unsigned char final;
 } poly1305_state_internal_t;
 
 /* interpret four 8 bit unsigned integers as a 32 bit unsigned integer in little endian */
 static unsigned long U8TO32(const unsigned char* p)
 {
-    return
-        (((unsigned long)(p[0] & 0xff)      ) |
-         ((unsigned long)(p[1] & 0xff) <<  8) |
-         ((unsigned long)(p[2] & 0xff) << 16) |
-         ((unsigned long)(p[3] & 0xff) << 24));
+    return (((unsigned long)(p[0] & 0xff)) |
+            ((unsigned long)(p[1] & 0xff) << 8) |
+            ((unsigned long)(p[2] & 0xff) << 16) |
+            ((unsigned long)(p[3] & 0xff) << 24));
 }
 
 /* store a 32 bit unsigned integer as four 8 bit unsigned integers in little endian */
 static void U32TO8(unsigned char* p, unsigned long v)
 {
-    p[0] = (v      ) & 0xff;
-    p[1] = (v >>  8) & 0xff;
+    p[0] = (v) & 0xff;
+    p[1] = (v >> 8) & 0xff;
     p[2] = (v >> 16) & 0xff;
     p[3] = (v >> 24) & 0xff;
 }
@@ -52,10 +51,10 @@ void poly1305_init(poly1305_context* ctx, const unsigned char key[32])
     poly1305_state_internal_t* st = (poly1305_state_internal_t*)ctx;
 
     /* r &= 0xffffffc0ffffffc0ffffffc0fffffff */
-    st->r[0] = (U8TO32(&key[ 0])     ) & 0x3ffffff;
-    st->r[1] = (U8TO32(&key[ 3]) >> 2) & 0x3ffff03;
-    st->r[2] = (U8TO32(&key[ 6]) >> 4) & 0x3ffc0ff;
-    st->r[3] = (U8TO32(&key[ 9]) >> 6) & 0x3f03fff;
+    st->r[0] = (U8TO32(&key[0])) & 0x3ffffff;
+    st->r[1] = (U8TO32(&key[3]) >> 2) & 0x3ffff03;
+    st->r[2] = (U8TO32(&key[6]) >> 4) & 0x3ffc0ff;
+    st->r[3] = (U8TO32(&key[9]) >> 6) & 0x3f03fff;
     st->r[4] = (U8TO32(&key[12]) >> 8) & 0x00fffff;
 
     /* h = 0 */
@@ -104,7 +103,7 @@ static void poly1305_blocks(poly1305_state_internal_t* st, const unsigned char* 
     while (bytes >= poly1305_block_size)
     {
         /* h += m[i] */
-        h0 += (U8TO32(m + 0)     ) & 0x3ffffff;
+        h0 += (U8TO32(m + 0)) & 0x3ffffff;
         h1 += (U8TO32(m + 3) >> 2) & 0x3ffffff;
         h2 += (U8TO32(m + 6) >> 4) & 0x3ffffff;
         h3 += (U8TO32(m + 9) >> 6) & 0x3ffffff;
@@ -133,8 +132,8 @@ static void poly1305_blocks(poly1305_state_internal_t* st, const unsigned char* 
         c = (unsigned long)(d4 >> 26);
         h4 = (unsigned long)d4 & 0x3ffffff;
         h0 += c * 5;
-        c =                (h0 >> 26);
-        h0 =                h0 & 0x3ffffff;
+        c = (h0 >> 26);
+        h0 = h0 & 0x3ffffff;
         h1 += c;
 
         m += poly1305_block_size;
@@ -178,19 +177,19 @@ POLY1305_NOINLINE void poly1305_finish(poly1305_context* ctx, unsigned char mac[
 
     c = h1 >> 26;
     h1 = h1 & 0x3ffffff;
-    h2 +=     c;
+    h2 += c;
     c = h2 >> 26;
     h2 = h2 & 0x3ffffff;
-    h3 +=     c;
+    h3 += c;
     c = h3 >> 26;
     h3 = h3 & 0x3ffffff;
-    h4 +=     c;
+    h4 += c;
     c = h4 >> 26;
     h4 = h4 & 0x3ffffff;
     h0 += c * 5;
     c = h0 >> 26;
     h0 = h0 & 0x3ffffff;
-    h1 +=     c;
+    h1 += c;
 
     /* compute h + -p */
     g0 = h0 + 5;
@@ -222,13 +221,13 @@ POLY1305_NOINLINE void poly1305_finish(poly1305_context* ctx, unsigned char mac[
     h4 = (h4 & mask) | g4;
 
     /* h = h % (2^128) */
-    h0 = ((h0      ) | (h1 << 26)) & 0xffffffff;
-    h1 = ((h1 >>  6) | (h2 << 20)) & 0xffffffff;
+    h0 = ((h0) | (h1 << 26)) & 0xffffffff;
+    h1 = ((h1 >> 6) | (h2 << 20)) & 0xffffffff;
     h2 = ((h2 >> 12) | (h3 << 14)) & 0xffffffff;
-    h3 = ((h3 >> 18) | (h4 <<  8)) & 0xffffffff;
+    h3 = ((h3 >> 18) | (h4 << 8)) & 0xffffffff;
 
     /* mac = (h + pad) % (2^128) */
-    f = (unsigned long long)h0 + st->pad[0]            ;
+    f = (unsigned long long)h0 + st->pad[0];
     h0 = (unsigned long)f;
     f = (unsigned long long)h1 + st->pad[1] + (f >> 32);
     h1 = (unsigned long)f;
@@ -237,9 +236,9 @@ POLY1305_NOINLINE void poly1305_finish(poly1305_context* ctx, unsigned char mac[
     f = (unsigned long long)h3 + st->pad[3] + (f >> 32);
     h3 = (unsigned long)f;
 
-    U32TO8(mac +  0, h0);
-    U32TO8(mac +  4, h1);
-    U32TO8(mac +  8, h2);
+    U32TO8(mac + 0, h0);
+    U32TO8(mac + 4, h1);
+    U32TO8(mac + 8, h2);
     U32TO8(mac + 12, h3);
 
     /* zero out the state */

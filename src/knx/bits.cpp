@@ -1,6 +1,6 @@
-#include <stdint.h>
 #include "bits.h"
 #include <cstring> // for memcpy()
+#include <stdint.h>
 
 namespace Knx
 {
@@ -168,7 +168,7 @@ namespace Knx
         {
             uint8_t bite = input[i] & 0xff;
 
-            for (uint8_t b = 8; b -- > 0;)
+            for (uint8_t b = 8; b-- > 0;)
             {
                 bool bit = ((bite >> b) & 1) == 1;
                 bool one = (crc >> 15 & 1) == 1;
@@ -181,4 +181,4 @@ namespace Knx
 
         return (~crc) & 0xffff;
     }
-}
+} // namespace Knx

@@ -2,11 +2,12 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt13: public ValueDpt<int32_t>
+    class Dpt13 : public ValueDpt<int32_t>
     {
         public:
-            Dpt13() {};
-            Dpt13(int32_t value) : ValueDpt(value) {}
+            Dpt13(){};
+            Dpt13(int32_t value)
+                : ValueDpt(value) {}
             Go_SizeCode size() const override;
 
             void encode(uint8_t* data) const override;
@@ -23,4 +24,4 @@ namespace Knx
     typedef Dpt13 DPT_ReactiveEnergy_kVARh;
     typedef Dpt13 DPT_ActiveEnergy_MWh;
     typedef Dpt13 DPT_LongDeltaTimeSec;
-}
+} // namespace Knx

@@ -43,17 +43,17 @@
 #ifndef ti_drivers_adc_ADCCC26XX__include
 #define ti_drivers_adc_ADCCC26XX__include
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include <ti/drivers/ADC.h>
 #include <ti/drivers/PIN.h>
-#include <ti/drivers/pin/PINCC26XX.h>
 #include <ti/drivers/Power.h>
+#include <ti/drivers/pin/PINCC26XX.h>
 #include <ti/drivers/power/PowerCC26XX.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib/aux_adc.h)
+#include DeviceFamily_constructPath(driverlib / aux_adc.h)
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,19 +70,19 @@ extern "C" {
  */
 typedef enum ADCCC26XX_Sampling_Duration
 {
-    ADCCC26XX_SAMPLING_DURATION_2P7_US    = AUXADC_SAMPLE_TIME_2P7_US,
-    ADCCC26XX_SAMPLING_DURATION_5P3_US    = AUXADC_SAMPLE_TIME_5P3_US,
-    ADCCC26XX_SAMPLING_DURATION_10P6_US   = AUXADC_SAMPLE_TIME_10P6_US,
-    ADCCC26XX_SAMPLING_DURATION_21P3_US   = AUXADC_SAMPLE_TIME_21P3_US,
-    ADCCC26XX_SAMPLING_DURATION_42P6_US   = AUXADC_SAMPLE_TIME_42P6_US,
-    ADCCC26XX_SAMPLING_DURATION_85P3_US   = AUXADC_SAMPLE_TIME_85P3_US,
-    ADCCC26XX_SAMPLING_DURATION_170_US    = AUXADC_SAMPLE_TIME_170_US,
-    ADCCC26XX_SAMPLING_DURATION_341_US    = AUXADC_SAMPLE_TIME_341_US,
-    ADCCC26XX_SAMPLING_DURATION_682_US    = AUXADC_SAMPLE_TIME_682_US,
-    ADCCC26XX_SAMPLING_DURATION_1P37_MS   = AUXADC_SAMPLE_TIME_1P37_MS,
-    ADCCC26XX_SAMPLING_DURATION_2P73_MS   = AUXADC_SAMPLE_TIME_2P73_MS,
-    ADCCC26XX_SAMPLING_DURATION_5P46_MS   = AUXADC_SAMPLE_TIME_5P46_MS,
-    ADCCC26XX_SAMPLING_DURATION_10P9_MS   = AUXADC_SAMPLE_TIME_10P9_MS
+    ADCCC26XX_SAMPLING_DURATION_2P7_US = AUXADC_SAMPLE_TIME_2P7_US,
+    ADCCC26XX_SAMPLING_DURATION_5P3_US = AUXADC_SAMPLE_TIME_5P3_US,
+    ADCCC26XX_SAMPLING_DURATION_10P6_US = AUXADC_SAMPLE_TIME_10P6_US,
+    ADCCC26XX_SAMPLING_DURATION_21P3_US = AUXADC_SAMPLE_TIME_21P3_US,
+    ADCCC26XX_SAMPLING_DURATION_42P6_US = AUXADC_SAMPLE_TIME_42P6_US,
+    ADCCC26XX_SAMPLING_DURATION_85P3_US = AUXADC_SAMPLE_TIME_85P3_US,
+    ADCCC26XX_SAMPLING_DURATION_170_US = AUXADC_SAMPLE_TIME_170_US,
+    ADCCC26XX_SAMPLING_DURATION_341_US = AUXADC_SAMPLE_TIME_341_US,
+    ADCCC26XX_SAMPLING_DURATION_682_US = AUXADC_SAMPLE_TIME_682_US,
+    ADCCC26XX_SAMPLING_DURATION_1P37_MS = AUXADC_SAMPLE_TIME_1P37_MS,
+    ADCCC26XX_SAMPLING_DURATION_2P73_MS = AUXADC_SAMPLE_TIME_2P73_MS,
+    ADCCC26XX_SAMPLING_DURATION_5P46_MS = AUXADC_SAMPLE_TIME_5P46_MS,
+    ADCCC26XX_SAMPLING_DURATION_10P9_MS = AUXADC_SAMPLE_TIME_10P9_MS
 } ADCCC26XX_Sampling_Duration;
 
 /*!
@@ -107,8 +107,8 @@ typedef enum ADCCC26XX_Sampling_Duration
  */
 typedef enum ADCCC26XX_Reference_Source
 {
-    ADCCC26XX_FIXED_REFERENCE       = AUXADC_REF_FIXED,
-    ADCCC26XX_VDDS_REFERENCE        = AUXADC_REF_VDDS_REL
+    ADCCC26XX_FIXED_REFERENCE = AUXADC_REF_FIXED,
+    ADCCC26XX_VDDS_REFERENCE = AUXADC_REF_VDDS_REL
 } ADCCC26XX_Reference_Source;
 
 /*!
@@ -119,7 +119,7 @@ typedef enum ADCCC26XX_Reference_Source
  */
 typedef enum ADCCC26XX_Trigger_Source
 {
-    ADCCC26XX_TRIGGER_MANUAL    = AUXADC_TRIGGER_MANUAL,
+    ADCCC26XX_TRIGGER_MANUAL = AUXADC_TRIGGER_MANUAL,
 } ADCCC26XX_Trigger_Source;
 
 /* ADC function table pointer */
@@ -133,13 +133,13 @@ extern const ADC_FxnTable ADCCC26XX_fxnTable;
  */
 typedef struct ADCCC26XX_HWAttrs
 {
-    uint8_t                             adcDIO;                     /*!< DIO that the ADC is routed to */
-    uint8_t                             adcCompBInput;              /*!< Internal signal routed to comparator B */
-    bool                                returnAdjustedVal;          /*!< Should the raw output be trimmed before returning it */
-    bool                                inputScalingEnabled;        /*!< Is input scaling enabled */
-    ADCCC26XX_Reference_Source          refSource;                  /*!< Reference source for the ADC to use */
-    ADCCC26XX_Sampling_Duration         samplingDuration;           /*!< Time the ADC spends sampling. This is load dependent */
-    ADCCC26XX_Trigger_Source            triggerSource;              /*!< Source that the ADC triggers off of. Currently only supports AUXADC_TRIGGER_MANUAL */
+        uint8_t adcDIO;                               /*!< DIO that the ADC is routed to */
+        uint8_t adcCompBInput;                        /*!< Internal signal routed to comparator B */
+        bool returnAdjustedVal;                       /*!< Should the raw output be trimmed before returning it */
+        bool inputScalingEnabled;                     /*!< Is input scaling enabled */
+        ADCCC26XX_Reference_Source refSource;         /*!< Reference source for the ADC to use */
+        ADCCC26XX_Sampling_Duration samplingDuration; /*!< Time the ADC spends sampling. This is load dependent */
+        ADCCC26XX_Trigger_Source triggerSource;       /*!< Source that the ADC triggers off of. Currently only supports AUXADC_TRIGGER_MANUAL */
 } ADCCC26XX_HWAttrs;
 
 /*!
@@ -149,13 +149,11 @@ typedef struct ADCCC26XX_HWAttrs
  */
 typedef struct ADCCC26XX_Object
 {
-    PIN_State                       pinState;                   /*!< Pin state object */
-    PIN_Handle                      pinHandle;                  /*!< Pin handle */
-    bool                            isOpen;                     /*!< Flag if the instance is in use */
-    bool                            isProtected;                /*!< Flag to indicate if thread safety is ensured by the driver */
+        PIN_State pinState;   /*!< Pin state object */
+        PIN_Handle pinHandle; /*!< Pin handle */
+        bool isOpen;          /*!< Flag if the instance is in use */
+        bool isProtected;     /*!< Flag to indicate if thread safety is ensured by the driver */
 } ADCCC26XX_Object;
-
-
 
 #ifdef __cplusplus
 }

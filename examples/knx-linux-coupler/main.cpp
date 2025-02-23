@@ -4,13 +4,13 @@
 #include "knx/coupler/bau2920.h"
 
 #include "knx/bits.h"
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <signal.h>
 #include <sched.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/mman.h>
+#include <time.h>
 
 #include "fdsk.h"
 
@@ -35,11 +35,11 @@ bool isSendHidReportPossible()
 }
 
 #if MASK_VERSION == 0x091A
-    KnxFacade<LinuxPlatform, Bau091A> knx; // IP/TP1 coupler
+KnxFacade<LinuxPlatform, Bau091A> knx; // IP/TP1 coupler
 #elif MASK_VERSION == 0x2920
-    KnxFacade<LinuxPlatform, Bau2920> knx; // TP1/RF coupler
+KnxFacade<LinuxPlatform, Bau2920> knx; // TP1/RF coupler
 #else
-    #error Mask version not supported yet!
+#error Mask version not supported yet!
 #endif
 
 void appLoop()
@@ -70,8 +70,8 @@ int main(int argc, char** argv)
 {
     printf("main() start.\n");
 
-    uint8_t serialNumber[] = { 0x00, 0xFA, 0x01, 0x02, 0x03, 0x04};
-    uint8_t key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+    uint8_t serialNumber[] = {0x00, 0xFA, 0x01, 0x02, 0x03, 0x04};
+    uint8_t key[] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
 
     FdskCalculator calc;
     char fdskString[42]; // 6 * 6 chars + 5 dashes + nullbyte = 42

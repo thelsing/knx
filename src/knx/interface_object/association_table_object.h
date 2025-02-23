@@ -17,6 +17,7 @@ namespace Knx
             {
                 return "AssociationTable";
             }
+
         protected:
             void beforeStateChange(LoadState& newState) override;
 
@@ -28,4 +29,4 @@ namespace Knx
             uint16_t* _tableData = 0;
             uint16_t sortedEntryCount;
     };
-}
+} // namespace Knx

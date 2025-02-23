@@ -6,7 +6,7 @@
 
 namespace Knx
 {
-    class DeviceObject: public InterfaceObject
+    class DeviceObject : public InterfaceObject
     {
         public:
             // increase this version anytime DeviceObject-API changes
@@ -47,6 +47,7 @@ namespace Knx
             {
                 return "DeviceObject";
             }
+
         private:
             uint8_t _prgMode = 0;
 #if MASK_VERSION == 0x091A || MASK_VERSION == 0x2920
@@ -55,4 +56,4 @@ namespace Knx
             uint16_t _ownAddress = 0xFFFF; // 15.15.255;
 #endif
     };
-}
+} // namespace Knx

@@ -1,7 +1,7 @@
 #include "dpt10.h"
 
-#include "dptconvert.h"
 #include "dpt11.h"
+#include "dptconvert.h"
 
 Knx::Go_SizeCode Knx::DPT_Date::size() const
 {

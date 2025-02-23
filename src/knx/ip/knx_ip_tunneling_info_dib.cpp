@@ -5,7 +5,8 @@
 
 namespace Knx
 {
-    KnxIpTunnelingInfoDIB::KnxIpTunnelingInfoDIB(uint8_t* data) : KnxIpDIB(data)
+    KnxIpTunnelingInfoDIB::KnxIpTunnelingInfoDIB(uint8_t* data)
+        : KnxIpDIB(data)
     {
         currentPos = data + 4;
     }
@@ -29,4 +30,4 @@ namespace Knx
         currentPos += 4;
         length(currentPos - _data);
     }
-}
+} // namespace Knx

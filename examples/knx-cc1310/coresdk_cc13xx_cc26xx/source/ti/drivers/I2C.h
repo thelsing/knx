@@ -302,7 +302,7 @@ extern "C" {
  * #define I2CXYZ_CMD_COMMAND1      I2C_CMD_RESERVED + 1
  * @endcode
  */
-#define I2C_CMD_RESERVED           (32)
+#define I2C_CMD_RESERVED (32)
 
 /*!
  * @private
@@ -317,7 +317,7 @@ extern "C" {
  * #define I2CXYZ_STATUS_ERROR2     I2C_STATUS_RESERVED - 2
  * @endcode
  */
-#define I2C_STATUS_RESERVED        (-32)
+#define I2C_STATUS_RESERVED (-32)
 /*! @endcond */
 
 /**
@@ -333,7 +333,7 @@ extern "C" {
  * I2C_control() returns #I2C_STATUS_SUCCESS if the control code was executed
  * successfully.
  */
-#define I2C_STATUS_SUCCESS         (0)
+#define I2C_STATUS_SUCCESS (0)
 
 /*!
  * @brief   Generic error status code returned by I2C_control().
@@ -341,7 +341,7 @@ extern "C" {
  * I2C_control() returns #I2C_STATUS_ERROR if the control code was not executed
  * successfully.
  */
-#define I2C_STATUS_ERROR           (-1)
+#define I2C_STATUS_ERROR (-1)
 
 /*!
  * @brief   An error status code returned by I2C_control() for undefined
@@ -350,7 +350,7 @@ extern "C" {
  * I2C_control() returns #I2C_STATUS_UNDEFINEDCMD if the control code is not
  * recognized by the driver implementation.
  */
-#define I2C_STATUS_UNDEFINEDCMD    (-2)
+#define I2C_STATUS_UNDEFINEDCMD (-2)
 /** @}*/
 
 /**
@@ -379,73 +379,73 @@ typedef struct I2C_Config_* I2C_Handle;
  */
 typedef struct
 {
-    /*!
-     *  Pointer to a buffer of at least #I2C_Transaction.writeCount bytes.
-     *  If #I2C_Transaction.writeCount is 0, this pointer is not used.
-     */
-    void*         writeBuf;
+        /*!
+         *  Pointer to a buffer of at least #I2C_Transaction.writeCount bytes.
+         *  If #I2C_Transaction.writeCount is 0, this pointer is not used.
+         */
+        void* writeBuf;
 
-    /*!
-     *  Number of bytes to write to the I2C slave device. A value of 0
-     *  indicates no data will be written to the slave device and only a read
-     *  will occur. If this value
-     *  is not 0, the driver will always perform the write transfer first.
-     *  The data written to the I2C bus is preceded by the
-     *  #I2C_Transaction.slaveAddress with the write bit set. If
-     *  @p writeCount bytes are successfully sent and
-     *  acknowledged, the transfer will complete or perform a read--depending
-     *  on #I2C_Transaction.readCount.
-     *
-     *  @note Both #I2C_Transaction.writeCount and #I2C_Transaction.readCount
-     *  can not be 0.
-     */
-    size_t        writeCount;
+        /*!
+         *  Number of bytes to write to the I2C slave device. A value of 0
+         *  indicates no data will be written to the slave device and only a read
+         *  will occur. If this value
+         *  is not 0, the driver will always perform the write transfer first.
+         *  The data written to the I2C bus is preceded by the
+         *  #I2C_Transaction.slaveAddress with the write bit set. If
+         *  @p writeCount bytes are successfully sent and
+         *  acknowledged, the transfer will complete or perform a read--depending
+         *  on #I2C_Transaction.readCount.
+         *
+         *  @note Both #I2C_Transaction.writeCount and #I2C_Transaction.readCount
+         *  can not be 0.
+         */
+        size_t writeCount;
 
-    /*!
-     *  Pointer to a buffer of at least #I2C_Transaction.readCount bytes.
-     *  If #I2C_Transaction.readCount is 0, this pointer is not used.
-     */
-    void*         readBuf;
+        /*!
+         *  Pointer to a buffer of at least #I2C_Transaction.readCount bytes.
+         *  If #I2C_Transaction.readCount is 0, this pointer is not used.
+         */
+        void* readBuf;
 
-    /*!
-     *  Number of bytes to read from the I2C slave device. A value of 0
-     *  indicates no data will be read and only a write will occur. If
-     *  #I2C_Transaction.writeCount is not 0, this driver will perform the
-     *  write first, followed by the read. The data read from the bus is
-     *  preceded by the #I2C_Transaction.slaveAddress with the read bit set.
-     *  After @p readCount bytes are successfully read, the transfer will
-     *  complete.
-     *
-     *  @note Both #I2C_Transaction.writeCount and #I2C_Transaction.readCount
-     *  can not be 0.
-     */
-    size_t        readCount;
+        /*!
+         *  Number of bytes to read from the I2C slave device. A value of 0
+         *  indicates no data will be read and only a write will occur. If
+         *  #I2C_Transaction.writeCount is not 0, this driver will perform the
+         *  write first, followed by the read. The data read from the bus is
+         *  preceded by the #I2C_Transaction.slaveAddress with the read bit set.
+         *  After @p readCount bytes are successfully read, the transfer will
+         *  complete.
+         *
+         *  @note Both #I2C_Transaction.writeCount and #I2C_Transaction.readCount
+         *  can not be 0.
+         */
+        size_t readCount;
 
-    /*!
-     *  I2C slave address used for the transaction. The slave address is
-     *  the first byte transmitted during an I2C transfer. The read/write bit
-     *  is automatically set based upon the #I2C_Transaction.writeCount and
-     *  #I2C_Transaction.readCount.
-     */
-    uint_least8_t slaveAddress;
+        /*!
+         *  I2C slave address used for the transaction. The slave address is
+         *  the first byte transmitted during an I2C transfer. The read/write bit
+         *  is automatically set based upon the #I2C_Transaction.writeCount and
+         *  #I2C_Transaction.readCount.
+         */
+        uint_least8_t slaveAddress;
 
-    /*!
-     * Pointer to a custom argument to be passed to the #I2C_CallbackFxn
-     * function via the #I2C_Transaction structure.
-     *
-     * @note The #I2C_CallbackFxn function is only called when operating in
-     * #I2C_MODE_CALLBACK.
-     *
-     * @sa  #I2C_MODE_CALLBACK
-     * @sa  #I2C_CallbackFxn
-     */
-    void*         arg;
+        /*!
+         * Pointer to a custom argument to be passed to the #I2C_CallbackFxn
+         * function via the #I2C_Transaction structure.
+         *
+         * @note The #I2C_CallbackFxn function is only called when operating in
+         * #I2C_MODE_CALLBACK.
+         *
+         * @sa  #I2C_MODE_CALLBACK
+         * @sa  #I2C_CallbackFxn
+         */
+        void* arg;
 
-    /*!
-     *  @private This is reserved for use by the driver and must never be
-     *  modified by the application.
-     */
-    void*         nextPtr;
+        /*!
+         *  @private This is reserved for use by the driver and must never be
+         *  modified by the application.
+         */
+        void* nextPtr;
 } I2C_Transaction;
 
 /*!
@@ -519,11 +519,11 @@ typedef void (*I2C_CallbackFxn)(I2C_Handle handle, I2C_Transaction* transaction,
  */
 typedef enum
 {
-    I2C_100kHz     = 0,    /*!< I2C Standard-mode. Up to 100 kbit/s. */
-    I2C_400kHz     = 1,    /*!< I2C Fast-mode. Up to 400 kbit/s. */
-    I2C_1000kHz    = 2,    /*!< I2C Fast-mode Plus. Up to 1Mbit/s. */
-    I2C_3330kHz    = 3,    /*!< I2C High-speed mode. Up to 3.4Mbit/s. */
-    I2C_3400kHz    = 3,    /*!< I2C High-speed mode. Up to 3.4Mbit/s. */
+    I2C_100kHz = 0,  /*!< I2C Standard-mode. Up to 100 kbit/s. */
+    I2C_400kHz = 1,  /*!< I2C Fast-mode. Up to 400 kbit/s. */
+    I2C_1000kHz = 2, /*!< I2C Fast-mode Plus. Up to 1Mbit/s. */
+    I2C_3330kHz = 3, /*!< I2C High-speed mode. Up to 3.4Mbit/s. */
+    I2C_3400kHz = 3, /*!< I2C High-speed mode. Up to 3.4Mbit/s. */
 } I2C_BitRate;
 
 /*!
@@ -536,23 +536,23 @@ typedef enum
  */
 typedef struct
 {
-    /*! #I2C_TransferMode for all I2C transfers. */
-    I2C_TransferMode transferMode;
+        /*! #I2C_TransferMode for all I2C transfers. */
+        I2C_TransferMode transferMode;
 
-    /*!
-     *  Pointer to a #I2C_CallbackFxn to be invoked after a
-     *  I2C_transfer() completes when operating in #I2C_MODE_CALLBACK.
-     */
-    I2C_CallbackFxn transferCallbackFxn;
+        /*!
+         *  Pointer to a #I2C_CallbackFxn to be invoked after a
+         *  I2C_transfer() completes when operating in #I2C_MODE_CALLBACK.
+         */
+        I2C_CallbackFxn transferCallbackFxn;
 
-    /*!
-     * A #I2C_BitRate specifying the frequency at which the I2C peripheral
-     * will transmit data during a I2C_transfer().
-     */
-    I2C_BitRate bitRate;
+        /*!
+         * A #I2C_BitRate specifying the frequency at which the I2C peripheral
+         * will transmit data during a I2C_transfer().
+         */
+        I2C_BitRate bitRate;
 
-    /*! Pointer to a device specific extension of the #I2C_Params */
-    void* custom;
+        /*! Pointer to a device specific extension of the #I2C_Params */
+        void* custom;
 } I2C_Params;
 
 /*!
@@ -560,44 +560,44 @@ typedef struct
  *  @brief      A function pointer to a driver-specific implementation of
  *              I2C_cancel().
  */
-typedef void (*I2C_CancelFxn) (I2C_Handle handle);
+typedef void (*I2C_CancelFxn)(I2C_Handle handle);
 
 /*!
  *  @private
  *  @brief      A function pointer to a driver-specific implementation of
  *              I2C_close().
  */
-typedef void (*I2C_CloseFxn) (I2C_Handle handle);
+typedef void (*I2C_CloseFxn)(I2C_Handle handle);
 
 /*!
  *  @private
  *  @brief      A function pointer to a driver-specific implementation of
  *              I2C_control().
  */
-typedef int_fast16_t (*I2C_ControlFxn) (I2C_Handle handle, uint_fast16_t cmd,
-                                        void* controlArg);
+typedef int_fast16_t (*I2C_ControlFxn)(I2C_Handle handle, uint_fast16_t cmd,
+                                       void* controlArg);
 
 /*!
  *  @private
  *  @brief      A function pointer to a driver-specific implementation of
  *              I2C_init().
  */
-typedef void (*I2C_InitFxn) (I2C_Handle handle);
+typedef void (*I2C_InitFxn)(I2C_Handle handle);
 
 /*!
  *  @private
  *  @brief      A function pointer to a driver-specific implementation of
  *              I2C_open().
  */
-typedef I2C_Handle (*I2C_OpenFxn) (I2C_Handle handle, I2C_Params* params);
+typedef I2C_Handle (*I2C_OpenFxn)(I2C_Handle handle, I2C_Params* params);
 
 /*!
  *  @private
  *  @brief      A function pointer to a driver-specific implementation of
  *              I2C_transfer().
  */
-typedef bool (*I2C_TransferFxn) (I2C_Handle handle,
-                                 I2C_Transaction* transaction);
+typedef bool (*I2C_TransferFxn)(I2C_Handle handle,
+                                I2C_Transaction* transaction);
 
 /*!
  *  @brief      The definition of an I2C function table that contains the
@@ -606,12 +606,12 @@ typedef bool (*I2C_TransferFxn) (I2C_Handle handle,
  */
 typedef struct I2C_FxnTable_
 {
-    I2C_CancelFxn   cancelFxn;
-    I2C_CloseFxn    closeFxn;
-    I2C_ControlFxn  controlFxn;
-    I2C_InitFxn     initFxn;
-    I2C_OpenFxn     openFxn;
-    I2C_TransferFxn transferFxn;
+        I2C_CancelFxn cancelFxn;
+        I2C_CloseFxn closeFxn;
+        I2C_ControlFxn controlFxn;
+        I2C_InitFxn initFxn;
+        I2C_OpenFxn openFxn;
+        I2C_TransferFxn transferFxn;
 } I2C_FxnTable;
 
 /*!
@@ -623,16 +623,16 @@ typedef struct I2C_FxnTable_
  */
 typedef struct I2C_Config_
 {
-    /*! Pointer to a @ref driver_function_table "function pointer table"
-     *  with driver-specific implementations of I2C APIs */
-    I2C_FxnTable const* fxnTablePtr;
+        /*! Pointer to a @ref driver_function_table "function pointer table"
+         *  with driver-specific implementations of I2C APIs */
+        I2C_FxnTable const* fxnTablePtr;
 
-    /*! Pointer to a driver specific @ref driver_objects "data object". */
-    void*               object;
+        /*! Pointer to a driver specific @ref driver_objects "data object". */
+        void* object;
 
-    /*! Pointer to a driver specific @ref driver_hardware_attributes
-     *  "hardware attributes structure". */
-    void         const* hwAttrs;
+        /*! Pointer to a driver specific @ref driver_hardware_attributes
+         *  "hardware attributes structure". */
+        void const* hwAttrs;
 } I2C_Config;
 
 /*!

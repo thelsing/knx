@@ -1,51 +1,51 @@
 #pragma once
 
-#include "util/logger.h"
-#include "config.h"
 #include "bau/bau.h"
-#include "tp/bau07B0.h"
-#include "rf/bau27B0.h"
-#include "ip/bau57B0.h"
+#include "config.h"
 #include "coupler/bau091A.h"
 #include "coupler/bau2920.h"
+#include "ip/bau57B0.h"
 #include "knx/bits.h"
+#include "rf/bau27B0.h"
+#include "tp/bau07B0.h"
+#include "util/logger.h"
 
 #ifndef USERDATA_SAVE_SIZE
-    #define USERDATA_SAVE_SIZE 0
+#define USERDATA_SAVE_SIZE 0
 #endif
 
 #ifdef __SAMD51__
-    #include "platform/samd51_platform.h"
+#include "platform/samd51_platform.h"
 #elif defined(_SAMD21_)
-    #include "platform/samd21_platform.h"
+#include "platform/samd21_platform.h"
 #elif defined(ARDUINO_ARCH_RP2040)
-    #include "platform/rp2040_arduino_platform.h"
+#include "platform/rp2040_arduino_platform.h"
 #elif defined(ARDUINO_ARCH_ESP8266)
-    #include "platform/esp8266_platform.h"
+#include "platform/esp8266_platform.h"
 #elif defined(ARDUINO_ARCH_ESP32)
-    #include "platform/esp32_platform.h"
+#include "platform/esp32_platform.h"
 #elif defined(ARDUINO_ARCH_STM32)
-    #include "platform/stm32_platform.h"
+#include "platform/stm32_platform.h"
 #elif __linux__
-    #include "platform/linux_platform.h"
+#include "platform/linux_platform.h"
 #else
-    #include "platform/cc1310_platform.h"
+#include "platform/cc1310_platform.h"
 #endif
 
 #ifndef KNX_LED
-    #ifdef LED_BUILTIN
-        #define KNX_LED LED_BUILTIN
-    #else
-        #define KNX_LED -1
-    #endif
+#ifdef LED_BUILTIN
+#define KNX_LED LED_BUILTIN
+#else
+#define KNX_LED -1
+#endif
 #endif
 
 #ifndef KNX_LED_ACTIVE_ON
-    #define KNX_LED_ACTIVE_ON 0
+#define KNX_LED_ACTIVE_ON 0
 #endif
 
 #ifndef KNX_BUTTON
-    #define KNX_BUTTON -1
+#define KNX_BUTTON -1
 #endif
 
 namespace Knx
@@ -63,17 +63,20 @@ namespace Knx
     typedef void (*ActivityCallback)(uint8_t info);
 #endif
 
-    template <class P, class B> class KnxFacade : private SaveRestore
+    template <class P, class B>
+    class KnxFacade : private SaveRestore
     {
         public:
-            KnxFacade() : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
+            KnxFacade()
+                : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
             {
                 manufacturerId(0xfa);
                 bauNumber(platform().uniqueSerialNumber());
                 _bau.addSaveRestore(this);
             }
 
-            KnxFacade(B& bau) : _bau(bau)
+            KnxFacade(B& bau)
+                : _bau(bau)
             {
                 _platformPtr = static_cast<P*>(&bau.platform());
                 manufacturerId(0xfa);
@@ -81,7 +84,8 @@ namespace Knx
                 _bau.addSaveRestore(this);
             }
 
-            KnxFacade(IsrFunctionPtr buttonISRFunction) : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
+            KnxFacade(IsrFunctionPtr buttonISRFunction)
+                : _platformPtr(new P()), _bauPtr(new B(*_platformPtr)), _bau(*_bauPtr)
             {
                 manufacturerId(0xfa);
                 bauNumber(platform().uniqueSerialNumber());
@@ -326,7 +330,7 @@ namespace Knx
                 if (!_bau.configured())
                     return 0;
 
-                return (bool) ((_bau.parameters().getByte(addr) >> (7 - shift)) & 0x01);
+                return (bool)((_bau.parameters().getByte(addr) >> (7 - shift)) & 0x01);
             }
 
             uint8_t paramByte(uint32_t addr)
@@ -347,7 +351,7 @@ namespace Knx
                 if (!_bau.configured())
                     return 0;
 
-                return (int8_t) _bau.parameters().getByte(addr);
+                return (int8_t)_bau.parameters().getByte(addr);
             }
 
             uint16_t paramWord(uint32_t addr)
@@ -462,75 +466,75 @@ namespace Knx
                     _progLedCallback(false);
             }
     };
-}
+} // namespace Knx
 #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
-    #ifdef __SAMD51__
-        // predefined global instance for TP or RF
-        #if MASK_VERSION == 0x07B0
-            extern Knx::KnxFacade<Knx::Samd51Platform, Knx::Bau07B0> knx;
-        #elif MASK_VERSION == 0x27B0
-            extern Knx::KnxFacade<Knx::Samd51Platform, Knx::Bau2920> knx;
-        #elif MASK_VERSION == 0x57B0
-            extern Knx::KnxFacade<Knx::Samd51Platform, Knx::Bau57B0> knx;
-        #else
-            #error "Mask version not supported on SAMD51"
-        #endif
-    #elif defined(_SAMD21_)
-        // predefined global instance for TP or RF or TP/RF coupler
-        #if MASK_VERSION == 0x07B0
-            extern Knx::KnxFacade<Knx::Samd21Platform, Knx::Bau07B0> knx;
-        #elif MASK_VERSION == 0x27B0
-            extern Knx::KnxFacade<Knx::Samd21Platform, Knx::Bau27B0> knx;
-        #elif MASK_VERSION == 0x2920
-            extern Knx::KnxFacade<Knx::Samd21Platform, Knx::Bau2920> knx;
-        #else
-            #error "Mask version not supported on ARDUINO_ARCH_SAMD"
-        #endif
-    #elif defined(ARDUINO_ARCH_RP2040)
-        // predefined global instance for TP or RF or TP/RF or TP/IP coupler
-        #if MASK_VERSION == 0x07B0
-            extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau07B0> knx;
-        #elif MASK_VERSION == 0x27B0
-            extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau27B0> knx;
-        #elif MASK_VERSION == 0x57B0
-            extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau57B0> knx;
-        #elif MASK_VERSION == 0x2920
-            extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau2920> knx;
-        #elif MASK_VERSION == 0x091A
-            extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau091A> knx;
-        #else
-            #error "Mask version not supported on ARDUINO_ARCH_RP2040"
-        #endif
-    #elif defined(ARDUINO_ARCH_ESP8266)
-        // predefined global instance for TP or IP or TP/IP coupler
-        #if MASK_VERSION == 0x07B0
-            extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau07B0> knx;
-        #elif MASK_VERSION == 0x57B0
-            extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau57B0> knx;
-        #elif MASK_VERSION == 0x091A
-            extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau091A> knx;
-        #else
-            #error "Mask version not supported on ARDUINO_ARCH_ESP8266"
-        #endif
-    #elif defined(ARDUINO_ARCH_ESP32)
-        // predefined global instance for TP or IP or TP/IP coupler
-        #if MASK_VERSION == 0x07B0
-            extern Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau07B0> knx;
-        #elif MASK_VERSION == 0x57B0
-            extern Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau57B0> knx;
-        #elif MASK_VERSION == 0x091A
-            extern Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau091A> knx;
-        #else
-            #error "Mask version not supported on ARDUINO_ARCH_ESP32"
-        #endif
-    #elif defined(ARDUINO_ARCH_STM32)
-        // predefined global instance for TP only
-        #if MASK_VERSION == 0x07B0
-            extern Knx::KnxFacade<Knx::Stm32Platform, Knx::Bau07B0> knx;
-        #else
-            #error "Mask version not supported on ARDUINO_ARCH_STM32"
-        #endif
-    #else // Non-Arduino platforms and Linux platform
-        // no predefined global instance
-    #endif
+#ifdef __SAMD51__
+  // predefined global instance for TP or RF
+#if MASK_VERSION == 0x07B0
+extern Knx::KnxFacade<Knx::Samd51Platform, Knx::Bau07B0> knx;
+#elif MASK_VERSION == 0x27B0
+extern Knx::KnxFacade<Knx::Samd51Platform, Knx::Bau2920> knx;
+#elif MASK_VERSION == 0x57B0
+extern Knx::KnxFacade<Knx::Samd51Platform, Knx::Bau57B0> knx;
+#else
+#error "Mask version not supported on SAMD51"
+#endif
+#elif defined(_SAMD21_)
+  // predefined global instance for TP or RF or TP/RF coupler
+#if MASK_VERSION == 0x07B0
+extern Knx::KnxFacade<Knx::Samd21Platform, Knx::Bau07B0> knx;
+#elif MASK_VERSION == 0x27B0
+extern Knx::KnxFacade<Knx::Samd21Platform, Knx::Bau27B0> knx;
+#elif MASK_VERSION == 0x2920
+extern Knx::KnxFacade<Knx::Samd21Platform, Knx::Bau2920> knx;
+#else
+#error "Mask version not supported on ARDUINO_ARCH_SAMD"
+#endif
+#elif defined(ARDUINO_ARCH_RP2040)
+  // predefined global instance for TP or RF or TP/RF or TP/IP coupler
+#if MASK_VERSION == 0x07B0
+extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau07B0> knx;
+#elif MASK_VERSION == 0x27B0
+extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau27B0> knx;
+#elif MASK_VERSION == 0x57B0
+extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau57B0> knx;
+#elif MASK_VERSION == 0x2920
+extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau2920> knx;
+#elif MASK_VERSION == 0x091A
+extern Knx::KnxFacade<Knx::RP2040ArduinoPlatform, Knx::Bau091A> knx;
+#else
+#error "Mask version not supported on ARDUINO_ARCH_RP2040"
+#endif
+#elif defined(ARDUINO_ARCH_ESP8266)
+  // predefined global instance for TP or IP or TP/IP coupler
+#if MASK_VERSION == 0x07B0
+extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau07B0> knx;
+#elif MASK_VERSION == 0x57B0
+extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau57B0> knx;
+#elif MASK_VERSION == 0x091A
+extern Knx::KnxFacade<Knx::Esp8266Platform, Knx::Bau091A> knx;
+#else
+#error "Mask version not supported on ARDUINO_ARCH_ESP8266"
+#endif
+#elif defined(ARDUINO_ARCH_ESP32)
+  // predefined global instance for TP or IP or TP/IP coupler
+#if MASK_VERSION == 0x07B0
+extern Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau07B0> knx;
+#elif MASK_VERSION == 0x57B0
+extern Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau57B0> knx;
+#elif MASK_VERSION == 0x091A
+extern Knx::KnxFacade<Knx::Esp32Platform, Knx::Bau091A> knx;
+#else
+#error "Mask version not supported on ARDUINO_ARCH_ESP32"
+#endif
+#elif defined(ARDUINO_ARCH_STM32)
+  // predefined global instance for TP only
+#if MASK_VERSION == 0x07B0
+extern Knx::KnxFacade<Knx::Stm32Platform, Knx::Bau07B0> knx;
+#else
+#error "Mask version not supported on ARDUINO_ARCH_STM32"
+#endif
+#else // Non-Arduino platforms and Linux platform
+  // no predefined global instance
+#endif
 #endif // KNX_NO_AUTOMATIC_GLOBAL_INSTANCE

@@ -16,4 +16,4 @@ namespace Knx
     {
         return _ch;
     }
-}
+} // namespace Knx

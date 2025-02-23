@@ -2,8 +2,8 @@
 
 #include "../bits.h"
 
-#include <cstring>
 #include <cstdio>
+#include <cstring>
 
 /*
 cEMI Frame Format
@@ -126,7 +126,6 @@ namespace Knx
         return *this;
     }
 
-
     MessageCode CemiFrame::messageCode() const
     {
         return (MessageCode)_data[0];
@@ -157,9 +156,9 @@ namespace Knx
         if (frameType() == StandardFrame)
         {
             uint8_t octet5 = (_ctrl1[1] & 0xF0) | (_ctrl1[6] & 0x0F);
-            data[0] = _ctrl1[0]; //CTRL
-            memcpy(data + 1, _ctrl1 + 2, 4); // SA, DA
-            data[5] = octet5; // LEN; Hopcount, ..
+            data[0] = _ctrl1[0];                   // CTRL
+            memcpy(data + 1, _ctrl1 + 2, 4);       // SA, DA
+            data[5] = octet5;                      // LEN; Hopcount, ..
             memcpy(data + 6, _ctrl1 + 7, len - 7); // APDU
         }
         else
@@ -186,12 +185,12 @@ namespace Knx
         // as there is already a length field at the beginning of the raw RF frame which is also used by the
         // physical layer to control the HW packet engine of the transceiver.
 
-        data[0] = _ctrl1[1] & 0x0F; // KNX CTRL field for RF (bits 3..0 EFF only), bits 7..4 are set to 0 for asynchronous RF frames
-        memcpy(data + 1, _ctrl1 + 2, 4); // SA, DA
+        data[0] = _ctrl1[1] & 0x0F;                                                       // KNX CTRL field for RF (bits 3..0 EFF only), bits 7..4 are set to 0 for asynchronous RF frames
+        memcpy(data + 1, _ctrl1 + 2, 4);                                                  // SA, DA
         data[5] = (_ctrl1[1] & 0xF0) | ((_rfLfn & 0x7) << 1) | ((_ctrl1[0] & 0x10) >> 4); // L/NPCI field: AT, Hopcount, LFN, AET
-        memcpy(data + 6, _ctrl1 + 7, len - 6); // APDU
+        memcpy(data + 6, _ctrl1 + 7, len - 6);                                            // APDU
 
-        //printHex("cEMI_fill: ", &data[0], len);
+        // printHex("cEMI_fill: ", &data[0], len);
     }
 #endif
     uint8_t* CemiFrame::data()
@@ -391,11 +390,10 @@ namespace Knx
             return false;
         }
 
-        if ((_ctrl1[0] & 0x40) > 0 // Bit 6 has do be 0
-                || (_ctrl1[1] & 0xF) > 0 // only standard or extended frames
-                || _npdu.octetCount() == 0xFF // not allowed
-                || (_npdu.octetCount() > 15 && frameType() == StandardFrame)
-           )
+        if ((_ctrl1[0] & 0x40) > 0        // Bit 6 has do be 0
+            || (_ctrl1[1] & 0xF) > 0      // only standard or extended frames
+            || _npdu.octetCount() == 0xFF // not allowed
+            || (_npdu.octetCount() > 15 && frameType() == StandardFrame))
         {
             print("Other issue");
             return false;
@@ -430,4 +428,4 @@ namespace Knx
 
 #endif
     }
-}
+} // namespace Knx

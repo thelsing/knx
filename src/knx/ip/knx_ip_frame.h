@@ -50,9 +50,10 @@ namespace Knx
             uint16_t totalLength() const;
             void totalLength(uint16_t length);
             uint8_t* data();
+
         protected:
             bool _freeData = false;
             uint8_t* _data = 0;
             uint16_t _dataLength;
     };
-}
+} // namespace Knx

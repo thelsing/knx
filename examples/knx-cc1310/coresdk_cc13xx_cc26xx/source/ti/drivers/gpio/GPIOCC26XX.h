@@ -143,12 +143,10 @@ extern "C" {
 
 #include <stdint.h>
 
-#include <ti/drivers/GPIO.h>
 #include <ti/devices/DeviceFamily.h>
+#include <ti/drivers/GPIO.h>
 
-#include DeviceFamily_constructPath(driverlib/ioc.h)
-
-
+#include DeviceFamily_constructPath(driverlib / ioc.h)
 
 /*!
  *  @brief  GPIO device specific driver configuration structure
@@ -176,32 +174,32 @@ extern "C" {
  */
 typedef struct GPIOCC26XX_Config
 {
-    /*! Pointer to the board's GPIO_PinConfig array */
-    GPIO_PinConfig*  pinConfigs;
+        /*! Pointer to the board's GPIO_PinConfig array */
+        GPIO_PinConfig* pinConfigs;
 
-    /*! Pointer to the board's GPIO_CallbackFxn array */
-    GPIO_CallbackFxn*  callbacks;
+        /*! Pointer to the board's GPIO_CallbackFxn array */
+        GPIO_CallbackFxn* callbacks;
 
-    /*! Number of GPIO_PinConfigs defined */
-    uint32_t numberOfPinConfigs;
+        /*! Number of GPIO_PinConfigs defined */
+        uint32_t numberOfPinConfigs;
 
-    /*! Number of GPIO_Callbacks defined */
-    uint32_t numberOfCallbacks;
+        /*! Number of GPIO_Callbacks defined */
+        uint32_t numberOfCallbacks;
 
-    /*!
-     *  Interrupt priority used for call back interrupts.
-     *
-     *  intPriority is the interrupt priority, as defined by the
-     *  underlying OS.  It is passed unmodified to the underlying OS's
-     *  interrupt handler creation code, so you need to refer to the OS
-     *  documentation for usage.  If the driver uses the ti.dpl
-     *  interface instead of making OS calls directly, then the HwiP port
-     *  handles the interrupt priority in an OS specific way.  In the case
-     *  of the SYS/BIOS port, intPriority is passed unmodified to Hwi_create().
-     *
-     *  Setting ~0 will configure the lowest possible priority
-     */
-    uint32_t intPriority;
+        /*!
+         *  Interrupt priority used for call back interrupts.
+         *
+         *  intPriority is the interrupt priority, as defined by the
+         *  underlying OS.  It is passed unmodified to the underlying OS's
+         *  interrupt handler creation code, so you need to refer to the OS
+         *  documentation for usage.  If the driver uses the ti.dpl
+         *  interface instead of making OS calls directly, then the HwiP port
+         *  handles the interrupt priority in an OS specific way.  In the case
+         *  of the SYS/BIOS port, intPriority is passed unmodified to Hwi_create().
+         *
+         *  Setting ~0 will configure the lowest possible priority
+         */
+        uint32_t intPriority;
 } GPIOCC26XX_Config;
 
 /*!
@@ -211,44 +209,44 @@ typedef struct GPIOCC26XX_Config
 /**
  *  @name Device specific GPIO port/pin identifiers to be used within the board's GPIO_PinConfig table.
  *  @{
-*/
-#define GPIOCC26XX_EMPTY_PIN  0xffff   /*!< @hideinitializer */
+ */
+#define GPIOCC26XX_EMPTY_PIN 0xffff /*!< @hideinitializer */
 
-#define GPIOCC26XX_DIO_00    IOID_0    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_01    IOID_1    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_02    IOID_2    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_03    IOID_3    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_04    IOID_4    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_05    IOID_5    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_06    IOID_6    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_07    IOID_7    /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_00 IOID_0 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_01 IOID_1 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_02 IOID_2 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_03 IOID_3 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_04 IOID_4 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_05 IOID_5 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_06 IOID_6 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_07 IOID_7 /*!< @hideinitializer */
 
-#define GPIOCC26XX_DIO_08    IOID_8    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_09    IOID_9    /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_10    IOID_10   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_11    IOID_11   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_12    IOID_12   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_13    IOID_13   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_14    IOID_14   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_15    IOID_15   /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_08 IOID_8  /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_09 IOID_9  /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_10 IOID_10 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_11 IOID_11 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_12 IOID_12 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_13 IOID_13 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_14 IOID_14 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_15 IOID_15 /*!< @hideinitializer */
 
-#define GPIOCC26XX_DIO_16    IOID_16   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_17    IOID_17   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_18    IOID_18   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_19    IOID_19   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_20    IOID_20   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_21    IOID_21   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_22    IOID_22   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_23    IOID_23   /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_16 IOID_16 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_17 IOID_17 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_18 IOID_18 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_19 IOID_19 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_20 IOID_20 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_21 IOID_21 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_22 IOID_22 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_23 IOID_23 /*!< @hideinitializer */
 
-#define GPIOCC26XX_DIO_24    IOID_24   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_25    IOID_25   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_26    IOID_26   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_27    IOID_27   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_28    IOID_28   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_29    IOID_29   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_30    IOID_30   /*!< @hideinitializer */
-#define GPIOCC26XX_DIO_31    IOID_31   /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_24 IOID_24 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_25 IOID_25 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_26 IOID_26 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_27 IOID_27 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_28 IOID_28 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_29 IOID_29 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_30 IOID_30 /*!< @hideinitializer */
+#define GPIOCC26XX_DIO_31 IOID_31 /*!< @hideinitializer */
 
 /** @} */
 /** @} end of GPIOCC26XX_PinConfigIds group */

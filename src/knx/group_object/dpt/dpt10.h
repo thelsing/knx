@@ -2,7 +2,7 @@
 #include "dpt.h"
 namespace Knx
 {
-    class DPT_TimeOfDay: public Dpt
+    class DPT_TimeOfDay : public Dpt
     {
         public:
             enum DayOfWeekValue
@@ -16,7 +16,6 @@ namespace Knx
                 Saturday = 6,
                 Sunday = 7
             };
-
 
             Go_SizeCode size() const override;
 
@@ -34,6 +33,7 @@ namespace Knx
 
             uint8_t seconds() const;
             void seconds(uint8_t value);
+
         private:
             DayOfWeekValue _dow;
             uint8_t _hours;
@@ -41,5 +41,4 @@ namespace Knx
             uint8_t _seconds;
     };
 
-
-}
+} // namespace Knx

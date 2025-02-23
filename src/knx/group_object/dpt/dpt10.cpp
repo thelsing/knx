@@ -17,7 +17,7 @@ void Knx::DPT_TimeOfDay::encode(uint8_t* data) const
 
 bool Knx::DPT_TimeOfDay::decode(uint8_t* data)
 {
-    _dow = (DayOfWeekValue) ((unsigned8FromPayload(data, 0) & 0xE0) >> 5);
+    _dow = (DayOfWeekValue)((unsigned8FromPayload(data, 0) & 0xE0) >> 5);
     _hours = unsigned8FromPayload(data, 0) & 0x1F;
     _minutes = unsigned8FromPayload(data, 1) & 0x3F;
     _seconds = unsigned8FromPayload(data, 2) & 0x3F;

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "npdu.h"
-#include "network_layer_entity.h"
-#include "../transport_layer/transport_layer.h"
 #include "../knx_types.h"
+#include "../transport_layer/transport_layer.h"
+#include "network_layer_entity.h"
+#include "npdu.h"
 
 #include <cstdint>
 
@@ -47,4 +47,4 @@ namespace Knx
         private:
             uint8_t _hopCount; // Network Layer Parameter hop_count for the device's own outgoing frames (default value from PID_ROUTING_COUNT)
     };
-}
+} // namespace Knx

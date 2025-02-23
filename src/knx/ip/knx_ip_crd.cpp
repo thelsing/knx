@@ -2,7 +2,8 @@
 
 namespace Knx
 {
-    KnxIpCRD::KnxIpCRD(uint8_t* data) : _data(data)
+    KnxIpCRD::KnxIpCRD(uint8_t* data)
+        : _data(data)
     {}
 
     KnxIpCRD::~KnxIpCRD()
@@ -40,4 +41,4 @@ namespace Knx
         _data[2] = value >> 8;
         _data[3] = value & 0xFF;
     }
-}
+} // namespace Knx

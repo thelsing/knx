@@ -6,7 +6,8 @@ namespace Knx
 {
     class InterfaceObject;
 
-    template <class T> class CallbackProperty : public Property
+    template <class T>
+    class CallbackProperty : public Property
     {
         public:
             CallbackProperty(T* io, PropertyID id, bool writeEnable, PropertyDataType type, uint16_t maxElements,
@@ -34,9 +35,10 @@ namespace Knx
 
                 return _writeCallback(_interfaceObject, start, count, data);
             }
+
         private:
             T* _interfaceObject = nullptr;
             uint8_t (*_readCallback)(T*, uint16_t, uint8_t, uint8_t*) = nullptr;
             uint8_t (*_writeCallback)(T*, uint16_t, uint8_t, const uint8_t*) = nullptr;
     };
-}
+} // namespace Knx

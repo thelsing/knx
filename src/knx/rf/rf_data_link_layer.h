@@ -1,14 +1,13 @@
 #pragma once
 
 #if defined(DeviceFamily_CC13X0)
-    #include "rf_physical_layer_cc1310.h"
+#include "rf_physical_layer_cc1310.h"
 #else
-    #include "rf_physical_layer_cc1101.h"
+#include "rf_physical_layer_cc1101.h"
 #endif
 
 #include "../config.h"
 #include "../datalink_layer/data_link_layer.h"
-
 
 #include <cstdint>
 
@@ -47,15 +46,15 @@ namespace Knx
 
             struct _tx_queue_frame_t
             {
-                uint8_t* data;
-                uint16_t length;
-                _tx_queue_frame_t* next;
+                    uint8_t* data;
+                    uint16_t length;
+                    _tx_queue_frame_t* next;
             };
 
             struct _tx_queue_t
             {
-                _tx_queue_frame_t* front = NULL;
-                _tx_queue_frame_t* back = NULL;
+                    _tx_queue_frame_t* front = NULL;
+                    _tx_queue_frame_t* back = NULL;
             } _tx_queue;
 
             RfMediumObject& _rfMediumObj;
@@ -71,4 +70,4 @@ namespace Knx
             bool sendFrame(CemiFrame& frame);
             void frameBytesReceived(uint8_t* buffer, uint16_t length);
     };
-}
+} // namespace Knx

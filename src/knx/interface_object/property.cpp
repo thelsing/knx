@@ -136,7 +136,6 @@ namespace Knx
     Property::~Property()
     {}
 
-
     uint8_t Property::read(uint8_t& value) const
     {
         if (ElementSize() != 1)
@@ -144,7 +143,6 @@ namespace Knx
 
         return read(1, 1, &value);
     }
-
 
     uint8_t Property::read(uint16_t& value) const
     {
@@ -161,7 +159,6 @@ namespace Knx
 
         return count;
     }
-
 
     uint8_t Property::read(uint32_t& value) const
     {
@@ -192,7 +189,6 @@ namespace Knx
         return write(1, 1, &value);
     }
 
-
     uint8_t Property::write(uint16_t value)
     {
         if (ElementSize() != 2)
@@ -202,7 +198,6 @@ namespace Knx
         pushWord(value, data);
         return write(1, 1, data);
     }
-
 
     uint8_t Property::write(uint32_t value)
     {
@@ -214,12 +209,10 @@ namespace Knx
         return write(1, 1, data);
     }
 
-
     uint8_t Property::write(const uint8_t* value)
     {
         return write(1, 1, value);
     }
-
 
     uint8_t Property::write(uint16_t position, uint16_t value)
     {
@@ -871,4 +864,4 @@ namespace Knx
         return "";
     }
 #endif
-}
+} // namespace Knx

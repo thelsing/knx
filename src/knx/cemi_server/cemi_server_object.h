@@ -4,7 +4,7 @@
 
 namespace Knx
 {
-    class CemiServerObject: public InterfaceObject
+    class CemiServerObject : public InterfaceObject
     {
         public:
             CemiServerObject();
@@ -16,4 +16,4 @@ namespace Knx
                 return "CemiServerObject";
             }
     };
-}
+} // namespace Knx

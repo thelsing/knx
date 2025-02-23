@@ -7,13 +7,16 @@ namespace Knx
 {
     enum ControlValue
     {
-        NoControl, Control
+        NoControl,
+        Control
     };
-    template<typename T> class DPT2: public ValueDpt<T>
+    template <typename T>
+    class DPT2 : public ValueDpt<T>
     {
         public:
-            DPT2() {};
-            DPT2(bool value) : ValueDpt<T>(value) {}
+            DPT2(){};
+            DPT2(bool value)
+                : ValueDpt<T>(value) {}
             Go_SizeCode size() const override
             {
                 return Go_2_Bit;
@@ -21,7 +24,7 @@ namespace Knx
 
             void encode(uint8_t* data) const override
             {
-                if (_control ==  NoControl)
+                if (_control == NoControl)
                 {
                     bitToPayload(data, 6, false);
                     return;
@@ -37,7 +40,7 @@ namespace Knx
 
                 if (!c)
                 {
-                    _control =  NoControl;
+                    _control = NoControl;
                     return true;
                 }
 
@@ -74,4 +77,4 @@ namespace Knx
     typedef DPT2<StartValue> DPT_Start_Control;
     typedef DPT2<StateValue> DPT_State_Control;
     typedef DPT2<InvertValue> DPT_Invert_Control;
-}
+} // namespace Knx

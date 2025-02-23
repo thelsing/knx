@@ -37,18 +37,18 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 typedef struct RingBuf_Object
 {
-    unsigned char*      buffer;
-    size_t              length;
-    size_t              count;
-    size_t              head;
-    size_t              tail;
-    size_t              maxCount;
+        unsigned char* buffer;
+        size_t length;
+        size_t count;
+        size_t head;
+        size_t tail;
+        size_t maxCount;
 } RingBuf_Object, *RingBuf_Handle;
 
 /*!

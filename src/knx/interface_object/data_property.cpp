@@ -17,7 +17,6 @@ namespace Knx
         if (count == 0 || _currentElements == 0 || start > _currentElements || count > _currentElements - start + 1)
             return 0;
 
-
         // we start counting with zero
         start -= 1;
 
@@ -122,7 +121,6 @@ namespace Knx
         return sizeof(_currentElements) + _maxElements * ElementSize();
     }
 
-
     const uint8_t* DataProperty::restore(const uint8_t* buffer)
     {
         uint16_t elements = 0;
@@ -143,7 +141,6 @@ namespace Knx
         return buffer;
     }
 
-
     uint8_t* DataProperty::save(uint8_t* buffer)
     {
         buffer = pushWord(_currentElements, buffer);
@@ -153,7 +150,6 @@ namespace Knx
 
         return buffer;
     }
-
 
     const uint8_t* DataProperty::data()
     {
@@ -169,4 +165,4 @@ namespace Knx
         uint16_t offset = elementIndex * ElementSize();
         return _data + offset;
     }
-}
+} // namespace Knx

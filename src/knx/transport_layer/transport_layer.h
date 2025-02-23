@@ -1,9 +1,9 @@
 #pragma once
 
-#include "tpdu.h"
-#include "../knx_types.h"
-#include "../interface_object/address_table_object.h"
 #include "../datalink_layer/cemi_frame.h"
+#include "../interface_object/address_table_object.h"
+#include "../knx_types.h"
+#include "tpdu.h"
 
 #include <stdint.h>
 
@@ -14,7 +14,13 @@ namespace Knx
     class NetworkLayer;
     class Platform;
 
-    enum StateType { Closed, OpenIdle, OpenWait, Connecting };
+    enum StateType
+    {
+        Closed,
+        OpenIdle,
+        OpenWait,
+        Connecting
+    };
 
     class TransportLayer
     {
@@ -23,7 +29,7 @@ namespace Knx
             void networkLayer(NetworkLayer& layer);
             void groupAddressTable(AddressTableObject& addrTable);
 
-            #pragma region from network layer
+#pragma region from network layer
             void dataIndividualIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
             void dataIndividualConfirm(AckType ack, uint16_t destination, HopCountType hopType, Priority priority, TPDU& tpdu, bool status);
             void dataGroupIndication(uint16_t destination, HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
@@ -32,9 +38,9 @@ namespace Knx
             void dataBroadcastConfirm(AckType ack, HopCountType hopType, Priority priority, TPDU& tpdu, bool status);
             void dataSystemBroadcastIndication(HopCountType hopType, Priority priority, uint16_t source, TPDU& tpdu);
             void dataSystemBroadcastConfirm(AckType ack, HopCountType hopType, TPDU& tpdu, Priority priority, bool status);
-            #pragma endregion
+#pragma endregion
 
-            #pragma region from application layer
+#pragma region from application layer
             /**
              * Request to send an APDU that via multicast. See 3.2 of @cite knx:3/3/4.
              * See also ApplicationLayer::dataGroupConfirm and ApplicationLayer::dataGroupIndication.
@@ -63,16 +69,16 @@ namespace Knx
 
             uint8_t getTpciSeqNum();
             uint16_t getConnectionAddress();
-            #pragma endregion
+#pragma endregion
 
-            #pragma region other
+#pragma region other
             void connectionTimeoutIndication();
             void ackTimeoutIndication();
             void loop();
-            #pragma endregion
+#pragma endregion
 
         private:
-            #pragma region States
+#pragma region States
             Priority _savedPriority = LowPriority;
             CemiFrame _savedFrame;
             Priority _savedPriorityConnecting;
@@ -81,8 +87,34 @@ namespace Knx
             bool _savedConnectingValid = false;
             enum StateEvent
             {
-                E0, E1, E2, E3, E4, E5, E6, E7, E8, E9, E10, E11, E12, E13, E14,
-                E15, E16, E17, E18, E19, E20, E21, E22, E23, E24, E25, E26, E27
+                E0,
+                E1,
+                E2,
+                E3,
+                E4,
+                E5,
+                E6,
+                E7,
+                E8,
+                E9,
+                E10,
+                E11,
+                E12,
+                E13,
+                E14,
+                E15,
+                E16,
+                E17,
+                E18,
+                E19,
+                E20,
+                E21,
+                E22,
+                E23,
+                E24,
+                E25,
+                E26,
+                E27
             };
             StateType _currentState = Closed;
             void sendControlTelegram(TpduType pduType, uint8_t seqNo);
@@ -117,9 +149,9 @@ namespace Knx
             uint16_t _ackTimeoutMillis = 3000;
             uint8_t _repCount = 0;
             uint8_t _maxRepCount = 3;
-            #pragma endregion
+#pragma endregion
             ApplicationLayer& _applicationLayer;
             AddressTableObject* _groupAddressTable;
             NetworkLayer* _networkLayer;
     };
-}
+} // namespace Knx

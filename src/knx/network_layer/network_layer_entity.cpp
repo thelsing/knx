@@ -1,13 +1,14 @@
 #include "network_layer_entity.h"
 
-#include "network_layer.h"
-#include "../transport_layer/tpdu.h"
-#include "../datalink_layer/data_link_layer.h"
 #include "../bits.h"
+#include "../datalink_layer/data_link_layer.h"
+#include "../transport_layer/tpdu.h"
+#include "network_layer.h"
 
 namespace Knx
 {
-    NetworkLayerEntity::NetworkLayerEntity(NetworkLayer& netLayer, uint8_t entityIndex) : _netLayer(netLayer), _entityIndex(entityIndex)
+    NetworkLayerEntity::NetworkLayerEntity(NetworkLayer& netLayer, uint8_t entityIndex)
+        : _netLayer(netLayer), _entityIndex(entityIndex)
     {
     }
 
@@ -75,4 +76,4 @@ namespace Knx
         else
             _dataLinkLayer->systemBroadcastRequest(ack, frameFormat, priority, npdu, source);
     }
-}
+} // namespace Knx

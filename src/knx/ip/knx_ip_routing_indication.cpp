@@ -8,9 +8,9 @@ namespace Knx
         return _frame;
     }
 
-
     KnxIpRoutingIndication::KnxIpRoutingIndication(uint8_t* data,
-            uint16_t length) : KnxIpFrame(data, length), _frame(data + headerLength(), length - headerLength())
+                                                   uint16_t length)
+        : KnxIpFrame(data, length), _frame(data + headerLength(), length - headerLength())
     {
     }
 
@@ -20,4 +20,4 @@ namespace Knx
         serviceTypeIdentifier(RoutingIndication);
         memcpy(_data + LEN_KNXIP_HEADER, frame.data(), frame.totalLenght());
     }
-}
+} // namespace Knx

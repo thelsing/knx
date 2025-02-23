@@ -1,15 +1,15 @@
 #include "network_layer.h"
 
-#include "../interface_object/device_object.h"
-#include "../datalink_layer/data_link_layer.h"
-#include "../transport_layer/tpdu.h"
 #include "../bits.h"
+#include "../datalink_layer/data_link_layer.h"
+#include "../interface_object/device_object.h"
+#include "../transport_layer/tpdu.h"
 
 namespace Knx
 {
-    NetworkLayer::NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer) :
-        _deviceObj(deviceObj),
-        _transportLayer(layer)
+    NetworkLayer::NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer)
+        : _deviceObj(deviceObj),
+          _transportLayer(layer)
     {
         _hopCount = _deviceObj.defaultHopCount();
     }
@@ -44,4 +44,4 @@ namespace Knx
 
         return false;
     }
-}
+} // namespace Knx

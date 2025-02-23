@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 
-
 namespace Knx
 {
     // Provides a simple unordered map which is based on two arrays of different data types, namely K and V.
@@ -19,7 +18,7 @@ namespace Knx
         public:
             Map()
             {
-                static_assert (SIZE <= 64, "Map is too big! Max. 64 elements.");
+                static_assert(SIZE <= 64, "Map is too big! Max. 64 elements.");
             }
 
             void clear()
@@ -137,4 +136,4 @@ namespace Knx
             V values[SIZE];
             static constexpr uint8_t noFreeEntryFoundIndex = 255;
     };
-}
+} // namespace Knx

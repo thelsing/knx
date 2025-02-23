@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       sha2.h
-*  Revised:        2018-04-17 16:04:03 +0200 (Tue, 17 Apr 2018)
-*  Revision:       51893
-*
-*  Description:    SHA-2 header file.
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       sha2.h
+ *  Revised:        2018-04-17 16:04:03 +0200 (Tue, 17 Apr 2018)
+ *  Revision:       51893
+ *
+ *  Description:    SHA-2 header file.
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,21 +55,20 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <stddef.h>
-#include "../inc/hw_types.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_ints.h"
-#include "../inc/hw_crypto.h"
 #include "../inc/hw_ccfg.h"
+#include "../inc/hw_crypto.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
+#include "cpu.h"
 #include "debug.h"
 #include "interrupt.h"
-#include "cpu.h"
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 //*****************************************************************************
 //
@@ -85,12 +84,12 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define SHA2StartDMAOperation           NOROM_SHA2StartDMAOperation
-#define SHA2WaitForIRQFlags             NOROM_SHA2WaitForIRQFlags
-#define SHA2ComputeInitialHash          NOROM_SHA2ComputeInitialHash
-#define SHA2ComputeIntermediateHash     NOROM_SHA2ComputeIntermediateHash
-#define SHA2ComputeFinalHash            NOROM_SHA2ComputeFinalHash
-#define SHA2ComputeHash                 NOROM_SHA2ComputeHash
+#define SHA2StartDMAOperation NOROM_SHA2StartDMAOperation
+#define SHA2WaitForIRQFlags NOROM_SHA2WaitForIRQFlags
+#define SHA2ComputeInitialHash NOROM_SHA2ComputeInitialHash
+#define SHA2ComputeIntermediateHash NOROM_SHA2ComputeIntermediateHash
+#define SHA2ComputeFinalHash NOROM_SHA2ComputeFinalHash
+#define SHA2ComputeHash NOROM_SHA2ComputeHash
 #endif
 
 //*****************************************************************************
@@ -101,10 +100,9 @@ extern "C"
 // function to see if it supports other interrupt status flags.
 //
 //*****************************************************************************
-#define SHA2_DMA_IN_DONE                (CRYPTO_IRQEN_DMA_IN_DONE_M)
-#define SHA2_RESULT_RDY                 (CRYPTO_IRQEN_RESULT_AVAIL_M)
-#define SHA2_DMA_BUS_ERR                (CRYPTO_IRQCLR_DMA_BUS_ERR_M)
-
+#define SHA2_DMA_IN_DONE (CRYPTO_IRQEN_DMA_IN_DONE_M)
+#define SHA2_RESULT_RDY (CRYPTO_IRQEN_RESULT_AVAIL_M)
+#define SHA2_DMA_BUS_ERR (CRYPTO_IRQCLR_DMA_BUS_ERR_M)
 
 //*****************************************************************************
 //
@@ -113,45 +111,43 @@ extern "C"
 //*****************************************************************************
 
 // SHA-2 module return codes
-#define SHA2_SUCCESS                        0
-#define SHA2_INVALID_ALGORITHM              1
-#define SHA2_DMA_BUSY                       3
-#define SHA2_DMA_ERROR                      4
-#define SHA2_DIGEST_NOT_READY               5
-#define SHA2_OLD_DIGEST_NOT_READ            6
+#define SHA2_SUCCESS 0
+#define SHA2_INVALID_ALGORITHM 1
+#define SHA2_DMA_BUSY 3
+#define SHA2_DMA_ERROR 4
+#define SHA2_DIGEST_NOT_READY 5
+#define SHA2_OLD_DIGEST_NOT_READ 6
 
 // SHA-2 output digest lengths in bytes.
-#define SHA2_SHA224_DIGEST_LENGTH_BYTES     (224 / 8)
-#define SHA2_SHA256_DIGEST_LENGTH_BYTES     (256 / 8)
-#define SHA2_SHA384_DIGEST_LENGTH_BYTES     (384 / 8)
-#define SHA2_SHA512_DIGEST_LENGTH_BYTES     (512 / 8)
+#define SHA2_SHA224_DIGEST_LENGTH_BYTES (224 / 8)
+#define SHA2_SHA256_DIGEST_LENGTH_BYTES (256 / 8)
+#define SHA2_SHA384_DIGEST_LENGTH_BYTES (384 / 8)
+#define SHA2_SHA512_DIGEST_LENGTH_BYTES (512 / 8)
 
-//Selectable SHA-2 modes. They determine the algorithm used and if initial
-//values will be set to the default constants or not
-#define SHA2_MODE_SELECT_SHA224             (CRYPTO_HASHMODE_SHA224_MODE_M)
-#define SHA2_MODE_SELECT_SHA256             (CRYPTO_HASHMODE_SHA256_MODE_M)
-#define SHA2_MODE_SELECT_SHA384             (CRYPTO_HASHMODE_SHA384_MODE_M)
-#define SHA2_MODE_SELECT_SHA512             (CRYPTO_HASHMODE_SHA512_MODE_M)
-#define SHA2_MODE_SELECT_NEW_HASH           (CRYPTO_HASHMODE_NEW_HASH_M)
+// Selectable SHA-2 modes. They determine the algorithm used and if initial
+// values will be set to the default constants or not
+#define SHA2_MODE_SELECT_SHA224 (CRYPTO_HASHMODE_SHA224_MODE_M)
+#define SHA2_MODE_SELECT_SHA256 (CRYPTO_HASHMODE_SHA256_MODE_M)
+#define SHA2_MODE_SELECT_SHA384 (CRYPTO_HASHMODE_SHA384_MODE_M)
+#define SHA2_MODE_SELECT_SHA512 (CRYPTO_HASHMODE_SHA512_MODE_M)
+#define SHA2_MODE_SELECT_NEW_HASH (CRYPTO_HASHMODE_NEW_HASH_M)
 
 // SHA-2 block lengths. When hashing block-wise, they define the size of each
 // block provided to the new and intermediate hash functions.
-#define SHA2_SHA224_BLOCK_SIZE_BYTES        (512 / 8)
-#define SHA2_SHA256_BLOCK_SIZE_BYTES        (512 / 8)
-#define SHA2_SHA384_BLOCK_SIZE_BYTES        (1024 / 8)
-#define SHA2_SHA512_BLOCK_SIZE_BYTES        (1024 / 8)
+#define SHA2_SHA224_BLOCK_SIZE_BYTES (512 / 8)
+#define SHA2_SHA256_BLOCK_SIZE_BYTES (512 / 8)
+#define SHA2_SHA384_BLOCK_SIZE_BYTES (1024 / 8)
+#define SHA2_SHA512_BLOCK_SIZE_BYTES (1024 / 8)
 
 // DMA status codes
-#define SHA2_DMA_CHANNEL0_ACTIVE            (CRYPTO_DMASTAT_CH0_ACT_M)
-#define SHA2_DMA_CHANNEL1_ACTIVE            (CRYPTO_DMASTAT_CH1_ACT_M)
-#define SHA2_DMA_PORT_ERROR                 (CRYPTO_DMASTAT_PORT_ERR_M)
+#define SHA2_DMA_CHANNEL0_ACTIVE (CRYPTO_DMASTAT_CH0_ACT_M)
+#define SHA2_DMA_CHANNEL1_ACTIVE (CRYPTO_DMASTAT_CH1_ACT_M)
+#define SHA2_DMA_PORT_ERROR (CRYPTO_DMASTAT_PORT_ERR_M)
 
 // Crypto module DMA operation types
-#define SHA2_ALGSEL_SHA256                  0x04
-#define SHA2_ALGSEL_SHA512                  0x08
-#define SHA2_ALGSEL_TAG                     (CRYPTO_ALGSEL_TAG_M)
-
-
+#define SHA2_ALGSEL_SHA256 0x04
+#define SHA2_ALGSEL_SHA512 0x08
+#define SHA2_ALGSEL_TAG (CRYPTO_ALGSEL_TAG_M)
 
 //*****************************************************************************
 //
@@ -186,7 +182,7 @@ extern "C"
 //! \return None
 //
 //*****************************************************************************
-extern void SHA2StartDMAOperation(uint8_t* channel0Addr, uint32_t channel0Length,  uint8_t* channel1Addr, uint32_t channel1Length);
+extern void SHA2StartDMAOperation(uint8_t* channel0Addr, uint32_t channel0Length, uint8_t* channel1Addr, uint32_t channel1Length);
 
 //*****************************************************************************
 //
@@ -462,8 +458,6 @@ __STATIC_INLINE void SHA2SelectAlgorithm(uint32_t algorithm)
     HWREG(CRYPTO_BASE + CRYPTO_O_ALGSEL) = algorithm;
 }
 
-
-
 //*****************************************************************************
 //
 //! \brief Specify the total length of the message.
@@ -519,7 +513,6 @@ __STATIC_INLINE void SHA2SetDigest(uint32_t* digest, uint8_t digestLength)
     {
         HWREG(CRYPTO_BASE + CRYPTO_O_HASHDIGESTA + (i * sizeof(uint32_t))) = digest[i];
     }
-
 }
 
 //*****************************************************************************
@@ -764,28 +757,28 @@ __STATIC_INLINE void SHA2IntUnregister(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_SHA2StartDMAOperation
-#undef  SHA2StartDMAOperation
-#define SHA2StartDMAOperation           ROM_SHA2StartDMAOperation
+#undef SHA2StartDMAOperation
+#define SHA2StartDMAOperation ROM_SHA2StartDMAOperation
 #endif
 #ifdef ROM_SHA2WaitForIRQFlags
-#undef  SHA2WaitForIRQFlags
-#define SHA2WaitForIRQFlags             ROM_SHA2WaitForIRQFlags
+#undef SHA2WaitForIRQFlags
+#define SHA2WaitForIRQFlags ROM_SHA2WaitForIRQFlags
 #endif
 #ifdef ROM_SHA2ComputeInitialHash
-#undef  SHA2ComputeInitialHash
-#define SHA2ComputeInitialHash          ROM_SHA2ComputeInitialHash
+#undef SHA2ComputeInitialHash
+#define SHA2ComputeInitialHash ROM_SHA2ComputeInitialHash
 #endif
 #ifdef ROM_SHA2ComputeIntermediateHash
-#undef  SHA2ComputeIntermediateHash
-#define SHA2ComputeIntermediateHash     ROM_SHA2ComputeIntermediateHash
+#undef SHA2ComputeIntermediateHash
+#define SHA2ComputeIntermediateHash ROM_SHA2ComputeIntermediateHash
 #endif
 #ifdef ROM_SHA2ComputeFinalHash
-#undef  SHA2ComputeFinalHash
-#define SHA2ComputeFinalHash            ROM_SHA2ComputeFinalHash
+#undef SHA2ComputeFinalHash
+#define SHA2ComputeFinalHash ROM_SHA2ComputeFinalHash
 #endif
 #ifdef ROM_SHA2ComputeHash
-#undef  SHA2ComputeHash
-#define SHA2ComputeHash                 ROM_SHA2ComputeHash
+#undef SHA2ComputeHash
+#define SHA2ComputeHash ROM_SHA2ComputeHash
 #endif
 #endif
 
@@ -798,7 +791,7 @@ __STATIC_INLINE void SHA2IntUnregister(void)
 }
 #endif
 
-#endif  // __SHA2_H__
+#endif // __SHA2_H__
 
 //*****************************************************************************
 //

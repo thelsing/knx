@@ -29,4 +29,4 @@ namespace Knx
         private:
             uint8_t* _data;
     };
-}
+} // namespace Knx

@@ -55,10 +55,11 @@ namespace Knx
             {
                 return "AddressTable";
             }
+
         protected:
             void beforeStateChange(LoadState& newState) override;
 
         private:
             uint16_t* _groupAddresses = 0;
     };
-}
+} // namespace Knx

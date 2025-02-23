@@ -2,9 +2,9 @@
 
 namespace Knx
 {
-    KnxIpSupportedServiceDIB::KnxIpSupportedServiceDIB(uint8_t* data) : KnxIpDIB(data)
+    KnxIpSupportedServiceDIB::KnxIpSupportedServiceDIB(uint8_t* data)
+        : KnxIpDIB(data)
     {}
-
 
     uint8_t KnxIpSupportedServiceDIB::serviceVersion(ServiceFamily family)
     {
@@ -20,8 +20,7 @@ namespace Knx
         return 0;
     }
 
-
-    void KnxIpSupportedServiceDIB::serviceVersion(ServiceFamily family,  uint8_t version)
+    void KnxIpSupportedServiceDIB::serviceVersion(ServiceFamily family, uint8_t version)
     {
         uint8_t* start = _data + 2;
         uint8_t* end = _data + length();
@@ -42,4 +41,4 @@ namespace Knx
             }
         }
     }
-}
+} // namespace Knx

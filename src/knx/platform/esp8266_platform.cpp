@@ -1,15 +1,14 @@
 #ifdef ARDUINO_ARCH_ESP8266
 #include "esp8266_platform.h"
 
-
-#include <user_interface.h>
 #include <Arduino.h>
 #include <EEPROM.h>
+#include <user_interface.h>
 
 #include "knx/bits.h"
 
 #ifndef KNX_SERIAL
-    #define KNX_SERIAL Serial
+#define KNX_SERIAL Serial
 #endif
 
 namespace Knx
@@ -21,7 +20,8 @@ namespace Knx
     {
     }
 
-    Esp8266Platform::Esp8266Platform( HardwareSerial* s) : ArduinoPlatform(s)
+    Esp8266Platform::Esp8266Platform(HardwareSerial* s)
+        : ArduinoPlatform(s)
     {
     }
 
@@ -75,7 +75,7 @@ namespace Knx
 
     bool Esp8266Platform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
     {
-        //printHex("<- ",buffer, len);
+        // printHex("<- ",buffer, len);
         _udp.beginPacketMulticast(_multicastAddr, _multicastPort, WiFi.localIP());
         _udp.write(buffer, len);
         _udp.endPacket();
@@ -96,7 +96,7 @@ namespace Knx
         }
 
         _udp.read(buffer, len);
-        //printHex("-> ", buffer, len);
+        // printHex("-> ", buffer, len);
         return len;
     }
 
@@ -135,5 +135,5 @@ namespace Knx
     {
         EEPROM.commit();
     }
-}
+} // namespace Knx
 #endif
