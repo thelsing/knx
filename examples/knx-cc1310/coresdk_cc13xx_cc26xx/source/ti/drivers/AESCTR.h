@@ -309,6 +309,7 @@
 extern "C" {
 #endif
 
+
 /*!
  * Common AESCTR status code reservation offset.
  * AESCTR driver implementations should offset status codes with
@@ -321,7 +322,7 @@ extern "C" {
  * #define AESCTRXYZ_STATUS_ERROR2    AESCTR_STATUS_RESERVED - 2
  * @endcode
  */
-#define AESCTR_STATUS_RESERVED (-32)
+#define AESCTR_STATUS_RESERVED        (-32)
 
 /*!
  * @brief   Successful status code.
@@ -329,7 +330,7 @@ extern "C" {
  * Functions return #AESCTR_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define AESCTR_STATUS_SUCCESS (0)
+#define AESCTR_STATUS_SUCCESS         (0)
 
 /*!
  * @brief   Generic error status code.
@@ -337,7 +338,7 @@ extern "C" {
  * Functions return #AESCTR_STATUS_ERROR if the function was not executed
  * successfully and no more pertinent error code could be returned.
  */
-#define AESCTR_STATUS_ERROR (-1)
+#define AESCTR_STATUS_ERROR           (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -353,6 +354,7 @@ extern "C" {
  *  @brief  The ongoing operation was canceled.
  */
 #define AESCTR_STATUS_CANCELED (-3)
+
 
 /*!
  * @brief   The way in which CTR function calls return after performing an
@@ -377,20 +379,20 @@ extern "C" {
  */
 typedef enum
 {
-    AESCTR_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
-                                          *   CTR operation goes on in the background. The registered
-                                          *   callback function is called after the operation completes.
-                                          *   The context the callback function is called (task, HWI, SWI)
-                                          *   is implementation-dependent.
-                                          */
-    AESCTR_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while the CTR operation goes
-                                          *   on in the background. CTR operation results are available
-                                          *   after the function returns.
-                                          */
-    AESCTR_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while CTR
-                                          *   operation goes on in the background. CTR operation results
-                                          *   are available after the function returns.
-                                          */
+    AESCTR_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
+                                             *   CTR operation goes on in the background. The registered
+                                             *   callback function is called after the operation completes.
+                                             *   The context the callback function is called (task, HWI, SWI)
+                                             *   is implementation-dependent.
+                                             */
+    AESCTR_RETURN_BEHAVIOR_BLOCKING = 2,    /*!< The function call will block while the CTR operation goes
+                                             *   on in the background. CTR operation results are available
+                                             *   after the function returns.
+                                             */
+    AESCTR_RETURN_BEHAVIOR_POLLING  = 4,    /*!< The function call will continuously poll a flag while CTR
+                                             *   operation goes on in the background. CTR operation results
+                                             *   are available after the function returns.
+                                             */
 } AESCTR_ReturnBehavior;
 
 /*!
@@ -411,24 +413,24 @@ typedef enum
  */
 typedef struct
 {
-        const CryptoKey* key;          /*!< A previously initialized CryptoKey. */
-        const uint8_t* input;          /*!<
-                                        *   - Encryption: The plaintext buffer to be
-                                        *     encrypted in the CTR operation.
-                                        *   - Decryption: The ciphertext to be decrypted.
-                                        */
-        uint8_t* output;               /*!<
-                                        *   - Encryption: The output ciphertext buffer that
-                                        *     the encrypted plaintext is copied to.
-                                        *   - Decryption: The plaintext derived from the
-                                        *     decrypted ciphertext is copied here.
-                                        */
-        const uint8_t* initialCounter; /*!< A buffer containing an initial counter. Under
-                                        *   the same key, each counter value may only be
-                                        *   used to encrypt or decrypt a single input
-                                        *   block.
-                                        */
-        size_t inputLength;            /*!< Length of the input and output in bytes. */
+    const CryptoKey*          key;                       /*!< A previously initialized CryptoKey. */
+    const uint8_t*            input;                     /*!<
+                                                         *   - Encryption: The plaintext buffer to be
+                                                         *     encrypted in the CTR operation.
+                                                         *   - Decryption: The ciphertext to be decrypted.
+                                                         */
+    uint8_t*                  output;                    /*!<
+                                                         *   - Encryption: The output ciphertext buffer that
+                                                         *     the encrypted plaintext is copied to.
+                                                         *   - Decryption: The plaintext derived from the
+                                                         *     decrypted ciphertext is copied here.
+                                                         */
+    const uint8_t*            initialCounter;            /*!< A buffer containing an initial counter. Under
+                                                         *   the same key, each counter value may only be
+                                                         *   used to encrypt or decrypt a single input
+                                                         *   block.
+                                                         */
+    size_t                   inputLength;                /*!< Length of the input and output in bytes. */
 } AESCTR_Operation;
 
 /*!
@@ -453,11 +455,11 @@ typedef enum
  */
 typedef struct AESCTR_Config
 {
-        /*! Pointer to a driver specific data object */
-        void* object;
+    /*! Pointer to a driver specific data object */
+    void*               object;
 
-        /*! Pointer to a driver specific hardware attributes structure */
-        void const* hwAttrs;
+    /*! Pointer to a driver specific hardware attributes structure */
+    void         const* hwAttrs;
 } AESCTR_Config;
 
 /*!
@@ -480,10 +482,10 @@ typedef AESCTR_Config* AESCTR_Handle;
  *  @param  operationType This parameter determines which operation the
  *          callback refers to.
  */
-typedef void (*AESCTR_CallbackFxn)(AESCTR_Handle handle,
-                                   int_fast16_t returnValue,
-                                   AESCTR_Operation* operation,
-                                   AESCTR_OperationType operationType);
+typedef void (*AESCTR_CallbackFxn) (AESCTR_Handle handle,
+                                    int_fast16_t returnValue,
+                                    AESCTR_Operation* operation,
+                                    AESCTR_OperationType operationType);
 
 /*!
  *  @brief  CTR Parameters
@@ -495,14 +497,14 @@ typedef void (*AESCTR_CallbackFxn)(AESCTR_Handle handle,
  */
 typedef struct
 {
-        AESCTR_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
-        AESCTR_CallbackFxn callbackFxn;       /*!< Callback function pointer */
-        uint32_t timeout;                     /*!< Timeout before the driver returns an error in
-                                               *   ::AESCTR_RETURN_BEHAVIOR_BLOCKING
-                                               */
-        void* custom;                         /*!< Custom argument used by driver
-                                               *   implementation
-                                               */
+    AESCTR_ReturnBehavior   returnBehavior;             /*!< Blocking, callback, or polling return behavior */
+    AESCTR_CallbackFxn      callbackFxn;                /*!< Callback function pointer */
+    uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
+                                                         *   ::AESCTR_RETURN_BEHAVIOR_BLOCKING
+                                                         */
+    void*                   custom;                     /*!< Custom argument used by driver
+                                                         *   implementation
+                                                         */
 } AESCTR_Params;
 
 /*!

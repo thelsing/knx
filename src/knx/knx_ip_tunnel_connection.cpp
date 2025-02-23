@@ -2,6 +2,7 @@
 
 KnxIpTunnelConnection::KnxIpTunnelConnection()
 {
+
 }
 
 void KnxIpTunnelConnection::Reset()

@@ -43,18 +43,20 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <ti/drivers/dpl/SemaphoreP.h>
 
 /* PKA driver semaphore used to synchronize accesses to the PKA engine */
-extern SemaphoreP_Struct PKAResourceCC26XX_accessSemaphore;
-extern SemaphoreP_Struct PKAResourceCC26XX_operationSemaphore;
+extern SemaphoreP_Struct    PKAResourceCC26XX_accessSemaphore;
+extern SemaphoreP_Struct    PKAResourceCC26XX_operationSemaphore;
 
-extern volatile bool PKAResourceCC26XX_pollingFlag;
+extern volatile bool        PKAResourceCC26XX_pollingFlag;
 
-extern HwiP_Struct PKAResourceCC26XX_hwi;
+extern HwiP_Struct          PKAResourceCC26XX_hwi;
+
+
 
 void PKAResourceCC26XX_constructRTOSObjects(void);
 void PKAResourceCC26XX_destructRTOSObjects(void);

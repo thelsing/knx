@@ -1,38 +1,38 @@
 /******************************************************************************
- *  Filename:       hw_crypto_h
- *  Revised:        2018-05-14 12:24:52 +0200 (Mon, 14 May 2018)
- *  Revision:       51990
- *
- * Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1) Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- *
- * 2) Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- *
- * 3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *    be used to endorse or promote products derived from this software without
- *    specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       hw_crypto_h
+*  Revised:        2018-05-14 12:24:52 +0200 (Mon, 14 May 2018)
+*  Revision:       51990
+*
+* Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+* All rights reserved.
+*
+* Redistribution and use in source and binary forms, with or without
+* modification, are permitted provided that the following conditions are met:
+*
+* 1) Redistributions of source code must retain the above copyright notice,
+*    this list of conditions and the following disclaimer.
+*
+* 2) Redistributions in binary form must reproduce the above copyright notice,
+*    this list of conditions and the following disclaimer in the documentation
+*    and/or other materials provided with the distribution.
+*
+* 3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*    be used to endorse or promote products derived from this software without
+*    specific prior written permission.
+*
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+* POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 #ifndef __HW_CRYPTO_H__
 #define __HW_CRYPTO_H__
@@ -44,313 +44,313 @@
 //
 //*****************************************************************************
 // Channel 0 Control
-#define CRYPTO_O_DMACH0CTL 0x00000000
+#define CRYPTO_O_DMACH0CTL                                          0x00000000
 
 // Channel 0 External Address
-#define CRYPTO_O_DMACH0EXTADDR 0x00000004
+#define CRYPTO_O_DMACH0EXTADDR                                      0x00000004
 
 // Channel 0 DMA Length
-#define CRYPTO_O_DMACH0LEN 0x0000000C
+#define CRYPTO_O_DMACH0LEN                                          0x0000000C
 
 // DMAC Status
-#define CRYPTO_O_DMASTAT 0x00000018
+#define CRYPTO_O_DMASTAT                                            0x00000018
 
 // DMAC Software Reset
-#define CRYPTO_O_DMASWRESET 0x0000001C
+#define CRYPTO_O_DMASWRESET                                         0x0000001C
 
 // Channel 1 Control
-#define CRYPTO_O_DMACH1CTL 0x00000020
+#define CRYPTO_O_DMACH1CTL                                          0x00000020
 
 // Channel 1 External Address
-#define CRYPTO_O_DMACH1EXTADDR 0x00000024
+#define CRYPTO_O_DMACH1EXTADDR                                      0x00000024
 
 // Channel 1 DMA Length
-#define CRYPTO_O_DMACH1LEN 0x0000002C
+#define CRYPTO_O_DMACH1LEN                                          0x0000002C
 
 // DMAC Master Run-time Parameters
-#define CRYPTO_O_DMABUSCFG 0x00000078
+#define CRYPTO_O_DMABUSCFG                                          0x00000078
 
 // DMAC Port Error Raw Status
-#define CRYPTO_O_DMAPORTERR 0x0000007C
+#define CRYPTO_O_DMAPORTERR                                         0x0000007C
 
 // DMAC Version
-#define CRYPTO_O_DMAHWVER 0x000000FC
+#define CRYPTO_O_DMAHWVER                                           0x000000FC
 
 // Key Store Write Area
-#define CRYPTO_O_KEYWRITEAREA 0x00000400
+#define CRYPTO_O_KEYWRITEAREA                                       0x00000400
 
 // Key Store Written Area
-#define CRYPTO_O_KEYWRITTENAREA 0x00000404
+#define CRYPTO_O_KEYWRITTENAREA                                     0x00000404
 
 // Key Store Size
-#define CRYPTO_O_KEYSIZE 0x00000408
+#define CRYPTO_O_KEYSIZE                                            0x00000408
 
 // Key Store Read Area
-#define CRYPTO_O_KEYREADAREA 0x0000040C
+#define CRYPTO_O_KEYREADAREA                                        0x0000040C
 
 // AES_KEY2_0 / AES_GHASH_H_IN_0
-#define CRYPTO_O_AESKEY20 0x00000500
+#define CRYPTO_O_AESKEY20                                           0x00000500
 
 // AES_KEY2_0 / AES_GHASH_H_IN_0
-#define CRYPTO_O_AESKEY21 0x00000504
+#define CRYPTO_O_AESKEY21                                           0x00000504
 
 // AES_KEY2_0 / AES_GHASH_H_IN_0
-#define CRYPTO_O_AESKEY22 0x00000508
+#define CRYPTO_O_AESKEY22                                           0x00000508
 
 // AES_KEY2_0 / AES_GHASH_H_IN_0
-#define CRYPTO_O_AESKEY23 0x0000050C
+#define CRYPTO_O_AESKEY23                                           0x0000050C
 
 // AES_KEY3_0 / AES_KEY2_4
-#define CRYPTO_O_AESKEY30 0x00000510
+#define CRYPTO_O_AESKEY30                                           0x00000510
 
 // AES_KEY3_0 / AES_KEY2_4
-#define CRYPTO_O_AESKEY31 0x00000514
+#define CRYPTO_O_AESKEY31                                           0x00000514
 
 // AES_KEY3_0 / AES_KEY2_4
-#define CRYPTO_O_AESKEY32 0x00000518
+#define CRYPTO_O_AESKEY32                                           0x00000518
 
 // AES_KEY3_0 / AES_KEY2_4
-#define CRYPTO_O_AESKEY33 0x0000051C
+#define CRYPTO_O_AESKEY33                                           0x0000051C
 
 // AES initialization vector registers
-#define CRYPTO_O_AESIV0 0x00000540
+#define CRYPTO_O_AESIV0                                             0x00000540
 
 // AES initialization vector registers
-#define CRYPTO_O_AESIV1 0x00000544
+#define CRYPTO_O_AESIV1                                             0x00000544
 
 // AES initialization vector registers
-#define CRYPTO_O_AESIV2 0x00000548
+#define CRYPTO_O_AESIV2                                             0x00000548
 
 // AES initialization vector registers
-#define CRYPTO_O_AESIV3 0x0000054C
+#define CRYPTO_O_AESIV3                                             0x0000054C
 
 // AES Control
-#define CRYPTO_O_AESCTL 0x00000550
+#define CRYPTO_O_AESCTL                                             0x00000550
 
 // AES Crypto Length 0 (LSW)
-#define CRYPTO_O_AESDATALEN0 0x00000554
+#define CRYPTO_O_AESDATALEN0                                        0x00000554
 
 // AES Crypto Length 1 (MSW)
-#define CRYPTO_O_AESDATALEN1 0x00000558
+#define CRYPTO_O_AESDATALEN1                                        0x00000558
 
 // AES Authentication Length
-#define CRYPTO_O_AESAUTHLEN 0x0000055C
+#define CRYPTO_O_AESAUTHLEN                                         0x0000055C
 
 // Data Input/Output
-#define CRYPTO_O_AESDATAOUT0 0x00000560
+#define CRYPTO_O_AESDATAOUT0                                        0x00000560
 
 // AES Data Input_Output 0
-#define CRYPTO_O_AESDATAIN0 0x00000560
+#define CRYPTO_O_AESDATAIN0                                         0x00000560
 
 // Data Input/Output
-#define CRYPTO_O_AESDATAOUT1 0x00000564
+#define CRYPTO_O_AESDATAOUT1                                        0x00000564
 
 // AES Data Input_Output 0
-#define CRYPTO_O_AESDATAIN1 0x00000564
+#define CRYPTO_O_AESDATAIN1                                         0x00000564
 
 // Data Input/Output
-#define CRYPTO_O_AESDATAOUT2 0x00000568
+#define CRYPTO_O_AESDATAOUT2                                        0x00000568
 
 // AES Data Input_Output 2
-#define CRYPTO_O_AESDATAIN2 0x00000568
+#define CRYPTO_O_AESDATAIN2                                         0x00000568
 
 // Data Input/Output
-#define CRYPTO_O_AESDATAOUT3 0x0000056C
+#define CRYPTO_O_AESDATAOUT3                                        0x0000056C
 
 // AES Data Input_Output 3
-#define CRYPTO_O_AESDATAIN3 0x0000056C
+#define CRYPTO_O_AESDATAIN3                                         0x0000056C
 
 // AES Tag Out 0
-#define CRYPTO_O_AESTAGOUT0 0x00000570
+#define CRYPTO_O_AESTAGOUT0                                         0x00000570
 
 // AES Tag Out 0
-#define CRYPTO_O_AESTAGOUT1 0x00000574
+#define CRYPTO_O_AESTAGOUT1                                         0x00000574
 
 // AES Tag Out 0
-#define CRYPTO_O_AESTAGOUT2 0x00000578
+#define CRYPTO_O_AESTAGOUT2                                         0x00000578
 
 // AES Tag Out 0
-#define CRYPTO_O_AESTAGOUT3 0x0000057C
+#define CRYPTO_O_AESTAGOUT3                                         0x0000057C
 
 // HASH Data Input 1
-#define CRYPTO_O_HASHDATAIN1 0x00000604
+#define CRYPTO_O_HASHDATAIN1                                        0x00000604
 
 // HASH Data Input 2
-#define CRYPTO_O_HASHDATAIN2 0x00000608
+#define CRYPTO_O_HASHDATAIN2                                        0x00000608
 
 // HASH Data Input 3
-#define CRYPTO_O_HASHDATAIN3 0x0000060C
+#define CRYPTO_O_HASHDATAIN3                                        0x0000060C
 
 // HASH Data Input 4
-#define CRYPTO_O_HASHDATAIN4 0x00000610
+#define CRYPTO_O_HASHDATAIN4                                        0x00000610
 
 // HASH Data Input 5
-#define CRYPTO_O_HASHDATAIN5 0x00000614
+#define CRYPTO_O_HASHDATAIN5                                        0x00000614
 
 // HASH Data Input 6
-#define CRYPTO_O_HASHDATAIN6 0x00000618
+#define CRYPTO_O_HASHDATAIN6                                        0x00000618
 
 // HASH Data Input 7
-#define CRYPTO_O_HASHDATAIN7 0x0000061C
+#define CRYPTO_O_HASHDATAIN7                                        0x0000061C
 
 // HASH Data Input 8
-#define CRYPTO_O_HASHDATAIN8 0x00000620
+#define CRYPTO_O_HASHDATAIN8                                        0x00000620
 
 // HASH Data Input 9
-#define CRYPTO_O_HASHDATAIN9 0x00000624
+#define CRYPTO_O_HASHDATAIN9                                        0x00000624
 
 // HASH Data Input 10
-#define CRYPTO_O_HASHDATAIN10 0x00000628
+#define CRYPTO_O_HASHDATAIN10                                       0x00000628
 
 // HASH Data Input 11
-#define CRYPTO_O_HASHDATAIN11 0x0000062C
+#define CRYPTO_O_HASHDATAIN11                                       0x0000062C
 
 // HASH Data Input 12
-#define CRYPTO_O_HASHDATAIN12 0x00000630
+#define CRYPTO_O_HASHDATAIN12                                       0x00000630
 
 // HASH Data Input 13
-#define CRYPTO_O_HASHDATAIN13 0x00000634
+#define CRYPTO_O_HASHDATAIN13                                       0x00000634
 
 // HASH Data Input 14
-#define CRYPTO_O_HASHDATAIN14 0x00000638
+#define CRYPTO_O_HASHDATAIN14                                       0x00000638
 
 // HASH Data Input 15
-#define CRYPTO_O_HASHDATAIN15 0x0000063C
+#define CRYPTO_O_HASHDATAIN15                                       0x0000063C
 
 // HASH Data Input 16
-#define CRYPTO_O_HASHDATAIN16 0x00000640
+#define CRYPTO_O_HASHDATAIN16                                       0x00000640
 
 // HASH Data Input 17
-#define CRYPTO_O_HASHDATAIN17 0x00000644
+#define CRYPTO_O_HASHDATAIN17                                       0x00000644
 
 // HASH Data Input 18
-#define CRYPTO_O_HASHDATAIN18 0x00000648
+#define CRYPTO_O_HASHDATAIN18                                       0x00000648
 
 // HASH Data Input 19
-#define CRYPTO_O_HASHDATAIN19 0x0000064C
+#define CRYPTO_O_HASHDATAIN19                                       0x0000064C
 
 // HASH Data Input 20
-#define CRYPTO_O_HASHDATAIN20 0x00000650
+#define CRYPTO_O_HASHDATAIN20                                       0x00000650
 
 // HASH Data Input 21
-#define CRYPTO_O_HASHDATAIN21 0x00000654
+#define CRYPTO_O_HASHDATAIN21                                       0x00000654
 
 // HASH Data Input 22
-#define CRYPTO_O_HASHDATAIN22 0x00000658
+#define CRYPTO_O_HASHDATAIN22                                       0x00000658
 
 // HASH Data Input 23
-#define CRYPTO_O_HASHDATAIN23 0x0000065C
+#define CRYPTO_O_HASHDATAIN23                                       0x0000065C
 
 // HASH Data Input 24
-#define CRYPTO_O_HASHDATAIN24 0x00000660
+#define CRYPTO_O_HASHDATAIN24                                       0x00000660
 
 // HASH Data Input 25
-#define CRYPTO_O_HASHDATAIN25 0x00000664
+#define CRYPTO_O_HASHDATAIN25                                       0x00000664
 
 // HASH Data Input 26
-#define CRYPTO_O_HASHDATAIN26 0x00000668
+#define CRYPTO_O_HASHDATAIN26                                       0x00000668
 
 // HASH Data Input 27
-#define CRYPTO_O_HASHDATAIN27 0x0000066C
+#define CRYPTO_O_HASHDATAIN27                                       0x0000066C
 
 // HASH Data Input 28
-#define CRYPTO_O_HASHDATAIN28 0x00000670
+#define CRYPTO_O_HASHDATAIN28                                       0x00000670
 
 // HASH Data Input 29
-#define CRYPTO_O_HASHDATAIN29 0x00000674
+#define CRYPTO_O_HASHDATAIN29                                       0x00000674
 
 // HASH Data Input 30
-#define CRYPTO_O_HASHDATAIN30 0x00000678
+#define CRYPTO_O_HASHDATAIN30                                       0x00000678
 
 // HASH Data Input 31
-#define CRYPTO_O_HASHDATAIN31 0x0000067C
+#define CRYPTO_O_HASHDATAIN31                                       0x0000067C
 
 // HASH Input_Output Buffer Control
-#define CRYPTO_O_HASHIOBUFCTRL 0x00000680
+#define CRYPTO_O_HASHIOBUFCTRL                                      0x00000680
 
 // HASH Mode
-#define CRYPTO_O_HASHMODE 0x00000684
+#define CRYPTO_O_HASHMODE                                           0x00000684
 
 // HASH Input Length LSB
-#define CRYPTO_O_HASHINLENL 0x00000688
+#define CRYPTO_O_HASHINLENL                                         0x00000688
 
 // HASH Input Length MSB
-#define CRYPTO_O_HASHINLENH 0x0000068C
+#define CRYPTO_O_HASHINLENH                                         0x0000068C
 
 // HASH Digest A
-#define CRYPTO_O_HASHDIGESTA 0x000006C0
+#define CRYPTO_O_HASHDIGESTA                                        0x000006C0
 
 // HASH Digest B
-#define CRYPTO_O_HASHDIGESTB 0x000006C4
+#define CRYPTO_O_HASHDIGESTB                                        0x000006C4
 
 // HASH Digest C
-#define CRYPTO_O_HASHDIGESTC 0x000006C8
+#define CRYPTO_O_HASHDIGESTC                                        0x000006C8
 
 // HASH Digest D
-#define CRYPTO_O_HASHDIGESTD 0x000006CC
+#define CRYPTO_O_HASHDIGESTD                                        0x000006CC
 
 // HASH Digest E
-#define CRYPTO_O_HASHDIGESTE 0x000006D0
+#define CRYPTO_O_HASHDIGESTE                                        0x000006D0
 
 // HASH Digest F
-#define CRYPTO_O_HASHDIGESTF 0x000006D4
+#define CRYPTO_O_HASHDIGESTF                                        0x000006D4
 
 // HASH Digest G
-#define CRYPTO_O_HASHDIGESTG 0x000006D8
+#define CRYPTO_O_HASHDIGESTG                                        0x000006D8
 
 // HASH Digest H
-#define CRYPTO_O_HASHDIGESTH 0x000006DC
+#define CRYPTO_O_HASHDIGESTH                                        0x000006DC
 
 // HASH Digest I
-#define CRYPTO_O_HASHDIGESTI 0x000006E0
+#define CRYPTO_O_HASHDIGESTI                                        0x000006E0
 
 // HASH Digest J
-#define CRYPTO_O_HASHDIGESTJ 0x000006E4
+#define CRYPTO_O_HASHDIGESTJ                                        0x000006E4
 
 // HASH Digest K
-#define CRYPTO_O_HASHDIGESTK 0x000006E8
+#define CRYPTO_O_HASHDIGESTK                                        0x000006E8
 
 // HASH Digest L
-#define CRYPTO_O_HASHDIGESTL 0x000006EC
+#define CRYPTO_O_HASHDIGESTL                                        0x000006EC
 
 // HASH Digest M
-#define CRYPTO_O_HASHDIGESTM 0x000006F0
+#define CRYPTO_O_HASHDIGESTM                                        0x000006F0
 
 // HASH Digest N
-#define CRYPTO_O_HASHDIGESTN 0x000006F4
+#define CRYPTO_O_HASHDIGESTN                                        0x000006F4
 
 // HASH Digest 0
-#define CRYPTO_O_HASHDIGESTO 0x000006F8
+#define CRYPTO_O_HASHDIGESTO                                        0x000006F8
 
 // HASH Digest P
-#define CRYPTO_O_HASHDIGESTP 0x000006FC
+#define CRYPTO_O_HASHDIGESTP                                        0x000006FC
 
 // Algorithm Select
-#define CRYPTO_O_ALGSEL 0x00000700
+#define CRYPTO_O_ALGSEL                                             0x00000700
 
 // DMA Protection Control
-#define CRYPTO_O_DMAPROTCTL 0x00000704
+#define CRYPTO_O_DMAPROTCTL                                         0x00000704
 
 // Software Reset
-#define CRYPTO_O_SWRESET 0x00000740
+#define CRYPTO_O_SWRESET                                            0x00000740
 
 // Control Interrupt Configuration
-#define CRYPTO_O_IRQTYPE 0x00000780
+#define CRYPTO_O_IRQTYPE                                            0x00000780
 
 // Control Interrupt Enable
-#define CRYPTO_O_IRQEN 0x00000784
+#define CRYPTO_O_IRQEN                                              0x00000784
 
 // Control Interrupt Clear
-#define CRYPTO_O_IRQCLR 0x00000788
+#define CRYPTO_O_IRQCLR                                             0x00000788
 
 // Control Interrupt Set
-#define CRYPTO_O_IRQSET 0x0000078C
+#define CRYPTO_O_IRQSET                                             0x0000078C
 
 // Control Interrupt Status
-#define CRYPTO_O_IRQSTAT 0x00000790
+#define CRYPTO_O_IRQSTAT                                            0x00000790
 
 // Hardware Version
-#define CRYPTO_O_HWVER 0x000007FC
+#define CRYPTO_O_HWVER                                              0x000007FC
 
 //*****************************************************************************
 //
@@ -366,10 +366,10 @@
 // external port is arbitrated using the round robin scheme. If one channel has
 // a high priority and another one low, the channel with the high priority is
 // served first, in case of simultaneous access requests.
-#define CRYPTO_DMACH0CTL_PRIO 0x00000002
-#define CRYPTO_DMACH0CTL_PRIO_BITN 1
-#define CRYPTO_DMACH0CTL_PRIO_M 0x00000002
-#define CRYPTO_DMACH0CTL_PRIO_S 1
+#define CRYPTO_DMACH0CTL_PRIO                                       0x00000002
+#define CRYPTO_DMACH0CTL_PRIO_BITN                                           1
+#define CRYPTO_DMACH0CTL_PRIO_M                                     0x00000002
+#define CRYPTO_DMACH0CTL_PRIO_S                                              1
 
 // Field:     [0] EN
 //
@@ -378,10 +378,10 @@
 // 1: Enable
 // Note: Disabling an active channel interrupts the DMA operation. The ongoing
 // block transfer completes, but no new transfers are requested.
-#define CRYPTO_DMACH0CTL_EN 0x00000001
-#define CRYPTO_DMACH0CTL_EN_BITN 0
-#define CRYPTO_DMACH0CTL_EN_M 0x00000001
-#define CRYPTO_DMACH0CTL_EN_S 0
+#define CRYPTO_DMACH0CTL_EN                                         0x00000001
+#define CRYPTO_DMACH0CTL_EN_BITN                                             0
+#define CRYPTO_DMACH0CTL_EN_M                                       0x00000001
+#define CRYPTO_DMACH0CTL_EN_S                                                0
 
 //*****************************************************************************
 //
@@ -395,9 +395,9 @@
 // being sent to the master interface.  Note: The crypto DMA copies out upto 3
 // bytes until it hits a word boundary, thus the address need not be word
 // aligned.
-#define CRYPTO_DMACH0EXTADDR_ADDR_W 32
-#define CRYPTO_DMACH0EXTADDR_ADDR_M 0xFFFFFFFF
-#define CRYPTO_DMACH0EXTADDR_ADDR_S 0
+#define CRYPTO_DMACH0EXTADDR_ADDR_W                                         32
+#define CRYPTO_DMACH0EXTADDR_ADDR_M                                 0xFFFFFFFF
+#define CRYPTO_DMACH0EXTADDR_ADDR_S                                          0
 
 //*****************************************************************************
 //
@@ -413,9 +413,9 @@
 // Note: Setting this register to a nonzero value starts the transfer if the
 // channel is enabled. Therefore, this register must be written last when
 // setting up a DMA channel.
-#define CRYPTO_DMACH0LEN_DMALEN_W 16
-#define CRYPTO_DMACH0LEN_DMALEN_M 0x0000FFFF
-#define CRYPTO_DMACH0LEN_DMALEN_S 0
+#define CRYPTO_DMACH0LEN_DMALEN_W                                           16
+#define CRYPTO_DMACH0LEN_DMALEN_M                                   0x0000FFFF
+#define CRYPTO_DMACH0LEN_DMALEN_S                                            0
 
 //*****************************************************************************
 //
@@ -425,26 +425,26 @@
 // Field:    [17] PORT_ERR
 //
 // Reflects possible transfer errors on the AHB port.
-#define CRYPTO_DMASTAT_PORT_ERR 0x00020000
-#define CRYPTO_DMASTAT_PORT_ERR_BITN 17
-#define CRYPTO_DMASTAT_PORT_ERR_M 0x00020000
-#define CRYPTO_DMASTAT_PORT_ERR_S 17
+#define CRYPTO_DMASTAT_PORT_ERR                                     0x00020000
+#define CRYPTO_DMASTAT_PORT_ERR_BITN                                        17
+#define CRYPTO_DMASTAT_PORT_ERR_M                                   0x00020000
+#define CRYPTO_DMASTAT_PORT_ERR_S                                           17
 
 // Field:     [1] CH1_ACT
 //
 // A value of 1 indicates that channel 1 is active (DMA transfer on-going).
-#define CRYPTO_DMASTAT_CH1_ACT 0x00000002
-#define CRYPTO_DMASTAT_CH1_ACT_BITN 1
-#define CRYPTO_DMASTAT_CH1_ACT_M 0x00000002
-#define CRYPTO_DMASTAT_CH1_ACT_S 1
+#define CRYPTO_DMASTAT_CH1_ACT                                      0x00000002
+#define CRYPTO_DMASTAT_CH1_ACT_BITN                                          1
+#define CRYPTO_DMASTAT_CH1_ACT_M                                    0x00000002
+#define CRYPTO_DMASTAT_CH1_ACT_S                                             1
 
 // Field:     [0] CH0_ACT
 //
 // A value of 1 indicates that channel 0 is active (DMA transfer on-going).
-#define CRYPTO_DMASTAT_CH0_ACT 0x00000001
-#define CRYPTO_DMASTAT_CH0_ACT_BITN 0
-#define CRYPTO_DMASTAT_CH0_ACT_M 0x00000001
-#define CRYPTO_DMASTAT_CH0_ACT_S 0
+#define CRYPTO_DMASTAT_CH0_ACT                                      0x00000001
+#define CRYPTO_DMASTAT_CH0_ACT_BITN                                          0
+#define CRYPTO_DMASTAT_CH0_ACT_M                                    0x00000001
+#define CRYPTO_DMASTAT_CH0_ACT_S                                             0
 
 //*****************************************************************************
 //
@@ -457,10 +457,10 @@
 // 0 : Disabled
 // 1 :  Enabled (self-cleared to 0)
 // Completion of the software reset must be checked through the DMASTAT
-#define CRYPTO_DMASWRESET_SWRES 0x00000001
-#define CRYPTO_DMASWRESET_SWRES_BITN 0
-#define CRYPTO_DMASWRESET_SWRES_M 0x00000001
-#define CRYPTO_DMASWRESET_SWRES_S 0
+#define CRYPTO_DMASWRESET_SWRES                                     0x00000001
+#define CRYPTO_DMASWRESET_SWRES_BITN                                         0
+#define CRYPTO_DMASWRESET_SWRES_M                                   0x00000001
+#define CRYPTO_DMASWRESET_SWRES_S                                            0
 
 //*****************************************************************************
 //
@@ -476,10 +476,10 @@
 // external port is arbitrated using the round robin scheme. If one channel has
 // a high priority and another one low, the channel with the high priority is
 // served first, in case of simultaneous access requests.
-#define CRYPTO_DMACH1CTL_PRIO 0x00000002
-#define CRYPTO_DMACH1CTL_PRIO_BITN 1
-#define CRYPTO_DMACH1CTL_PRIO_M 0x00000002
-#define CRYPTO_DMACH1CTL_PRIO_S 1
+#define CRYPTO_DMACH1CTL_PRIO                                       0x00000002
+#define CRYPTO_DMACH1CTL_PRIO_BITN                                           1
+#define CRYPTO_DMACH1CTL_PRIO_M                                     0x00000002
+#define CRYPTO_DMACH1CTL_PRIO_S                                              1
 
 // Field:     [0] EN
 //
@@ -488,10 +488,10 @@
 // 1: Enable
 // Note: Disabling an active channel interrupts the DMA operation. The ongoing
 // block transfer completes, but no new transfers are requested.
-#define CRYPTO_DMACH1CTL_EN 0x00000001
-#define CRYPTO_DMACH1CTL_EN_BITN 0
-#define CRYPTO_DMACH1CTL_EN_M 0x00000001
-#define CRYPTO_DMACH1CTL_EN_S 0
+#define CRYPTO_DMACH1CTL_EN                                         0x00000001
+#define CRYPTO_DMACH1CTL_EN_BITN                                             0
+#define CRYPTO_DMACH1CTL_EN_M                                       0x00000001
+#define CRYPTO_DMACH1CTL_EN_S                                                0
 
 //*****************************************************************************
 //
@@ -505,9 +505,9 @@
 // being sent to the master interface.   Note: The crypto DMA copies out upto 3
 // bytes until it hits a word boundary, thus the address need not be word
 // aligned.
-#define CRYPTO_DMACH1EXTADDR_ADDR_W 32
-#define CRYPTO_DMACH1EXTADDR_ADDR_M 0xFFFFFFFF
-#define CRYPTO_DMACH1EXTADDR_ADDR_S 0
+#define CRYPTO_DMACH1EXTADDR_ADDR_W                                         32
+#define CRYPTO_DMACH1EXTADDR_ADDR_M                                 0xFFFFFFFF
+#define CRYPTO_DMACH1EXTADDR_ADDR_S                                          0
 
 //*****************************************************************************
 //
@@ -523,9 +523,9 @@
 // Note: Setting this register to a nonzero value starts the transfer if the
 // channel is enabled. Therefore, this register must be written last when
 // setting up a DMA channel.
-#define CRYPTO_DMACH1LEN_DMALEN_W 16
-#define CRYPTO_DMACH1LEN_DMALEN_M 0x0000FFFF
-#define CRYPTO_DMACH1LEN_DMALEN_S 0
+#define CRYPTO_DMACH1LEN_DMALEN_W                                           16
+#define CRYPTO_DMACH1LEN_DMALEN_M                                   0x0000FFFF
+#define CRYPTO_DMACH1LEN_DMALEN_S                                            0
 
 //*****************************************************************************
 //
@@ -541,14 +541,14 @@
 // 16_BYTE                  16 bytes
 // 8_BYTE                   8 bytes
 // 4_BYTE                   4 bytes
-#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_W 4
-#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_M 0x0000F000
-#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_S 12
-#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_64_BYTE 0x00006000
-#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_32_BYTE 0x00005000
-#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_16_BYTE 0x00004000
-#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_8_BYTE 0x00003000
-#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_4_BYTE 0x00002000
+#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_W                               4
+#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_M                      0x0000F000
+#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_S                              12
+#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_64_BYTE                0x00006000
+#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_32_BYTE                0x00005000
+#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_16_BYTE                0x00004000
+#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_8_BYTE                 0x00003000
+#define CRYPTO_DMABUSCFG_AHB_MST1_BURST_SIZE_4_BYTE                 0x00002000
 
 // Field:    [11] AHB_MST1_IDLE_EN
 //
@@ -556,12 +556,12 @@
 // ENUMs:
 // IDLE                     Idle transfer insertion enabled
 // NO_IDLE                  Do not insert idle transfers.
-#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN 0x00000800
-#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_BITN 11
-#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_M 0x00000800
-#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_S 11
-#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_IDLE 0x00000800
-#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_NO_IDLE 0x00000000
+#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN                           0x00000800
+#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_BITN                              11
+#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_M                         0x00000800
+#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_S                                 11
+#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_IDLE                      0x00000800
+#define CRYPTO_DMABUSCFG_AHB_MST1_IDLE_EN_NO_IDLE                   0x00000000
 
 // Field:    [10] AHB_MST1_INCR_EN
 //
@@ -569,12 +569,12 @@
 // ENUMs:
 // SPECIFIED                Fixed length bursts or single transfers
 // UNSPECIFIED              Unspecified length burst transfers
-#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN 0x00000400
-#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_BITN 10
-#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_M 0x00000400
-#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_S 10
-#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_SPECIFIED 0x00000400
-#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_UNSPECIFIED 0x00000000
+#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN                           0x00000400
+#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_BITN                              10
+#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_M                         0x00000400
+#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_S                                 10
+#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_SPECIFIED                 0x00000400
+#define CRYPTO_DMABUSCFG_AHB_MST1_INCR_EN_UNSPECIFIED               0x00000000
 
 // Field:     [9] AHB_MST1_LOCK_EN
 //
@@ -582,12 +582,12 @@
 // ENUMs:
 // LOCKED                   Transfers are locked
 // NOT_LOCKED               Transfers are not locked
-#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN 0x00000200
-#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_BITN 9
-#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_M 0x00000200
-#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_S 9
-#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_LOCKED 0x00000200
-#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_NOT_LOCKED 0x00000000
+#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN                           0x00000200
+#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_BITN                               9
+#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_M                         0x00000200
+#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_S                                  9
+#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_LOCKED                    0x00000200
+#define CRYPTO_DMABUSCFG_AHB_MST1_LOCK_EN_NOT_LOCKED                0x00000000
 
 // Field:     [8] AHB_MST1_BIGEND
 //
@@ -595,12 +595,12 @@
 // ENUMs:
 // BIG_ENDIAN               Big Endian
 // LITTLE_ENDIAN            Little Endian
-#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND 0x00000100
-#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_BITN 8
-#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_M 0x00000100
-#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_S 8
-#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_BIG_ENDIAN 0x00000100
-#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_LITTLE_ENDIAN 0x00000000
+#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND                            0x00000100
+#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_BITN                                8
+#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_M                          0x00000100
+#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_S                                   8
+#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_BIG_ENDIAN                 0x00000100
+#define CRYPTO_DMABUSCFG_AHB_MST1_BIGEND_LITTLE_ENDIAN              0x00000000
 
 //*****************************************************************************
 //
@@ -610,19 +610,19 @@
 // Field:    [12] PORT1_AHB_ERROR
 //
 // A value of 1 indicates that the EIP-101 has detected an AHB bus error
-#define CRYPTO_DMAPORTERR_PORT1_AHB_ERROR 0x00001000
-#define CRYPTO_DMAPORTERR_PORT1_AHB_ERROR_BITN 12
-#define CRYPTO_DMAPORTERR_PORT1_AHB_ERROR_M 0x00001000
-#define CRYPTO_DMAPORTERR_PORT1_AHB_ERROR_S 12
+#define CRYPTO_DMAPORTERR_PORT1_AHB_ERROR                           0x00001000
+#define CRYPTO_DMAPORTERR_PORT1_AHB_ERROR_BITN                              12
+#define CRYPTO_DMAPORTERR_PORT1_AHB_ERROR_M                         0x00001000
+#define CRYPTO_DMAPORTERR_PORT1_AHB_ERROR_S                                 12
 
 // Field:     [9] PORT1_CHANNEL
 //
 // Indicates which channel has serviced last (channel 0 or channel 1) by AHB
 // master port.
-#define CRYPTO_DMAPORTERR_PORT1_CHANNEL 0x00000200
-#define CRYPTO_DMAPORTERR_PORT1_CHANNEL_BITN 9
-#define CRYPTO_DMAPORTERR_PORT1_CHANNEL_M 0x00000200
-#define CRYPTO_DMAPORTERR_PORT1_CHANNEL_S 9
+#define CRYPTO_DMAPORTERR_PORT1_CHANNEL                             0x00000200
+#define CRYPTO_DMAPORTERR_PORT1_CHANNEL_BITN                                 9
+#define CRYPTO_DMAPORTERR_PORT1_CHANNEL_M                           0x00000200
+#define CRYPTO_DMAPORTERR_PORT1_CHANNEL_S                                    9
 
 //*****************************************************************************
 //
@@ -632,38 +632,38 @@
 // Field: [27:24] HW_MAJOR_VERSION
 //
 // Major version number
-#define CRYPTO_DMAHWVER_HW_MAJOR_VERSION_W 4
-#define CRYPTO_DMAHWVER_HW_MAJOR_VERSION_M 0x0F000000
-#define CRYPTO_DMAHWVER_HW_MAJOR_VERSION_S 24
+#define CRYPTO_DMAHWVER_HW_MAJOR_VERSION_W                                   4
+#define CRYPTO_DMAHWVER_HW_MAJOR_VERSION_M                          0x0F000000
+#define CRYPTO_DMAHWVER_HW_MAJOR_VERSION_S                                  24
 
 // Field: [23:20] HW_MINOR_VERSION
 //
 // Minor version number
-#define CRYPTO_DMAHWVER_HW_MINOR_VERSION_W 4
-#define CRYPTO_DMAHWVER_HW_MINOR_VERSION_M 0x00F00000
-#define CRYPTO_DMAHWVER_HW_MINOR_VERSION_S 20
+#define CRYPTO_DMAHWVER_HW_MINOR_VERSION_W                                   4
+#define CRYPTO_DMAHWVER_HW_MINOR_VERSION_M                          0x00F00000
+#define CRYPTO_DMAHWVER_HW_MINOR_VERSION_S                                  20
 
 // Field: [19:16] HW_PATCH_LEVEL
 //
 // Patch level
 // Starts at 0 at first delivery of this version
-#define CRYPTO_DMAHWVER_HW_PATCH_LEVEL_W 4
-#define CRYPTO_DMAHWVER_HW_PATCH_LEVEL_M 0x000F0000
-#define CRYPTO_DMAHWVER_HW_PATCH_LEVEL_S 16
+#define CRYPTO_DMAHWVER_HW_PATCH_LEVEL_W                                     4
+#define CRYPTO_DMAHWVER_HW_PATCH_LEVEL_M                            0x000F0000
+#define CRYPTO_DMAHWVER_HW_PATCH_LEVEL_S                                    16
 
 // Field:  [15:8] EIP_NUMBER_COMPL
 //
 // Bit-by-bit complement of the EIP_NUMBER field bits.
-#define CRYPTO_DMAHWVER_EIP_NUMBER_COMPL_W 8
-#define CRYPTO_DMAHWVER_EIP_NUMBER_COMPL_M 0x0000FF00
-#define CRYPTO_DMAHWVER_EIP_NUMBER_COMPL_S 8
+#define CRYPTO_DMAHWVER_EIP_NUMBER_COMPL_W                                   8
+#define CRYPTO_DMAHWVER_EIP_NUMBER_COMPL_M                          0x0000FF00
+#define CRYPTO_DMAHWVER_EIP_NUMBER_COMPL_S                                   8
 
 // Field:   [7:0] EIP_NUMBER
 //
 // Binary encoding of the EIP-number of this DMA controller (209)
-#define CRYPTO_DMAHWVER_EIP_NUMBER_W 8
-#define CRYPTO_DMAHWVER_EIP_NUMBER_M 0x000000FF
-#define CRYPTO_DMAHWVER_EIP_NUMBER_S 0
+#define CRYPTO_DMAHWVER_EIP_NUMBER_W                                         8
+#define CRYPTO_DMAHWVER_EIP_NUMBER_M                                0x000000FF
+#define CRYPTO_DMAHWVER_EIP_NUMBER_S                                         0
 
 //*****************************************************************************
 //
@@ -684,12 +684,12 @@
 // ENUMs:
 // SEL                      This RAM area is selected to be written
 // NOT_SEL                  This RAM area is not selected to be written
-#define CRYPTO_KEYWRITEAREA_RAM_AREA7 0x00000080
-#define CRYPTO_KEYWRITEAREA_RAM_AREA7_BITN 7
-#define CRYPTO_KEYWRITEAREA_RAM_AREA7_M 0x00000080
-#define CRYPTO_KEYWRITEAREA_RAM_AREA7_S 7
-#define CRYPTO_KEYWRITEAREA_RAM_AREA7_SEL 0x00000080
-#define CRYPTO_KEYWRITEAREA_RAM_AREA7_NOT_SEL 0x00000000
+#define CRYPTO_KEYWRITEAREA_RAM_AREA7                               0x00000080
+#define CRYPTO_KEYWRITEAREA_RAM_AREA7_BITN                                   7
+#define CRYPTO_KEYWRITEAREA_RAM_AREA7_M                             0x00000080
+#define CRYPTO_KEYWRITEAREA_RAM_AREA7_S                                      7
+#define CRYPTO_KEYWRITEAREA_RAM_AREA7_SEL                           0x00000080
+#define CRYPTO_KEYWRITEAREA_RAM_AREA7_NOT_SEL                       0x00000000
 
 // Field:     [6] RAM_AREA6
 //
@@ -705,12 +705,12 @@
 // ENUMs:
 // SEL                      This RAM area is selected to be written
 // NOT_SEL                  This RAM area is not selected to be written
-#define CRYPTO_KEYWRITEAREA_RAM_AREA6 0x00000040
-#define CRYPTO_KEYWRITEAREA_RAM_AREA6_BITN 6
-#define CRYPTO_KEYWRITEAREA_RAM_AREA6_M 0x00000040
-#define CRYPTO_KEYWRITEAREA_RAM_AREA6_S 6
-#define CRYPTO_KEYWRITEAREA_RAM_AREA6_SEL 0x00000040
-#define CRYPTO_KEYWRITEAREA_RAM_AREA6_NOT_SEL 0x00000000
+#define CRYPTO_KEYWRITEAREA_RAM_AREA6                               0x00000040
+#define CRYPTO_KEYWRITEAREA_RAM_AREA6_BITN                                   6
+#define CRYPTO_KEYWRITEAREA_RAM_AREA6_M                             0x00000040
+#define CRYPTO_KEYWRITEAREA_RAM_AREA6_S                                      6
+#define CRYPTO_KEYWRITEAREA_RAM_AREA6_SEL                           0x00000040
+#define CRYPTO_KEYWRITEAREA_RAM_AREA6_NOT_SEL                       0x00000000
 
 // Field:     [5] RAM_AREA5
 //
@@ -726,12 +726,12 @@
 // ENUMs:
 // SEL                      This RAM area is selected to be written
 // NOT_SEL                  This RAM area is not selected to be written
-#define CRYPTO_KEYWRITEAREA_RAM_AREA5 0x00000020
-#define CRYPTO_KEYWRITEAREA_RAM_AREA5_BITN 5
-#define CRYPTO_KEYWRITEAREA_RAM_AREA5_M 0x00000020
-#define CRYPTO_KEYWRITEAREA_RAM_AREA5_S 5
-#define CRYPTO_KEYWRITEAREA_RAM_AREA5_SEL 0x00000020
-#define CRYPTO_KEYWRITEAREA_RAM_AREA5_NOT_SEL 0x00000000
+#define CRYPTO_KEYWRITEAREA_RAM_AREA5                               0x00000020
+#define CRYPTO_KEYWRITEAREA_RAM_AREA5_BITN                                   5
+#define CRYPTO_KEYWRITEAREA_RAM_AREA5_M                             0x00000020
+#define CRYPTO_KEYWRITEAREA_RAM_AREA5_S                                      5
+#define CRYPTO_KEYWRITEAREA_RAM_AREA5_SEL                           0x00000020
+#define CRYPTO_KEYWRITEAREA_RAM_AREA5_NOT_SEL                       0x00000000
 
 // Field:     [4] RAM_AREA4
 //
@@ -747,12 +747,12 @@
 // ENUMs:
 // SEL                      This RAM area is selected to be written
 // NOT_SEL                  This RAM area is not selected to be written
-#define CRYPTO_KEYWRITEAREA_RAM_AREA4 0x00000010
-#define CRYPTO_KEYWRITEAREA_RAM_AREA4_BITN 4
-#define CRYPTO_KEYWRITEAREA_RAM_AREA4_M 0x00000010
-#define CRYPTO_KEYWRITEAREA_RAM_AREA4_S 4
-#define CRYPTO_KEYWRITEAREA_RAM_AREA4_SEL 0x00000010
-#define CRYPTO_KEYWRITEAREA_RAM_AREA4_NOT_SEL 0x00000000
+#define CRYPTO_KEYWRITEAREA_RAM_AREA4                               0x00000010
+#define CRYPTO_KEYWRITEAREA_RAM_AREA4_BITN                                   4
+#define CRYPTO_KEYWRITEAREA_RAM_AREA4_M                             0x00000010
+#define CRYPTO_KEYWRITEAREA_RAM_AREA4_S                                      4
+#define CRYPTO_KEYWRITEAREA_RAM_AREA4_SEL                           0x00000010
+#define CRYPTO_KEYWRITEAREA_RAM_AREA4_NOT_SEL                       0x00000000
 
 // Field:     [3] RAM_AREA3
 //
@@ -768,12 +768,12 @@
 // ENUMs:
 // SEL                      This RAM area is selected to be written
 // NOT_SEL                  This RAM area is not selected to be written
-#define CRYPTO_KEYWRITEAREA_RAM_AREA3 0x00000008
-#define CRYPTO_KEYWRITEAREA_RAM_AREA3_BITN 3
-#define CRYPTO_KEYWRITEAREA_RAM_AREA3_M 0x00000008
-#define CRYPTO_KEYWRITEAREA_RAM_AREA3_S 3
-#define CRYPTO_KEYWRITEAREA_RAM_AREA3_SEL 0x00000008
-#define CRYPTO_KEYWRITEAREA_RAM_AREA3_NOT_SEL 0x00000000
+#define CRYPTO_KEYWRITEAREA_RAM_AREA3                               0x00000008
+#define CRYPTO_KEYWRITEAREA_RAM_AREA3_BITN                                   3
+#define CRYPTO_KEYWRITEAREA_RAM_AREA3_M                             0x00000008
+#define CRYPTO_KEYWRITEAREA_RAM_AREA3_S                                      3
+#define CRYPTO_KEYWRITEAREA_RAM_AREA3_SEL                           0x00000008
+#define CRYPTO_KEYWRITEAREA_RAM_AREA3_NOT_SEL                       0x00000000
 
 // Field:     [2] RAM_AREA2
 //
@@ -789,12 +789,12 @@
 // ENUMs:
 // SEL                      This RAM area is selected to be written
 // NOT_SEL                  This RAM area is not selected to be written
-#define CRYPTO_KEYWRITEAREA_RAM_AREA2 0x00000004
-#define CRYPTO_KEYWRITEAREA_RAM_AREA2_BITN 2
-#define CRYPTO_KEYWRITEAREA_RAM_AREA2_M 0x00000004
-#define CRYPTO_KEYWRITEAREA_RAM_AREA2_S 2
-#define CRYPTO_KEYWRITEAREA_RAM_AREA2_SEL 0x00000004
-#define CRYPTO_KEYWRITEAREA_RAM_AREA2_NOT_SEL 0x00000000
+#define CRYPTO_KEYWRITEAREA_RAM_AREA2                               0x00000004
+#define CRYPTO_KEYWRITEAREA_RAM_AREA2_BITN                                   2
+#define CRYPTO_KEYWRITEAREA_RAM_AREA2_M                             0x00000004
+#define CRYPTO_KEYWRITEAREA_RAM_AREA2_S                                      2
+#define CRYPTO_KEYWRITEAREA_RAM_AREA2_SEL                           0x00000004
+#define CRYPTO_KEYWRITEAREA_RAM_AREA2_NOT_SEL                       0x00000000
 
 // Field:     [1] RAM_AREA1
 //
@@ -810,12 +810,12 @@
 // ENUMs:
 // SEL                      This RAM area is selected to be written
 // NOT_SEL                  This RAM area is not selected to be written
-#define CRYPTO_KEYWRITEAREA_RAM_AREA1 0x00000002
-#define CRYPTO_KEYWRITEAREA_RAM_AREA1_BITN 1
-#define CRYPTO_KEYWRITEAREA_RAM_AREA1_M 0x00000002
-#define CRYPTO_KEYWRITEAREA_RAM_AREA1_S 1
-#define CRYPTO_KEYWRITEAREA_RAM_AREA1_SEL 0x00000002
-#define CRYPTO_KEYWRITEAREA_RAM_AREA1_NOT_SEL 0x00000000
+#define CRYPTO_KEYWRITEAREA_RAM_AREA1                               0x00000002
+#define CRYPTO_KEYWRITEAREA_RAM_AREA1_BITN                                   1
+#define CRYPTO_KEYWRITEAREA_RAM_AREA1_M                             0x00000002
+#define CRYPTO_KEYWRITEAREA_RAM_AREA1_S                                      1
+#define CRYPTO_KEYWRITEAREA_RAM_AREA1_SEL                           0x00000002
+#define CRYPTO_KEYWRITEAREA_RAM_AREA1_NOT_SEL                       0x00000000
 
 // Field:     [0] RAM_AREA0
 //
@@ -831,12 +831,12 @@
 // ENUMs:
 // SEL                      This RAM area is selected to be written
 // NOT_SEL                  This RAM area is not selected to be written
-#define CRYPTO_KEYWRITEAREA_RAM_AREA0 0x00000001
-#define CRYPTO_KEYWRITEAREA_RAM_AREA0_BITN 0
-#define CRYPTO_KEYWRITEAREA_RAM_AREA0_M 0x00000001
-#define CRYPTO_KEYWRITEAREA_RAM_AREA0_S 0
-#define CRYPTO_KEYWRITEAREA_RAM_AREA0_SEL 0x00000001
-#define CRYPTO_KEYWRITEAREA_RAM_AREA0_NOT_SEL 0x00000000
+#define CRYPTO_KEYWRITEAREA_RAM_AREA0                               0x00000001
+#define CRYPTO_KEYWRITEAREA_RAM_AREA0_BITN                                   0
+#define CRYPTO_KEYWRITEAREA_RAM_AREA0_M                             0x00000001
+#define CRYPTO_KEYWRITEAREA_RAM_AREA0_S                                      0
+#define CRYPTO_KEYWRITEAREA_RAM_AREA0_SEL                           0x00000001
+#define CRYPTO_KEYWRITEAREA_RAM_AREA0_NOT_SEL                       0x00000000
 
 //*****************************************************************************
 //
@@ -857,12 +857,12 @@
 //                          information
 // NOT_WRITTEN              This RAM area is not written with valid key
 //                          information
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7 0x00000080
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_BITN 7
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_M 0x00000080
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_S 7
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_WRITTEN 0x00000080
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_NOT_WRITTEN 0x00000000
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7                     0x00000080
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_BITN                         7
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_M                   0x00000080
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_S                            7
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_WRITTEN             0x00000080
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN7_NOT_WRITTEN         0x00000000
 
 // Field:     [6] RAM_AREA_WRITTEN6
 //
@@ -878,12 +878,12 @@
 //                          information
 // NOT_WRITTEN              This RAM area is not written with valid key
 //                          information
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6 0x00000040
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_BITN 6
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_M 0x00000040
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_S 6
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_WRITTEN 0x00000040
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_NOT_WRITTEN 0x00000000
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6                     0x00000040
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_BITN                         6
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_M                   0x00000040
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_S                            6
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_WRITTEN             0x00000040
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN6_NOT_WRITTEN         0x00000000
 
 // Field:     [5] RAM_AREA_WRITTEN5
 //
@@ -899,12 +899,12 @@
 //                          information
 // NOT_WRITTEN              This RAM area is not written with valid key
 //                          information
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5 0x00000020
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_BITN 5
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_M 0x00000020
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_S 5
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_WRITTEN 0x00000020
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_NOT_WRITTEN 0x00000000
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5                     0x00000020
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_BITN                         5
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_M                   0x00000020
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_S                            5
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_WRITTEN             0x00000020
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN5_NOT_WRITTEN         0x00000000
 
 // Field:     [4] RAM_AREA_WRITTEN4
 //
@@ -920,12 +920,12 @@
 //                          information
 // NOT_WRITTEN              This RAM area is not written with valid key
 //                          information
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4 0x00000010
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_BITN 4
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_M 0x00000010
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_S 4
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_WRITTEN 0x00000010
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_NOT_WRITTEN 0x00000000
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4                     0x00000010
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_BITN                         4
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_M                   0x00000010
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_S                            4
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_WRITTEN             0x00000010
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN4_NOT_WRITTEN         0x00000000
 
 // Field:     [3] RAM_AREA_WRITTEN3
 //
@@ -941,12 +941,12 @@
 //                          information
 // NOT_WRITTEN              This RAM area is not written with valid key
 //                          information
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3 0x00000008
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_BITN 3
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_M 0x00000008
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_S 3
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_WRITTEN 0x00000008
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_NOT_WRITTEN 0x00000000
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3                     0x00000008
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_BITN                         3
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_M                   0x00000008
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_S                            3
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_WRITTEN             0x00000008
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN3_NOT_WRITTEN         0x00000000
 
 // Field:     [2] RAM_AREA_WRITTEN2
 //
@@ -962,12 +962,12 @@
 //                          information
 // NOT_WRITTEN              This RAM area is not written with valid key
 //                          information
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2 0x00000004
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_BITN 2
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_M 0x00000004
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_S 2
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_WRITTEN 0x00000004
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_NOT_WRITTEN 0x00000000
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2                     0x00000004
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_BITN                         2
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_M                   0x00000004
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_S                            2
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_WRITTEN             0x00000004
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN2_NOT_WRITTEN         0x00000000
 
 // Field:     [1] RAM_AREA_WRITTEN1
 //
@@ -983,12 +983,12 @@
 //                          information
 // NOT_WRITTEN              This RAM area is not written with valid key
 //                          information
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1 0x00000002
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_BITN 1
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_M 0x00000002
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_S 1
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_WRITTEN 0x00000002
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_NOT_WRITTEN 0x00000000
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1                     0x00000002
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_BITN                         1
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_M                   0x00000002
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_S                            1
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_WRITTEN             0x00000002
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN1_NOT_WRITTEN         0x00000000
 
 // Field:     [0] RAM_AREA_WRITTEN0
 //
@@ -999,10 +999,10 @@
 // Note: This register will be reset on a soft reset initiated by writing to
 // DMASWRESET.SWRES. After a soft reset, all keys must be rewritten to the key
 // store memory.
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN0 0x00000001
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN0_BITN 0
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN0_M 0x00000001
-#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN0_S 0
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN0                     0x00000001
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN0_BITN                         0
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN0_M                   0x00000001
+#define CRYPTO_KEYWRITTENAREA_RAM_AREA_WRITTEN0_S                            0
 
 //*****************************************************************************
 //
@@ -1019,12 +1019,12 @@
 // 256_BIT                  256 bits
 // 192_BIT                  192 bits
 // 128_BIT                  128 bits
-#define CRYPTO_KEYSIZE_SIZE_W 2
-#define CRYPTO_KEYSIZE_SIZE_M 0x00000003
-#define CRYPTO_KEYSIZE_SIZE_S 0
-#define CRYPTO_KEYSIZE_SIZE_256_BIT 0x00000003
-#define CRYPTO_KEYSIZE_SIZE_192_BIT 0x00000002
-#define CRYPTO_KEYSIZE_SIZE_128_BIT 0x00000001
+#define CRYPTO_KEYSIZE_SIZE_W                                                2
+#define CRYPTO_KEYSIZE_SIZE_M                                       0x00000003
+#define CRYPTO_KEYSIZE_SIZE_S                                                0
+#define CRYPTO_KEYSIZE_SIZE_256_BIT                                 0x00000003
+#define CRYPTO_KEYSIZE_SIZE_192_BIT                                 0x00000002
+#define CRYPTO_KEYSIZE_SIZE_128_BIT                                 0x00000001
 
 //*****************************************************************************
 //
@@ -1036,10 +1036,10 @@
 // Key store operation busy status flag (read only):
 // 0: Operation is complete.
 // 1: Operation is not completed and the key store is busy.
-#define CRYPTO_KEYREADAREA_BUSY 0x80000000
-#define CRYPTO_KEYREADAREA_BUSY_BITN 31
-#define CRYPTO_KEYREADAREA_BUSY_M 0x80000000
-#define CRYPTO_KEYREADAREA_BUSY_S 31
+#define CRYPTO_KEYREADAREA_BUSY                                     0x80000000
+#define CRYPTO_KEYREADAREA_BUSY_BITN                                        31
+#define CRYPTO_KEYREADAREA_BUSY_M                                   0x80000000
+#define CRYPTO_KEYREADAREA_BUSY_S                                           31
 
 // Field:   [3:0] RAM_AREA
 //
@@ -1060,18 +1060,18 @@
 // RAM_AREA2                RAM Area 2
 // RAM_AREA1                RAM Area 1
 // RAM_AREA0                RAM Area 0
-#define CRYPTO_KEYREADAREA_RAM_AREA_W 4
-#define CRYPTO_KEYREADAREA_RAM_AREA_M 0x0000000F
-#define CRYPTO_KEYREADAREA_RAM_AREA_S 0
-#define CRYPTO_KEYREADAREA_RAM_AREA_NO_RAM 0x00000008
-#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA7 0x00000007
-#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA6 0x00000006
-#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA5 0x00000005
-#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA4 0x00000004
-#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA3 0x00000003
-#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA2 0x00000002
-#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA1 0x00000001
-#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA0 0x00000000
+#define CRYPTO_KEYREADAREA_RAM_AREA_W                                        4
+#define CRYPTO_KEYREADAREA_RAM_AREA_M                               0x0000000F
+#define CRYPTO_KEYREADAREA_RAM_AREA_S                                        0
+#define CRYPTO_KEYREADAREA_RAM_AREA_NO_RAM                          0x00000008
+#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA7                       0x00000007
+#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA6                       0x00000006
+#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA5                       0x00000005
+#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA4                       0x00000004
+#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA3                       0x00000003
+#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA2                       0x00000002
+#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA1                       0x00000001
+#define CRYPTO_KEYREADAREA_RAM_AREA_RAM_AREA0                       0x00000000
 
 //*****************************************************************************
 //
@@ -1093,9 +1093,9 @@
 //
 // For CBC-MAC:
 // -[255:0] - ZEROES - This register must remain 0.
-#define CRYPTO_AESKEY20_AES_KEY2_W 32
-#define CRYPTO_AESKEY20_AES_KEY2_M 0xFFFFFFFF
-#define CRYPTO_AESKEY20_AES_KEY2_S 0
+#define CRYPTO_AESKEY20_AES_KEY2_W                                          32
+#define CRYPTO_AESKEY20_AES_KEY2_M                                  0xFFFFFFFF
+#define CRYPTO_AESKEY20_AES_KEY2_S                                           0
 
 //*****************************************************************************
 //
@@ -1117,9 +1117,9 @@
 //
 // For CBC-MAC:
 // -[255:0] - ZEROES - This register must remain 0.
-#define CRYPTO_AESKEY21_AES_KEY2_W 32
-#define CRYPTO_AESKEY21_AES_KEY2_M 0xFFFFFFFF
-#define CRYPTO_AESKEY21_AES_KEY2_S 0
+#define CRYPTO_AESKEY21_AES_KEY2_W                                          32
+#define CRYPTO_AESKEY21_AES_KEY2_M                                  0xFFFFFFFF
+#define CRYPTO_AESKEY21_AES_KEY2_S                                           0
 
 //*****************************************************************************
 //
@@ -1141,9 +1141,9 @@
 //
 // For CBC-MAC:
 // -[255:0] - ZEROES - This register must remain 0.
-#define CRYPTO_AESKEY22_AES_KEY2_W 32
-#define CRYPTO_AESKEY22_AES_KEY2_M 0xFFFFFFFF
-#define CRYPTO_AESKEY22_AES_KEY2_S 0
+#define CRYPTO_AESKEY22_AES_KEY2_W                                          32
+#define CRYPTO_AESKEY22_AES_KEY2_M                                  0xFFFFFFFF
+#define CRYPTO_AESKEY22_AES_KEY2_S                                           0
 
 //*****************************************************************************
 //
@@ -1165,9 +1165,9 @@
 //
 // For CBC-MAC:
 // -[255:0] - ZEROES - This register must remain 0.
-#define CRYPTO_AESKEY23_AES_KEY2_W 32
-#define CRYPTO_AESKEY23_AES_KEY2_M 0xFFFFFFFF
-#define CRYPTO_AESKEY23_AES_KEY2_S 0
+#define CRYPTO_AESKEY23_AES_KEY2_W                                          32
+#define CRYPTO_AESKEY23_AES_KEY2_M                                  0xFFFFFFFF
+#define CRYPTO_AESKEY23_AES_KEY2_S                                           0
 
 //*****************************************************************************
 //
@@ -1189,9 +1189,9 @@
 //
 // For CBC-MAC:
 // -[255:0] - ZEROES - This register must remain 0.
-#define CRYPTO_AESKEY30_AES_KEY3_W 32
-#define CRYPTO_AESKEY30_AES_KEY3_M 0xFFFFFFFF
-#define CRYPTO_AESKEY30_AES_KEY3_S 0
+#define CRYPTO_AESKEY30_AES_KEY3_W                                          32
+#define CRYPTO_AESKEY30_AES_KEY3_M                                  0xFFFFFFFF
+#define CRYPTO_AESKEY30_AES_KEY3_S                                           0
 
 //*****************************************************************************
 //
@@ -1213,9 +1213,9 @@
 //
 // For CBC-MAC:
 // -[255:0] - ZEROES - This register must remain 0.
-#define CRYPTO_AESKEY31_AES_KEY3_W 32
-#define CRYPTO_AESKEY31_AES_KEY3_M 0xFFFFFFFF
-#define CRYPTO_AESKEY31_AES_KEY3_S 0
+#define CRYPTO_AESKEY31_AES_KEY3_W                                          32
+#define CRYPTO_AESKEY31_AES_KEY3_M                                  0xFFFFFFFF
+#define CRYPTO_AESKEY31_AES_KEY3_S                                           0
 
 //*****************************************************************************
 //
@@ -1237,9 +1237,9 @@
 //
 // For CBC-MAC:
 // -[255:0] - ZEROES - This register must remain 0.
-#define CRYPTO_AESKEY32_AES_KEY3_W 32
-#define CRYPTO_AESKEY32_AES_KEY3_M 0xFFFFFFFF
-#define CRYPTO_AESKEY32_AES_KEY3_S 0
+#define CRYPTO_AESKEY32_AES_KEY3_W                                          32
+#define CRYPTO_AESKEY32_AES_KEY3_M                                  0xFFFFFFFF
+#define CRYPTO_AESKEY32_AES_KEY3_S                                           0
 
 //*****************************************************************************
 //
@@ -1261,9 +1261,9 @@
 //
 // For CBC-MAC:
 // -[255:0] - ZEROES - This register must remain 0.
-#define CRYPTO_AESKEY33_AES_KEY3_W 32
-#define CRYPTO_AESKEY33_AES_KEY3_M 0xFFFFFFFF
-#define CRYPTO_AESKEY33_AES_KEY3_S 0
+#define CRYPTO_AESKEY33_AES_KEY3_W                                          32
+#define CRYPTO_AESKEY33_AES_KEY3_M                                  0xFFFFFFFF
+#define CRYPTO_AESKEY33_AES_KEY3_S                                           0
 
 //*****************************************************************************
 //
@@ -1302,9 +1302,9 @@
 // -[127:0] - Zeroes - For CBC-MAC this register must be written with 0s at the
 // start of each operation. After an operation, these registers contain the
 // 128-bit TAG output, generated by the EIP-120t.
-#define CRYPTO_AESIV0_AES_IV_W 32
-#define CRYPTO_AESIV0_AES_IV_M 0xFFFFFFFF
-#define CRYPTO_AESIV0_AES_IV_S 0
+#define CRYPTO_AESIV0_AES_IV_W                                              32
+#define CRYPTO_AESIV0_AES_IV_M                                      0xFFFFFFFF
+#define CRYPTO_AESIV0_AES_IV_S                                               0
 
 //*****************************************************************************
 //
@@ -1343,9 +1343,9 @@
 // -[127:0] - Zeroes - For CBC-MAC this register must be written with 0s at the
 // start of each operation. After an operation, these registers contain the
 // 128-bit TAG output, generated by the EIP-120t.
-#define CRYPTO_AESIV1_AES_IV_W 32
-#define CRYPTO_AESIV1_AES_IV_M 0xFFFFFFFF
-#define CRYPTO_AESIV1_AES_IV_S 0
+#define CRYPTO_AESIV1_AES_IV_W                                              32
+#define CRYPTO_AESIV1_AES_IV_M                                      0xFFFFFFFF
+#define CRYPTO_AESIV1_AES_IV_S                                               0
 
 //*****************************************************************************
 //
@@ -1384,9 +1384,9 @@
 // -[127:0] - Zeroes - For CBC-MAC this register must be written with 0s at the
 // start of each operation. After an operation, these registers contain the
 // 128-bit TAG output, generated by the EIP-120t.
-#define CRYPTO_AESIV2_AES_IV_W 32
-#define CRYPTO_AESIV2_AES_IV_M 0xFFFFFFFF
-#define CRYPTO_AESIV2_AES_IV_S 0
+#define CRYPTO_AESIV2_AES_IV_W                                              32
+#define CRYPTO_AESIV2_AES_IV_M                                      0xFFFFFFFF
+#define CRYPTO_AESIV2_AES_IV_S                                               0
 
 //*****************************************************************************
 //
@@ -1425,9 +1425,9 @@
 // -[127:0] - Zeroes - For CBC-MAC this register must be written with 0s at the
 // start of each operation. After an operation, these registers contain the
 // 128-bit TAG output, generated by the EIP-120t.
-#define CRYPTO_AESIV3_AES_IV_W 32
-#define CRYPTO_AESIV3_AES_IV_M 0xFFFFFFFF
-#define CRYPTO_AESIV3_AES_IV_S 0
+#define CRYPTO_AESIV3_AES_IV_W                                              32
+#define CRYPTO_AESIV3_AES_IV_M                                      0xFFFFFFFF
+#define CRYPTO_AESIV3_AES_IV_S                                               0
 
 //*****************************************************************************
 //
@@ -1438,10 +1438,10 @@
 //
 // If 1, this read-only status bit indicates that the context data registers
 // can be overwritten and the host is permitted to write the next context.
-#define CRYPTO_AESCTL_CONTEXT_READY 0x80000000
-#define CRYPTO_AESCTL_CONTEXT_READY_BITN 31
-#define CRYPTO_AESCTL_CONTEXT_READY_M 0x80000000
-#define CRYPTO_AESCTL_CONTEXT_READY_S 31
+#define CRYPTO_AESCTL_CONTEXT_READY                                 0x80000000
+#define CRYPTO_AESCTL_CONTEXT_READY_BITN                                    31
+#define CRYPTO_AESCTL_CONTEXT_READY_M                               0x80000000
+#define CRYPTO_AESCTL_CONTEXT_READY_S                                       31
 
 // Field:    [30] SAVED_CONTEXT_RDY
 //
@@ -1456,10 +1456,10 @@
 // with 1.
 // Note: This bit is controlled automatically by the EIP-120t for TAG read DMA
 // operations.
-#define CRYPTO_AESCTL_SAVED_CONTEXT_RDY 0x40000000
-#define CRYPTO_AESCTL_SAVED_CONTEXT_RDY_BITN 30
-#define CRYPTO_AESCTL_SAVED_CONTEXT_RDY_M 0x40000000
-#define CRYPTO_AESCTL_SAVED_CONTEXT_RDY_S 30
+#define CRYPTO_AESCTL_SAVED_CONTEXT_RDY                             0x40000000
+#define CRYPTO_AESCTL_SAVED_CONTEXT_RDY_BITN                                30
+#define CRYPTO_AESCTL_SAVED_CONTEXT_RDY_M                           0x40000000
+#define CRYPTO_AESCTL_SAVED_CONTEXT_RDY_S                                   30
 
 // Field:    [29] SAVE_CONTEXT
 //
@@ -1471,10 +1471,10 @@
 // If this bit is set, the engine retains its full context until the TAG and/or
 // IV registers are read.
 // The TAG or IV must be read before the AES engine can start a new operation.
-#define CRYPTO_AESCTL_SAVE_CONTEXT 0x20000000
-#define CRYPTO_AESCTL_SAVE_CONTEXT_BITN 29
-#define CRYPTO_AESCTL_SAVE_CONTEXT_M 0x20000000
-#define CRYPTO_AESCTL_SAVE_CONTEXT_S 29
+#define CRYPTO_AESCTL_SAVE_CONTEXT                                  0x20000000
+#define CRYPTO_AESCTL_SAVE_CONTEXT_BITN                                     29
+#define CRYPTO_AESCTL_SAVE_CONTEXT_M                                0x20000000
+#define CRYPTO_AESCTL_SAVE_CONTEXT_S                                        29
 
 // Field: [24:22] CCM_M
 //
@@ -1483,18 +1483,18 @@
 // CCM-M plus one).
 // Note: The EIP-120t always returns a 128-bit authentication field, of which
 // the M least significant bytes are valid. All values are supported.
-#define CRYPTO_AESCTL_CCM_M_W 3
-#define CRYPTO_AESCTL_CCM_M_M 0x01C00000
-#define CRYPTO_AESCTL_CCM_M_S 22
+#define CRYPTO_AESCTL_CCM_M_W                                                3
+#define CRYPTO_AESCTL_CCM_M_M                                       0x01C00000
+#define CRYPTO_AESCTL_CCM_M_S                                               22
 
 // Field: [21:19] CCM_L
 //
 // Defines L, which indicates the width of the length field for CCM operations;
 // the length field in bytes equals the value of CMM-L plus one. All values are
 // supported.
-#define CRYPTO_AESCTL_CCM_L_W 3
-#define CRYPTO_AESCTL_CCM_L_M 0x00380000
-#define CRYPTO_AESCTL_CCM_L_S 19
+#define CRYPTO_AESCTL_CCM_L_W                                                3
+#define CRYPTO_AESCTL_CCM_L_M                                       0x00380000
+#define CRYPTO_AESCTL_CCM_L_S                                               19
 
 // Field:    [18] CCM
 //
@@ -1504,10 +1504,10 @@
 // after all other registers.
 // Note: The CTR mode bit in this register must also be set to 1 to enable
 // AES-CTR; selecting other AES modes than CTR mode is invalid.
-#define CRYPTO_AESCTL_CCM 0x00040000
-#define CRYPTO_AESCTL_CCM_BITN 18
-#define CRYPTO_AESCTL_CCM_M 0x00040000
-#define CRYPTO_AESCTL_CCM_S 18
+#define CRYPTO_AESCTL_CCM                                           0x00040000
+#define CRYPTO_AESCTL_CCM_BITN                                              18
+#define CRYPTO_AESCTL_CCM_M                                         0x00040000
+#define CRYPTO_AESCTL_CCM_S                                                 18
 
 // Field: [17:16] GCM
 //
@@ -1523,9 +1523,9 @@
 // 11 = Autonomous GHASH (both H- and Y0-encrypted calculated internally)
 // Note: The EIP-120t-1 configuration only supports mode 11 (autonomous GHASH),
 // other GCM modes are not allowed.
-#define CRYPTO_AESCTL_GCM_W 2
-#define CRYPTO_AESCTL_GCM_M 0x00030000
-#define CRYPTO_AESCTL_GCM_S 16
+#define CRYPTO_AESCTL_GCM_W                                                  2
+#define CRYPTO_AESCTL_GCM_M                                         0x00030000
+#define CRYPTO_AESCTL_GCM_S                                                 16
 
 // Field:    [15] CBC_MAC
 //
@@ -1533,10 +1533,10 @@
 // The direction bit must be set to 1 for this mode.
 // Selecting this mode requires writing the length register after all other
 // registers.
-#define CRYPTO_AESCTL_CBC_MAC 0x00008000
-#define CRYPTO_AESCTL_CBC_MAC_BITN 15
-#define CRYPTO_AESCTL_CBC_MAC_M 0x00008000
-#define CRYPTO_AESCTL_CBC_MAC_S 15
+#define CRYPTO_AESCTL_CBC_MAC                                       0x00008000
+#define CRYPTO_AESCTL_CBC_MAC_BITN                                          15
+#define CRYPTO_AESCTL_CBC_MAC_M                                     0x00008000
+#define CRYPTO_AESCTL_CBC_MAC_S                                             15
 
 // Field:   [8:7] CTR_WIDTH
 //
@@ -1550,31 +1550,31 @@
 // 96_BIT                   96 bits
 // 64_BIT                   64 bits
 // 32_BIT                   32 bits
-#define CRYPTO_AESCTL_CTR_WIDTH_W 2
-#define CRYPTO_AESCTL_CTR_WIDTH_M 0x00000180
-#define CRYPTO_AESCTL_CTR_WIDTH_S 7
-#define CRYPTO_AESCTL_CTR_WIDTH_128_BIT 0x00000180
-#define CRYPTO_AESCTL_CTR_WIDTH_96_BIT 0x00000100
-#define CRYPTO_AESCTL_CTR_WIDTH_64_BIT 0x00000080
-#define CRYPTO_AESCTL_CTR_WIDTH_32_BIT 0x00000000
+#define CRYPTO_AESCTL_CTR_WIDTH_W                                            2
+#define CRYPTO_AESCTL_CTR_WIDTH_M                                   0x00000180
+#define CRYPTO_AESCTL_CTR_WIDTH_S                                            7
+#define CRYPTO_AESCTL_CTR_WIDTH_128_BIT                             0x00000180
+#define CRYPTO_AESCTL_CTR_WIDTH_96_BIT                              0x00000100
+#define CRYPTO_AESCTL_CTR_WIDTH_64_BIT                              0x00000080
+#define CRYPTO_AESCTL_CTR_WIDTH_32_BIT                              0x00000000
 
 // Field:     [6] CTR
 //
 // If set to 1, AES counter mode (CTR) is selected.
 // Note: This bit must also be set for GCM and CCM, when encryption/decryption
 // is required.
-#define CRYPTO_AESCTL_CTR 0x00000040
-#define CRYPTO_AESCTL_CTR_BITN 6
-#define CRYPTO_AESCTL_CTR_M 0x00000040
-#define CRYPTO_AESCTL_CTR_S 6
+#define CRYPTO_AESCTL_CTR                                           0x00000040
+#define CRYPTO_AESCTL_CTR_BITN                                               6
+#define CRYPTO_AESCTL_CTR_M                                         0x00000040
+#define CRYPTO_AESCTL_CTR_S                                                  6
 
 // Field:     [5] CBC
 //
 // If set to 1, cipher-block-chaining (CBC) mode is selected.
-#define CRYPTO_AESCTL_CBC 0x00000020
-#define CRYPTO_AESCTL_CBC_BITN 5
-#define CRYPTO_AESCTL_CBC_M 0x00000020
-#define CRYPTO_AESCTL_CBC_S 5
+#define CRYPTO_AESCTL_CBC                                           0x00000020
+#define CRYPTO_AESCTL_CBC_BITN                                               5
+#define CRYPTO_AESCTL_CBC_M                                         0x00000020
+#define CRYPTO_AESCTL_CBC_S                                                  5
 
 // Field:   [4:3] KEY_SIZE
 //
@@ -1585,19 +1585,19 @@
 // 01 = 128-bit
 // 10 = 192-bit
 // 11 = 256-bit
-#define CRYPTO_AESCTL_KEY_SIZE_W 2
-#define CRYPTO_AESCTL_KEY_SIZE_M 0x00000018
-#define CRYPTO_AESCTL_KEY_SIZE_S 3
+#define CRYPTO_AESCTL_KEY_SIZE_W                                             2
+#define CRYPTO_AESCTL_KEY_SIZE_M                                    0x00000018
+#define CRYPTO_AESCTL_KEY_SIZE_S                                             3
 
 // Field:     [2] DIR
 //
 // If set to 1 an encrypt operation is performed.
 // If set to 0 a decrypt operation is performed.
 // This bit must be written with a 1 when CBC-MAC is selected.
-#define CRYPTO_AESCTL_DIR 0x00000004
-#define CRYPTO_AESCTL_DIR_BITN 2
-#define CRYPTO_AESCTL_DIR_M 0x00000004
-#define CRYPTO_AESCTL_DIR_S 2
+#define CRYPTO_AESCTL_DIR                                           0x00000004
+#define CRYPTO_AESCTL_DIR_BITN                                               2
+#define CRYPTO_AESCTL_DIR_M                                         0x00000004
+#define CRYPTO_AESCTL_DIR_S                                                  2
 
 // Field:     [1] INPUT_READY
 //
@@ -1609,10 +1609,10 @@
 // Note: For DMA operations, this bit is automatically controlled by the
 // EIP-120t.
 // After reset, this bit is 0. After writing a context, this bit becomes 1.
-#define CRYPTO_AESCTL_INPUT_READY 0x00000002
-#define CRYPTO_AESCTL_INPUT_READY_BITN 1
-#define CRYPTO_AESCTL_INPUT_READY_M 0x00000002
-#define CRYPTO_AESCTL_INPUT_READY_S 1
+#define CRYPTO_AESCTL_INPUT_READY                                   0x00000002
+#define CRYPTO_AESCTL_INPUT_READY_BITN                                       1
+#define CRYPTO_AESCTL_INPUT_READY_M                                 0x00000002
+#define CRYPTO_AESCTL_INPUT_READY_S                                          1
 
 // Field:     [0] OUTPUT_READY
 //
@@ -1623,10 +1623,10 @@
 // Writing 1 to this bit is ignored.
 // Note: For DMA operations, this bit is automatically controlled by the
 // EIP-120t.
-#define CRYPTO_AESCTL_OUTPUT_READY 0x00000001
-#define CRYPTO_AESCTL_OUTPUT_READY_BITN 0
-#define CRYPTO_AESCTL_OUTPUT_READY_M 0x00000001
-#define CRYPTO_AESCTL_OUTPUT_READY_S 0
+#define CRYPTO_AESCTL_OUTPUT_READY                                  0x00000001
+#define CRYPTO_AESCTL_OUTPUT_READY_BITN                                      0
+#define CRYPTO_AESCTL_OUTPUT_READY_M                                0x00000001
+#define CRYPTO_AESCTL_OUTPUT_READY_S                                         0
 
 //*****************************************************************************
 //
@@ -1657,9 +1657,9 @@
 // data length must be programmed in multiples of the block cipher size, 16
 // bytes.
 // For a host read operation, these registers return all-0s.
-#define CRYPTO_AESDATALEN0_C_LENGTH_W 32
-#define CRYPTO_AESDATALEN0_C_LENGTH_M 0xFFFFFFFF
-#define CRYPTO_AESDATALEN0_C_LENGTH_S 0
+#define CRYPTO_AESDATALEN0_C_LENGTH_W                                       32
+#define CRYPTO_AESDATALEN0_C_LENGTH_M                               0xFFFFFFFF
+#define CRYPTO_AESDATALEN0_C_LENGTH_S                                        0
 
 //*****************************************************************************
 //
@@ -1690,9 +1690,9 @@
 // data length must be programmed in multiples of the block cipher size, 16
 // bytes.
 // For a host read operation, these registers return all-0s.
-#define CRYPTO_AESDATALEN1_C_LENGTH_W 29
-#define CRYPTO_AESDATALEN1_C_LENGTH_M 0x1FFFFFFF
-#define CRYPTO_AESDATALEN1_C_LENGTH_S 0
+#define CRYPTO_AESDATALEN1_C_LENGTH_W                                       29
+#define CRYPTO_AESDATALEN1_C_LENGTH_M                               0x1FFFFFFF
+#define CRYPTO_AESDATALEN1_C_LENGTH_S                                        0
 
 //*****************************************************************************
 //
@@ -1709,9 +1709,9 @@
 // A write to this register triggers the engine to start using this context for
 // GCM and CCM.
 // For a host read operation, these registers return all-0s.
-#define CRYPTO_AESAUTHLEN_AUTH_LENGTH_W 32
-#define CRYPTO_AESAUTHLEN_AUTH_LENGTH_M 0xFFFFFFFF
-#define CRYPTO_AESAUTHLEN_AUTH_LENGTH_S 0
+#define CRYPTO_AESAUTHLEN_AUTH_LENGTH_W                                     32
+#define CRYPTO_AESAUTHLEN_AUTH_LENGTH_M                             0xFFFFFFFF
+#define CRYPTO_AESAUTHLEN_AUTH_LENGTH_S                                      0
 
 //*****************************************************************************
 //
@@ -1738,9 +1738,9 @@
 //
 // Note: The AAD / authentication only data is not copied to the output buffer
 // but only used for authentication.
-#define CRYPTO_AESDATAOUT0_DATA_W 32
-#define CRYPTO_AESDATAOUT0_DATA_M 0xFFFFFFFF
-#define CRYPTO_AESDATAOUT0_DATA_S 0
+#define CRYPTO_AESDATAOUT0_DATA_W                                           32
+#define CRYPTO_AESDATAOUT0_DATA_M                                   0xFFFFFFFF
+#define CRYPTO_AESDATAOUT0_DATA_S                                            0
 
 //*****************************************************************************
 //
@@ -1779,9 +1779,9 @@
 // mode, the remaining data in an unaligned data block is ignored.
 // Note: The AAD / authentication only data is not copied to the output buffer
 // but only used for authentication.
-#define CRYPTO_AESDATAIN0_AES_DATA_IN_OUT_W 32
-#define CRYPTO_AESDATAIN0_AES_DATA_IN_OUT_M 0xFFFFFFFF
-#define CRYPTO_AESDATAIN0_AES_DATA_IN_OUT_S 0
+#define CRYPTO_AESDATAIN0_AES_DATA_IN_OUT_W                                 32
+#define CRYPTO_AESDATAIN0_AES_DATA_IN_OUT_M                         0xFFFFFFFF
+#define CRYPTO_AESDATAIN0_AES_DATA_IN_OUT_S                                  0
 
 //*****************************************************************************
 //
@@ -1808,9 +1808,9 @@
 //
 // Note: The AAD / authentication only data is not copied to the output buffer
 // but only used for authentication.
-#define CRYPTO_AESDATAOUT1_DATA_W 32
-#define CRYPTO_AESDATAOUT1_DATA_M 0xFFFFFFFF
-#define CRYPTO_AESDATAOUT1_DATA_S 0
+#define CRYPTO_AESDATAOUT1_DATA_W                                           32
+#define CRYPTO_AESDATAOUT1_DATA_M                                   0xFFFFFFFF
+#define CRYPTO_AESDATAOUT1_DATA_S                                            0
 
 //*****************************************************************************
 //
@@ -1849,9 +1849,9 @@
 // mode, the remaining data in an unaligned data block is ignored.
 // Note: The AAD / authentication only data is not copied to the output buffer
 // but only used for authentication.
-#define CRYPTO_AESDATAIN1_AES_DATA_IN_OUT_W 32
-#define CRYPTO_AESDATAIN1_AES_DATA_IN_OUT_M 0xFFFFFFFF
-#define CRYPTO_AESDATAIN1_AES_DATA_IN_OUT_S 0
+#define CRYPTO_AESDATAIN1_AES_DATA_IN_OUT_W                                 32
+#define CRYPTO_AESDATAIN1_AES_DATA_IN_OUT_M                         0xFFFFFFFF
+#define CRYPTO_AESDATAIN1_AES_DATA_IN_OUT_S                                  0
 
 //*****************************************************************************
 //
@@ -1878,9 +1878,9 @@
 //
 // Note: The AAD / authentication only data is not copied to the output buffer
 // but only used for authentication.
-#define CRYPTO_AESDATAOUT2_DATA_W 32
-#define CRYPTO_AESDATAOUT2_DATA_M 0xFFFFFFFF
-#define CRYPTO_AESDATAOUT2_DATA_S 0
+#define CRYPTO_AESDATAOUT2_DATA_W                                           32
+#define CRYPTO_AESDATAOUT2_DATA_M                                   0xFFFFFFFF
+#define CRYPTO_AESDATAOUT2_DATA_S                                            0
 
 //*****************************************************************************
 //
@@ -1919,9 +1919,9 @@
 // mode, the remaining data in an unaligned data block is ignored.
 // Note: The AAD / authentication only data is not copied to the output buffer
 // but only used for authentication.
-#define CRYPTO_AESDATAIN2_AES_DATA_IN_OUT_W 32
-#define CRYPTO_AESDATAIN2_AES_DATA_IN_OUT_M 0xFFFFFFFF
-#define CRYPTO_AESDATAIN2_AES_DATA_IN_OUT_S 0
+#define CRYPTO_AESDATAIN2_AES_DATA_IN_OUT_W                                 32
+#define CRYPTO_AESDATAIN2_AES_DATA_IN_OUT_M                         0xFFFFFFFF
+#define CRYPTO_AESDATAIN2_AES_DATA_IN_OUT_S                                  0
 
 //*****************************************************************************
 //
@@ -1948,9 +1948,9 @@
 //
 // Note: The AAD / authentication only data is not copied to the output buffer
 // but only used for authentication.
-#define CRYPTO_AESDATAOUT3_DATA_W 32
-#define CRYPTO_AESDATAOUT3_DATA_M 0xFFFFFFFF
-#define CRYPTO_AESDATAOUT3_DATA_S 0
+#define CRYPTO_AESDATAOUT3_DATA_W                                           32
+#define CRYPTO_AESDATAOUT3_DATA_M                                   0xFFFFFFFF
+#define CRYPTO_AESDATAOUT3_DATA_S                                            0
 
 //*****************************************************************************
 //
@@ -1989,9 +1989,9 @@
 // mode, the remaining data in an unaligned data block is ignored.
 // Note: The AAD / authentication only data is not copied to the output buffer
 // but only used for authentication.
-#define CRYPTO_AESDATAIN3_AES_DATA_IN_OUT_W 32
-#define CRYPTO_AESDATAIN3_AES_DATA_IN_OUT_M 0xFFFFFFFF
-#define CRYPTO_AESDATAIN3_AES_DATA_IN_OUT_S 0
+#define CRYPTO_AESDATAIN3_AES_DATA_IN_OUT_W                                 32
+#define CRYPTO_AESDATAIN3_AES_DATA_IN_OUT_M                         0xFFFFFFFF
+#define CRYPTO_AESDATAIN3_AES_DATA_IN_OUT_S                                  0
 
 //*****************************************************************************
 //
@@ -2010,9 +2010,9 @@
 // the AESCTL.SAVED_CONTEXT_RDY register is set. During processing or for
 // operations/modes that do not return a TAG, reads from this register return
 // data from the IV register.
-#define CRYPTO_AESTAGOUT0_AES_TAG_W 32
-#define CRYPTO_AESTAGOUT0_AES_TAG_M 0xFFFFFFFF
-#define CRYPTO_AESTAGOUT0_AES_TAG_S 0
+#define CRYPTO_AESTAGOUT0_AES_TAG_W                                         32
+#define CRYPTO_AESTAGOUT0_AES_TAG_M                                 0xFFFFFFFF
+#define CRYPTO_AESTAGOUT0_AES_TAG_S                                          0
 
 //*****************************************************************************
 //
@@ -2031,9 +2031,9 @@
 // the AESCTL.SAVED_CONTEXT_RDY register is set. During processing or for
 // operations/modes that do not return a TAG, reads from this register return
 // data from the IV register.
-#define CRYPTO_AESTAGOUT1_AES_TAG_W 32
-#define CRYPTO_AESTAGOUT1_AES_TAG_M 0xFFFFFFFF
-#define CRYPTO_AESTAGOUT1_AES_TAG_S 0
+#define CRYPTO_AESTAGOUT1_AES_TAG_W                                         32
+#define CRYPTO_AESTAGOUT1_AES_TAG_M                                 0xFFFFFFFF
+#define CRYPTO_AESTAGOUT1_AES_TAG_S                                          0
 
 //*****************************************************************************
 //
@@ -2052,9 +2052,9 @@
 // the AESCTL.SAVED_CONTEXT_RDY register is set. During processing or for
 // operations/modes that do not return a TAG, reads from this register return
 // data from the IV register.
-#define CRYPTO_AESTAGOUT2_AES_TAG_W 32
-#define CRYPTO_AESTAGOUT2_AES_TAG_M 0xFFFFFFFF
-#define CRYPTO_AESTAGOUT2_AES_TAG_S 0
+#define CRYPTO_AESTAGOUT2_AES_TAG_W                                         32
+#define CRYPTO_AESTAGOUT2_AES_TAG_M                                 0xFFFFFFFF
+#define CRYPTO_AESTAGOUT2_AES_TAG_S                                          0
 
 //*****************************************************************************
 //
@@ -2073,9 +2073,9 @@
 // the AESCTL.SAVED_CONTEXT_RDY register is set. During processing or for
 // operations/modes that do not return a TAG, reads from this register return
 // data from the IV register.
-#define CRYPTO_AESTAGOUT3_AES_TAG_W 32
-#define CRYPTO_AESTAGOUT3_AES_TAG_M 0xFFFFFFFF
-#define CRYPTO_AESTAGOUT3_AES_TAG_S 0
+#define CRYPTO_AESTAGOUT3_AES_TAG_W                                         32
+#define CRYPTO_AESTAGOUT3_AES_TAG_M                                 0xFFFFFFFF
+#define CRYPTO_AESTAGOUT3_AES_TAG_S                                          0
 
 //*****************************************************************************
 //
@@ -2100,9 +2100,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN1_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN1_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN1_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN1_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN1_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN1_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2127,9 +2127,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN2_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN2_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN2_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN2_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN2_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN2_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2154,9 +2154,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN3_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN3_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN3_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN3_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN3_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN3_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2181,9 +2181,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN4_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN4_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN4_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN4_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN4_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN4_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2208,9 +2208,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN5_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN5_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN5_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN5_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN5_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN5_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2235,9 +2235,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN6_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN6_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN6_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN6_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN6_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN6_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2262,9 +2262,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN7_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN7_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN7_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN7_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN7_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN7_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2289,9 +2289,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN8_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN8_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN8_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN8_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN8_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN8_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2316,9 +2316,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN9_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN9_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN9_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN9_HASH_DATA_IN_W                                   32
+#define CRYPTO_HASHDATAIN9_HASH_DATA_IN_M                           0xFFFFFFFF
+#define CRYPTO_HASHDATAIN9_HASH_DATA_IN_S                                    0
 
 //*****************************************************************************
 //
@@ -2343,9 +2343,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN10_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN10_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN10_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN10_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN10_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN10_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2370,9 +2370,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN11_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN11_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN11_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN11_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN11_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN11_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2397,9 +2397,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN12_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN12_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN12_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN12_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN12_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN12_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2424,9 +2424,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN13_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN13_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN13_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN13_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN13_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN13_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2451,9 +2451,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN14_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN14_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN14_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN14_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN14_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN14_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2478,9 +2478,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN15_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN15_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN15_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN15_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN15_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN15_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2505,9 +2505,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN16_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN16_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN16_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN16_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN16_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN16_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2532,9 +2532,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN17_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN17_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN17_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN17_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN17_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN17_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2559,9 +2559,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN18_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN18_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN18_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN18_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN18_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN18_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2586,9 +2586,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN19_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN19_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN19_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN19_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN19_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN19_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2613,9 +2613,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN20_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN20_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN20_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN20_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN20_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN20_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2640,9 +2640,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN21_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN21_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN21_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN21_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN21_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN21_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2667,9 +2667,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN22_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN22_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN22_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN22_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN22_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN22_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2694,9 +2694,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN23_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN23_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN23_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN23_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN23_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN23_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2721,9 +2721,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN24_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN24_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN24_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN24_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN24_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN24_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2748,9 +2748,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN25_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN25_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN25_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN25_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN25_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN25_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2775,9 +2775,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN26_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN26_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN26_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN26_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN26_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN26_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2802,9 +2802,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN27_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN27_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN27_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN27_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN27_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN27_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2829,9 +2829,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN28_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN28_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN28_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN28_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN28_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN28_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2856,9 +2856,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN29_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN29_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN29_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN29_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN29_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN29_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2883,9 +2883,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN30_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN30_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN30_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN30_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN30_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN30_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2910,9 +2910,9 @@
 // significant bits of data must be written, but they must be padded with 0s to
 // the next 32-bit boundary.
 // Host read operations from these register addresses return 0s.
-#define CRYPTO_HASHDATAIN31_HASH_DATA_IN_W 32
-#define CRYPTO_HASHDATAIN31_HASH_DATA_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHDATAIN31_HASH_DATA_IN_S 0
+#define CRYPTO_HASHDATAIN31_HASH_DATA_IN_W                                  32
+#define CRYPTO_HASHDATAIN31_HASH_DATA_IN_M                          0xFFFFFFFF
+#define CRYPTO_HASHDATAIN31_HASH_DATA_IN_S                                   0
 
 //*****************************************************************************
 //
@@ -2931,10 +2931,10 @@
 // aligned and calculates the intermediate digest.
 // This bit is automatically cleared when the last DMA data block is arrived in
 // the hash engine.
-#define CRYPTO_HASHIOBUFCTRL_PAD_DMA_MESSAGE 0x00000080
-#define CRYPTO_HASHIOBUFCTRL_PAD_DMA_MESSAGE_BITN 7
-#define CRYPTO_HASHIOBUFCTRL_PAD_DMA_MESSAGE_M 0x00000080
-#define CRYPTO_HASHIOBUFCTRL_PAD_DMA_MESSAGE_S 7
+#define CRYPTO_HASHIOBUFCTRL_PAD_DMA_MESSAGE                        0x00000080
+#define CRYPTO_HASHIOBUFCTRL_PAD_DMA_MESSAGE_BITN                            7
+#define CRYPTO_HASHIOBUFCTRL_PAD_DMA_MESSAGE_M                      0x00000080
+#define CRYPTO_HASHIOBUFCTRL_PAD_DMA_MESSAGE_S                               7
 
 // Field:     [6] GET_DIGEST
 //
@@ -2953,10 +2953,10 @@
 // has processed the contents of the HASHDATAINn register. In the period
 // between this bit is set by the host and the actual HASHDATAINn processing,
 // this bit reads 1.
-#define CRYPTO_HASHIOBUFCTRL_GET_DIGEST 0x00000040
-#define CRYPTO_HASHIOBUFCTRL_GET_DIGEST_BITN 6
-#define CRYPTO_HASHIOBUFCTRL_GET_DIGEST_M 0x00000040
-#define CRYPTO_HASHIOBUFCTRL_GET_DIGEST_S 6
+#define CRYPTO_HASHIOBUFCTRL_GET_DIGEST                             0x00000040
+#define CRYPTO_HASHIOBUFCTRL_GET_DIGEST_BITN                                 6
+#define CRYPTO_HASHIOBUFCTRL_GET_DIGEST_M                           0x00000040
+#define CRYPTO_HASHIOBUFCTRL_GET_DIGEST_S                                    6
 
 // Field:     [5] PAD_MESSAGE
 //
@@ -2979,10 +2979,10 @@
 // This bit is automatically cleared (i.e. reads 0) by the hash engine. This
 // bit reads 1 between the time it was set by the host and the hash engine
 // interpreted its value.
-#define CRYPTO_HASHIOBUFCTRL_PAD_MESSAGE 0x00000020
-#define CRYPTO_HASHIOBUFCTRL_PAD_MESSAGE_BITN 5
-#define CRYPTO_HASHIOBUFCTRL_PAD_MESSAGE_M 0x00000020
-#define CRYPTO_HASHIOBUFCTRL_PAD_MESSAGE_S 5
+#define CRYPTO_HASHIOBUFCTRL_PAD_MESSAGE                            0x00000020
+#define CRYPTO_HASHIOBUFCTRL_PAD_MESSAGE_BITN                                5
+#define CRYPTO_HASHIOBUFCTRL_PAD_MESSAGE_M                          0x00000020
+#define CRYPTO_HASHIOBUFCTRL_PAD_MESSAGE_S                                   5
 
 // Field:     [2] RFD_IN
 //
@@ -2995,10 +2995,10 @@
 // When 0, the input buffer of the hash engine is processing the data that is
 // currently in HASHDATAINn; writing new data to these registers is not
 // allowed.
-#define CRYPTO_HASHIOBUFCTRL_RFD_IN 0x00000004
-#define CRYPTO_HASHIOBUFCTRL_RFD_IN_BITN 2
-#define CRYPTO_HASHIOBUFCTRL_RFD_IN_M 0x00000004
-#define CRYPTO_HASHIOBUFCTRL_RFD_IN_S 2
+#define CRYPTO_HASHIOBUFCTRL_RFD_IN                                 0x00000004
+#define CRYPTO_HASHIOBUFCTRL_RFD_IN_BITN                                     2
+#define CRYPTO_HASHIOBUFCTRL_RFD_IN_M                               0x00000004
+#define CRYPTO_HASHIOBUFCTRL_RFD_IN_S                                        2
 
 // Field:     [1] DATA_IN_AV
 //
@@ -3015,10 +3015,10 @@
 // starts processing the HASHDATAINn contents. This bit reads 1 between the
 // time it was set by the host and the hash engine actually starts processing
 // the input data block.
-#define CRYPTO_HASHIOBUFCTRL_DATA_IN_AV 0x00000002
-#define CRYPTO_HASHIOBUFCTRL_DATA_IN_AV_BITN 1
-#define CRYPTO_HASHIOBUFCTRL_DATA_IN_AV_M 0x00000002
-#define CRYPTO_HASHIOBUFCTRL_DATA_IN_AV_S 1
+#define CRYPTO_HASHIOBUFCTRL_DATA_IN_AV                             0x00000002
+#define CRYPTO_HASHIOBUFCTRL_DATA_IN_AV_BITN                                 1
+#define CRYPTO_HASHIOBUFCTRL_DATA_IN_AV_M                           0x00000002
+#define CRYPTO_HASHIOBUFCTRL_DATA_IN_AV_S                                    1
 
 // Field:     [0] OUTPUT_FULL
 //
@@ -3037,10 +3037,10 @@
 // Writing 0 to this bit has no effect.
 // Note: If this bit is asserted (1) no new operation should be started before
 // the digest is retrieved from the hash engine and this bit is cleared (0).
-#define CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL 0x00000001
-#define CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL_BITN 0
-#define CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL_M 0x00000001
-#define CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL_S 0
+#define CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL                            0x00000001
+#define CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL_BITN                                0
+#define CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL_M                          0x00000001
+#define CRYPTO_HASHIOBUFCTRL_OUTPUT_FULL_S                                   0
 
 //*****************************************************************************
 //
@@ -3050,34 +3050,34 @@
 // Field:     [6] SHA384_MODE
 //
 // The host must write this bit with 1  prior to  processing a SHA 384 session.
-#define CRYPTO_HASHMODE_SHA384_MODE 0x00000040
-#define CRYPTO_HASHMODE_SHA384_MODE_BITN 6
-#define CRYPTO_HASHMODE_SHA384_MODE_M 0x00000040
-#define CRYPTO_HASHMODE_SHA384_MODE_S 6
+#define CRYPTO_HASHMODE_SHA384_MODE                                 0x00000040
+#define CRYPTO_HASHMODE_SHA384_MODE_BITN                                     6
+#define CRYPTO_HASHMODE_SHA384_MODE_M                               0x00000040
+#define CRYPTO_HASHMODE_SHA384_MODE_S                                        6
 
 // Field:     [5] SHA512_MODE
 //
 // The host must write this bit with 1  prior to  processing a SHA 512 session.
-#define CRYPTO_HASHMODE_SHA512_MODE 0x00000020
-#define CRYPTO_HASHMODE_SHA512_MODE_BITN 5
-#define CRYPTO_HASHMODE_SHA512_MODE_M 0x00000020
-#define CRYPTO_HASHMODE_SHA512_MODE_S 5
+#define CRYPTO_HASHMODE_SHA512_MODE                                 0x00000020
+#define CRYPTO_HASHMODE_SHA512_MODE_BITN                                     5
+#define CRYPTO_HASHMODE_SHA512_MODE_M                               0x00000020
+#define CRYPTO_HASHMODE_SHA512_MODE_S                                        5
 
 // Field:     [4] SHA224_MODE
 //
 // The host must write this bit with 1  prior to  processing a SHA 224 session.
-#define CRYPTO_HASHMODE_SHA224_MODE 0x00000010
-#define CRYPTO_HASHMODE_SHA224_MODE_BITN 4
-#define CRYPTO_HASHMODE_SHA224_MODE_M 0x00000010
-#define CRYPTO_HASHMODE_SHA224_MODE_S 4
+#define CRYPTO_HASHMODE_SHA224_MODE                                 0x00000010
+#define CRYPTO_HASHMODE_SHA224_MODE_BITN                                     4
+#define CRYPTO_HASHMODE_SHA224_MODE_M                               0x00000010
+#define CRYPTO_HASHMODE_SHA224_MODE_S                                        4
 
 // Field:     [3] SHA256_MODE
 //
 // The host must write this bit with 1  prior to  processing a SHA 256 session.
-#define CRYPTO_HASHMODE_SHA256_MODE 0x00000008
-#define CRYPTO_HASHMODE_SHA256_MODE_BITN 3
-#define CRYPTO_HASHMODE_SHA256_MODE_M 0x00000008
-#define CRYPTO_HASHMODE_SHA256_MODE_S 3
+#define CRYPTO_HASHMODE_SHA256_MODE                                 0x00000008
+#define CRYPTO_HASHMODE_SHA256_MODE_BITN                                     3
+#define CRYPTO_HASHMODE_SHA256_MODE_M                               0x00000008
+#define CRYPTO_HASHMODE_SHA256_MODE_S                                        3
 
 // Field:     [0] NEW_HASH
 //
@@ -3089,10 +3089,10 @@
 // engine will start processing with the digest that is currently in its
 // internal HASHDIGESTn registers.
 // This bit is automatically cleared when hash processing is started.
-#define CRYPTO_HASHMODE_NEW_HASH 0x00000001
-#define CRYPTO_HASHMODE_NEW_HASH_BITN 0
-#define CRYPTO_HASHMODE_NEW_HASH_M 0x00000001
-#define CRYPTO_HASHMODE_NEW_HASH_S 0
+#define CRYPTO_HASHMODE_NEW_HASH                                    0x00000001
+#define CRYPTO_HASHMODE_NEW_HASH_BITN                                        0
+#define CRYPTO_HASHMODE_NEW_HASH_M                                  0x00000001
+#define CRYPTO_HASHMODE_NEW_HASH_S                                           0
 
 //*****************************************************************************
 //
@@ -3134,9 +3134,9 @@
 // host read operations from these register locations will return 0s.
 // Note: When getting data from DMA, this register must be programmed before
 // DMA is programmed to start.
-#define CRYPTO_HASHINLENL_LENGTH_IN_W 32
-#define CRYPTO_HASHINLENL_LENGTH_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHINLENL_LENGTH_IN_S 0
+#define CRYPTO_HASHINLENL_LENGTH_IN_W                                       32
+#define CRYPTO_HASHINLENL_LENGTH_IN_M                               0xFFFFFFFF
+#define CRYPTO_HASHINLENL_LENGTH_IN_S                                        0
 
 //*****************************************************************************
 //
@@ -3178,9 +3178,9 @@
 // host read operations from these register locations will return 0s.
 // Note: When getting data from DMA, this register must be programmed before
 // DMA is programmed to start.
-#define CRYPTO_HASHINLENH_LENGTH_IN_W 32
-#define CRYPTO_HASHINLENH_LENGTH_IN_M 0xFFFFFFFF
-#define CRYPTO_HASHINLENH_LENGTH_IN_S 0
+#define CRYPTO_HASHINLENH_LENGTH_IN_W                                       32
+#define CRYPTO_HASHINLENH_LENGTH_IN_M                               0xFFFFFFFF
+#define CRYPTO_HASHINLENH_LENGTH_IN_S                                        0
 
 //*****************************************************************************
 //
@@ -3206,9 +3206,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTA_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTA_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTA_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTA_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTA_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTA_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3234,9 +3234,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTB_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTB_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTB_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTB_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTB_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTB_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3262,9 +3262,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTC_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTC_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTC_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTC_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTC_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTC_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3290,9 +3290,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTD_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTD_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTD_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTD_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTD_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTD_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3318,9 +3318,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTE_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTE_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTE_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTE_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTE_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTE_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3346,9 +3346,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTF_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTF_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTF_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTF_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTF_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTF_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3374,9 +3374,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTG_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTG_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTG_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTG_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTG_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTG_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3402,9 +3402,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTH_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTH_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTH_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTH_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTH_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTH_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3430,9 +3430,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTI_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTI_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTI_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTI_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTI_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTI_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3458,9 +3458,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTJ_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTJ_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTJ_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTJ_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTJ_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTJ_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3486,9 +3486,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTK_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTK_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTK_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTK_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTK_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTK_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3514,9 +3514,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTL_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTL_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTL_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTL_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTL_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTL_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3542,9 +3542,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTM_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTM_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTM_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTM_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTM_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTM_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3570,9 +3570,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTN_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTN_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTN_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTN_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTN_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTN_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3598,9 +3598,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTO_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTO_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTO_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTO_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTO_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTO_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3626,9 +3626,9 @@
 // Reading from these registers provides the intermediate hash result
 // (non-final hash operation) or the final hash result (final hash operation)
 // after data processing.
-#define CRYPTO_HASHDIGESTP_HASH_DIGEST_W 32
-#define CRYPTO_HASHDIGESTP_HASH_DIGEST_M 0xFFFFFFFF
-#define CRYPTO_HASHDIGESTP_HASH_DIGEST_S 0
+#define CRYPTO_HASHDIGESTP_HASH_DIGEST_W                                    32
+#define CRYPTO_HASHDIGESTP_HASH_DIGEST_M                            0xFFFFFFFF
+#define CRYPTO_HASHDIGESTP_HASH_DIGEST_S                                     0
 
 //*****************************************************************************
 //
@@ -3642,10 +3642,10 @@
 // The maximum transfer size to DMA engine is set to 64 bytes for reading and
 // 32 bytes for writing (the latter is only applicable if the hash result is
 // written out through the DMA).
-#define CRYPTO_ALGSEL_HASH_SHA_512 0x100000000
-#define CRYPTO_ALGSEL_HASH_SHA_512_BITN 32
-#define CRYPTO_ALGSEL_HASH_SHA_512_M 0x100000000
-#define CRYPTO_ALGSEL_HASH_SHA_512_S 32
+#define CRYPTO_ALGSEL_HASH_SHA_512                                  0x100000000
+#define CRYPTO_ALGSEL_HASH_SHA_512_BITN                                     32
+#define CRYPTO_ALGSEL_HASH_SHA_512_M                                0x100000000
+#define CRYPTO_ALGSEL_HASH_SHA_512_S                                        32
 
 // Field:    [31] TAG
 //
@@ -3656,10 +3656,10 @@
 // any other selected module, setting this bit only allows a DMA that reads the
 // TAG. No data allowed to be transferred to or from the selected module via
 // the DMA.
-#define CRYPTO_ALGSEL_TAG 0x80000000
-#define CRYPTO_ALGSEL_TAG_BITN 31
-#define CRYPTO_ALGSEL_TAG_M 0x80000000
-#define CRYPTO_ALGSEL_TAG_S 31
+#define CRYPTO_ALGSEL_TAG                                           0x80000000
+#define CRYPTO_ALGSEL_TAG_BITN                                              31
+#define CRYPTO_ALGSEL_TAG_M                                         0x80000000
+#define CRYPTO_ALGSEL_TAG_S                                                 31
 
 // Field:     [2] HASH_SHA_256
 //
@@ -3668,30 +3668,30 @@
 // The maximum transfer size to DMA engine is set to 64 bytes for reading and
 // 32 bytes for writing (the latter is only applicable if the hash result is
 // written out through the DMA).
-#define CRYPTO_ALGSEL_HASH_SHA_256 0x00000004
-#define CRYPTO_ALGSEL_HASH_SHA_256_BITN 2
-#define CRYPTO_ALGSEL_HASH_SHA_256_M 0x00000004
-#define CRYPTO_ALGSEL_HASH_SHA_256_S 2
+#define CRYPTO_ALGSEL_HASH_SHA_256                                  0x00000004
+#define CRYPTO_ALGSEL_HASH_SHA_256_BITN                                      2
+#define CRYPTO_ALGSEL_HASH_SHA_256_M                                0x00000004
+#define CRYPTO_ALGSEL_HASH_SHA_256_S                                         2
 
 // Field:     [1] AES
 //
 // If set to one, selects the AES engine as source/destination for the DMA
 // The read and write maximum transfer size to the DMA engine is set to 16
 // bytes.
-#define CRYPTO_ALGSEL_AES 0x00000002
-#define CRYPTO_ALGSEL_AES_BITN 1
-#define CRYPTO_ALGSEL_AES_M 0x00000002
-#define CRYPTO_ALGSEL_AES_S 1
+#define CRYPTO_ALGSEL_AES                                           0x00000002
+#define CRYPTO_ALGSEL_AES_BITN                                               1
+#define CRYPTO_ALGSEL_AES_M                                         0x00000002
+#define CRYPTO_ALGSEL_AES_S                                                  1
 
 // Field:     [0] KEY_STORE
 //
 // If set to one, selects the Key Store as destination for the DMA
 // The maximum transfer size to DMA engine is set to 32 bytes (however
 // transfers of 16, 24 and 32 bytes are allowed)
-#define CRYPTO_ALGSEL_KEY_STORE 0x00000001
-#define CRYPTO_ALGSEL_KEY_STORE_BITN 0
-#define CRYPTO_ALGSEL_KEY_STORE_M 0x00000001
-#define CRYPTO_ALGSEL_KEY_STORE_S 0
+#define CRYPTO_ALGSEL_KEY_STORE                                     0x00000001
+#define CRYPTO_ALGSEL_KEY_STORE_BITN                                         0
+#define CRYPTO_ALGSEL_KEY_STORE_M                                   0x00000001
+#define CRYPTO_ALGSEL_KEY_STORE_S                                            0
 
 //*****************************************************************************
 //
@@ -3704,10 +3704,10 @@
 // area as destination.
 // 0 : transfers use 'USER' type access.
 // 1 : transfers use 'PRIVILEGED' type access.
-#define CRYPTO_DMAPROTCTL_PROT_EN 0x00000001
-#define CRYPTO_DMAPROTCTL_PROT_EN_BITN 0
-#define CRYPTO_DMAPROTCTL_PROT_EN_M 0x00000001
-#define CRYPTO_DMAPROTCTL_PROT_EN_S 0
+#define CRYPTO_DMAPROTCTL_PROT_EN                                   0x00000001
+#define CRYPTO_DMAPROTCTL_PROT_EN_BITN                                       0
+#define CRYPTO_DMAPROTCTL_PROT_EN_M                                 0x00000001
+#define CRYPTO_DMAPROTCTL_PROT_EN_S                                          0
 
 //*****************************************************************************
 //
@@ -3723,10 +3723,10 @@
 // flags; therefore, the keys must be reloaded to the key store module.
 // Writing 0 has no effect.
 // The bit is self cleared after executing the reset.
-#define CRYPTO_SWRESET_SW_RESET 0x00000001
-#define CRYPTO_SWRESET_SW_RESET_BITN 0
-#define CRYPTO_SWRESET_SW_RESET_M 0x00000001
-#define CRYPTO_SWRESET_SW_RESET_S 0
+#define CRYPTO_SWRESET_SW_RESET                                     0x00000001
+#define CRYPTO_SWRESET_SW_RESET_BITN                                         0
+#define CRYPTO_SWRESET_SW_RESET_M                                   0x00000001
+#define CRYPTO_SWRESET_SW_RESET_S                                            0
 
 //*****************************************************************************
 //
@@ -3739,10 +3739,10 @@
 // If this bit is set to 1, the interrupt is a level interrupt that must be
 // cleared by writing the interrupt clear register.
 // This bit is applicable for both interrupt output signals.
-#define CRYPTO_IRQTYPE_LEVEL 0x00000001
-#define CRYPTO_IRQTYPE_LEVEL_BITN 0
-#define CRYPTO_IRQTYPE_LEVEL_M 0x00000001
-#define CRYPTO_IRQTYPE_LEVEL_S 0
+#define CRYPTO_IRQTYPE_LEVEL                                        0x00000001
+#define CRYPTO_IRQTYPE_LEVEL_BITN                                            0
+#define CRYPTO_IRQTYPE_LEVEL_M                                      0x00000001
+#define CRYPTO_IRQTYPE_LEVEL_S                                               0
 
 //*****************************************************************************
 //
@@ -3754,20 +3754,20 @@
 // If this bit is set to 0, the DMA input done (irq_dma_in_done) interrupt
 // output is disabled and remains 0.
 // If this bit is set to 1, the DMA input done interrupt output is enabled.
-#define CRYPTO_IRQEN_DMA_IN_DONE 0x00000002
-#define CRYPTO_IRQEN_DMA_IN_DONE_BITN 1
-#define CRYPTO_IRQEN_DMA_IN_DONE_M 0x00000002
-#define CRYPTO_IRQEN_DMA_IN_DONE_S 1
+#define CRYPTO_IRQEN_DMA_IN_DONE                                    0x00000002
+#define CRYPTO_IRQEN_DMA_IN_DONE_BITN                                        1
+#define CRYPTO_IRQEN_DMA_IN_DONE_M                                  0x00000002
+#define CRYPTO_IRQEN_DMA_IN_DONE_S                                           1
 
 // Field:     [0] RESULT_AVAIL
 //
 // If this bit is set to 0, the result available (irq_result_av) interrupt
 // output is disabled and remains 0.
 // If this bit is set to 1, the result available interrupt output is enabled.
-#define CRYPTO_IRQEN_RESULT_AVAIL 0x00000001
-#define CRYPTO_IRQEN_RESULT_AVAIL_BITN 0
-#define CRYPTO_IRQEN_RESULT_AVAIL_M 0x00000001
-#define CRYPTO_IRQEN_RESULT_AVAIL_S 0
+#define CRYPTO_IRQEN_RESULT_AVAIL                                   0x00000001
+#define CRYPTO_IRQEN_RESULT_AVAIL_BITN                                       0
+#define CRYPTO_IRQEN_RESULT_AVAIL_M                                 0x00000001
+#define CRYPTO_IRQEN_RESULT_AVAIL_S                                          0
 
 //*****************************************************************************
 //
@@ -3778,28 +3778,28 @@
 //
 // If 1 is written to this bit, the DMA bus error status is cleared.
 // Writing 0 has no effect.
-#define CRYPTO_IRQCLR_DMA_BUS_ERR 0x80000000
-#define CRYPTO_IRQCLR_DMA_BUS_ERR_BITN 31
-#define CRYPTO_IRQCLR_DMA_BUS_ERR_M 0x80000000
-#define CRYPTO_IRQCLR_DMA_BUS_ERR_S 31
+#define CRYPTO_IRQCLR_DMA_BUS_ERR                                   0x80000000
+#define CRYPTO_IRQCLR_DMA_BUS_ERR_BITN                                      31
+#define CRYPTO_IRQCLR_DMA_BUS_ERR_M                                 0x80000000
+#define CRYPTO_IRQCLR_DMA_BUS_ERR_S                                         31
 
 // Field:    [30] KEY_ST_WR_ERR
 //
 // If 1 is written to this bit, the key store write error status is cleared.
 // Writing 0 has no effect.
-#define CRYPTO_IRQCLR_KEY_ST_WR_ERR 0x40000000
-#define CRYPTO_IRQCLR_KEY_ST_WR_ERR_BITN 30
-#define CRYPTO_IRQCLR_KEY_ST_WR_ERR_M 0x40000000
-#define CRYPTO_IRQCLR_KEY_ST_WR_ERR_S 30
+#define CRYPTO_IRQCLR_KEY_ST_WR_ERR                                 0x40000000
+#define CRYPTO_IRQCLR_KEY_ST_WR_ERR_BITN                                    30
+#define CRYPTO_IRQCLR_KEY_ST_WR_ERR_M                               0x40000000
+#define CRYPTO_IRQCLR_KEY_ST_WR_ERR_S                                       30
 
 // Field:    [29] KEY_ST_RD_ERR
 //
 // If 1 is written to this bit, the key store read error status is cleared.
 // Writing 0 has no effect.
-#define CRYPTO_IRQCLR_KEY_ST_RD_ERR 0x20000000
-#define CRYPTO_IRQCLR_KEY_ST_RD_ERR_BITN 29
-#define CRYPTO_IRQCLR_KEY_ST_RD_ERR_M 0x20000000
-#define CRYPTO_IRQCLR_KEY_ST_RD_ERR_S 29
+#define CRYPTO_IRQCLR_KEY_ST_RD_ERR                                 0x20000000
+#define CRYPTO_IRQCLR_KEY_ST_RD_ERR_BITN                                    29
+#define CRYPTO_IRQCLR_KEY_ST_RD_ERR_M                               0x20000000
+#define CRYPTO_IRQCLR_KEY_ST_RD_ERR_S                                       29
 
 // Field:     [1] DMA_IN_DONE
 //
@@ -3808,10 +3808,10 @@
 // Writing 0 has no effect.
 // Note that clearing an interrupt makes sense only if the interrupt output is
 // programmed as level (refer to IRQTYPE).
-#define CRYPTO_IRQCLR_DMA_IN_DONE 0x00000002
-#define CRYPTO_IRQCLR_DMA_IN_DONE_BITN 1
-#define CRYPTO_IRQCLR_DMA_IN_DONE_M 0x00000002
-#define CRYPTO_IRQCLR_DMA_IN_DONE_S 1
+#define CRYPTO_IRQCLR_DMA_IN_DONE                                   0x00000002
+#define CRYPTO_IRQCLR_DMA_IN_DONE_BITN                                       1
+#define CRYPTO_IRQCLR_DMA_IN_DONE_M                                 0x00000002
+#define CRYPTO_IRQCLR_DMA_IN_DONE_S                                          1
 
 // Field:     [0] RESULT_AVAIL
 //
@@ -3820,10 +3820,10 @@
 // Writing 0 has no effect.
 // Note that clearing an interrupt makes sense only if the interrupt output is
 // programmed as level (refer to IRQTYPE).
-#define CRYPTO_IRQCLR_RESULT_AVAIL 0x00000001
-#define CRYPTO_IRQCLR_RESULT_AVAIL_BITN 0
-#define CRYPTO_IRQCLR_RESULT_AVAIL_M 0x00000001
-#define CRYPTO_IRQCLR_RESULT_AVAIL_S 0
+#define CRYPTO_IRQCLR_RESULT_AVAIL                                  0x00000001
+#define CRYPTO_IRQCLR_RESULT_AVAIL_BITN                                      0
+#define CRYPTO_IRQCLR_RESULT_AVAIL_M                                0x00000001
+#define CRYPTO_IRQCLR_RESULT_AVAIL_S                                         0
 
 //*****************************************************************************
 //
@@ -3839,10 +3839,10 @@
 // DMA data in done (irq_dma_in_done) interrupt is not needed. If it is
 // programmed to level, clearing the interrupt output should be done by writing
 // the interrupt clear register (IRQCLR.DMA_IN_DONE).
-#define CRYPTO_IRQSET_DMA_IN_DONE 0x00000002
-#define CRYPTO_IRQSET_DMA_IN_DONE_BITN 1
-#define CRYPTO_IRQSET_DMA_IN_DONE_M 0x00000002
-#define CRYPTO_IRQSET_DMA_IN_DONE_S 1
+#define CRYPTO_IRQSET_DMA_IN_DONE                                   0x00000002
+#define CRYPTO_IRQSET_DMA_IN_DONE_BITN                                       1
+#define CRYPTO_IRQSET_DMA_IN_DONE_M                                 0x00000002
+#define CRYPTO_IRQSET_DMA_IN_DONE_S                                          1
 
 // Field:     [0] RESULT_AVAIL
 //
@@ -3853,10 +3853,10 @@
 // result available (irq_result_av) interrupt is not needed. If it is
 // programmed to level, clearing the interrupt output should be done by writing
 // the interrupt clear register (IRQCLR.RESULT_AVAIL).
-#define CRYPTO_IRQSET_RESULT_AVAIL 0x00000001
-#define CRYPTO_IRQSET_RESULT_AVAIL_BITN 0
-#define CRYPTO_IRQSET_RESULT_AVAIL_M 0x00000001
-#define CRYPTO_IRQSET_RESULT_AVAIL_S 0
+#define CRYPTO_IRQSET_RESULT_AVAIL                                  0x00000001
+#define CRYPTO_IRQSET_RESULT_AVAIL_BITN                                      0
+#define CRYPTO_IRQSET_RESULT_AVAIL_M                                0x00000001
+#define CRYPTO_IRQSET_RESULT_AVAIL_S                                         0
 
 //*****************************************************************************
 //
@@ -3870,10 +3870,10 @@
 // IRQCLR.DMA_BUS_ERR
 // Note: This error is asserted if an error is detected on the AHB master
 // interface during a DMA operation.
-#define CRYPTO_IRQSTAT_DMA_BUS_ERR 0x80000000
-#define CRYPTO_IRQSTAT_DMA_BUS_ERR_BITN 31
-#define CRYPTO_IRQSTAT_DMA_BUS_ERR_M 0x80000000
-#define CRYPTO_IRQSTAT_DMA_BUS_ERR_S 31
+#define CRYPTO_IRQSTAT_DMA_BUS_ERR                                  0x80000000
+#define CRYPTO_IRQSTAT_DMA_BUS_ERR_BITN                                     31
+#define CRYPTO_IRQSTAT_DMA_BUS_ERR_M                                0x80000000
+#define CRYPTO_IRQSTAT_DMA_BUS_ERR_S                                        31
 
 // Field:    [30] KEY_ST_WR_ERR
 //
@@ -3882,10 +3882,10 @@
 // it is cleared through the IRQCLR.KEY_ST_WR_ERR register.
 // Note: This error is asserted if a DMA operation does not cover a full key
 // area or more areas are written than expected.
-#define CRYPTO_IRQSTAT_KEY_ST_WR_ERR 0x40000000
-#define CRYPTO_IRQSTAT_KEY_ST_WR_ERR_BITN 30
-#define CRYPTO_IRQSTAT_KEY_ST_WR_ERR_M 0x40000000
-#define CRYPTO_IRQSTAT_KEY_ST_WR_ERR_S 30
+#define CRYPTO_IRQSTAT_KEY_ST_WR_ERR                                0x40000000
+#define CRYPTO_IRQSTAT_KEY_ST_WR_ERR_BITN                                   30
+#define CRYPTO_IRQSTAT_KEY_ST_WR_ERR_M                              0x40000000
+#define CRYPTO_IRQSTAT_KEY_ST_WR_ERR_S                                      30
 
 // Field:    [29] KEY_ST_RD_ERR
 //
@@ -3894,30 +3894,30 @@
 // is held until it is cleared through the IRQCLR.KEY_ST_RD_ERR register.
 // Note: This error is asserted if a key location is selected in the key store
 // that is not available.
-#define CRYPTO_IRQSTAT_KEY_ST_RD_ERR 0x20000000
-#define CRYPTO_IRQSTAT_KEY_ST_RD_ERR_BITN 29
-#define CRYPTO_IRQSTAT_KEY_ST_RD_ERR_M 0x20000000
-#define CRYPTO_IRQSTAT_KEY_ST_RD_ERR_S 29
+#define CRYPTO_IRQSTAT_KEY_ST_RD_ERR                                0x20000000
+#define CRYPTO_IRQSTAT_KEY_ST_RD_ERR_BITN                                   29
+#define CRYPTO_IRQSTAT_KEY_ST_RD_ERR_M                              0x20000000
+#define CRYPTO_IRQSTAT_KEY_ST_RD_ERR_S                                      29
 
 // Field:     [1] DMA_IN_DONE
 //
 // This read only bit returns the actual DMA data in done (irq_data_in_done)
 // interrupt status of the DMA data in done interrupt output pin
 // (irq_data_in_done).
-#define CRYPTO_IRQSTAT_DMA_IN_DONE 0x00000002
-#define CRYPTO_IRQSTAT_DMA_IN_DONE_BITN 1
-#define CRYPTO_IRQSTAT_DMA_IN_DONE_M 0x00000002
-#define CRYPTO_IRQSTAT_DMA_IN_DONE_S 1
+#define CRYPTO_IRQSTAT_DMA_IN_DONE                                  0x00000002
+#define CRYPTO_IRQSTAT_DMA_IN_DONE_BITN                                      1
+#define CRYPTO_IRQSTAT_DMA_IN_DONE_M                                0x00000002
+#define CRYPTO_IRQSTAT_DMA_IN_DONE_S                                         1
 
 // Field:     [0] RESULT_AVAIL
 //
 // This read only bit returns the actual result available (irq_result_av)
 // interrupt status of the result available interrupt output pin
 // (irq_result_av).
-#define CRYPTO_IRQSTAT_RESULT_AVAIL 0x00000001
-#define CRYPTO_IRQSTAT_RESULT_AVAIL_BITN 0
-#define CRYPTO_IRQSTAT_RESULT_AVAIL_M 0x00000001
-#define CRYPTO_IRQSTAT_RESULT_AVAIL_S 0
+#define CRYPTO_IRQSTAT_RESULT_AVAIL                                 0x00000001
+#define CRYPTO_IRQSTAT_RESULT_AVAIL_BITN                                     0
+#define CRYPTO_IRQSTAT_RESULT_AVAIL_M                               0x00000001
+#define CRYPTO_IRQSTAT_RESULT_AVAIL_S                                        0
 
 //*****************************************************************************
 //
@@ -3927,39 +3927,40 @@
 // Field: [27:24] HW_MAJOR_VER
 //
 // Major version number
-#define CRYPTO_HWVER_HW_MAJOR_VER_W 4
-#define CRYPTO_HWVER_HW_MAJOR_VER_M 0x0F000000
-#define CRYPTO_HWVER_HW_MAJOR_VER_S 24
+#define CRYPTO_HWVER_HW_MAJOR_VER_W                                          4
+#define CRYPTO_HWVER_HW_MAJOR_VER_M                                 0x0F000000
+#define CRYPTO_HWVER_HW_MAJOR_VER_S                                         24
 
 // Field: [23:20] HW_MINOR_VER
 //
 // Minor version number
-#define CRYPTO_HWVER_HW_MINOR_VER_W 4
-#define CRYPTO_HWVER_HW_MINOR_VER_M 0x00F00000
-#define CRYPTO_HWVER_HW_MINOR_VER_S 20
+#define CRYPTO_HWVER_HW_MINOR_VER_W                                          4
+#define CRYPTO_HWVER_HW_MINOR_VER_M                                 0x00F00000
+#define CRYPTO_HWVER_HW_MINOR_VER_S                                         20
 
 // Field: [19:16] HW_PATCH_LVL
 //
 // Patch level
 // Starts at 0 at first delivery of this version
-#define CRYPTO_HWVER_HW_PATCH_LVL_W 4
-#define CRYPTO_HWVER_HW_PATCH_LVL_M 0x000F0000
-#define CRYPTO_HWVER_HW_PATCH_LVL_S 16
+#define CRYPTO_HWVER_HW_PATCH_LVL_W                                          4
+#define CRYPTO_HWVER_HW_PATCH_LVL_M                                 0x000F0000
+#define CRYPTO_HWVER_HW_PATCH_LVL_S                                         16
 
 // Field:  [15:8] VER_NUM_COMPL
 //
 // These bits simply contain the complement of bits [7:0] (0x87), used by a
 // driver to ascertain that the EIP-120t register is indeed read.
-#define CRYPTO_HWVER_VER_NUM_COMPL_W 8
-#define CRYPTO_HWVER_VER_NUM_COMPL_M 0x0000FF00
-#define CRYPTO_HWVER_VER_NUM_COMPL_S 8
+#define CRYPTO_HWVER_VER_NUM_COMPL_W                                         8
+#define CRYPTO_HWVER_VER_NUM_COMPL_M                                0x0000FF00
+#define CRYPTO_HWVER_VER_NUM_COMPL_S                                         8
 
 // Field:   [7:0] VER_NUM
 //
 // These bits encode the EIP number for the EIP-120t, this field contains the
 // value 120 (decimal) or 0x78.
-#define CRYPTO_HWVER_VER_NUM_W 8
-#define CRYPTO_HWVER_VER_NUM_M 0x000000FF
-#define CRYPTO_HWVER_VER_NUM_S 0
+#define CRYPTO_HWVER_VER_NUM_W                                               8
+#define CRYPTO_HWVER_VER_NUM_M                                      0x000000FF
+#define CRYPTO_HWVER_VER_NUM_S                                               0
+
 
 #endif // __CRYPTO__

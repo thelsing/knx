@@ -409,13 +409,13 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <ti/drivers/Power.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib / crypto.h)
+#include DeviceFamily_constructPath(driverlib/crypto.h)
 
 #if DeviceFamily_PARENT == DeviceFamily_PARENT_CC13X2_CC26X2
 #warning "This driver is deprecated for the CC26x2 and CC13x2 families.\
@@ -452,26 +452,27 @@ It is superceded by AESECB and AESCCM."
 
 #define CRYPTOCC26XX_TIMEOUT 20 /*!< Timeout Return Code */
 
-#define CRYPTOCC26XX_STATUS_SUCCESS 0       /*!< Success Return Code           */
-#define CRYPTOCC26XX_STATUS_ERROR -1        /*!< Error Return Code             */
-#define CRYPTOCC26XX_STATUS_UNDEFINEDCMD -2 /*!< Command Undefined Return Code */
+#define CRYPTOCC26XX_STATUS_SUCCESS        0  /*!< Success Return Code           */
+#define CRYPTOCC26XX_STATUS_ERROR         -1  /*!< Error Return Code             */
+#define CRYPTOCC26XX_STATUS_UNDEFINEDCMD  -2  /*!< Command Undefined Return Code */
 
-#define CRYPTOCC26XX_OP_AES_CCM_ENCRYPT 0          /*!< AES-CCM encryption of both AAD and plain text */
-#define CRYPTOCC26XX_OP_AES_CCM_ENCRYPT_AAD_ONLY 1 /*!< AES-CCM authentication of ADD only */
-#define CRYPTOCC26XX_OP_AES_CCM_DECRYPT 2          /*!< AES-CCM decryption of both AAD and plain text and verification of both */
-#define CRYPTOCC26XX_OP_AES_CCM_DECRYPT_AAD_ONLY 3 /*!< AES-CCM verification of ADD only */
-#define CRYPTOCC26XX_OP_AES_ECB_ENCRYPT 4          /*!< AES-ECB encryption */
-#define CRYPTOCC26XX_OP_AES_ECB_DECRYPT 5          /*!< AES-ECB decryption */
-#define CRYPTOCC26XX_OP_AES_CBC_ENCRYPT 6          /*!< AES-CBC encryption */
-#define CRYPTOCC26XX_OP_AES_CBC_DECRYPT 7          /*!< AES-CBC decryption */
+#define CRYPTOCC26XX_OP_AES_CCM_ENCRYPT             0   /*!< AES-CCM encryption of both AAD and plain text */
+#define CRYPTOCC26XX_OP_AES_CCM_ENCRYPT_AAD_ONLY    1   /*!< AES-CCM authentication of ADD only */
+#define CRYPTOCC26XX_OP_AES_CCM_DECRYPT             2   /*!< AES-CCM decryption of both AAD and plain text and verification of both */
+#define CRYPTOCC26XX_OP_AES_CCM_DECRYPT_AAD_ONLY    3   /*!< AES-CCM verification of ADD only */
+#define CRYPTOCC26XX_OP_AES_ECB_ENCRYPT             4   /*!< AES-ECB encryption */
+#define CRYPTOCC26XX_OP_AES_ECB_DECRYPT             5   /*!< AES-ECB decryption */
+#define CRYPTOCC26XX_OP_AES_CBC_ENCRYPT             6   /*!< AES-CBC encryption */
+#define CRYPTOCC26XX_OP_AES_CBC_DECRYPT             7   /*!< AES-CBC decryption */
 
 /* Deprecated operation mode names */
-#define CRYPTOCC26XX_OP_AES_CCM CRYPTOCC26XX_OP_AES_CCM_ENCRYPT
-#define CRYPTOCC26XX_OP_AES_CCM_NOCRYPT CRYPTOCC26XX_OP_AES_CCM_ENCRYPT_AAD_ONLY
-#define CRYPTOCC26XX_OP_AES_CCMINV CRYPTOCC26XX_OP_AES_CCM_DECRYPT
-#define CRYPTOCC26XX_OP_AES_CCMINV_NOCRYPT CRYPTOCC26XX_OP_AES_CCM_DECRYPT_AAD_ONLY
-#define CRYPTOCC26XX_OP_AES_ECB CRYPTOCC26XX_OP_AES_ECB_ENCRYPT
-#define CRYPTOCC26XX_OP_AES_ECB_NOCRYPT CRYPTOCC26XX_OP_AES_ECB_DECRYPT
+#define CRYPTOCC26XX_OP_AES_CCM                 CRYPTOCC26XX_OP_AES_CCM_ENCRYPT
+#define CRYPTOCC26XX_OP_AES_CCM_NOCRYPT         CRYPTOCC26XX_OP_AES_CCM_ENCRYPT_AAD_ONLY
+#define CRYPTOCC26XX_OP_AES_CCMINV              CRYPTOCC26XX_OP_AES_CCM_DECRYPT
+#define CRYPTOCC26XX_OP_AES_CCMINV_NOCRYPT      CRYPTOCC26XX_OP_AES_CCM_DECRYPT_AAD_ONLY
+#define CRYPTOCC26XX_OP_AES_ECB                 CRYPTOCC26XX_OP_AES_ECB_ENCRYPT
+#define CRYPTOCC26XX_OP_AES_ECB_NOCRYPT         CRYPTOCC26XX_OP_AES_ECB_DECRYPT
+
 
 #include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
@@ -479,7 +480,7 @@ It is superceded by AESECB and AESCCM."
 /*!
  *  @brief      A handle that is returned from a CryptoCC26XX_open() call.
  */
-typedef struct CryptoCC26XX_Config* CryptoCC26XX_Handle;
+typedef struct CryptoCC26XX_Config*      CryptoCC26XX_Handle;
 
 /*!
  *  @brief      CryptoCC26XX Mode Settings
@@ -490,15 +491,15 @@ typedef struct CryptoCC26XX_Config* CryptoCC26XX_Handle;
 typedef enum CryptoCC26XX_Mode
 {
     /*!
-     *  Uses a semaphore to block while data is being sent. Context of the call
-     *  must be a Task.
-     */
+      *  Uses a semaphore to block while data is being sent. Context of the call
+      *  must be a Task.
+      */
     CRYPTOCC26XX_MODE_BLOCKING,
 
     /*!
-     *  Will return when the operation has finished. Call can be made from
-     *  hwi and swi context.
-     */
+      *  Will return when the operation has finished. Call can be made from
+      *  hwi and swi context.
+      */
     CRYPTOCC26XX_MODE_POLLING
 } CryptoCC26XX_Mode;
 
@@ -541,7 +542,7 @@ typedef enum CryptoCC26XX_KeyLocation
  */
 typedef struct CryptoCC26XX_Params
 {
-        uint32_t timeout; /*!< Timeout for read semaphore */
+    uint32_t        timeout;  /*!< Timeout for read semaphore */
 } CryptoCC26XX_Params;
 
 /*!
@@ -562,9 +563,9 @@ typedef uint8_t CryptoCC26XX_KeyStore;
  */
 typedef struct CryptoCC26XX_Transaction
 {
-        CryptoCC26XX_Operation opType; /*!< The type of the crypto operation */
-        CryptoCC26XX_Mode mode;        /*!< The mode of current transaction */
-        uint8_t data[];                /*!< A void pointer to rest of transaction (transac. specific) */
+    CryptoCC26XX_Operation    opType;          /*!< The type of the crypto operation */
+    CryptoCC26XX_Mode         mode;            /*!< The mode of current transaction */
+    uint8_t                   data[];          /*!< A void pointer to rest of transaction (transac. specific) */
 } CryptoCC26XX_Transaction;
 
 /*!
@@ -619,55 +620,55 @@ typedef struct CryptoCC26XX_Transaction
  */
 typedef struct CryptoCC26XX_AESCCM_Transaction
 {
-        CryptoCC26XX_Operation opType; /*!< The type of the crypto operation */
-        CryptoCC26XX_Mode mode;        /*!< The mode of current transaction. Set by transact function. */
-        uint8_t keyIndex;              /*!< The key store index to be used */
-        uint8_t authLength;            /*!< Is the the length of the authentication field */
-        /*!< 0, 2, 4, 6, 8, 10, 12, 14 or 16 octets. */
-        char* nonce;           /*!< A pointer to a nonce. It must satisfy the equation 15 = q + n,
-                                *   where q is the fieldLength and n is the length of the nonce.
-                                *
-                                *   The minimum size of the array containing the nonce is 12 bytes.
-                                *   When using nonces of length < 12 bytes, the nonce must be zero-padded
-                                *   to 12 bytes. The driverlib implementation in ROM was written
-                                *   with 12 and 13-byte nonces in mind. It constructs the IV's
-                                *   internally and hence copies either 12 or 13 bytes into another buffer.
-                                *   Providing a nonce buffer with less than 12 bytes would result in
-                                *   whatever is after the nonce in memory being incorrectly copied
-                                *   into the IV's.
-                                *
-                                *   As long as the correct fieldLength is set for the < 12-bytes nonce,
-                                *   the correct nonce-length will be used.
-                                *
-                                *   Valid nonce lengths are {7, 8, 9, 10, 11, 12, 13}.
-                                */
-        char* msgIn;           /*!<
-                                *   - Encryption: A pointer to the octet string input message and after the transaction,
-                                *     the location of the encrypted cleartext. The cleatext is encrypted in place.
-                                *   - Decryption:  A pointer to the encrypted ciphertext composed of the encrypted cleartext
-                                *     concatenated with the encrypted message authentication code.
-                                */
-        char* header;          /*!< The Additional Authentication Data (AAD). This header is authenticated but not encrypted. */
-        void* msgOut;          /*!< A pointer to where the encrypted CBC-MAC shall be written to.
-                                *   - Encryption: It is recommended to set this to msgIn + msgInLength. The cyphertext sent out
-                                *     must be the concatenation of the encrypted message and encrypted MAC anyway.
-                                *   - Decyption: Do NOT set msgOut to the same location as the received MAC in the
-                                *     cyphertext within msgIn! Doing this effectively disables verification.
-                                */
-        uint8_t fieldLength;   /*!< This parameter specifies the size in bytes of the message length field.
-                                *   (Not the length of the message itself!)
-                                *
-                                *   It sets the maximum length of the message
-                                *   according to p < 2^(8*q) where p is the message length and q is the fieldLength.
-                                *
-                                *   It must satisfy the equation 15 = q + n where q is the fieldLength and n is the
-                                *   length of the nonce.
-                                *
-                                *   Valid values are {2, 3, 4, 5, 6, 7, 8}.
-                                */
-        uint16_t msgInLength;  /*!< - Encryption:  The length of the cleartext.
-                                    - Decryption: The length of the ciphertext. */
-        uint16_t headerLength; /*!< The length of the header in octets */
+    CryptoCC26XX_Operation  opType;         /*!< The type of the crypto operation */
+    CryptoCC26XX_Mode       mode;           /*!< The mode of current transaction. Set by transact function. */
+    uint8_t                 keyIndex;       /*!< The key store index to be used */
+    uint8_t                 authLength;     /*!< Is the the length of the authentication field */
+    /*!< 0, 2, 4, 6, 8, 10, 12, 14 or 16 octets. */
+    char*                   nonce;          /*!< A pointer to a nonce. It must satisfy the equation 15 = q + n,
+                                             *   where q is the fieldLength and n is the length of the nonce.
+                                             *
+                                             *   The minimum size of the array containing the nonce is 12 bytes.
+                                             *   When using nonces of length < 12 bytes, the nonce must be zero-padded
+                                             *   to 12 bytes. The driverlib implementation in ROM was written
+                                             *   with 12 and 13-byte nonces in mind. It constructs the IV's
+                                             *   internally and hence copies either 12 or 13 bytes into another buffer.
+                                             *   Providing a nonce buffer with less than 12 bytes would result in
+                                             *   whatever is after the nonce in memory being incorrectly copied
+                                             *   into the IV's.
+                                             *
+                                             *   As long as the correct fieldLength is set for the < 12-bytes nonce,
+                                             *   the correct nonce-length will be used.
+                                             *
+                                             *   Valid nonce lengths are {7, 8, 9, 10, 11, 12, 13}.
+                                             */
+    char*                   msgIn;          /*!<
+                                             *   - Encryption: A pointer to the octet string input message and after the transaction,
+                                             *     the location of the encrypted cleartext. The cleatext is encrypted in place.
+                                             *   - Decryption:  A pointer to the encrypted ciphertext composed of the encrypted cleartext
+                                             *     concatenated with the encrypted message authentication code.
+                                             */
+    char*                   header;         /*!< The Additional Authentication Data (AAD). This header is authenticated but not encrypted. */
+    void*                   msgOut;         /*!< A pointer to where the encrypted CBC-MAC shall be written to.
+                                             *   - Encryption: It is recommended to set this to msgIn + msgInLength. The cyphertext sent out
+                                             *     must be the concatenation of the encrypted message and encrypted MAC anyway.
+                                             *   - Decyption: Do NOT set msgOut to the same location as the received MAC in the
+                                             *     cyphertext within msgIn! Doing this effectively disables verification.
+                                             */
+    uint8_t                 fieldLength;    /*!< This parameter specifies the size in bytes of the message length field.
+                                             *   (Not the length of the message itself!)
+                                             *
+                                             *   It sets the maximum length of the message
+                                             *   according to p < 2^(8*q) where p is the message length and q is the fieldLength.
+                                             *
+                                             *   It must satisfy the equation 15 = q + n where q is the fieldLength and n is the
+                                             *   length of the nonce.
+                                             *
+                                             *   Valid values are {2, 3, 4, 5, 6, 7, 8}.
+                                             */
+    uint16_t                msgInLength;    /*!< - Encryption:  The length of the cleartext.
+                                                 - Decryption: The length of the ciphertext. */
+    uint16_t                headerLength;   /*!< The length of the header in octets */
 } CryptoCC26XX_AESCCM_Transaction;
 
 /*!
@@ -678,13 +679,13 @@ typedef struct CryptoCC26XX_AESCCM_Transaction
  */
 typedef struct CryptoCC26XX_AESCBC_Transaction
 {
-        CryptoCC26XX_Operation opType; /*!< The type of the crypto operation */
-        CryptoCC26XX_Mode mode;        /*!< The mode of current transaction. Set by transact function. */
-        uint8_t keyIndex;              /*!< The key store index to be used */
-        void* nonce;                   /*!< A pointer to 16 byte Nonce. */
-        void* msgIn;                   /*!< A pointer to the octet string input message */
-        void* msgOut;                  /*!< A pointer to the output message location */
-        uint16_t msgInLength;          /*!< The length of the message */
+    CryptoCC26XX_Operation  opType;         /*!< The type of the crypto operation */
+    CryptoCC26XX_Mode       mode;           /*!< The mode of current transaction. Set by transact function. */
+    uint8_t                 keyIndex;       /*!< The key store index to be used */
+    void*                    nonce;         /*!< A pointer to 16 byte Nonce. */
+    void*                    msgIn;         /*!< A pointer to the octet string input message */
+    void*                    msgOut;        /*!< A pointer to the output message location */
+    uint16_t                msgInLength;    /*!< The length of the message */
 } CryptoCC26XX_AESCBC_Transaction;
 
 /*!
@@ -695,11 +696,11 @@ typedef struct CryptoCC26XX_AESCBC_Transaction
  */
 typedef struct CryptoCC26XX_AESECB_Transaction
 {
-        CryptoCC26XX_Operation opType; /*!< The type of the crypto operation */
-        CryptoCC26XX_Mode mode;        /*!< The mode of current transaction. Set by transact function. */
-        uint8_t keyIndex;              /*!< The key store index to be used. */
-        void* msgIn;                   /*!< A poiner to the octet string input message */
-        void* msgOut;                  /*!< A pointer to the output message location */
+    CryptoCC26XX_Operation    opType;    /*!< The type of the crypto operation */
+    CryptoCC26XX_Mode         mode;      /*!< The mode of current transaction. Set by transact function. */
+    uint8_t                   keyIndex;  /*!< The key store index to be used. */
+    void*                     msgIn;     /*!< A poiner to the octet string input message */
+    void*                     msgOut;    /*!< A pointer to the output message location */
 } CryptoCC26XX_AESECB_Transaction;
 
 /*!
@@ -733,25 +734,25 @@ typedef struct CryptoCC26XX_AESECB_Transaction
  */
 typedef struct CryptoCC26XX_HWAttrs
 {
-        /*! Crypto Peripheral's base address */
-        uint32_t baseAddr;
-        /*! Crypto Peripheral's power manager ID */
-        int powerMngrId;
-        /*! Crypto Peripheral's interrupt vector */
-        int intNum;
-        /*! @brief Crypto Peripheral's interrupt priority.
+    /*! Crypto Peripheral's base address */
+    uint32_t   baseAddr;
+    /*! Crypto Peripheral's power manager ID */
+    int        powerMngrId;
+    /*! Crypto Peripheral's interrupt vector */
+    int        intNum;
+    /*! @brief Crypto Peripheral's interrupt priority.
 
-            The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
+        The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
 
-            (7 << 5) will apply the lowest priority.
+        (7 << 5) will apply the lowest priority.
 
-            (1 << 5) will apply the highest priority.
+        (1 << 5) will apply the highest priority.
 
-            Setting the priority to 0 is not supported by this driver.
+        Setting the priority to 0 is not supported by this driver.
 
-            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-        */
-        uint8_t intPriority;
+        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+    */
+    uint8_t    intPriority;
 } CryptoCC26XX_HWAttrs;
 
 /*!
@@ -761,27 +762,27 @@ typedef struct CryptoCC26XX_HWAttrs
  */
 typedef struct CryptoCC26XX_Object
 {
-        /* CryptoCC26XX control variables */
-        int openCnt;                               /*!< Counting number of clients */
-        uint32_t timeout;                          /*!< Timeout for encrypt/decrypt operation */
-        CryptoCC26XX_KeyStore keyStore;            /*!< Key store for Crypto */
-        CryptoCC26XX_Transaction* currentTransact; /*!< Pointer to ongoing transaction */
+    /* CryptoCC26XX control variables */
+    int                       openCnt;          /*!< Counting number of clients */
+    uint32_t                  timeout;          /*!< Timeout for encrypt/decrypt operation */
+    CryptoCC26XX_KeyStore     keyStore;         /*!< Key store for Crypto */
+    CryptoCC26XX_Transaction* currentTransact;  /*!< Pointer to ongoing transaction */
 
-        /*! Crypto notification object */
-        Power_NotifyObj cryptoNotiObj;
+    /*! Crypto notification object */
+    Power_NotifyObj           cryptoNotiObj;
 
-        /* CryptoCC26XX SYS/BIOS objects */
-        HwiP_Struct hwi; /*!< Hwi object */
+    /* CryptoCC26XX SYS/BIOS objects */
+    HwiP_Struct hwi;      /*!< Hwi object */
 } CryptoCC26XX_Object;
 
 /*! @brief CryptoCC26XX Global Configuration */
 typedef struct CryptoCC26XX_Config
 {
-        /*! Pointer to a driver specific data object */
-        void* object;
+    /*! Pointer to a driver specific data object */
+    void*                   object;
 
-        /*! Pointer to a driver specific hardware attributes structure */
-        void const* hwAttrs;
+    /*! Pointer to a driver specific hardware attributes structure */
+    void          const*    hwAttrs;
 } CryptoCC26XX_Config;
 
 /*!
@@ -890,6 +891,7 @@ void CryptoCC26XX_Transac_init(CryptoCC26XX_Transaction* trans, CryptoCC26XX_Ope
  *  @sa     CryptoCC26XX_loadKey()
  */
 int CryptoCC26XX_allocateKey(CryptoCC26XX_Handle handle, CryptoCC26XX_KeyLocation keyLocation, const uint32_t* keySrc);
+
 
 /*!
  *  @brief  Function that writes a given key into a key store

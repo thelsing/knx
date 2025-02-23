@@ -1,9 +1,9 @@
 #pragma once
 
-#include "dptconvert.h"
-#include "knx_types.h"
 #include <stddef.h>
 #include <stdint.h>
+#include "knx_types.h"
+#include "dptconvert.h"
 
 class GroupObjectTableObject;
 
@@ -21,18 +21,18 @@ enum ComFlag : uint8_t
 class GroupObject;
 
 #ifndef HAS_FUNCTIONAL
-#if defined(__linux__) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_RP2040)
-#define HAS_FUNCTIONAL 1
-#else
-#define HAS_FUNCTIONAL 0
-#endif
+    #if defined(__linux__) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32) || defined (ARDUINO_ARCH_SAMD) || defined (ARDUINO_ARCH_RP2040)
+        #define HAS_FUNCTIONAL    1
+    #else
+        #define HAS_FUNCTIONAL   0
+    #endif
 #endif
 
 #if HAS_FUNCTIONAL
-#include <functional>
-typedef std::function<void(GroupObject&)> GroupObjectUpdatedHandler;
+    #include <functional>
+    typedef std::function<void(GroupObject&)> GroupObjectUpdatedHandler;
 #else
-typedef void (*GroupObjectUpdatedHandler)(GroupObject& go);
+    typedef void (*GroupObjectUpdatedHandler)(GroupObject& go);
 #endif
 
 /**
@@ -42,7 +42,6 @@ class GroupObject
 {
         friend class GroupObjectTableObject;
         GroupObject(const GroupObject& other) = delete;
-
     public:
         /**
          * The constructor.
@@ -99,21 +98,21 @@ class GroupObject
         bool initialized();
 
         /**
-         * Request the read of a communication object. Calling this function triggers the
-         * sending of a read-group-value telegram, to read the value of the communication
-         * object from the bus.
-         *
-         * When the answer is received, the communication object's value will be updated.
-         *
-         * This sets the state of the group objecte to ::ReadRequest
-         */
+        * Request the read of a communication object. Calling this function triggers the
+        * sending of a read-group-value telegram, to read the value of the communication
+        * object from the bus.
+        *
+        * When the answer is received, the communication object's value will be updated.
+        *
+        * This sets the state of the group objecte to ::ReadRequest
+        */
         void requestObjectRead();
         /**
-         * Mark a communication object as written. Calling this
-         * function triggers the sending of a write-group-value telegram.
-         *
-         * This sets the state of the group object to ::WriteRequest
-         */
+        * Mark a communication object as written. Calling this
+        * function triggers the sending of a write-group-value telegram.
+        *
+        * This sets the state of the group object to ::WriteRequest
+        */
         void objectWritten();
 
         /**

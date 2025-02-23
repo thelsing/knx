@@ -1,8 +1,7 @@
 #include "knx_ip_config_dib.h"
 
 #ifdef USE_IP
-KnxIpConfigDIB::KnxIpConfigDIB(uint8_t* data, bool isCurrent)
-    : KnxIpDIB(data)
+KnxIpConfigDIB::KnxIpConfigDIB(uint8_t* data, bool isCurrent) : KnxIpDIB(data)
 {
     _isCurrent = isCurrent;
 }

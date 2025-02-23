@@ -4,17 +4,17 @@
 
 #define LEN_HARDWARE_TYPE 6
 
-class DeviceObject : public InterfaceObject
+class DeviceObject: public InterfaceObject
 {
-    public:
-        // increase this version anytime DeviceObject-API changes
-        // the following value represents the serialized representation of DeviceObject.
-        const uint16_t apiVersion = 2;
-
-        DeviceObject();
-        uint8_t* save(uint8_t* buffer) override;
-        const uint8_t* restore(const uint8_t* buffer) override;
-        uint16_t saveSize() override;
+public:
+    // increase this version anytime DeviceObject-API changes 
+    // the following value represents the serialized representation of DeviceObject.
+    const uint16_t apiVersion = 2;
+    
+    DeviceObject();
+    uint8_t* save(uint8_t* buffer) override;
+    const uint8_t* restore(const uint8_t* buffer) override;
+    uint16_t saveSize() override;
 
         uint16_t individualAddress();
         void individualAddress(uint16_t value);
@@ -41,7 +41,6 @@ class DeviceObject : public InterfaceObject
         const uint8_t* rfDomainAddress();
         void rfDomainAddress(uint8_t* value);
         uint8_t defaultHopCount();
-
     private:
         uint8_t _prgMode = 0;
 #if MASK_VERSION == 0x091A || MASK_VERSION == 0x2920

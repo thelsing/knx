@@ -7,16 +7,16 @@
 #include "knx/bits.h"
 
 #ifndef KNX_SERIAL
-#define KNX_SERIAL Serial1
-#pragma warn "KNX_SERIAL not defined, using Serial1"
+    #define KNX_SERIAL Serial1
+    #pragma warn "KNX_SERIAL not defined, using Serial1"
 #endif
-
+ 
 #ifdef KNX_IP_LAN
-#include "ETH.h"
-#define KNX_NETIF ETH
+    #include "ETH.h"
+    #define KNX_NETIF ETH
 #else // KNX_IP_WIFI
-#include <WiFi.h>
-#define KNX_NETIF WiFi
+    #include <WiFi.h>
+    #define KNX_NETIF WiFi
 #endif
 
 Esp32Platform::Esp32Platform()
@@ -32,8 +32,7 @@ Esp32Platform::Esp32Platform()
 #endif
 }
 
-Esp32Platform::Esp32Platform(HardwareSerial* s)
-    : ArduinoPlatform(s)
+Esp32Platform::Esp32Platform(HardwareSerial* s) : ArduinoPlatform(s)
 {
 }
 
@@ -91,7 +90,7 @@ void Esp32Platform::setupMultiCast(uint32_t addr, uint16_t port)
     IPAddress mcastaddr(htonl(addr));
 
     KNX_DEBUG_SERIAL.printf("setup multicast addr: %s port: %d ip: %s\n", mcastaddr.toString().c_str(), port,
-                            KNX_NETIF.localIP().toString().c_str());
+        KNX_NETIF.localIP().toString().c_str());
     uint8_t result = _udp.beginMulticast(mcastaddr, port);
     KNX_DEBUG_SERIAL.printf("result %d\n", result);
 }
@@ -103,7 +102,7 @@ void Esp32Platform::closeMultiCast()
 
 bool Esp32Platform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
 {
-    // printHex("<- ",buffer, len);
+    //printHex("<- ",buffer, len);
     _udp.beginMulticastPacket();
     _udp.write(buffer, len);
     _udp.endPacket();

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "config.h"
 #include <cstdint>
+#include "config.h"
 
 #ifdef USE_IP
 

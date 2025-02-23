@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       aon_wuc.h
- *  Revised:        2017-06-05 12:13:49 +0200 (Mon, 05 Jun 2017)
- *  Revision:       49096
- *
- *  Description:    Defines and prototypes for the AON Wake-Up Controller
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       aon_wuc.h
+*  Revised:        2017-06-05 12:13:49 +0200 (Mon, 05 Jun 2017)
+*  Revision:       49096
+*
+*  Description:    Defines and prototypes for the AON Wake-Up Controller
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,18 +55,19 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_aon_rtc.h"
-#include "../inc/hw_aon_wuc.h"
-#include "../inc/hw_ints.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include "debug.h"
-#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_aon_wuc.h"
+#include "../inc/hw_aon_rtc.h"
+#include "interrupt.h"
+#include "debug.h"
 
 //*****************************************************************************
 //
@@ -82,9 +83,9 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define AONWUCAuxReset NOROM_AONWUCAuxReset
-#define AONWUCRechargeCtrlConfigSet NOROM_AONWUCRechargeCtrlConfigSet
-#define AONWUCOscConfig NOROM_AONWUCOscConfig
+#define AONWUCAuxReset                  NOROM_AONWUCAuxReset
+#define AONWUCRechargeCtrlConfigSet     NOROM_AONWUCRechargeCtrlConfigSet
+#define AONWUCOscConfig                 NOROM_AONWUCOscConfig
 #endif
 
 //*****************************************************************************
@@ -92,11 +93,11 @@ extern "C" {
 // Defines the possible clock source for the MCU and AUX domain.
 //
 //*****************************************************************************
-#define AONWUC_CLOCK_SRC_HF 0x00000003 // System clock high frequency -
+#define AONWUC_CLOCK_SRC_HF     0x00000003  // System clock high frequency -
 // 48 MHz.
-#define AONWUC_CLOCK_SRC_LF 0x00000001 // System clock low frequency -
+#define AONWUC_CLOCK_SRC_LF     0x00000001  // System clock low frequency -
 // 32 kHz.
-#define AONWUC_NO_CLOCK 0x00000000 // System clock low frequency -
+#define AONWUC_NO_CLOCK         0x00000000  // System clock low frequency -
 // 32 kHz.
 
 //*****************************************************************************
@@ -104,30 +105,30 @@ extern "C" {
 // Defines the possible clock division factors for the AUX domain.
 //
 //*****************************************************************************
-#define AUX_CLOCK_DIV_2 (AON_WUC_AUXCLK_SCLK_HF_DIV_DIV2)
-#define AUX_CLOCK_DIV_4 (AON_WUC_AUXCLK_SCLK_HF_DIV_DIV4)
-#define AUX_CLOCK_DIV_8 (AON_WUC_AUXCLK_SCLK_HF_DIV_DIV8)
-#define AUX_CLOCK_DIV_16 (AON_WUC_AUXCLK_SCLK_HF_DIV_DIV16)
-#define AUX_CLOCK_DIV_32 (AON_WUC_AUXCLK_SCLK_HF_DIV_DIV32)
-#define AUX_CLOCK_DIV_64 (AON_WUC_AUXCLK_SCLK_HF_DIV_DIV64)
-#define AUX_CLOCK_DIV_128 (AON_WUC_AUXCLK_SCLK_HF_DIV_DIV128)
-#define AUX_CLOCK_DIV_256 (AON_WUC_AUXCLK_SCLK_HF_DIV_DIV256)
-#define AUX_CLOCK_DIV_UNUSED (AON_WUC_AUXCLK_SCLK_HF_DIV_M + (1 << AON_WUC_AUXCLK_SCLK_HF_DIV_S))
-#define AUX_CLOCK_DIV_M (AON_WUC_AUXCLK_SCLK_HF_DIV_M)
+#define AUX_CLOCK_DIV_2         ( AON_WUC_AUXCLK_SCLK_HF_DIV_DIV2   )
+#define AUX_CLOCK_DIV_4         ( AON_WUC_AUXCLK_SCLK_HF_DIV_DIV4   )
+#define AUX_CLOCK_DIV_8         ( AON_WUC_AUXCLK_SCLK_HF_DIV_DIV8   )
+#define AUX_CLOCK_DIV_16        ( AON_WUC_AUXCLK_SCLK_HF_DIV_DIV16  )
+#define AUX_CLOCK_DIV_32        ( AON_WUC_AUXCLK_SCLK_HF_DIV_DIV32  )
+#define AUX_CLOCK_DIV_64        ( AON_WUC_AUXCLK_SCLK_HF_DIV_DIV64  )
+#define AUX_CLOCK_DIV_128       ( AON_WUC_AUXCLK_SCLK_HF_DIV_DIV128 )
+#define AUX_CLOCK_DIV_256       ( AON_WUC_AUXCLK_SCLK_HF_DIV_DIV256 )
+#define AUX_CLOCK_DIV_UNUSED    ( AON_WUC_AUXCLK_SCLK_HF_DIV_M + ( 1 << AON_WUC_AUXCLK_SCLK_HF_DIV_S ))
+#define AUX_CLOCK_DIV_M         ( AON_WUC_AUXCLK_SCLK_HF_DIV_M )
 
 //*****************************************************************************
 //
 // Defines used for configuring the power-off and wake up procedure.
 //
 //*****************************************************************************
-#define MCU_VIRT_PWOFF_DISABLE 0x00000000
-#define MCU_VIRT_PWOFF_ENABLE 0x00020000
-#define MCU_IMM_WAKE_UP 0x00000000
-#define MCU_FIXED_WAKE_UP 0x00010000
-#define AUX_VIRT_PWOFF_DISABLE 0x00000000
-#define AUX_VIRT_PWOFF_ENABLE 0x00020000
-#define AUX_IMM_WAKE_UP 0x00000000
-#define AUX_FIXED_WAKE_UP 0x00010000
+#define MCU_VIRT_PWOFF_DISABLE  0x00000000
+#define MCU_VIRT_PWOFF_ENABLE   0x00020000
+#define MCU_IMM_WAKE_UP         0x00000000
+#define MCU_FIXED_WAKE_UP       0x00010000
+#define AUX_VIRT_PWOFF_DISABLE  0x00000000
+#define AUX_VIRT_PWOFF_ENABLE   0x00020000
+#define AUX_IMM_WAKE_UP         0x00000000
+#define AUX_FIXED_WAKE_UP       0x00010000
 
 //*****************************************************************************
 //
@@ -135,12 +136,12 @@ extern "C" {
 // retention on the SRAM in both the MCU and the AUX domain.
 //
 //*****************************************************************************
-#define MCU_RAM0_RETENTION 0x00000001
-#define MCU_RAM1_RETENTION 0x00000002
-#define MCU_RAM2_RETENTION 0x00000004
-#define MCU_RAM3_RETENTION 0x00000008
+#define MCU_RAM0_RETENTION      0x00000001
+#define MCU_RAM1_RETENTION      0x00000002
+#define MCU_RAM2_RETENTION      0x00000004
+#define MCU_RAM3_RETENTION      0x00000008
 #define MCU_RAM_BLOCK_RETENTION 0x0000000F
-#define MCU_AUX_RET_ENABLE 0x00000001
+#define MCU_AUX_RET_ENABLE      0x00000001
 
 //*****************************************************************************
 //
@@ -148,8 +149,8 @@ extern "C" {
 // AONWUCAuxWakeUpEvent() .
 //
 //*****************************************************************************
-#define AONWUC_AUX_WAKEUP 0x00000001
-#define AONWUC_AUX_ALLOW_SLEEP 0x00000000
+#define AONWUC_AUX_WAKEUP       0x00000001
+#define AONWUC_AUX_ALLOW_SLEEP  0x00000000
 
 //*****************************************************************************
 //
@@ -157,41 +158,42 @@ extern "C" {
 // AONWUCPowerStatusGet() .
 //
 //*****************************************************************************
-#define AONWUC_OSC_GBIAS_REQ 0x00400000   // OSC is requesting GBias
-#define AONWUC_AUX_GBIAS_REQ 0x00200000   // AUX is requesting GBias
-#define AONWUC_MCU_GBIAS_REQ 0x00100000   // MCU is requesting GBias
-#define AONWUC_OSC_BGAP_REQ 0x00040000    // OSC is requesting BGap
-#define AONWUC_AUX_BGAP_REQ 0x00020000    // AUX is requesting BGap
-#define AONWUC_MCU_BGAP_REQ 0x00010000    // MCU is requesting BGap
-#define AONWUC_GBIAS_ON 0x00002000        // Global Bias is on
-#define AONWUC_BGAP_ON 0x00001000         // Band Gap is on
-#define AONWUC_AUX_POWER_DOWN 0x00000200  // AUX is in powerdown mode
-#define AONWUC_MCU_POWER_DOWN 0x00000100  // MCU is in powerdown mode
-#define AONWUC_JTAG_POWER_ON 0x00000040   // JTAG is powered on
-#define AONWUC_AUX_POWER_ON 0x00000020    // AUX is powered on
-#define AONWUC_MCU_POWER_ON 0x00000010    // MCU is powered on
-#define AONWUC_SPLY_POWER_DOWN 0x00000001 // Power supply is in power down
+#define AONWUC_OSC_GBIAS_REQ    0x00400000  // OSC is requesting GBias
+#define AONWUC_AUX_GBIAS_REQ    0x00200000  // AUX is requesting GBias
+#define AONWUC_MCU_GBIAS_REQ    0x00100000  // MCU is requesting GBias
+#define AONWUC_OSC_BGAP_REQ     0x00040000  // OSC is requesting BGap
+#define AONWUC_AUX_BGAP_REQ     0x00020000  // AUX is requesting BGap
+#define AONWUC_MCU_BGAP_REQ     0x00010000  // MCU is requesting BGap
+#define AONWUC_GBIAS_ON         0x00002000  // Global Bias is on
+#define AONWUC_BGAP_ON          0x00001000  // Band Gap is on
+#define AONWUC_AUX_POWER_DOWN   0x00000200  // AUX is in powerdown mode
+#define AONWUC_MCU_POWER_DOWN   0x00000100  // MCU is in powerdown mode
+#define AONWUC_JTAG_POWER_ON    0x00000040  // JTAG is powered on
+#define AONWUC_AUX_POWER_ON     0x00000020  // AUX is powered on
+#define AONWUC_MCU_POWER_ON     0x00000010  // MCU is powered on
+#define AONWUC_SPLY_POWER_DOWN  0x00000001  // Power supply is in power down
+
 
 //*****************************************************************************
 //
 // RAM repair status bits. Values are returned by AOXWUCRamRepairStatusGet() .
 //
 //*****************************************************************************
-#define MCU_RAMREPAIR_DONE 0x00000001
-#define AUX_RAMREPAIR_DONE 0x00000002
+#define MCU_RAMREPAIR_DONE      0x00000001
+#define AUX_RAMREPAIR_DONE      0x00000002
 
 //*****************************************************************************
 
 //*****************************************************************************
-#define RC_RATE_MAX 768 // Maximum recharge rate for the
+#define RC_RATE_MAX                   768   // Maximum recharge rate for the
 // recharge controller.
-#define RC_RATE_MIN 2 // Minimum recharge rate for the
+#define RC_RATE_MIN                     2   // Minimum recharge rate for the
 // recharge controller.
 
 //*****************************************************************************
-#define AONWUC_MCU_RESET_SRC 0x00000002 // MCU reset source can be SW or
+#define AONWUC_MCU_RESET_SRC    0x00000002  // MCU reset source can be SW or
 // JTAG
-#define AONWUC_MCU_WARM_RESET 0x00000001 // MCU reset type and can be warm
+#define AONWUC_MCU_WARM_RESET   0x00000001  // MCU reset type and can be warm
 // or not warm.
 
 //*****************************************************************************
@@ -233,7 +235,8 @@ AONWUCMcuPowerDownConfig(uint32_t ui32ClkSrc)
     ui32Reg = HWREG(AON_WUC_BASE + AON_WUC_O_MCUCLK);
     ui32Reg &= ~AON_WUC_MCUCLK_PWR_DWN_SRC_M;
     HWREG(AON_WUC_BASE + AON_WUC_O_MCUCLK) = ui32Reg |
-                                             (ui32ClkSrc << AON_WUC_MCUCLK_PWR_DWN_SRC_S);
+            (ui32ClkSrc <<
+             AON_WUC_MCUCLK_PWR_DWN_SRC_S);
 }
 
 //*****************************************************************************
@@ -335,6 +338,7 @@ AONWUCMcuSRamConfig(uint32_t ui32Retention)
     HWREG(AON_WUC_BASE + AON_WUC_O_MCUCFG) = ui32Reg;
 }
 
+
 //*****************************************************************************
 //
 //! \brief Return the clock configuration for the AUX domain.
@@ -395,8 +399,10 @@ AONWUCAuxPowerDownConfig(uint32_t ui32ClkSrc)
     ui32Reg = HWREG(AON_WUC_BASE + AON_WUC_O_AUXCLK);
     ui32Reg &= ~AON_WUC_AUXCLK_PWR_DWN_SRC_M;
     HWREG(AON_WUC_BASE + AON_WUC_O_AUXCLK) = ui32Reg |
-                                             (ui32ClkSrc << AON_WUC_AUXCLK_PWR_DWN_SRC_S);
+            (ui32ClkSrc <<
+             AON_WUC_AUXCLK_PWR_DWN_SRC_S);
 }
+
 
 //*****************************************************************************
 //
@@ -789,6 +795,7 @@ AONWUCJtagPowerOff(void)
     HWREG(AON_WUC_BASE + AON_WUC_O_JTAGCFG) = 0;
 }
 
+
 //*****************************************************************************
 //
 // Support for DriverLib in ROM:
@@ -798,16 +805,16 @@ AONWUCJtagPowerOff(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_AONWUCAuxReset
-#undef AONWUCAuxReset
-#define AONWUCAuxReset ROM_AONWUCAuxReset
+#undef  AONWUCAuxReset
+#define AONWUCAuxReset                  ROM_AONWUCAuxReset
 #endif
 #ifdef ROM_AONWUCRechargeCtrlConfigSet
-#undef AONWUCRechargeCtrlConfigSet
-#define AONWUCRechargeCtrlConfigSet ROM_AONWUCRechargeCtrlConfigSet
+#undef  AONWUCRechargeCtrlConfigSet
+#define AONWUCRechargeCtrlConfigSet     ROM_AONWUCRechargeCtrlConfigSet
 #endif
 #ifdef ROM_AONWUCOscConfig
-#undef AONWUCOscConfig
-#define AONWUCOscConfig ROM_AONWUCOscConfig
+#undef  AONWUCOscConfig
+#define AONWUCOscConfig                 ROM_AONWUCOscConfig
 #endif
 #endif
 

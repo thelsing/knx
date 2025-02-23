@@ -2,8 +2,8 @@
 
 #include "config.h"
 
-#include "knx_types.h"
 #include "table_object.h"
+#include "knx_types.h"
 
 class Memory;
 
@@ -17,7 +17,7 @@ enum RouterObjectType
 {
     Primary,
     Secondary,
-    Single // Not used, just a placeholder for better readability for coupler model 1.x
+    Single     // Not used, just a placeholder for better readability for coupler model 1.x
 };
 
 class RouterObject : public TableObject

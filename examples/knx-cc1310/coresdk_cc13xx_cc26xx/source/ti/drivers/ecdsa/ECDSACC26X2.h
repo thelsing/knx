@@ -91,22 +91,22 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
-#include <ti/drivers/ECDSA.h>
 #include <ti/drivers/Power.h>
-#include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
+#include <ti/drivers/ECDSA.h>
 #include <ti/drivers/cryptoutils/ecc/ECCParams.h>
+#include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
 
 #include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SemaphoreP.h>
 #include <ti/drivers/dpl/SwiP.h>
+#include <ti/drivers/dpl/SemaphoreP.h>
 
 /* Exit the SWI and wait until an HWI call posts the SWI again */
-#define ECDSACC26X2_STATUS_FSM_RUN_PKA_OP ECDSA_STATUS_RESERVED - 0
+#define ECDSACC26X2_STATUS_FSM_RUN_PKA_OP       ECDSA_STATUS_RESERVED - 0
 /* Execute the next FSM state immediately without waiting for the next HWI */
-#define ECDSACC26X2_STATUS_FSM_RUN_FSM ECDSA_STATUS_RESERVED - 1
+#define ECDSACC26X2_STATUS_FSM_RUN_FSM          ECDSA_STATUS_RESERVED - 1
 
 /*!
  *  @brief      ECDSACC26X2 Sign and Verify states
@@ -169,7 +169,7 @@ typedef enum ECDSACC26X2_FsmState_
  *  pointer is stored in the object at the beginning of the transaction.
  *  This way, unused state machines are removed at link time.
  */
-typedef int_fast16_t (*ECDSACC26X2_stateMachineFxn)(ECDSA_Handle handle);
+typedef int_fast16_t (*ECDSACC26X2_stateMachineFxn) (ECDSA_Handle handle);
 
 /*!
  *  @brief      ECDSACC26X2 Hardware Attributes
@@ -179,19 +179,19 @@ typedef int_fast16_t (*ECDSACC26X2_stateMachineFxn)(ECDSA_Handle handle);
  */
 typedef struct ECDSACC26X2_HWAttrs_
 {
-        /*! @brief PKA Peripheral's interrupt priority.
+    /*! @brief PKA Peripheral's interrupt priority.
 
-            The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
+        The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
 
-            (7 << 5) will apply the lowest priority.
+        (7 << 5) will apply the lowest priority.
 
-            (1 << 5) will apply the highest priority.
+        (1 << 5) will apply the highest priority.
 
-            Setting the priority to 0 is not supported by this driver.
+        Setting the priority to 0 is not supported by this driver.
 
-            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-        */
-        uint8_t intPriority;
+        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+    */
+    uint8_t    intPriority;
 } ECDSACC26X2_HWAttrs;
 
 /*!
@@ -201,20 +201,20 @@ typedef struct ECDSACC26X2_HWAttrs_
  */
 typedef struct ECDSACC26X2_Object_
 {
-        bool isOpen;
-        bool operationInProgress;
-        bool operationCanceled;
-        int_fast16_t operationStatus;
-        ECDSA_Operation operation;
-        ECDSA_OperationType operationType;
-        ECDSA_CallbackFxn callbackFxn;
-        ECDSACC26X2_stateMachineFxn fsmFxn;
-        ECDSA_ReturnBehavior returnBehavior;
-        ECDSACC26X2_FsmState fsmState;
-        uint32_t semaphoreTimeout;
-        uint32_t resultAddress;
-        uint32_t* scratchNumber1;
-        uint32_t* scratchNumber2;
+    bool                            isOpen;
+    bool                            operationInProgress;
+    bool                            operationCanceled;
+    int_fast16_t                    operationStatus;
+    ECDSA_Operation                 operation;
+    ECDSA_OperationType             operationType;
+    ECDSA_CallbackFxn               callbackFxn;
+    ECDSACC26X2_stateMachineFxn     fsmFxn;
+    ECDSA_ReturnBehavior            returnBehavior;
+    ECDSACC26X2_FsmState            fsmState;
+    uint32_t                        semaphoreTimeout;
+    uint32_t                        resultAddress;
+    uint32_t*                       scratchNumber1;
+    uint32_t*                       scratchNumber2;
 } ECDSACC26X2_Object;
 
 #ifdef __cplusplus

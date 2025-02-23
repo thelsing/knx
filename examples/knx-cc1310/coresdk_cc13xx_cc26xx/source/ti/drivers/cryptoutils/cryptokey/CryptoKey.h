@@ -88,18 +88,19 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 /*!
 
  */
 
 /**
- *  @defgroup CryptoKey_CONTROL Status codes
- *  These CryptoKey macros are reservations for CryptoKey.h
- *  @{
- */
+*  @defgroup CryptoKey_CONTROL Status codes
+*  These CryptoKey macros are reservations for CryptoKey.h
+*  @{
+*/
+
 
 /*!
  * Common CryptoKey_control status code reservation offset.
@@ -113,7 +114,7 @@ extern "C" {
  * #define CryptoKeyXYZ_STATUS_ERROR2    CryptoKey_STATUS_RESERVED - 2
  * @endcode
  */
-#define CryptoKey_STATUS_RESERVED (-32)
+#define CryptoKey_STATUS_RESERVED        (-32)
 
 /**
  *  @defgroup CryptoKey_STATUS Status Codes
@@ -128,7 +129,7 @@ extern "C" {
  * CryptoKey_control() returns CryptoKey_STATUS_SUCCESS if the control code was executed
  * successfully.
  */
-#define CryptoKey_STATUS_SUCCESS (0)
+#define CryptoKey_STATUS_SUCCESS         (0)
 
 /*!
  * @brief   Generic error status code
@@ -136,7 +137,7 @@ extern "C" {
  * CryptoKey_control() returns CryptoKey_STATUS_ERROR if the control code was not executed
  * successfully.
  */
-#define CryptoKey_STATUS_ERROR (-1)
+#define CryptoKey_STATUS_ERROR           (-1)
 
 /*!
  * @brief   Returned if the encoding of a CryptoKey is not a CryptoKey_Encoding value
@@ -144,7 +145,8 @@ extern "C" {
  * CryptoKey_control() returns CryptoKey_STATUS_ERROR if the control code was not executed
  * successfully.
  */
-#define CryptoKey_STATUS_UNDEFINED_ENCODING (-2)
+#define CryptoKey_STATUS_UNDEFINED_ENCODING    (-2)
+
 
 /** @}*/
 
@@ -156,12 +158,12 @@ extern "C" {
  */
 typedef enum CryptoKey_Encoding_
 {
-    CryptoKey_PLAINTEXT = 1 << 1,
-    CryptoKey_BLANK_PLAINTEXT = 1 << 2,
-    CryptoKey_KEYSTORE = 1 << 3,
-    CryptoKey_BLANK_KEYSTORE = 1 << 4,
-    CryptoKey_KEYBLOB = 1 << 5,
-    CryptoKey_BLANK_KEYBLOB = 1 << 6,
+    CryptoKey_PLAINTEXT             = 1 << 1,
+    CryptoKey_BLANK_PLAINTEXT       = 1 << 2,
+    CryptoKey_KEYSTORE              = 1 << 3,
+    CryptoKey_BLANK_KEYSTORE        = 1 << 4,
+    CryptoKey_KEYBLOB               = 1 << 5,
+    CryptoKey_BLANK_KEYBLOB         = 1 << 6,
 } CryptoKey_Encoding;
 
 /*!
@@ -172,8 +174,8 @@ typedef enum CryptoKey_Encoding_
  */
 typedef struct CryptoKey_Plaintext_
 {
-        uint8_t* keyMaterial;
-        uint16_t keyLength;
+    uint8_t* keyMaterial;
+    uint16_t keyLength;
 } CryptoKey_Plaintext;
 
 /*!
@@ -184,9 +186,9 @@ typedef struct CryptoKey_Plaintext_
  */
 typedef struct CryptoKey_KeyStore_
 {
-        void* keyStore;
-        uint16_t keyLength;
-        uint32_t keyIndex;
+    void* keyStore;
+    uint16_t keyLength;
+    uint32_t keyIndex;
 } CryptoKey_KeyStore;
 
 /*!
@@ -197,8 +199,8 @@ typedef struct CryptoKey_KeyStore_
  */
 typedef struct CryptoKey_KeyBlob_
 {
-        uint8_t* keyBlob;
-        uint32_t keyBlobLength;
+    uint8_t* keyBlob;
+    uint32_t keyBlobLength;
 } CryptoKey_KeyBlob;
 
 /*!
@@ -211,14 +213,15 @@ typedef struct CryptoKey_KeyBlob_
  */
 typedef struct CryptoKey_
 {
-        CryptoKey_Encoding encoding;
-        union
-        {
-                CryptoKey_Plaintext plaintext;
-                CryptoKey_KeyStore keyStore;
-                CryptoKey_KeyBlob keyBlob;
-        } u;
+    CryptoKey_Encoding encoding;
+    union
+    {
+        CryptoKey_Plaintext plaintext;
+        CryptoKey_KeyStore keyStore;
+        CryptoKey_KeyBlob keyBlob;
+    } u;
 } CryptoKey;
+
 
 /*!
  * @brief  Structure that specifies the restrictions on a CryptoKey

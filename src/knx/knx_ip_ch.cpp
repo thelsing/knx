@@ -1,7 +1,6 @@
 #include "knx_ip_ch.h"
 #ifdef USE_IP
-KnxIpCH::KnxIpCH(uint8_t* data)
-    : _data(data)
+KnxIpCH::KnxIpCH(uint8_t* data) : _data(data)
 {}
 
 KnxIpCH::~KnxIpCH()

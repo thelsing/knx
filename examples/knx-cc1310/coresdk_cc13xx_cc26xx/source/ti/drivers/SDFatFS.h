@@ -91,8 +91,8 @@ extern "C" {
 
 #include <ti/drivers/SD.h>
 
-#include <third_party/fatfs/diskio.h>
 #include <third_party/fatfs/ff.h>
+#include <third_party/fatfs/diskio.h>
 
 /*!
  *  @brief SDFatFS Object
@@ -100,16 +100,17 @@ extern "C" {
  */
 typedef struct SDFatFS_Object_
 {
-        uint_fast32_t driveNum;
-        DSTATUS diskState;
-        FATFS filesystem; /* FATFS data object */
-        SD_Handle sdHandle;
+    uint_fast32_t driveNum;
+    DSTATUS       diskState;
+    FATFS         filesystem; /* FATFS data object */
+    SD_Handle     sdHandle;
 } SDFatFS_Object;
 
 /*!
  *  @brief A handle that is returned from a SDFatFS_open() call.
  */
-typedef struct SDFatFS_Config_* SDFatFS_Handle;
+typedef struct SDFatFS_Config_*      SDFatFS_Handle;
+
 
 /*!
  *  @brief SDFatFS Global configuration
@@ -124,8 +125,8 @@ typedef struct SDFatFS_Config_* SDFatFS_Handle;
  */
 typedef struct SDFatFS_Config_
 {
-        /*! Pointer to a SDFatFS object */
-        void* object;
+    /*! Pointer to a SDFatFS object */
+    void*       object;
 } SDFatFS_Config;
 
 /*!

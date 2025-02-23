@@ -309,15 +309,15 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <ti/drivers/I2C.h>
-#include <ti/drivers/Power.h>
 #include <ti/drivers/pin/PINCC26XX.h>
+#include <ti/drivers/Power.h>
 
 #include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SemaphoreP.h>
 #include <ti/drivers/dpl/SwiP.h>
+#include <ti/drivers/dpl/SemaphoreP.h>
 
 /**
  *  @addtogroup I2C_STATUS
@@ -348,9 +348,9 @@ extern "C" {
 /** @}*/
 
 /*! I2C Base Address type.*/
-typedef unsigned long I2CBaseAddrType;
+typedef unsigned long   I2CBaseAddrType;
 /* \cond */
-typedef unsigned long I2CDataType;
+typedef unsigned long   I2CDataType;
 /* \endcond */
 
 /*! @internal @brief I2C function table pointer */
@@ -379,8 +379,8 @@ extern const I2C_FxnTable I2CCC26XX_fxnTable;
  */
 typedef struct I2CCC26XX_I2CPinCfg
 {
-        uint8_t pinSDA;
-        uint8_t pinSCL;
+    uint8_t pinSDA;
+    uint8_t pinSCL;
 } I2CCC26XX_I2CPinCfg;
 
 /*!
@@ -392,11 +392,11 @@ typedef struct I2CCC26XX_I2CPinCfg
  */
 typedef enum I2CCC26XX_Mode
 {
-    I2CCC26XX_IDLE_MODE = 0, /* I2C is not performing a transaction */
-    I2CCC26XX_WRITE_MODE,    /* I2C is currently performing write operations */
-    I2CCC26XX_READ_MODE,     /* I2C is currently performing read operations */
-    I2CCC26XX_BUSBUSY_MODE,  /* I2C Bus is currently busy */
-    I2CCC26XX_ERROR = 0xFF   /* I2C error has occurred, exit gracefully */
+    I2CCC26XX_IDLE_MODE = 0,  /* I2C is not performing a transaction */
+    I2CCC26XX_WRITE_MODE,     /* I2C is currently performing write operations */
+    I2CCC26XX_READ_MODE,      /* I2C is currently performing read operations */
+    I2CCC26XX_BUSBUSY_MODE,   /* I2C Bus is currently busy */
+    I2CCC26XX_ERROR = 0xFF    /* I2C error has occurred, exit gracefully */
 } I2CCC26XX_Mode;
 /*! @endcond */
 
@@ -441,36 +441,36 @@ typedef enum I2CCC26XX_Mode
  */
 typedef struct I2CCC26XX_HWAttrsV1
 {
-        /*! I2C peripheral's base address */
-        I2CBaseAddrType baseAddr;
-        /*! I2C peripheral's Power driver ID */
-        unsigned long powerMngrId;
-        /*! I2C peripheral's interrupt number */
-        int intNum;
-        /*! @brief I2C Peripheral's interrupt priority.
+    /*! I2C peripheral's base address */
+    I2CBaseAddrType     baseAddr;
+    /*! I2C peripheral's Power driver ID */
+    unsigned long       powerMngrId;
+    /*! I2C peripheral's interrupt number */
+    int                 intNum;
+    /*! @brief I2C Peripheral's interrupt priority.
 
-            The CC26xx uses three of the priority bits,
-            meaning ~0 has the same effect as (7 << 5).
+        The CC26xx uses three of the priority bits,
+        meaning ~0 has the same effect as (7 << 5).
 
-            (7 << 5) will apply the lowest priority.
+        (7 << 5) will apply the lowest priority.
 
-            (1 << 5) will apply the highest priority.
+        (1 << 5) will apply the highest priority.
 
-            Setting the priority to 0 is not supported by this driver.
+        Setting the priority to 0 is not supported by this driver.
 
-            Hwi's with priority 0 ignore the Hwi dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-        */
-        uint8_t intPriority;
-        /*! @brief I2C Swi priority.
-            The higher the number, the higher the priority.
-            The minimum is 0 and the maximum is 15 by default.
-            The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
-        */
-        uint32_t swiPriority;
-        /*! I2C SDA pin mapping */
-        uint8_t sdaPin;
-        /*! I2C SCL pin mapping */
-        uint8_t sclPin;
+        Hwi's with priority 0 ignore the Hwi dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+    */
+    uint8_t             intPriority;
+    /*! @brief I2C Swi priority.
+        The higher the number, the higher the priority.
+        The minimum is 0 and the maximum is 15 by default.
+        The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
+    */
+    uint32_t            swiPriority;
+    /*! I2C SDA pin mapping */
+    uint8_t             sdaPin;
+    /*! I2C SCL pin mapping */
+    uint8_t             sclPin;
 } I2CCC26XX_HWAttrsV1;
 
 /*!
@@ -480,38 +480,38 @@ typedef struct I2CCC26XX_HWAttrsV1
  */
 typedef struct I2CCC26XX_Object
 {
-        /* I2C control variables */
-        I2C_TransferMode transferMode;       /*!< Blocking or Callback mode */
-        I2C_CallbackFxn transferCallbackFxn; /*!< Callback function pointer */
-        volatile I2CCC26XX_Mode mode;        /*!< Stores the I2C state */
-        uint32_t bitRate;                    /*!< Bitrate of the I2C module */
+    /* I2C control variables */
+    I2C_TransferMode    transferMode;        /*!< Blocking or Callback mode */
+    I2C_CallbackFxn     transferCallbackFxn; /*!< Callback function pointer */
+    volatile I2CCC26XX_Mode mode;            /*!< Stores the I2C state */
+    uint32_t            bitRate;             /*!< Bitrate of the I2C module */
 
-        /* I2C SYS/BIOS objects */
-        HwiP_Struct hwi;                    /*!< Hwi object handle */
-        SwiP_Struct swi;                    /*!< Swi object */
-        SemaphoreP_Struct mutex;            /*!< Grants exclusive access to I2C */
-        SemaphoreP_Struct transferComplete; /*!< Signal I2C transfer complete */
+    /* I2C SYS/BIOS objects */
+    HwiP_Struct hwi;/*!< Hwi object handle */
+    SwiP_Struct          swi;                /*!< Swi object */
+    SemaphoreP_Struct    mutex;              /*!< Grants exclusive access to I2C */
+    SemaphoreP_Struct    transferComplete;   /*!< Signal I2C transfer complete */
 
-        /* PIN driver state object and handle */
-        PIN_State pinState;
-        PIN_Handle hPin;
+    /* PIN driver state object and handle */
+    PIN_State           pinState;
+    PIN_Handle          hPin;
 
-        /* I2C current transaction */
-        I2C_Transaction* currentTransaction; /*!< Ptr to current I2C transaction */
-        uint8_t* writeBufIdx;                /*!< Internal inc. writeBuf index */
-        unsigned int writeCountIdx;          /*!< Internal dec. writeCounter */
-        uint8_t* readBufIdx;                 /*!< Internal inc. readBuf index */
-        unsigned int readCountIdx;           /*!< Internal dec. readCounter */
+    /* I2C current transaction */
+    I2C_Transaction*     currentTransaction; /*!< Ptr to current I2C transaction */
+    uint8_t*             writeBufIdx;        /*!< Internal inc. writeBuf index */
+    unsigned int        writeCountIdx;       /*!< Internal dec. writeCounter */
+    uint8_t*             readBufIdx;         /*!< Internal inc. readBuf index */
+    unsigned int        readCountIdx;        /*!< Internal dec. readCounter */
 
-        /* I2C transaction pointers for I2C_MODE_CALLBACK */
-        I2C_Transaction* headPtr; /*!< Head ptr for queued transactions */
-        I2C_Transaction* tailPtr; /*!< Tail ptr for queued transactions */
+    /* I2C transaction pointers for I2C_MODE_CALLBACK */
+    I2C_Transaction*     headPtr;            /*!< Head ptr for queued transactions */
+    I2C_Transaction*     tailPtr;            /*!< Tail ptr for queued transactions */
 
-        /* I2C power notification */
-        void* i2cPostFxn;           /*!< I2C post-notification Function pointer */
-        Power_NotifyObj i2cPostObj; /*!< I2C post-notification object */
+    /* I2C power notification */
+    void*                i2cPostFxn;        /*!< I2C post-notification Function pointer */
+    Power_NotifyObj     i2cPostObj;         /*!< I2C post-notification object */
 
-        bool isOpen; /*!< flag to indicate module is open */
+    bool                isOpen;             /*!< flag to indicate module is open */
 } I2CCC26XX_Object;
 
 /*! @endcond */

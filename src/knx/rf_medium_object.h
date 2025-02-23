@@ -5,7 +5,7 @@
 
 #include "interface_object.h"
 
-class RfMediumObject : public InterfaceObject
+class RfMediumObject: public InterfaceObject
 {
     public:
         RfMediumObject();
@@ -13,57 +13,7 @@ class RfMediumObject : public InterfaceObject
         void rfDomainAddress(const uint8_t* value);
 
     private:
-        uint8_t _rfDiagSourceAddressFilterTable[24] = {
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-        };
-        uint8_t _rfDiagLinkBudgetTable[24] = {
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-        };
+        uint8_t _rfDiagSourceAddressFilterTable[24] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
+        uint8_t _rfDiagLinkBudgetTable[24] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
 };
 #endif

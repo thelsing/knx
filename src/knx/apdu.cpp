@@ -1,9 +1,8 @@
 #include "apdu.h"
-#include "bits.h"
 #include "cemi_frame.h"
+#include "bits.h"
 
-APDU::APDU(uint8_t* data, CemiFrame& frame)
-    : _data(data), _frame(frame)
+APDU::APDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
 {
 }
 
@@ -14,7 +13,7 @@ ApduType APDU::type()
     popWord(apci, _data);
     apci &= 0x3ff;
 
-    if ((apci >> 6) < 11 && (apci >> 6) != 7) // short apci
+    if ((apci >> 6) < 11 && (apci >> 6) != 7) //short apci
         apci &= 0x3c0;
 
     return (ApduType)apci;

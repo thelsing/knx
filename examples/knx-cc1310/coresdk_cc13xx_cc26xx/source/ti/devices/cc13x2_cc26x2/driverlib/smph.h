@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       smph.h
- *  Revised:        2016-10-06 17:21:09 +0200 (Thu, 06 Oct 2016)
- *  Revision:       47343
- *
- *  Description:    Defines and prototypes for the MCU Semaphore.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       smph.h
+*  Revised:        2016-10-06 17:21:09 +0200 (Thu, 06 Oct 2016)
+*  Revision:       47343
+*
+*  Description:    Defines and prototypes for the MCU Semaphore.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,15 +55,16 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_smph.h"
-#include "../inc/hw_types.h"
-#include "debug.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_smph.h"
+#include "../inc/hw_memmap.h"
+#include "debug.h"
 
 //*****************************************************************************
 //
@@ -79,7 +80,7 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define SMPHAcquire NOROM_SMPHAcquire
+#define SMPHAcquire                     NOROM_SMPHAcquire
 #endif
 
 //*****************************************************************************
@@ -87,8 +88,8 @@ extern "C" {
 // General constants and defines
 //
 //*****************************************************************************
-#define SMPH_FREE 0x00000001    // MCU Semaphore has not been claimed
-#define SMPH_CLAIMED 0x00000000 // MCU Semaphore has been claimed
+#define SMPH_FREE     0x00000001 // MCU Semaphore has not been claimed
+#define SMPH_CLAIMED  0x00000000 // MCU Semaphore has been claimed
 
 //*****************************************************************************
 //
@@ -96,38 +97,38 @@ extern "C" {
 // as the ui32Semaphore parameter.
 //
 //*****************************************************************************
-#define SMPH_0 0   // MCU Semaphore  0
-#define SMPH_1 1   // MCU Semaphore  1
-#define SMPH_2 2   // MCU Semaphore  2
-#define SMPH_3 3   // MCU Semaphore  3
-#define SMPH_4 4   // MCU Semaphore  4
-#define SMPH_5 5   // MCU Semaphore  5
-#define SMPH_6 6   // MCU Semaphore  6
-#define SMPH_7 7   // MCU Semaphore  7
-#define SMPH_8 8   // MCU Semaphore  8
-#define SMPH_9 9   // MCU Semaphore  9
-#define SMPH_10 10 // MCU Semaphore 10
-#define SMPH_11 11 // MCU Semaphore 11
-#define SMPH_12 12 // MCU Semaphore 12
-#define SMPH_13 13 // MCU Semaphore 13
-#define SMPH_14 14 // MCU Semaphore 14
-#define SMPH_15 15 // MCU Semaphore 15
-#define SMPH_16 16 // MCU Semaphore 16
-#define SMPH_17 17 // MCU Semaphore 17
-#define SMPH_18 18 // MCU Semaphore 18
-#define SMPH_19 19 // MCU Semaphore 19
-#define SMPH_20 20 // MCU Semaphore 20
-#define SMPH_21 21 // MCU Semaphore 21
-#define SMPH_22 22 // MCU Semaphore 22
-#define SMPH_23 23 // MCU Semaphore 23
-#define SMPH_24 24 // MCU Semaphore 24
-#define SMPH_25 25 // MCU Semaphore 25
-#define SMPH_26 26 // MCU Semaphore 26
-#define SMPH_27 27 // MCU Semaphore 27
-#define SMPH_28 28 // MCU Semaphore 28
-#define SMPH_29 29 // MCU Semaphore 29
-#define SMPH_30 30 // MCU Semaphore 30
-#define SMPH_31 31 // MCU Semaphore 31
+#define SMPH_0    0 // MCU Semaphore  0
+#define SMPH_1    1 // MCU Semaphore  1
+#define SMPH_2    2 // MCU Semaphore  2
+#define SMPH_3    3 // MCU Semaphore  3
+#define SMPH_4    4 // MCU Semaphore  4
+#define SMPH_5    5 // MCU Semaphore  5
+#define SMPH_6    6 // MCU Semaphore  6
+#define SMPH_7    7 // MCU Semaphore  7
+#define SMPH_8    8 // MCU Semaphore  8
+#define SMPH_9    9 // MCU Semaphore  9
+#define SMPH_10  10 // MCU Semaphore 10
+#define SMPH_11  11 // MCU Semaphore 11
+#define SMPH_12  12 // MCU Semaphore 12
+#define SMPH_13  13 // MCU Semaphore 13
+#define SMPH_14  14 // MCU Semaphore 14
+#define SMPH_15  15 // MCU Semaphore 15
+#define SMPH_16  16 // MCU Semaphore 16
+#define SMPH_17  17 // MCU Semaphore 17
+#define SMPH_18  18 // MCU Semaphore 18
+#define SMPH_19  19 // MCU Semaphore 19
+#define SMPH_20  20 // MCU Semaphore 20
+#define SMPH_21  21 // MCU Semaphore 21
+#define SMPH_22  22 // MCU Semaphore 22
+#define SMPH_23  23 // MCU Semaphore 23
+#define SMPH_24  24 // MCU Semaphore 24
+#define SMPH_25  25 // MCU Semaphore 25
+#define SMPH_26  26 // MCU Semaphore 26
+#define SMPH_27  27 // MCU Semaphore 27
+#define SMPH_28  28 // MCU Semaphore 28
+#define SMPH_29  29 // MCU Semaphore 29
+#define SMPH_30  30 // MCU Semaphore 30
+#define SMPH_31  31 // MCU Semaphore 31
 
 //*****************************************************************************
 //
@@ -286,8 +287,8 @@ SMPHRelease(uint32_t ui32Semaphore)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_SMPHAcquire
-#undef SMPHAcquire
-#define SMPHAcquire ROM_SMPHAcquire
+#undef  SMPHAcquire
+#define SMPHAcquire                     ROM_SMPHAcquire
 #endif
 #endif
 

@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       ssi.h
- *  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
- *  Revision:       49048
- *
- *  Description:    Defines and macros for the SSI.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       ssi.h
+*  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
+*  Revision:       49048
+*
+*  Description:    Defines and macros for the SSI.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,17 +55,18 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_ints.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_ssi.h"
-#include "../inc/hw_types.h"
-#include "debug.h"
-#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_ints.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
+#include "../inc/hw_ssi.h"
+#include "debug.h"
+#include "interrupt.h"
 
 //*****************************************************************************
 //
@@ -81,13 +82,13 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define SSIConfigSetExpClk NOROM_SSIConfigSetExpClk
-#define SSIDataPut NOROM_SSIDataPut
-#define SSIDataPutNonBlocking NOROM_SSIDataPutNonBlocking
-#define SSIDataGet NOROM_SSIDataGet
-#define SSIDataGetNonBlocking NOROM_SSIDataGetNonBlocking
-#define SSIIntRegister NOROM_SSIIntRegister
-#define SSIIntUnregister NOROM_SSIIntUnregister
+#define SSIConfigSetExpClk              NOROM_SSIConfigSetExpClk
+#define SSIDataPut                      NOROM_SSIDataPut
+#define SSIDataPutNonBlocking           NOROM_SSIDataPutNonBlocking
+#define SSIDataGet                      NOROM_SSIDataGet
+#define SSIDataGetNonBlocking           NOROM_SSIDataGetNonBlocking
+#define SSIIntRegister                  NOROM_SSIIntRegister
+#define SSIIntUnregister                NOROM_SSIIntUnregister
 #endif
 
 //*****************************************************************************
@@ -96,45 +97,45 @@ extern "C" {
 // as the ui32IntFlags parameter, and returned by SSIIntStatus.
 //
 //*****************************************************************************
-#define SSI_TXFF 0x00000008 // TX FIFO half full or less
-#define SSI_RXFF 0x00000004 // RX FIFO half full or more
-#define SSI_RXTO 0x00000002 // RX timeout
-#define SSI_RXOR 0x00000001 // RX overrun
+#define SSI_TXFF                0x00000008  // TX FIFO half full or less
+#define SSI_RXFF                0x00000004  // RX FIFO half full or more
+#define SSI_RXTO                0x00000002  // RX timeout
+#define SSI_RXOR                0x00000001  // RX overrun
 
 //*****************************************************************************
 //
 // Values that are returned from SSIStatus
 //
 //*****************************************************************************
-#define SSI_RX_FULL 0x00000008      // Receive FIFO full
-#define SSI_RX_NOT_EMPTY 0x00000004 // Receive FIFO not empty
-#define SSI_TX_NOT_FULL 0x00000002  // Transmit FIFO not full
-#define SSI_TX_EMPTY 0x00000001     // Transmit FIFO empty
-#define SSI_STATUS_MASK 0x0000000F
+#define SSI_RX_FULL             0x00000008  // Receive FIFO full
+#define SSI_RX_NOT_EMPTY        0x00000004  // Receive FIFO not empty
+#define SSI_TX_NOT_FULL         0x00000002  // Transmit FIFO not full
+#define SSI_TX_EMPTY            0x00000001  // Transmit FIFO empty
+#define SSI_STATUS_MASK         0x0000000F
 
 //*****************************************************************************
 //
 // Values that can be passed to SSIConfigSetExpClk.
 //
 //*****************************************************************************
-#define SSI_FRF_MOTO_MODE_0 0x00000000 // Moto fmt, polarity 0, phase 0
-#define SSI_FRF_MOTO_MODE_1 0x00000002 // Moto fmt, polarity 0, phase 1
-#define SSI_FRF_MOTO_MODE_2 0x00000001 // Moto fmt, polarity 1, phase 0
-#define SSI_FRF_MOTO_MODE_3 0x00000003 // Moto fmt, polarity 1, phase 1
-#define SSI_FRF_TI 0x00000010          // TI frame format
-#define SSI_FRF_NMW 0x00000020         // National MicroWire frame format
+#define SSI_FRF_MOTO_MODE_0     0x00000000  // Moto fmt, polarity 0, phase 0
+#define SSI_FRF_MOTO_MODE_1     0x00000002  // Moto fmt, polarity 0, phase 1
+#define SSI_FRF_MOTO_MODE_2     0x00000001  // Moto fmt, polarity 1, phase 0
+#define SSI_FRF_MOTO_MODE_3     0x00000003  // Moto fmt, polarity 1, phase 1
+#define SSI_FRF_TI              0x00000010  // TI frame format
+#define SSI_FRF_NMW             0x00000020  // National MicroWire frame format
 
-#define SSI_MODE_MASTER 0x00000000   // SSI master
-#define SSI_MODE_SLAVE 0x00000001    // SSI slave
-#define SSI_MODE_SLAVE_OD 0x00000002 // SSI slave with output disabled
+#define SSI_MODE_MASTER         0x00000000  // SSI master
+#define SSI_MODE_SLAVE          0x00000001  // SSI slave
+#define SSI_MODE_SLAVE_OD       0x00000002  // SSI slave with output disabled
 
 //*****************************************************************************
 //
 // Values that can be passed to SSIDMAEnable() and SSIDMADisable().
 //
 //*****************************************************************************
-#define SSI_DMA_TX 0x00000002 // Enable DMA for transmit
-#define SSI_DMA_RX 0x00000001 // Enable DMA for receive
+#define SSI_DMA_TX              0x00000002  // Enable DMA for transmit
+#define SSI_DMA_RX              0x00000001  // Enable DMA for receive
 
 //*****************************************************************************
 //
@@ -650,32 +651,32 @@ SSIDMADisable(uint32_t ui32Base, uint32_t ui32DMAFlags)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_SSIConfigSetExpClk
-#undef SSIConfigSetExpClk
-#define SSIConfigSetExpClk ROM_SSIConfigSetExpClk
+#undef  SSIConfigSetExpClk
+#define SSIConfigSetExpClk              ROM_SSIConfigSetExpClk
 #endif
 #ifdef ROM_SSIDataPut
-#undef SSIDataPut
-#define SSIDataPut ROM_SSIDataPut
+#undef  SSIDataPut
+#define SSIDataPut                      ROM_SSIDataPut
 #endif
 #ifdef ROM_SSIDataPutNonBlocking
-#undef SSIDataPutNonBlocking
-#define SSIDataPutNonBlocking ROM_SSIDataPutNonBlocking
+#undef  SSIDataPutNonBlocking
+#define SSIDataPutNonBlocking           ROM_SSIDataPutNonBlocking
 #endif
 #ifdef ROM_SSIDataGet
-#undef SSIDataGet
-#define SSIDataGet ROM_SSIDataGet
+#undef  SSIDataGet
+#define SSIDataGet                      ROM_SSIDataGet
 #endif
 #ifdef ROM_SSIDataGetNonBlocking
-#undef SSIDataGetNonBlocking
-#define SSIDataGetNonBlocking ROM_SSIDataGetNonBlocking
+#undef  SSIDataGetNonBlocking
+#define SSIDataGetNonBlocking           ROM_SSIDataGetNonBlocking
 #endif
 #ifdef ROM_SSIIntRegister
-#undef SSIIntRegister
-#define SSIIntRegister ROM_SSIIntRegister
+#undef  SSIIntRegister
+#define SSIIntRegister                  ROM_SSIIntRegister
 #endif
 #ifdef ROM_SSIIntUnregister
-#undef SSIIntUnregister
-#define SSIIntUnregister ROM_SSIIntUnregister
+#undef  SSIIntUnregister
+#define SSIIntUnregister                ROM_SSIIntUnregister
 #endif
 #endif
 

@@ -611,10 +611,10 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include <ti/drivers/Power.h>
 #include <ti/drivers/SPI.h>
-#include <ti/drivers/dma/UDMACC26XX.h>
 #include <ti/drivers/pin/PINCC26XX.h>
+#include <ti/drivers/dma/UDMACC26XX.h>
+#include <ti/drivers/Power.h>
 #include <ti/drivers/power/PowerCC26XX.h>
 
 #include <ti/drivers/dpl/HwiP.h>
@@ -652,7 +652,7 @@ extern "C" {
  * reception is inactive for a given 32-bit period.  With this command @b arg
  * is @a don't @a care and it returns SPI_STATUS_SUCCESS.
  */
-#define SPICC26XXDMA_CMD_RETURN_PARTIAL_ENABLE (SPI_CMD_RESERVED + 0)
+#define SPICC26XXDMA_CMD_RETURN_PARTIAL_ENABLE  (SPI_CMD_RESERVED + 0)
 
 /*!
  * @brief Command used by SPI_control to disable partial return
@@ -669,13 +669,13 @@ extern "C" {
  * This command specifies a chip select pin
  * With this command @b arg is of type @c PIN_Id and it return SPI_STATUS_SUCCESS
  */
-#define SPICC26XXDMA_CMD_SET_CSN_PIN (SPI_CMD_RESERVED + 2)
+#define SPICC26XXDMA_CMD_SET_CSN_PIN            (SPI_CMD_RESERVED + 2)
 /** @}*/
 
 /* BACKWARDS COMPATIBILITY */
-#define SPICC26XXDMA_RETURN_PARTIAL_ENABLE SPICC26XXDMA_CMD_RETURN_PARTIAL_ENABLE
-#define SPICC26XXDMA_RETURN_PARTIAL_DISABLE SPICC26XXDMA_CMD_RETURN_PARTIAL_DISABLE
-#define SPICC26XXDMA_SET_CSN_PIN SPICC26XXDMA_CMD_SET_CSN_PIN
+#define SPICC26XXDMA_RETURN_PARTIAL_ENABLE      SPICC26XXDMA_CMD_RETURN_PARTIAL_ENABLE
+#define SPICC26XXDMA_RETURN_PARTIAL_DISABLE     SPICC26XXDMA_CMD_RETURN_PARTIAL_DISABLE
+#define SPICC26XXDMA_SET_CSN_PIN                SPICC26XXDMA_CMD_SET_CSN_PIN
 /* END BACKWARDS COMPATIBILITY */
 
 /*!
@@ -696,7 +696,7 @@ extern const SPI_FxnTable SPICC26XXDMA_fxnTable;
  */
 typedef enum SPICC26XXDMA_FrameSize
 {
-    SPICC26XXDMA_8bit = 0,
+    SPICC26XXDMA_8bit  = 0,
     SPICC26XXDMA_16bit = 1
 } SPICC26XXDMA_FrameSize;
 
@@ -756,49 +756,49 @@ typedef enum SPICC26XXDMA_FrameSize
  */
 typedef struct SPICC26XXDMA_HWAttrsV1
 {
-        /*! SPI Peripheral's base address */
-        uint32_t baseAddr;
-        /*! SPI CC26XXDMA Peripheral's interrupt vector */
-        uint8_t intNum;
-        /*! @brief SPI CC26XXDMA Peripheral's interrupt priority.
+    /*! SPI Peripheral's base address */
+    uint32_t         baseAddr;
+    /*! SPI CC26XXDMA Peripheral's interrupt vector */
+    uint8_t          intNum;
+    /*! @brief SPI CC26XXDMA Peripheral's interrupt priority.
 
-            The CC26xx uses three of the priority bits,
-            meaning ~0 has the same effect as (7 << 5).
+        The CC26xx uses three of the priority bits,
+        meaning ~0 has the same effect as (7 << 5).
 
-            (7 << 5) will apply the lowest priority.
+        (7 << 5) will apply the lowest priority.
 
-            (1 << 5) will apply the highest priority.
+        (1 << 5) will apply the highest priority.
 
-            Setting the priority to 0 is not supported by this driver.
+        Setting the priority to 0 is not supported by this driver.
 
-            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-        */
-        uint8_t intPriority;
-        /*! @brief SPI SWI priority.
-            The higher the number, the higher the priority.
-            The minimum is 0 and the maximum is 15 by default.
-            The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
-        */
-        uint32_t swiPriority;
-        /*! SPI Peripheral's power manager ID */
-        PowerCC26XX_Resource powerMngrId;
-        /*! Default TX value if txBuf == NULL */
-        uint16_t defaultTxBufValue;
-        /*! uDMA controlTable channel index */
-        uint32_t rxChannelBitMask;
-        /*! uDMA controlTable channel index */
-        uint32_t txChannelBitMask;
-        /*! SPI MOSI pin */
-        PIN_Id mosiPin;
-        /*! SPI MISO pin */
-        PIN_Id misoPin;
-        /*! SPI CLK pin */
-        PIN_Id clkPin;
-        /*! SPI CSN pin */
-        PIN_Id csnPin;
+        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+    */
+    uint8_t          intPriority;
+    /*! @brief SPI SWI priority.
+        The higher the number, the higher the priority.
+        The minimum is 0 and the maximum is 15 by default.
+        The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
+    */
+    uint32_t         swiPriority;
+    /*! SPI Peripheral's power manager ID */
+    PowerCC26XX_Resource   powerMngrId;
+    /*! Default TX value if txBuf == NULL */
+    uint16_t         defaultTxBufValue;
+    /*! uDMA controlTable channel index */
+    uint32_t         rxChannelBitMask;
+    /*! uDMA controlTable channel index */
+    uint32_t         txChannelBitMask;
+    /*! SPI MOSI pin */
+    PIN_Id           mosiPin;
+    /*! SPI MISO pin */
+    PIN_Id           misoPin;
+    /*! SPI CLK pin */
+    PIN_Id           clkPin;
+    /*! SPI CSN pin */
+    PIN_Id           csnPin;
 
-        /*! Minimum transfer size for DMA based transfer */
-        uint32_t minDmaTransferSize;
+    /*! Minimum transfer size for DMA based transfer */
+    uint32_t minDmaTransferSize;
 } SPICC26XXDMA_HWAttrsV1;
 
 /*!
@@ -808,58 +808,61 @@ typedef struct SPICC26XXDMA_HWAttrsV1
  */
 typedef struct SPICC26XXDMA_Object
 {
-        /* SPI control variables */
-        SPI_TransferMode transferMode;       /*!< Blocking or Callback mode */
-        unsigned int transferTimeout;        /*!< Timeout for the transfer when in blocking mode */
-        SPI_CallbackFxn transferCallbackFxn; /*!< Callback function pointer */
-        SPI_Mode mode;                       /*!< Master or Slave mode */
-        /*! @brief SPI bit rate in Hz.
-         *
-         *  When the SPI is configured as SPI slave, the maximum bitrate is 4MHz.
-         *
-         *  When the SPI is configured as SPI master, the maximum bitrate is 12MHz.
-         */
-        unsigned int bitRate;
-        unsigned int dataSize;       /*!< SPI data frame size in bits */
-        SPI_FrameFormat frameFormat; /*!< SPI frame format */
+    /* SPI control variables */
+    SPI_TransferMode       transferMode;        /*!< Blocking or Callback mode */
+    unsigned int           transferTimeout;     /*!< Timeout for the transfer when in blocking mode */
+    SPI_CallbackFxn        transferCallbackFxn; /*!< Callback function pointer */
+    SPI_Mode               mode;                /*!< Master or Slave mode */
+    /*! @brief SPI bit rate in Hz.
+     *
+     *  When the SPI is configured as SPI slave, the maximum bitrate is 4MHz.
+     *
+     *  When the SPI is configured as SPI master, the maximum bitrate is 12MHz.
+     */
+    unsigned int           bitRate;
+    unsigned int           dataSize;            /*!< SPI data frame size in bits */
+    SPI_FrameFormat        frameFormat;         /*!< SPI frame format */
 
-        /* SPI SYS/BIOS objects */
-        HwiP_Struct hwi;                    /*!< Hwi object handle */
-        SwiP_Struct swi;                    /*!< Swi object */
-        SemaphoreP_Struct transferComplete; /*!< Notify finished SPICC26XXDMA transfer */
+    /* SPI SYS/BIOS objects */
+    HwiP_Struct hwi;    /*!< Hwi object handle */
+    SwiP_Struct             swi;                 /*!< Swi object */
+    SemaphoreP_Struct       transferComplete;    /*!< Notify finished SPICC26XXDMA transfer */
 
-        /* SPI current transaction */
-        SPI_Transaction* currentTransaction; /*!< Ptr to the current transaction*/
-        size_t amtDataXferred;               /*!< Number of frames transferred */
-        size_t currentXferAmt;               /*!< Size of current DMA transfer */
-        SPICC26XXDMA_FrameSize frameSize;    /*!< Data frame size variable */
+    /* SPI current transaction */
+    SPI_Transaction*        currentTransaction; /*!< Ptr to the current transaction*/
+    size_t                 amtDataXferred;      /*!< Number of frames transferred */
+    size_t                 currentXferAmt;      /*!< Size of current DMA transfer */
+    SPICC26XXDMA_FrameSize frameSize;           /*!< Data frame size variable */
 
-        /* Support for dynamic CSN pin allocation */
-        PIN_Id csnPin; /*!< SPI CSN pin */
+    /* Support for dynamic CSN pin allocation */
+    PIN_Id                 csnPin;              /*!< SPI CSN pin */
 
-        /* PIN driver state object and handle */
-        PIN_State pinState;
-        PIN_Handle pinHandle;
+    /* PIN driver state object and handle */
+    PIN_State              pinState;
+    PIN_Handle             pinHandle;
 
-        /* UDMA driver handle */
-        UDMACC26XX_Handle udmaHandle;
+    /* UDMA driver handle */
+    UDMACC26XX_Handle      udmaHandle;
 
-        /* Optional slave mode features */
-        bool returnPartial; /*!< Optional slave mode return partial on CSN deassert */
+    /* Optional slave mode features */
+    bool                   returnPartial;      /*!< Optional slave mode return partial on CSN deassert */
 
-        /* Scratch buffer of size uint32_t */
-        uint16_t scratchBuf;
+    /* Scratch buffer of size uint32_t */
+    uint16_t               scratchBuf;
 
-        /* SPI pre- and post notification functions */
-        void* spiPreFxn;            /*!< SPI pre-notification function pointer */
-        void* spiPostFxn;           /*!< SPI post-notification function pointer */
-        Power_NotifyObj spiPreObj;  /*!< SPI pre-notification object */
-        Power_NotifyObj spiPostObj; /*!< SPI post-notification object */
+    /* SPI pre- and post notification functions */
+    void*                   spiPreFxn;         /*!< SPI pre-notification function pointer */
+    void*                   spiPostFxn;        /*!< SPI post-notification function pointer */
+    Power_NotifyObj        spiPreObj;          /*!< SPI pre-notification object */
+    Power_NotifyObj        spiPostObj;         /*!< SPI post-notification object */
 
-        volatile bool spiPowerConstraint; /*!< SPI power constraint flag, guard to avoid power constraints getting out of sync */
+    volatile bool          spiPowerConstraint; /*!< SPI power constraint flag, guard to avoid power constraints getting out of sync */
 
-        bool isOpen; /*!< Has the object been opened */
+    bool                   isOpen;             /*!< Has the object been opened */
 } SPICC26XXDMA_Object, *SPICC26XXDMA_Handle;
+
+
+
 
 #ifdef __cplusplus
 }

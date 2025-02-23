@@ -3,6 +3,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 
+
 class EspPlatform : public ArduinoPlatform
 {
     public:
@@ -21,19 +22,18 @@ class EspPlatform : public ArduinoPlatform
         // basic stuff
         void restart();
 
-        // multicast
+        //multicast
         void setupMultiCast(uint32_t addr, uint16_t port) override;
         void closeMultiCast() override;
         bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
         int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
 
-        // unicast
+        //unicast
         bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
 
-        // memory
+        //memory
         uint8_t* getEepromBuffer(uint32_t size);
         void commitToEeprom();
-
     private:
         WiFiUDP _udp;
         uint32_t _multicastAddr;

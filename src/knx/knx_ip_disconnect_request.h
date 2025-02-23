@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ip_host_protocol_address_information.h"
 #include "knx_ip_frame.h"
+#include "ip_host_protocol_address_information.h"
 #ifdef USE_IP
 class KnxIpDisconnectRequest : public KnxIpFrame
 {
@@ -11,7 +11,6 @@ class KnxIpDisconnectRequest : public KnxIpFrame
         IpHostProtocolAddressInformation& hpaiCtrl();
         uint8_t channelId();
         void channelId(uint8_t channelId);
-
     private:
         IpHostProtocolAddressInformation _hpaiCtrl;
 };

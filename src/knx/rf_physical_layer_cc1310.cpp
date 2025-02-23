@@ -3,21 +3,21 @@
 #include "config.h"
 #ifdef USE_RF
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
-#include "rf_data_link_layer.h"
 #include "rf_physical_layer_cc1310.h"
+#include "rf_data_link_layer.h"
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib / rf_data_entry.h)
-#include DeviceFamily_constructPath(driverlib / rf_prop_mailbox.h)
-#include "smartrf_settings/smartrf_settings.h"
+#include DeviceFamily_constructPath(driverlib/rf_data_entry.h)
+#include DeviceFamily_constructPath(driverlib/rf_prop_mailbox.h)
 #include <ti/drivers/rf/RF.h>
+#include "smartrf_settings/smartrf_settings.h"
 
-#include "Board.h"
 #include "cc1310_platform.h"
+#include "Board.h"
 
 #include "bits.h"
 #include "platform.h"
@@ -32,7 +32,7 @@ static RF_Handle rfHandle;
 static RF_CmdHandle rxCommandHandle;
 
 static uint8_t rxBuffer[sizeof(rfc_dataEntryPartial_t) + RX_MAX_BUFFER_LENGTH] __attribute__((aligned(4)));
-static rfc_dataEntryPartial_t* pDataEntry = (rfc_dataEntryPartial_t*)&rxBuffer;
+static rfc_dataEntryPartial_t* pDataEntry = (rfc_dataEntryPartial_t*)& rxBuffer;
 static dataQueue_t dataQueue;
 
 static uint8_t addrFilterTable[2] = {0x44, 0xFF}; // Do not modify the size without changing RF_cmdPropRxAdv.addrConf.addrSize!
@@ -73,7 +73,7 @@ static void RxCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 
             // Make sure we have a valid first block
             if (((pData[1] != addrFilterTable[0]) || (pData[2] != addrFilterTable[1])) ||
-                (crc16Dnp(pData, 10) != ((pData[10] << 8) | pData[11])))
+                    (crc16Dnp(pData, 10) != ((pData[10] << 8) | pData[11])))
             {
                 // cancel early because it does not seem to be KNX RF packet
                 RF_cancelCmd(rfHandle, rxCommandHandle, 0 /* force abort RF */);
@@ -83,12 +83,12 @@ static void RxCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
             // First block is valid, so the length is valid
             uint8_t len = pDataEntry->rxData;
             struct rfc_CMD_PROP_SET_LEN_s RF_cmdPropSetLen =
-                {
-                    .commandNo = CMD_PROP_SET_LEN,      // command identifier
-                    .rxLen = (uint16_t)PACKET_SIZE(len) // packet length to set
-                };
+            {
+                .commandNo = CMD_PROP_SET_LEN,        // command identifier
+                .rxLen   = (uint16_t)PACKET_SIZE(len) // packet length to set
+            };
 
-            // RF_runImmediateCmd(rfHandle, (uint32_t*)&RF_cmdPropSetLen); // for length > 255
+            //RF_runImmediateCmd(rfHandle, (uint32_t*)&RF_cmdPropSetLen); // for length > 255
             RF_Stat status = RF_runDirectCmd(rfHandle, (uint32_t)&RF_cmdPropSetLen);
 
             if (status != RF_StatCmdDoneSuccess)
@@ -140,7 +140,7 @@ void RfPhysicalLayerCC1310::setOutputPowerLevel(int8_t dBm)
 #if (CCFG_FORCE_VDDR_HH != 0x1)
 
     if ((newValue.paType == RF_TxPowerTable_DefaultPA) &&
-        (dBm == rfPowerTable[rfPowerTableSize - 2].power))
+            (dBm == rfPowerTable[rfPowerTableSize - 2].power))
     {
         // The desired power level is set to the maximum supported under the
         // default PA settings, but the boost mode (CCFG_FORCE_VDDR_HH) is not
@@ -164,6 +164,7 @@ void RfPhysicalLayerCC1310::setOutputPowerLevel(int8_t dBm)
     }
 }
 
+
 bool RfPhysicalLayerCC1310::InitChip()
 {
     RF_Params rfParams;
@@ -171,8 +172,8 @@ bool RfPhysicalLayerCC1310::InitChip()
 
     pDataEntry->length = 255;
     pDataEntry->config.type = DATA_ENTRY_TYPE_PARTIAL; // --> DATA_ENTRY_TYPE_PARTIAL adds a 12 Byte Header
-    pDataEntry->config.irqIntv = 12;                   // KNX-RF first block consists of 12 bytes (one length byte, 0x44, 0xFF, one RFinfo byte, six Serial/DoA bytes, two CRC bytes)
-    pDataEntry->config.lenSz = 0;                      // no length indicator at beginning of data entry
+    pDataEntry-> config.irqIntv = 12; // KNX-RF first block consists of 12 bytes (one length byte, 0x44, 0xFF, one RFinfo byte, six Serial/DoA bytes, two CRC bytes)
+    pDataEntry-> config.lenSz  = 0; // no length indicator at beginning of data entry
     pDataEntry->status = DATA_ENTRY_PENDING;
     pDataEntry->pNextEntry = (uint8_t*)pDataEntry;
 
@@ -207,11 +208,12 @@ void RfPhysicalLayerCC1310::loop()
 {
     switch (_loopState)
     {
-        case TX_START: {
-            uint8_t* sendBuffer{nullptr};
-            uint16_t sendBufferLength{0};
+        case TX_START:
+        {
+            uint8_t* sendBuffer {nullptr};
+            uint16_t sendBufferLength {0};
 
-            // println("TX_START...");
+            //println("TX_START...");
             _rfDataLinkLayer.loadNextTxFrame(&sendBuffer, &sendBufferLength);
             uint16_t pktLen = PACKET_SIZE(sendBuffer[0]);
 
@@ -243,7 +245,7 @@ void RfPhysicalLayerCC1310::loop()
             RF_cmdPropTx.pPkt = sendBuffer;
             RF_cmdPropTx.startTrigger.triggerType = TRIG_NOW;
             RF_EventMask result = RF_runCmd(rfHandle, (RF_Op*)&RF_cmdPropTx, RF_PriorityNormal, NULL, RF_TERMINATION_EVENT_MASK);
-            // print("TX: RF_EventMask: ");println(result, HEX);
+            //print("TX: RF_EventMask: ");println(result, HEX);
 
 #if defined(DEBUG_DUMP_PACKETS)
             printHex("TX: ", sendBuffer, pktLen);
@@ -256,12 +258,13 @@ void RfPhysicalLayerCC1310::loop()
                 println(result, HEX);
             }
 
-            // println("Restart RX...");
+            //println("Restart RX...");
             _loopState = RX_START;
         }
         break;
 
-        case RX_START: {
+        case RX_START:
+        {
             packetStartTime = 0;
             rfDone = false;
             rfErr = 0;
@@ -280,7 +283,8 @@ void RfPhysicalLayerCC1310::loop()
         }
         break;
 
-        case RX_ACTIVE: {
+        case RX_ACTIVE:
+        {
             if (!_rfDataLinkLayer.isTxQueueEmpty())
             {
                 RF_cancelCmd(rfHandle, rxCommandHandle, RF_ABORT_GRACEFULLY);
@@ -333,7 +337,7 @@ void RfPhysicalLayerCC1310::loop()
                 {
                     // add CRC sizes for received blocks, but do not add the length of the L-field (1 byte) itself
                     packetLength = PACKET_SIZE(pDataEntry->rxData);
-                    packetDataPointer = (uint8_t*)&pDataEntry->rxData;
+                    packetDataPointer = (uint8_t*) &pDataEntry->rxData;
 
                     // Sanity check: the partial data entry index points to the next free location in the partial RX buffer
                     if (packetLength != (pDataEntry->nextIndex - 1))
@@ -355,7 +359,7 @@ void RfPhysicalLayerCC1310::loop()
 
 #if defined(DEBUG_DUMP_PACKETS)
                     printHex("RX: ", packetDataPointer, packetLength, false);
-                    print("- RSSI: ");
+                    print ("- RSSI: ");
                     println(rxStatistics.lastRssi);
 #endif
                     _rfDataLinkLayer.frameBytesReceived(packetDataPointer, packetLength);

@@ -9,7 +9,7 @@
 
 #include "rf_physical_layer.h"
 
-#define RX_PACKET_TIMEOUT 20 // Wait 20ms for packet reception to complete
+#define RX_PACKET_TIMEOUT        20   // Wait 20ms for packet reception to complete
 
 // loop states
 #define RX_START 0

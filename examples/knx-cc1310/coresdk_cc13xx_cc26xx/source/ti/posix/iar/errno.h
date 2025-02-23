@@ -39,14 +39,14 @@
 
 /* compiler vendor check */
 #ifndef __IAR_SYSTEMS_ICC__
-#error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
+    #error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
 #endif
 
 /* include toolchain's header file */
 #if defined(__430_CORE__) || defined(__430X_CORE__)
-#include <../inc/dlib/c/errno.h>
+    #include <../inc/dlib/c/errno.h>
 #else
-#include <../inc/c/errno.h>
+    #include <../inc/c/errno.h>
 #endif
 
 #ifdef __cplusplus
@@ -56,139 +56,139 @@ extern "C" {
 /* These are missing from errno.h Values match GNU ARM compiler. */
 
 #ifndef EACCES
-#define EACCES 13
+#define EACCES                  13
 #endif
 
 #ifndef EAGAIN
-#define EAGAIN 11
+#define EAGAIN                  11
 #endif
 
 #ifndef EBADF
-#define EBADF 9
+#define EBADF                   9
 #endif
 
 #ifndef EBUSY
-#define EBUSY 16
+#define EBUSY                   16
 #endif
 
 #ifndef EDEADLK
-#define EDEADLK 45
+#define EDEADLK                 45
 #endif
 
 #ifndef EEXIST
-#define EEXIST 17
+#define EEXIST                  17
 #endif
 
 #ifndef EFAULT
-#define EFAULT 14
+#define EFAULT                  14
 #endif
 
 #ifndef EINVAL
-#define EINVAL 22
+#define EINVAL                  22
 #endif
 
 #ifndef EMSGSIZE
-#define EMSGSIZE 122
+#define EMSGSIZE                122
 #endif
 
 #ifndef ENFILE
-#define ENFILE 23
+#define ENFILE                  23
 #endif
 
 #ifndef ENOMEM
-#define ENOMEM 12
+#define ENOMEM                  12
 #endif
 
 #ifndef ENOENT
-#define ENOENT 2
+#define ENOENT                  2
 #endif
 
 #ifndef ENOSPC
-#define ENOSPC 28
+#define ENOSPC                  28
 #endif
 
 #ifndef ENOSYS
-#define ENOSYS 89
+#define ENOSYS                  89
 #endif
 
 #ifndef ENOTSUP
-#define ENOTSUP 48
+#define ENOTSUP                 48
 #endif
 
 #ifndef EPERM
-#define EPERM 1
+#define EPERM                   1
 #endif
 
 #ifndef ETIMEDOUT
-#define ETIMEDOUT 145
+#define ETIMEDOUT               145
 #endif
 
 #ifndef EADDRINUSE
-#define EADDRINUSE 112
+#define EADDRINUSE              112
 #endif
 
 #ifndef EADDRNOTAVAIL
-#define EADDRNOTAVAIL 125
+#define EADDRNOTAVAIL           125
 #endif
 
 #ifndef EAFNOSUPPORT
-#define EAFNOSUPPORT 106
+#define EAFNOSUPPORT            106
 #endif
 
 #ifndef ECONNREFUSED
-#define ECONNREFUSED 111
+#define ECONNREFUSED            111
 #endif
 
 #ifndef EDESTADDRREQ
-#define EDESTADDRREQ 121
+#define EDESTADDRREQ            121
 #endif
 
 #ifndef EISCONN
-#define EISCONN 127
+#define EISCONN                 127
 #endif
 
 #ifndef ENETDOWN
-#define ENETDOWN 115
+#define ENETDOWN                115
 #endif
 
 #ifndef ENETUNREACH
-#define ENETUNREACH 114
+#define ENETUNREACH             114
 #endif
 
 #ifndef ENOBUFS
-#define ENOBUFS 105
+#define ENOBUFS                 105
 #endif
 
 #ifndef ENOPROTOOPT
-#define ENOPROTOOPT 109
+#define ENOPROTOOPT             109
 #endif
 
 #ifndef ENOTCONN
-#define ENOTCONN 128
+#define ENOTCONN                128
 #endif
 
 #ifndef EOPNOTSUPP
-#define EOPNOTSUPP 95
+#define EOPNOTSUPP              95
 #endif
 
 #ifndef EOVERFLOW
-#define EOVERFLOW 139
+#define EOVERFLOW               139
 #endif
 
 #ifndef EPROTONOSUPPORT
-#define EPROTONOSUPPORT 123
+#define EPROTONOSUPPORT         123
 #endif
 
 #ifndef EPROTOTYPE
-#define EPROTOTYPE 107
+#define EPROTOTYPE              107
 #endif
 
 #ifndef EWOULDBLOCK
-#define EWOULDBLOCK EAGAIN
+#define EWOULDBLOCK             EAGAIN
 #endif
 
 /* custom error codes */
-#define EFREERTOS 2001 /* FreeRTOS function failure */
+#define EFREERTOS    2001       /* FreeRTOS function failure */
 
 #ifdef __cplusplus
 }

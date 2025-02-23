@@ -1,41 +1,41 @@
 /******************************************************************************
- *  Filename:       cpu.h
- *  Revised:        2018-06-04 16:10:13 +0200 (Mon, 04 Jun 2018)
- *  Revision:       52111
- *
- *  Description:    Defines and prototypes for the CPU instruction wrapper
- *                  functions.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       cpu.h
+*  Revised:        2018-06-04 16:10:13 +0200 (Mon, 04 Jun 2018)
+*  Revision:       52111
+*
+*  Description:    Defines and prototypes for the CPU instruction wrapper
+*                  functions.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -56,14 +56,15 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_cpu_scs.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_cpu_scs.h"
 
 //*****************************************************************************
 //
@@ -79,11 +80,11 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define CPUcpsid NOROM_CPUcpsid
-#define CPUprimask NOROM_CPUprimask
-#define CPUcpsie NOROM_CPUcpsie
-#define CPUbasepriGet NOROM_CPUbasepriGet
-#define CPUdelay NOROM_CPUdelay
+#define CPUcpsid                        NOROM_CPUcpsid
+#define CPUprimask                      NOROM_CPUprimask
+#define CPUcpsie                        NOROM_CPUcpsie
+#define CPUbasepriGet                   NOROM_CPUbasepriGet
+#define CPUdelay                        NOROM_CPUdelay
 #endif
 
 //*****************************************************************************
@@ -206,7 +207,7 @@ CPUwfi(void)
 {
     // Wait for the next interrupt.
     wfi;
-    bx lr
+    bx      lr
 }
 #elif defined(__TI_COMPILER_VERSION__)
 __STATIC_INLINE void
@@ -220,7 +221,7 @@ __STATIC_INLINE void __attribute__((always_inline))
 CPUwfi(void)
 {
     // Wait for the next interrupt.
-    __asm volatile("    wfi\n");
+    __asm volatile ("    wfi\n");
 }
 #endif
 
@@ -253,7 +254,7 @@ CPUwfe(void)
 {
     // Wait for the next event.
     wfe;
-    bx lr
+    bx      lr
 }
 #elif defined(__TI_COMPILER_VERSION__)
 __STATIC_INLINE void
@@ -267,7 +268,7 @@ __STATIC_INLINE void __attribute__((always_inline))
 CPUwfe(void)
 {
     // Wait for the next event.
-    __asm volatile("    wfe\n");
+    __asm volatile ("    wfe\n");
 }
 #endif
 
@@ -300,7 +301,7 @@ CPUsev(void)
 {
     // Send event.
     sev;
-    bx lr
+    bx      lr
 }
 #elif defined(__TI_COMPILER_VERSION__)
 __STATIC_INLINE void
@@ -314,9 +315,10 @@ __STATIC_INLINE void __attribute__((always_inline))
 CPUsev(void)
 {
     // Send event.
-    __asm volatile("    sev\n");
+    __asm volatile ("    sev\n");
 }
 #endif
+
 
 //*****************************************************************************
 //
@@ -348,8 +350,8 @@ __asm __STATIC_INLINE void
 CPUbasepriSet(uint32_t ui32NewBasepri)
 {
     // Set the BASEPRI register.
-    msr BASEPRI, r0;
-    bx lr
+    msr     BASEPRI, r0;
+    bx      lr
 }
 #elif defined(__TI_COMPILER_VERSION__)
 __STATIC_INLINE void
@@ -361,14 +363,15 @@ CPUbasepriSet(uint32_t ui32NewBasepri)
 #else
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wattributes"
-__STATIC_INLINE void __attribute__((naked))
+__STATIC_INLINE void __attribute__ ((naked))
 CPUbasepriSet(uint32_t ui32NewBasepri)
 {
     // Set the BASEPRI register.
-    __asm volatile("    msr     BASEPRI, %0\n"
-                   "    bx      lr\n"
-                   : /* No output */
-                   : "r"(ui32NewBasepri));
+    __asm volatile ("    msr     BASEPRI, %0\n"
+                    "    bx      lr\n"
+                    : /* No output */
+                    : "r" (ui32NewBasepri)
+                   );
 }
 #pragma GCC diagnostic pop
 #endif
@@ -390,9 +393,9 @@ CPUbasepriSet(uint32_t ui32NewBasepri)
 //
 //*****************************************************************************
 __STATIC_INLINE void
-CPU_WriteBufferDisable(void)
+CPU_WriteBufferDisable( void )
 {
-    HWREGBITW(CPU_SCS_BASE + CPU_SCS_O_ACTLR, CPU_SCS_ACTLR_DISDEFWBUF_BITN) = 1;
+    HWREGBITW( CPU_SCS_BASE + CPU_SCS_O_ACTLR, CPU_SCS_ACTLR_DISDEFWBUF_BITN ) = 1;
 }
 
 //*****************************************************************************
@@ -408,9 +411,9 @@ CPU_WriteBufferDisable(void)
 //
 //*****************************************************************************
 __STATIC_INLINE void
-CPU_WriteBufferEnable(void)
+CPU_WriteBufferEnable( void )
 {
-    HWREGBITW(CPU_SCS_BASE + CPU_SCS_O_ACTLR, CPU_SCS_ACTLR_DISDEFWBUF_BITN) = 0;
+    HWREGBITW( CPU_SCS_BASE + CPU_SCS_O_ACTLR, CPU_SCS_ACTLR_DISDEFWBUF_BITN ) = 0;
 }
 
 //*****************************************************************************
@@ -422,24 +425,24 @@ CPU_WriteBufferEnable(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_CPUcpsid
-#undef CPUcpsid
-#define CPUcpsid ROM_CPUcpsid
+#undef  CPUcpsid
+#define CPUcpsid                        ROM_CPUcpsid
 #endif
 #ifdef ROM_CPUprimask
-#undef CPUprimask
-#define CPUprimask ROM_CPUprimask
+#undef  CPUprimask
+#define CPUprimask                      ROM_CPUprimask
 #endif
 #ifdef ROM_CPUcpsie
-#undef CPUcpsie
-#define CPUcpsie ROM_CPUcpsie
+#undef  CPUcpsie
+#define CPUcpsie                        ROM_CPUcpsie
 #endif
 #ifdef ROM_CPUbasepriGet
-#undef CPUbasepriGet
-#define CPUbasepriGet ROM_CPUbasepriGet
+#undef  CPUbasepriGet
+#define CPUbasepriGet                   ROM_CPUbasepriGet
 #endif
 #ifdef ROM_CPUdelay
-#undef CPUdelay
-#define CPUdelay ROM_CPUdelay
+#undef  CPUdelay
+#define CPUdelay                        ROM_CPUdelay
 #endif
 #endif
 

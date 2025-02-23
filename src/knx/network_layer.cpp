@@ -1,14 +1,14 @@
 #include "network_layer.h"
-#include "apdu.h"
-#include "bits.h"
-#include "cemi_frame.h"
-#include "data_link_layer.h"
 #include "device_object.h"
+#include "data_link_layer.h"
 #include "tpdu.h"
+#include "cemi_frame.h"
+#include "bits.h"
+#include "apdu.h"
 
-NetworkLayer::NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer)
-    : _deviceObj(deviceObj),
-      _transportLayer(layer)
+NetworkLayer::NetworkLayer(DeviceObject& deviceObj, TransportLayer& layer) :
+    _deviceObj(deviceObj),
+    _transportLayer(layer)
 {
     _hopCount = _deviceObj.defaultHopCount();
 }
@@ -43,3 +43,4 @@ bool NetworkLayer::isApciSystemBroadcast(APDU& apdu)
 
     return false;
 }
+

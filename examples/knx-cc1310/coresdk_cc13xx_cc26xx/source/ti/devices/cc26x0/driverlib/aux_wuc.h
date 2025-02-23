@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       aon_wuc.h
- *  Revised:        2017-06-05 12:13:49 +0200 (Mon, 05 Jun 2017)
- *  Revision:       49096
- *
- *  Description:    Defines and prototypes for the AUX Wakeup Controller
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       aon_wuc.h
+*  Revised:        2017-06-05 12:13:49 +0200 (Mon, 05 Jun 2017)
+*  Revision:       49096
+*
+*  Description:    Defines and prototypes for the AUX Wakeup Controller
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //****************************************************************************
 //
@@ -55,15 +55,16 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_aux_wuc.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include "debug.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_aux_wuc.h"
+#include "debug.h"
 
 //*****************************************************************************
 //
@@ -79,10 +80,10 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define AUXWUCClockEnable NOROM_AUXWUCClockEnable
-#define AUXWUCClockDisable NOROM_AUXWUCClockDisable
-#define AUXWUCClockStatus NOROM_AUXWUCClockStatus
-#define AUXWUCPowerCtrl NOROM_AUXWUCPowerCtrl
+#define AUXWUCClockEnable               NOROM_AUXWUCClockEnable
+#define AUXWUCClockDisable              NOROM_AUXWUCClockDisable
+#define AUXWUCClockStatus               NOROM_AUXWUCClockStatus
+#define AUXWUCPowerCtrl                 NOROM_AUXWUCPowerCtrl
 #endif
 
 //*****************************************************************************
@@ -90,35 +91,35 @@ extern "C" {
 // Defines for the AUX power control.
 //
 //*****************************************************************************
-#define AUX_WUC_POWER_OFF 0x00000001
-#define AUX_WUC_POWER_DOWN 0x00000002
-#define AUX_WUC_POWER_ACTIVE 0x00000004
+#define AUX_WUC_POWER_OFF       0x00000001
+#define AUX_WUC_POWER_DOWN      0x00000002
+#define AUX_WUC_POWER_ACTIVE    0x00000004
 
 //*****************************************************************************
 //
 // Defines for the AUX peripherals clock control.
 //
 //*****************************************************************************
-#define AUX_WUC_SMPH_CLOCK (AUX_WUC_MODCLKEN0_SMPH_EN)
-#define AUX_WUC_AIODIO0_CLOCK (AUX_WUC_MODCLKEN0_AIODIO0_EN)
-#define AUX_WUC_AIODIO1_CLOCK (AUX_WUC_MODCLKEN0_AIODIO1_EN)
-#define AUX_WUC_TIMER_CLOCK (AUX_WUC_MODCLKEN0_TIMER_EN)
-#define AUX_WUC_ANAIF_CLOCK (AUX_WUC_MODCLKEN0_ANAIF_EN)
-#define AUX_WUC_TDCIF_CLOCK (AUX_WUC_MODCLKEN0_TDC_EN)
-#define AUX_WUC_OSCCTRL_CLOCK (AUX_WUC_MODCLKEN0_AUX_DDI0_OSC_EN)
-#define AUX_WUC_ADI_CLOCK (AUX_WUC_MODCLKEN0_AUX_ADI4_EN)
-#define AUX_WUC_MODCLK_MASK 0x000000FF
+#define AUX_WUC_SMPH_CLOCK      (AUX_WUC_MODCLKEN0_SMPH_EN)
+#define AUX_WUC_AIODIO0_CLOCK   (AUX_WUC_MODCLKEN0_AIODIO0_EN)
+#define AUX_WUC_AIODIO1_CLOCK   (AUX_WUC_MODCLKEN0_AIODIO1_EN)
+#define AUX_WUC_TIMER_CLOCK     (AUX_WUC_MODCLKEN0_TIMER_EN)
+#define AUX_WUC_ANAIF_CLOCK     (AUX_WUC_MODCLKEN0_ANAIF_EN)
+#define AUX_WUC_TDCIF_CLOCK     (AUX_WUC_MODCLKEN0_TDC_EN)
+#define AUX_WUC_OSCCTRL_CLOCK   (AUX_WUC_MODCLKEN0_AUX_DDI0_OSC_EN)
+#define AUX_WUC_ADI_CLOCK       (AUX_WUC_MODCLKEN0_AUX_ADI4_EN)
+#define AUX_WUC_MODCLK_MASK     0x000000FF
 
-#define AUX_WUC_TDC_CLOCK 0x00000100
-#define AUX_WUC_ADC_CLOCK 0x00000200
-#define AUX_WUC_REF_CLOCK 0x00000400
+#define AUX_WUC_TDC_CLOCK       0x00000100
+#define AUX_WUC_ADC_CLOCK       0x00000200
+#define AUX_WUC_REF_CLOCK       0x00000400
 
-#define AUX_WUC_CLOCK_OFF 0x00000000
-#define AUX_WUC_CLOCK_UNSTABLE 0x00000001
-#define AUX_WUC_CLOCK_READY 0x00000011
+#define AUX_WUC_CLOCK_OFF       0x00000000
+#define AUX_WUC_CLOCK_UNSTABLE  0x00000001
+#define AUX_WUC_CLOCK_READY     0x00000011
 
-#define AUX_WUC_CLOCK_HIFREQ 0x00000000
-#define AUX_WUC_CLOCK_LOFREQ 0x00000001
+#define AUX_WUC_CLOCK_HIFREQ    0x00000000
+#define AUX_WUC_CLOCK_LOFREQ    0x00000001
 
 //*****************************************************************************
 //
@@ -309,20 +310,20 @@ AUXWUCFreezeDisable(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_AUXWUCClockEnable
-#undef AUXWUCClockEnable
-#define AUXWUCClockEnable ROM_AUXWUCClockEnable
+#undef  AUXWUCClockEnable
+#define AUXWUCClockEnable               ROM_AUXWUCClockEnable
 #endif
 #ifdef ROM_AUXWUCClockDisable
-#undef AUXWUCClockDisable
-#define AUXWUCClockDisable ROM_AUXWUCClockDisable
+#undef  AUXWUCClockDisable
+#define AUXWUCClockDisable              ROM_AUXWUCClockDisable
 #endif
 #ifdef ROM_AUXWUCClockStatus
-#undef AUXWUCClockStatus
-#define AUXWUCClockStatus ROM_AUXWUCClockStatus
+#undef  AUXWUCClockStatus
+#define AUXWUCClockStatus               ROM_AUXWUCClockStatus
 #endif
 #ifdef ROM_AUXWUCPowerCtrl
-#undef AUXWUCPowerCtrl
-#define AUXWUCPowerCtrl ROM_AUXWUCPowerCtrl
+#undef  AUXWUCPowerCtrl
+#define AUXWUCPowerCtrl                 ROM_AUXWUCPowerCtrl
 #endif
 #endif
 

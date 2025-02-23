@@ -1,40 +1,41 @@
 #include "linux_platform.h"
 #ifdef __linux__
-#include <cmath>
 #include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <stdexcept>
 #include <string>
+#include <cstring>
+#include <cstdlib>
+#include <stdexcept>
+#include <cmath>
 
-#include <arpa/inet.h>
-#include <errno.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
 #include <fcntl.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/ioctl.h>
 #include <net/if.h>
 #include <net/if_arp.h>
 #include <netdb.h>
-#include <netinet/in.h>
-#include <sys/ioctl.h>
-#include <sys/mman.h>
-#include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <termios.h>
-#include <unistd.h>
 
+#include <sys/ioctl.h>        // Needed for SPI port
 #include <linux/spi/spidev.h> // Needed for SPI port
 #include <poll.h>             // Needed for GPIO edge detection
-#include <sys/ioctl.h>        // Needed for SPI port
 #include <sys/time.h>         // Needed for delayMicroseconds()
 
-#include "knx/address_table_object.h"
-#include "knx/application_program_object.h"
-#include "knx/association_table_object.h"
-#include "knx/bits.h"
 #include "knx/device_object.h"
+#include "knx/address_table_object.h"
+#include "knx/association_table_object.h"
 #include "knx/group_object_table_object.h"
-#include "knx/ip_host_protocol_address_information.h"
+#include "knx/application_program_object.h"
 #include "knx/ip_parameter_object.h"
+#include "knx/bits.h"
+#include "knx/ip_host_protocol_address_information.h"
 
 #define MAX_MEM 4096
 
@@ -87,11 +88,11 @@ LinuxPlatform::LinuxPlatform()
         struct sockaddr_in* ipaddr = (struct sockaddr_in*)&ifr.ifr_addr;
         _ipAddress = ntohl(ipaddr->sin_addr.s_addr);
 
-        // printf("IP address: %s\n", inet_ntoa(ipaddr->sin_addr));
+        //printf("IP address: %s\n", inet_ntoa(ipaddr->sin_addr));
         ioctl(socketMac, SIOCGIFNETMASK, &ifr);
         struct sockaddr_in* netmask = (struct sockaddr_in*)&ifr.ifr_netmask;
         _netmask = ntohl(netmask->sin_addr.s_addr);
-        // printf("Netmask: %s\n", inet_ntoa(ipaddr->sin_addr));
+        //printf("Netmask: %s\n", inet_ntoa(ipaddr->sin_addr));
         break;
     }
 
@@ -113,7 +114,7 @@ LinuxPlatform::LinuxPlatform()
         {
             if (strcmp(c, "00000000") == 0)
             {
-                // printf("Default interface is : %s \n" , p);
+                //printf("Default interface is : %s \n" , p);
                 if (g)
                 {
                     char* pEnd;
@@ -305,7 +306,7 @@ void LinuxPlatform::doMemoryMapping()
     if (_fd < 0)
     {
         puts("Error in file opening");
-        // exit(-1);
+        //exit(-1);
     }
 
     struct stat st;
@@ -315,7 +316,7 @@ void LinuxPlatform::doMemoryMapping()
     if (ret < 0)
     {
         puts("Error in fstat");
-        // exit(-1);
+        //exit(-1);
     }
 
     size_t len_file = st.st_size;
@@ -325,7 +326,7 @@ void LinuxPlatform::doMemoryMapping()
         if (ftruncate(_fd, FLASHSIZE) != 0)
         {
             puts("Error extending file");
-            // exit(-1);
+            //exit(-1);
         }
 
         len_file = FLASHSIZE;
@@ -343,7 +344,7 @@ void LinuxPlatform::doMemoryMapping()
     if (addr == MAP_FAILED)
     {
         puts("Error in mmap");
-        // exit(-1);
+        //exit(-1);
     }
 
     _mappedFile = addr;
@@ -425,6 +426,8 @@ std::string LinuxPlatform::flashFilePath()
     return _flashFilePath;
 }
 
+
+
 size_t LinuxPlatform::readBytesUart(uint8_t* buffer, size_t length)
 {
     return read(_uartFd, buffer, length);
@@ -432,36 +435,36 @@ size_t LinuxPlatform::readBytesUart(uint8_t* buffer, size_t length)
 
 int LinuxPlatform::readUart()
 {
-    uint8_t x;
+    uint8_t x ;
 
     if (read(_uartFd, &x, 1) != 1)
     {
         return -1;
     }
 
-    return ((int)x) & 0xFF;
+    return ((int)x) & 0xFF ;
 }
 
 size_t LinuxPlatform::writeUart(const uint8_t* buffer, size_t size)
 {
-    return write(_uartFd, buffer, size);
+    return write(_uartFd, buffer, size) ;
 }
 
 size_t LinuxPlatform::writeUart(const uint8_t data)
 {
-    return write(_uartFd, &data, 1);
+    return write(_uartFd, &data, 1) ;
 }
 
 int LinuxPlatform::uartAvailable()
 {
-    int result;
+    int result ;
 
     if (ioctl(_uartFd, FIONREAD, &result) == -1)
     {
         return -1;
     }
 
-    return result;
+    return result ;
 }
 
 void LinuxPlatform::closeUart()
@@ -475,9 +478,9 @@ void LinuxPlatform::closeUart()
 void LinuxPlatform::setupUart()
 {
     /*
-     * 19200,8E1, no handshake
-     */
-    struct termios options; /* Schnittstellenoptionen */
+    * 19200,8E1, no handshake
+    */
+    struct termios options;    /* Schnittstellenoptionen */
 
     /* Port oeffnen - read/write, kein "controlling tty", Status von DCD ignorieren */
     _uartFd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY);
@@ -501,10 +504,10 @@ void LinuxPlatform::setupUart()
         cfsetospeed(&options, B19200);
 
         /* setze Optionen */
-        options.c_cflag |= PARENB;  /* Enable Paritybit */
-        options.c_cflag &= ~PARODD; /* Even parity */
-        options.c_cflag &= ~CSTOPB; /* 1 Stoppbit */
-        options.c_cflag &= ~CSIZE;  /* 8 Datenbits */
+        options.c_cflag |= PARENB;          /* Enable Paritybit */
+        options.c_cflag &= ~PARODD;         /* Even parity */
+        options.c_cflag &= ~CSTOPB;         /* 1 Stoppbit */
+        options.c_cflag &= ~CSIZE;          /* 8 Datenbits */
         options.c_cflag |= CS8;
 
         /* 19200 bps, 8 Datenbits, CD-Signal ignorieren, Lesen erlauben */
@@ -512,11 +515,11 @@ void LinuxPlatform::setupUart()
 
         /* Kein Echo, keine Steuerzeichen, keine Interrupts */
         options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
-        options.c_iflag = IGNPAR;    /* Parity-Fehler ignorieren */
-        options.c_oflag &= ~OPOST;   /* setze "raw" Input */
-        options.c_cc[VMIN] = 0;      /* warten auf min. 0 Zeichen */
-        options.c_cc[VTIME] = 10;    /* Timeout 1 Sekunde */
-        tcflush(_uartFd, TCIOFLUSH); /* Puffer leeren */
+        options.c_iflag = IGNPAR;           /* Parity-Fehler ignorieren */
+        options.c_oflag &= ~OPOST;          /* setze "raw" Input */
+        options.c_cc[VMIN]  = 0;            /* warten auf min. 0 Zeichen */
+        options.c_cc[VTIME] = 10;           /* Timeout 1 Sekunde */
+        tcflush(_uartFd, TCIOFLUSH);        /* Puffer leeren */
 
         if (tcsetattr(_uartFd, TCSAFLUSH, &options) != 0)
         {
@@ -764,7 +767,7 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
     if (_args)
         delete[] _args;
 
-    _args = new char*[argc + 1];
+    _args = new char* [argc + 1];
     memcpy(_args, argv, argc * sizeof(char*));
     _args[argc] = 0;
 }
@@ -774,7 +777,8 @@ void LinuxPlatform::cmdLineArgs(int argc, char** argv)
 #define MAX_NUM_GPIO 64
 
 static int gpioFds[MAX_NUM_GPIO] =
-    {
+{
+    -1,
         -1,
         -1,
         -1,
@@ -838,8 +842,7 @@ static int gpioFds[MAX_NUM_GPIO] =
         -1,
         -1,
         -1,
-        -1,
-};
+    };
 
 /* Activate GPIO-Pin
  * Write GPIO pin number to /sys/class/gpio/export
@@ -1161,7 +1164,7 @@ void delayMicrosecondsHard(unsigned int howLong)
     tLong.tv_usec = howLong % 1000000;
     timeradd(&tNow, &tLong, &tEnd);
 
-    while (timercmp(&tNow, &tEnd, <))
+    while (timercmp(&tNow, &tEnd, < ))
         gettimeofday(&tNow, NULL);
 }
 

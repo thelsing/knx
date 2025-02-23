@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       udma.h
- *  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
- *  Revision:       49048
- *
- *  Description:    Defines and prototypes for the uDMA controller.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       udma.h
+*  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
+*  Revision:       49048
+*
+*  Description:    Defines and prototypes for the uDMA controller.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,17 +55,18 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
+#include <stdbool.h>
+#include <stdint.h>
+#include "../inc/hw_types.h"
 #include "../inc/hw_ints.h"
 #include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
 #include "../inc/hw_udma.h"
 #include "debug.h"
 #include "interrupt.h"
-#include <stdbool.h>
-#include <stdint.h>
 
 //*****************************************************************************
 //
@@ -81,14 +82,14 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define uDMAChannelAttributeEnable NOROM_uDMAChannelAttributeEnable
-#define uDMAChannelAttributeDisable NOROM_uDMAChannelAttributeDisable
-#define uDMAChannelAttributeGet NOROM_uDMAChannelAttributeGet
-#define uDMAChannelControlSet NOROM_uDMAChannelControlSet
-#define uDMAChannelTransferSet NOROM_uDMAChannelTransferSet
-#define uDMAChannelScatterGatherSet NOROM_uDMAChannelScatterGatherSet
-#define uDMAChannelSizeGet NOROM_uDMAChannelSizeGet
-#define uDMAChannelModeGet NOROM_uDMAChannelModeGet
+#define uDMAChannelAttributeEnable      NOROM_uDMAChannelAttributeEnable
+#define uDMAChannelAttributeDisable     NOROM_uDMAChannelAttributeDisable
+#define uDMAChannelAttributeGet         NOROM_uDMAChannelAttributeGet
+#define uDMAChannelControlSet           NOROM_uDMAChannelControlSet
+#define uDMAChannelTransferSet          NOROM_uDMAChannelTransferSet
+#define uDMAChannelScatterGatherSet     NOROM_uDMAChannelScatterGatherSet
+#define uDMAChannelSizeGet              NOROM_uDMAChannelSizeGet
+#define uDMAChannelModeGet              NOROM_uDMAChannelModeGet
 #endif
 
 //*****************************************************************************
@@ -101,11 +102,12 @@ extern "C" {
 //*****************************************************************************
 typedef struct
 {
-        volatile void* pvSrcEndAddr;   //!< The ending source address of the data transfer.
-        volatile void* pvDstEndAddr;   //!< The ending destination address of the data transfer.
-        volatile uint32_t ui32Control; //!< The channel control mode.
-        volatile uint32_t ui32Spare;   //!< An unused location.
-} tDMAControlTable;
+    volatile void* pvSrcEndAddr;   //!< The ending source address of the data transfer.
+    volatile void* pvDstEndAddr;   //!< The ending destination address of the data transfer.
+    volatile uint32_t ui32Control; //!< The channel control mode.
+    volatile uint32_t ui32Spare;   //!< An unused location.
+}
+tDMAControlTable;
 
 //*****************************************************************************
 //
@@ -175,40 +177,42 @@ typedef struct
 //! \return None (this is not a function)
 //
 //*****************************************************************************
-#define uDMATaskStructEntry(ui32TransferCount,                                                                                                                        \
-                            ui32ItemSize,                                                                                                                             \
-                            ui32SrcIncrement,                                                                                                                         \
-                            pvSrcAddr,                                                                                                                                \
-                            ui32DstIncrement,                                                                                                                         \
-                            pvDstAddr,                                                                                                                                \
-                            ui32ArbSize,                                                                                                                              \
-                            ui32Mode)                                                                                                                                 \
-    {                                                                                                                                                                 \
-        (((ui32SrcIncrement) == UDMA_SRC_INC_NONE) ? (pvSrcAddr) : ((void*)(&((uint8_t*)(pvSrcAddr))[((ui32TransferCount) << ((ui32SrcIncrement) >> 26)) - 1]))),     \
-            (((ui32DstIncrement) == UDMA_DST_INC_NONE) ? (pvDstAddr) : ((void*)(&((uint8_t*)(pvDstAddr))[((ui32TransferCount) << ((ui32DstIncrement) >> 30)) - 1]))), \
-            (ui32SrcIncrement) | (ui32DstIncrement) | (ui32ItemSize) |                                                                                                \
-                (ui32ArbSize) | (((ui32TransferCount) - 1) << 4) |                                                                                                    \
-                ((((ui32Mode) == UDMA_MODE_MEM_SCATTER_GATHER) ||                                                                                                     \
-                  ((ui32Mode) == UDMA_MODE_PER_SCATTER_GATHER))                                                                                                       \
-                     ? (ui32Mode) | UDMA_MODE_ALT_SELECT                                                                                                              \
-                     : (ui32Mode)),                                                                                                                                   \
-            0                                                                                                                                                         \
-    }
+#define uDMATaskStructEntry(ui32TransferCount,                                \
+                            ui32ItemSize,                                     \
+                            ui32SrcIncrement,                                 \
+                            pvSrcAddr,                                        \
+                            ui32DstIncrement,                                 \
+                            pvDstAddr,                                        \
+                            ui32ArbSize,                                      \
+                            ui32Mode)                                         \
+{                                                                         \
+    (((ui32SrcIncrement) == UDMA_SRC_INC_NONE) ? (pvSrcAddr) :            \
+     ((void *)(&((uint8_t *)(pvSrcAddr))[((ui32TransferCount) <<       \
+                                                               ((ui32SrcIncrement) >> 26)) - 1]))), \
+    (((ui32DstIncrement) == UDMA_DST_INC_NONE) ? (pvDstAddr) :            \
+     ((void *)(&((uint8_t *)(pvDstAddr))[((ui32TransferCount) <<       \
+                                                               ((ui32DstIncrement) >> 30)) - 1]))), \
+    (ui32SrcIncrement) | (ui32DstIncrement) | (ui32ItemSize) |            \
+    (ui32ArbSize) | (((ui32TransferCount) - 1) << 4) |                    \
+    ((((ui32Mode) == UDMA_MODE_MEM_SCATTER_GATHER) ||                     \
+      ((ui32Mode) == UDMA_MODE_PER_SCATTER_GATHER)) ?                     \
+     (ui32Mode) | UDMA_MODE_ALT_SELECT : (ui32Mode)), 0            \
+}
 
 //*****************************************************************************
 //
 // The hardware configured number of uDMA channels.
 //
 //*****************************************************************************
-#define UDMA_NUM_CHANNELS 21
+#define UDMA_NUM_CHANNELS       21
 
 //*****************************************************************************
 //
 // The level of priority for the uDMA channels
 //
 //*****************************************************************************
-#define UDMA_PRIORITY_LOW 0x00000000
-#define UDMA_PRIORITY_HIGH 0x00000001
+#define UDMA_PRIORITY_LOW       0x00000000
+#define UDMA_PRIORITY_HIGH      0x00000001
 
 //*****************************************************************************
 //
@@ -216,11 +220,11 @@ typedef struct
 // uDMAChannelAttributeDisable(), and returned from uDMAChannelAttributeGet().
 //
 //*****************************************************************************
-#define UDMA_ATTR_USEBURST 0x00000001
-#define UDMA_ATTR_ALTSELECT 0x00000002
+#define UDMA_ATTR_USEBURST      0x00000001
+#define UDMA_ATTR_ALTSELECT     0x00000002
 #define UDMA_ATTR_HIGH_PRIORITY 0x00000004
-#define UDMA_ATTR_REQMASK 0x00000008
-#define UDMA_ATTR_ALL 0x0000000F
+#define UDMA_ATTR_REQMASK       0x00000008
+#define UDMA_ATTR_ALL           0x0000000F
 
 //*****************************************************************************
 //
@@ -228,56 +232,56 @@ typedef struct
 // uDMAChannelModeGet().
 //
 //*****************************************************************************
-#define UDMA_MODE_STOP 0x00000000
-#define UDMA_MODE_BASIC 0x00000001
-#define UDMA_MODE_AUTO 0x00000002
-#define UDMA_MODE_PINGPONG 0x00000003
-#define UDMA_MODE_MEM_SCATTER_GATHER \
+#define UDMA_MODE_STOP          0x00000000
+#define UDMA_MODE_BASIC         0x00000001
+#define UDMA_MODE_AUTO          0x00000002
+#define UDMA_MODE_PINGPONG      0x00000003
+#define UDMA_MODE_MEM_SCATTER_GATHER                                          \
     0x00000004
-#define UDMA_MODE_PER_SCATTER_GATHER \
+#define UDMA_MODE_PER_SCATTER_GATHER                                          \
     0x00000006
-#define UDMA_MODE_M 0x00000007 // uDMA Transfer Mode
-#define UDMA_MODE_ALT_SELECT 0x00000001
+#define UDMA_MODE_M             0x00000007  // uDMA Transfer Mode
+#define UDMA_MODE_ALT_SELECT    0x00000001
 
 //*****************************************************************************
 //
 // Channel configuration values that can be passed to uDMAControlSet().
 //
 //*****************************************************************************
-#define UDMA_DST_INC_8 0x00000000
-#define UDMA_DST_INC_16 0x40000000
-#define UDMA_DST_INC_32 0x80000000
-#define UDMA_DST_INC_NONE 0xC0000000
-#define UDMA_DST_INC_M 0xC0000000 // Destination Address Increment
-#define UDMA_DST_INC_S 30
-#define UDMA_SRC_INC_8 0x00000000
-#define UDMA_SRC_INC_16 0x04000000
-#define UDMA_SRC_INC_32 0x08000000
-#define UDMA_SRC_INC_NONE 0x0c000000
-#define UDMA_SRC_INC_M 0x0C000000 // Source Address Increment
-#define UDMA_SRC_INC_S 26
-#define UDMA_SIZE_8 0x00000000
-#define UDMA_SIZE_16 0x11000000
-#define UDMA_SIZE_32 0x22000000
-#define UDMA_SIZE_M 0x33000000 // Data Size
-#define UDMA_SIZE_S 24
-#define UDMA_ARB_1 0x00000000
-#define UDMA_ARB_2 0x00004000
-#define UDMA_ARB_4 0x00008000
-#define UDMA_ARB_8 0x0000c000
-#define UDMA_ARB_16 0x00010000
-#define UDMA_ARB_32 0x00014000
-#define UDMA_ARB_64 0x00018000
-#define UDMA_ARB_128 0x0001c000
-#define UDMA_ARB_256 0x00020000
-#define UDMA_ARB_512 0x00024000
-#define UDMA_ARB_1024 0x00028000
-#define UDMA_ARB_M 0x0003C000 // Arbitration Size
-#define UDMA_ARB_S 14
-#define UDMA_NEXT_USEBURST 0x00000008
-#define UDMA_XFER_SIZE_MAX 1024
-#define UDMA_XFER_SIZE_M 0x00003FF0 // Transfer size
-#define UDMA_XFER_SIZE_S 4
+#define UDMA_DST_INC_8          0x00000000
+#define UDMA_DST_INC_16         0x40000000
+#define UDMA_DST_INC_32         0x80000000
+#define UDMA_DST_INC_NONE       0xC0000000
+#define UDMA_DST_INC_M          0xC0000000  // Destination Address Increment
+#define UDMA_DST_INC_S          30
+#define UDMA_SRC_INC_8          0x00000000
+#define UDMA_SRC_INC_16         0x04000000
+#define UDMA_SRC_INC_32         0x08000000
+#define UDMA_SRC_INC_NONE       0x0c000000
+#define UDMA_SRC_INC_M          0x0C000000  // Source Address Increment
+#define UDMA_SRC_INC_S          26
+#define UDMA_SIZE_8             0x00000000
+#define UDMA_SIZE_16            0x11000000
+#define UDMA_SIZE_32            0x22000000
+#define UDMA_SIZE_M             0x33000000  // Data Size
+#define UDMA_SIZE_S             24
+#define UDMA_ARB_1              0x00000000
+#define UDMA_ARB_2              0x00004000
+#define UDMA_ARB_4              0x00008000
+#define UDMA_ARB_8              0x0000c000
+#define UDMA_ARB_16             0x00010000
+#define UDMA_ARB_32             0x00014000
+#define UDMA_ARB_64             0x00018000
+#define UDMA_ARB_128            0x0001c000
+#define UDMA_ARB_256            0x00020000
+#define UDMA_ARB_512            0x00024000
+#define UDMA_ARB_1024           0x00028000
+#define UDMA_ARB_M              0x0003C000  // Arbitration Size
+#define UDMA_ARB_S              14
+#define UDMA_NEXT_USEBURST      0x00000008
+#define UDMA_XFER_SIZE_MAX      1024
+#define UDMA_XFER_SIZE_M        0x00003FF0  // Transfer size
+#define UDMA_XFER_SIZE_S        4
 
 //*****************************************************************************
 //
@@ -285,25 +289,25 @@ typedef struct
 // ID.
 //
 //*****************************************************************************
-#define UDMA_CHAN_SW_EVT0 0   // Software Event Channel 0
-#define UDMA_CHAN_UART0_RX 1  // UART0 RX Data
-#define UDMA_CHAN_UART0_TX 2  // UART0 RX Data
-#define UDMA_CHAN_SSI0_RX 3   // SSI0 RX Data
-#define UDMA_CHAN_SSI0_TX 4   // SSI0 RX Data
-#define UDMA_CHAN_AUX_ADC 7   // AUX ADC event
-#define UDMA_CHAN_AUX_SW 8    // AUX Software event
-#define UDMA_CHAN_TIMER0_A 9  // Timer0 A event
-#define UDMA_CHAN_TIMER0_B 10 // Timer0 B event
-#define UDMA_CHAN_TIMER1_A 11
-#define UDMA_CHAN_TIMER1_B 12
-#define UDMA_CHAN_AON_PROG2 13
-#define UDMA_CHAN_DMA_PROG 14
-#define UDMA_CHAN_AON_RTC 15
-#define UDMA_CHAN_SSI1_RX 16
-#define UDMA_CHAN_SSI1_TX 17
-#define UDMA_CHAN_SW_EVT1 18
-#define UDMA_CHAN_SW_EVT2 19
-#define UDMA_CHAN_SW_EVT3 20
+#define UDMA_CHAN_SW_EVT0       0   // Software Event Channel 0
+#define UDMA_CHAN_UART0_RX      1   // UART0 RX Data
+#define UDMA_CHAN_UART0_TX      2   // UART0 RX Data
+#define UDMA_CHAN_SSI0_RX       3   // SSI0 RX Data
+#define UDMA_CHAN_SSI0_TX       4   // SSI0 RX Data
+#define UDMA_CHAN_AUX_ADC       7   // AUX ADC event
+#define UDMA_CHAN_AUX_SW        8   // AUX Software event
+#define UDMA_CHAN_TIMER0_A      9   // Timer0 A event
+#define UDMA_CHAN_TIMER0_B      10  // Timer0 B event
+#define UDMA_CHAN_TIMER1_A      11
+#define UDMA_CHAN_TIMER1_B      12
+#define UDMA_CHAN_AON_PROG2     13
+#define UDMA_CHAN_DMA_PROG      14
+#define UDMA_CHAN_AON_RTC       15
+#define UDMA_CHAN_SSI1_RX       16
+#define UDMA_CHAN_SSI1_TX       17
+#define UDMA_CHAN_SW_EVT1       18
+#define UDMA_CHAN_SW_EVT2       19
+#define UDMA_CHAN_SW_EVT3       20
 
 //*****************************************************************************
 //
@@ -311,8 +315,8 @@ typedef struct
 // control structure should be used.
 //
 //*****************************************************************************
-#define UDMA_PRI_SELECT 0x00000000
-#define UDMA_ALT_SELECT 0x00000020
+#define UDMA_PRI_SELECT         0x00000000
+#define UDMA_ALT_SELECT         0x00000020
 
 //*****************************************************************************
 //
@@ -510,7 +514,8 @@ uDMAChannelIsEnabled(uint32_t ui32Base, uint32_t ui32ChannelNum)
 
     // AND the specified channel bit with the enable register, and return the
     // result.
-    return ((HWREG(ui32Base + UDMA_O_SETCHANNELEN) & (1 << ui32ChannelNum)) ? true : false);
+    return ((HWREG(ui32Base + UDMA_O_SETCHANNELEN) & (1 << ui32ChannelNum)) ?
+            true : false);
 }
 
 //*****************************************************************************
@@ -1145,7 +1150,8 @@ uDMAChannelPriorityGet(uint32_t ui32Base, uint32_t ui32ChannelNum)
     ASSERT(ui32ChannelNum < UDMA_NUM_CHANNELS);
 
     // Return the channel priority.
-    return (HWREG(ui32Base + UDMA_O_SETCHNLPRIORITY) & (1 << ui32ChannelNum) ? UDMA_PRIORITY_HIGH : UDMA_PRIORITY_LOW);
+    return (HWREG(ui32Base + UDMA_O_SETCHNLPRIORITY) & (1 << ui32ChannelNum) ?
+            UDMA_PRIORITY_HIGH : UDMA_PRIORITY_LOW);
 }
 
 //*****************************************************************************
@@ -1181,36 +1187,36 @@ uDMAChannelPriorityClear(uint32_t ui32Base, uint32_t ui32ChannelNum)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_uDMAChannelAttributeEnable
-#undef uDMAChannelAttributeEnable
-#define uDMAChannelAttributeEnable ROM_uDMAChannelAttributeEnable
+#undef  uDMAChannelAttributeEnable
+#define uDMAChannelAttributeEnable      ROM_uDMAChannelAttributeEnable
 #endif
 #ifdef ROM_uDMAChannelAttributeDisable
-#undef uDMAChannelAttributeDisable
-#define uDMAChannelAttributeDisable ROM_uDMAChannelAttributeDisable
+#undef  uDMAChannelAttributeDisable
+#define uDMAChannelAttributeDisable     ROM_uDMAChannelAttributeDisable
 #endif
 #ifdef ROM_uDMAChannelAttributeGet
-#undef uDMAChannelAttributeGet
-#define uDMAChannelAttributeGet ROM_uDMAChannelAttributeGet
+#undef  uDMAChannelAttributeGet
+#define uDMAChannelAttributeGet         ROM_uDMAChannelAttributeGet
 #endif
 #ifdef ROM_uDMAChannelControlSet
-#undef uDMAChannelControlSet
-#define uDMAChannelControlSet ROM_uDMAChannelControlSet
+#undef  uDMAChannelControlSet
+#define uDMAChannelControlSet           ROM_uDMAChannelControlSet
 #endif
 #ifdef ROM_uDMAChannelTransferSet
-#undef uDMAChannelTransferSet
-#define uDMAChannelTransferSet ROM_uDMAChannelTransferSet
+#undef  uDMAChannelTransferSet
+#define uDMAChannelTransferSet          ROM_uDMAChannelTransferSet
 #endif
 #ifdef ROM_uDMAChannelScatterGatherSet
-#undef uDMAChannelScatterGatherSet
-#define uDMAChannelScatterGatherSet ROM_uDMAChannelScatterGatherSet
+#undef  uDMAChannelScatterGatherSet
+#define uDMAChannelScatterGatherSet     ROM_uDMAChannelScatterGatherSet
 #endif
 #ifdef ROM_uDMAChannelSizeGet
-#undef uDMAChannelSizeGet
-#define uDMAChannelSizeGet ROM_uDMAChannelSizeGet
+#undef  uDMAChannelSizeGet
+#define uDMAChannelSizeGet              ROM_uDMAChannelSizeGet
 #endif
 #ifdef ROM_uDMAChannelModeGet
-#undef uDMAChannelModeGet
-#define uDMAChannelModeGet ROM_uDMAChannelModeGet
+#undef  uDMAChannelModeGet
+#define uDMAChannelModeGet              ROM_uDMAChannelModeGet
 #endif
 #endif
 

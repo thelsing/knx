@@ -1,18 +1,18 @@
 #include "knx_facade.h"
 
-#include "knx/bau07B0.h"
-#include "knx/bau27B0.h"
 #include "knx/bau57B0.h"
+#include "knx/bau27B0.h"
+#include "knx/bau07B0.h"
 
-#include "knx/bits.h"
 #include "knx/group_object_table_object.h"
-#include <sched.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/mman.h>
+#include "knx/bits.h"
 #include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <signal.h>
+#include <sched.h>
+#include <sys/mman.h>
 
 #include "fdsk.h"
 
@@ -35,13 +35,13 @@ bool isSendHidReportPossible()
 }
 
 #if MASK_VERSION == 0x57B0
-KnxFacade<LinuxPlatform, Bau57B0> knx;
+    KnxFacade<LinuxPlatform, Bau57B0> knx;
 #elif MASK_VERSION == 0x27B0
-KnxFacade<LinuxPlatform, Bau27B0> knx;
+    KnxFacade<LinuxPlatform, Bau27B0> knx;
 #elif MASK_VERSION == 0x07B0
-KnxFacade<LinuxPlatform, Bau07B0> knx;
+    KnxFacade<LinuxPlatform, Bau07B0> knx;
 #else
-#error Mask version not supported yet!
+    #error Mask version not supported yet!
 #endif
 
 long lastsend = 0;
@@ -127,8 +127,8 @@ int main(int argc, char** argv)
 {
     printf("main() start.\n");
 
-    uint8_t serialNumber[] = {0x00, 0xFA, 0x01, 0x02, 0x03, 0x04};
-    uint8_t key[] = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+    uint8_t serialNumber[] = { 0x00, 0xFA, 0x01, 0x02, 0x03, 0x04};
+    uint8_t key[] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
 
     FdskCalculator calc;
     char fdskString[42]; // 6 * 6 chars + 5 dashes + nullbyte = 42

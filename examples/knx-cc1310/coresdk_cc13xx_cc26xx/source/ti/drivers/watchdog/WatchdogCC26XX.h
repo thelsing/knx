@@ -178,8 +178,8 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <ti/drivers/Watchdog.h>
 
 /**
@@ -220,8 +220,8 @@ extern const Watchdog_FxnTable WatchdogCC26XX_fxnTable;
  */
 typedef struct WatchdogCC26XX_HWAttrs
 {
-        unsigned int baseAddr;     /*!< Base adddress for Watchdog */
-        unsigned long reloadValue; /*!< Reload value in milliseconds for Watchdog */
+    unsigned int baseAddr;       /*!< Base adddress for Watchdog */
+    unsigned long reloadValue;   /*!< Reload value in milliseconds for Watchdog */
 } WatchdogCC26XX_HWAttrs;
 
 /*!
@@ -231,15 +231,15 @@ typedef struct WatchdogCC26XX_HWAttrs
  */
 typedef struct WatchdogCC26XX_Object
 {
-        bool isOpen;                       /* Flag for open/close status */
-        Watchdog_Callback callbackFxn;     /* Pointer to callback. Not supported
-                                              on all targets. */
-        Watchdog_ResetMode resetMode;      /* Mode to enable resets.
-                                              Not supported on all targets. */
-        Watchdog_DebugMode debugStallMode; /* Mode to stall Watchdog at breakpoints.
-                                              Not supported on all targets. */
-        /* Watchdog SYS/BIOS objects */
-        HwiP_Struct hwi; /* Hwi object */
+    bool                isOpen;             /* Flag for open/close status */
+    Watchdog_Callback   callbackFxn;        /* Pointer to callback. Not supported
+                                               on all targets. */
+    Watchdog_ResetMode  resetMode;          /* Mode to enable resets.
+                                               Not supported on all targets. */
+    Watchdog_DebugMode  debugStallMode;     /* Mode to stall Watchdog at breakpoints.
+                                               Not supported on all targets. */
+    /* Watchdog SYS/BIOS objects */
+    HwiP_Struct hwi; /* Hwi object */
 } WatchdogCC26XX_Object;
 
 #ifdef __cplusplus

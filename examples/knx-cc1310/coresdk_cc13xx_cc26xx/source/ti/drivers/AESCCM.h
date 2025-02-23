@@ -346,7 +346,7 @@ extern "C" {
  * #define AESCCMXYZ_STATUS_ERROR2    AESCCM_STATUS_RESERVED - 2
  * @endcode
  */
-#define AESCCM_STATUS_RESERVED (-32)
+#define AESCCM_STATUS_RESERVED        (-32)
 
 /*!
  * @brief   Successful status code.
@@ -354,7 +354,7 @@ extern "C" {
  * Functions return AESCCM_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define AESCCM_STATUS_SUCCESS (0)
+#define AESCCM_STATUS_SUCCESS         (0)
 
 /*!
  * @brief   Generic error status code.
@@ -362,7 +362,7 @@ extern "C" {
  * Functions return AESCCM_STATUS_ERROR if the function was not executed
  * successfully and no more pertinent error code could be returned.
  */
-#define AESCCM_STATUS_ERROR (-1)
+#define AESCCM_STATUS_ERROR           (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -391,7 +391,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from an AESCCM_open() call.
  */
-typedef struct AESCCM_Config* AESCCM_Handle;
+typedef struct AESCCM_Config*    AESCCM_Handle;
 
 /*!
  * @brief   The way in which CCM function calls return after performing an
@@ -416,20 +416,20 @@ typedef struct AESCCM_Config* AESCCM_Handle;
  */
 typedef enum
 {
-    AESCCM_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
-                                          *   CCM operation goes on in the background. The registered
-                                          *   callback function is called after the operation completes.
-                                          *   The context the callback function is called (task, HWI, SWI)
-                                          *   is implementation-dependent.
-                                          */
-    AESCCM_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while the CCM operation goes
-                                          *   on in the background. CCM operation results are available
-                                          *   after the function returns.
-                                          */
-    AESCCM_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while CCM
-                                          *   operation goes on in the background. CCM operation results
-                                          *   are available after the function returns.
-                                          */
+    AESCCM_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
+                                             *   CCM operation goes on in the background. The registered
+                                             *   callback function is called after the operation completes.
+                                             *   The context the callback function is called (task, HWI, SWI)
+                                             *   is implementation-dependent.
+                                             */
+    AESCCM_RETURN_BEHAVIOR_BLOCKING = 2,    /*!< The function call will block while the CCM operation goes
+                                             *   on in the background. CCM operation results are available
+                                             *   after the function returns.
+                                             */
+    AESCCM_RETURN_BEHAVIOR_POLLING  = 4,    /*!< The function call will continuously poll a flag while CCM
+                                             *   operation goes on in the background. CCM operation results
+                                             *   are available after the function returns.
+                                             */
 } AESCCM_ReturnBehavior;
 
 /*!
@@ -447,54 +447,54 @@ typedef enum
  */
 typedef struct
 {
-        CryptoKey* key;                /*!< A previously initialized CryptoKey */
-        uint8_t* aad;                  /*!< A buffer of length \c aadLength containing additional
-                                        *   authentication data to be authenticated/verified but not
-                                        *   encrypted/decrypted.
-                                        */
-        uint8_t* input;                /*!<
-                                        *   - Encryption: The plaintext buffer to be encrypted and authenticated
-                                        *   in the CCM operation.
-                                        *   - Decryption: The ciphertext to be decrypted and verified.
-                                        */
-        uint8_t* output;               /*!<
-                                        *   - Encryption: The output ciphertext buffer that the encrypted plaintext
-                                        *   is copied to.
-                                        *   - Decryption: The plaintext derived from the decrypted and verified
-                                        *   ciphertext is copied here.
-                                        */
-        uint8_t* nonce;                /*!< A buffer containing a nonce. Nonces must be unique to
-                                        *   each CCM operation and may not be reused. If
-                                        *   nonceInternallyGenerated is set the nonce will be
-                                        *   generated by this function call and copied to
-                                        *   this buffer.
-                                        */
-        uint8_t* mac;                  /*!<
-                                        *   - Encryption: The buffer where the message authentication
-                                        *   code is copied.
-                                        *   - Decryption: The buffer containing the received message
-                                        *   authentication code.
-                                        */
-        size_t aadLength;              /*!< Length of \c aad in bytes. Either \c aadLength or
-                                        *   \c plaintextLength must benon-zero.
-                                        *   encrypted.
-                                        */
-        size_t inputLength;            /*!< Length of the input and output in bytes. Either \c aadLength or
-                                        *   \c inputLength must be
-                                        *   non-zero.
-                                        */
-        uint8_t nonceLength;           /*!< Length of \c nonce in bytes.
-                                        *   Valid nonce lengths are [7, 8, ... 13].
-                                        */
-        uint8_t macLength;             /*!< Length of \c mac in bytes.
-                                        *   Valid MAC lengths are [0, 4, 6, 8, 10, 12, 14, 16].
-                                        *   A length of 0 disables authentication and verification. This is
-                                        *   only permitted when using CCM*.
-                                        */
-        bool nonceInternallyGenerated; /*!< When true, the nonce buffer passed into the AESCCM_setupEncrypt()
-                                        *   and AESCCM_oneStepEncrypt() functions will be overwritten with a
-                                        *   randomly generated nonce. Not supported by all implementations.
-                                        */
+    CryptoKey*                key;                       /*!< A previously initialized CryptoKey */
+    uint8_t*                  aad;                       /*!< A buffer of length \c aadLength containing additional
+                                                         *   authentication data to be authenticated/verified but not
+                                                         *   encrypted/decrypted.
+                                                         */
+    uint8_t*                  input;                     /*!<
+                                                         *   - Encryption: The plaintext buffer to be encrypted and authenticated
+                                                         *   in the CCM operation.
+                                                         *   - Decryption: The ciphertext to be decrypted and verified.
+                                                         */
+    uint8_t*                  output;                    /*!<
+                                                         *   - Encryption: The output ciphertext buffer that the encrypted plaintext
+                                                         *   is copied to.
+                                                         *   - Decryption: The plaintext derived from the decrypted and verified
+                                                         *   ciphertext is copied here.
+                                                         */
+    uint8_t*                  nonce;                     /*!< A buffer containing a nonce. Nonces must be unique to
+                                                         *   each CCM operation and may not be reused. If
+                                                         *   nonceInternallyGenerated is set the nonce will be
+                                                         *   generated by this function call and copied to
+                                                         *   this buffer.
+                                                         */
+    uint8_t*                  mac;                       /*!<
+                                                         *   - Encryption: The buffer where the message authentication
+                                                         *   code is copied.
+                                                         *   - Decryption: The buffer containing the received message
+                                                         *   authentication code.
+                                                         */
+    size_t                   aadLength;                  /*!< Length of \c aad in bytes. Either \c aadLength or
+                                                         *   \c plaintextLength must benon-zero.
+                                                         *   encrypted.
+                                                         */
+    size_t                   inputLength;                /*!< Length of the input and output in bytes. Either \c aadLength or
+                                                         *   \c inputLength must be
+                                                         *   non-zero.
+                                                         */
+    uint8_t                  nonceLength;                /*!< Length of \c nonce in bytes.
+                                                         *   Valid nonce lengths are [7, 8, ... 13].
+                                                         */
+    uint8_t                  macLength;                  /*!< Length of \c mac in bytes.
+                                                         *   Valid MAC lengths are [0, 4, 6, 8, 10, 12, 14, 16].
+                                                         *   A length of 0 disables authentication and verification. This is
+                                                         *   only permitted when using CCM*.
+                                                         */
+    bool                     nonceInternallyGenerated;   /*!< When true, the nonce buffer passed into the AESCCM_setupEncrypt()
+                                                         *   and AESCCM_oneStepEncrypt() functions will be overwritten with a
+                                                         *   randomly generated nonce. Not supported by all implementations.
+                                                         */
 } AESCCM_Operation;
 
 /*!
@@ -519,11 +519,11 @@ typedef enum
  */
 typedef struct AESCCM_Config
 {
-        /*! Pointer to a driver specific data object */
-        void* object;
+    /*! Pointer to a driver specific data object */
+    void*               object;
 
-        /*! Pointer to a driver specific hardware attributes structure */
-        void const* hwAttrs;
+    /*! Pointer to a driver specific hardware attributes structure */
+    void         const* hwAttrs;
 } AESCCM_Config;
 
 /*!
@@ -541,10 +541,10 @@ typedef struct AESCCM_Config
  *  @param  operationType This parameter determines which operation the
  *          callback refers to.
  */
-typedef void (*AESCCM_CallbackFxn)(AESCCM_Handle handle,
-                                   int_fast16_t returnValue,
-                                   AESCCM_Operation* operation,
-                                   AESCCM_OperationType operationType);
+typedef void (*AESCCM_CallbackFxn) (AESCCM_Handle handle,
+                                    int_fast16_t returnValue,
+                                    AESCCM_Operation* operation,
+                                    AESCCM_OperationType operationType);
 
 /*!
  *  @brief  CCM Parameters
@@ -556,14 +556,14 @@ typedef void (*AESCCM_CallbackFxn)(AESCCM_Handle handle,
  */
 typedef struct
 {
-        AESCCM_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
-        AESCCM_CallbackFxn callbackFxn;       /*!< Callback function pointer */
-        uint32_t timeout;                     /*!< Timeout before the driver returns an error in
-                                               *   ::AESCCM_RETURN_BEHAVIOR_BLOCKING
-                                               */
-        void* custom;                         /*!< Custom argument used by driver
-                                               *   implementation
-                                               */
+    AESCCM_ReturnBehavior   returnBehavior;             /*!< Blocking, callback, or polling return behavior */
+    AESCCM_CallbackFxn      callbackFxn;                /*!< Callback function pointer */
+    uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
+                                                         *   ::AESCCM_RETURN_BEHAVIOR_BLOCKING
+                                                         */
+    void*                   custom;                     /*!< Custom argument used by driver
+                                                         *   implementation
+                                                         */
 } AESCCM_Params;
 
 /*!

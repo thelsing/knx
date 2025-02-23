@@ -57,15 +57,15 @@ class UsbTunnelInterface
     private:
         struct _queue_buffer_t
         {
-                uint8_t* data;
-                uint16_t length;
-                _queue_buffer_t* next;
+            uint8_t* data;
+            uint16_t length;
+            _queue_buffer_t* next;
         };
 
         struct _queue_t
         {
-                _queue_buffer_t* front = nullptr;
-                _queue_buffer_t* back = nullptr;
+            _queue_buffer_t* front = nullptr;
+            _queue_buffer_t* back = nullptr;
         };
 
         static const uint8_t descHidReport[];

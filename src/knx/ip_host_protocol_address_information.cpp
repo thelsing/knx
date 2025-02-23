@@ -5,6 +5,7 @@ IpHostProtocolAddressInformation::IpHostProtocolAddressInformation(uint8_t* data
     : _data(data)
 {}
 
+
 uint8_t IpHostProtocolAddressInformation::length() const
 {
     return *_data;

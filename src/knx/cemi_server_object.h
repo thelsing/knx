@@ -5,7 +5,7 @@
 
 #include "interface_object.h"
 
-class CemiServerObject : public InterfaceObject
+class CemiServerObject: public InterfaceObject
 {
     public:
         CemiServerObject();

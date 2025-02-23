@@ -246,6 +246,7 @@
 extern "C" {
 #endif
 
+
 /*!
  * Common AESCTRDRBG status code reservation offset.
  * AESCTRDRBG driver implementations should offset status codes with
@@ -258,7 +259,7 @@ extern "C" {
  * #define AESCTRDRBGXYZ_STATUS_ERROR2    AESCTRDRBG_STATUS_RESERVED - 2
  * @endcode
  */
-#define AESCTRDRBG_STATUS_RESERVED (-32)
+#define AESCTRDRBG_STATUS_RESERVED        (-32)
 
 /*!
  * @brief   Successful status code.
@@ -266,7 +267,7 @@ extern "C" {
  * Functions return #AESCTRDRBG_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define AESCTRDRBG_STATUS_SUCCESS (0)
+#define AESCTRDRBG_STATUS_SUCCESS         (0)
 
 /*!
  * @brief   Generic error status code.
@@ -274,7 +275,7 @@ extern "C" {
  * Functions return #AESCTRDRBG_STATUS_ERROR if the function was not executed
  * successfully and no more pertinent error code could be returned.
  */
-#define AESCTRDRBG_STATUS_ERROR (-1)
+#define AESCTRDRBG_STATUS_ERROR           (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -348,7 +349,7 @@ typedef enum AESCTRDRBG_ReturnBehavior_
      *   operation goes on in the background. AESCTRDRBG operation results
      *   are available after the function returns.
      */
-    AESCTRDRBG_RETURN_BEHAVIOR_POLLING = AESCTR_RETURN_BEHAVIOR_POLLING,
+    AESCTRDRBG_RETURN_BEHAVIOR_POLLING  = AESCTR_RETURN_BEHAVIOR_POLLING,
 } AESCTRDRBG_ReturnBehavior;
 
 /*!
@@ -364,11 +365,11 @@ typedef enum AESCTRDRBG_ReturnBehavior_
  */
 typedef struct
 {
-        /*! Pointer to a driver specific data object */
-        void* object;
+    /*! Pointer to a driver specific data object */
+    void*               object;
 
-        /*! Pointer to a driver specific hardware attributes structure */
-        void const* hwAttrs;
+    /*! Pointer to a driver specific hardware attributes structure */
+    void         const* hwAttrs;
 } AESCTRDRBG_Config;
 
 /*!
@@ -386,36 +387,36 @@ typedef AESCTRDRBG_Config* AESCTRDRBG_Handle;
  */
 typedef struct
 {
-        AESCTRDRBG_AES_KEY_LENGTH keyLength;      /*!< Length of the internal AES key
-                                                   *   of the driver instance.
-                                                   */
-        uint32_t reseedInterval;                  /*!< Number of random number generation
-                                                   *   requests before the application is
-                                                   *   required to reseed the driver.
-                                                   */
-        const void* seed;                         /*!< Entropy used to seed the internal
-                                                   *   state of the driver. Must be one of
-                                                   *   #AESCTRDRBG_SEED_LENGTH long depending
-                                                   *   on \c keyLength.
-                                                   */
-        const void* personalizationData;          /*!< Optional non-secret personalization
-                                                   *   data to mix into the driver's internal
-                                                   *   state.
-                                                   */
-        size_t personalizationDataLength;         /*!< Length of the optional
-                                                   *   \c personalizationData. Must satisfy
-                                                   *   0 <= \c personalizationDataLength <= seed length.
-                                                   */
-        AESCTRDRBG_ReturnBehavior returnBehavior; /*!< Return behavior of the driver instance.
-                                                   *   #AESCTRDRBG_RETURN_BEHAVIOR_POLLING is
-                                                   *   strongly recommended unless requests
-                                                   *   for > 500 bytes with AES-256 or
-                                                   *   1250 bytes for AES-128 will be common
-                                                   *   usecases for this driver instance.
-                                                   */
-        void* custom;                             /*!< Custom argument used by driver
-                                                   *   implementation
-                                                   */
+    AESCTRDRBG_AES_KEY_LENGTH   keyLength;                      /*!< Length of the internal AES key
+                                                                 *   of the driver instance.
+                                                                 */
+    uint32_t                    reseedInterval;                 /*!< Number of random number generation
+                                                                 *   requests before the application is
+                                                                 *   required to reseed the driver.
+                                                                 */
+    const void*                  seed;                          /*!< Entropy used to seed the internal
+                                                                 *   state of the driver. Must be one of
+                                                                 *   #AESCTRDRBG_SEED_LENGTH long depending
+                                                                 *   on \c keyLength.
+                                                                 */
+    const void*                  personalizationData;           /*!< Optional non-secret personalization
+                                                                 *   data to mix into the driver's internal
+                                                                 *   state.
+                                                                 */
+    size_t                      personalizationDataLength;      /*!< Length of the optional
+                                                                 *   \c personalizationData. Must satisfy
+                                                                 *   0 <= \c personalizationDataLength <= seed length.
+                                                                 */
+    AESCTRDRBG_ReturnBehavior   returnBehavior;                 /*!< Return behavior of the driver instance.
+                                                                 *   #AESCTRDRBG_RETURN_BEHAVIOR_POLLING is
+                                                                 *   strongly recommended unless requests
+                                                                 *   for > 500 bytes with AES-256 or
+                                                                 *   1250 bytes for AES-128 will be common
+                                                                 *   usecases for this driver instance.
+                                                                 */
+    void*                        custom;                        /*!< Custom argument used by driver
+                                                                 *   implementation
+                                                                 */
 } AESCTRDRBG_Params;
 
 /*!
@@ -510,6 +511,8 @@ int_fast16_t AESCTRDRBG_reseed(AESCTRDRBG_Handle handle,
                                const void* seed,
                                const void* additionalData,
                                size_t additionalDataLength);
+
+
 
 #ifdef __cplusplus
 }

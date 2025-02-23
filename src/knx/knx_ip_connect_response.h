@@ -1,11 +1,11 @@
 #pragma once
 
-#include "ip_host_protocol_address_information.h"
-#include "ip_parameter_object.h"
-#include "knx_ip_crd.h"
-#include "knx_ip_device_information_dib.h"
 #include "knx_ip_frame.h"
+#include "knx_ip_crd.h"
+#include "ip_host_protocol_address_information.h"
+#include "knx_ip_device_information_dib.h"
 #include "knx_ip_supported_service_dib.h"
+#include "ip_parameter_object.h"
 #ifdef USE_IP
 
 enum KnxIpConnectionRequestErrorCodes
@@ -37,7 +37,6 @@ class KnxIpConnectResponse : public KnxIpFrame
         KnxIpConnectResponse(uint8_t channel, uint8_t errorCode);
         IpHostProtocolAddressInformation& controlEndpoint();
         KnxIpCRD& crd();
-
     private:
         IpHostProtocolAddressInformation _controlEndpoint;
         KnxIpCRD _crd;

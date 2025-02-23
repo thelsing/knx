@@ -3,8 +3,7 @@
 
 #ifdef USE_IP
 KnxIpTunnelingRequest::KnxIpTunnelingRequest(uint8_t* data,
-                                             uint16_t length)
-    : KnxIpFrame(data, length), _frame(data + LEN_CH + headerLength(), length - LEN_CH - headerLength()), _ch(_data + headerLength())
+        uint16_t length) : KnxIpFrame(data, length), _frame(data + LEN_CH + headerLength(), length - LEN_CH - headerLength()), _ch(_data + headerLength())
 {
 }
 

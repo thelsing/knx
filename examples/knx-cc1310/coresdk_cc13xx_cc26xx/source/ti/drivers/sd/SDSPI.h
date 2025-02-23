@@ -71,9 +71,9 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <ti/drivers/dpl/SemaphoreP.h>
 #include <ti/drivers/SD.h>
 #include <ti/drivers/SPI.h>
-#include <ti/drivers/dpl/SemaphoreP.h>
 
 /* SDSPI function table */
 extern const SD_FxnTable SDSPI_fxnTable;
@@ -103,8 +103,8 @@ extern const SD_FxnTable SDSPI_fxnTable;
  */
 typedef struct SDSPI_HWAttrs_
 {
-        uint_least8_t spiIndex;
-        uint16_t spiCsGpioIndex;
+    uint_least8_t spiIndex;
+    uint16_t      spiCsGpioIndex;
 } SDSPI_HWAttrs;
 
 /*!
@@ -114,10 +114,10 @@ typedef struct SDSPI_HWAttrs_
  */
 typedef struct SDSPI_Object_
 {
-        SemaphoreP_Handle lockSem;
-        SPI_Handle spiHandle;
-        SD_CardType cardType;
-        bool isOpen;
+    SemaphoreP_Handle lockSem;
+    SPI_Handle        spiHandle;
+    SD_CardType       cardType;
+    bool              isOpen;
 } SDSPI_Object;
 
 #ifdef __cplusplus

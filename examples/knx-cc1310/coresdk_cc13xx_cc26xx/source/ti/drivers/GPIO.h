@@ -303,7 +303,7 @@ extern "C" {
  * #define GPIOTXYZ_STATUS_ERROR2    GPIO_STATUS_RESERVED - 2
  * @endcode
  */
-#define GPIO_STATUS_RESERVED (-32)
+#define GPIO_STATUS_RESERVED        (-32)
 
 /*!
  * @brief   Successful status code returned by GPI_setConfig().
@@ -311,7 +311,7 @@ extern "C" {
  * GPI_setConfig() returns GPIO_STATUS_SUCCESS if the API was executed
  * successfully.
  */
-#define GPIO_STATUS_SUCCESS (0)
+#define GPIO_STATUS_SUCCESS         (0)
 
 /*!
  * @brief   Generic error status code returned by GPI_setConfig().
@@ -319,7 +319,7 @@ extern "C" {
  * GPI_setConfig() returns GPIO_STATUS_ERROR if the API was not executed
  * successfully.
  */
-#define GPIO_STATUS_ERROR (-1)
+#define GPIO_STATUS_ERROR           (-1)
 /** @}*/
 
 /*!
@@ -337,17 +337,17 @@ typedef uint32_t GPIO_PinConfig;
  *  @cond NODOC
  *  Internally used configuration bit access macros.
  */
-#define GPIO_CFG_IO_MASK 0x00ff0000
-#define GPIO_CFG_IO_LSB 16
-#define GPIO_CFG_OUT_TYPE_MASK 0x00060000
-#define GPIO_CFG_OUT_TYPE_LSB 17
-#define GPIO_CFG_IN_TYPE_MASK 0x00060000
-#define GPIO_CFG_IN_TYPE_LSB 17
+#define GPIO_CFG_IO_MASK           0x00ff0000
+#define GPIO_CFG_IO_LSB            16
+#define GPIO_CFG_OUT_TYPE_MASK     0x00060000
+#define GPIO_CFG_OUT_TYPE_LSB      17
+#define GPIO_CFG_IN_TYPE_MASK      0x00060000
+#define GPIO_CFG_IN_TYPE_LSB       17
 #define GPIO_CFG_OUT_STRENGTH_MASK 0x00f00000
-#define GPIO_CFG_OUT_STRENGTH_LSB 20
-#define GPIO_CFG_INT_MASK 0x07000000
-#define GPIO_CFG_INT_LSB 24
-#define GPIO_CFG_OUT_BIT 19
+#define GPIO_CFG_OUT_STRENGTH_LSB  20
+#define GPIO_CFG_INT_MASK          0x07000000
+#define GPIO_CFG_INT_LSB           24
+#define GPIO_CFG_OUT_BIT           19
 /*! @endcond */
 
 /*!
@@ -357,38 +357,38 @@ typedef uint32_t GPIO_PinConfig;
 /** @name GPIO_PinConfig output pin configuration macros
  *  @{
  */
-#define GPIO_CFG_OUTPUT (((uint32_t)0) << GPIO_CFG_IO_LSB)        /*!< @hideinitializer Pin is an output. */
-#define GPIO_CFG_OUT_STD (((uint32_t)0) << GPIO_CFG_IO_LSB)       /*!< @hideinitializer Output pin is actively driven high and low */
-#define GPIO_CFG_OUT_OD_NOPULL (((uint32_t)2) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Output pin is Open Drain */
-#define GPIO_CFG_OUT_OD_PU (((uint32_t)4) << GPIO_CFG_IO_LSB)     /*!< @hideinitializer Output pin is Open Drain w/ pull up */
-#define GPIO_CFG_OUT_OD_PD (((uint32_t)6) << GPIO_CFG_IO_LSB)     /*!< @hideinitializer Output pin is Open Drain w/ pull dn */
+#define GPIO_CFG_OUTPUT            (((uint32_t) 0) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Pin is an output. */
+#define GPIO_CFG_OUT_STD           (((uint32_t) 0) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Output pin is actively driven high and low */
+#define GPIO_CFG_OUT_OD_NOPULL     (((uint32_t) 2) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Output pin is Open Drain */
+#define GPIO_CFG_OUT_OD_PU         (((uint32_t) 4) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Output pin is Open Drain w/ pull up */
+#define GPIO_CFG_OUT_OD_PD         (((uint32_t) 6) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Output pin is Open Drain w/ pull dn */
 
-#define GPIO_CFG_OUT_STR_LOW (((uint32_t)0) << GPIO_CFG_OUT_STRENGTH_LSB)  /*!< @hideinitializer Set output pin strength to low */
-#define GPIO_CFG_OUT_STR_MED (((uint32_t)1) << GPIO_CFG_OUT_STRENGTH_LSB)  /*!< @hideinitializer Set output pin strength to medium */
-#define GPIO_CFG_OUT_STR_HIGH (((uint32_t)2) << GPIO_CFG_OUT_STRENGTH_LSB) /*!< @hideinitializer Set output pin strength to high */
+#define GPIO_CFG_OUT_STR_LOW       (((uint32_t) 0) << GPIO_CFG_OUT_STRENGTH_LSB) /*!< @hideinitializer Set output pin strength to low */
+#define GPIO_CFG_OUT_STR_MED       (((uint32_t) 1) << GPIO_CFG_OUT_STRENGTH_LSB) /*!< @hideinitializer Set output pin strength to medium */
+#define GPIO_CFG_OUT_STR_HIGH      (((uint32_t) 2) << GPIO_CFG_OUT_STRENGTH_LSB) /*!< @hideinitializer Set output pin strength to high */
 
-#define GPIO_CFG_OUT_HIGH (((uint32_t)1) << GPIO_CFG_OUT_BIT) /*!< @hideinitializer Set pin's output to 1. */
-#define GPIO_CFG_OUT_LOW (((uint32_t)0) << GPIO_CFG_OUT_BIT)  /*!< @hideinitializer Set pin's output to 0. */
+#define GPIO_CFG_OUT_HIGH          (((uint32_t) 1) << GPIO_CFG_OUT_BIT) /*!< @hideinitializer Set pin's output to 1. */
+#define GPIO_CFG_OUT_LOW           (((uint32_t) 0) << GPIO_CFG_OUT_BIT) /*!< @hideinitializer Set pin's output to 0. */
 /** @} */
 
 /** @name GPIO_PinConfig input pin configuration macros
  *  @{
  */
-#define GPIO_CFG_INPUT (((uint32_t)1) << GPIO_CFG_IO_LSB)     /*!< @hideinitializer Pin is an input. */
-#define GPIO_CFG_IN_NOPULL (((uint32_t)1) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Input pin with no internal PU/PD */
-#define GPIO_CFG_IN_PU (((uint32_t)3) << GPIO_CFG_IO_LSB)     /*!< @hideinitializer Input pin with internal PU */
-#define GPIO_CFG_IN_PD (((uint32_t)5) << GPIO_CFG_IO_LSB)     /*!< @hideinitializer Input pin with internal PD */
+#define GPIO_CFG_INPUT             (((uint32_t) 1) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Pin is an input. */
+#define GPIO_CFG_IN_NOPULL         (((uint32_t) 1) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Input pin with no internal PU/PD */
+#define GPIO_CFG_IN_PU             (((uint32_t) 3) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Input pin with internal PU */
+#define GPIO_CFG_IN_PD             (((uint32_t) 5) << GPIO_CFG_IO_LSB) /*!< @hideinitializer Input pin with internal PD */
 /** @} */
 
 /** @name GPIO_PinConfig interrupt configuration macros
  *  @{
  */
-#define GPIO_CFG_IN_INT_NONE (((uint32_t)0) << GPIO_CFG_INT_LSB)       /*!< @hideinitializer No Interrupt */
-#define GPIO_CFG_IN_INT_FALLING (((uint32_t)1) << GPIO_CFG_INT_LSB)    /*!< @hideinitializer Interrupt on falling edge */
-#define GPIO_CFG_IN_INT_RISING (((uint32_t)2) << GPIO_CFG_INT_LSB)     /*!< @hideinitializer Interrupt on rising edge */
-#define GPIO_CFG_IN_INT_BOTH_EDGES (((uint32_t)3) << GPIO_CFG_INT_LSB) /*!< @hideinitializer Interrupt on both edges */
-#define GPIO_CFG_IN_INT_LOW (((uint32_t)4) << GPIO_CFG_INT_LSB)        /*!< @hideinitializer Interrupt on low level */
-#define GPIO_CFG_IN_INT_HIGH (((uint32_t)5) << GPIO_CFG_INT_LSB)       /*!< @hideinitializer Interrupt on high level */
+#define GPIO_CFG_IN_INT_NONE       (((uint32_t) 0) << GPIO_CFG_INT_LSB)    /*!< @hideinitializer No Interrupt */
+#define GPIO_CFG_IN_INT_FALLING    (((uint32_t) 1) << GPIO_CFG_INT_LSB)    /*!< @hideinitializer Interrupt on falling edge */
+#define GPIO_CFG_IN_INT_RISING     (((uint32_t) 2) << GPIO_CFG_INT_LSB)    /*!< @hideinitializer Interrupt on rising edge */
+#define GPIO_CFG_IN_INT_BOTH_EDGES (((uint32_t) 3) << GPIO_CFG_INT_LSB)    /*!< @hideinitializer Interrupt on both edges */
+#define GPIO_CFG_IN_INT_LOW        (((uint32_t) 4) << GPIO_CFG_INT_LSB)    /*!< @hideinitializer Interrupt on low level */
+#define GPIO_CFG_IN_INT_HIGH       (((uint32_t) 5) << GPIO_CFG_INT_LSB)    /*!< @hideinitializer Interrupt on high level */
 /** @} */
 
 /** @name Special GPIO_PinConfig configuration macros
@@ -399,13 +399,13 @@ typedef uint32_t GPIO_PinConfig;
  *  @brief 'Or' in this @ref GPIO_PinConfig definition to inform GPIO_setConfig()
  *  to only configure the interrupt attributes of a GPIO input pin.
  */
-#define GPIO_CFG_IN_INT_ONLY (((uint32_t)1) << 27) /*!< @hideinitializer configure interrupt only */
+#define GPIO_CFG_IN_INT_ONLY       (((uint32_t) 1) << 27)                  /*!< @hideinitializer configure interrupt only */
 
 /*!
  *  @brief Use this @ref GPIO_PinConfig definition to inform GPIO_init()
  *  NOT to configure the corresponding pin
  */
-#define GPIO_DO_NOT_CONFIG 0x40000000 /*!< @hideinitializer Do not configure this Pin */
+#define GPIO_DO_NOT_CONFIG         0x40000000                              /*!< @hideinitializer Do not configure this Pin */
 
 /** @} */
 /** @} end of GPIO_PinConfigSettings group */

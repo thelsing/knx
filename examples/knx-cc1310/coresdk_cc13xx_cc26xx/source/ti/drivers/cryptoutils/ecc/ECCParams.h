@@ -43,8 +43,8 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
 
@@ -56,7 +56,7 @@ extern "C" {
  * Function return ECCParams_STATUS_SUCCESS if the control code was executed
  * successfully.
  */
-#define ECCParams_STATUS_SUCCESS (0)
+#define ECCParams_STATUS_SUCCESS         (0)
 
 /*!
  * @brief   Generic error status code.
@@ -64,7 +64,7 @@ extern "C" {
  * Functions return ECCParams_STATUS_ERROR if the control code was not executed
  * successfully.
  */
-#define ECCParams_STATUS_ERROR (-1)
+#define ECCParams_STATUS_ERROR           (-1)
 
 /*!
  *  @brief Enumeration of curve equations supported.
@@ -111,15 +111,18 @@ typedef enum ECCParams_CurveType_
  */
 typedef struct ECCParams_CurveParams_
 {
-        const ECCParams_CurveType curveType;
-        const size_t length;       //!< Length of the curve in bytes. All other buffers have this length.
-        const uint8_t* prime;      //!< The prime that defines the field of the curve.
-        const uint8_t* order;      //!< Order of the curve.
-        const uint8_t* a;          //!< Coefficient a of the equation.
-        const uint8_t* b;          //!< Coefficient b of the equation.
-        const uint8_t* generatorX; //!< X coordinate of the generator point of the curve.
-        const uint8_t* generatorY; //!< Y coordinate of the generator point of the curve.
-} ECCParams_CurveParams;
+    const ECCParams_CurveType   curveType;
+    const size_t                length;         //!< Length of the curve in bytes. All other buffers have this length.
+    const uint8_t*               prime;         //!< The prime that defines the field of the curve.
+    const uint8_t*               order;         //!< Order of the curve.
+    const uint8_t*               a;             //!< Coefficient a of the equation.
+    const uint8_t*               b;             //!< Coefficient b of the equation.
+    const uint8_t*               generatorX;    //!< X coordinate of the generator point of the curve.
+    const uint8_t*               generatorY;    //!< Y coordinate of the generator point of the curve.
+}
+ECCParams_CurveParams;
+
+
 
 /* Short Weierstrass curves */
 
@@ -172,6 +175,8 @@ extern const ECCParams_CurveParams ECCParams_BrainpoolP384R1;
  */
 extern const ECCParams_CurveParams ECCParams_BrainpoolP512R1;
 
+
+
 /* Montgomery curves */
 
 /*!
@@ -180,6 +185,8 @@ extern const ECCParams_CurveParams ECCParams_BrainpoolP512R1;
  *
  */
 extern const ECCParams_CurveParams ECCParams_Curve25519;
+
+
 
 /* Edwards curves */
 

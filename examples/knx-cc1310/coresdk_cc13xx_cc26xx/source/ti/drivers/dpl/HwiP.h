@@ -54,9 +54,9 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdint.h>
 
 /*!
  *  @brief    Number of bytes greater than or equal to the size of any RTOS
@@ -65,7 +65,7 @@ extern "C" {
  *  nortos:   12
  *  SysBIOS:  28
  */
-#define HwiP_STRUCT_SIZE (28)
+#define HwiP_STRUCT_SIZE   (28)
 
 /*!
  *  @brief    HwiP structure.
@@ -75,8 +75,8 @@ extern "C" {
  */
 typedef union HwiP_Struct
 {
-        uint32_t dummy; /*!< Align object */
-        char data[HwiP_STRUCT_SIZE];
+    uint32_t dummy;  /*!< Align object */
+    char     data[HwiP_STRUCT_SIZE];
 } HwiP_Struct;
 
 /*!
@@ -84,7 +84,7 @@ typedef union HwiP_Struct
  *
  *  A HwiP_Handle returned from the ::HwiP_create represents that instance.
  */
-typedef void* HwiP_Handle;
+typedef  void* HwiP_Handle;
 
 /*!
  *  @brief    Status codes for HwiP APIs
@@ -114,9 +114,9 @@ typedef void (*HwiP_Fxn)(uintptr_t arg);
  */
 typedef struct HwiP_Params
 {
-        uintptr_t arg;     /*!< Argument passed into the Hwi function. */
-        uint32_t priority; /*!< Device specific priority. */
-        bool enableInt;    /*!< Enable interrupt on creation. */
+    uintptr_t  arg;       /*!< Argument passed into the Hwi function. */
+    uint32_t   priority;  /*!< Device specific priority. */
+    bool       enableInt; /*!< Enable interrupt on creation. */
 } HwiP_Params;
 
 /*!

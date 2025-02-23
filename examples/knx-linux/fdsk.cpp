@@ -4,9 +4,10 @@
 
 // CRC-4 generator polynom: 10011 (x^4+x+1)
 const uint8_t FdskCalculator::crc4_tab[16] =
-    {
-        0x0, 0x3, 0x6, 0x5, 0xc, 0xf, 0xa, 0x9,
-        0xb, 0x8, 0xd, 0xe, 0x7, 0x4, 0x1, 0x2};
+{
+    0x0, 0x3, 0x6, 0x5, 0xc, 0xf, 0xa, 0x9,
+    0xb, 0x8, 0xd, 0xe, 0x7, 0x4, 0x1, 0x2
+};
 
 int FdskCalculator::snprintFdsk(char* str, int strSize, uint8_t* serialNumber, uint8_t* key)
 {
@@ -131,7 +132,7 @@ int FdskCalculator::toBase32(uint8_t* in, long length, uint8_t*& out, bool usePa
     out = new uint8_t[result];
 
     memcpy(out, temp, result);
-    delete[] temp;
+    delete [] temp;
 
     return result;
 }
@@ -167,6 +168,7 @@ int FdskCalculator::fromBase32(uint8_t* in, long length, uint8_t*& out)
             ch = 0x42;
         }
 
+
         // look up one base32 symbols: from 'A' to 'Z' or from 'a' to 'z' or from '2' to '7'
         if ((ch >= 0x41 && ch <= 0x5A) || (ch >= 0x61 && ch <= 0x7A))
         {
@@ -178,7 +180,7 @@ int FdskCalculator::fromBase32(uint8_t* in, long length, uint8_t*& out)
         }
         else
         {
-            delete[] temp;
+            delete [] temp;
             return 0;
         }
 
@@ -196,7 +198,8 @@ int FdskCalculator::fromBase32(uint8_t* in, long length, uint8_t*& out)
 
     out = new uint8_t[result];
     memcpy(out, temp, result);
-    delete[] temp;
+    delete [] temp;
 
     return result;
 }
+

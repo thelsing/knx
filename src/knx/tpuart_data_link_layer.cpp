@@ -35,13 +35,13 @@
 
 // Only on NCN51xx available
 #ifdef NCN5120
-#define U_CONFIGURE_REQ 0x18
-#define U_CONFIGURE_MARKER_REQ 0x1
-#define U_CONFIGURE_CRC_CCITT_REQ 0x2
-#define U_CONFIGURE_AUTO_POLLING_REQ 0x4
-#define U_SET_REPETITION_REQ 0xF2
+    #define U_CONFIGURE_REQ 0x18
+    #define U_CONFIGURE_MARKER_REQ 0x1
+    #define U_CONFIGURE_CRC_CCITT_REQ 0x2
+    #define U_CONFIGURE_AUTO_POLLING_REQ 0x4
+    #define U_SET_REPETITION_REQ 0xF2
 #else
-#define U_MXRSTCNT 0x24
+    #define U_MXRSTCNT 0x24
 #endif
 
 // knx transmit data commands
@@ -1046,10 +1046,10 @@ bool TpUartDataLinkLayer::processTxFrameBytes()
 }
 
 TpUartDataLinkLayer::TpUartDataLinkLayer(DeviceObject& devObj,
-                                         NetworkLayerEntity& netLayerEntity,
-                                         Platform& platform,
-                                         ITpUartCallBacks& cb,
-                                         DataLinkLayerCallbacks* dllcb)
+        NetworkLayerEntity& netLayerEntity,
+        Platform& platform,
+        ITpUartCallBacks& cb,
+        DataLinkLayerCallbacks* dllcb)
     : DataLinkLayer(devObj, netLayerEntity, platform),
       _cb(cb),
       _dllcb(dllcb)
@@ -1130,7 +1130,7 @@ bool TpUartDataLinkLayer::markerMode()
         return false;
 
 #ifdef NCN5120
-        // return true;
+    // return true;
 #endif
 
     return false;
@@ -1243,7 +1243,7 @@ uint8_t TpUartDataLinkLayer::pullByteFromRxQueue()
 
 uint16_t TpUartDataLinkLayer::availableInRxQueue()
 {
-    return ((_rxBufferFront == _rxBufferRear) ? (MAX_RX_QUEUE_BYTES) : ((((MAX_RX_QUEUE_BYTES)-_rxBufferFront) + _rxBufferRear) % (MAX_RX_QUEUE_BYTES))) - 1;
+    return ((_rxBufferFront == _rxBufferRear) ? (MAX_RX_QUEUE_BYTES) : ((((MAX_RX_QUEUE_BYTES) - _rxBufferFront) + _rxBufferRear) % (MAX_RX_QUEUE_BYTES))) - 1;
 }
 #endif
 

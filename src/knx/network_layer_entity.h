@@ -1,8 +1,8 @@
 #pragma once
 
+#include <stdint.h>
 #include "knx_types.h"
 #include "npdu.h"
-#include <stdint.h>
 
 class DataLinkLayer;
 class NetworkLayer;

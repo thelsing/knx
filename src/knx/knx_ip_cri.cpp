@@ -1,7 +1,6 @@
 #include "knx_ip_cri.h"
 #ifdef USE_IP
-KnxIpCRI::KnxIpCRI(uint8_t* data)
-    : _data(data)
+KnxIpCRI::KnxIpCRI(uint8_t* data) : _data(data)
 {}
 
 KnxIpCRI::~KnxIpCRI()

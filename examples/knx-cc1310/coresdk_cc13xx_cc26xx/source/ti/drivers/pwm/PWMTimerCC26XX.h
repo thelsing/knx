@@ -132,28 +132,29 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <ti/drivers/PIN.h>
 #include <ti/drivers/PWM.h>
 #include <ti/drivers/timer/GPTimerCC26XX.h>
 
+
 /*!
  *  @name PWMTimerCC26XX specific control commands and arguments
  *  @{
- */
+*/
 
 /*! Timer debug stall mode (stop PWM output debugger halts CPU)
     When enabled, PWM output will be HIGH when CPU is halted
  */
-#define PWMTimerCC26XX_CMD_DEBUG_STALL PWM_CMD_RESERVED + 0 /*!< @hideinitializer */
+#define PWMTimerCC26XX_CMD_DEBUG_STALL    PWM_CMD_RESERVED + 0  /*!< @hideinitializer */
 /*!
  *  @name Arguments for PWMTimerCC26XX_CMD_DEBUG_STALL
  *  @{
  */
-#define CMD_ARG_DEBUG_STALL_OFF (uint32_t) GPTimerCC26XX_DEBUG_STALL_OFF /*!< @hideinitializer */
-#define CMD_ARG_DEBUG_STALL_ON (uint32_t) GPTimerCC26XX_DEBUG_STALL_ON   /*!< @hideinitializer */
+#define CMD_ARG_DEBUG_STALL_OFF (uint32_t)GPTimerCC26XX_DEBUG_STALL_OFF  /*!< @hideinitializer */
+#define CMD_ARG_DEBUG_STALL_ON  (uint32_t)GPTimerCC26XX_DEBUG_STALL_ON   /*!< @hideinitializer */
 /*  @} */
 
 /*  @} */
@@ -183,8 +184,8 @@ extern const PWM_FxnTable PWMTimerCC26XX_fxnTable;
  */
 typedef struct PWMTimerCC26XX_HwAttrs
 {
-        PIN_Id pwmPin;       /*!< PIN to output PWM signal on */
-        uint8_t gpTimerUnit; /*!< GPTimer unit index (0A, 0B, 1A..) */
+    PIN_Id  pwmPin;               /*!< PIN to output PWM signal on */
+    uint8_t gpTimerUnit;          /*!< GPTimer unit index (0A, 0B, 1A..) */
 } PWMTimerCC26XX_HwAttrs;
 
 /*!
@@ -203,16 +204,16 @@ typedef struct PWMTimerCC26XX_HwAttrs
  */
 typedef struct PWMTimerCC26XX_Object
 {
-        bool isOpen;                 /*!< open flag used to check if PWM is opened */
-        bool isRunning;              /*!< running flag, set if the output is active */
-        PWM_Period_Units periodUnit; /*!< Current period unit */
-        uint32_t periodValue;        /*!< Current period value in unit */
-        uint32_t periodCounts;       /*!< Current period in raw timer counts */
-        PWM_Duty_Units dutyUnit;     /*!< Current duty cycle unit */
-        uint32_t dutyValue;          /*!< Current duty cycle value in unit */
-        uint32_t dutyCounts;         /*!< Current duty in raw timer counts */
-        PWM_IdleLevel idleLevel;     /*!< PWM idle level when stopped / not started */
-        GPTimerCC26XX_Handle hTimer; /*!< Handle to underlying GPTimer peripheral */
+    bool                 isOpen;        /*!< open flag used to check if PWM is opened */
+    bool                 isRunning;     /*!< running flag, set if the output is active */
+    PWM_Period_Units     periodUnit;    /*!< Current period unit */
+    uint32_t             periodValue;   /*!< Current period value in unit */
+    uint32_t             periodCounts;  /*!< Current period in raw timer counts */
+    PWM_Duty_Units       dutyUnit;      /*!< Current duty cycle unit */
+    uint32_t             dutyValue;     /*!< Current duty cycle value in unit */
+    uint32_t             dutyCounts;    /*!< Current duty in raw timer counts */
+    PWM_IdleLevel        idleLevel;     /*!< PWM idle level when stopped / not started */
+    GPTimerCC26XX_Handle hTimer;        /*!< Handle to underlying GPTimer peripheral */
 } PWMTimerCC26XX_Object;
 
 #ifdef __cplusplus

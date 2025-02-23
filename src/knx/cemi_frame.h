@@ -1,11 +1,11 @@
 #pragma once
 
+#include "knx_types.h"
+#include "stdint.h"
+#include "npdu.h"
+#include "tpdu.h"
 #include "apdu.h"
 #include "config.h"
-#include "knx_types.h"
-#include "npdu.h"
-#include "stdint.h"
-#include "tpdu.h"
 
 #define NPDU_LPDU_DIFF 8
 #define TPDU_NPDU_DIFF 1
@@ -74,7 +74,7 @@ class CemiFrame
         bool valid() const;
 
     private:
-        uint8_t buffer[0xff + NPDU_LPDU_DIFF] = {0}; // only valid of add info is zero
+        uint8_t buffer[0xff + NPDU_LPDU_DIFF] = {0}; //only valid of add info is zero
         uint8_t* _data = 0;
         uint8_t* _ctrl1 = 0;
         NPDU _npdu;
@@ -86,8 +86,8 @@ class CemiFrame
         // FIXME: integrate this propery in _data
         // only for RF medium
         uint8_t* _rfSerialOrDoA = 0;
-        uint8_t _rfInfo = 0;
-        uint8_t _rfLfn = 0xFF; // RF Data Link layer frame number
+        uint8_t  _rfInfo = 0;
+        uint8_t  _rfLfn = 0xFF; // RF Data Link layer frame number
 #endif
 
         uint8_t _sourceInterfaceIndex;

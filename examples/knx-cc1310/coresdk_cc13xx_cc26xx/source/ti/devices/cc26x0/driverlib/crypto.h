@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       crypto.h
- *  Revised:        2018-01-12 18:46:31 +0100 (Fri, 12 Jan 2018)
- *  Revision:       51161
- *
- *  Description:    AES header file.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       crypto.h
+*  Revised:        2018-01-12 18:46:31 +0100 (Fri, 12 Jan 2018)
+*  Revision:       51161
+*
+*  Description:    AES header file.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,18 +55,19 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_crypto.h"
-#include "../inc/hw_ints.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include "cpu.h"
-#include "debug.h"
-#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_crypto.h"
+#include "debug.h"
+#include "interrupt.h"
+#include "cpu.h"
 
 //*****************************************************************************
 //
@@ -82,19 +83,19 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define CRYPTOAesLoadKey NOROM_CRYPTOAesLoadKey
-#define CRYPTOAesCbc NOROM_CRYPTOAesCbc
-#define CRYPTOAesCbcStatus NOROM_CRYPTOAesCbcStatus
-#define CRYPTOAesEcb NOROM_CRYPTOAesEcb
-#define CRYPTOAesEcbStatus NOROM_CRYPTOAesEcbStatus
-#define CRYPTOCcmAuthEncrypt NOROM_CRYPTOCcmAuthEncrypt
-#define CRYPTOCcmAuthEncryptStatus NOROM_CRYPTOCcmAuthEncryptStatus
-#define CRYPTOCcmAuthEncryptResultGet NOROM_CRYPTOCcmAuthEncryptResultGet
-#define CRYPTOCcmInvAuthDecrypt NOROM_CRYPTOCcmInvAuthDecrypt
-#define CRYPTOCcmInvAuthDecryptStatus NOROM_CRYPTOCcmInvAuthDecryptStatus
+#define CRYPTOAesLoadKey                NOROM_CRYPTOAesLoadKey
+#define CRYPTOAesCbc                    NOROM_CRYPTOAesCbc
+#define CRYPTOAesCbcStatus              NOROM_CRYPTOAesCbcStatus
+#define CRYPTOAesEcb                    NOROM_CRYPTOAesEcb
+#define CRYPTOAesEcbStatus              NOROM_CRYPTOAesEcbStatus
+#define CRYPTOCcmAuthEncrypt            NOROM_CRYPTOCcmAuthEncrypt
+#define CRYPTOCcmAuthEncryptStatus      NOROM_CRYPTOCcmAuthEncryptStatus
+#define CRYPTOCcmAuthEncryptResultGet   NOROM_CRYPTOCcmAuthEncryptResultGet
+#define CRYPTOCcmInvAuthDecrypt         NOROM_CRYPTOCcmInvAuthDecrypt
+#define CRYPTOCcmInvAuthDecryptStatus   NOROM_CRYPTOCcmInvAuthDecryptStatus
 #define CRYPTOCcmInvAuthDecryptResultGet NOROM_CRYPTOCcmInvAuthDecryptResultGet
-#define CRYPTODmaEnable NOROM_CRYPTODmaEnable
-#define CRYPTODmaDisable NOROM_CRYPTODmaDisable
+#define CRYPTODmaEnable                 NOROM_CRYPTODmaEnable
+#define CRYPTODmaDisable                NOROM_CRYPTODmaDisable
 #endif
 
 //*****************************************************************************
@@ -102,7 +103,7 @@ extern "C" {
 // Length of AES Electronic Code Book (ECB) block in bytes
 //
 //*****************************************************************************
-#define AES_ECB_LENGTH 16
+#define AES_ECB_LENGTH  16
 
 //*****************************************************************************
 //
@@ -110,24 +111,24 @@ extern "C" {
 // as the ui32IntFlags parameter, and returned from CryptoIntStatus.
 //
 //*****************************************************************************
-#define CRYPTO_DMA_IN_DONE 0x00000002   // DMA done interrupt mask
-#define CRYPTO_RESULT_RDY 0x00000001    // Result ready interrupt mask
-#define CRYPTO_DMA_BUS_ERR 0x80000000   // DMA Bus error
-#define CRYPTO_KEY_ST_WR_ERR 0x40000000 // Key Store Write failed
-#define CRYPTO_KEY_ST_RD_ERR 0x20000000 // Key Store Read failed
+#define CRYPTO_DMA_IN_DONE      0x00000002  // DMA done interrupt mask
+#define CRYPTO_RESULT_RDY       0x00000001  // Result ready interrupt mask
+#define CRYPTO_DMA_BUS_ERR      0x80000000  // DMA Bus error
+#define CRYPTO_KEY_ST_WR_ERR    0x40000000  // Key Store Write failed
+#define CRYPTO_KEY_ST_RD_ERR    0x20000000  // Key Store Read failed
 
-#define CRYPTO_IRQTYPE_LEVEL 0x00000001 // Crypto Level interrupt enabled
-#define CRYPTO_IRQTYPE_PULSE 0x00000000 // Crypto pulse interrupt enabled
+#define CRYPTO_IRQTYPE_LEVEL    0x00000001  // Crypto Level interrupt enabled
+#define CRYPTO_IRQTYPE_PULSE    0x00000000  // Crypto pulse interrupt enabled
 
-#define CRYPTO_DMA_CHAN0 0x00000001 // Crypto DMA Channel 0
-#define CRYPTO_DMA_CHAN1 0x00000002 // Crypto DMA Channel 1
+#define CRYPTO_DMA_CHAN0        0x00000001  // Crypto DMA Channel 0
+#define CRYPTO_DMA_CHAN1        0x00000002  // Crypto DMA Channel 1
 
-#define CRYPTO_AES128_ENCRYPT 0x0000000C //
-#define CRYPTO_AES128_DECRYPT 0x00000008 //
+#define CRYPTO_AES128_ENCRYPT   0x0000000C  //
+#define CRYPTO_AES128_DECRYPT   0x00000008  //
 
-#define CRYPTO_DMA_READY 0x00000000     // DMA ready
-#define CRYPTO_DMA_BSY 0x00000003       // DMA busy
-#define CRYPTO_DMA_BUS_ERROR 0x00020000 // DMA encountered bus error
+#define CRYPTO_DMA_READY        0x00000000  // DMA ready
+#define CRYPTO_DMA_BSY          0x00000003  // DMA busy
+#define CRYPTO_DMA_BUS_ERROR    0x00020000  // DMA encountered bus error
 
 //*****************************************************************************
 //
@@ -136,25 +137,25 @@ extern "C" {
 //*****************************************************************************
 
 // AES module return codes
-#define AES_SUCCESS 0
-#define AES_KEYSTORE_READ_ERROR 1
-#define AES_KEYSTORE_WRITE_ERROR 2
-#define AES_DMA_BUS_ERROR 3
-#define CCM_AUTHENTICATION_FAILED 4
-#define AES_ECB_TEST_ERROR 8
-#define AES_NULL_ERROR 9
-#define AES_CCM_TEST_ERROR 10
-#define AES_DMA_BSY 11
+#define AES_SUCCESS                      0
+#define AES_KEYSTORE_READ_ERROR          1
+#define AES_KEYSTORE_WRITE_ERROR         2
+#define AES_DMA_BUS_ERROR                3
+#define CCM_AUTHENTICATION_FAILED        4
+#define AES_ECB_TEST_ERROR               8
+#define AES_NULL_ERROR                   9
+#define AES_CCM_TEST_ERROR              10
+#define AES_DMA_BSY                     11
 
 // Key store module defines
-#define STATE_BLENGTH 16   // Number of bytes in State
-#define KEY_BLENGTH 16     // Number of bytes in Key
-#define KEY_EXP_LENGTH 176 // Nb * (Nr+1) * 4
+#define STATE_BLENGTH                   16  // Number of bytes in State
+#define KEY_BLENGTH                     16  // Number of bytes in Key
+#define KEY_EXP_LENGTH                 176  // Nb * (Nr+1) * 4
 
-#define KEY_STORE_SIZE_128 0x00000001
-#define KEY_STORE_SIZE_192 0x00000002
-#define KEY_STORE_SIZE_256 0x00000003
-#define KEY_STORE_SIZE_BITS 0x00000003
+#define KEY_STORE_SIZE_128      0x00000001
+#define KEY_STORE_SIZE_192      0x00000002
+#define KEY_STORE_SIZE_256      0x00000003
+#define KEY_STORE_SIZE_BITS     0x00000003
 
 //*****************************************************************************
 //
@@ -163,36 +164,36 @@ extern "C" {
 // are valid.
 //
 //*****************************************************************************
-#define CRYPTO_KEY_AREA_0 0
-#define CRYPTO_KEY_AREA_1 1
-#define CRYPTO_KEY_AREA_2 2
-#define CRYPTO_KEY_AREA_3 3
-#define CRYPTO_KEY_AREA_4 4
-#define CRYPTO_KEY_AREA_5 5
-#define CRYPTO_KEY_AREA_6 6
-#define CRYPTO_KEY_AREA_7 7
+#define CRYPTO_KEY_AREA_0       0
+#define CRYPTO_KEY_AREA_1       1
+#define CRYPTO_KEY_AREA_2       2
+#define CRYPTO_KEY_AREA_3       3
+#define CRYPTO_KEY_AREA_4       4
+#define CRYPTO_KEY_AREA_5       5
+#define CRYPTO_KEY_AREA_6       6
+#define CRYPTO_KEY_AREA_7       7
 
 //*****************************************************************************
 //
 // Defines for the current AES operation
 //
 //*****************************************************************************
-#define CRYPTO_AES_NONE 0
-#define CRYPTO_AES_KEYL0AD 1
-#define CRYPTO_AES_ECB 2
-#define CRYPTO_AES_CCM 3
-#define CRYPTO_AES_RNG 4
-#define CRYPTO_AES_CBC 5
+#define CRYPTO_AES_NONE         0
+#define CRYPTO_AES_KEYL0AD      1
+#define CRYPTO_AES_ECB          2
+#define CRYPTO_AES_CCM          3
+#define CRYPTO_AES_RNG          4
+#define CRYPTO_AES_CBC          5
 
 //*****************************************************************************
 //
 // Defines for the AES-CTR mode counter width
 //
 //*****************************************************************************
-#define CRYPTO_AES_CTR_32 0x0
-#define CRYPTO_AES_CTR_64 0x1
-#define CRYPTO_AES_CTR_96 0x2
-#define CRYPTO_AES_CTR_128 0x3
+#define CRYPTO_AES_CTR_32       0x0
+#define CRYPTO_AES_CTR_64       0x1
+#define CRYPTO_AES_CTR_96       0x2
+#define CRYPTO_AES_CTR_128      0x3
 
 //*****************************************************************************
 //
@@ -456,7 +457,7 @@ extern uint32_t CRYPTOCcmAuthEncryptStatus(void);
 //
 //*****************************************************************************
 extern uint32_t CRYPTOCcmAuthEncryptResultGet(uint32_t ui32TagLength,
-                                              uint32_t* pui32CcmTag);
+        uint32_t* pui32CcmTag);
 
 //*****************************************************************************
 //
@@ -529,9 +530,9 @@ extern uint32_t CRYPTOCcmInvAuthDecryptStatus(void);
 //
 //*****************************************************************************
 extern uint32_t CRYPTOCcmInvAuthDecryptResultGet(uint32_t ui32AuthLength,
-                                                 uint32_t* pui32CipherText,
-                                                 uint32_t ui32CipherTextLength,
-                                                 uint32_t* pui32CcmTag);
+        uint32_t* pui32CipherText,
+        uint32_t ui32CipherTextLength,
+        uint32_t* pui32CcmTag);
 
 //*****************************************************************************
 //
@@ -782,56 +783,56 @@ CRYPTOIntUnregister(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_CRYPTOAesLoadKey
-#undef CRYPTOAesLoadKey
-#define CRYPTOAesLoadKey ROM_CRYPTOAesLoadKey
+#undef  CRYPTOAesLoadKey
+#define CRYPTOAesLoadKey                ROM_CRYPTOAesLoadKey
 #endif
 #ifdef ROM_CRYPTOAesCbc
-#undef CRYPTOAesCbc
-#define CRYPTOAesCbc ROM_CRYPTOAesCbc
+#undef  CRYPTOAesCbc
+#define CRYPTOAesCbc                    ROM_CRYPTOAesCbc
 #endif
 #ifdef ROM_CRYPTOAesCbcStatus
-#undef CRYPTOAesCbcStatus
-#define CRYPTOAesCbcStatus ROM_CRYPTOAesCbcStatus
+#undef  CRYPTOAesCbcStatus
+#define CRYPTOAesCbcStatus              ROM_CRYPTOAesCbcStatus
 #endif
 #ifdef ROM_CRYPTOAesEcb
-#undef CRYPTOAesEcb
-#define CRYPTOAesEcb ROM_CRYPTOAesEcb
+#undef  CRYPTOAesEcb
+#define CRYPTOAesEcb                    ROM_CRYPTOAesEcb
 #endif
 #ifdef ROM_CRYPTOAesEcbStatus
-#undef CRYPTOAesEcbStatus
-#define CRYPTOAesEcbStatus ROM_CRYPTOAesEcbStatus
+#undef  CRYPTOAesEcbStatus
+#define CRYPTOAesEcbStatus              ROM_CRYPTOAesEcbStatus
 #endif
 #ifdef ROM_CRYPTOCcmAuthEncrypt
-#undef CRYPTOCcmAuthEncrypt
-#define CRYPTOCcmAuthEncrypt ROM_CRYPTOCcmAuthEncrypt
+#undef  CRYPTOCcmAuthEncrypt
+#define CRYPTOCcmAuthEncrypt            ROM_CRYPTOCcmAuthEncrypt
 #endif
 #ifdef ROM_CRYPTOCcmAuthEncryptStatus
-#undef CRYPTOCcmAuthEncryptStatus
-#define CRYPTOCcmAuthEncryptStatus ROM_CRYPTOCcmAuthEncryptStatus
+#undef  CRYPTOCcmAuthEncryptStatus
+#define CRYPTOCcmAuthEncryptStatus      ROM_CRYPTOCcmAuthEncryptStatus
 #endif
 #ifdef ROM_CRYPTOCcmAuthEncryptResultGet
-#undef CRYPTOCcmAuthEncryptResultGet
-#define CRYPTOCcmAuthEncryptResultGet ROM_CRYPTOCcmAuthEncryptResultGet
+#undef  CRYPTOCcmAuthEncryptResultGet
+#define CRYPTOCcmAuthEncryptResultGet   ROM_CRYPTOCcmAuthEncryptResultGet
 #endif
 #ifdef ROM_CRYPTOCcmInvAuthDecrypt
-#undef CRYPTOCcmInvAuthDecrypt
-#define CRYPTOCcmInvAuthDecrypt ROM_CRYPTOCcmInvAuthDecrypt
+#undef  CRYPTOCcmInvAuthDecrypt
+#define CRYPTOCcmInvAuthDecrypt         ROM_CRYPTOCcmInvAuthDecrypt
 #endif
 #ifdef ROM_CRYPTOCcmInvAuthDecryptStatus
-#undef CRYPTOCcmInvAuthDecryptStatus
-#define CRYPTOCcmInvAuthDecryptStatus ROM_CRYPTOCcmInvAuthDecryptStatus
+#undef  CRYPTOCcmInvAuthDecryptStatus
+#define CRYPTOCcmInvAuthDecryptStatus   ROM_CRYPTOCcmInvAuthDecryptStatus
 #endif
 #ifdef ROM_CRYPTOCcmInvAuthDecryptResultGet
-#undef CRYPTOCcmInvAuthDecryptResultGet
+#undef  CRYPTOCcmInvAuthDecryptResultGet
 #define CRYPTOCcmInvAuthDecryptResultGet ROM_CRYPTOCcmInvAuthDecryptResultGet
 #endif
 #ifdef ROM_CRYPTODmaEnable
-#undef CRYPTODmaEnable
-#define CRYPTODmaEnable ROM_CRYPTODmaEnable
+#undef  CRYPTODmaEnable
+#define CRYPTODmaEnable                 ROM_CRYPTODmaEnable
 #endif
 #ifdef ROM_CRYPTODmaDisable
-#undef CRYPTODmaDisable
-#define CRYPTODmaDisable ROM_CRYPTODmaDisable
+#undef  CRYPTODmaDisable
+#define CRYPTODmaDisable                ROM_CRYPTODmaDisable
 #endif
 #endif
 
@@ -844,7 +845,7 @@ CRYPTOIntUnregister(void)
 }
 #endif
 
-#endif // __CRYPTO_H__
+#endif  // __CRYPTO_H__
 
 //*****************************************************************************
 //

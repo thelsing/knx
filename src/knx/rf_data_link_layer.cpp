@@ -2,18 +2,18 @@
 #ifdef USE_RF
 
 #if defined(DeviceFamily_CC13X0)
-#include "rf_physical_layer_cc1310.h"
+    #include "rf_physical_layer_cc1310.h"
 #else
-#include "rf_physical_layer_cc1101.h"
+    #include "rf_physical_layer_cc1101.h"
 #endif
 #include "rf_data_link_layer.h"
 
-#include "address_table_object.h"
 #include "bits.h"
-#include "cemi_frame.h"
-#include "device_object.h"
 #include "platform.h"
+#include "device_object.h"
+#include "address_table_object.h"
 #include "rf_medium_object.h"
+#include "cemi_frame.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -113,8 +113,8 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
     // then we seem to have a valid first block of an KNX RF frame.
     // The first block basically contains the RF-info field and the KNX SN/Domain address.
     if ((rfPacketBuf[1] == 0x44) &&
-        (rfPacketBuf[2] == 0xFF) &&
-        (crc16Dnp(rfPacketBuf, 10) == block1Crc))
+            (rfPacketBuf[2] == 0xFF) &&
+            (crc16Dnp(rfPacketBuf, 10) == block1Crc))
 #endif
     {
         // bytes left from the remaining block(s)
@@ -165,16 +165,16 @@ void RfDataLinkLayer::frameBytesReceived(uint8_t* rfPacketBuf, uint16_t length)
         if (crcOk)
         {
             // Copy rest of the received packet without checksum
-            memcpy(pBuffer, pRfPacketBuf, bytesLeft - 2);
+            memcpy(pBuffer, pRfPacketBuf,  bytesLeft - 2);
             newLength += bytesLeft - 2;
 
             // Prepare CEMI by writing/overwriting certain fields in the buffer (contiguous frame without CRC checksums)
             // See 3.6.3 p.79: L_Data services for KNX RF asynchronous frames
             // For now we do not use additional info, but use normal method arguments for CEMI
-            _buffer[0] = (uint8_t)L_data_ind; // L_data.ind
-            _buffer[1] = 0;                   // Additional info length (spec. says that local dev management is not required to use AddInfo internally)
-            _buffer[2] = 0;                   // CTRL1 field (will be set later, this is the field we reserved space for)
-            _buffer[3] &= 0x0F;               // CTRL2 field (take only RFCtrl.b3..0, b7..4 shall always be 0 for asynchronous KNX RF)
+            _buffer[0] = (uint8_t) L_data_ind;  // L_data.ind
+            _buffer[1] = 0;     // Additional info length (spec. says that local dev management is not required to use AddInfo internally)
+            _buffer[2] = 0;     // CTRL1 field (will be set later, this is the field we reserved space for)
+            _buffer[3] &= 0x0F; // CTRL2 field (take only RFCtrl.b3..0, b7..4 shall always be 0 for asynchronous KNX RF)
 
             // Now get all control bits from the L/NPCI field of the RF frame
             // so that we can overwrite it afterwards with the correct NPDU length

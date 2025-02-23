@@ -1,6 +1,6 @@
 #pragma once
-#include "bits.h"
 #include "knx_ip_dib.h"
+#include "bits.h"
 
 #ifdef USE_IP
 #define LEN_IP_CONFIG_DIB 16
@@ -22,7 +22,6 @@ class KnxIpConfigDIB : public KnxIpDIB
         void info1(uint8_t addr);
         uint8_t info2();
         void info2(uint8_t addr);
-
     private:
         bool _isCurrent = false;
 };

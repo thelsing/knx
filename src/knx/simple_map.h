@@ -14,7 +14,7 @@ class Map
     public:
         Map()
         {
-            static_assert(SIZE <= 64, "Map is too big! Max. 64 elements.");
+            static_assert (SIZE <= 64, "Map is too big! Max. 64 elements.");
         }
 
         void clear()

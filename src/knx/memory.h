@@ -1,22 +1,22 @@
 #pragma once
 
-#include "device_object.h"
-#include "platform.h"
-#include "save_restore.h"
-#include "table_object.h"
 #include <stdint.h>
+#include "save_restore.h"
+#include "platform.h"
+#include "device_object.h"
+#include "table_object.h"
 
 #define MAXSAVE 5
 #define MAXTABLEOBJ 4
 
 #ifndef KNX_FLASH_SIZE
-#define KNX_FLASH_SIZE 1024
+    #define KNX_FLASH_SIZE 1024
 #endif
 
 class MemoryBlock
 {
     public:
-        MemoryBlock(){};
+        MemoryBlock() {};
         MemoryBlock(uint8_t* address, size_t size)
             : address(address), size(size) {}
         uint8_t* address = nullptr;
@@ -26,9 +26,9 @@ class MemoryBlock
 
 enum VersionCheckResult
 {
-    FlashAllInvalid = 0,    //!< All flash content is not valid for this firmware, we delete it
-    FlashTablesInvalid = 1, //!< All table objects are invalid for this firmware, device object and saveRestores are OK
-    FlashValid = 2          //!< Flash content is valid and will be used
+    FlashAllInvalid = 0,   //!< All flash content is not valid for this firmware, we delete it
+    FlashTablesInvalid = 1,//!< All table objects are invalid for this firmware, device object and saveRestores are OK
+    FlashValid = 2         //!< Flash content is valid and will be used
 };
 
 typedef VersionCheckResult (*VersionCheckCallback)(uint16_t manufacturerId, uint8_t* hardwareType, uint16_t version);

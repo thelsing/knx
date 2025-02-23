@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       chipinfo.h
- *  Revised:        2018-06-18 10:26:12 +0200 (Mon, 18 Jun 2018)
- *  Revision:       52189
- *
- *  Description:    Collection of functions returning chip information.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       chipinfo.h
+*  Revised:        2018-06-18 10:26:12 +0200 (Mon, 18 Jun 2018)
+*  Revision:       52189
+*
+*  Description:    Collection of functions returning chip information.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,14 +55,15 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_fcfg1.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_fcfg1.h"
 
 //*****************************************************************************
 //
@@ -79,10 +80,10 @@ extern "C" {
 //*****************************************************************************
 #if !defined(DOXYGEN)
 #define ChipInfo_GetSupportedProtocol_BV NOROM_ChipInfo_GetSupportedProtocol_BV
-#define ChipInfo_GetPackageType NOROM_ChipInfo_GetPackageType
-#define ChipInfo_GetChipType NOROM_ChipInfo_GetChipType
-#define ChipInfo_GetChipFamily NOROM_ChipInfo_GetChipFamily
-#define ChipInfo_GetHwRevision NOROM_ChipInfo_GetHwRevision
+#define ChipInfo_GetPackageType         NOROM_ChipInfo_GetPackageType
+#define ChipInfo_GetChipType            NOROM_ChipInfo_GetChipType
+#define ChipInfo_GetChipFamily          NOROM_ChipInfo_GetChipFamily
+#define ChipInfo_GetHwRevision          NOROM_ChipInfo_GetHwRevision
 #define ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated NOROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
 #endif
 
@@ -97,10 +98,10 @@ extern "C" {
 //*****************************************************************************
 typedef enum
 {
-    PROTOCOL_Unknown = 0,             //!< None of the known protocols are supported.
-    PROTOCOLBIT_BLE = 0x02,           //!< Bit[1] set, indicates that Bluetooth Low Energy is supported.
+    PROTOCOL_Unknown          = 0,    //!< None of the known protocols are supported.
+    PROTOCOLBIT_BLE           = 0x02, //!< Bit[1] set, indicates that Bluetooth Low Energy is supported.
     PROTOCOLBIT_IEEE_802_15_4 = 0x04, //!< Bit[2] set, indicates that IEEE 802.15.4 is supported.
-    PROTOCOLBIT_Proprietary = 0x08    //!< Bit[3] set, indicates that proprietary protocols are supported.
+    PROTOCOLBIT_Proprietary   = 0x08  //!< Bit[3] set, indicates that proprietary protocols are supported.
 } ProtocolBitVector_t;
 
 //*****************************************************************************
@@ -111,7 +112,7 @@ typedef enum
 //! Returns \ref ProtocolBitVector_t which is a bit vector indicating supported protocols.
 //
 //*****************************************************************************
-extern ProtocolBitVector_t ChipInfo_GetSupportedProtocol_BV(void);
+extern ProtocolBitVector_t ChipInfo_GetSupportedProtocol_BV( void );
 
 //*****************************************************************************
 //
@@ -122,9 +123,9 @@ extern ProtocolBitVector_t ChipInfo_GetSupportedProtocol_BV(void);
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_SupportsBLE(void)
+ChipInfo_SupportsBLE( void )
 {
-    return ((ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_BLE) != 0);
+    return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_BLE ) != 0 );
 }
 
 //*****************************************************************************
@@ -136,9 +137,9 @@ ChipInfo_SupportsBLE(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_SupportsIEEE_802_15_4(void)
+ChipInfo_SupportsIEEE_802_15_4( void )
 {
-    return ((ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_IEEE_802_15_4) != 0);
+    return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_IEEE_802_15_4 ) != 0 );
 }
 
 //*****************************************************************************
@@ -150,9 +151,9 @@ ChipInfo_SupportsIEEE_802_15_4(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_SupportsPROPRIETARY(void)
+ChipInfo_SupportsPROPRIETARY( void )
 {
-    return ((ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_Proprietary) != 0);
+    return (( ChipInfo_GetSupportedProtocol_BV() & PROTOCOLBIT_Proprietary ) != 0 );
 }
 
 //*****************************************************************************
@@ -165,13 +166,13 @@ ChipInfo_SupportsPROPRIETARY(void)
 //*****************************************************************************
 typedef enum
 {
-    PACKAGE_Unknown = -1, //!< -1 means that current package type is unknown.
-    PACKAGE_4x4 = 0,      //!<  0 means that this is a 4x4 mm QFN (RHB) package.
-    PACKAGE_5x5 = 1,      //!<  1 means that this is a 5x5 mm QFN (RSM) package.
-    PACKAGE_7x7 = 2,      //!<  2 means that this is a 7x7 mm QFN (RGZ) package.
-    PACKAGE_WAFER = 3,    //!<  3 means that this is a wafer sale package (naked die).
-    PACKAGE_WCSP = 4,     //!<  4 means that this is a 2.7x2.7 mm WCSP (YFV).
-    PACKAGE_7x7_Q1 = 5    //!<  5 means that this is a 7x7 mm QFN package with Wettable Flanks.
+    PACKAGE_Unknown   = -1, //!< -1 means that current package type is unknown.
+    PACKAGE_4x4       =  0, //!<  0 means that this is a 4x4 mm QFN (RHB) package.
+    PACKAGE_5x5       =  1, //!<  1 means that this is a 5x5 mm QFN (RSM) package.
+    PACKAGE_7x7       =  2, //!<  2 means that this is a 7x7 mm QFN (RGZ) package.
+    PACKAGE_WAFER     =  3, //!<  3 means that this is a wafer sale package (naked die).
+    PACKAGE_WCSP      =  4, //!<  4 means that this is a 2.7x2.7 mm WCSP (YFV).
+    PACKAGE_7x7_Q1    =  5  //!<  5 means that this is a 7x7 mm QFN package with Wettable Flanks.
 } PackageType_t;
 
 //*****************************************************************************
@@ -182,7 +183,7 @@ typedef enum
 //! Returns \ref PackageType_t
 //
 //*****************************************************************************
-extern PackageType_t ChipInfo_GetPackageType(void);
+extern PackageType_t ChipInfo_GetPackageType( void );
 
 //*****************************************************************************
 //
@@ -193,9 +194,9 @@ extern PackageType_t ChipInfo_GetPackageType(void);
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_PackageTypeIs4x4(void)
+ChipInfo_PackageTypeIs4x4( void )
 {
-    return (ChipInfo_GetPackageType() == PACKAGE_4x4);
+    return ( ChipInfo_GetPackageType() == PACKAGE_4x4 );
 }
 
 //*****************************************************************************
@@ -207,9 +208,9 @@ ChipInfo_PackageTypeIs4x4(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_PackageTypeIs5x5(void)
+ChipInfo_PackageTypeIs5x5( void )
 {
-    return (ChipInfo_GetPackageType() == PACKAGE_5x5);
+    return ( ChipInfo_GetPackageType() == PACKAGE_5x5 );
 }
 
 //*****************************************************************************
@@ -221,9 +222,9 @@ ChipInfo_PackageTypeIs5x5(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_PackageTypeIs7x7(void)
+ChipInfo_PackageTypeIs7x7( void )
 {
-    return (ChipInfo_GetPackageType() == PACKAGE_7x7);
+    return ( ChipInfo_GetPackageType() == PACKAGE_7x7 );
 }
 
 //*****************************************************************************
@@ -235,9 +236,9 @@ ChipInfo_PackageTypeIs7x7(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_PackageTypeIsWAFER(void)
+ChipInfo_PackageTypeIsWAFER( void )
 {
-    return (ChipInfo_GetPackageType() == PACKAGE_WAFER);
+    return ( ChipInfo_GetPackageType() == PACKAGE_WAFER );
 }
 
 //*****************************************************************************
@@ -249,9 +250,9 @@ ChipInfo_PackageTypeIsWAFER(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_PackageTypeIsWCSP(void)
+ChipInfo_PackageTypeIsWCSP( void )
 {
-    return (ChipInfo_GetPackageType() == PACKAGE_WCSP);
+    return ( ChipInfo_GetPackageType() == PACKAGE_WCSP );
 }
 
 //*****************************************************************************
@@ -263,9 +264,9 @@ ChipInfo_PackageTypeIsWCSP(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_PackageTypeIs7x7Q1(void)
+ChipInfo_PackageTypeIs7x7Q1( void )
 {
-    return (ChipInfo_GetPackageType() == PACKAGE_7x7_Q1);
+    return ( ChipInfo_GetPackageType() == PACKAGE_7x7_Q1 );
 }
 
 //*****************************************************************************
@@ -276,10 +277,10 @@ ChipInfo_PackageTypeIs7x7Q1(void)
 //! Returns the internal chip HW revision code (in range 0-15)
 //*****************************************************************************
 __STATIC_INLINE uint32_t
-ChipInfo_GetDeviceIdHwRevCode(void)
+ChipInfo_GetDeviceIdHwRevCode( void )
 {
     // Returns HwRevCode = FCFG1_O_ICEPICK_DEVICE_ID[31:28]
-    return (HWREG(FCFG1_BASE + FCFG1_O_ICEPICK_DEVICE_ID) >> 28);
+    return ( HWREG( FCFG1_BASE + FCFG1_O_ICEPICK_DEVICE_ID ) >> 28 );
 }
 
 //*****************************************************************************
@@ -294,18 +295,18 @@ ChipInfo_GetDeviceIdHwRevCode(void)
 //
 //*****************************************************************************
 __STATIC_INLINE uint32_t
-ChipInfo_GetMinorHwRev(void)
+ChipInfo_GetMinorHwRev( void )
 {
-    uint32_t minorRev = ((HWREG(FCFG1_BASE + FCFG1_O_MISC_CONF_1) &
-                          FCFG1_MISC_CONF_1_DEVICE_MINOR_REV_M) >>
-                         FCFG1_MISC_CONF_1_DEVICE_MINOR_REV_S);
+    uint32_t minorRev = (( HWREG( FCFG1_BASE + FCFG1_O_MISC_CONF_1 ) &
+                           FCFG1_MISC_CONF_1_DEVICE_MINOR_REV_M ) >>
+                         FCFG1_MISC_CONF_1_DEVICE_MINOR_REV_S ) ;
 
-    if (minorRev >= 0x80)
+    if ( minorRev >= 0x80 )
     {
         minorRev = 0;
     }
 
-    return (minorRev);
+    return ( minorRev );
 }
 
 //*****************************************************************************
@@ -319,9 +320,9 @@ ChipInfo_GetMinorHwRev(void)
 //
 //*****************************************************************************
 __STATIC_INLINE uint32_t
-ChipInfo_GetUserId(void)
+ChipInfo_GetUserId( void )
 {
-    return (HWREG(FCFG1_BASE + FCFG1_O_USER_ID));
+    return ( HWREG( FCFG1_BASE + FCFG1_O_USER_ID ));
 }
 
 //*****************************************************************************
@@ -331,22 +332,22 @@ ChipInfo_GetUserId(void)
 //*****************************************************************************
 typedef enum
 {
-    CHIP_TYPE_Unknown = -1, //!< -1 means that the chip type is unknown.
-    CHIP_TYPE_CC1310 = 0,   //!<  0 means that this is a CC1310 chip.
-    CHIP_TYPE_CC1350 = 1,   //!<  1 means that this is a CC1350 chip.
-    CHIP_TYPE_CC2620 = 2,   //!<  2 means that this is a CC2620 chip.
-    CHIP_TYPE_CC2630 = 3,   //!<  3 means that this is a CC2630 chip.
-    CHIP_TYPE_CC2640 = 4,   //!<  4 means that this is a CC2640 chip.
-    CHIP_TYPE_CC2650 = 5,   //!<  5 means that this is a CC2650 chip.
-    CHIP_TYPE_CUSTOM_0 = 6, //!<  6 means that this is a CUSTOM_0 chip.
-    CHIP_TYPE_CUSTOM_1 = 7, //!<  7 means that this is a CUSTOM_1 chip.
-    CHIP_TYPE_CC2640R2 = 8, //!<  8 means that this is a CC2640R2 chip.
-    CHIP_TYPE_CC2642 = 9,   //!<  9 means that this is a CC2642 chip.
-    CHIP_TYPE_unused = 10,  //!< 10 unused value
-    CHIP_TYPE_CC2652 = 11,  //!< 11 means that this is a CC2652 chip.
-    CHIP_TYPE_CC1312 = 12,  //!< 12 means that this is a CC1312 chip.
-    CHIP_TYPE_CC1352 = 13,  //!< 13 means that this is a CC1352 chip.
-    CHIP_TYPE_CC1352P = 14  //!< 14 means that this is a CC1352P chip.
+    CHIP_TYPE_Unknown       = -1, //!< -1 means that the chip type is unknown.
+    CHIP_TYPE_CC1310        =  0, //!<  0 means that this is a CC1310 chip.
+    CHIP_TYPE_CC1350        =  1, //!<  1 means that this is a CC1350 chip.
+    CHIP_TYPE_CC2620        =  2, //!<  2 means that this is a CC2620 chip.
+    CHIP_TYPE_CC2630        =  3, //!<  3 means that this is a CC2630 chip.
+    CHIP_TYPE_CC2640        =  4, //!<  4 means that this is a CC2640 chip.
+    CHIP_TYPE_CC2650        =  5, //!<  5 means that this is a CC2650 chip.
+    CHIP_TYPE_CUSTOM_0      =  6, //!<  6 means that this is a CUSTOM_0 chip.
+    CHIP_TYPE_CUSTOM_1      =  7, //!<  7 means that this is a CUSTOM_1 chip.
+    CHIP_TYPE_CC2640R2      =  8, //!<  8 means that this is a CC2640R2 chip.
+    CHIP_TYPE_CC2642        =  9, //!<  9 means that this is a CC2642 chip.
+    CHIP_TYPE_unused        =  10,//!< 10 unused value
+    CHIP_TYPE_CC2652        =  11,//!< 11 means that this is a CC2652 chip.
+    CHIP_TYPE_CC1312        =  12,//!< 12 means that this is a CC1312 chip.
+    CHIP_TYPE_CC1352        =  13,//!< 13 means that this is a CC1352 chip.
+    CHIP_TYPE_CC1352P       =  14 //!< 14 means that this is a CC1352P chip.
 } ChipType_t;
 
 //*****************************************************************************
@@ -357,7 +358,7 @@ typedef enum
 //! Returns \ref ChipType_t
 //
 //*****************************************************************************
-extern ChipType_t ChipInfo_GetChipType(void);
+extern ChipType_t ChipInfo_GetChipType( void );
 
 //*****************************************************************************
 //
@@ -366,12 +367,12 @@ extern ChipType_t ChipInfo_GetChipType(void);
 //*****************************************************************************
 typedef enum
 {
-    FAMILY_Unknown = -1,     //!< -1 means that the chip's family member is unknown.
-    FAMILY_CC26x0 = 0,       //!<  0 means that the chip is a CC26x0 family member.
-    FAMILY_CC13x0 = 1,       //!<  1 means that the chip is a CC13x0 family member.
-    FAMILY_CC26x1 = 2,       //!<  2 means that the chip is a CC26x1 family member.
-    FAMILY_CC26x0R2 = 3,     //!<  3 means that the chip is a CC26x0R2 family (new ROM contents).
-    FAMILY_CC13x2_CC26x2 = 4 //!<  4 means that the chip is a CC13x2, CC26x2 family member.
+    FAMILY_Unknown          = -1, //!< -1 means that the chip's family member is unknown.
+    FAMILY_CC26x0           =  0, //!<  0 means that the chip is a CC26x0 family member.
+    FAMILY_CC13x0           =  1, //!<  1 means that the chip is a CC13x0 family member.
+    FAMILY_CC26x1           =  2, //!<  2 means that the chip is a CC26x1 family member.
+    FAMILY_CC26x0R2         =  3, //!<  3 means that the chip is a CC26x0R2 family (new ROM contents).
+    FAMILY_CC13x2_CC26x2    =  4  //!<  4 means that the chip is a CC13x2, CC26x2 family member.
 } ChipFamily_t;
 
 //*****************************************************************************
@@ -382,17 +383,17 @@ typedef enum
 //! Returns \ref ChipFamily_t
 //
 //*****************************************************************************
-extern ChipFamily_t ChipInfo_GetChipFamily(void);
+extern ChipFamily_t ChipInfo_GetChipFamily( void );
 
 //*****************************************************************************
 //
 // Options for the define THIS_DRIVERLIB_BUILD
 //
 //*****************************************************************************
-#define DRIVERLIB_BUILD_CC26X0 0        //!< 0 is the driverlib build ID for the cc26x0 driverlib.
-#define DRIVERLIB_BUILD_CC13X0 1        //!< 1 is the driverlib build ID for the cc13x0 driverlib.
-#define DRIVERLIB_BUILD_CC26X1 2        //!< 2 is the driverlib build ID for the cc26x1 driverlib.
-#define DRIVERLIB_BUILD_CC26X0R2 3      //!< 3 is the driverlib build ID for the cc26x0r2 driverlib.
+#define DRIVERLIB_BUILD_CC26X0        0 //!< 0 is the driverlib build ID for the cc26x0 driverlib.
+#define DRIVERLIB_BUILD_CC13X0        1 //!< 1 is the driverlib build ID for the cc13x0 driverlib.
+#define DRIVERLIB_BUILD_CC26X1        2 //!< 2 is the driverlib build ID for the cc26x1 driverlib.
+#define DRIVERLIB_BUILD_CC26X0R2      3 //!< 3 is the driverlib build ID for the cc26x0r2 driverlib.
 #define DRIVERLIB_BUILD_CC13X2_CC26X2 4 //!< 4 is the driverlib build ID for the cc13x2_cc26x2 driverlib.
 
 //*****************************************************************************
@@ -402,7 +403,7 @@ extern ChipFamily_t ChipInfo_GetChipFamily(void);
 //! This driverlib build identifier can be useful for compile time checking/optimization (supporting C preprocessor expressions).
 //
 //*****************************************************************************
-#define THIS_DRIVERLIB_BUILD DRIVERLIB_BUILD_CC13X0
+#define THIS_DRIVERLIB_BUILD   DRIVERLIB_BUILD_CC13X0
 
 //*****************************************************************************
 //
@@ -413,9 +414,9 @@ extern ChipFamily_t ChipInfo_GetChipFamily(void);
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_ChipFamilyIs_CC13x0(void)
+ChipInfo_ChipFamilyIs_CC13x0( void )
 {
-    return (ChipInfo_GetChipFamily() == FAMILY_CC13x0);
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC13x0 );
 }
 
 //*****************************************************************************
@@ -427,9 +428,9 @@ ChipInfo_ChipFamilyIs_CC13x0(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_ChipFamilyIs_CC26x0(void)
+ChipInfo_ChipFamilyIs_CC26x0( void )
 {
-    return (ChipInfo_GetChipFamily() == FAMILY_CC26x0);
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC26x0 );
 }
 
 //*****************************************************************************
@@ -441,9 +442,9 @@ ChipInfo_ChipFamilyIs_CC26x0(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_ChipFamilyIs_CC26x0R2(void)
+ChipInfo_ChipFamilyIs_CC26x0R2( void )
 {
-    return (ChipInfo_GetChipFamily() == FAMILY_CC26x0R2);
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC26x0R2 );
 }
 
 //*****************************************************************************
@@ -455,9 +456,9 @@ ChipInfo_ChipFamilyIs_CC26x0R2(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_ChipFamilyIs_CC26x1(void)
+ChipInfo_ChipFamilyIs_CC26x1( void )
 {
-    return (ChipInfo_GetChipFamily() == FAMILY_CC26x1);
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC26x1 );
 }
 
 //*****************************************************************************
@@ -469,9 +470,9 @@ ChipInfo_ChipFamilyIs_CC26x1(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_ChipFamilyIs_CC13x2_CC26x2(void)
+ChipInfo_ChipFamilyIs_CC13x2_CC26x2( void )
 {
-    return (ChipInfo_GetChipFamily() == FAMILY_CC13x2_CC26x2);
+    return ( ChipInfo_GetChipFamily() == FAMILY_CC13x2_CC26x2 );
 }
 
 //*****************************************************************************
@@ -481,14 +482,14 @@ ChipInfo_ChipFamilyIs_CC13x2_CC26x2(void)
 //*****************************************************************************
 typedef enum
 {
-    HWREV_Unknown = -1, //!< -1 means that the chip's HW revision is unknown.
-    HWREV_1_0 = 10,     //!< 10 means that the chip's HW revision is 1.0
-    HWREV_1_1 = 11,     //!< 11 means that the chip's HW revision is 1.1
-    HWREV_2_0 = 20,     //!< 20 means that the chip's HW revision is 2.0
-    HWREV_2_1 = 21,     //!< 21 means that the chip's HW revision is 2.1
-    HWREV_2_2 = 22,     //!< 22 means that the chip's HW revision is 2.2
-    HWREV_2_3 = 23,     //!< 23 means that the chip's HW revision is 2.3
-    HWREV_2_4 = 24      //!< 24 means that the chip's HW revision is 2.4
+    HWREV_Unknown     = -1, //!< -1 means that the chip's HW revision is unknown.
+    HWREV_1_0         = 10, //!< 10 means that the chip's HW revision is 1.0
+    HWREV_1_1         = 11, //!< 11 means that the chip's HW revision is 1.1
+    HWREV_2_0         = 20, //!< 20 means that the chip's HW revision is 2.0
+    HWREV_2_1         = 21, //!< 21 means that the chip's HW revision is 2.1
+    HWREV_2_2         = 22, //!< 22 means that the chip's HW revision is 2.2
+    HWREV_2_3         = 23, //!< 23 means that the chip's HW revision is 2.3
+    HWREV_2_4         = 24  //!< 24 means that the chip's HW revision is 2.4
 } HwRevision_t;
 
 //*****************************************************************************
@@ -499,7 +500,7 @@ typedef enum
 //! Returns \ref HwRevision_t
 //
 //*****************************************************************************
-extern HwRevision_t ChipInfo_GetHwRevision(void);
+extern HwRevision_t ChipInfo_GetHwRevision( void );
 
 //*****************************************************************************
 //
@@ -510,9 +511,9 @@ extern HwRevision_t ChipInfo_GetHwRevision(void);
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_1_0(void)
+ChipInfo_HwRevisionIs_1_0( void )
 {
-    return (ChipInfo_GetHwRevision() == HWREV_1_0);
+    return ( ChipInfo_GetHwRevision() == HWREV_1_0 );
 }
 
 //*****************************************************************************
@@ -524,9 +525,9 @@ ChipInfo_HwRevisionIs_1_0(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_2_0(void)
+ChipInfo_HwRevisionIs_2_0( void )
 {
-    return (ChipInfo_GetHwRevision() == HWREV_2_0);
+    return ( ChipInfo_GetHwRevision() == HWREV_2_0 );
 }
 
 //*****************************************************************************
@@ -538,9 +539,9 @@ ChipInfo_HwRevisionIs_2_0(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_GTEQ_2_0(void)
+ChipInfo_HwRevisionIs_GTEQ_2_0( void )
 {
-    return (ChipInfo_GetHwRevision() >= HWREV_2_0);
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_0 );
 }
 
 //*****************************************************************************
@@ -552,9 +553,9 @@ ChipInfo_HwRevisionIs_GTEQ_2_0(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_2_1(void)
+ChipInfo_HwRevisionIs_2_1( void )
 {
-    return (ChipInfo_GetHwRevision() == HWREV_2_1);
+    return ( ChipInfo_GetHwRevision() == HWREV_2_1 );
 }
 
 //*****************************************************************************
@@ -566,9 +567,9 @@ ChipInfo_HwRevisionIs_2_1(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_GTEQ_2_1(void)
+ChipInfo_HwRevisionIs_GTEQ_2_1( void )
 {
-    return (ChipInfo_GetHwRevision() >= HWREV_2_1);
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_1 );
 }
 
 //*****************************************************************************
@@ -580,9 +581,9 @@ ChipInfo_HwRevisionIs_GTEQ_2_1(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_2_2(void)
+ChipInfo_HwRevisionIs_2_2( void )
 {
-    return (ChipInfo_GetHwRevision() == HWREV_2_2);
+    return ( ChipInfo_GetHwRevision() == HWREV_2_2 );
 }
 
 //*****************************************************************************
@@ -594,9 +595,9 @@ ChipInfo_HwRevisionIs_2_2(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_GTEQ_2_2(void)
+ChipInfo_HwRevisionIs_GTEQ_2_2( void )
 {
-    return (ChipInfo_GetHwRevision() >= HWREV_2_2);
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_2 );
 }
 
 //*****************************************************************************
@@ -608,9 +609,9 @@ ChipInfo_HwRevisionIs_GTEQ_2_2(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_GTEQ_2_3(void)
+ChipInfo_HwRevisionIs_GTEQ_2_3( void )
 {
-    return (ChipInfo_GetHwRevision() >= HWREV_2_3);
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_3 );
 }
 
 //*****************************************************************************
@@ -622,9 +623,9 @@ ChipInfo_HwRevisionIs_GTEQ_2_3(void)
 //
 //*****************************************************************************
 __STATIC_INLINE bool
-ChipInfo_HwRevisionIs_GTEQ_2_4(void)
+ChipInfo_HwRevisionIs_GTEQ_2_4( void )
 {
-    return (ChipInfo_GetHwRevision() >= HWREV_2_4);
+    return ( ChipInfo_GetHwRevision() >= HWREV_2_4 );
 }
 
 //*****************************************************************************
@@ -634,7 +635,7 @@ ChipInfo_HwRevisionIs_GTEQ_2_4(void)
 //! \return None
 //
 //*****************************************************************************
-extern void ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated(void);
+extern void ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated( void );
 
 //*****************************************************************************
 //
@@ -645,27 +646,27 @@ extern void ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated(void);
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_ChipInfo_GetSupportedProtocol_BV
-#undef ChipInfo_GetSupportedProtocol_BV
+#undef  ChipInfo_GetSupportedProtocol_BV
 #define ChipInfo_GetSupportedProtocol_BV ROM_ChipInfo_GetSupportedProtocol_BV
 #endif
 #ifdef ROM_ChipInfo_GetPackageType
-#undef ChipInfo_GetPackageType
-#define ChipInfo_GetPackageType ROM_ChipInfo_GetPackageType
+#undef  ChipInfo_GetPackageType
+#define ChipInfo_GetPackageType         ROM_ChipInfo_GetPackageType
 #endif
 #ifdef ROM_ChipInfo_GetChipType
-#undef ChipInfo_GetChipType
-#define ChipInfo_GetChipType ROM_ChipInfo_GetChipType
+#undef  ChipInfo_GetChipType
+#define ChipInfo_GetChipType            ROM_ChipInfo_GetChipType
 #endif
 #ifdef ROM_ChipInfo_GetChipFamily
-#undef ChipInfo_GetChipFamily
-#define ChipInfo_GetChipFamily ROM_ChipInfo_GetChipFamily
+#undef  ChipInfo_GetChipFamily
+#define ChipInfo_GetChipFamily          ROM_ChipInfo_GetChipFamily
 #endif
 #ifdef ROM_ChipInfo_GetHwRevision
-#undef ChipInfo_GetHwRevision
-#define ChipInfo_GetHwRevision ROM_ChipInfo_GetHwRevision
+#undef  ChipInfo_GetHwRevision
+#define ChipInfo_GetHwRevision          ROM_ChipInfo_GetHwRevision
 #endif
 #ifdef ROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
-#undef ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
+#undef  ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
 #define ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated ROM_ThisLibraryIsFor_CC13x0_HwRev20AndLater_HaltIfViolated
 #endif
 #endif

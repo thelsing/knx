@@ -1,22 +1,22 @@
-#include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
+#include <pybind11/functional.h>
+#include <pybind11/stl.h>
 
 namespace py = pybind11;
 
 #include <Python.h>
-#include <algorithm>
-#include <stdint.h>
 #include <stdio.h>
+#include <time.h>
 #include <stdlib.h>
 #include <thread>
-#include <time.h>
+#include <stdint.h>
 #include <vector>
+#include <algorithm>
 
+#include "linux_platform.h"
 #include "knx/bau57B0.h"
 #include "knx/group_object_table_object.h"
-#include "linux_platform.h"
 
 LinuxPlatform* platform = 0;
 Bau57B0* bau = 0;
@@ -38,10 +38,10 @@ static std::vector<const char*> argv;
 
 struct StdStringCStrFunctor
 {
-        const char* operator()(const std::string& str)
-        {
-            return str.c_str();
-        }
+    const char* operator() (const std::string& str)
+    {
+        return str.c_str();
+    }
 };
 
 static void Prepare(std::vector<std::string> args)
@@ -129,41 +129,52 @@ static bool Configured()
     return bau->configured();
 }
 
+
 PYBIND11_MODULE(knx, m)
 {
-    m.doc() = "wrapper for knx device lib"; // optional module docstring
+    m.doc() = "wrapper for knx device lib";    // optional module docstring
 
     m.def("Start", &Start, "Start knx handling thread.");
     m.def("Stop", &Stop, "Stop knx handling thread.");
     m.def("Prepare", &Prepare, "Allocated needed objects.");
     m.def("Destroy", &Destroy, "Free object allocated by Prepare.");
-    m.def("ProgramMode", (bool (*)()) & ProgramMode, "get programing mode active.");
-    m.def("ProgramMode", (bool (*)(bool)) & ProgramMode, "Activate / deactivate programing mode.");
-    m.def("Configured", (bool (*)()) & Configured, "get configured status.");
+    m.def("ProgramMode", (bool(*)())&ProgramMode, "get programing mode active.");
+    m.def("ProgramMode", (bool(*)(bool))&ProgramMode, "Activate / deactivate programing mode.");
+    m.def("Configured", (bool(*)())&Configured, "get configured status.");
     m.def("ReadMemory", &ReadMemory, "read memory from flash file");
-    m.def("FlashFilePath", []() {
+    m.def("FlashFilePath", []()
+    {
         if (!platform)
             return std::string("");
 
         return platform->flashFilePath();
     });
-    m.def("FlashFilePath", [](std::string path) {
+    m.def("FlashFilePath", [](std::string path)
+    {
         if (!platform)
             return;
 
         platform->flashFilePath(path);
     });
-    m.def("GetGroupObject", [](uint16_t goNr) {
+    m.def("GetGroupObject", [](uint16_t goNr)
+    {
         if (!bau || goNr > bau->groupObjectTable().entryCount())
             return (GroupObject*)nullptr;
 
-        return &bau->groupObjectTable().get(goNr); }, py::return_value_policy::reference);
+        return &bau->groupObjectTable().get(goNr);
+    }, py::return_value_policy::reference);
 
     py::class_<GroupObject>(m, "GroupObject", py::dynamic_attr())
-        .def(py::init())
-        .def("asap", &GroupObject::asap)
-        .def("size", &GroupObject::valueSize)
-        .def_property("value", [](GroupObject& go) { return py::bytes((const char*)go.valueRef(), go.valueSize()); }, [](GroupObject& go, py::bytes bytesValue) {
+    .def(py::init())
+    .def("asap", &GroupObject::asap)
+    .def("size", &GroupObject::valueSize)
+    .def_property("value",
+                  [](GroupObject & go)
+    {
+        return py::bytes((const char*)go.valueRef(), go.valueSize());
+    },
+    [](GroupObject & go, py::bytes bytesValue)
+    {
         const auto value = static_cast<std::string>(bytesValue);
 
         if (value.length() != go.valueSize())
@@ -171,7 +182,17 @@ PYBIND11_MODULE(knx, m)
 
         auto valueRef = go.valueRef();
         memcpy(valueRef, value.c_str(), go.valueSize());
-        go.objectWritten(); })
-        .def_property("callback", [](GroupObject& go) { return go.callback(); }, [](GroupObject& go, GroupObjectUpdatedHandler handler) { go.callback(handler); })
-        .def("callBack", (void(GroupObject::*)(GroupObjectUpdatedHandler)) & GroupObject::callback);
+        go.objectWritten();
+    })
+    .def_property("callback",
+                  [](GroupObject & go)
+    {
+        return go.callback();
+    },
+    [](GroupObject & go, GroupObjectUpdatedHandler handler)
+    {
+        go.callback(handler);
+    }
+                 )
+    .def("callBack", (void(GroupObject::*)(GroupObjectUpdatedHandler))&GroupObject::callback);
 }

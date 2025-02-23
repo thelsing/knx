@@ -4,26 +4,26 @@
 #include "ip_data_link_layer.h"
 
 #include "bits.h"
+#include "platform.h"
 #include "device_object.h"
-#include "knx_facade.h"
 #include "knx_ip_routing_indication.h"
 #include "knx_ip_search_request.h"
-#include "knx_ip_search_request_extended.h"
 #include "knx_ip_search_response.h"
+#include "knx_ip_search_request_extended.h"
 #include "knx_ip_search_response_extended.h"
-#include "platform.h"
+#include "knx_facade.h"
 #ifdef KNX_TUNNELING
-#include "knx_ip_config_request.h"
-#include "knx_ip_connect_request.h"
-#include "knx_ip_connect_response.h"
-#include "knx_ip_description_request.h"
-#include "knx_ip_description_response.h"
-#include "knx_ip_disconnect_request.h"
-#include "knx_ip_disconnect_response.h"
-#include "knx_ip_state_request.h"
-#include "knx_ip_state_response.h"
-#include "knx_ip_tunneling_ack.h"
-#include "knx_ip_tunneling_request.h"
+    #include "knx_ip_connect_request.h"
+    #include "knx_ip_connect_response.h"
+    #include "knx_ip_state_request.h"
+    #include "knx_ip_state_response.h"
+    #include "knx_ip_disconnect_request.h"
+    #include "knx_ip_disconnect_response.h"
+    #include "knx_ip_tunneling_request.h"
+    #include "knx_ip_tunneling_ack.h"
+    #include "knx_ip_description_request.h"
+    #include "knx_ip_description_response.h"
+    #include "knx_ip_config_request.h"
 #endif
 
 #include <stdio.h>
@@ -35,8 +35,7 @@
 #define MIN_LEN_CEMI 10
 
 IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam,
-                                 NetworkLayerEntity& netLayerEntity, Platform& platform, DataLinkLayerCallbacks* dllcb)
-    : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam), _dllcb(dllcb)
+                                 NetworkLayerEntity& netLayerEntity, Platform& platform, DataLinkLayerCallbacks* dllcb) : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam), _dllcb(dllcb)
 {
 }
 
@@ -68,7 +67,7 @@ void IpDataLinkLayer::dataRequestToTunnel(CemiFrame& frame)
             if (tunnels[i].ChannelId != 0 && tunnels[i].IndividualAddress == frame.sourceAddress())
                 sendFrameToTunnel(&tunnels[i], frame);
 
-        // TODO check if source is from tunnel
+        //TODO check if source is from tunnel
         return;
     }
 
@@ -121,7 +120,7 @@ void IpDataLinkLayer::dataConfirmationToTunnel(CemiFrame& frame)
             if (tunnels[i].ChannelId != 0 && tunnels[i].IndividualAddress == frame.sourceAddress())
                 sendFrameToTunnel(&tunnels[i], frame);
 
-        // TODO check if source is from tunnel
+        //TODO check if source is from tunnel
         return;
     }
 
@@ -302,6 +301,7 @@ void IpDataLinkLayer::loop()
 
 #endif
 
+
     uint8_t buffer[512];
     uint16_t remotePort = 0;
     uint32_t remoteAddr = 0;
@@ -313,7 +313,8 @@ void IpDataLinkLayer::loop()
     if (len < KNXIP_HEADER_LEN)
         return;
 
-    if (buffer[0] != KNXIP_HEADER_LEN || buffer[1] != KNXIP_PROTOCOL_VERSION)
+    if (buffer[0] != KNXIP_HEADER_LEN
+            || buffer[1] != KNXIP_PROTOCOL_VERSION)
         return;
 
 #ifdef KNX_ACTIVITYCALLBACK
@@ -328,13 +329,15 @@ void IpDataLinkLayer::loop()
 
     switch ((KnxIpServiceType)code)
     {
-        case RoutingIndication: {
+        case RoutingIndication:
+        {
             KnxIpRoutingIndication routingIndication(buffer, len);
             frameReceived(routingIndication.frame());
             break;
         }
 
-        case SearchRequest: {
+        case SearchRequest:
+        {
             KnxIpSearchRequest searchRequest(buffer, len);
             KnxIpSearchResponse searchResponse(_ipParameters, _deviceObject);
 
@@ -349,7 +352,8 @@ void IpDataLinkLayer::loop()
             break;
         }
 
-        case SearchRequestExt: {
+        case SearchRequestExt:
+        {
 #if KNX_SERVICE_FAMILY_CORE >= 2
             loopHandleSearchRequestExtended(buffer, len);
 #endif
@@ -358,45 +362,53 @@ void IpDataLinkLayer::loop()
 
 #ifdef KNX_TUNNELING
 
-        case ConnectRequest: {
+        case ConnectRequest:
+        {
             loopHandleConnectRequest(buffer, len, remoteAddr, remotePort);
             break;
         }
 
-        case ConnectionStateRequest: {
+        case ConnectionStateRequest:
+        {
             loopHandleConnectionStateRequest(buffer, len);
             break;
         }
 
-        case DisconnectRequest: {
+        case DisconnectRequest:
+        {
             loopHandleDisconnectRequest(buffer, len);
             break;
         }
 
-        case DescriptionRequest: {
+        case DescriptionRequest:
+        {
             loopHandleDescriptionRequest(buffer, len);
             break;
         }
 
-        case DeviceConfigurationRequest: {
+        case DeviceConfigurationRequest:
+        {
             loopHandleDeviceConfigurationRequest(buffer, len);
             break;
         }
 
-        case TunnelingRequest: {
+        case TunnelingRequest:
+        {
             loopHandleTunnelingRequest(buffer, len);
             return;
         }
 
-        case DeviceConfigurationAck: {
-            // TOOD nothing to do now
-            // println("got Ack");
+        case DeviceConfigurationAck:
+        {
+            //TOOD nothing to do now
+            //println("got Ack");
             break;
         }
 
-        case TunnelingAck: {
-            // TOOD nothing to do now
-            // println("got Ack");
+        case TunnelingAck:
+        {
+            //TOOD nothing to do now
+            //println("got Ack");
             break;
         }
 
@@ -447,7 +459,7 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
 #endif
 #endif
 
-    // defaults: "Device Information DIB", "Extended Device Information DIB" and "Supported Services DIB".
+    //defaults: "Device Information DIB", "Extended Device Information DIB" and "Supported Services DIB".
     int dibLength = LEN_DEVICE_INFORMATION_DIB + LEN_SERVICE_DIB + LEN_EXTENDED_DEVICE_INFORMATION_DIB;
 
     if (searchRequest.srpByService)
@@ -492,12 +504,12 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
 
     if (searchRequest.srpRequestDIBs)
     {
-        // println("srpRequestDIBs");
-        if (searchRequest.requestedDIB(IP_CONFIG))
-            dibLength += LEN_IP_CONFIG_DIB; // 16
+        //println("srpRequestDIBs");
+        if(searchRequest.requestedDIB(IP_CONFIG))
+            dibLength += LEN_IP_CONFIG_DIB; //16
 
         if (searchRequest.requestedDIB(IP_CUR_CONFIG))
-            dibLength += LEN_IP_CURRENT_CONFIG_DIB; // 20
+            dibLength += LEN_IP_CURRENT_CONFIG_DIB; //20
 
         if (searchRequest.requestedDIB(KNX_ADDRESSES))
         {
@@ -507,7 +519,7 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
         }
 
         if (searchRequest.requestedDIB(MANUFACTURER_DATA))
-            dibLength += 0; // 4 + n
+            dibLength += 0; //4 + n
 
         if (searchRequest.requestedDIB(TUNNELING_INFO))
         {
@@ -519,9 +531,9 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
 
     KnxIpSearchResponseExtended searchResponse(_ipParameters, _deviceObject, dibLength);
 
-    searchResponse.setDeviceInfo(_ipParameters, _deviceObject); // DescriptionTypeCode::DeviceInfo 1
-    searchResponse.setSupportedServices();                      // DescriptionTypeCode::SUPP_SVC_FAMILIES 2
-    searchResponse.setExtendedDeviceInfo();                     // DescriptionTypeCode::EXTENDED_DEVICE_INFO 8
+    searchResponse.setDeviceInfo(_ipParameters, _deviceObject); //DescriptionTypeCode::DeviceInfo 1
+    searchResponse.setSupportedServices(); //DescriptionTypeCode::SUPP_SVC_FAMILIES 2
+    searchResponse.setExtendedDeviceInfo(); //DescriptionTypeCode::EXTENDED_DEVICE_INFO 8
 
     if (searchRequest.srpRequestDIBs)
     {
@@ -536,14 +548,14 @@ void IpDataLinkLayer::loopHandleSearchRequestExtended(uint8_t* buffer, uint16_t 
 
         if (searchRequest.requestedDIB(MANUFACTURER_DATA))
         {
-            // println("requested MANUFACTURER_DATA but not implemented");
+            //println("requested MANUFACTURER_DATA but not implemented");
         }
 
         if (searchRequest.requestedDIB(TUNNELING_INFO))
             searchResponse.setTunnelingInfo(_ipParameters, _deviceObject, tunnels);
     }
 
-    if (searchResponse.totalLength() > 500)
+    if(searchResponse.totalLength() > 500)
     {
         printf("skipped response length > 500. Length: %d bytes\n", searchResponse.totalLength());
         return;
@@ -607,7 +619,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
     println(connRequest.hpaiCtrl().ipPortNumber());
 #endif
 
-    // We only support 0x03 and 0x04!
+    //We only support 0x03 and 0x04!
     if (connRequest.cri().type() != TUNNEL_CONNECTION && connRequest.cri().type() != DEVICE_MGMT_CONNECTION)
     {
 #ifdef KNX_LOG_TUNNELING
@@ -618,9 +630,9 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
         return;
     }
 
-    if (connRequest.cri().type() == TUNNEL_CONNECTION && connRequest.cri().layer() != 0x02) // LinkLayer
+    if (connRequest.cri().type() == TUNNEL_CONNECTION && connRequest.cri().layer() != 0x02) //LinkLayer
     {
-        // We only support 0x02!
+        //We only support 0x02!
 #ifdef KNX_LOG_TUNNELING
         println("Only LinkLayer ist supported!");
 #endif
@@ -643,7 +655,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
     {
         addresses = _ipParameters.propertyData(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES);
     }
-    else // no tunnel PA configured, that means device is unconfigured and has 15.15.0
+    else    // no tunnel PA configured, that means device is unconfigured and has 15.15.0
     {
         uint8_t addrbuffer[KNX_TUNNELING * 2];
         addresses = (uint8_t*)addrbuffer;
@@ -702,7 +714,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
             tunnelResOptions[i] = (*(tunCtrlBytes + i) & 0x60) >> 5;
         }
 
-        if (resTunActive && tunnelResActive[i]) // tunnel reserve feature active for this tunnel
+        if(resTunActive && tunnelResActive[i])   // tunnel reserve feature active for this tunnel
         {
 #ifdef KNX_LOG_TUNNELING
             print("tunnel reserve feature active for this tunnel: ");
@@ -745,9 +757,10 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
     println(firstResAndOccTunnel);
 #endif
 
+
     uint8_t tunIdx = 0xff;
 
-    if (resTunActive & (firstResAndFreeTunnel >= 0 || firstResAndOccTunnel >= 0)) // tunnel reserve feature active (for this src)
+    if (resTunActive & (firstResAndFreeTunnel >= 0 || firstResAndOccTunnel >= 0))  // tunnel reserve feature active (for this src)
     {
         if (firstResAndFreeTunnel >= 0)
         {
@@ -770,6 +783,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
                 _platform.sendBytesUniCast(tunnels[firstResAndOccTunnel].IpAddress, tunnels[firstResAndOccTunnel].PortCtrl, discReq.data(), discReq.totalLength());
                 tunnels[firstResAndOccTunnel].Reset();
 
+
                 tunIdx = firstResAndOccTunnel;
             }
             else if (tunnelResOptions[firstResAndOccTunnel] == 3) // use the first unreserved tunnel (if one)
@@ -780,22 +794,22 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
                     ; // do nothing => decline
             }
 
-            // else
-            //  should not happen
-            //  do nothing => decline
+            //else
+            // should not happen
+            // do nothing => decline
         }
 
-        // else
-        //  should not happen
-        //  do nothing => decline
+        //else
+        // should not happen
+        // do nothing => decline
     }
     else
     {
         if (firstFreeTunnel >= 0)
             tunIdx = firstFreeTunnel;
 
-        // else
-        //  do nothing => decline
+        //else
+        // do nothing => decline
     }
 
     KnxIpTunnelConnection* tun = nullptr;
@@ -807,7 +821,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
         uint16_t tunPa = 0;
         popWord(tunPa, addresses + (tunIdx * 2));
 
-        // check if this PA is in use (should not happen, only when there is one pa wrongly assigned to more then one tunnel)
+        //check if this PA is in use (should not happen, only when there is one pa wrongly assigned to more then one tunnel)
         for (int x = 0; x < KNX_TUNNELING; x++)
             if (tunnels[x].IndividualAddress == tunPa)
             {
@@ -818,8 +832,9 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
                 tun = nullptr;
                 break;
             }
-        if (tun)
+        if(tun)
             tun->IndividualAddress = tunPa;
+
     }
 
     if (tun == nullptr)
@@ -853,8 +868,8 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
         _lastChannelId = 0;
 
     tun->IpAddress = srcIP;
-    tun->PortData = connRequest.hpaiData().ipPortNumber() ? connRequest.hpaiData().ipPortNumber() : srcPort;
-    tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber() ? connRequest.hpaiCtrl().ipPortNumber() : srcPort;
+    tun->PortData = connRequest.hpaiData().ipPortNumber()?connRequest.hpaiData().ipPortNumber():srcPort;
+    tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber()?connRequest.hpaiCtrl().ipPortNumber():srcPort;
 
     print("New Tunnel-Connection[");
     print(tunIdx);
@@ -892,6 +907,7 @@ void IpDataLinkLayer::loopHandleConnectRequest(uint8_t* buffer, uint16_t length,
 
     println();
 
+
     KnxIpConnectResponse connRes(_ipParameters, tun->IndividualAddress, 3671, tun->ChannelId, connRequest.cri().type());
     _platform.sendBytesUniCast(tun->IpAddress, tun->PortCtrl, connRes.data(), connRes.totalLength());
 }
@@ -922,10 +938,10 @@ void IpDataLinkLayer::loopHandleConnectionStateRequest(uint8_t* buffer, uint16_t
         return;
     }
 
-    // TODO check knx connection!
-    // if no connection return E_KNX_CONNECTION
+    //TODO check knx connection!
+    //if no connection return E_KNX_CONNECTION
 
-    // TODO check when to send E_DATA_CONNECTION
+    //TODO check when to send E_DATA_CONNECTION
 
     tun->lastHeartbeat = millis();
     KnxIpStateResponse stateRes(tun->ChannelId, E_NO_ERROR);
@@ -962,6 +978,7 @@ void IpDataLinkLayer::loopHandleDisconnectRequest(uint8_t* buffer, uint16_t leng
         _platform.sendBytesUniCast(discReq.hpaiCtrl().ipAddress(), discReq.hpaiCtrl().ipPortNumber(), discRes.data(), discRes.totalLength());
         return;
     }
+
 
     KnxIpDisconnectResponse discRes(tun->ChannelId, E_NO_ERROR);
     _platform.sendBytesUniCast(discReq.hpaiCtrl().ipAddress(), discReq.hpaiCtrl().ipPortNumber(), discRes.data(), discRes.totalLength());
@@ -1045,8 +1062,8 @@ void IpDataLinkLayer::loopHandleTunnelingRequest(uint8_t* buffer, uint16_t lengt
         print("Received SequenceCounter again: ");
         println(tunnReq.connectionHeader().sequenceCounter());
 #endif
-        // we already got this one
-        // so just ack it
+        //we already got this one
+        //so just ack it
         KnxIpTunnelingAck tunnAck;
         tunnAck.connectionHeader().length(4);
         tunnAck.connectionHeader().channelId(tun->ChannelId);
@@ -1063,7 +1080,7 @@ void IpDataLinkLayer::loopHandleTunnelingRequest(uint8_t* buffer, uint16_t lengt
         print(" expected ");
         println((uint8_t)(tun->SequenceCounter_R + 1));
 #endif
-        // Dont handle it
+        //Dont handle it
         return;
     }
 
@@ -1132,7 +1149,7 @@ bool IpDataLinkLayer::isSendLimitReached()
         if (timeBaseDiff > 10)
             timeBaseDiff = 10;
 
-        for (uint32_t i = 0; i < timeBaseDiff; i++)
+        for (uint32_t i = 0; i < timeBaseDiff ; i++)
         {
             _frameCountBase++;
             _frameCountBase = _frameCountBase % 10;
@@ -1143,31 +1160,31 @@ bool IpDataLinkLayer::isSendLimitReached()
     }
     else // _frameCountTimeBase < curTime => millis overflow, reset
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 10 ; i++)
             _frameCount[i] = 0;
 
         _frameCountBase = 0;
         _frameCountTimeBase = curTime;
     }
 
-    // check if we are over the limit
+    //check if we are over the limit
     uint16_t sum = 0;
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 10 ; i++)
         sum += _frameCount[i];
 
     if (sum > 50)
     {
         println("Dropping packet due to 50p/s limit");
-        return true; // drop packet
+        return true;   // drop packet
     }
     else
     {
         _frameCount[_frameCountBase]++;
-        // print("sent packages in last 1000ms: ");
-        // print(sum);
-        // print(" curTime: ");
-        // println(curTime);
+        //print("sent packages in last 1000ms: ");
+        //print(sum);
+        //print(" curTime: ");
+        //println(curTime);
         return false;
     }
 }

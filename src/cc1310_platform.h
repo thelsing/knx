@@ -24,4 +24,4 @@ class CC1310Platform : public Platform
         void commitToEeprom() final;
 };
 
-#endif // DeviceFamily_CC13X0
+#endif //DeviceFamily_CC13X0

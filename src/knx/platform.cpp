@@ -2,8 +2,8 @@
 
 #include "bits.h"
 
-#include <cstdlib>
 #include <cstring>
+#include <cstdlib>
 
 NvMemoryType Platform::NonVolatileMemoryType()
 {
@@ -187,7 +187,7 @@ void Platform::commitNonVolatileMemory()
 
             free(_eraseblockBuffer);
             _eraseblockBuffer = nullptr;
-            _bufferedEraseblockNumber = -1; // does that make sense?
+            _bufferedEraseblockNumber = -1;  // does that make sense?
         }
     }
 
@@ -217,7 +217,7 @@ uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t* buf
         {
             loadEraseblockContaining(relativeAddress);
             uint32_t start = _bufferedEraseblockNumber * (flashEraseBlockSize() * flashPageSize());
-            uint32_t end = start + (flashEraseBlockSize() * flashPageSize());
+            uint32_t end = start +  (flashEraseBlockSize() * flashPageSize());
 
             uint32_t offset = relativeAddress - start;
             uint32_t length = end - relativeAddress;
@@ -335,7 +335,7 @@ uint32_t Platform::writeNonVolatileMemory(uint32_t relativeAddress, uint8_t valu
         {
             loadEraseblockContaining(relativeAddress);
             uint32_t start = _bufferedEraseblockNumber * (flashEraseBlockSize() * flashPageSize());
-            uint32_t end = start + (flashEraseBlockSize() * flashPageSize());
+            uint32_t end = start +  (flashEraseBlockSize() * flashPageSize());
 
             uint32_t offset = relativeAddress - start;
             uint32_t length = end - relativeAddress;
@@ -380,6 +380,7 @@ int32_t Platform::getEraseBlockNumberOf(uint32_t relativeAddress)
     return relativeAddress / (flashEraseBlockSize() * flashPageSize());
 }
 
+
 void Platform::writeBufferedEraseBlock()
 {
     if (_bufferedEraseblockNumber > -1 && _bufferedEraseblockDirty)
@@ -397,6 +398,7 @@ void Platform::writeBufferedEraseBlock()
     }
 }
 
+
 void Platform::bufferEraseBlock(int32_t eraseBlockNumber)
 {
     if (_bufferedEraseblockNumber == eraseBlockNumber)
@@ -412,6 +414,7 @@ void Platform::bufferEraseBlock(int32_t eraseBlockNumber)
     _bufferedEraseblockNumber = eraseBlockNumber;
     _bufferedEraseblockDirty = false;
 }
+
 
 #ifdef KNX_FLASH_CALLBACK
 void Platform::registerFlashCallbacks(

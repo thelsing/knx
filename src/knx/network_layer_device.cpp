@@ -1,12 +1,12 @@
 #include "network_layer_device.h"
-#include "bits.h"
-#include "cemi_frame.h"
 #include "device_object.h"
 #include "tpdu.h"
+#include "cemi_frame.h"
+#include "bits.h"
 
-NetworkLayerDevice::NetworkLayerDevice(DeviceObject& deviceObj, TransportLayer& layer)
-    : NetworkLayer(deviceObj, layer),
-      _netLayerEntities{{*this, kInterfaceIndex}}
+NetworkLayerDevice::NetworkLayerDevice(DeviceObject& deviceObj, TransportLayer& layer) :
+    NetworkLayer(deviceObj, layer),
+    _netLayerEntities { {*this, kInterfaceIndex} }
 {
 }
 
@@ -24,11 +24,11 @@ void NetworkLayerDevice::dataIndividualRequest(AckType ack, uint16_t destination
     else
         npdu.hopCount(hopCount());
 
-    // if (tpdu.apdu().length() > 0)
+    //if (tpdu.apdu().length() > 0)
     //{
-    //     print.print("-> NL  ");
-    //     tpdu.apdu().printPDU();
-    // }
+    //    print.print("-> NL  ");
+    //    tpdu.apdu().printPDU();
+    //}
     _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, _deviceObj.individualAddress(), priority, IndividualAddress, Broadcast);
 }
 
@@ -120,8 +120,8 @@ void NetworkLayerDevice::broadcastIndication(AckType ack, FrameFormat format, NP
     // however we must be able to access those APCI via broadcast mode
     // so we "translate" it to system broadcast like a coupler does when routing
     // between closed and open media
-    if (((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
-        isApciSystemBroadcast(npdu.tpdu().apdu()))
+    if ( ((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
+            isApciSystemBroadcast(npdu.tpdu().apdu()))
     {
         npdu.frame().systemBroadcast(SysBroadcast);
         _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());

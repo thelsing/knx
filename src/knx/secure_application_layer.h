@@ -1,11 +1,11 @@
 #pragma once
 
-#include "apdu.h"
 #include "application_layer.h"
-#include "bits.h"
-#include "knx_types.h"
-#include "simple_map.h"
 #include <stdint.h>
+#include "knx_types.h"
+#include "apdu.h"
+#include "bits.h"
+#include "simple_map.h"
 
 class DeviceObject;
 class SecurityInterfaceObject;
@@ -19,7 +19,7 @@ class BusAccessUnit;
  * It also takes calls from TransportLayer, decodes the submitted APDU and calls the coresponding
  * methods of the BusAccessUnit class.
  */
-class SecureApplicationLayer : public ApplicationLayer
+class SecureApplicationLayer :  public ApplicationLayer
 {
     public:
         /**
@@ -64,49 +64,46 @@ class SecureApplicationLayer : public ApplicationLayer
 
         struct Addr
         {
-                Addr() = default;
-                Addr(uint8_t addr)
-                    : addr{addr} {}
+            Addr() = default;
+            Addr(uint8_t addr) : addr{addr} {}
 
-                uint16_t addr;
-                AddrType addrType{AddrType::unknown};
+            uint16_t addr;
+            AddrType addrType{AddrType::unknown};
 
-                bool operator==(const Addr& cmpAddr) const
+            bool operator ==(const Addr& cmpAddr) const
+            {
+                if ((cmpAddr.addrType == AddrType::unknown) || (addrType == AddrType::unknown))
                 {
-                    if ((cmpAddr.addrType == AddrType::unknown) || (addrType == AddrType::unknown))
-                    {
-                        println("Unknown address type detected!");
-                        return false;
-                    }
-
-                    return (cmpAddr.addr == addr) && (cmpAddr.addrType == addrType);
+                    println("Unknown address type detected!");
+                    return false;
                 }
+
+                return (cmpAddr.addr == addr) && (cmpAddr.addrType == addrType);
+            }
         };
 
         struct GrpAddr : Addr
         {
-                GrpAddr()
-                {
-                    addrType = AddrType::group;
-                }
-                GrpAddr(uint8_t addr)
-                    : Addr{addr}
-                {
-                    addrType = AddrType::group;
-                }
+            GrpAddr()
+            {
+                addrType = AddrType::group;
+            }
+            GrpAddr(uint8_t addr) : Addr{addr}
+            {
+                addrType = AddrType::group;
+            }
         };
 
         struct IndAddr : Addr
         {
-                IndAddr()
-                {
-                    addrType = AddrType::individual;
-                }
-                IndAddr(uint8_t addr)
-                    : Addr{addr}
-                {
-                    addrType = AddrType::individual;
-                }
+            IndAddr()
+            {
+                addrType = AddrType::individual;
+            }
+            IndAddr(uint8_t addr) : Addr{addr}
+            {
+                addrType = AddrType::individual;
+            }
         };
 
         uint32_t calcAuthOnlyMac(uint8_t* apdu, uint8_t apduLength, const uint8_t* key, uint8_t* iv, uint8_t* ctr0);

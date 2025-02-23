@@ -1,10 +1,10 @@
 #include <string.h>
 
+#include "table_object.h"
 #include "bits.h"
+#include "memory.h"
 #include "callback_property.h"
 #include "data_property.h"
-#include "memory.h"
-#include "table_object.h"
 
 BeforeTablesUnloadCallback TableObject::_beforeTablesUnload = 0;
 uint8_t TableObject::_tableUnloadCount = 0;
@@ -60,9 +60,10 @@ void TableObject::loadState(LoadState newState)
     _state = newState;
 }
 
+
 uint8_t* TableObject::save(uint8_t* buffer)
 {
-    // println("TableObject::save");
+    //println("TableObject::save");
     allocTableStatic();
 
     buffer = pushByte(_state, buffer);
@@ -77,9 +78,10 @@ uint8_t* TableObject::save(uint8_t* buffer)
     return InterfaceObject::save(buffer);
 }
 
+
 const uint8_t* TableObject::restore(const uint8_t* buffer)
 {
-    // println("TableObject::restore");
+    //println("TableObject::restore");
 
     uint8_t state = 0;
     buffer = popByte(state, buffer);
@@ -89,14 +91,14 @@ const uint8_t* TableObject::restore(const uint8_t* buffer)
 
     uint32_t relativeAddress = 0;
     buffer = popInt(relativeAddress, buffer);
-    // println(relativeAddress);
+    //println(relativeAddress);
 
     if (relativeAddress != 0)
         _data = _memory.toAbsolute(relativeAddress);
     else
         _data = 0;
 
-    // println((uint32_t)_data);
+    //println((uint32_t)_data);
     return InterfaceObject::restore(buffer);
 }
 
@@ -137,6 +139,7 @@ bool TableObject::allocTable(uint32_t size, bool doFill, uint8_t fillByte)
     return true;
 }
 
+
 void TableObject::allocTableStatic()
 {
     if (_staticTableAdr && !_data)
@@ -149,7 +152,7 @@ void TableObject::allocTableStatic()
 
 void TableObject::loadEvent(const uint8_t* data)
 {
-    // printHex("TableObject::loadEvent 0x", data, 10);
+    //printHex("TableObject::loadEvent 0x", data, 10);
     switch (_state)
     {
         case LS_UNLOADED:
@@ -242,7 +245,7 @@ void TableObject::loadEventLoaded(const uint8_t* data)
         case LE_UNLOAD:
             loadState(LS_UNLOADED);
 
-            // free nv memory
+            //free nv memory
             if (_data)
             {
                 if (!_staticTableAdr)
@@ -327,8 +330,9 @@ uint16_t TableObject::saveSize()
 void TableObject::initializeProperties(size_t propertiesSize, Property** properties)
 {
     Property* ownProperties[] =
-        {
-            new CallbackProperty<TableObject>(this, PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3, [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+    {
+        new CallbackProperty<TableObject>(this, PID_LOAD_STATE_CONTROL, true, PDT_CONTROL, 1, ReadLv3 | WriteLv3,
+        [](TableObject * obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
             if (start == 0)
             {
                 uint16_t currentNoOfElements = 1;
@@ -337,9 +341,13 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
             }
 
             data[0] = obj->_state;
-            return 1; }, [](TableObject* obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
+            return 1;
+        },
+        [](TableObject * obj, uint16_t start, uint8_t count, const uint8_t* data) -> uint8_t {
             obj->loadEvent(data);
-            return 1; })};
+            return 1;
+        })
+    };
 
     uint8_t ownPropertiesCount = sizeof(ownProperties) / sizeof(Property*);
 
@@ -359,38 +367,39 @@ void TableObject::initializeProperties(size_t propertiesSize, Property** propert
 void TableObject::initializeDynTableProperties(size_t propertiesSize, Property** properties)
 {
     Property* ownProperties[] =
-        {
-            new CallbackProperty<TableObject>(this, PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0,
-                                              [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
-                                                  if (start == 0)
-                                                  {
-                                                      uint16_t currentNoOfElements = 1;
-                                                      pushWord(currentNoOfElements, data);
-                                                      return 1;
-                                                  }
+    {
+        new CallbackProperty<TableObject>(this, PID_TABLE_REFERENCE, false, PDT_UNSIGNED_LONG, 1, ReadLv3 | WriteLv0,
+        [](TableObject * obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+            if (start == 0)
+            {
+                uint16_t currentNoOfElements = 1;
+                pushWord(currentNoOfElements, data);
+                return 1;
+            }
 
-                                                  if (obj->_state == LS_UNLOADED)
-                                                      pushInt(0, data);
-                                                  else
-                                                      pushInt(obj->tableReference(), data);
-                                                  return 1;
-                                              }),
-            new CallbackProperty<TableObject>(this, PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0,
-                                              [](TableObject* obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
-                                                  if (obj->_state != LS_LOADED)
-                                                      return 0; // need to check return code for invalid
+            if (obj->_state == LS_UNLOADED)
+                pushInt(0, data);
+            else
+                pushInt(obj->tableReference(), data);
+            return 1;
+        }),
+        new CallbackProperty<TableObject>(this, PID_MCB_TABLE, false, PDT_GENERIC_08, 1, ReadLv3 | WriteLv0,
+        [](TableObject * obj, uint16_t start, uint8_t count, uint8_t* data) -> uint8_t {
+            if (obj->_state != LS_LOADED)
+                return 0; // need to check return code for invalid
 
-                                                  uint32_t segmentSize = obj->_size;
-                                                  uint16_t crc16 = crc16Ccitt(obj->data(), segmentSize);
+            uint32_t segmentSize = obj->_size;
+            uint16_t crc16 = crc16Ccitt(obj->data(), segmentSize);
 
-                                                  pushInt(segmentSize, data); // Segment size
-                                                  pushByte(0x00, data + 4);   // CRC control byte -> 0: always valid
-                                                  pushByte(0xFF, data + 5);   // Read access 4 bits + Write access 4 bits
-                                                  pushWord(crc16, data + 6);  // CRC-16 CCITT of data
+            pushInt(segmentSize, data);     // Segment size
+            pushByte(0x00, data + 4);       // CRC control byte -> 0: always valid
+            pushByte(0xFF, data + 5);       // Read access 4 bits + Write access 4 bits
+            pushWord(crc16, data + 6);      // CRC-16 CCITT of data
 
-                                                  return 1;
-                                              }),
-            new DataProperty(PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t)E_NO_FAULT)};
+            return 1;
+        }),
+        new DataProperty(PID_ERROR_CODE, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t)E_NO_FAULT)
+    };
 
     uint8_t ownPropertiesCount = sizeof(ownProperties) / sizeof(Property*);
 

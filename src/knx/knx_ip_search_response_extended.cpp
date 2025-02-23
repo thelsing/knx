@@ -5,17 +5,17 @@
 
 #define LEN_SERVICE_FAMILIES 2
 #if MASK_VERSION == 0x091A
-#ifdef KNX_TUNNELING
-#define LEN_SERVICE_DIB (2 + 4 * LEN_SERVICE_FAMILIES)
+    #ifdef KNX_TUNNELING
+        #define LEN_SERVICE_DIB (2 + 4 * LEN_SERVICE_FAMILIES)
+    #else
+        #define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
+    #endif
 #else
-#define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
-#endif
-#else
-#ifdef KNX_TUNNELING
-#define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
-#else
-#define LEN_SERVICE_DIB (2 + 2 * LEN_SERVICE_FAMILIES)
-#endif
+    #ifdef KNX_TUNNELING
+        #define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
+    #else
+        #define LEN_SERVICE_DIB (2 + 2 * LEN_SERVICE_FAMILIES)
+    #endif
 #endif
 
 KnxIpSearchResponseExtended::KnxIpSearchResponseExtended(IpParameterObject& parameters, DeviceObject& deviceObject, int dibLength)
@@ -34,14 +34,14 @@ KnxIpSearchResponseExtended::KnxIpSearchResponseExtended(IpParameterObject& para
 
 void KnxIpSearchResponseExtended::setDeviceInfo(IpParameterObject& parameters, DeviceObject& deviceObject)
 {
-    // setDeviceInfo");
+    //setDeviceInfo");
     KnxIpDeviceInformationDIB _deviceInfo(_data + currentPos);
     _deviceInfo.length(LEN_DEVICE_INFORMATION_DIB);
     _deviceInfo.code(DEVICE_INFO);
 #if MASK_VERSION == 0x57B0
-    _deviceInfo.medium(0x20); // MediumType is IP (for IP-Only Devices)
+    _deviceInfo.medium(0x20); //MediumType is IP (for IP-Only Devices)
 #else
-    _deviceInfo.medium(0x02); // MediumType is TP
+    _deviceInfo.medium(0x02); //MediumType is TP
 #endif
     _deviceInfo.status(deviceObject.progMode());
     _deviceInfo.individualAddress(parameters.propertyValue<uint16_t>(PID_KNX_INDIVIDUAL_ADDRESS));
@@ -65,7 +65,7 @@ void KnxIpSearchResponseExtended::setDeviceInfo(IpParameterObject& parameters, D
 
 void KnxIpSearchResponseExtended::setSupportedServices()
 {
-    // println("setSupportedServices");
+    //println("setSupportedServices");
     KnxIpSupportedServiceDIB _supportedServices(_data + currentPos);
     _supportedServices.length(LEN_SERVICE_DIB);
     _supportedServices.code(SUPP_SVC_FAMILIES);
@@ -82,7 +82,7 @@ void KnxIpSearchResponseExtended::setSupportedServices()
 
 void KnxIpSearchResponseExtended::setIpConfig(IpParameterObject& parameters)
 {
-    // println("setIpConfig");
+    //println("setIpConfig");
     KnxIpConfigDIB _ipConfig(_data + currentPos);
     _ipConfig.length(LEN_IP_CONFIG_DIB);
     _ipConfig.code(IP_CONFIG);
@@ -97,7 +97,7 @@ void KnxIpSearchResponseExtended::setIpConfig(IpParameterObject& parameters)
 
 void KnxIpSearchResponseExtended::setIpCurrentConfig(IpParameterObject& parameters)
 {
-    // println("setIpCurrentConfig");
+    //println("setIpCurrentConfig");
     KnxIpConfigDIB _ipCurConfig(_data + currentPos, true);
     _ipCurConfig.length(LEN_IP_CURRENT_CONFIG_DIB);
     _ipCurConfig.code(IP_CUR_CONFIG);
@@ -106,16 +106,16 @@ void KnxIpSearchResponseExtended::setIpCurrentConfig(IpParameterObject& paramete
     _ipCurConfig.gateway(parameters.propertyValue<uint32_t>(PID_CURRENT_DEFAULT_GATEWAY));
     _ipCurConfig.dhcp(0);
     _ipCurConfig.info1(parameters.propertyValue<uint8_t>(PID_CURRENT_IP_ASSIGNMENT_METHOD));
-    _ipCurConfig.info2(0x00); // Reserved
+    _ipCurConfig.info2(0x00); //Reserved
 
     currentPos += LEN_IP_CURRENT_CONFIG_DIB;
 }
 
 void KnxIpSearchResponseExtended::setKnxAddresses(IpParameterObject& parameters, DeviceObject& deviceObject)
 {
-    // println("setKnxAddresses");
+    //println("setKnxAddresses");
     KnxIpKnxAddressesDIB _knxAddresses(_data + currentPos);
-    _knxAddresses.length(4); // minimum
+    _knxAddresses.length(4); //minimum
     _knxAddresses.code(KNX_ADDRESSES);
     _knxAddresses.individualAddress(deviceObject.individualAddress());
 
@@ -136,11 +136,11 @@ void KnxIpSearchResponseExtended::setKnxAddresses(IpParameterObject& parameters,
 
 void KnxIpSearchResponseExtended::setTunnelingInfo(IpParameterObject& parameters, DeviceObject& deviceObject, KnxIpTunnelConnection tunnels[])
 {
-    // println("setTunnelingInfo");
+    //println("setTunnelingInfo");
     KnxIpTunnelingInfoDIB _tunnelInfo(_data + currentPos);
-    _tunnelInfo.length(4); // minlength
+    _tunnelInfo.length(4); //minlength
     _tunnelInfo.code(TUNNELING_INFO);
-    _tunnelInfo.apduLength(254); // FIXME where to get from
+    _tunnelInfo.apduLength(254); //FIXME where to get from
 
     uint16_t length = 0;
     parameters.readPropertyLength(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES, length);
@@ -184,12 +184,12 @@ void KnxIpSearchResponseExtended::setTunnelingInfo(IpParameterObject& parameters
         }
 
         if (doubleCounter > 1 && used)
-            flags |= 1 << 2; // Slot is not usable; double PA is already used
+            flags |= 1 << 2; //Slot is not usable; double PA is already used
 
         if (used)
         {
-            flags |= 1 << 2; // Slot is not usable; PA is already used
-            flags |= 1;      // Slot is not free
+            flags |= 1 << 2; //Slot is not usable; PA is already used
+            flags |= 1; //Slot is not free
         }
 
         flags = ~flags;
@@ -202,12 +202,12 @@ void KnxIpSearchResponseExtended::setTunnelingInfo(IpParameterObject& parameters
 
 void KnxIpSearchResponseExtended::setExtendedDeviceInfo()
 {
-    // println("setExtendedDeviceInfo");
+    //println("setExtendedDeviceInfo");
     KnxIpExtendedDeviceInformationDIB _extended(_data + currentPos);
     _extended.length(LEN_EXTENDED_DEVICE_INFORMATION_DIB);
     _extended.code(EXTENDED_DEVICE_INFO);
-    _extended.status(0x01);      // FIXME dont know encoding PID_MEDIUM_STATUS=51 RouterObject
-    _extended.localMaxApdu(254); // FIXME is this correct?
+    _extended.status(0x01); //FIXME dont know encoding PID_MEDIUM_STATUS=51 RouterObject
+    _extended.localMaxApdu(254); //FIXME is this correct?
     _extended.deviceDescriptor(MASK_VERSION);
 
     currentPos += LEN_EXTENDED_DEVICE_INFORMATION_DIB;
@@ -217,6 +217,7 @@ IpHostProtocolAddressInformation& KnxIpSearchResponseExtended::controlEndpoint()
 {
     return _controlEndpoint;
 }
+
 
 uint8_t* KnxIpSearchResponseExtended::DIBs()
 {

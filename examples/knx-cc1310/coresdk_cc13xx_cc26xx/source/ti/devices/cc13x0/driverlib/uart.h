@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       uart.h
- *  Revised:        2017-06-05 12:13:49 +0200 (Mon, 05 Jun 2017)
- *  Revision:       49096
- *
- *  Description:    Defines and prototypes for the UART.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       uart.h
+*  Revised:        2017-06-05 12:13:49 +0200 (Mon, 05 Jun 2017)
+*  Revision:       49096
+*
+*  Description:    Defines and prototypes for the UART.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,17 +55,18 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_ints.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include "../inc/hw_uart.h"
-#include "debug.h"
-#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_uart.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_ints.h"
+#include "interrupt.h"
+#include "debug.h"
 
 //*****************************************************************************
 //
@@ -81,16 +82,16 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define UARTFIFOLevelGet NOROM_UARTFIFOLevelGet
-#define UARTConfigSetExpClk NOROM_UARTConfigSetExpClk
-#define UARTConfigGetExpClk NOROM_UARTConfigGetExpClk
-#define UARTDisable NOROM_UARTDisable
-#define UARTCharGetNonBlocking NOROM_UARTCharGetNonBlocking
-#define UARTCharGet NOROM_UARTCharGet
-#define UARTCharPutNonBlocking NOROM_UARTCharPutNonBlocking
-#define UARTCharPut NOROM_UARTCharPut
-#define UARTIntRegister NOROM_UARTIntRegister
-#define UARTIntUnregister NOROM_UARTIntUnregister
+#define UARTFIFOLevelGet                NOROM_UARTFIFOLevelGet
+#define UARTConfigSetExpClk             NOROM_UARTConfigSetExpClk
+#define UARTConfigGetExpClk             NOROM_UARTConfigGetExpClk
+#define UARTDisable                     NOROM_UARTDisable
+#define UARTCharGetNonBlocking          NOROM_UARTCharGetNonBlocking
+#define UARTCharGet                     NOROM_UARTCharGet
+#define UARTCharPutNonBlocking          NOROM_UARTCharPutNonBlocking
+#define UARTCharPut                     NOROM_UARTCharPut
+#define UARTIntRegister                 NOROM_UARTIntRegister
+#define UARTIntUnregister               NOROM_UARTIntUnregister
 #endif
 
 //*****************************************************************************
@@ -99,14 +100,14 @@ extern "C" {
 // as the ui32IntFlags parameter, and returned from UARTIntStatus.
 //
 //*****************************************************************************
-#define UART_INT_OE (UART_IMSC_OEIM)    // Overrun Error Interrupt Mask
-#define UART_INT_BE (UART_IMSC_BEIM)    // Break Error Interrupt Mask
-#define UART_INT_PE (UART_IMSC_PEIM)    // Parity Error Interrupt Mask
-#define UART_INT_FE (UART_IMSC_FEIM)    // Framing Error Interrupt Mask
-#define UART_INT_RT (UART_IMSC_RTIM)    // Receive Timeout Interrupt Mask
-#define UART_INT_TX (UART_IMSC_TXIM)    // Transmit Interrupt Mask
-#define UART_INT_RX (UART_IMSC_RXIM)    // Receive Interrupt Mask
-#define UART_INT_CTS (UART_IMSC_CTSMIM) // CTS Modem Interrupt Mask
+#define UART_INT_OE    ( UART_IMSC_OEIM   ) // Overrun Error Interrupt Mask
+#define UART_INT_BE    ( UART_IMSC_BEIM   ) // Break Error Interrupt Mask
+#define UART_INT_PE    ( UART_IMSC_PEIM   ) // Parity Error Interrupt Mask
+#define UART_INT_FE    ( UART_IMSC_FEIM   ) // Framing Error Interrupt Mask
+#define UART_INT_RT    ( UART_IMSC_RTIM   ) // Receive Timeout Interrupt Mask
+#define UART_INT_TX    ( UART_IMSC_TXIM   ) // Transmit Interrupt Mask
+#define UART_INT_RX    ( UART_IMSC_RXIM   ) // Receive Interrupt Mask
+#define UART_INT_CTS   ( UART_IMSC_CTSMIM ) // CTS Modem Interrupt Mask
 
 //*****************************************************************************
 //
@@ -117,20 +118,20 @@ extern "C" {
 // UARTParityModeGet.
 //
 //*****************************************************************************
-#define UART_CONFIG_WLEN_MASK 0x00000060 // Mask for extracting word length
-#define UART_CONFIG_WLEN_8 0x00000060    // 8 bit data
-#define UART_CONFIG_WLEN_7 0x00000040    // 7 bit data
-#define UART_CONFIG_WLEN_6 0x00000020    // 6 bit data
-#define UART_CONFIG_WLEN_5 0x00000000    // 5 bit data
-#define UART_CONFIG_STOP_MASK 0x00000008 // Mask for extracting stop bits
-#define UART_CONFIG_STOP_ONE 0x00000000  // One stop bit
-#define UART_CONFIG_STOP_TWO 0x00000008  // Two stop bits
-#define UART_CONFIG_PAR_MASK 0x00000086  // Mask for extracting parity
-#define UART_CONFIG_PAR_NONE 0x00000000  // No parity
-#define UART_CONFIG_PAR_EVEN 0x00000006  // Even parity
-#define UART_CONFIG_PAR_ODD 0x00000002   // Odd parity
-#define UART_CONFIG_PAR_ONE 0x00000082   // Parity bit is one
-#define UART_CONFIG_PAR_ZERO 0x00000086  // Parity bit is zero
+#define UART_CONFIG_WLEN_MASK   0x00000060  // Mask for extracting word length
+#define UART_CONFIG_WLEN_8      0x00000060  // 8 bit data
+#define UART_CONFIG_WLEN_7      0x00000040  // 7 bit data
+#define UART_CONFIG_WLEN_6      0x00000020  // 6 bit data
+#define UART_CONFIG_WLEN_5      0x00000000  // 5 bit data
+#define UART_CONFIG_STOP_MASK   0x00000008  // Mask for extracting stop bits
+#define UART_CONFIG_STOP_ONE    0x00000000  // One stop bit
+#define UART_CONFIG_STOP_TWO    0x00000008  // Two stop bits
+#define UART_CONFIG_PAR_MASK    0x00000086  // Mask for extracting parity
+#define UART_CONFIG_PAR_NONE    0x00000000  // No parity
+#define UART_CONFIG_PAR_EVEN    0x00000006  // Even parity
+#define UART_CONFIG_PAR_ODD     0x00000002  // Odd parity
+#define UART_CONFIG_PAR_ONE     0x00000082  // Parity bit is one
+#define UART_CONFIG_PAR_ZERO    0x00000086  // Parity bit is zero
 
 //*****************************************************************************
 //
@@ -138,11 +139,11 @@ extern "C" {
 // and returned by UARTFIFOLevelGet in the pui32TxLevel.
 //
 //*****************************************************************************
-#define UART_FIFO_TX1_8 0x00000000 // Transmit interrupt at 1/8 Full
-#define UART_FIFO_TX2_8 0x00000001 // Transmit interrupt at 1/4 Full
-#define UART_FIFO_TX4_8 0x00000002 // Transmit interrupt at 1/2 Full
-#define UART_FIFO_TX6_8 0x00000003 // Transmit interrupt at 3/4 Full
-#define UART_FIFO_TX7_8 0x00000004 // Transmit interrupt at 7/8 Full
+#define UART_FIFO_TX1_8         0x00000000  // Transmit interrupt at 1/8 Full
+#define UART_FIFO_TX2_8         0x00000001  // Transmit interrupt at 1/4 Full
+#define UART_FIFO_TX4_8         0x00000002  // Transmit interrupt at 1/2 Full
+#define UART_FIFO_TX6_8         0x00000003  // Transmit interrupt at 3/4 Full
+#define UART_FIFO_TX7_8         0x00000004  // Transmit interrupt at 7/8 Full
 
 //*****************************************************************************
 //
@@ -150,38 +151,38 @@ extern "C" {
 // and returned by UARTFIFOLevelGet in the pui32RxLevel.
 //
 //*****************************************************************************
-#define UART_FIFO_RX1_8 0x00000000 // Receive interrupt at 1/8 Full
-#define UART_FIFO_RX2_8 0x00000008 // Receive interrupt at 1/4 Full
-#define UART_FIFO_RX4_8 0x00000010 // Receive interrupt at 1/2 Full
-#define UART_FIFO_RX6_8 0x00000018 // Receive interrupt at 3/4 Full
-#define UART_FIFO_RX7_8 0x00000020 // Receive interrupt at 7/8 Full
+#define UART_FIFO_RX1_8         0x00000000  // Receive interrupt at 1/8 Full
+#define UART_FIFO_RX2_8         0x00000008  // Receive interrupt at 1/4 Full
+#define UART_FIFO_RX4_8         0x00000010  // Receive interrupt at 1/2 Full
+#define UART_FIFO_RX6_8         0x00000018  // Receive interrupt at 3/4 Full
+#define UART_FIFO_RX7_8         0x00000020  // Receive interrupt at 7/8 Full
 
 //*****************************************************************************
 //
 // Values that can be passed to UARTDMAEnable() and UARTDMADisable().
 //
 //*****************************************************************************
-#define UART_DMA_ERR_RXSTOP 0x00000004 // Stop DMA receive if UART error
-#define UART_DMA_TX 0x00000002         // Enable DMA for transmit
-#define UART_DMA_RX 0x00000001         // Enable DMA for receive
+#define UART_DMA_ERR_RXSTOP     0x00000004  // Stop DMA receive if UART error
+#define UART_DMA_TX             0x00000002  // Enable DMA for transmit
+#define UART_DMA_RX             0x00000001  // Enable DMA for receive
 
 //*****************************************************************************
 //
 // Values returned from UARTRxErrorGet().
 //
 //*****************************************************************************
-#define UART_RXERROR_OVERRUN 0x00000008
-#define UART_RXERROR_BREAK 0x00000004
-#define UART_RXERROR_PARITY 0x00000002
-#define UART_RXERROR_FRAMING 0x00000001
+#define UART_RXERROR_OVERRUN    0x00000008
+#define UART_RXERROR_BREAK      0x00000004
+#define UART_RXERROR_PARITY     0x00000002
+#define UART_RXERROR_FRAMING    0x00000001
 
 //*****************************************************************************
 //
 // Values returned from the UARTBusy().
 //
 //*****************************************************************************
-#define UART_BUSY 0x00000001
-#define UART_IDLE 0x00000000
+#define UART_BUSY               0x00000001
+#define UART_IDLE               0x00000000
 
 //*****************************************************************************
 //
@@ -207,7 +208,7 @@ extern "C" {
 static bool
 UARTBaseValid(uint32_t ui32Base)
 {
-    return ((ui32Base == UART0_BASE) || (ui32Base == UART0_NONBUF_BASE));
+    return (( ui32Base == UART0_BASE ) || ( ui32Base == UART0_NONBUF_BASE ));
 }
 #endif
 
@@ -245,8 +246,7 @@ UARTParityModeSet(uint32_t ui32Base, uint32_t ui32Parity)
     // Set the parity mode.
     HWREG(ui32Base + UART_O_LCRH) = ((HWREG(ui32Base + UART_O_LCRH) &
                                       ~(UART_LCRH_SPS | UART_LCRH_EPS |
-                                        UART_LCRH_PEN)) |
-                                     ui32Parity);
+                                        UART_LCRH_PEN)) | ui32Parity);
 }
 
 //*****************************************************************************
@@ -639,7 +639,8 @@ UARTBusy(uint32_t ui32Base)
     ASSERT(UARTBaseValid(ui32Base));
 
     // Determine if the UART is busy.
-    return ((HWREG(ui32Base + UART_O_FR) & UART_FR_BUSY) ? UART_BUSY : UART_IDLE);
+    return ((HWREG(ui32Base + UART_O_FR) & UART_FR_BUSY) ?
+            UART_BUSY : UART_IDLE);
 }
 
 //*****************************************************************************
@@ -665,7 +666,9 @@ UARTBreakCtl(uint32_t ui32Base, bool bBreakState)
 
     // Set the break condition as requested.
     HWREG(ui32Base + UART_O_LCRH) =
-        (bBreakState ? (HWREG(ui32Base + UART_O_LCRH) | UART_LCRH_BRK) : (HWREG(ui32Base + UART_O_LCRH) & ~(UART_LCRH_BRK)));
+        (bBreakState ?
+         (HWREG(ui32Base + UART_O_LCRH) | UART_LCRH_BRK) :
+         (HWREG(ui32Base + UART_O_LCRH) & ~(UART_LCRH_BRK)));
 }
 
 //*****************************************************************************
@@ -989,12 +992,12 @@ UARTRxErrorClear(uint32_t ui32Base)
 //
 //*****************************************************************************
 __STATIC_INLINE void
-UARTHwFlowControlEnable(uint32_t ui32Base)
+UARTHwFlowControlEnable( uint32_t ui32Base )
 {
     // Check the arguments.
-    ASSERT(UARTBaseValid(ui32Base));
+    ASSERT( UARTBaseValid( ui32Base ));
 
-    HWREG(ui32Base + UART_O_CTL) |= (UART_CTL_CTSEN | UART_CTL_RTSEN);
+    HWREG( ui32Base + UART_O_CTL ) |= ( UART_CTL_CTSEN | UART_CTL_RTSEN );
 }
 
 //*****************************************************************************
@@ -1009,13 +1012,14 @@ UARTHwFlowControlEnable(uint32_t ui32Base)
 //
 //*****************************************************************************
 __STATIC_INLINE void
-UARTHwFlowControlDisable(uint32_t ui32Base)
+UARTHwFlowControlDisable( uint32_t ui32Base )
 {
     // Check the arguments.
-    ASSERT(UARTBaseValid(ui32Base));
+    ASSERT( UARTBaseValid( ui32Base ));
 
-    HWREG(ui32Base + UART_O_CTL) &= ~(UART_CTL_CTSEN | UART_CTL_RTSEN);
+    HWREG( ui32Base + UART_O_CTL ) &= ~( UART_CTL_CTSEN | UART_CTL_RTSEN );
 }
+
 
 //*****************************************************************************
 //
@@ -1026,44 +1030,44 @@ UARTHwFlowControlDisable(uint32_t ui32Base)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_UARTFIFOLevelGet
-#undef UARTFIFOLevelGet
-#define UARTFIFOLevelGet ROM_UARTFIFOLevelGet
+#undef  UARTFIFOLevelGet
+#define UARTFIFOLevelGet                ROM_UARTFIFOLevelGet
 #endif
 #ifdef ROM_UARTConfigSetExpClk
-#undef UARTConfigSetExpClk
-#define UARTConfigSetExpClk ROM_UARTConfigSetExpClk
+#undef  UARTConfigSetExpClk
+#define UARTConfigSetExpClk             ROM_UARTConfigSetExpClk
 #endif
 #ifdef ROM_UARTConfigGetExpClk
-#undef UARTConfigGetExpClk
-#define UARTConfigGetExpClk ROM_UARTConfigGetExpClk
+#undef  UARTConfigGetExpClk
+#define UARTConfigGetExpClk             ROM_UARTConfigGetExpClk
 #endif
 #ifdef ROM_UARTDisable
-#undef UARTDisable
-#define UARTDisable ROM_UARTDisable
+#undef  UARTDisable
+#define UARTDisable                     ROM_UARTDisable
 #endif
 #ifdef ROM_UARTCharGetNonBlocking
-#undef UARTCharGetNonBlocking
-#define UARTCharGetNonBlocking ROM_UARTCharGetNonBlocking
+#undef  UARTCharGetNonBlocking
+#define UARTCharGetNonBlocking          ROM_UARTCharGetNonBlocking
 #endif
 #ifdef ROM_UARTCharGet
-#undef UARTCharGet
-#define UARTCharGet ROM_UARTCharGet
+#undef  UARTCharGet
+#define UARTCharGet                     ROM_UARTCharGet
 #endif
 #ifdef ROM_UARTCharPutNonBlocking
-#undef UARTCharPutNonBlocking
-#define UARTCharPutNonBlocking ROM_UARTCharPutNonBlocking
+#undef  UARTCharPutNonBlocking
+#define UARTCharPutNonBlocking          ROM_UARTCharPutNonBlocking
 #endif
 #ifdef ROM_UARTCharPut
-#undef UARTCharPut
-#define UARTCharPut ROM_UARTCharPut
+#undef  UARTCharPut
+#define UARTCharPut                     ROM_UARTCharPut
 #endif
 #ifdef ROM_UARTIntRegister
-#undef UARTIntRegister
-#define UARTIntRegister ROM_UARTIntRegister
+#undef  UARTIntRegister
+#define UARTIntRegister                 ROM_UARTIntRegister
 #endif
 #ifdef ROM_UARTIntUnregister
-#undef UARTIntUnregister
-#define UARTIntUnregister ROM_UARTIntUnregister
+#undef  UARTIntUnregister
+#define UARTIntUnregister               ROM_UARTIntUnregister
 #endif
 #endif
 

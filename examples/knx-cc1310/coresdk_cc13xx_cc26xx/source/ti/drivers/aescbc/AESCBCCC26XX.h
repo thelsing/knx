@@ -76,8 +76,8 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <ti/drivers/AESCBC.h>
 
@@ -91,19 +91,19 @@ extern "C" {
  */
 typedef struct AESCBCCC26XX_HWAttrs
 {
-        /*! @brief Crypto Peripheral's interrupt priority.
+    /*! @brief Crypto Peripheral's interrupt priority.
 
-            The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
+        The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
 
-            (7 << 5) will apply the lowest priority.
+        (7 << 5) will apply the lowest priority.
 
-            (1 << 5) will apply the highest priority.
+        (1 << 5) will apply the highest priority.
 
-            Setting the priority to 0 is not supported by this driver.
+        Setting the priority to 0 is not supported by this driver.
 
-            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-        */
-        uint8_t intPriority;
+        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+    */
+    uint8_t    intPriority;
 } AESCBCCC26XX_HWAttrs;
 
 /*!
@@ -113,15 +113,15 @@ typedef struct AESCBCCC26XX_HWAttrs
  */
 typedef struct AESCBCCC26XX_Object
 {
-        bool isOpen;
-        bool operationInProgress;
-        bool operationCanceled;
-        int_fast16_t returnStatus;
-        AESCBC_ReturnBehavior returnBehavior;
-        AESCBC_OperationType operationType;
-        uint32_t semaphoreTimeout;
-        AESCBC_CallbackFxn callbackFxn;
-        AESCBC_Operation* operation;
+    bool                            isOpen;
+    bool                            operationInProgress;
+    bool                            operationCanceled;
+    int_fast16_t                    returnStatus;
+    AESCBC_ReturnBehavior           returnBehavior;
+    AESCBC_OperationType            operationType;
+    uint32_t                        semaphoreTimeout;
+    AESCBC_CallbackFxn              callbackFxn;
+    AESCBC_Operation*                operation;
 } AESCBCCC26XX_Object;
 
 #ifdef __cplusplus

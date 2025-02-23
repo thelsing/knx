@@ -35,13 +35,13 @@
 
 typedef struct _QueueP_Elem
 {
-        struct _QueueP_Elem* volatile next;
-        struct _QueueP_Elem* volatile prev;
+    struct _QueueP_Elem* volatile next;
+    struct _QueueP_Elem* volatile prev;
 } QueueP_Elem;
 
 typedef struct _QueueP_Obj
 {
-        QueueP_Elem elem;
+    QueueP_Elem elem;
 } QueueP_Obj;
 
 typedef QueueP_Obj* QueueP_Handle;
@@ -52,5 +52,5 @@ uintptr_t QueueP_next(QueueP_Elem* qelem);
 uintptr_t QueueP_prev(QueueP_Elem* qelem);
 uintptr_t QueueP_get(QueueP_Obj* obj);
 void QueueP_put(QueueP_Obj* obj, QueueP_Elem* elem);
-void QueueP_remove(QueueP_Elem* qelem);
+void QueueP_remove(QueueP_Elem* qelem) ;
 bool QueueP_empty(QueueP_Obj* obj);

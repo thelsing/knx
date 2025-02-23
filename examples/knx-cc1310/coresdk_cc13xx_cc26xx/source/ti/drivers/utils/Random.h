@@ -79,12 +79,12 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdint.h>
 
-#define Random_STATUS_SUCCESS (0)
-#define Random_STATUS_ERROR (-1)
+#define Random_STATUS_SUCCESS   (0)
+#define Random_STATUS_ERROR     (-1)
 
 /*! @brief Length of the seed in bytes */
 #define Random_SEED_LENGTH (20)
@@ -161,6 +161,7 @@ extern uint32_t Random_getNumber(void);
  *  @pre Random_seedManual()
  */
 extern void Random_getBytes(void* buffer, size_t bufferSize);
+
 
 #ifdef __cplusplus
 }

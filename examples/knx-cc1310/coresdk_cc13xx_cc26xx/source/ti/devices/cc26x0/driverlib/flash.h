@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       flash.h
- *  Revised:        2017-11-02 16:09:32 +0100 (Thu, 02 Nov 2017)
- *  Revision:       50166
- *
- *  Description:    Defines and prototypes for the Flash driver.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       flash.h
+*  Revised:        2017-11-02 16:09:32 +0100 (Thu, 02 Nov 2017)
+*  Revision:       50166
+*
+*  Description:    Defines and prototypes for the Flash driver.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,19 +55,20 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_aon_sysctl.h"
-#include "../inc/hw_fcfg1.h"
-#include "../inc/hw_flash.h"
-#include "../inc/hw_ints.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include "debug.h"
-#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_flash.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_aon_sysctl.h"
+#include "../inc/hw_fcfg1.h"
+#include "interrupt.h"
+#include "debug.h"
 
 //*****************************************************************************
 //
@@ -83,15 +84,15 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define FlashPowerModeSet NOROM_FlashPowerModeSet
-#define FlashPowerModeGet NOROM_FlashPowerModeGet
-#define FlashProtectionSet NOROM_FlashProtectionSet
-#define FlashProtectionGet NOROM_FlashProtectionGet
-#define FlashProtectionSave NOROM_FlashProtectionSave
-#define FlashSectorErase NOROM_FlashSectorErase
-#define FlashProgram NOROM_FlashProgram
-#define FlashEfuseReadRow NOROM_FlashEfuseReadRow
-#define FlashDisableSectorsForWrite NOROM_FlashDisableSectorsForWrite
+#define FlashPowerModeSet               NOROM_FlashPowerModeSet
+#define FlashPowerModeGet               NOROM_FlashPowerModeGet
+#define FlashProtectionSet              NOROM_FlashProtectionSet
+#define FlashProtectionGet              NOROM_FlashProtectionGet
+#define FlashProtectionSave             NOROM_FlashProtectionSave
+#define FlashSectorErase                NOROM_FlashSectorErase
+#define FlashProgram                    NOROM_FlashProgram
+#define FlashEfuseReadRow               NOROM_FlashEfuseReadRow
+#define FlashDisableSectorsForWrite     NOROM_FlashDisableSectorsForWrite
 #endif
 
 //*****************************************************************************
@@ -99,12 +100,12 @@ extern "C" {
 // Values that can be returned from the API functions
 //
 //*****************************************************************************
-#define FAPI_STATUS_SUCCESS 0x00000000   // Function completed successfully
-#define FAPI_STATUS_FSM_BUSY 0x00000001  // FSM is Busy
-#define FAPI_STATUS_FSM_READY 0x00000002 // FSM is Ready
+#define FAPI_STATUS_SUCCESS     0x00000000  // Function completed successfully
+#define FAPI_STATUS_FSM_BUSY    0x00000001  // FSM is Busy
+#define FAPI_STATUS_FSM_READY   0x00000002  // FSM is Ready
 #define FAPI_STATUS_INCORRECT_DATABUFFER_LENGTH \
-    0x00000003                           // Incorrect parameter value
-#define FAPI_STATUS_FSM_ERROR 0x00000004 // Operation failed
+    0x00000003  // Incorrect parameter value
+#define FAPI_STATUS_FSM_ERROR   0x00000004  // Operation failed
 
 //*****************************************************************************
 //
@@ -112,16 +113,16 @@ extern "C" {
 // returned from FlashIntStatus().
 //
 //*****************************************************************************
-#define FLASH_INT_FSM_DONE 0x00400000 // FSM Done Interrupt Mask
-#define FLASH_INT_RV 0x00010000       // Read Verify error Interrupt Mask
+#define FLASH_INT_FSM_DONE      0x00400000  // FSM Done Interrupt Mask
+#define FLASH_INT_RV            0x00010000  // Read Verify error Interrupt Mask
 
 //*****************************************************************************
 //
 // Values passed to FlashSetPowerMode() and returned from FlashGetPowerMode().
 //
 //*****************************************************************************
-#define FLASH_PWR_ACTIVE_MODE 0x00000000
-#define FLASH_PWR_OFF_MODE 0x00000001
+#define FLASH_PWR_ACTIVE_MODE   0x00000000
+#define FLASH_PWR_OFF_MODE      0x00000001
 #define FLASH_PWR_DEEP_STDBY_MODE \
     0x00000002
 
@@ -130,8 +131,8 @@ extern "C" {
 // Values passed to FlashSetProtection() and returned from FlashGetProtection().
 //
 //*****************************************************************************
-#define FLASH_NO_PROTECT 0x00000000    // Sector not protected
-#define FLASH_WRITE_PROTECT 0x00000001 // Sector erase and program
+#define FLASH_NO_PROTECT        0x00000000 // Sector not protected
+#define FLASH_WRITE_PROTECT     0x00000001 // Sector erase and program
 // protected
 
 //*****************************************************************************
@@ -139,21 +140,21 @@ extern "C" {
 // Define used by the flash programming and erase functions
 //
 //*****************************************************************************
-#define ADDR_OFFSET (0x1F800000 - FLASHMEM_BASE)
+#define ADDR_OFFSET            (0x1F800000 - FLASHMEM_BASE)
 
 //*****************************************************************************
 //
 // Define used for access to factory configuration area.
 //
 //*****************************************************************************
-#define FCFG1_OFFSET 0x1000
+#define FCFG1_OFFSET           0x1000
 
 //*****************************************************************************
 //
 // Define for the clock frequency input to the flash module in number of MHz
 //
 //*****************************************************************************
-#define FLASH_MODULE_CLK_FREQ 48
+#define FLASH_MODULE_CLK_FREQ  48
 
 //*****************************************************************************
 //
@@ -162,16 +163,16 @@ extern "C" {
 //*****************************************************************************
 typedef enum
 {
-    FAPI_PROGRAM_DATA = 0x0002,    //!< Program data.
-    FAPI_ERASE_SECTOR = 0x0006,    //!< Erase sector.
-    FAPI_ERASE_BANK = 0x0008,      //!< Erase bank.
+    FAPI_PROGRAM_DATA    = 0x0002, //!< Program data.
+    FAPI_ERASE_SECTOR    = 0x0006, //!< Erase sector.
+    FAPI_ERASE_BANK      = 0x0008, //!< Erase bank.
     FAPI_VALIDATE_SECTOR = 0x000E, //!< Validate sector.
-    FAPI_CLEAR_STATUS = 0x0010,    //!< Clear status.
-    FAPI_PROGRAM_RESUME = 0x0014,  //!< Program resume.
-    FAPI_ERASE_RESUME = 0x0016,    //!< Erase resume.
-    FAPI_CLEAR_MORE = 0x0018,      //!< Clear more.
-    FAPI_PROGRAM_SECTOR = 0x0020,  //!< Program sector.
-    FAPI_ERASE_OTP = 0x0030        //!< Erase OTP.
+    FAPI_CLEAR_STATUS    = 0x0010, //!< Clear status.
+    FAPI_PROGRAM_RESUME  = 0x0014, //!< Program resume.
+    FAPI_ERASE_RESUME    = 0x0016, //!< Erase resume.
+    FAPI_CLEAR_MORE      = 0x0018, //!< Clear more.
+    FAPI_PROGRAM_SECTOR  = 0x0020, //!< Program sector.
+    FAPI_ERASE_OTP       = 0x0030  //!< Erase OTP.
 } tFlashStateCommandsType;
 
 //*****************************************************************************
@@ -179,39 +180,39 @@ typedef enum
 // Defines for values written to the FLASH_O_FSM_WR_ENA register
 //
 //*****************************************************************************
-#define FSM_REG_WRT_ENABLE 5
-#define FSM_REG_WRT_DISABLE 2
+#define FSM_REG_WRT_ENABLE     5
+#define FSM_REG_WRT_DISABLE    2
 
 //*****************************************************************************
 //
 // Defines for the bank power mode field the FLASH_O_FBFALLBACK register
 //
 //*****************************************************************************
-#define FBFALLBACK_SLEEP 0
-#define FBFALLBACK_DEEP_STDBY 1
-#define FBFALLBACK_ACTIVE 3
+#define FBFALLBACK_SLEEP       0
+#define FBFALLBACK_DEEP_STDBY  1
+#define FBFALLBACK_ACTIVE      3
 
 //*****************************************************************************
 //
 // Defines for the bank grace period and pump grace period
 //
 //*****************************************************************************
-#define FLASH_BAGP 0x14
-#define FLASH_PAGP 0x14
+#define FLASH_BAGP             0x14
+#define FLASH_PAGP             0x14
 
 //*****************************************************************************
 //
 // Defines used by the FlashProgramPattern() function
 //
 //*****************************************************************************
-#define PATTERN_BITS 0x20 // No of bits in data pattern to program
+#define PATTERN_BITS           0x20  // No of bits in data pattern to program
 
 //*****************************************************************************
 //
 // Defines for the FW flag bits in the FLASH_O_FWFLAG register
 //
 //*****************************************************************************
-#define FW_WRT_TRIMMED 0x00000001
+#define FW_WRT_TRIMMED         0x00000001
 
 //*****************************************************************************
 //
@@ -219,21 +220,21 @@ typedef enum
 //
 //*****************************************************************************
 typedef volatile uint8_t tFwpWriteByte;
-#define FWPWRITE_BYTE_ADDRESS ((tFwpWriteByte*)((FLASH_BASE + FLASH_O_FWPWRITE0)))
+#define FWPWRITE_BYTE_ADDRESS ((tFwpWriteByte *)((FLASH_BASE + FLASH_O_FWPWRITE0)))
 
 //*****************************************************************************
 //
 // Define for efuse instruction
 //
 //*****************************************************************************
-#define DUMPWORD_INSTR 0x04
+#define DUMPWORD_INSTR         0x04
 
 //*****************************************************************************
 //
 // Define for FSM command execution
 //
 //*****************************************************************************
-#define FLASH_CMD_EXEC 0x15
+#define FLASH_CMD_EXEC         0x15
 
 //*****************************************************************************
 //
@@ -670,6 +671,7 @@ FlashIntClear(uint32_t ui32IntFlags)
 //*****************************************************************************
 extern uint32_t FlashSectorErase(uint32_t ui32SectorAddress);
 
+
 //*****************************************************************************
 //
 //! \brief Programs unprotected flash sectors in the main bank.
@@ -748,6 +750,7 @@ extern bool FlashEfuseReadRow(uint32_t* pui32EfuseData,
 //*****************************************************************************
 extern void FlashDisableSectorsForWrite(void);
 
+
 //*****************************************************************************
 //
 // Support for DriverLib in ROM:
@@ -757,40 +760,40 @@ extern void FlashDisableSectorsForWrite(void);
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_FlashPowerModeSet
-#undef FlashPowerModeSet
-#define FlashPowerModeSet ROM_FlashPowerModeSet
+#undef  FlashPowerModeSet
+#define FlashPowerModeSet               ROM_FlashPowerModeSet
 #endif
 #ifdef ROM_FlashPowerModeGet
-#undef FlashPowerModeGet
-#define FlashPowerModeGet ROM_FlashPowerModeGet
+#undef  FlashPowerModeGet
+#define FlashPowerModeGet               ROM_FlashPowerModeGet
 #endif
 #ifdef ROM_FlashProtectionSet
-#undef FlashProtectionSet
-#define FlashProtectionSet ROM_FlashProtectionSet
+#undef  FlashProtectionSet
+#define FlashProtectionSet              ROM_FlashProtectionSet
 #endif
 #ifdef ROM_FlashProtectionGet
-#undef FlashProtectionGet
-#define FlashProtectionGet ROM_FlashProtectionGet
+#undef  FlashProtectionGet
+#define FlashProtectionGet              ROM_FlashProtectionGet
 #endif
 #ifdef ROM_FlashProtectionSave
-#undef FlashProtectionSave
-#define FlashProtectionSave ROM_FlashProtectionSave
+#undef  FlashProtectionSave
+#define FlashProtectionSave             ROM_FlashProtectionSave
 #endif
 #ifdef ROM_FlashSectorErase
-#undef FlashSectorErase
-#define FlashSectorErase ROM_FlashSectorErase
+#undef  FlashSectorErase
+#define FlashSectorErase                ROM_FlashSectorErase
 #endif
 #ifdef ROM_FlashProgram
-#undef FlashProgram
-#define FlashProgram ROM_FlashProgram
+#undef  FlashProgram
+#define FlashProgram                    ROM_FlashProgram
 #endif
 #ifdef ROM_FlashEfuseReadRow
-#undef FlashEfuseReadRow
-#define FlashEfuseReadRow ROM_FlashEfuseReadRow
+#undef  FlashEfuseReadRow
+#define FlashEfuseReadRow               ROM_FlashEfuseReadRow
 #endif
 #ifdef ROM_FlashDisableSectorsForWrite
-#undef FlashDisableSectorsForWrite
-#define FlashDisableSectorsForWrite ROM_FlashDisableSectorsForWrite
+#undef  FlashDisableSectorsForWrite
+#define FlashDisableSectorsForWrite     ROM_FlashDisableSectorsForWrite
 #endif
 #endif
 

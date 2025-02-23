@@ -76,16 +76,16 @@
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
-#include <ti/drivers/AESCCM.h>
 #include <ti/drivers/Power.h>
+#include <ti/drivers/AESCCM.h>
 #include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
 
 #include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SemaphoreP.h>
 #include <ti/drivers/dpl/SwiP.h>
+#include <ti/drivers/dpl/SemaphoreP.h>
 
 /*!
  *  @brief      AESCCMCC26XX Hardware Attributes
@@ -95,19 +95,19 @@ extern "C" {
  */
 typedef struct AESCCMCC26XX_HWAttrs
 {
-        /*! @brief Crypto Peripheral's interrupt priority.
+    /*! @brief Crypto Peripheral's interrupt priority.
 
-            The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
+        The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
 
-            (7 << 5) will apply the lowest priority.
+        (7 << 5) will apply the lowest priority.
 
-            (1 << 5) will apply the highest priority.
+        (1 << 5) will apply the highest priority.
 
-            Setting the priority to 0 is not supported by this driver.
+        Setting the priority to 0 is not supported by this driver.
 
-            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-        */
-        uint8_t intPriority;
+        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+    */
+    uint8_t    intPriority;
 } AESCCMCC26XX_HWAttrs;
 
 /*!
@@ -117,15 +117,15 @@ typedef struct AESCCMCC26XX_HWAttrs
  */
 typedef struct AESCCMCC26XX_Object
 {
-        bool isOpen;
-        bool operationInProgress;
-        bool operationCanceled;
-        int_fast16_t returnStatus;
-        AESCCM_ReturnBehavior returnBehavior;
-        AESCCM_OperationType operationType;
-        uint32_t semaphoreTimeout;
-        AESCCM_CallbackFxn callbackFxn;
-        AESCCM_Operation* operation;
+    bool                            isOpen;
+    bool                            operationInProgress;
+    bool                            operationCanceled;
+    int_fast16_t                    returnStatus;
+    AESCCM_ReturnBehavior           returnBehavior;
+    AESCCM_OperationType            operationType;
+    uint32_t                        semaphoreTimeout;
+    AESCCM_CallbackFxn              callbackFxn;
+    AESCCM_Operation*                operation;
 } AESCCMCC26XX_Object;
 
 #ifdef __cplusplus

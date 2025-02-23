@@ -20,8 +20,8 @@ NamespaceIndentation: All
 TabWidth: 4
 DerivePointerAlignment: true
 IndentCaseLabels: true
-IndentAccessModifiers: true
 AllowShortFunctionsOnASingleLine: InlineOnly
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
 UseTab: Never
+...

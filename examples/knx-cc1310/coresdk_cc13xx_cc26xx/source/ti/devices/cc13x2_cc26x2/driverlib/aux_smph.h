@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       aux_smph.h
- *  Revised:        2016-10-06 17:21:09 +0200 (Thu, 06 Oct 2016)
- *  Revision:       47343
- *
- *  Description:    Defines and prototypes for the AUX Semaphore
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       aux_smph.h
+*  Revised:        2016-10-06 17:21:09 +0200 (Thu, 06 Oct 2016)
+*  Revision:       47343
+*
+*  Description:    Defines and prototypes for the AUX Semaphore
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,23 +55,24 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_aux_smph.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include "debug.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_aux_smph.h"
+#include "../inc/hw_memmap.h"
+#include "debug.h"
 
 //*****************************************************************************
 //
 // General constants and defines
 //
 //*****************************************************************************
-#define AUX_SMPH_FREE 0x00000001    // MCU Semaphore has not been claimed
-#define AUX_SMPH_CLAIMED 0x00000000 // MCU Semaphore has been claimed
+#define AUX_SMPH_FREE     0x00000001 // MCU Semaphore has not been claimed
+#define AUX_SMPH_CLAIMED  0x00000000 // MCU Semaphore has been claimed
 
 //*****************************************************************************
 //
@@ -79,14 +80,14 @@ extern "C" {
 // as the ui32Semaphore parameter.
 //
 //*****************************************************************************
-#define AUX_SMPH_0 0 // AUX Semaphore  0
-#define AUX_SMPH_1 1 // AUX Semaphore  1
-#define AUX_SMPH_2 2 // AUX Semaphore  2
-#define AUX_SMPH_3 3 // AUX Semaphore  3
-#define AUX_SMPH_4 4 // AUX Semaphore  4
-#define AUX_SMPH_5 5 // AUX Semaphore  5
-#define AUX_SMPH_6 6 // AUX Semaphore  6
-#define AUX_SMPH_7 7 // AUX Semaphore  7
+#define AUX_SMPH_0                0 // AUX Semaphore  0
+#define AUX_SMPH_1                1 // AUX Semaphore  1
+#define AUX_SMPH_2                2 // AUX Semaphore  2
+#define AUX_SMPH_3                3 // AUX Semaphore  3
+#define AUX_SMPH_4                4 // AUX Semaphore  4
+#define AUX_SMPH_5                5 // AUX Semaphore  5
+#define AUX_SMPH_6                6 // AUX Semaphore  6
+#define AUX_SMPH_7                7 // AUX Semaphore  7
 
 //*****************************************************************************
 //
@@ -137,7 +138,7 @@ AUXSMPHAcquire(uint32_t ui32Semaphore)
     // Semaphore register reads 1 when lock was acquired otherwise 0
     // (i.e. AUX_SMPH_CLAIMED).
     while (HWREG(AUX_SMPH_BASE + AUX_SMPH_O_SMPH0 + 4 * ui32Semaphore) ==
-           AUX_SMPH_CLAIMED)
+            AUX_SMPH_CLAIMED)
     {
     }
 }

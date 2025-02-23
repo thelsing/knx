@@ -1,11 +1,10 @@
-#include "network_layer_entity.h"
-#include "bits.h"
-#include "data_link_layer.h"
 #include "network_layer.h"
+#include "network_layer_entity.h"
 #include "tpdu.h"
+#include "data_link_layer.h"
+#include "bits.h"
 
-NetworkLayerEntity::NetworkLayerEntity(NetworkLayer& netLayer, uint8_t entityIndex)
-    : _netLayer(netLayer), _entityIndex(entityIndex)
+NetworkLayerEntity::NetworkLayerEntity(NetworkLayer& netLayer, uint8_t entityIndex) : _netLayer(netLayer), _entityIndex(entityIndex)
 {
 }
 

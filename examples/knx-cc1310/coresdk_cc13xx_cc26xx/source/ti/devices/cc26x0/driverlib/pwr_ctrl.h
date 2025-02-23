@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       pwr_ctrl.h
- *  Revised:        2017-11-02 15:41:14 +0100 (Thu, 02 Nov 2017)
- *  Revision:       50165
- *
- *  Description:    Defines and prototypes for the System Power Control.
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       pwr_ctrl.h
+*  Revised:        2017-11-02 15:41:14 +0100 (Thu, 02 Nov 2017)
+*  Revision:       50165
+*
+*  Description:    Defines and prototypes for the System Power Control.
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,25 +55,26 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_adi_2_refsys.h"
-#include "../inc/hw_aon_rtc.h"
-#include "../inc/hw_aon_sysctl.h"
-#include "../inc/hw_aon_wuc.h"
-#include "../inc/hw_ints.h"
-#include "../inc/hw_memmap.h"
+#include <stdbool.h>
+#include <stdint.h>
 #include "../inc/hw_types.h"
-#include "adi.h"
-#include "aon_ioc.h"
-#include "cpu.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_aon_wuc.h"
+#include "../inc/hw_aon_sysctl.h"
+#include "../inc/hw_aon_rtc.h"
+#include "../inc/hw_adi_2_refsys.h"
 #include "debug.h"
 #include "interrupt.h"
 #include "osc.h"
+#include "cpu.h"
 #include "prcm.h"
-#include <stdbool.h>
-#include <stdint.h>
+#include "aon_ioc.h"
+#include "adi.h"
 
 //*****************************************************************************
 //
@@ -89,7 +90,7 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define PowerCtrlSourceSet NOROM_PowerCtrlSourceSet
+#define PowerCtrlSourceSet              NOROM_PowerCtrlSourceSet
 #endif
 
 //*****************************************************************************
@@ -97,37 +98,37 @@ extern "C" {
 // Defines for the system power states
 //
 //*****************************************************************************
-#define PWRCTRL_ACTIVE 0x00000001
-#define PWRCTRL_STANDBY 0x00000002
-#define PWRCTRL_POWER_DOWN 0x00000004
-#define PWRCTRL_SHUTDOWN 0x00000008
+#define PWRCTRL_ACTIVE          0x00000001
+#define PWRCTRL_STANDBY         0x00000002
+#define PWRCTRL_POWER_DOWN      0x00000004
+#define PWRCTRL_SHUTDOWN        0x00000008
 
 //*****************************************************************************
 //
 // Defines for the power configuration in the AON System Control 1.2 V
 //
 //*****************************************************************************
-#define PWRCTRL_IOSEG3_ENABLE 0x00000800
-#define PWRCTRL_IOSEG2_ENABLE 0x00000400
-#define PWRCTRL_IOSEG3_DISABLE 0x00000200
-#define PWRCTRL_IOSEG2_DISABLE 0x00000100
-#define PWRCTRL_PWRSRC_DCDC 0x00000001
-#define PWRCTRL_PWRSRC_GLDO 0x00000000
-#define PWRCTRL_PWRSRC_ULDO 0x00000002
+#define PWRCTRL_IOSEG3_ENABLE   0x00000800
+#define PWRCTRL_IOSEG2_ENABLE   0x00000400
+#define PWRCTRL_IOSEG3_DISABLE  0x00000200
+#define PWRCTRL_IOSEG2_DISABLE  0x00000100
+#define PWRCTRL_PWRSRC_DCDC     0x00000001
+#define PWRCTRL_PWRSRC_GLDO     0x00000000
+#define PWRCTRL_PWRSRC_ULDO     0x00000002
 
 //*****************************************************************************
 //
 // The following are defines for the various reset source for the device.
 //
 //*****************************************************************************
-#define PWRCTRL_RST_POWER_ON 0x00000000 // Reset by power on
-#define PWRCTRL_RST_PIN 0x00000001      // Pin reset
-#define PWRCTRL_RST_VDDS_BOD 0x00000002 // VDDS Brown Out Detect
-#define PWRCTRL_RST_VDD_BOD 0x00000003  // VDD Brown Out Detect
-#define PWRCTRL_RST_VDDR_BOD 0x00000004 // VDDR Brown Out Detect
-#define PWRCTRL_RST_CLK_LOSS 0x00000005 // Clock loss Reset
-#define PWRCTRL_RST_SW_PIN 0x00000006   // SYSRESET or pin reset
-#define PWRCTRL_RST_WARM 0x00000007     // Reset via PRCM warm reset request
+#define PWRCTRL_RST_POWER_ON    0x00000000  // Reset by power on
+#define PWRCTRL_RST_PIN         0x00000001  // Pin reset
+#define PWRCTRL_RST_VDDS_BOD    0x00000002  // VDDS Brown Out Detect
+#define PWRCTRL_RST_VDD_BOD     0x00000003  // VDD Brown Out Detect
+#define PWRCTRL_RST_VDDR_BOD    0x00000004  // VDDR Brown Out Detect
+#define PWRCTRL_RST_CLK_LOSS    0x00000005  // Clock loss Reset
+#define PWRCTRL_RST_SW_PIN      0x00000006  // SYSRESET or pin reset
+#define PWRCTRL_RST_WARM        0x00000007  // Reset via PRCM warm reset request
 
 //*****************************************************************************
 //
@@ -222,9 +223,9 @@ __STATIC_INLINE uint32_t
 PowerCtrlResetSourceGet(void)
 {
     //  Get the reset source.
-    return ((HWREG(AON_SYSCTL_BASE + AON_SYSCTL_O_RESETCTL) &
-             AON_SYSCTL_RESETCTL_RESET_SRC_M) >>
-            AON_SYSCTL_RESETCTL_RESET_SRC_S);
+    return (( HWREG( AON_SYSCTL_BASE + AON_SYSCTL_O_RESETCTL ) &
+              AON_SYSCTL_RESETCTL_RESET_SRC_M ) >>
+            AON_SYSCTL_RESETCTL_RESET_SRC_S ) ;
 }
 
 //*****************************************************************************
@@ -271,8 +272,8 @@ PowerCtrlPadSleepDisable(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_PowerCtrlSourceSet
-#undef PowerCtrlSourceSet
-#define PowerCtrlSourceSet ROM_PowerCtrlSourceSet
+#undef  PowerCtrlSourceSet
+#define PowerCtrlSourceSet              ROM_PowerCtrlSourceSet
 #endif
 #endif
 

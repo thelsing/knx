@@ -664,17 +664,17 @@ assert (rssi != RF_GET_RSSI_ERROR_VAL); // Could not read the RSSI
 extern "C" {
 #endif
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <ti/drivers/dpl/ClockP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
 #include <ti/drivers/utils/List.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib / rf_common_cmd.h)
-#include DeviceFamily_constructPath(driverlib / rf_prop_cmd.h)
-#include DeviceFamily_constructPath(driverlib / rf_ble_cmd.h)
+#include DeviceFamily_constructPath(driverlib/rf_common_cmd.h)
+#include DeviceFamily_constructPath(driverlib/rf_prop_cmd.h)
+#include DeviceFamily_constructPath(driverlib/rf_ble_cmd.h)
 
 /**
  *  @name RF Core Events
@@ -687,34 +687,34 @@ extern "C" {
  *  @sa RF_postCmd(), RF_pendCmd(), RF_runCmd()
  *  @{
  */
-#define RF_EventCmdDone (1 << 0)                  ///< A radio operation command in a chain finished.
-#define RF_EventLastCmdDone (1 << 1)              ///< A stand-alone radio operation command or the last radio operation command in a chain finished.
-#define RF_EventFGCmdDone (1 << 2)                ///< A IEEE-mode radio operation command in a chain finished.
-#define RF_EventLastFGCmdDone (1 << 3)            ///< A stand-alone IEEE-mode radio operation command or the last command in a chain finished.
-#define RF_EventTxDone (1 << 4)                   ///< Packet transmitted
-#define RF_EventTXAck (1 << 5)                    ///< ACK packet transmitted
-#define RF_EventTxCtrl (1 << 6)                   ///< Control packet transmitted
-#define RF_EventTxCtrlAck (1 << 7)                ///< Acknowledgement received on a transmitted control packet
-#define RF_EventTxCtrlAckAck (1 << 8)             ///< Acknowledgement received on a transmitted control packet, and acknowledgement transmitted for that packet
-#define RF_EventTxRetrans (1 << 9)                ///< Packet retransmitted
-#define RF_EventTxEntryDone (1 << 10)             ///< Tx queue data entry state changed to Finished
-#define RF_EventTxBufferChange (1 << 11)          ///< A buffer change is complete
-#define RF_EventPaChanged (1 << 14)               ///< The PA was reconfigured on the fly.
-#define RF_EventRxOk (1 << 16)                    ///< Packet received with CRC OK, payload, and not to be ignored
-#define RF_EventRxNOk (1 << 17)                   ///< Packet received with CRC error
-#define RF_EventRxIgnored (1 << 18)               ///< Packet received with CRC OK, but to be ignored
-#define RF_EventRxEmpty (1 << 19)                 ///< Packet received with CRC OK, not to be ignored, no payload
-#define RF_EventRxCtrl (1 << 20)                  ///< Control packet received with CRC OK, not to be ignored
-#define RF_EventRxCtrlAck (1 << 21)               ///< Control packet received with CRC OK, not to be ignored, then ACK sent
-#define RF_EventRxBufFull (1 << 22)               ///< Packet received that did not fit in the Rx queue
-#define RF_EventRxEntryDone (1 << 23)             ///< Rx queue data entry changing state to Finished
-#define RF_EventDataWritten (1 << 24)             ///< Data written to partial read Rx buffer
-#define RF_EventNDataWritten (1 << 25)            ///< Specified number of bytes written to partial read Rx buffer
-#define RF_EventRxAborted (1 << 26)               ///< Packet reception stopped before packet was done
-#define RF_EventRxCollisionDetected (1 << 27)     ///< A collision was indicated during packet reception
-#define RF_EventModulesUnlocked (1 << 29)         ///< As part of the boot process, the CM0 has opened access to RF core modules and memories
-#define RF_EventInternalError (uint32_t)(1 << 31) ///< Internal error observed
-#define RF_EventMdmSoft 0x0000002000000000        ///< Synchronization word detected (MDMSOFT interrupt flag)
+#define   RF_EventCmdDone             (1 << 0)   ///< A radio operation command in a chain finished.
+#define   RF_EventLastCmdDone         (1 << 1)   ///< A stand-alone radio operation command or the last radio operation command in a chain finished.
+#define   RF_EventFGCmdDone           (1 << 2)   ///< A IEEE-mode radio operation command in a chain finished.
+#define   RF_EventLastFGCmdDone       (1 << 3)   ///< A stand-alone IEEE-mode radio operation command or the last command in a chain finished.
+#define   RF_EventTxDone              (1 << 4)   ///< Packet transmitted
+#define   RF_EventTXAck               (1 << 5)   ///< ACK packet transmitted
+#define   RF_EventTxCtrl              (1 << 6)   ///< Control packet transmitted
+#define   RF_EventTxCtrlAck           (1 << 7)   ///< Acknowledgement received on a transmitted control packet
+#define   RF_EventTxCtrlAckAck        (1 << 8)   ///< Acknowledgement received on a transmitted control packet, and acknowledgement transmitted for that packet
+#define   RF_EventTxRetrans           (1 << 9)   ///< Packet retransmitted
+#define   RF_EventTxEntryDone         (1 << 10)  ///< Tx queue data entry state changed to Finished
+#define   RF_EventTxBufferChange      (1 << 11)  ///< A buffer change is complete
+#define   RF_EventPaChanged           (1 << 14)  ///< The PA was reconfigured on the fly.
+#define   RF_EventRxOk                (1 << 16)  ///< Packet received with CRC OK, payload, and not to be ignored
+#define   RF_EventRxNOk               (1 << 17)  ///< Packet received with CRC error
+#define   RF_EventRxIgnored           (1 << 18)  ///< Packet received with CRC OK, but to be ignored
+#define   RF_EventRxEmpty             (1 << 19)  ///< Packet received with CRC OK, not to be ignored, no payload
+#define   RF_EventRxCtrl              (1 << 20)  ///< Control packet received with CRC OK, not to be ignored
+#define   RF_EventRxCtrlAck           (1 << 21)  ///< Control packet received with CRC OK, not to be ignored, then ACK sent
+#define   RF_EventRxBufFull           (1 << 22)  ///< Packet received that did not fit in the Rx queue
+#define   RF_EventRxEntryDone         (1 << 23)  ///< Rx queue data entry changing state to Finished
+#define   RF_EventDataWritten         (1 << 24)  ///< Data written to partial read Rx buffer
+#define   RF_EventNDataWritten        (1 << 25)  ///< Specified number of bytes written to partial read Rx buffer
+#define   RF_EventRxAborted           (1 << 26)  ///< Packet reception stopped before packet was done
+#define   RF_EventRxCollisionDetected (1 << 27)  ///< A collision was indicated during packet reception
+#define   RF_EventModulesUnlocked     (1 << 29)  ///< As part of the boot process, the CM0 has opened access to RF core modules and memories
+#define   RF_EventInternalError       (uint32_t)(1 << 31) ///< Internal error observed
+#define   RF_EventMdmSoft             0x0000002000000000  ///< Synchronization word detected (MDMSOFT interrupt flag)
 /** @}*/
 
 /**
@@ -724,13 +724,13 @@ extern "C" {
  *  Event flags generated by the RF Driver.
  *  @{
  */
-#define RF_EventCmdCancelled 0x1000000000000000 ///< Command canceled before it was started.
-#define RF_EventCmdAborted 0x2000000000000000   ///< Abrupt command termination caused by RF_cancelCmd() or RF_flushCmd().
-#define RF_EventCmdStopped 0x4000000000000000   ///< Graceful command termination caused by RF_cancelCmd() or RF_flushCmd().
-#define RF_EventRatCh 0x0800000000000000        ///< A user-programmable RAT channel triggered an event.
-#define RF_EventPowerUp 0x0400000000000000      ///< RF power up event. \deprecated This event is deprecated. Use #RF_ClientEventPowerUpFinished instead.
-#define RF_EventError 0x0200000000000000        ///< Event flag used for error callback functions to indicate an error. See RF_Params::pErrCb.
-#define RF_EventCmdPreempted 0x0100000000000000 ///< Command preempted by another command with higher priority. Applies only to multi-client applications.
+#define   RF_EventCmdCancelled        0x1000000000000000  ///< Command canceled before it was started.
+#define   RF_EventCmdAborted          0x2000000000000000  ///< Abrupt command termination caused by RF_cancelCmd() or RF_flushCmd().
+#define   RF_EventCmdStopped          0x4000000000000000  ///< Graceful command termination caused by RF_cancelCmd() or RF_flushCmd().
+#define   RF_EventRatCh               0x0800000000000000  ///< A user-programmable RAT channel triggered an event.
+#define   RF_EventPowerUp             0x0400000000000000  ///< RF power up event. \deprecated This event is deprecated. Use #RF_ClientEventPowerUpFinished instead.
+#define   RF_EventError               0x0200000000000000  ///< Event flag used for error callback functions to indicate an error. See RF_Params::pErrCb.
+#define   RF_EventCmdPreempted        0x0100000000000000  ///< Command preempted by another command with higher priority. Applies only to multi-client applications.
 /** @}*/
 
 /**
@@ -749,7 +749,7 @@ extern "C" {
  * command after a specified timeout period (in us)
  * With this control code @b arg is a pointer to the timeout variable and returns RF_StatSuccess.
  */
-#define RF_CTRL_SET_INACTIVITY_TIMEOUT 0
+#define RF_CTRL_SET_INACTIVITY_TIMEOUT            0
 /*!
  * @brief Control code used by RF_control to update setup command
  *
@@ -759,13 +759,13 @@ extern "C" {
  * setup command. Prior to updating the setup command, user should make sure all pending commands
  * have completed.
  */
-#define RF_CTRL_UPDATE_SETUP_CMD 1
+#define RF_CTRL_UPDATE_SETUP_CMD                  1
 /*!
  * @brief Control code used by RF_control to set powerup duration margin
  *
  * Setting this control updates the powerup duration margin. Default is RF_DEFAULT_POWER_UP_MARGIN.
  */
-#define RF_CTRL_SET_POWERUP_DURATION_MARGIN 2
+#define RF_CTRL_SET_POWERUP_DURATION_MARGIN       2
 /*!
  * @brief Control code used by RF_control to set the phy switching margin
  *
@@ -773,7 +773,7 @@ extern "C" {
  * run-time conflicts shall be evaluated in case of colliding radio operations issued from two
  * different clients. Default is RF_DEFAULT_PHY_SWITCHING_MARGIN.
  */
-#define RF_CTRL_SET_PHYSWITCHING_DURATION_MARGIN 3
+#define RF_CTRL_SET_PHYSWITCHING_DURATION_MARGIN  3
 /*!
  * @brief Control code used by RF_control to set max error tolerance for RAT/RTC
  *
@@ -781,7 +781,7 @@ extern "C" {
  * Default is RF_DEFAULT_RAT_RTC_ERR_TOL_IN_US (5 us)
  * Client is recommeneded to change this setting before sending any commands.
  */
-#define RF_CTRL_SET_RAT_RTC_ERR_TOL_VAL 4
+#define RF_CTRL_SET_RAT_RTC_ERR_TOL_VAL           4
 /*!
  * @brief Control code used by RF_control to set power management
  *
@@ -793,7 +793,7 @@ extern "C" {
  * This control is valid for dual-mode code only. Setting this control when using single-mode code has no effect
  * (power management always enabled).
  */
-#define RF_CTRL_SET_POWER_MGMT 5
+#define RF_CTRL_SET_POWER_MGMT                    5
 /*!
  * @brief Control code used by RF_control to set the hardware interrupt priority level of the RF driver.
  *
@@ -815,7 +815,7 @@ extern "C" {
  * RF_control(rfHandle, RF_CTRL_SET_HWI_PRIORITY, &hwiPriority);
  * @endcode
  */
-#define RF_CTRL_SET_HWI_PRIORITY 6
+#define RF_CTRL_SET_HWI_PRIORITY                  6
 /*!
  * @brief Control code used by RF_control to set the software interrupt priority level of the RF driver.
  *
@@ -837,7 +837,7 @@ extern "C" {
  * RF_control(rfHandle, RF_CTRL_SET_SWI_PRIORITY, &swiPriority);
  * @endcode
  */
-#define RF_CTRL_SET_SWI_PRIORITY 7
+#define RF_CTRL_SET_SWI_PRIORITY                  7
 /*!
  * @brief Control code used by RF_control to mask the available RAT channels manually.
  *
@@ -847,7 +847,7 @@ extern "C" {
  * between the automatic channel allocation through #RF_ratCompare()/#RF_ratCapture() and the direct
  * configuration through #RF_postCmd().
  */
-#define RF_CTRL_SET_AVAILABLE_RAT_CHANNELS_MASK 8
+#define RF_CTRL_SET_AVAILABLE_RAT_CHANNELS_MASK   8
 /** @}*/
 
 /**
@@ -861,7 +861,7 @@ extern "C" {
  *
  * \sa #RF_TxPowerTable_findValue()
  */
-#define RF_TxPowerTable_MIN_DBM -128
+#define RF_TxPowerTable_MIN_DBM   -128
 
 /**
  * Refers to the the maximum available power in dBm when accessing a power
@@ -869,14 +869,14 @@ extern "C" {
  *
  * \sa #RF_TxPowerTable_findValue()
  */
-#define RF_TxPowerTable_MAX_DBM 126
+#define RF_TxPowerTable_MAX_DBM   126
 
 /**
  * Refers to an invalid power level in a TX power table.
  *
  * \sa #RF_TxPowerTable_findPowerLevel()
  */
-#define RF_TxPowerTable_INVALID_DBM 127
+#define RF_TxPowerTable_INVALID_DBM   127
 
 /**
  * Refers to an invalid power value in a TX power table.
@@ -912,11 +912,8 @@ extern "C" {
  * };
  * @endcode
  */
-#define RF_TxPowerTable_TERMINATION_ENTRY                                                          \
-    {                                                                                              \
-        .power = RF_TxPowerTable_INVALID_DBM, .value = {.rawValue = RF_TxPowerTable_INVALID_VALUE, \
-                                                        .paType = RF_TxPowerTable_DefaultPA }      \
-    }
+#define RF_TxPowerTable_TERMINATION_ENTRY \
+    { .power = RF_TxPowerTable_INVALID_DBM, .value = { .rawValue = RF_TxPowerTable_INVALID_VALUE, .paType = RF_TxPowerTable_DefaultPA } }
 
 /**
  * Creates a TX power table entry for the default PA.
@@ -924,10 +921,8 @@ extern "C" {
  * The values for \a bias, \a gain, \a boost and \a coefficient are usually measured by Texas Instruments
  * for a specific front-end configuration. They can then be obtained from SmartRFStudio.
  */
-#define RF_TxPowerTable_DEFAULT_PA_ENTRY(bias, gain, boost, coefficient)                                                       \
-    {                                                                                                                          \
-        .rawValue = ((bias) << 0) | ((gain) << 6) | ((boost) << 8) | ((coefficient) << 9), .paType = RF_TxPowerTable_DefaultPA \
-    }
+#define RF_TxPowerTable_DEFAULT_PA_ENTRY(bias, gain, boost, coefficient) \
+    { .rawValue = ((bias) << 0) | ((gain) << 6) | ((boost) << 8) | ((coefficient) << 9), .paType = RF_TxPowerTable_DefaultPA }
 
 /**
  * Creates a TX power table entry for the High-power PA.
@@ -935,10 +930,9 @@ extern "C" {
  * The values for \a bias, \a ibboost, \a boost, \a coefficient and \a ldoTrim are usually measured by Texas Instruments
  * for a specific front-end configuration. They can then be obtained from SmartRFStudio.
  */
-#define RF_TxPowerTable_HIGH_PA_ENTRY(bias, ibboost, boost, coefficient, ldotrim)                                                                  \
-    {                                                                                                                                              \
-        .rawValue = ((bias) << 0) | ((ibboost) << 6) | ((boost) << 8) | ((coefficient) << 9) | ((ldotrim) << 16), .paType = RF_TxPowerTable_HighPA \
-    }
+#define RF_TxPowerTable_HIGH_PA_ENTRY(bias, ibboost, boost, coefficient, ldotrim) \
+    { .rawValue = ((bias) << 0) | ((ibboost) << 6) | ((boost) << 8) | ((coefficient) << 9) | ((ldotrim) << 16), .paType = RF_TxPowerTable_HighPA }
+
 
 /** @} */
 
@@ -946,29 +940,29 @@ extern "C" {
  * @name Other defines
  * @{
  */
-#define RF_GET_RSSI_ERROR_VAL (-128)     ///< Error return value for RF_getRssi()
-#define RF_CMDHANDLE_FLUSH_ALL (-1)      ///< RF command handle to flush all RF commands
-#define RF_ALLOC_ERROR (-2)              ///< RF command or RAT channel allocation error
-#define RF_SCHEDULE_CMD_ERROR (-3)       ///< RF command schedule error
-#define RF_ERROR_RAT_PROG (-255)         ///< A rat channel could not be programmed.
-#define RF_ERROR_INVALID_RFMODE (-256)   ///< Invalid RF_Mode. Used in error callback.
-#define RF_ERROR_CMDFS_SYNTH_PROG (-257) ///< Synthesizer error with CMD_FS. Used in error callback. If this error occurred in error callback, user needs to resend CMD_FS to recover. See the device's errata for more details.
+#define RF_GET_RSSI_ERROR_VAL                   (-128)   ///< Error return value for RF_getRssi()
+#define RF_CMDHANDLE_FLUSH_ALL                  (-1)     ///< RF command handle to flush all RF commands
+#define RF_ALLOC_ERROR                          (-2)     ///< RF command or RAT channel allocation error
+#define RF_SCHEDULE_CMD_ERROR                   (-3)     ///< RF command schedule error
+#define RF_ERROR_RAT_PROG                       (-255)   ///< A rat channel could not be programmed.
+#define RF_ERROR_INVALID_RFMODE                 (-256)   ///< Invalid RF_Mode. Used in error callback.
+#define RF_ERROR_CMDFS_SYNTH_PROG               (-257)   ///< Synthesizer error with CMD_FS. Used in error callback. If this error occurred in error callback, user needs to resend CMD_FS to recover. See the device's errata for more details.
 
-#define RF_NUM_SCHEDULE_ACCESS_ENTRIES 2                                                               ///< Number of access request entries
-#define RF_NUM_SCHEDULE_COMMAND_ENTRIES 8                                                              ///< Number of scheduled command entries
-#define RF_NUM_SCHEDULE_MAP_ENTRIES (RF_NUM_SCHEDULE_ACCESS_ENTRIES + RF_NUM_SCHEDULE_COMMAND_ENTRIES) ///< Number of schedule map entries. This is the sum of access request and scheduled command entries
-#define RF_SCH_MAP_CURRENT_CMD_OFFSET RF_NUM_SCHEDULE_ACCESS_ENTRIES                                   ///< Offset of the current command entry in the schedule map
-#define RF_SCH_MAP_PENDING_CMD_OFFSET (RF_SCH_MAP_CURRENT_CMD_OFFSET + 2)                              ///< Offset of the first pending command entry in the schedule map
+#define RF_NUM_SCHEDULE_ACCESS_ENTRIES          2        ///< Number of access request entries
+#define RF_NUM_SCHEDULE_COMMAND_ENTRIES         8        ///< Number of scheduled command entries
+#define RF_NUM_SCHEDULE_MAP_ENTRIES             (RF_NUM_SCHEDULE_ACCESS_ENTRIES + RF_NUM_SCHEDULE_COMMAND_ENTRIES) ///< Number of schedule map entries. This is the sum of access request and scheduled command entries
+#define RF_SCH_MAP_CURRENT_CMD_OFFSET           RF_NUM_SCHEDULE_ACCESS_ENTRIES      ///< Offset of the current command entry in the schedule map
+#define RF_SCH_MAP_PENDING_CMD_OFFSET           (RF_SCH_MAP_CURRENT_CMD_OFFSET + 2) ///< Offset of the first pending command entry in the schedule map
 
-#define RF_ABORT_PREEMPTION (1 << 2) ///< Used with RF_cancelCmd() to provoke subscription to RadioFreeCallback
-#define RF_ABORT_GRACEFULLY (1 << 0) ///< Used with RF_cancelCmd() for graceful command termination
+#define RF_ABORT_PREEMPTION                     (1<<2)   ///< Used with RF_cancelCmd() to provoke subscription to RadioFreeCallback
+#define RF_ABORT_GRACEFULLY                     (1<<0)   ///< Used with RF_cancelCmd() for graceful command termination
 
-#define RF_SCH_CMD_EXECUTION_TIME_UNKNOWN 0 ///< For unknown execution time for RF scheduler
+#define RF_SCH_CMD_EXECUTION_TIME_UNKNOWN       0        ///< For unknown execution time for RF scheduler
 
-#define RF_RAT_ANY_CHANNEL (-1) ///< To be used within the channel configuration structure. Allocate any of the available channels.
-#define RF_RAT_TICKS_PER_US 4   ///< Radio timer (RAT) ticks per microsecond.
+#define RF_RAT_ANY_CHANNEL                      (-1)     ///< To be used within the channel configuration structure. Allocate any of the available channels.
+#define RF_RAT_TICKS_PER_US                     4        ///< Radio timer (RAT) ticks per microsecond.
 
-#define RF_LODIVIDER_MASK 0x7F ///< Mask to be used to determine the effective value of the setup command's loDivider field.
+#define RF_LODIVIDER_MASK                       0x7F     ///< Mask to be used to determine the effective value of the setup command's loDivider field.
 
 /*!
 \brief Converts a duration given in \a microseconds into radio timer (RAT) ticks.
@@ -994,7 +988,9 @@ extern "C" {
 #define RF_convertRatTicksToMs(ticks) \
     ((ticks) / (1000 * (RF_RAT_TICKS_PER_US)))
 
+
 /** @}*/
+
 
 /**
  * \brief PA configuration value for a certain power level.
@@ -1006,15 +1002,15 @@ extern "C" {
  */
 typedef struct
 {
-        uint32_t rawValue : 22; ///< Hardware configuration value.
-        ///<
-        ///< - \c [15:0] used for default PA,
-        ///< - \c [21:0] used for High-power PA
-        uint32_t __dummy : 9;
-        uint32_t paType : 1; ///< Selects the PA type to be used.
-        ///<
-        ///< - 0: #RF_TxPowerTable_DefaultPA
-        ///< - 1: #RF_TxPowerTable_HighPA
+    uint32_t rawValue: 22;     ///< Hardware configuration value.
+    ///<
+    ///< - \c [15:0] used for default PA,
+    ///< - \c [21:0] used for High-power PA
+    uint32_t __dummy: 9;
+    uint32_t paType: 1;        ///< Selects the PA type to be used.
+    ///<
+    ///< - 0: #RF_TxPowerTable_DefaultPA
+    ///< - 1: #RF_TxPowerTable_HighPA
 } RF_TxPowerTable_Value;
 
 /**
@@ -1037,11 +1033,12 @@ typedef struct
  */
 typedef struct
 {
-        int8_t power; ///< Human readable power value representing
-        ///< the output in dBm.
+    int8_t power;                 ///< Human readable power value representing
+    ///< the output in dBm.
 
-        RF_TxPowerTable_Value value; ///< PA hardware configuration for that power level.
+    RF_TxPowerTable_Value value;  ///< PA hardware configuration for that power level.
 } __attribute__((packed)) RF_TxPowerTable_Entry;
+
 
 /**
  * \brief Selects a power amplifier path in a TX power value.
@@ -1054,6 +1051,7 @@ typedef enum
     RF_TxPowerTable_DefaultPA = 0, ///< Default PA
     RF_TxPowerTable_HighPA = 1,    ///< High-power PA
 } RF_TxPowerTable_PAType;
+
 
 /** @brief Base type for all radio operation commands.
  *
@@ -1070,6 +1068,7 @@ typedef enum
  */
 typedef rfc_radioOp_t RF_Op;
 
+
 /** @brief Specifies a RF core firmware configuration.
  *
  *  %RF_Mode selects a mode of operation and points to firmware patches for the RF core.
@@ -1080,10 +1079,10 @@ typedef rfc_radioOp_t RF_Op;
  */
 typedef struct
 {
-        uint8_t rfMode;            ///< Specifies which PHY modes should be activated. Must be set to RF_MODE_MULTIPLE for dual-mode operation.
-        void (*cpePatchFxn)(void); ///< Pointer to CPE patch function
-        void (*mcePatchFxn)(void); ///< Pointer to MCE patch function
-        void (*rfePatchFxn)(void); ///< Pointer to RFE patch function
+    uint8_t rfMode;             ///< Specifies which PHY modes should be activated. Must be set to RF_MODE_MULTIPLE for dual-mode operation.
+    void (*cpePatchFxn)(void);  ///< Pointer to CPE patch function
+    void (*mcePatchFxn)(void);  ///< Pointer to MCE patch function
+    void (*rfePatchFxn)(void);  ///< Pointer to RFE patch function
 } RF_Mode;
 
 /** @brief Scheduling priority of RF operation commands.
@@ -1099,8 +1098,8 @@ typedef struct
 typedef enum
 {
     RF_PriorityHighest = 2, ///< Highest priority. Only use this for urgent commands.
-    RF_PriorityHigh = 1,    ///< High priority. Use this for time-critical commands in synchronous protocols.
-    RF_PriorityNormal = 0,  ///< Default priority. Use this in single-client applications.
+    RF_PriorityHigh    = 1, ///< High priority. Use this for time-critical commands in synchronous protocols.
+    RF_PriorityNormal  = 0, ///< Default priority. Use this in single-client applications.
 } RF_Priority;
 
 /** @brief Status codes for various RF driver functions.
@@ -1118,7 +1117,7 @@ typedef enum
     RF_StatCmdDoneError,       ///< Command finished with an error.
     RF_StatInvalidParamsError, ///< Function was called with an invalid parameter.
     RF_StatCmdEnded,           ///< Cmd is found in the pool but was already ended.
-    RF_StatError = 0x80,       ///< General error specifier.
+    RF_StatError   = 0x80,     ///< General error specifier.
     RF_StatCmdDoneSuccess,     ///< Command finished with success.
     RF_StatCmdSch,             ///< Command successfully scheduled for execution.
     RF_StatSuccess             ///< Function finished with success.
@@ -1141,18 +1140,18 @@ typedef uint64_t RF_EventMask;
  */
 typedef union
 {
-        rfc_command_t commandId; ///< Generic command identifier. This is the first field
-        ///< in every radio operation command.
-        rfc_CMD_RADIO_SETUP_t common;            ///< Radio setup command for BLE and IEEE modes
-        rfc_CMD_BLE5_RADIO_SETUP_t ble5;         ///< Radio setup command for BLE5 mode
-        rfc_CMD_PROP_RADIO_SETUP_t prop;         ///< Radio setup command for PROPRIETARY mode on 2.4 GHz
-        rfc_CMD_PROP_RADIO_DIV_SETUP_t prop_div; ///< Radio setup command for PROPRIETARY mode on Sub-1 Ghz
+    rfc_command_t                      commandId;   ///< Generic command identifier. This is the first field
+    ///< in every radio operation command.
+    rfc_CMD_RADIO_SETUP_t              common;      ///< Radio setup command for BLE and IEEE modes
+    rfc_CMD_BLE5_RADIO_SETUP_t         ble5;        ///< Radio setup command for BLE5 mode
+    rfc_CMD_PROP_RADIO_SETUP_t         prop;        ///< Radio setup command for PROPRIETARY mode on 2.4 GHz
+    rfc_CMD_PROP_RADIO_DIV_SETUP_t     prop_div;    ///< Radio setup command for PROPRIETARY mode on Sub-1 Ghz
 
 #if (DeviceFamily_PARENT == DeviceFamily_PARENT_CC13X2_CC26X2)
-        rfc_CMD_RADIO_SETUP_PA_t common_pa;            ///< Radio setup command for BLE and IEEE modes with High Gain PA
-        rfc_CMD_BLE5_RADIO_SETUP_PA_t ble5_pa;         ///< Radio setup command for BLE5 mode with High Gain PA
-        rfc_CMD_PROP_RADIO_SETUP_PA_t prop_pa;         ///< Radio setup command for PROPRIETARY mode on 2.4 GHz with High Gain PA
-        rfc_CMD_PROP_RADIO_DIV_SETUP_PA_t prop_div_pa; ///< Radio setup command for PROPRIETARY mode on Sub-1 Ghz with High Gain PA
+    rfc_CMD_RADIO_SETUP_PA_t           common_pa;   ///< Radio setup command for BLE and IEEE modes with High Gain PA
+    rfc_CMD_BLE5_RADIO_SETUP_PA_t      ble5_pa;     ///< Radio setup command for BLE5 mode with High Gain PA
+    rfc_CMD_PROP_RADIO_SETUP_PA_t      prop_pa;     ///< Radio setup command for PROPRIETARY mode on 2.4 GHz with High Gain PA
+    rfc_CMD_PROP_RADIO_DIV_SETUP_PA_t  prop_div_pa; ///< Radio setup command for PROPRIETARY mode on Sub-1 Ghz with High Gain PA
 #endif
 } RF_RadioSetup;
 
@@ -1186,12 +1185,12 @@ typedef union
  */
 typedef enum
 {
-    RF_ClientEventPowerUpFinished = (1 << 0), ///< The RF core has been powered up the radio setup has been finished.
-    RF_ClientEventRadioFree = (1 << 1),       ///< Radio becomes free after a command has been preempted by a high-priority command of another client.
+    RF_ClientEventPowerUpFinished     = (1 << 0),   ///< The RF core has been powered up the radio setup has been finished.
+    RF_ClientEventRadioFree           = (1 << 1),   ///< Radio becomes free after a command has been preempted by a high-priority command of another client.
     ///< This event is only triggered on a client that has been preempted.
     ///< Clients may use this event to retry running their low-priority RF operation.
 
-    RF_ClientEventSwitchClientEntered = (1 << 2) ///< Signals the client that the RF driver is about to switch over from another client.
+    RF_ClientEventSwitchClientEntered = (1 << 2)    ///< Signals the client that the RF driver is about to switch over from another client.
 } RF_ClientEvent;
 
 /** @brief Global RF driver events.
@@ -1233,14 +1232,15 @@ typedef enum
  */
 typedef enum
 {
-    RF_GlobalEventRadioSetup = (1 << 0), ///< The RF core is being reconfigured through a setup command.
+    RF_GlobalEventRadioSetup     = (1 << 0),             ///< The RF core is being reconfigured through a setup command.
     ///< The \a arg argument is a pointer to the setup command.
     ///< HWI context.
 
-    RF_GlobalEventRadioPowerDown = (1 << 1), ///< The RF core is being powered down.
+    RF_GlobalEventRadioPowerDown = (1 << 1),             ///< The RF core is being powered down.
     ///< The \a arg argument is empty.
     ///< SWI context.
 } RF_GlobalEvent;
+
 
 /** @brief Event mask for combining #RF_ClientEvent event flags in #RF_Params::nClientEventMask.
  *
@@ -1283,12 +1283,13 @@ typedef int16_t RF_CmdHandle;
  *        any field in %RF_Object is forbidden.
  */
 
+
 /** @cond */
 
-#if defined(RF_SINGLEMODE)
-typedef struct RF_ObjectSingleMode RF_Object;
+#if defined (RF_SINGLEMODE)
+typedef struct RF_ObjectSingleMode  RF_Object;
 #else
-typedef struct RF_ObjectMultiMode RF_Object;
+typedef struct RF_ObjectMultiMode   RF_Object;
 #endif
 
 /*  Definition of the RF_Object structure for single-mode applications.
@@ -1296,32 +1297,32 @@ typedef struct RF_ObjectMultiMode RF_Object;
  */
 struct RF_ObjectSingleMode
 {
-        /// Configuration
+    /// Configuration
+    struct
+    {
+        uint32_t               nInactivityTimeout;      ///< Inactivity timeout in us.
+        RF_Mode*               pRfMode;                 ///< Mode of operation.
+        RF_RadioSetup*         pRadioSetup;             ///< Pointer to the setup command to be executed at power up.
+        uint32_t               nPowerUpDuration;        ///< Radio power up time to be used to calculate future wake-up events.
+        bool                   bMeasurePowerUpDuration; ///< Indicates if nPowerUpDuration holds a fix value or being measured and updated at every power up.
+        bool                   bUpdateSetup;            ///< Indicates if an analog configuration update should be performed at the next setup command execution.
+        uint16_t               nPowerUpDurationMargin;  ///< Power up duration margin in us.
+        void*                  pPowerCb;                ///< \deprecated Power up callback, will go away in future versions, see clientConfig::pClienteventCb instead.
+        void*                  pErrCb;                  ///< Error callback.
+    } clientConfig;
+    /// State & variables
+    struct
+    {
         struct
         {
-                uint32_t nInactivityTimeout;     ///< Inactivity timeout in us.
-                RF_Mode* pRfMode;                ///< Mode of operation.
-                RF_RadioSetup* pRadioSetup;      ///< Pointer to the setup command to be executed at power up.
-                uint32_t nPowerUpDuration;       ///< Radio power up time to be used to calculate future wake-up events.
-                bool bMeasurePowerUpDuration;    ///< Indicates if nPowerUpDuration holds a fix value or being measured and updated at every power up.
-                bool bUpdateSetup;               ///< Indicates if an analog configuration update should be performed at the next setup command execution.
-                uint16_t nPowerUpDurationMargin; ///< Power up duration margin in us.
-                void* pPowerCb;                  ///< \deprecated Power up callback, will go away in future versions, see clientConfig::pClienteventCb instead.
-                void* pErrCb;                    ///< Error callback.
-        } clientConfig;
-        /// State & variables
-        struct
-        {
-                struct
-                {
-                        rfc_CMD_FS_t cmdFs;      ///< FS command to be executed when the radio is powered up.
-                } mode_state;                    ///< (Mode-specific) state structure
-                SemaphoreP_Struct semSync;       ///< Semaphore used by RF_runCmd(), RF_pendCmd() and power down sequence.
-                RF_EventMask volatile eventSync; ///< Event mask/value used by RF_runCmd() and RF_pendCmd().
-                void* pCbSync;                   ///< Internal storage of user callbacks when RF_runCmd() is used.
-                RF_EventMask unpendCause;        ///< Internal storage of the return value of RF_pendCmd().
-                bool bYielded;                   ///< Flag indicates that the radio can be powered down at the earliest convenience.
-        } state;
+            rfc_CMD_FS_t        cmdFs;               ///< FS command to be executed when the radio is powered up.
+        } mode_state;                                ///< (Mode-specific) state structure
+        SemaphoreP_Struct       semSync;             ///< Semaphore used by RF_runCmd(), RF_pendCmd() and power down sequence.
+        RF_EventMask volatile   eventSync;           ///< Event mask/value used by RF_runCmd() and RF_pendCmd().
+        void*                   pCbSync;             ///< Internal storage of user callbacks when RF_runCmd() is used.
+        RF_EventMask            unpendCause;         ///< Internal storage of the return value of RF_pendCmd().
+        bool                    bYielded;            ///< Flag indicates that the radio can be powered down at the earliest convenience.
+    } state;
 };
 
 /** Definition of the RF_Object structure for multi mode applications.
@@ -1329,37 +1330,37 @@ struct RF_ObjectSingleMode
  */
 struct RF_ObjectMultiMode
 {
-        /// Configuration
+    /// Configuration
+    struct
+    {
+        uint32_t            nInactivityTimeout;          ///< Inactivity timeout in us.
+        RF_Mode*            pRfMode;                     ///< Mode of operation.
+        RF_RadioSetup*      pRadioSetup;                 ///< Pointer to the setup command to be executed at power up.
+        uint32_t            nPhySwitchingDuration;       ///< Radio reconfiguration time to this client's phy and protocol.
+        uint32_t            nPowerUpDuration;            ///< Radio power up time to be used to calculate future wake-up events.
+        bool                bMeasurePowerUpDuration;     ///< Indicates if nPowerUpDuration holds a fix value or being measured and updated at every power up.
+        bool                bUpdateSetup;                ///< Indicates if an analog configuration update should be performed at the next setup command execution.
+        uint16_t            nPowerUpDurationMargin;      ///< Power up duration margin in us.
+        void*               pPowerCb;                    ///< \deprecated Power up callback, will go away in future versions, see clientConfig::pClienteventCb instead
+        void*               pErrCb;                      ///< Error callback.
+        void*               pClientEventCb;              ///< Client event callback.
+        RF_ClientEventMask  nClientEventMask;            ///< Client event mask to activate client event callback.
+        uint16_t            nPhySwitchingDurationMargin; ///< Phy switching duration margin in us. It is used to calculate when run-time conflicts shall be resolved.
+    } clientConfig;
+    /// State & variables
+    struct
+    {
         struct
         {
-                uint32_t nInactivityTimeout;          ///< Inactivity timeout in us.
-                RF_Mode* pRfMode;                     ///< Mode of operation.
-                RF_RadioSetup* pRadioSetup;           ///< Pointer to the setup command to be executed at power up.
-                uint32_t nPhySwitchingDuration;       ///< Radio reconfiguration time to this client's phy and protocol.
-                uint32_t nPowerUpDuration;            ///< Radio power up time to be used to calculate future wake-up events.
-                bool bMeasurePowerUpDuration;         ///< Indicates if nPowerUpDuration holds a fix value or being measured and updated at every power up.
-                bool bUpdateSetup;                    ///< Indicates if an analog configuration update should be performed at the next setup command execution.
-                uint16_t nPowerUpDurationMargin;      ///< Power up duration margin in us.
-                void* pPowerCb;                       ///< \deprecated Power up callback, will go away in future versions, see clientConfig::pClienteventCb instead
-                void* pErrCb;                         ///< Error callback.
-                void* pClientEventCb;                 ///< Client event callback.
-                RF_ClientEventMask nClientEventMask;  ///< Client event mask to activate client event callback.
-                uint16_t nPhySwitchingDurationMargin; ///< Phy switching duration margin in us. It is used to calculate when run-time conflicts shall be resolved.
-        } clientConfig;
-        /// State & variables
-        struct
-        {
-                struct
-                {
-                        rfc_CMD_FS_t cmdFs;      ///< FS command to be executed when the radio is powered up.
-                } mode_state;                    ///< (Mode-specific) state structure
-                SemaphoreP_Struct semSync;       ///< Semaphore used by RF_runCmd(), RF_pendCmd() and power down sequence.
-                RF_EventMask volatile eventSync; ///< Event mask/value used by RF_runCmd() and RF_pendCmd().
-                void* pCbSync;                   ///< Internal storage of user callbacks when RF_runCmd() is used.
-                RF_EventMask unpendCause;        ///< Internal storage of the return value of RF_pendCmd().
-                ClockP_Struct clkReqAccess;      ///< Clock used for request access timeout.
-                bool bYielded;                   ///< Flag indicates that the radio can be powered down at the earliest convenience.
-        } state;
+            rfc_CMD_FS_t        cmdFs;              ///< FS command to be executed when the radio is powered up.
+        } mode_state;                               ///< (Mode-specific) state structure
+        SemaphoreP_Struct       semSync;            ///< Semaphore used by RF_runCmd(), RF_pendCmd() and power down sequence.
+        RF_EventMask volatile   eventSync;          ///< Event mask/value used by RF_runCmd() and RF_pendCmd().
+        void*                   pCbSync;            ///< Internal storage of user callbacks when RF_runCmd() is used.
+        RF_EventMask            unpendCause;        ///< Internal storage of the return value of RF_pendCmd().
+        ClockP_Struct           clkReqAccess;       ///< Clock used for request access timeout.
+        bool                    bYielded;           ///< Flag indicates that the radio can be powered down at the earliest convenience.
+    } state;
 };
 
 /** @endcond */
@@ -1370,6 +1371,7 @@ struct RF_ObjectMultiMode
  *  An invalid handle has the value NULL.
  */
 typedef RF_Object* RF_Handle;
+
 
 /** @brief RAT handle that is returned by RF_ratCompare() or RF_ratCapture().
  *
@@ -1386,12 +1388,12 @@ typedef int8_t RF_RatHandle;
  */
 typedef enum
 {
-    RF_GET_CURR_CMD,              ///< Retrieve a command handle of the current command.
-    RF_GET_AVAIL_RAT_CH,          ///< Create a bitmask showing available RAT channels.
-    RF_GET_RADIO_STATE,           ///< Show the current RF core power state. 0: Radio OFF, 1: Radio ON.
-    RF_GET_SCHEDULE_MAP,          ///< Provide a timetable of all scheduled commands.
-    RF_GET_CLIENT_LIST,           ///< Provide the client list.
-    RF_GET_CLIENT_SWITCHING_TIME, ///< Provide the client to client switching times
+    RF_GET_CURR_CMD,                              ///< Retrieve a command handle of the current command.
+    RF_GET_AVAIL_RAT_CH,                          ///< Create a bitmask showing available RAT channels.
+    RF_GET_RADIO_STATE,                           ///< Show the current RF core power state. 0: Radio OFF, 1: Radio ON.
+    RF_GET_SCHEDULE_MAP,                          ///< Provide a timetable of all scheduled commands.
+    RF_GET_CLIENT_LIST,                           ///< Provide the client list.
+    RF_GET_CLIENT_SWITCHING_TIME,                 ///< Provide the client to client switching times
 } RF_InfoType;
 
 /** @brief Stores output parameters for RF_getInfo().
@@ -1401,12 +1403,12 @@ typedef enum
  */
 typedef union
 {
-        RF_CmdHandle ch;                  ///< Command handle (#RF_GET_CURR_CMD).
-        uint16_t availRatCh;              ///< Available RAT channels (RF_GET_AVAIL_RAT_CH).
-        bool bRadioState;                 ///< Current RF core power state (#RF_GET_RADIO_STATE).
-        RF_Handle pClientList[2];         ///< Client pointer list, [0]: client 1, [1]: client 2.
-        uint32_t phySwitchingTimeInUs[2]; ///< Phy switching time 0: client 1 -> 2, 1 : client 2 -> 1.
-        void* pScheduleMap;               ///< Pointer to scheduling map (#RF_GET_SCHEDULE_MAP).
+    RF_CmdHandle ch;                              ///< Command handle (#RF_GET_CURR_CMD).
+    uint16_t     availRatCh;                      ///< Available RAT channels (RF_GET_AVAIL_RAT_CH).
+    bool         bRadioState;                     ///< Current RF core power state (#RF_GET_RADIO_STATE).
+    RF_Handle    pClientList[2];                  ///< Client pointer list, [0]: client 1, [1]: client 2.
+    uint32_t     phySwitchingTimeInUs[2];         ///< Phy switching time 0: client 1 -> 2, 1 : client 2 -> 1.
+    void*         pScheduleMap;                   ///< Pointer to scheduling map (#RF_GET_SCHEDULE_MAP).
 } RF_InfoVal;
 
 /** @brief RF schedule map entry structure.
@@ -1414,11 +1416,11 @@ typedef union
  */
 typedef struct
 {
-        RF_CmdHandle ch;      ///< Command handle
-        RF_Handle pClient;    ///< Pointer to client object
-        uint32_t startTime;   ///< Start time (in RAT tick) of the command or access request
-        uint32_t endTime;     ///< End time (in RAT tick) of the command or access request
-        RF_Priority priority; ///< Priority of the command or access request
+    RF_CmdHandle ch;                               ///< Command handle
+    RF_Handle    pClient;                          ///< Pointer to client object
+    uint32_t     startTime;                        ///< Start time (in RAT tick) of the command or access request
+    uint32_t     endTime;                          ///< End time (in RAT tick) of the command or access request
+    RF_Priority  priority;                         ///< Priority of the command or access request
 } RF_ScheduleMapElement;
 
 /** @brief RF schedule map structure.
@@ -1426,8 +1428,8 @@ typedef struct
  */
 typedef struct
 {
-        RF_ScheduleMapElement accessMap[RF_NUM_SCHEDULE_ACCESS_ENTRIES];   ///< Access request schedule map
-        RF_ScheduleMapElement commandMap[RF_NUM_SCHEDULE_COMMAND_ENTRIES]; ///< Command schedule map
+    RF_ScheduleMapElement  accessMap[RF_NUM_SCHEDULE_ACCESS_ENTRIES];    ///< Access request schedule map
+    RF_ScheduleMapElement  commandMap[RF_NUM_SCHEDULE_COMMAND_ENTRIES];  ///< Command schedule map
 } RF_ScheduleMap;
 
 /** @brief Handles events related to RF command execution.
@@ -1514,30 +1516,30 @@ typedef void (*RF_GlobalCallback)(RF_Handle h, RF_GlobalEvent event, void* arg);
  */
 typedef struct
 {
-        uint32_t nInactivityTimeout; ///< Inactivity timeout in microseconds.
-        ///< The default value is 0xFFFFFFFF (infinite).
+    uint32_t            nInactivityTimeout;      ///< Inactivity timeout in microseconds.
+    ///< The default value is 0xFFFFFFFF (infinite).
 
-        uint32_t nPowerUpDuration; ///< A custom power-up duration in microseconds.
-        ///< If 0, the RF driver will start with a conservative value and measure the actual time during the first power-up.
-        ///< The default value is 0.
+    uint32_t            nPowerUpDuration;        ///< A custom power-up duration in microseconds.
+    ///< If 0, the RF driver will start with a conservative value and measure the actual time during the first power-up.
+    ///< The default value is 0.
 
-        RF_Callback pPowerCb; ///< \deprecated Power up callback, will be removed future versions, see RF_Params::pClienteventCb instead.
-        ///< The default value is NULL.
+    RF_Callback         pPowerCb;                ///< \deprecated Power up callback, will be removed future versions, see RF_Params::pClienteventCb instead.
+    ///< The default value is NULL.
 
-        RF_Callback pErrCb; ///< \deprecated Callback function for driver error events.
+    RF_Callback         pErrCb;                  ///< \deprecated Callback function for driver error events.
 
-        uint16_t nPowerUpDurationMargin; ///< An additional safety margin to be added to #RF_Params::nPowerUpDuration.
-        ///< This is necessary because of other hardware and software interrupts
-        ///< preempting the RF driver interrupt handlers and state machine.
-        ///< The default value is platform-dependent.
+    uint16_t            nPowerUpDurationMargin;  ///< An additional safety margin to be added to #RF_Params::nPowerUpDuration.
+    ///< This is necessary because of other hardware and software interrupts
+    ///< preempting the RF driver interrupt handlers and state machine.
+    ///< The default value is platform-dependent.
 
-        uint16_t nPhySwitchingDurationMargin; ///< An additional safety margin to be used to calculate when conflicts shall be evaluated run-time.
+    uint16_t            nPhySwitchingDurationMargin; ///< An additional safety margin to be used to calculate when conflicts shall be evaluated run-time.
 
-        RF_ClientCallback pClientEventCb; ///< Callback function for client-related events.
-        ///< The default value is NULL.
+    RF_ClientCallback   pClientEventCb;          ///< Callback function for client-related events.
+    ///< The default value is NULL.
 
-        RF_ClientEventMask nClientEventMask; ///< Event mask used to subscribe certain client events.
-        ///< The purpose is to keep the number of callback executions small.
+    RF_ClientEventMask  nClientEventMask;        ///< Event mask used to subscribe certain client events.
+    ///< The purpose is to keep the number of callback executions small.
 } RF_Params;
 
 /* RF command. */
@@ -1546,19 +1548,19 @@ typedef struct RF_Cmd_s RF_Cmd;
 /* RF command . */
 struct RF_Cmd_s
 {
-        List_Elem _elem;          /* Pointer to next and previous elements. */
-        RF_Callback volatile pCb; /* Pointer to callback function */
-        RF_Op* pOp;               /* Pointer to (chain of) RF operations(s) */
-        RF_Object* pClient;       /* Pointer to client */
-        RF_EventMask bmEvent;     /* Enable mask for interrupts from the command */
-        RF_EventMask pastifg;     /* Accumulated value of events happened within a command chain */
-        RF_EventMask rfifg;       /* Return value for callback 0:31 - RF_CPE0_INT, 32:63 - RF_HW_INT */
-        uint32_t startTime;       /* Command start time (in RAT ticks) */
-        uint32_t endTime;         /* Command end time (in RAT ticks) */
-        uint32_t allowDelay;      /* Delay allowed if the start time cannot be met. */
-        RF_CmdHandle ch;          /* Command handle */
-        RF_Priority ePri;         /* Priority of RF command */
-        uint8_t volatile flags;   /* [0: Aborted, 1: Stopped, 2: canceled] */
+    List_Elem            _elem;       /* Pointer to next and previous elements. */
+    RF_Callback volatile pCb;         /* Pointer to callback function */
+    RF_Op*               pOp;         /* Pointer to (chain of) RF operations(s) */
+    RF_Object*           pClient;     /* Pointer to client */
+    RF_EventMask         bmEvent;     /* Enable mask for interrupts from the command */
+    RF_EventMask         pastifg;     /* Accumulated value of events happened within a command chain */
+    RF_EventMask         rfifg;       /* Return value for callback 0:31 - RF_CPE0_INT, 32:63 - RF_HW_INT */
+    uint32_t             startTime;   /* Command start time (in RAT ticks) */
+    uint32_t             endTime;     /* Command end time (in RAT ticks) */
+    uint32_t             allowDelay;  /* Delay allowed if the start time cannot be met. */
+    RF_CmdHandle         ch;          /* Command handle */
+    RF_Priority          ePri;        /* Priority of RF command */
+    uint8_t volatile     flags;       /* [0: Aborted, 1: Stopped, 2: canceled] */
 };
 
 /** @brief RF Hardware attributes.
@@ -1568,11 +1570,11 @@ struct RF_Cmd_s
  */
 typedef struct
 {
-        uint8_t hwiPriority;                ///< Priority for HWIs belong to the RF driver.
-        uint8_t swiPriority;                ///< Priority for SWIs belong to the RF driver.
-        bool xoscHfAlwaysNeeded;            ///< Indicate that the XOSC HF should be turned on by the power driver
-        RF_GlobalCallback globalCallback;   ///< Pointer to a callback function serving client independent events listed in #RF_GlobalEvent.
-        RF_GlobalEventMask globalEventMask; ///< Event mask which the globalCallback is invoked upon.
+    uint8_t             hwiPriority;        ///< Priority for HWIs belong to the RF driver.
+    uint8_t             swiPriority;        ///< Priority for SWIs belong to the RF driver.
+    bool                xoscHfAlwaysNeeded; ///< Indicate that the XOSC HF should be turned on by the power driver
+    RF_GlobalCallback   globalCallback;     ///< Pointer to a callback function serving client independent events listed in #RF_GlobalEvent.
+    RF_GlobalEventMask  globalEventMask;    ///< Event mask which the globalCallback is invoked upon.
 } RFCC26XX_HWAttrsV2;
 
 /** @brief Controls the behavior of the state machine of the RF driver when a conflict is identified
@@ -1581,20 +1583,20 @@ typedef struct
  */
 typedef enum
 {
-    RF_ConflictNone = 0,
+    RF_ConflictNone   = 0,
     RF_ConflictReject = 1,
-    RF_ConflictAbort = 2,
+    RF_ConflictAbort  = 2,
 } RF_Conflict;
 
 /** @brief Describes the location within the pend queue where the new command was inserted by the scheduler.
  */
 typedef enum
 {
-    RF_ScheduleStatusError = -3,
-    RF_ScheduleStatusNone = 0,
-    RF_ScheduleStatusTop = 1,
-    RF_ScheduleStatusMiddle = 2,
-    RF_ScheduleStatusTail = 4,
+    RF_ScheduleStatusError   = -3,
+    RF_ScheduleStatusNone    = 0,
+    RF_ScheduleStatusTop     = 1,
+    RF_ScheduleStatusMiddle  = 2,
+    RF_ScheduleStatusTail    = 4,
     RF_ScheduleStatusPreempt = 8
 } RF_ScheduleStatus;
 
@@ -1639,8 +1641,8 @@ typedef RF_Conflict (*RF_ConflictHook)(RF_Cmd* pCmdBg, RF_Cmd* pCmdFg, List_List
  */
 typedef struct
 {
-        RF_SubmitHook submitHook;     ///< Function hook implements the scheduling policy to be executed at the time of RF_scheduleCmd API call.
-        RF_ConflictHook conflictHook; ///< Function hook implements the runtime conflict resolution, if any identified at the start time of next command.
+    RF_SubmitHook   submitHook;   ///< Function hook implements the scheduling policy to be executed at the time of RF_scheduleCmd API call.
+    RF_ConflictHook conflictHook; ///< Function hook implements the runtime conflict resolution, if any identified at the start time of next command.
 } RFCC26XX_SchedulerPolicy;
 
 /** @brief Controls the behavior of the RF_scheduleCmd() API.
@@ -1649,7 +1651,7 @@ typedef struct
 typedef enum
 {
     RF_AllowDelayNone = 0,
-    RF_AllowDelayAny = UINT32_MAX
+    RF_AllowDelayAny  = UINT32_MAX
 } RF_AllowDelay;
 
 /* @brief RF schedule command parameter struct
@@ -1658,12 +1660,12 @@ typedef enum
  */
 typedef struct
 {
-        uint32_t endTime;     ///< End time in RAT Ticks for the radio command
-        RF_Priority priority; ///< Intra client priority
-        uint32_t allowDelay;  ///< Control word to define the policy of the scheduler if the timing of a command cannot be met.
-        ///< Only applicable on CC13x2 and CC26x2 devices.
-        ///<  RF_AllowDelayNone: Reject the command.
-        ///<  RF_AllowDelayAny:  Append the command to the end of the queue.
+    uint32_t            endTime;            ///< End time in RAT Ticks for the radio command
+    RF_Priority         priority;           ///< Intra client priority
+    uint32_t            allowDelay;         ///< Control word to define the policy of the scheduler if the timing of a command cannot be met.
+    ///< Only applicable on CC13x2 and CC26x2 devices.
+    ///<  RF_AllowDelayNone: Reject the command.
+    ///<  RF_AllowDelayAny:  Append the command to the end of the queue.
 } RF_ScheduleCmdParams;
 
 /** @brief RF request access parameter struct
@@ -1672,9 +1674,9 @@ typedef struct
  */
 typedef struct
 {
-        uint32_t duration;    ///< Radio access duration in RAT Ticks requested by the client
-        uint32_t startTime;   ///< Start time window in RAT Time for radio access
-        RF_Priority priority; ///< Access priority
+    uint32_t            duration;           ///< Radio access duration in RAT Ticks requested by the client
+    uint32_t            startTime;          ///< Start time window in RAT Time for radio access
+    RF_Priority         priority;           ///< Access priority
 } RF_AccessParams;
 
 /** @brief Select the preferred RAT channel through the configuration of #RF_ratCompare() or #RF_ratCapture().
@@ -1685,10 +1687,10 @@ typedef struct
  */
 typedef enum
 {
-    RF_RatChannelAny = -1, ///< Chose the first available channel.
-    RF_RatChannel0 = 0,    ///< Use RAT user channel 0.
-    RF_RatChannel1 = 1,    ///< Use RAT user channel 1.
-    RF_RatChannel2 = 2,    ///< Use RAT user channel 2.
+    RF_RatChannelAny = -1,                  ///< Chose the first available channel.
+    RF_RatChannel0   =  0,                  ///< Use RAT user channel 0.
+    RF_RatChannel1   =  1,                  ///< Use RAT user channel 1.
+    RF_RatChannel2   =  2,                  ///< Use RAT user channel 2.
 } RF_RatSelectChannel;
 
 /** @brief Selects the source signal for #RF_ratCapture().
@@ -1698,14 +1700,14 @@ typedef enum
  */
 typedef enum
 {
-    RF_RatCaptureSourceRtcUpdate = 20,    ///< Selects the RTC update signal source.
+    RF_RatCaptureSourceRtcUpdate    = 20, ///< Selects the RTC update signal source.
     RF_RatCaptureSourceEventGeneric = 21, ///< Selects the Generic event of Event Fabric as source.
-    RF_RatCaptureSourceRfcGpi0 = 22,      ///< Selects the RFC_GPI[0] as source. This can be used i.e.
+    RF_RatCaptureSourceRfcGpi0      = 22, ///< Selects the RFC_GPI[0] as source. This can be used i.e.
     ///< to capture events on a GPIO. This requires that the GPIO
     ///< is connected to RFC_GPO[0] from the GPIO driver.
-    RF_RatCaptureSourceRfcGpi1 = 23 ///< Selects the RFC_GPO[1] as source. This can be used i.e.
-                                    ///< to capture events on a GPIO. This requires that the GPIO
-                                    ///< is connected to RFC_GPO[1] from the GPIO driver.
+    RF_RatCaptureSourceRfcGpi1      = 23  ///< Selects the RFC_GPO[1] as source. This can be used i.e.
+                                      ///< to capture events on a GPIO. This requires that the GPIO
+                                      ///< is connected to RFC_GPO[1] from the GPIO driver.
 } RF_RatCaptureSource;
 
 /** @brief Selects the mode of #RF_ratCapture().
@@ -1715,10 +1717,10 @@ typedef enum
  */
 typedef enum
 {
-    RF_RatCaptureModeRising = 0,  ///< Rising edge of the selected source will trigger a capture event.
-    RF_RatCaptureModeFalling = 1, ///< Falling edge of the selected source will trigger a capture event.
-    RF_RatCaptureModeBoth = 2     ///< Both rising and falling edges of the selected source will generate
-                                  ///< capture events.
+    RF_RatCaptureModeRising       = 0,      ///< Rising edge of the selected source will trigger a capture event.
+    RF_RatCaptureModeFalling      = 1,      ///< Falling edge of the selected source will trigger a capture event.
+    RF_RatCaptureModeBoth         = 2       ///< Both rising and falling edges of the selected source will generate
+                                    ///< capture events.
 } RF_RatCaptureMode;
 
 /** @brief Selects the repetition of #RF_ratCapture().
@@ -1729,8 +1731,8 @@ typedef enum
  */
 typedef enum
 {
-    RF_RatCaptureSingle = 0, ///< Free the channel after the first capture event.
-    RF_RatCaptureRepeat = 1  ///< Rearm the channel after each capture events.
+    RF_RatCaptureSingle           = 0,      ///< Free the channel after the first capture event.
+    RF_RatCaptureRepeat           = 1       ///< Rearm the channel after each capture events.
 } RF_RatCaptureRepetition;
 
 /** @brief Selects the mode of the RAT_GPO[x] for #RF_ratCompare() or #RF_ratCapture().
@@ -1749,12 +1751,12 @@ typedef enum
  */
 typedef enum
 {
-    RF_RatOutputModePulse = 0,      ///< Generates a one-clock period width pulse.
-    RF_RatOutputModeSet = 1,        ///< Sets the output high on a RAT event.
-    RF_RatOutputModeClear = 2,      ///< Sets the output low on a RAT event.
-    RF_RatOutputModeToggle = 3,     ///< Inverts the polarity of the output.
-    RF_RatOutputModeAlwaysZero = 4, ///< Sets the output low independently of any RAT events.
-    RF_RatOutputModeAlwaysOne = 5,  ///< Sets the output high independently of any RAT events.
+    RF_RatOutputModePulse         = 0,      ///< Generates a one-clock period width pulse.
+    RF_RatOutputModeSet           = 1,      ///< Sets the output high on a RAT event.
+    RF_RatOutputModeClear         = 2,      ///< Sets the output low on a RAT event.
+    RF_RatOutputModeToggle        = 3,      ///< Inverts the polarity of the output.
+    RF_RatOutputModeAlwaysZero    = 4,      ///< Sets the output low independently of any RAT events.
+    RF_RatOutputModeAlwaysOne     = 5,      ///< Sets the output high independently of any RAT events.
 } RF_RatOutputMode;
 
 /** @brief Selects GPO to be used with #RF_ratCompare() or #RF_ratCapture().
@@ -1768,13 +1770,13 @@ typedef enum
  */
 typedef enum
 {
-    RF_RatOutputSelectRatGpo1 = 1, ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[1]
-    RF_RatOutputSelectRatGpo2 = 2, ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[2]
-    RF_RatOutputSelectRatGpo3 = 3, ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[3]
-    RF_RatOutputSelectRatGpo4 = 4, ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[4]
-    RF_RatOutputSelectRatGpo5 = 5, ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[5]
-    RF_RatOutputSelectRatGpo6 = 6, ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[6]
-    RF_RatOutputSelectRatGpo7 = 7, ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[7]
+    RF_RatOutputSelectRatGpo1     = 1,      ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[1]
+    RF_RatOutputSelectRatGpo2     = 2,      ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[2]
+    RF_RatOutputSelectRatGpo3     = 3,      ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[3]
+    RF_RatOutputSelectRatGpo4     = 4,      ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[4]
+    RF_RatOutputSelectRatGpo5     = 5,      ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[5]
+    RF_RatOutputSelectRatGpo6     = 6,      ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[6]
+    RF_RatOutputSelectRatGpo7     = 7,      ///< Configure RAT_CHANNEL[x] to interface with RAT_GPO[7]
 } RF_RatOutputSelect;
 
 /** @brief RF_ratCapture parameter structure.
@@ -1783,11 +1785,11 @@ typedef enum
  */
 typedef struct
 {
-        RF_RatCallback callback;        ///< Callback function to be invoked upon a capture event (optional).
-        RF_RatHandle channel;           ///< RF_RatHandle identifies the channel to be allocated.
-        RF_RatCaptureSource source;     ///< Configuration of the event source to cause a capture event.
-        RF_RatCaptureMode captureMode;  ///< Configuration of the mode of event to cause a capture event.
-        RF_RatCaptureRepetition repeat; ///< Configuration of the channel to be used in single or repeated mode.
+    RF_RatCallback            callback;         ///< Callback function to be invoked upon a capture event (optional).
+    RF_RatHandle              channel;          ///< RF_RatHandle identifies the channel to be allocated.
+    RF_RatCaptureSource       source;           ///< Configuration of the event source to cause a capture event.
+    RF_RatCaptureMode         captureMode;      ///< Configuration of the mode of event to cause a capture event.
+    RF_RatCaptureRepetition   repeat;           ///< Configuration of the channel to be used in single or repeated mode.
 } RF_RatConfigCapture;
 
 /** @brief RF_ratCompare parameter structure.
@@ -1796,10 +1798,10 @@ typedef struct
  */
 typedef struct
 {
-        RF_RatCallback callback; ///< Callback function to be invoked upon a capture event (optional).
-        RF_RatHandle channel;    ///< RF_RatHandle identifies the channel to be allocated.
-        uint32_t timeout;        ///< Timeout value in RAT ticks to be programmed in the timer as the
-        ///< trigger of compare event.
+    RF_RatCallback            callback;         ///< Callback function to be invoked upon a capture event (optional).
+    RF_RatHandle              channel;          ///< RF_RatHandle identifies the channel to be allocated.
+    uint32_t                  timeout;          ///< Timeout value in RAT ticks to be programmed in the timer as the
+    ///< trigger of compare event.
 } RF_RatConfigCompare;
 
 /** @brief RAT related IO parameter structure.
@@ -1808,8 +1810,8 @@ typedef struct
  */
 typedef struct
 {
-        RF_RatOutputMode mode;     ///< The mode the GPO should operate in.
-        RF_RatOutputSelect select; ///< The signal which shall be connected to the GPO.
+    RF_RatOutputMode          mode;            ///< The mode the GPO should operate in.
+    RF_RatOutputSelect        select;          ///< The signal which shall be connected to the GPO.
 } RF_RatConfigOutput;
 
 /** @brief Creates a a new client instance of the RF driver.
@@ -1948,6 +1950,7 @@ extern RF_ScheduleStatus RF_defaultSubmitPolicy(RF_Cmd* pCmdNew, RF_Cmd* pCmdBg,
  *  @return           RF_defaultSubmitPolicy identifies the success or failure of queuing.
  */
 extern RF_Conflict RF_defaultConflictPolicy(RF_Cmd* pCmdBg, RF_Cmd* pCmdFg, List_List* pPendQueue, List_List* pDoneQueue);
+
 
 /**
  *  @brief  Initialize the configuration structure to default values to be used with the RF_scheduleCmd() API.
@@ -2482,6 +2485,7 @@ extern int8_t RF_TxPowerTable_findPowerLevel(RF_TxPowerTable_Entry table[], RF_T
  *                      otherwise #RF_TxPowerTable_INVALID_VALUE.
  */
 extern RF_TxPowerTable_Value RF_TxPowerTable_findValue(RF_TxPowerTable_Entry table[], int8_t powerLevel);
+
 
 #ifdef __cplusplus
 }

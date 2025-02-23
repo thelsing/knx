@@ -2,8 +2,8 @@
 
 #ifdef USE_IP
 
-#include "bits.h"
 #include <cstring>
+#include "bits.h"
 
 #define KNXIP_HEADER_LEN 0x6
 #define KNXIP_PROTOCOL_VERSION 0x10
@@ -60,11 +60,13 @@ uint8_t* KnxIpFrame::data()
     return _data;
 }
 
+
 KnxIpFrame::~KnxIpFrame()
 {
     if (_freeData)
         delete[] _data;
 }
+
 
 KnxIpFrame::KnxIpFrame(uint16_t length)
 {

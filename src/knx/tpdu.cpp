@@ -1,8 +1,7 @@
 #include "tpdu.h"
 #include "cemi_frame.h"
 
-TPDU::TPDU(uint8_t* data, CemiFrame& frame)
-    : _data(data), _frame(frame)
+TPDU::TPDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
 {
 }
 
@@ -129,6 +128,5 @@ void TPDU::printPDU()
             if (i) print.print(" ");
             print.print(_data[i], HEX, 2);
         }
-        print.println()*/
-    ;
+        print.println()*/;
 }

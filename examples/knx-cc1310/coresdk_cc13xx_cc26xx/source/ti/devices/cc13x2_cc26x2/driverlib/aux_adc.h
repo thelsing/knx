@@ -1,41 +1,41 @@
 /******************************************************************************
- *  Filename:       aux_adc.h
- *  Revised:        2018-02-07 09:45:39 +0100 (Wed, 07 Feb 2018)
- *  Revision:       51437
- *
- *  Description:    Defines and prototypes for the AUX Analog-to-Digital
- *                  Converter
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       aux_adc.h
+*  Revised:        2018-02-07 09:45:39 +0100 (Wed, 07 Feb 2018)
+*  Revision:       51437
+*
+*  Description:    Defines and prototypes for the AUX Analog-to-Digital
+*                  Converter
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -56,18 +56,19 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
+#include <stdbool.h>
+#include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_event.h"
 #include "../inc/hw_adi.h"
 #include "../inc/hw_adi_4_aux.h"
 #include "../inc/hw_aux_anaif.h"
-#include "../inc/hw_event.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
 #include "rom.h"
-#include <stdbool.h>
-#include <stdint.h>
 
 //*****************************************************************************
 //
@@ -83,17 +84,17 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define AUXADCDisable NOROM_AUXADCDisable
-#define AUXADCEnableAsync NOROM_AUXADCEnableAsync
-#define AUXADCEnableSync NOROM_AUXADCEnableSync
-#define AUXADCDisableInputScaling NOROM_AUXADCDisableInputScaling
-#define AUXADCFlushFifo NOROM_AUXADCFlushFifo
-#define AUXADCReadFifo NOROM_AUXADCReadFifo
-#define AUXADCPopFifo NOROM_AUXADCPopFifo
-#define AUXADCGetAdjustmentGain NOROM_AUXADCGetAdjustmentGain
-#define AUXADCGetAdjustmentOffset NOROM_AUXADCGetAdjustmentOffset
-#define AUXADCValueToMicrovolts NOROM_AUXADCValueToMicrovolts
-#define AUXADCMicrovoltsToValue NOROM_AUXADCMicrovoltsToValue
+#define AUXADCDisable                   NOROM_AUXADCDisable
+#define AUXADCEnableAsync               NOROM_AUXADCEnableAsync
+#define AUXADCEnableSync                NOROM_AUXADCEnableSync
+#define AUXADCDisableInputScaling       NOROM_AUXADCDisableInputScaling
+#define AUXADCFlushFifo                 NOROM_AUXADCFlushFifo
+#define AUXADCReadFifo                  NOROM_AUXADCReadFifo
+#define AUXADCPopFifo                   NOROM_AUXADCPopFifo
+#define AUXADCGetAdjustmentGain         NOROM_AUXADCGetAdjustmentGain
+#define AUXADCGetAdjustmentOffset       NOROM_AUXADCGetAdjustmentOffset
+#define AUXADCValueToMicrovolts         NOROM_AUXADCValueToMicrovolts
+#define AUXADCMicrovoltsToValue         NOROM_AUXADCMicrovoltsToValue
 #define AUXADCAdjustValueForGainAndOffset NOROM_AUXADCAdjustValueForGainAndOffset
 #define AUXADCUnadjustValueForGainAndOffset NOROM_AUXADCUnadjustValueForGainAndOffset
 #endif
@@ -103,76 +104,78 @@ extern "C" {
 // Defines for ADC reference sources.
 //
 //*****************************************************************************
-#define AUXADC_REF_FIXED (0 << ADI_4_AUX_ADCREF0_SRC_S)
-#define AUXADC_REF_VDDS_REL (1 << ADI_4_AUX_ADCREF0_SRC_S)
+#define AUXADC_REF_FIXED                    (0 << ADI_4_AUX_ADCREF0_SRC_S)
+#define AUXADC_REF_VDDS_REL                 (1 << ADI_4_AUX_ADCREF0_SRC_S)
 
 //*****************************************************************************
 //
 // Defines for the ADC FIFO status bits.
 //
 //*****************************************************************************
-#define AUXADC_FIFO_EMPTY_M (AUX_ANAIF_ADCFIFOSTAT_EMPTY_M)
-#define AUXADC_FIFO_ALMOST_FULL_M (AUX_ANAIF_ADCFIFOSTAT_ALMOST_FULL_M)
-#define AUXADC_FIFO_FULL_M (AUX_ANAIF_ADCFIFOSTAT_FULL_M)
-#define AUXADC_FIFO_UNDERFLOW_M (AUX_ANAIF_ADCFIFOSTAT_UNDERFLOW_M)
-#define AUXADC_FIFO_OVERFLOW_M (AUX_ANAIF_ADCFIFOSTAT_OVERFLOW_M)
+#define AUXADC_FIFO_EMPTY_M                 (AUX_ANAIF_ADCFIFOSTAT_EMPTY_M)
+#define AUXADC_FIFO_ALMOST_FULL_M           (AUX_ANAIF_ADCFIFOSTAT_ALMOST_FULL_M)
+#define AUXADC_FIFO_FULL_M                  (AUX_ANAIF_ADCFIFOSTAT_FULL_M)
+#define AUXADC_FIFO_UNDERFLOW_M             (AUX_ANAIF_ADCFIFOSTAT_UNDERFLOW_M)
+#define AUXADC_FIFO_OVERFLOW_M              (AUX_ANAIF_ADCFIFOSTAT_OVERFLOW_M)
 
 //*****************************************************************************
 //
 // Defines for supported ADC triggers.
 //
 //*****************************************************************************
-#define AUXADC_TRIGGER_MANUAL (EVENT_AUXSEL0_EV_NONE)
-#define AUXADC_TRIGGER_GPT0A (EVENT_AUXSEL0_EV_GPT0A)
-#define AUXADC_TRIGGER_GPT0B (EVENT_AUXSEL0_EV_GPT0B)
-#define AUXADC_TRIGGER_GPT1A (EVENT_AUXSEL0_EV_GPT1A)
-#define AUXADC_TRIGGER_GPT1B (EVENT_AUXSEL0_EV_GPT1B)
-#define AUXADC_TRIGGER_GPT2A (EVENT_AUXSEL0_EV_GPT2A)
-#define AUXADC_TRIGGER_GPT2B (EVENT_AUXSEL0_EV_GPT2B)
-#define AUXADC_TRIGGER_GPT3A (EVENT_AUXSEL0_EV_GPT3A)
-#define AUXADC_TRIGGER_GPT3B (EVENT_AUXSEL0_EV_GPT3B)
+#define AUXADC_TRIGGER_MANUAL               (EVENT_AUXSEL0_EV_NONE)
+#define AUXADC_TRIGGER_GPT0A                (EVENT_AUXSEL0_EV_GPT0A)
+#define AUXADC_TRIGGER_GPT0B                (EVENT_AUXSEL0_EV_GPT0B)
+#define AUXADC_TRIGGER_GPT1A                (EVENT_AUXSEL0_EV_GPT1A)
+#define AUXADC_TRIGGER_GPT1B                (EVENT_AUXSEL0_EV_GPT1B)
+#define AUXADC_TRIGGER_GPT2A                (EVENT_AUXSEL0_EV_GPT2A)
+#define AUXADC_TRIGGER_GPT2B                (EVENT_AUXSEL0_EV_GPT2B)
+#define AUXADC_TRIGGER_GPT3A                (EVENT_AUXSEL0_EV_GPT3A)
+#define AUXADC_TRIGGER_GPT3B                (EVENT_AUXSEL0_EV_GPT3B)
 // Additional triggers specific for cc26x2 and cc13x2 devices
-#define AUXADC_TRIGGER_GPT0A_CMP (EVENT_AUXSEL0_EV_GPT0A_CMP)
-#define AUXADC_TRIGGER_GPT0B_CMP (EVENT_AUXSEL0_EV_GPT0B_CMP)
-#define AUXADC_TRIGGER_GPT1A_CMP (EVENT_AUXSEL0_EV_GPT1A_CMP)
-#define AUXADC_TRIGGER_GPT1B_CMP (EVENT_AUXSEL0_EV_GPT1B_CMP)
-#define AUXADC_TRIGGER_GPT2A_CMP (EVENT_AUXSEL0_EV_GPT2A_CMP)
-#define AUXADC_TRIGGER_GPT2B_CMP (EVENT_AUXSEL0_EV_GPT2B_CMP)
-#define AUXADC_TRIGGER_GPT3A_CMP (EVENT_AUXSEL0_EV_GPT3A_CMP)
-#define AUXADC_TRIGGER_GPT3B_CMP (EVENT_AUXSEL0_EV_GPT3B_CMP)
+#define AUXADC_TRIGGER_GPT0A_CMP            (EVENT_AUXSEL0_EV_GPT0A_CMP)
+#define AUXADC_TRIGGER_GPT0B_CMP            (EVENT_AUXSEL0_EV_GPT0B_CMP)
+#define AUXADC_TRIGGER_GPT1A_CMP            (EVENT_AUXSEL0_EV_GPT1A_CMP)
+#define AUXADC_TRIGGER_GPT1B_CMP            (EVENT_AUXSEL0_EV_GPT1B_CMP)
+#define AUXADC_TRIGGER_GPT2A_CMP            (EVENT_AUXSEL0_EV_GPT2A_CMP)
+#define AUXADC_TRIGGER_GPT2B_CMP            (EVENT_AUXSEL0_EV_GPT2B_CMP)
+#define AUXADC_TRIGGER_GPT3A_CMP            (EVENT_AUXSEL0_EV_GPT3A_CMP)
+#define AUXADC_TRIGGER_GPT3B_CMP            (EVENT_AUXSEL0_EV_GPT3B_CMP)
 
 //*****************************************************************************
 //
 // Defines for ADC sampling type for synchronous operation.
 //
 //*****************************************************************************
-#define AUXADC_SAMPLE_TIME_2P7_US 3
-#define AUXADC_SAMPLE_TIME_5P3_US 4
-#define AUXADC_SAMPLE_TIME_10P6_US 5
-#define AUXADC_SAMPLE_TIME_21P3_US 6
-#define AUXADC_SAMPLE_TIME_42P6_US 7
-#define AUXADC_SAMPLE_TIME_85P3_US 8
-#define AUXADC_SAMPLE_TIME_170_US 9
-#define AUXADC_SAMPLE_TIME_341_US 10
-#define AUXADC_SAMPLE_TIME_682_US 11
-#define AUXADC_SAMPLE_TIME_1P37_MS 12
-#define AUXADC_SAMPLE_TIME_2P73_MS 13
-#define AUXADC_SAMPLE_TIME_5P46_MS 14
-#define AUXADC_SAMPLE_TIME_10P9_MS 15
+#define AUXADC_SAMPLE_TIME_2P7_US           3
+#define AUXADC_SAMPLE_TIME_5P3_US           4
+#define AUXADC_SAMPLE_TIME_10P6_US          5
+#define AUXADC_SAMPLE_TIME_21P3_US          6
+#define AUXADC_SAMPLE_TIME_42P6_US          7
+#define AUXADC_SAMPLE_TIME_85P3_US          8
+#define AUXADC_SAMPLE_TIME_170_US           9
+#define AUXADC_SAMPLE_TIME_341_US           10
+#define AUXADC_SAMPLE_TIME_682_US           11
+#define AUXADC_SAMPLE_TIME_1P37_MS          12
+#define AUXADC_SAMPLE_TIME_2P73_MS          13
+#define AUXADC_SAMPLE_TIME_5P46_MS          14
+#define AUXADC_SAMPLE_TIME_10P9_MS          15
 
 //*****************************************************************************
 //
 // Equivalent voltages for fixed ADC reference, in microvolts.
 //
 //*****************************************************************************
-#define AUXADC_FIXED_REF_VOLTAGE_NORMAL 4300000
-#define AUXADC_FIXED_REF_VOLTAGE_UNSCALED 1478500
+#define AUXADC_FIXED_REF_VOLTAGE_NORMAL     4300000
+#define AUXADC_FIXED_REF_VOLTAGE_UNSCALED   1478500
+
 
 //*****************************************************************************
 //
 // API Functions and prototypes
 //
 //*****************************************************************************
+
 
 //*****************************************************************************
 //
@@ -523,55 +526,55 @@ extern int32_t AUXADCUnadjustValueForGainAndOffset(int32_t adcValue, int32_t gai
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_AUXADCDisable
-#undef AUXADCDisable
-#define AUXADCDisable ROM_AUXADCDisable
+#undef  AUXADCDisable
+#define AUXADCDisable                   ROM_AUXADCDisable
 #endif
 #ifdef ROM_AUXADCEnableAsync
-#undef AUXADCEnableAsync
-#define AUXADCEnableAsync ROM_AUXADCEnableAsync
+#undef  AUXADCEnableAsync
+#define AUXADCEnableAsync               ROM_AUXADCEnableAsync
 #endif
 #ifdef ROM_AUXADCEnableSync
-#undef AUXADCEnableSync
-#define AUXADCEnableSync ROM_AUXADCEnableSync
+#undef  AUXADCEnableSync
+#define AUXADCEnableSync                ROM_AUXADCEnableSync
 #endif
 #ifdef ROM_AUXADCDisableInputScaling
-#undef AUXADCDisableInputScaling
-#define AUXADCDisableInputScaling ROM_AUXADCDisableInputScaling
+#undef  AUXADCDisableInputScaling
+#define AUXADCDisableInputScaling       ROM_AUXADCDisableInputScaling
 #endif
 #ifdef ROM_AUXADCFlushFifo
-#undef AUXADCFlushFifo
-#define AUXADCFlushFifo ROM_AUXADCFlushFifo
+#undef  AUXADCFlushFifo
+#define AUXADCFlushFifo                 ROM_AUXADCFlushFifo
 #endif
 #ifdef ROM_AUXADCReadFifo
-#undef AUXADCReadFifo
-#define AUXADCReadFifo ROM_AUXADCReadFifo
+#undef  AUXADCReadFifo
+#define AUXADCReadFifo                  ROM_AUXADCReadFifo
 #endif
 #ifdef ROM_AUXADCPopFifo
-#undef AUXADCPopFifo
-#define AUXADCPopFifo ROM_AUXADCPopFifo
+#undef  AUXADCPopFifo
+#define AUXADCPopFifo                   ROM_AUXADCPopFifo
 #endif
 #ifdef ROM_AUXADCGetAdjustmentGain
-#undef AUXADCGetAdjustmentGain
-#define AUXADCGetAdjustmentGain ROM_AUXADCGetAdjustmentGain
+#undef  AUXADCGetAdjustmentGain
+#define AUXADCGetAdjustmentGain         ROM_AUXADCGetAdjustmentGain
 #endif
 #ifdef ROM_AUXADCGetAdjustmentOffset
-#undef AUXADCGetAdjustmentOffset
-#define AUXADCGetAdjustmentOffset ROM_AUXADCGetAdjustmentOffset
+#undef  AUXADCGetAdjustmentOffset
+#define AUXADCGetAdjustmentOffset       ROM_AUXADCGetAdjustmentOffset
 #endif
 #ifdef ROM_AUXADCValueToMicrovolts
-#undef AUXADCValueToMicrovolts
-#define AUXADCValueToMicrovolts ROM_AUXADCValueToMicrovolts
+#undef  AUXADCValueToMicrovolts
+#define AUXADCValueToMicrovolts         ROM_AUXADCValueToMicrovolts
 #endif
 #ifdef ROM_AUXADCMicrovoltsToValue
-#undef AUXADCMicrovoltsToValue
-#define AUXADCMicrovoltsToValue ROM_AUXADCMicrovoltsToValue
+#undef  AUXADCMicrovoltsToValue
+#define AUXADCMicrovoltsToValue         ROM_AUXADCMicrovoltsToValue
 #endif
 #ifdef ROM_AUXADCAdjustValueForGainAndOffset
-#undef AUXADCAdjustValueForGainAndOffset
+#undef  AUXADCAdjustValueForGainAndOffset
 #define AUXADCAdjustValueForGainAndOffset ROM_AUXADCAdjustValueForGainAndOffset
 #endif
 #ifdef ROM_AUXADCUnadjustValueForGainAndOffset
-#undef AUXADCUnadjustValueForGainAndOffset
+#undef  AUXADCUnadjustValueForGainAndOffset
 #define AUXADCUnadjustValueForGainAndOffset ROM_AUXADCUnadjustValueForGainAndOffset
 #endif
 #endif

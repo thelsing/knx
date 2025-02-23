@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       aux_timer.h
- *  Revised:        2017-06-05 12:13:49 +0200 (Mon, 05 Jun 2017)
- *  Revision:       49096
- *
- *  Description:    Defines and prototypes for the AUX Timer
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       aux_timer.h
+*  Revised:        2017-06-05 12:13:49 +0200 (Mon, 05 Jun 2017)
+*  Revision:       49096
+*
+*  Description:    Defines and prototypes for the AUX Timer
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,17 +55,18 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_aux_timer.h"
-#include "../inc/hw_ints.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include "debug.h"
-#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_aux_timer.h"
+#include "debug.h"
+#include "interrupt.h"
 
 //*****************************************************************************
 //
@@ -81,11 +82,11 @@ extern "C" {
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define AUXTimerConfigure NOROM_AUXTimerConfigure
-#define AUXTimerStart NOROM_AUXTimerStart
-#define AUXTimerStop NOROM_AUXTimerStop
-#define AUXTimerPrescaleSet NOROM_AUXTimerPrescaleSet
-#define AUXTimerPrescaleGet NOROM_AUXTimerPrescaleGet
+#define AUXTimerConfigure               NOROM_AUXTimerConfigure
+#define AUXTimerStart                   NOROM_AUXTimerStart
+#define AUXTimerStop                    NOROM_AUXTimerStop
+#define AUXTimerPrescaleSet             NOROM_AUXTimerPrescaleSet
+#define AUXTimerPrescaleGet             NOROM_AUXTimerPrescaleGet
 #endif
 
 //*****************************************************************************
@@ -93,45 +94,45 @@ extern "C" {
 // Values that can be passed to AUXTimerConfigure().
 //
 //*****************************************************************************
-#define AUX_TIMER_CFG_ONE_SHOT (AUX_TIMER_T0CFG_RELOAD_MAN)                                             // One-shot timer mode
-#define AUX_TIMER_CFG_PERIODIC (AUX_TIMER_T0CFG_RELOAD_CONT)                                            // Period timer mode
-#define AUX_TIMER_CFG_ONE_SHOT_EDGE_COUNT ((AUX_TIMER_T0CFG_RELOAD_MAN) | (AUX_TIMER_T0CFG_MODE_TICK))  // One-shot timer with edge count
-#define AUX_TIMER_CFG_PERIODIC_EDGE_COUNT ((AUX_TIMER_T0CFG_RELOAD_CONT) | (AUX_TIMER_T0CFG_MODE_TICK)) // Periodic timer with edge count
-#define AUX_TIMER_CFG_RISING_EDGE (AUX_TIMER_T0CFG_TICK_SRC_POL_RISE)                                   // Count rising edges (used with edge count mode)
-#define AUX_TIMER_CFG_FALLING_EDGE (AUX_TIMER_T0CFG_TICK_SRC_POL_FALL)                                  // Count falling edges (used with edge count mode)
+#define AUX_TIMER_CFG_ONE_SHOT              (AUX_TIMER_T0CFG_RELOAD_MAN)        // One-shot timer mode
+#define AUX_TIMER_CFG_PERIODIC              (AUX_TIMER_T0CFG_RELOAD_CONT)       // Period timer mode
+#define AUX_TIMER_CFG_ONE_SHOT_EDGE_COUNT   ((AUX_TIMER_T0CFG_RELOAD_MAN) | (AUX_TIMER_T0CFG_MODE_TICK))  // One-shot timer with edge count
+#define AUX_TIMER_CFG_PERIODIC_EDGE_COUNT   ((AUX_TIMER_T0CFG_RELOAD_CONT) | (AUX_TIMER_T0CFG_MODE_TICK)) // Periodic timer with edge count
+#define AUX_TIMER_CFG_RISING_EDGE           (AUX_TIMER_T0CFG_TICK_SRC_POL_RISE) // Count rising edges (used with edge count mode)
+#define AUX_TIMER_CFG_FALLING_EDGE          (AUX_TIMER_T0CFG_TICK_SRC_POL_FALL) // Count falling edges (used with edge count mode)
 
-#define AUX_TIMER_CFG_TICK_SRC_RTC_EVENT (AUX_TIMER_T0CFG_TICK_SRC_RTC_CH2_EV)            // AON wake-up event
-#define AUX_TIMER_CFG_TICK_SRC_CMP_A (AUX_TIMER_T0CFG_TICK_SRC_AUX_COMPA)                 // Comparator A
-#define AUX_TIMER_CFG_TICK_SRC_CMP_B (AUX_TIMER_T0CFG_TICK_SRC_AUX_COMPB)                 // Comparator B
-#define AUX_TIMER_CFG_TICK_SRC_TDCDONE (AUX_TIMER_T0CFG_TICK_SRC_TDC_DONE)                // TDC Done
-#define AUX_TIMER_CFG_TICK_SRC_TIMER0_EVENT (AUX_TIMER_T1CFG_TICK_SRC_TIMER0_EV)          // Timer 0 event
-#define AUX_TIMER_CFG_TICK_SRC_TIMER1_EVENT (AUX_TIMER_T0CFG_TICK_SRC_TIMER1_EV)          // Timer 1 event
+#define AUX_TIMER_CFG_TICK_SRC_RTC_EVENT    (AUX_TIMER_T0CFG_TICK_SRC_RTC_CH2_EV) // AON wake-up event
+#define AUX_TIMER_CFG_TICK_SRC_CMP_A        (AUX_TIMER_T0CFG_TICK_SRC_AUX_COMPA)  // Comparator A
+#define AUX_TIMER_CFG_TICK_SRC_CMP_B        (AUX_TIMER_T0CFG_TICK_SRC_AUX_COMPB)  // Comparator B
+#define AUX_TIMER_CFG_TICK_SRC_TDCDONE      (AUX_TIMER_T0CFG_TICK_SRC_TDC_DONE)   // TDC Done
+#define AUX_TIMER_CFG_TICK_SRC_TIMER0_EVENT (AUX_TIMER_T1CFG_TICK_SRC_TIMER0_EV)  // Timer 0 event
+#define AUX_TIMER_CFG_TICK_SRC_TIMER1_EVENT (AUX_TIMER_T0CFG_TICK_SRC_TIMER1_EV)  // Timer 1 event
 #define AUX_TIMER_CFG_TICK_SRC_SMPH_RELEASE (AUX_TIMER_T0CFG_TICK_SRC_SMPH_AUTOTAKE_DONE) // Semaphore release
-#define AUX_TIMER_CFG_TICK_SRC_ADC_DONE (AUX_TIMER_T0CFG_TICK_SRC_ADC_DONE)               // ADC done
-#define AUX_TIMER_CFG_TICK_SRC_RTC_4KHZ (AUX_TIMER_T0CFG_TICK_SRC_RTC_4KHZ)
-#define AUX_TIMER_CFG_TICK_SRC_OBSMUX0 (AUX_TIMER_T0CFG_TICK_SRC_OBSMUX0)
-#define AUX_TIMER_CFG_TICK_SRC_OBSMUX1 (AUX_TIMER_T0CFG_TICK_SRC_OBSMUX1)
-#define AUX_TIMER_CFG_TICK_SRC_AON_SW (AUX_TIMER_T0CFG_TICK_SRC_AON_SW)
-#define AUX_TIMER_CFG_TICK_SRC_AON_PROG_WU (AUX_TIMER_T0CFG_TICK_SRC_AON_PROG_WU)
-#define AUX_TIMER_CFG_TICK_SRC_AIO0 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO0)         // AIO_DAT[ 0]
-#define AUX_TIMER_CFG_TICK_SRC_AIO1 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO1)         // AIO_DAT[ 1]
-#define AUX_TIMER_CFG_TICK_SRC_AIO2 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO2)         // AIO_DAT[ 2]
-#define AUX_TIMER_CFG_TICK_SRC_AIO3 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO3)         // AIO_DAT[ 3]
-#define AUX_TIMER_CFG_TICK_SRC_AIO4 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO4)         // AIO_DAT[ 4]
-#define AUX_TIMER_CFG_TICK_SRC_AIO5 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO5)         // AIO_DAT[ 5]
-#define AUX_TIMER_CFG_TICK_SRC_AIO6 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO6)         // AIO_DAT[ 6]
-#define AUX_TIMER_CFG_TICK_SRC_AIO7 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO7)         // AIO_DAT[ 7]
-#define AUX_TIMER_CFG_TICK_SRC_AIO8 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO8)         // AIO_DAT[ 8]
-#define AUX_TIMER_CFG_TICK_SRC_AIO9 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO9)         // AIO_DAT[ 9]
-#define AUX_TIMER_CFG_TICK_SRC_AIO10 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO10)       // AIO_DAT[10]
-#define AUX_TIMER_CFG_TICK_SRC_AIO11 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO11)       // AIO_DAT[11]
-#define AUX_TIMER_CFG_TICK_SRC_AIO12 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO12)       // AIO_DAT[12]
-#define AUX_TIMER_CFG_TICK_SRC_AIO13 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO13)       // AIO_DAT[13]
-#define AUX_TIMER_CFG_TICK_SRC_AIO14 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO14)       // AIO_DAT[14]
-#define AUX_TIMER_CFG_TICK_SRC_AIO15 (AUX_TIMER_T0CFG_TICK_SRC_AUXIO15)       // AIO_DAT[15]
-#define AUX_TIMER_CFG_TICK_SRC_ACLK_REF (AUX_TIMER_T0CFG_TICK_SRC_ACLK_REF)   // ACLK_REF_i
-#define AUX_TIMER_CFG_TICK_SRC_MCU_EVENT (AUX_TIMER_T0CFG_TICK_SRC_MCU_EVENT) // MCU event
-#define AUX_TIMER_CFG_TICK_SRC_ADC_IRQ (AUX_TIMER_T0CFG_TICK_SRC_ADC_IRQ)     // DMA done
+#define AUX_TIMER_CFG_TICK_SRC_ADC_DONE     (AUX_TIMER_T0CFG_TICK_SRC_ADC_DONE)   // ADC done
+#define AUX_TIMER_CFG_TICK_SRC_RTC_4KHZ     (AUX_TIMER_T0CFG_TICK_SRC_RTC_4KHZ)
+#define AUX_TIMER_CFG_TICK_SRC_OBSMUX0      (AUX_TIMER_T0CFG_TICK_SRC_OBSMUX0)
+#define AUX_TIMER_CFG_TICK_SRC_OBSMUX1      (AUX_TIMER_T0CFG_TICK_SRC_OBSMUX1)
+#define AUX_TIMER_CFG_TICK_SRC_AON_SW       (AUX_TIMER_T0CFG_TICK_SRC_AON_SW)
+#define AUX_TIMER_CFG_TICK_SRC_AON_PROG_WU  (AUX_TIMER_T0CFG_TICK_SRC_AON_PROG_WU)
+#define AUX_TIMER_CFG_TICK_SRC_AIO0         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO0)     // AIO_DAT[ 0]
+#define AUX_TIMER_CFG_TICK_SRC_AIO1         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO1)     // AIO_DAT[ 1]
+#define AUX_TIMER_CFG_TICK_SRC_AIO2         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO2)     // AIO_DAT[ 2]
+#define AUX_TIMER_CFG_TICK_SRC_AIO3         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO3)     // AIO_DAT[ 3]
+#define AUX_TIMER_CFG_TICK_SRC_AIO4         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO4)     // AIO_DAT[ 4]
+#define AUX_TIMER_CFG_TICK_SRC_AIO5         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO5)     // AIO_DAT[ 5]
+#define AUX_TIMER_CFG_TICK_SRC_AIO6         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO6)     // AIO_DAT[ 6]
+#define AUX_TIMER_CFG_TICK_SRC_AIO7         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO7)     // AIO_DAT[ 7]
+#define AUX_TIMER_CFG_TICK_SRC_AIO8         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO8)     // AIO_DAT[ 8]
+#define AUX_TIMER_CFG_TICK_SRC_AIO9         (AUX_TIMER_T0CFG_TICK_SRC_AUXIO9)     // AIO_DAT[ 9]
+#define AUX_TIMER_CFG_TICK_SRC_AIO10        (AUX_TIMER_T0CFG_TICK_SRC_AUXIO10)    // AIO_DAT[10]
+#define AUX_TIMER_CFG_TICK_SRC_AIO11        (AUX_TIMER_T0CFG_TICK_SRC_AUXIO11)    // AIO_DAT[11]
+#define AUX_TIMER_CFG_TICK_SRC_AIO12        (AUX_TIMER_T0CFG_TICK_SRC_AUXIO12)    // AIO_DAT[12]
+#define AUX_TIMER_CFG_TICK_SRC_AIO13        (AUX_TIMER_T0CFG_TICK_SRC_AUXIO13)    // AIO_DAT[13]
+#define AUX_TIMER_CFG_TICK_SRC_AIO14        (AUX_TIMER_T0CFG_TICK_SRC_AUXIO14)    // AIO_DAT[14]
+#define AUX_TIMER_CFG_TICK_SRC_AIO15        (AUX_TIMER_T0CFG_TICK_SRC_AUXIO15)    // AIO_DAT[15]
+#define AUX_TIMER_CFG_TICK_SRC_ACLK_REF     (AUX_TIMER_T0CFG_TICK_SRC_ACLK_REF)   // ACLK_REF_i
+#define AUX_TIMER_CFG_TICK_SRC_MCU_EVENT    (AUX_TIMER_T0CFG_TICK_SRC_MCU_EVENT)  // MCU event
+#define AUX_TIMER_CFG_TICK_SRC_ADC_IRQ      (AUX_TIMER_T0CFG_TICK_SRC_ADC_IRQ)    // DMA done
 
 //*****************************************************************************
 //
@@ -139,9 +140,9 @@ extern "C" {
 // parameter.
 //
 //*****************************************************************************
-#define AUX_TIMER_0 0x0000FFFF    // AUX Timer 0
-#define AUX_TIMER_1 0x00FF0000    // AUX Timer 1
-#define AUX_TIMER_BOTH 0x00FFFFFF // AUX Timer Both 0 and 1
+#define AUX_TIMER_0             0x0000FFFF  // AUX Timer 0
+#define AUX_TIMER_1             0x00FF0000  // AUX Timer 1
+#define AUX_TIMER_BOTH          0x00FFFFFF  // AUX Timer Both 0 and 1
 
 //*****************************************************************************
 //
@@ -149,22 +150,22 @@ extern "C" {
 // AUXTimerPrescaleGet.
 //
 //*****************************************************************************
-#define AUX_TIMER_PRESCALE_DIV_1 0x00000000     // Prescale division ratio 1
-#define AUX_TIMER_PRESCALE_DIV_2 0x00000001     // Prescale division ratio 2
-#define AUX_TIMER_PRESCALE_DIV_4 0x00000002     // Prescale division ratio 4
-#define AUX_TIMER_PRESCALE_DIV_8 0x00000003     // Prescale division ratio 8
-#define AUX_TIMER_PRESCALE_DIV_16 0x00000004    // Prescale division ratio 16
-#define AUX_TIMER_PRESCALE_DIV_32 0x00000005    // Prescale division ratio 32
-#define AUX_TIMER_PRESCALE_DIV_64 0x00000006    // Prescale division ratio 64
-#define AUX_TIMER_PRESCALE_DIV_128 0x00000007   // Prescale division ratio 128
-#define AUX_TIMER_PRESCALE_DIV_256 0x00000008   // Prescale division ratio 256
-#define AUX_TIMER_PRESCALE_DIV_512 0x00000009   // Prescale division ratio 512
-#define AUX_TIMER_PRESCALE_DIV_1028 0x0000000A  // Prescale div. ratio 1028
-#define AUX_TIMER_PRESCALE_DIV_2048 0x0000000B  // Prescale div. ratio 2048
-#define AUX_TIMER_PRESCALE_DIV_4096 0x0000000C  // Prescale div. ratio 4096
-#define AUX_TIMER_PRESCALE_DIV_8192 0x0000000D  // Prescale div. ratio 8192
-#define AUX_TIMER_PRESCALE_DIV_16384 0x0000000E // Prescale div. ratio 16384
-#define AUX_TIMER_PRESCALE_DIV_32768 0x0000000F // Prescale div. ratio 32768
+#define AUX_TIMER_PRESCALE_DIV_1      0x00000000  // Prescale division ratio 1
+#define AUX_TIMER_PRESCALE_DIV_2      0x00000001  // Prescale division ratio 2
+#define AUX_TIMER_PRESCALE_DIV_4      0x00000002  // Prescale division ratio 4
+#define AUX_TIMER_PRESCALE_DIV_8      0x00000003  // Prescale division ratio 8
+#define AUX_TIMER_PRESCALE_DIV_16     0x00000004  // Prescale division ratio 16
+#define AUX_TIMER_PRESCALE_DIV_32     0x00000005  // Prescale division ratio 32
+#define AUX_TIMER_PRESCALE_DIV_64     0x00000006  // Prescale division ratio 64
+#define AUX_TIMER_PRESCALE_DIV_128    0x00000007  // Prescale division ratio 128
+#define AUX_TIMER_PRESCALE_DIV_256    0x00000008  // Prescale division ratio 256
+#define AUX_TIMER_PRESCALE_DIV_512    0x00000009  // Prescale division ratio 512
+#define AUX_TIMER_PRESCALE_DIV_1028   0x0000000A  // Prescale div. ratio 1028
+#define AUX_TIMER_PRESCALE_DIV_2048   0x0000000B  // Prescale div. ratio 2048
+#define AUX_TIMER_PRESCALE_DIV_4096   0x0000000C  // Prescale div. ratio 4096
+#define AUX_TIMER_PRESCALE_DIV_8192   0x0000000D  // Prescale div. ratio 8192
+#define AUX_TIMER_PRESCALE_DIV_16384  0x0000000E  // Prescale div. ratio 16384
+#define AUX_TIMER_PRESCALE_DIV_32768  0x0000000F  // Prescale div. ratio 32768
 
 //*****************************************************************************
 //
@@ -324,7 +325,9 @@ AUXTimerTargetValSet(uint32_t ui32Timer, uint32_t ui32Target)
     ASSERT(((ui32Timer & AUX_TIMER_0) && (ui32Target <= 65535)) ||
            ((ui32Timer & AUX_TIMER_1) && (ui32Target <= 255)));
 
-    ui32Addr = (ui32Timer & AUX_TIMER_0) ? (AUX_TIMER_BASE + AUX_TIMER_O_T0TARGET) : (AUX_TIMER_BASE + AUX_TIMER_O_T1TARGET);
+    ui32Addr = (ui32Timer & AUX_TIMER_0) ?
+               (AUX_TIMER_BASE + AUX_TIMER_O_T0TARGET) :
+               (AUX_TIMER_BASE + AUX_TIMER_O_T1TARGET);
 
     HWREG(ui32Addr) = ui32Target;
 }
@@ -352,7 +355,9 @@ AUXTimerTargetValGet(uint32_t ui32Timer)
     // Check the arguments.
     ASSERT((ui32Timer == AUX_TIMER_0) || (ui32Timer == AUX_TIMER_1));
 
-    return (HWREG((ui32Timer & AUX_TIMER_0) ? (AUX_TIMER_BASE + AUX_TIMER_O_T0TARGET) : (AUX_TIMER_BASE + AUX_TIMER_O_T1TARGET)));
+    return (HWREG((ui32Timer & AUX_TIMER_0) ?
+                  (AUX_TIMER_BASE + AUX_TIMER_O_T0TARGET) :
+                  (AUX_TIMER_BASE + AUX_TIMER_O_T1TARGET)));
 }
 
 //*****************************************************************************
@@ -436,24 +441,24 @@ extern uint32_t AUXTimerPrescaleGet(uint32_t ui32Timer);
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_AUXTimerConfigure
-#undef AUXTimerConfigure
-#define AUXTimerConfigure ROM_AUXTimerConfigure
+#undef  AUXTimerConfigure
+#define AUXTimerConfigure               ROM_AUXTimerConfigure
 #endif
 #ifdef ROM_AUXTimerStart
-#undef AUXTimerStart
-#define AUXTimerStart ROM_AUXTimerStart
+#undef  AUXTimerStart
+#define AUXTimerStart                   ROM_AUXTimerStart
 #endif
 #ifdef ROM_AUXTimerStop
-#undef AUXTimerStop
-#define AUXTimerStop ROM_AUXTimerStop
+#undef  AUXTimerStop
+#define AUXTimerStop                    ROM_AUXTimerStop
 #endif
 #ifdef ROM_AUXTimerPrescaleSet
-#undef AUXTimerPrescaleSet
-#define AUXTimerPrescaleSet ROM_AUXTimerPrescaleSet
+#undef  AUXTimerPrescaleSet
+#define AUXTimerPrescaleSet             ROM_AUXTimerPrescaleSet
 #endif
 #ifdef ROM_AUXTimerPrescaleGet
-#undef AUXTimerPrescaleGet
-#define AUXTimerPrescaleGet ROM_AUXTimerPrescaleGet
+#undef  AUXTimerPrescaleGet
+#define AUXTimerPrescaleGet             ROM_AUXTimerPrescaleGet
 #endif
 #endif
 

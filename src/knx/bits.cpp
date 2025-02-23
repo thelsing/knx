@@ -163,7 +163,7 @@ uint16_t crc16Dnp(uint8_t* input, uint16_t length)
     {
         uint8_t bite = input[i] & 0xff;
 
-        for (uint8_t b = 8; b-- > 0;)
+        for (uint8_t b = 8; b -- > 0;)
         {
             bool bit = ((bite >> b) & 1) == 1;
             bool one = (crc >> 15 & 1) == 1;

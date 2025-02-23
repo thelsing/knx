@@ -9,7 +9,7 @@ typedef void (*BeforeTablesUnloadCallback)();
 /**
  * This class provides common functionality for interface objects that are configured by ETS with MemorWrite.
  */
-class TableObject : public InterfaceObject
+class TableObject: public InterfaceObject
 {
         friend class Memory;
 

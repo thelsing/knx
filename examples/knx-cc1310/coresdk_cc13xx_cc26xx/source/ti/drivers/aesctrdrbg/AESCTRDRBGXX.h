@@ -59,8 +59,8 @@
 #ifndef ti_drivers_aesctrdrbg_AESCTRDRBGXX__include
 #define ti_drivers_aesctrdrbg_AESCTRDRBGXX__include
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <ti/drivers/AESCTRDRBG.h>
 
@@ -92,7 +92,7 @@ extern "C" {
  */
 typedef struct
 {
-        uint_least8_t aesctrIndex; /*! Index into AESCTR_config array */
+    uint_least8_t   aesctrIndex;    /*! Index into AESCTR_config array */
 } AESCTRDRBGXX_HWAttrs;
 
 /*!
@@ -102,15 +102,15 @@ typedef struct
  */
 typedef struct
 {
-        uint8_t keyingMaterial[AESCTRDRBG_AES_KEY_LENGTH_256];
-        uint8_t counter[AESCTRDRBG_AES_BLOCK_SIZE_BYTES];
-        CryptoKey key;
-        AESCTR_Handle ctrHandle;
-        size_t seedLength;
-        uint32_t reseedCounter;
-        uint32_t reseedInterval;
-        int_fast16_t returnStatus;
-        bool isOpen;
+    uint8_t                         keyingMaterial[AESCTRDRBG_AES_KEY_LENGTH_256];
+    uint8_t                         counter[AESCTRDRBG_AES_BLOCK_SIZE_BYTES];
+    CryptoKey                       key;
+    AESCTR_Handle                   ctrHandle;
+    size_t                          seedLength;
+    uint32_t                        reseedCounter;
+    uint32_t                        reseedInterval;
+    int_fast16_t                    returnStatus;
+    bool                            isOpen;
 } AESCTRDRBGXX_Object;
 
 #ifdef __cplusplus

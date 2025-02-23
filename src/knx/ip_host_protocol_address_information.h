@@ -1,7 +1,7 @@
 #pragma once
 
-#include "config.h"
 #include <cstdint>
+#include "config.h"
 
 enum HostProtocolCode : uint8_t
 {

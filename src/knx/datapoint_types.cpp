@@ -14,6 +14,7 @@
 // Sign for a negative DPT9 float value
 #define DPT_FLOAT_NEG_SIGN 0x8000
 
+
 uint16_t dptToFloat(int32_t value)
 {
     uint16_t exp = 0;
@@ -29,7 +30,7 @@ uint16_t dptToFloat(int32_t value)
             ++exp;
         }
 
-        return DPT_FLOAT_NEG_SIGN | (((int32_t)value) & 2047) | (exp << 11);
+        return DPT_FLOAT_NEG_SIGN | (((int32_t) value) & 2047) | (exp << 11);
     }
     else
     {

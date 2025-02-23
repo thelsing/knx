@@ -1,7 +1,7 @@
 #include <cstring>
 
-#include "data_property.h"
 #include "interface_object.h"
+#include "data_property.h"
 
 InterfaceObject::~InterfaceObject()
 {
@@ -122,8 +122,7 @@ void InterfaceObject::command(PropertyID id, uint8_t* data, uint8_t length, uint
     if (prop == nullptr)
     {
         resultLength = 0;
-        return;
-        ;
+        return;;
     }
 
     prop->command(data, length, resultData, resultLength);
@@ -136,8 +135,7 @@ void InterfaceObject::state(PropertyID id, uint8_t* data, uint8_t length, uint8_
     if (prop == nullptr)
     {
         resultLength = 0;
-        return;
-        ;
+        return;;
     }
 
     prop->state(data, length, resultData, resultLength);
@@ -150,6 +148,7 @@ void InterfaceObject::initializeProperties(size_t propertiesSize, Property** pro
     memcpy(_properties, properties, propertiesSize);
 }
 
+
 Property* InterfaceObject::property(PropertyID id)
 {
     for (int i = 0; i < _propertyCount; i++)
@@ -158,6 +157,7 @@ Property* InterfaceObject::property(PropertyID id)
 
     return nullptr;
 }
+
 
 uint8_t* InterfaceObject::save(uint8_t* buffer)
 {
@@ -174,6 +174,7 @@ uint8_t* InterfaceObject::save(uint8_t* buffer)
     return buffer;
 }
 
+
 const uint8_t* InterfaceObject::restore(const uint8_t* buffer)
 {
     for (int i = 0; i < _propertyCount; i++)
@@ -188,6 +189,7 @@ const uint8_t* InterfaceObject::restore(const uint8_t* buffer)
 
     return buffer;
 }
+
 
 uint16_t InterfaceObject::saveSize()
 {
@@ -206,6 +208,7 @@ uint16_t InterfaceObject::saveSize()
     return size;
 }
 
+
 const Property* InterfaceObject::property(PropertyID id) const
 {
     for (int i = 0; i < _propertyCount; i++)
@@ -214,6 +217,7 @@ const Property* InterfaceObject::property(PropertyID id) const
 
     return nullptr;
 }
+
 
 const uint8_t* InterfaceObject::propertyData(PropertyID id)
 {

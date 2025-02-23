@@ -1,40 +1,40 @@
 /******************************************************************************
- *  Filename:       aon_pmctl.h
- *  Revised:        2017-11-02 14:16:14 +0100 (Thu, 02 Nov 2017)
- *  Revision:       50156
- *
- *  Description:    Defines and prototypes for the AON Power-Management Controller
- *
- *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  1) Redistributions of source code must retain the above copyright notice,
- *     this list of conditions and the following disclaimer.
- *
- *  2) Redistributions in binary form must reproduce the above copyright notice,
- *     this list of conditions and the following disclaimer in the documentation
- *     and/or other materials provided with the distribution.
- *
- *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
- *     be used to endorse or promote products derived from this software without
- *     specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- ******************************************************************************/
+*  Filename:       aon_pmctl.h
+*  Revised:        2017-11-02 14:16:14 +0100 (Thu, 02 Nov 2017)
+*  Revision:       50156
+*
+*  Description:    Defines and prototypes for the AON Power-Management Controller
+*
+*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+*  All rights reserved.
+*
+*  Redistribution and use in source and binary forms, with or without
+*  modification, are permitted provided that the following conditions are met:
+*
+*  1) Redistributions of source code must retain the above copyright notice,
+*     this list of conditions and the following disclaimer.
+*
+*  2) Redistributions in binary form must reproduce the above copyright notice,
+*     this list of conditions and the following disclaimer in the documentation
+*     and/or other materials provided with the distribution.
+*
+*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+*     be used to endorse or promote products derived from this software without
+*     specific prior written permission.
+*
+*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+*  POSSIBILITY OF SUCH DAMAGE.
+*
+******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,15 +55,16 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#include "../inc/hw_aon_pmctl.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_types.h"
-#include "debug.h"
 #include <stdbool.h>
 #include <stdint.h>
+#include "../inc/hw_types.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_aon_pmctl.h"
+#include "debug.h"
 
 //*****************************************************************************
 //
@@ -72,11 +73,11 @@ extern "C" {
 // AONPMCTLMcuSRamConfig) .
 //
 //*****************************************************************************
-#define MCU_RAM_RET_NONE AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_NONE
-#define MCU_RAM_RET_LVL1 AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_LEVEL1
-#define MCU_RAM_RET_LVL2 AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_LEVEL2
-#define MCU_RAM_RET_LVL3 AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_LEVEL3
-#define MCU_RAM_RET_FULL AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_FULL
+#define MCU_RAM_RET_NONE        AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_NONE
+#define MCU_RAM_RET_LVL1        AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_LEVEL1
+#define MCU_RAM_RET_LVL2        AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_LEVEL2
+#define MCU_RAM_RET_LVL3        AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_LEVEL3
+#define MCU_RAM_RET_FULL        AON_PMCTL_RAMCFG_BUS_SRAM_RET_EN_RET_FULL
 
 //*****************************************************************************
 //
@@ -84,7 +85,7 @@ extern "C" {
 // AONPMCTLPowerStatusGet() .
 //
 //*****************************************************************************
-#define AONPMCTL_JTAG_POWER_ON AON_PMCTL_PWRSTAT_JTAG_PD_ON
+#define AONPMCTL_JTAG_POWER_ON  AON_PMCTL_PWRSTAT_JTAG_PD_ON
 
 //*****************************************************************************
 //
@@ -156,6 +157,7 @@ AONPMCTLPowerStatusGet(void)
     return (HWREG(AON_PMCTL_BASE + AON_PMCTL_O_PWRSTAT));
 }
 
+
 //*****************************************************************************
 //
 //! \brief Request power off of the JTAG domain.
@@ -177,6 +179,7 @@ AONPMCTLJtagPowerOff(void)
     // Request the power off of the JTAG domain
     HWREG(AON_PMCTL_BASE + AON_PMCTL_O_JTAGCFG) = 0;
 }
+
 
 //*****************************************************************************
 //

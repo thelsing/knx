@@ -56,14 +56,15 @@
 #ifndef ti_drivers_sha2_SHA2CC26X2__include
 #define ti_drivers_sha2_SHA2CC26X2__include
 
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include <ti/drivers/SHA2.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 /*!
  *  @brief Hardware-specific configuration attributes
@@ -73,25 +74,26 @@ extern "C" {
  */
 typedef struct
 {
-        uint8_t intPriority; /*!< Hardware interrupt priority of the Hash accelerator.
-                              *
-                              * The CC26XX provides 8 interrupt priority levels encoded in three bits:
-                              *
-                              * Value        | Description
-                              * ------------ | -----------------------
-                              * (~0)         | Special value: always lowest priority across all OS kernels.
-                              * (7 << 5)     | Priority level 7: lowest, but rather use ~0 instead.
-                              * ..           | ..
-                              * (0 << 5)     | Priority level 0: highest, not supported by this driver
-                              *
-                              * Hardware interrupts with priority level 0 ignore the hardware interrupt dispatcher
-                              * for minimum latency. This is not supported by this driver.
-                              */
+    uint8_t    intPriority; /*!< Hardware interrupt priority of the Hash accelerator.
+                             *
+                             * The CC26XX provides 8 interrupt priority levels encoded in three bits:
+                             *
+                             * Value        | Description
+                             * ------------ | -----------------------
+                             * (~0)         | Special value: always lowest priority across all OS kernels.
+                             * (7 << 5)     | Priority level 7: lowest, but rather use ~0 instead.
+                             * ..           | ..
+                             * (0 << 5)     | Priority level 0: highest, not supported by this driver
+                             *
+                             * Hardware interrupts with priority level 0 ignore the hardware interrupt dispatcher
+                             * for minimum latency. This is not supported by this driver.
+                             */
 } SHA2CC26X2_HWAttrs;
+
 
 /*! \cond Internal APIs */
 
-#define SHA2CC26X2_MAX_BLOCK_SIZE_BYTES (SHA2_BLOCK_SIZE_BYTES_512)
+#define SHA2CC26X2_MAX_BLOCK_SIZE_BYTES    (SHA2_BLOCK_SIZE_BYTES_512)
 #define SHA2CC26X2_MAX_DIGEST_LENGTH_BYTES (SHA2_DIGEST_LENGTH_BYTES_512)
 
 /*
@@ -101,18 +103,18 @@ typedef struct
  */
 typedef struct
 {
-        bool isOpen;
-        volatile bool operationInProgress;
-        bool operationCanceled;
-        SHA2_ReturnBehavior returnBehavior;
-        int_fast16_t returnStatus;
-        uint32_t accessTimeout;
-        SHA2_CallbackFxn callbackFxn;
-        SHA2_HashType hashType;
-        uint16_t bytesInBuffer;
-        uint32_t bytesProcessed;
-        uint8_t buffer[SHA2CC26X2_MAX_BLOCK_SIZE_BYTES];
-        uint32_t digest[SHA2CC26X2_MAX_DIGEST_LENGTH_BYTES / 4];
+    bool                            isOpen;
+    volatile bool                   operationInProgress;
+    bool                            operationCanceled;
+    SHA2_ReturnBehavior             returnBehavior;
+    int_fast16_t                    returnStatus;
+    uint32_t                        accessTimeout;
+    SHA2_CallbackFxn                callbackFxn;
+    SHA2_HashType                   hashType;
+    uint16_t                        bytesInBuffer;
+    uint32_t                        bytesProcessed;
+    uint8_t                         buffer[SHA2CC26X2_MAX_BLOCK_SIZE_BYTES];
+    uint32_t                        digest[SHA2CC26X2_MAX_DIGEST_LENGTH_BYTES / 4];
 } SHA2CC26X2_Object;
 
 /*
