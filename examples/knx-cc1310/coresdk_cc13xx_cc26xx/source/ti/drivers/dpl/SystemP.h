@@ -42,8 +42,8 @@
 #ifndef ti_dpl_SystemP__include
 #define ti_dpl_SystemP__include
 
-#include <stddef.h>
 #include <stdarg.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {

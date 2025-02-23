@@ -1,18 +1,18 @@
 #include "bau_systemB_coupler.h"
 #include "bits.h"
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
-BauSystemBCoupler::BauSystemBCoupler(Platform& platform) :
-    BauSystemB(platform),
-    _platform(platform),
+BauSystemBCoupler::BauSystemBCoupler(Platform& platform)
+    : BauSystemB(platform),
+      _platform(platform),
 #ifdef USE_DATASECURE
-    _appLayer(_deviceObj, _secIfObj, *this),
+      _appLayer(_deviceObj, _secIfObj, *this),
 #else
-    _appLayer(*this),
+      _appLayer(*this),
 #endif
-    _transLayer(_appLayer),
-    _netLayer(_deviceObj, _transLayer)
+      _transLayer(_appLayer),
+      _netLayer(_deviceObj, _transLayer)
 {
     _appLayer.transportLayer(_transLayer);
     _transLayer.networkLayer(_netLayer);

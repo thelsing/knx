@@ -1,14 +1,14 @@
 #include "esp_platform.h"
 
 #ifdef ARDUINO_ARCH_ESP8266
-#include <user_interface.h>
 #include <Arduino.h>
 #include <EEPROM.h>
+#include <user_interface.h>
 
 #include "knx/bits.h"
 
 #ifndef KNX_SERIAL
-    #define KNX_SERIAL Serial
+#define KNX_SERIAL Serial
 #endif
 
 EspPlatform::EspPlatform()
@@ -18,7 +18,8 @@ EspPlatform::EspPlatform()
 {
 }
 
-EspPlatform::EspPlatform( HardwareSerial* s) : ArduinoPlatform(s)
+EspPlatform::EspPlatform(HardwareSerial* s)
+    : ArduinoPlatform(s)
 {
 }
 
@@ -72,7 +73,7 @@ void EspPlatform::closeMultiCast()
 
 bool EspPlatform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
 {
-    //printHex("<- ",buffer, len);
+    // printHex("<- ",buffer, len);
     _udp.beginPacketMulticast(_multicastAddr, _multicastPort, WiFi.localIP());
     _udp.write(buffer, len);
     _udp.endPacket();
@@ -93,7 +94,7 @@ int EspPlatform::readBytesMultiCast(uint8_t* buffer, uint16_t maxLen)
     }
 
     _udp.read(buffer, len);
-    //printHex("-> ", buffer, len);
+    // printHex("-> ", buffer, len);
     return len;
 }
 

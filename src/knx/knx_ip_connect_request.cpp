@@ -5,7 +5,6 @@ KnxIpConnectRequest::KnxIpConnectRequest(uint8_t* data, uint16_t length)
 {
 }
 
-
 IpHostProtocolAddressInformation& KnxIpConnectRequest::hpaiCtrl()
 {
     return _hpaiCtrl;

@@ -5,15 +5,15 @@
 
 #include <Arduino.h>
 #ifdef USE_SAMD_EEPROM_EMULATION
-    #include <FlashAsEEPROM.h>
+#include <FlashAsEEPROM.h>
 #endif
 
 #if KNX_FLASH_SIZE % 1024
-    #error "KNX_FLASH_SIZE must be multiple of 1024"
+#error "KNX_FLASH_SIZE must be multiple of 1024"
 #endif
 
 #ifndef KNX_SERIAL
-    #define KNX_SERIAL Serial1
+#define KNX_SERIAL Serial1
 #endif
 
 SamdPlatform::SamdPlatform()
@@ -26,7 +26,8 @@ SamdPlatform::SamdPlatform()
 #endif
 }
 
-SamdPlatform::SamdPlatform( HardwareSerial* s) : ArduinoPlatform(s)
+SamdPlatform::SamdPlatform(HardwareSerial* s)
+    : ArduinoPlatform(s)
 {
 #ifndef USE_SAMD_EEPROM_EMULATION
     init();
@@ -35,19 +36,19 @@ SamdPlatform::SamdPlatform( HardwareSerial* s) : ArduinoPlatform(s)
 
 uint32_t SamdPlatform::uniqueSerialNumber()
 {
-#if defined (__SAMD51__)
+#if defined(__SAMD51__)
     // SAMD51 from section 9.6 of the datasheet
-#define SERIAL_NUMBER_WORD_0  *(volatile uint32_t*)(0x008061FC)
-#define SERIAL_NUMBER_WORD_1  *(volatile uint32_t*)(0x00806010)
-#define SERIAL_NUMBER_WORD_2  *(volatile uint32_t*)(0x00806014)
-#define SERIAL_NUMBER_WORD_3  *(volatile uint32_t*)(0x00806018)
+#define SERIAL_NUMBER_WORD_0 *(volatile uint32_t*)(0x008061FC)
+#define SERIAL_NUMBER_WORD_1 *(volatile uint32_t*)(0x00806010)
+#define SERIAL_NUMBER_WORD_2 *(volatile uint32_t*)(0x00806014)
+#define SERIAL_NUMBER_WORD_3 *(volatile uint32_t*)(0x00806018)
 #else
-    //#elif defined (__SAMD21E17A__) || defined(__SAMD21G18A__)  || defined(__SAMD21E18A__) || defined(__SAMD21J18A__)
-    // SAMD21 from section 9.3.3 of the datasheet
-#define SERIAL_NUMBER_WORD_0  *(volatile uint32_t*)(0x0080A00C)
-#define SERIAL_NUMBER_WORD_1  *(volatile uint32_t*)(0x0080A040)
-#define SERIAL_NUMBER_WORD_2  *(volatile uint32_t*)(0x0080A044)
-#define SERIAL_NUMBER_WORD_3  *(volatile uint32_t*)(0x0080A048)
+    // #elif defined (__SAMD21E17A__) || defined(__SAMD21G18A__)  || defined(__SAMD21E18A__) || defined(__SAMD21J18A__)
+    //  SAMD21 from section 9.3.3 of the datasheet
+#define SERIAL_NUMBER_WORD_0 *(volatile uint32_t*)(0x0080A00C)
+#define SERIAL_NUMBER_WORD_1 *(volatile uint32_t*)(0x0080A040)
+#define SERIAL_NUMBER_WORD_2 *(volatile uint32_t*)(0x0080A044)
+#define SERIAL_NUMBER_WORD_3 *(volatile uint32_t*)(0x0080A048)
 #endif
 
     return SERIAL_NUMBER_WORD_0 ^ SERIAL_NUMBER_WORD_1 ^ SERIAL_NUMBER_WORD_2 ^ SERIAL_NUMBER_WORD_3;
@@ -63,7 +64,7 @@ void SamdPlatform::restart()
 #pragma warning "Using EEPROM Simulation"
 uint8_t* SamdPlatform::getEepromBuffer(uint32_t size)
 {
-    //EEPROM.begin(size);
+    // EEPROM.begin(size);
     if (size > EEPROM_EMULATION_SIZE)
         fatalError();
 
@@ -95,7 +96,7 @@ void SamdPlatform::init()
     _MemoryStart = KNX_FLASH_OFFSET;
     _MemoryEnd = KNX_FLASH_OFFSET + KNX_FLASH_SIZE;
 #else
-    _MemoryStart = getRowAddr(_pageSize * _pageCnt - KNX_FLASH_SIZE - 1);        // 23295
+    _MemoryStart = getRowAddr(_pageSize * _pageCnt - KNX_FLASH_SIZE - 1); // 23295
     _MemoryEnd = getRowAddr(_pageSize * _pageCnt - 1);
 #endif
 

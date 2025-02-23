@@ -10,10 +10,10 @@ AssociationTableObject::AssociationTableObject(Memory& memory)
     : TableObject(memory)
 {
     Property* properties[] =
-    {
-        new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ASSOC_TABLE),
-        new DataProperty(PID_TABLE, false, PDT_GENERIC_04, 65535, ReadLv3 | WriteLv0) //FIXME: implement correctly
-    };
+        {
+            new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ASSOC_TABLE),
+            new DataProperty(PID_TABLE, false, PDT_GENERIC_04, 65535, ReadLv3 | WriteLv0) // FIXME: implement correctly
+        };
 
     TableObject::initializeProperties(sizeof(properties), properties);
 }
@@ -88,7 +88,7 @@ void AssociationTableObject::prepareBinarySearch()
                 else
                 {
                     sortedEntryCount = idx; // last found index indicates end of sorted list
-                    idx--; // current item has to be handled as remaining ASAP
+                    idx--;                  // current item has to be handled as remaining ASAP
                 }
             }
         }
@@ -131,7 +131,7 @@ int32_t AssociationTableObject::translateAsap(uint16_t asap)
             if (asap_i > asap)
                 high = i - 1;
             else
-                low = i + 1 ;
+                low = i + 1;
         }
     }
     else

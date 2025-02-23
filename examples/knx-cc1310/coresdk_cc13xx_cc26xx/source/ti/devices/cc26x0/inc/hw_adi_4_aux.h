@@ -1,38 +1,38 @@
 /******************************************************************************
-*  Filename:       hw_adi_4_aux_h
-*  Revised:        2017-05-04 21:56:26 +0200 (Thu, 04 May 2017)
-*  Revision:       48904
-*
-* Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* 1) Redistributions of source code must retain the above copyright notice,
-*    this list of conditions and the following disclaimer.
-*
-* 2) Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution.
-*
-* 3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*    be used to endorse or promote products derived from this software without
-*    specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       hw_adi_4_aux_h
+ *  Revised:        2017-05-04 21:56:26 +0200 (Thu, 04 May 2017)
+ *  Revision:       48904
+ *
+ * Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1) Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2) Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 #ifndef __HW_ADI_4_AUX_H__
 #define __HW_ADI_4_AUX_H__
@@ -44,37 +44,37 @@
 //
 //*****************************************************************************
 // Internal
-#define ADI_4_AUX_O_MUX0                                            0x00000000
+#define ADI_4_AUX_O_MUX0 0x00000000
 
 // Internal
-#define ADI_4_AUX_O_MUX1                                            0x00000001
+#define ADI_4_AUX_O_MUX1 0x00000001
 
 // Internal
-#define ADI_4_AUX_O_MUX2                                            0x00000002
+#define ADI_4_AUX_O_MUX2 0x00000002
 
 // Internal
-#define ADI_4_AUX_O_MUX3                                            0x00000003
+#define ADI_4_AUX_O_MUX3 0x00000003
 
 // Current Source
-#define ADI_4_AUX_O_ISRC                                            0x00000004
+#define ADI_4_AUX_O_ISRC 0x00000004
 
 // Comparator
-#define ADI_4_AUX_O_COMP                                            0x00000005
+#define ADI_4_AUX_O_COMP 0x00000005
 
 // Internal
-#define ADI_4_AUX_O_MUX4                                            0x00000007
+#define ADI_4_AUX_O_MUX4 0x00000007
 
 // ADC Control 0
-#define ADI_4_AUX_O_ADC0                                            0x00000008
+#define ADI_4_AUX_O_ADC0 0x00000008
 
 // ADC Control 1
-#define ADI_4_AUX_O_ADC1                                            0x00000009
+#define ADI_4_AUX_O_ADC1 0x00000009
 
 // ADC Reference 0
-#define ADI_4_AUX_O_ADCREF0                                         0x0000000A
+#define ADI_4_AUX_O_ADCREF0 0x0000000A
 
 // ADC Reference 1
-#define ADI_4_AUX_O_ADCREF1                                         0x0000000B
+#define ADI_4_AUX_O_ADCREF1 0x0000000B
 
 //*****************************************************************************
 //
@@ -90,14 +90,14 @@
 // VSS                      Internal. Only to be used through TI provided API.
 // DCOUPL                   Internal. Only to be used through TI provided API.
 // NC                       Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_MUX0_COMPA_REF_W                                           4
-#define ADI_4_AUX_MUX0_COMPA_REF_M                                  0x0000000F
-#define ADI_4_AUX_MUX0_COMPA_REF_S                                           0
-#define ADI_4_AUX_MUX0_COMPA_REF_ADCVREFP                           0x00000008
-#define ADI_4_AUX_MUX0_COMPA_REF_VDDS                               0x00000004
-#define ADI_4_AUX_MUX0_COMPA_REF_VSS                                0x00000002
-#define ADI_4_AUX_MUX0_COMPA_REF_DCOUPL                             0x00000001
-#define ADI_4_AUX_MUX0_COMPA_REF_NC                                 0x00000000
+#define ADI_4_AUX_MUX0_COMPA_REF_W 4
+#define ADI_4_AUX_MUX0_COMPA_REF_M 0x0000000F
+#define ADI_4_AUX_MUX0_COMPA_REF_S 0
+#define ADI_4_AUX_MUX0_COMPA_REF_ADCVREFP 0x00000008
+#define ADI_4_AUX_MUX0_COMPA_REF_VDDS 0x00000004
+#define ADI_4_AUX_MUX0_COMPA_REF_VSS 0x00000002
+#define ADI_4_AUX_MUX0_COMPA_REF_DCOUPL 0x00000001
+#define ADI_4_AUX_MUX0_COMPA_REF_NC 0x00000000
 
 //*****************************************************************************
 //
@@ -117,18 +117,18 @@
 // AUXIO6                   Internal. Only to be used through TI provided API.
 // AUXIO7                   Internal. Only to be used through TI provided API.
 // NC                       Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_MUX1_COMPA_IN_W                                            8
-#define ADI_4_AUX_MUX1_COMPA_IN_M                                   0x000000FF
-#define ADI_4_AUX_MUX1_COMPA_IN_S                                            0
-#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO0                              0x00000080
-#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO1                              0x00000040
-#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO2                              0x00000020
-#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO3                              0x00000010
-#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO4                              0x00000008
-#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO5                              0x00000004
-#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO6                              0x00000002
-#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO7                              0x00000001
-#define ADI_4_AUX_MUX1_COMPA_IN_NC                                  0x00000000
+#define ADI_4_AUX_MUX1_COMPA_IN_W 8
+#define ADI_4_AUX_MUX1_COMPA_IN_M 0x000000FF
+#define ADI_4_AUX_MUX1_COMPA_IN_S 0
+#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO0 0x00000080
+#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO1 0x00000040
+#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO2 0x00000020
+#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO3 0x00000010
+#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO4 0x00000008
+#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO5 0x00000004
+#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO6 0x00000002
+#define ADI_4_AUX_MUX1_COMPA_IN_AUXIO7 0x00000001
+#define ADI_4_AUX_MUX1_COMPA_IN_NC 0x00000000
 
 //*****************************************************************************
 //
@@ -145,15 +145,15 @@
 // ATEST1                   Internal. Only to be used through TI provided API.
 // ATEST0                   Internal. Only to be used through TI provided API.
 // NC                       Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_W                                         5
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_M                                0x000000F8
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_S                                         3
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_VDDS                             0x00000080
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_VSS                              0x00000040
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_DCOUPL                           0x00000020
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_ATEST1                           0x00000010
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_ATEST0                           0x00000008
-#define ADI_4_AUX_MUX2_ADCCOMPB_IN_NC                               0x00000000
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_W 5
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_M 0x000000F8
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_S 3
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_VDDS 0x00000080
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_VSS 0x00000040
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_DCOUPL 0x00000020
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_ATEST1 0x00000010
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_ATEST0 0x00000008
+#define ADI_4_AUX_MUX2_ADCCOMPB_IN_NC 0x00000000
 
 // Field:   [2:0] COMPB_REF
 //
@@ -163,13 +163,13 @@
 // VSS                      Internal. Only to be used through TI provided API.
 // DCOUPL                   Internal. Only to be used through TI provided API.
 // NC                       Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_MUX2_COMPB_REF_W                                           3
-#define ADI_4_AUX_MUX2_COMPB_REF_M                                  0x00000007
-#define ADI_4_AUX_MUX2_COMPB_REF_S                                           0
-#define ADI_4_AUX_MUX2_COMPB_REF_VDDS                               0x00000004
-#define ADI_4_AUX_MUX2_COMPB_REF_VSS                                0x00000002
-#define ADI_4_AUX_MUX2_COMPB_REF_DCOUPL                             0x00000001
-#define ADI_4_AUX_MUX2_COMPB_REF_NC                                 0x00000000
+#define ADI_4_AUX_MUX2_COMPB_REF_W 3
+#define ADI_4_AUX_MUX2_COMPB_REF_M 0x00000007
+#define ADI_4_AUX_MUX2_COMPB_REF_S 0
+#define ADI_4_AUX_MUX2_COMPB_REF_VDDS 0x00000004
+#define ADI_4_AUX_MUX2_COMPB_REF_VSS 0x00000002
+#define ADI_4_AUX_MUX2_COMPB_REF_DCOUPL 0x00000001
+#define ADI_4_AUX_MUX2_COMPB_REF_NC 0x00000000
 
 //*****************************************************************************
 //
@@ -189,18 +189,18 @@
 // AUXIO6                   Internal. Only to be used through TI provided API.
 // AUXIO7                   Internal. Only to be used through TI provided API.
 // NC                       Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_W                                         8
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_M                                0x000000FF
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_S                                         0
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO0                           0x00000080
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO1                           0x00000040
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO2                           0x00000020
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO3                           0x00000010
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO4                           0x00000008
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO5                           0x00000004
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO6                           0x00000002
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO7                           0x00000001
-#define ADI_4_AUX_MUX3_ADCCOMPB_IN_NC                               0x00000000
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_W 8
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_M 0x000000FF
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_S 0
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO0 0x00000080
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO1 0x00000040
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO2 0x00000020
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO3 0x00000010
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO4 0x00000008
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO5 0x00000004
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO6 0x00000002
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_AUXIO7 0x00000001
+#define ADI_4_AUX_MUX3_ADCCOMPB_IN_NC 0x00000000
 
 //*****************************************************************************
 //
@@ -220,23 +220,23 @@
 // 0P5U                     0.5 uA
 // 0P25U                    0.25 uA
 // NC                       No current connected
-#define ADI_4_AUX_ISRC_TRIM_W                                                6
-#define ADI_4_AUX_ISRC_TRIM_M                                       0x000000FC
-#define ADI_4_AUX_ISRC_TRIM_S                                                2
-#define ADI_4_AUX_ISRC_TRIM_11P75U                                  0x00000080
-#define ADI_4_AUX_ISRC_TRIM_4P5U                                    0x00000040
-#define ADI_4_AUX_ISRC_TRIM_2P0U                                    0x00000020
-#define ADI_4_AUX_ISRC_TRIM_1P0U                                    0x00000010
-#define ADI_4_AUX_ISRC_TRIM_0P5U                                    0x00000008
-#define ADI_4_AUX_ISRC_TRIM_0P25U                                   0x00000004
-#define ADI_4_AUX_ISRC_TRIM_NC                                      0x00000000
+#define ADI_4_AUX_ISRC_TRIM_W 6
+#define ADI_4_AUX_ISRC_TRIM_M 0x000000FC
+#define ADI_4_AUX_ISRC_TRIM_S 2
+#define ADI_4_AUX_ISRC_TRIM_11P75U 0x00000080
+#define ADI_4_AUX_ISRC_TRIM_4P5U 0x00000040
+#define ADI_4_AUX_ISRC_TRIM_2P0U 0x00000020
+#define ADI_4_AUX_ISRC_TRIM_1P0U 0x00000010
+#define ADI_4_AUX_ISRC_TRIM_0P5U 0x00000008
+#define ADI_4_AUX_ISRC_TRIM_0P25U 0x00000004
+#define ADI_4_AUX_ISRC_TRIM_NC 0x00000000
 
 // Field:     [0] EN
 //
 // Current source enable
-#define ADI_4_AUX_ISRC_EN                                           0x00000001
-#define ADI_4_AUX_ISRC_EN_M                                         0x00000001
-#define ADI_4_AUX_ISRC_EN_S                                                  0
+#define ADI_4_AUX_ISRC_EN 0x00000001
+#define ADI_4_AUX_ISRC_EN_M 0x00000001
+#define ADI_4_AUX_ISRC_EN_S 0
 
 //*****************************************************************************
 //
@@ -247,18 +247,18 @@
 //
 // Enables 400kohm resistance from COMPA reference node to ground. Used with
 // COMPA_REF_CURR_EN to generate voltage reference for cap-sense.
-#define ADI_4_AUX_COMP_COMPA_REF_RES_EN                             0x00000080
-#define ADI_4_AUX_COMP_COMPA_REF_RES_EN_M                           0x00000080
-#define ADI_4_AUX_COMP_COMPA_REF_RES_EN_S                                    7
+#define ADI_4_AUX_COMP_COMPA_REF_RES_EN 0x00000080
+#define ADI_4_AUX_COMP_COMPA_REF_RES_EN_M 0x00000080
+#define ADI_4_AUX_COMP_COMPA_REF_RES_EN_S 7
 
 // Field:     [6] COMPA_REF_CURR_EN
 //
 // Enables 2uA IPTAT current from ISRC to COMPA reference node. Requires
 // ISRC.EN = 1. Used with COMPA_REF_RES_EN to generate voltage reference for
 // cap-sense.
-#define ADI_4_AUX_COMP_COMPA_REF_CURR_EN                            0x00000040
-#define ADI_4_AUX_COMP_COMPA_REF_CURR_EN_M                          0x00000040
-#define ADI_4_AUX_COMP_COMPA_REF_CURR_EN_S                                   6
+#define ADI_4_AUX_COMP_COMPA_REF_CURR_EN 0x00000040
+#define ADI_4_AUX_COMP_COMPA_REF_CURR_EN_M 0x00000040
+#define ADI_4_AUX_COMP_COMPA_REF_CURR_EN_S 6
 
 // Field:   [5:3] COMPB_TRIM
 //
@@ -268,27 +268,27 @@
 // DIV3                     Divide reference by 3
 // DIV2                     Divide reference by 2
 // DIV1                     No reference division
-#define ADI_4_AUX_COMP_COMPB_TRIM_W                                          3
-#define ADI_4_AUX_COMP_COMPB_TRIM_M                                 0x00000038
-#define ADI_4_AUX_COMP_COMPB_TRIM_S                                          3
-#define ADI_4_AUX_COMP_COMPB_TRIM_DIV4                              0x00000038
-#define ADI_4_AUX_COMP_COMPB_TRIM_DIV3                              0x00000018
-#define ADI_4_AUX_COMP_COMPB_TRIM_DIV2                              0x00000008
-#define ADI_4_AUX_COMP_COMPB_TRIM_DIV1                              0x00000000
+#define ADI_4_AUX_COMP_COMPB_TRIM_W 3
+#define ADI_4_AUX_COMP_COMPB_TRIM_M 0x00000038
+#define ADI_4_AUX_COMP_COMPB_TRIM_S 3
+#define ADI_4_AUX_COMP_COMPB_TRIM_DIV4 0x00000038
+#define ADI_4_AUX_COMP_COMPB_TRIM_DIV3 0x00000018
+#define ADI_4_AUX_COMP_COMPB_TRIM_DIV2 0x00000008
+#define ADI_4_AUX_COMP_COMPB_TRIM_DIV1 0x00000000
 
 // Field:     [2] COMPB_EN
 //
 // COMPB enable
-#define ADI_4_AUX_COMP_COMPB_EN                                     0x00000004
-#define ADI_4_AUX_COMP_COMPB_EN_M                                   0x00000004
-#define ADI_4_AUX_COMP_COMPB_EN_S                                            2
+#define ADI_4_AUX_COMP_COMPB_EN 0x00000004
+#define ADI_4_AUX_COMP_COMPB_EN_M 0x00000004
+#define ADI_4_AUX_COMP_COMPB_EN_S 2
 
 // Field:     [0] COMPA_EN
 //
 // COMPA enable
-#define ADI_4_AUX_COMP_COMPA_EN                                     0x00000001
-#define ADI_4_AUX_COMP_COMPA_EN_M                                   0x00000001
-#define ADI_4_AUX_COMP_COMPA_EN_S                                            0
+#define ADI_4_AUX_COMP_COMPA_EN 0x00000001
+#define ADI_4_AUX_COMP_COMPA_EN_M 0x00000001
+#define ADI_4_AUX_COMP_COMPA_EN_S 0
 
 //*****************************************************************************
 //
@@ -308,18 +308,18 @@
 // AUXIO6                   Internal. Only to be used through TI provided API.
 // AUXIO7                   Internal. Only to be used through TI provided API.
 // NC                       Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_MUX4_COMPA_REF_W                                           8
-#define ADI_4_AUX_MUX4_COMPA_REF_M                                  0x000000FF
-#define ADI_4_AUX_MUX4_COMPA_REF_S                                           0
-#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO0                             0x00000080
-#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO1                             0x00000040
-#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO2                             0x00000020
-#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO3                             0x00000010
-#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO4                             0x00000008
-#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO5                             0x00000004
-#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO6                             0x00000002
-#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO7                             0x00000001
-#define ADI_4_AUX_MUX4_COMPA_REF_NC                                 0x00000000
+#define ADI_4_AUX_MUX4_COMPA_REF_W 8
+#define ADI_4_AUX_MUX4_COMPA_REF_M 0x000000FF
+#define ADI_4_AUX_MUX4_COMPA_REF_S 0
+#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO0 0x00000080
+#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO1 0x00000040
+#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO2 0x00000020
+#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO3 0x00000010
+#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO4 0x00000008
+#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO5 0x00000004
+#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO6 0x00000002
+#define ADI_4_AUX_MUX4_COMPA_REF_AUXIO7 0x00000001
+#define ADI_4_AUX_MUX4_COMPA_REF_NC 0x00000000
 
 //*****************************************************************************
 //
@@ -345,9 +345,9 @@
 // signal. Sampling restarts when the conversion has finished.
 // Asynchronous mode is useful when it is important to avoid jitter in the
 // sampling instant of an externally driven signal
-#define ADI_4_AUX_ADC0_SMPL_MODE                                    0x00000080
-#define ADI_4_AUX_ADC0_SMPL_MODE_M                                  0x00000080
-#define ADI_4_AUX_ADC0_SMPL_MODE_S                                           7
+#define ADI_4_AUX_ADC0_SMPL_MODE 0x00000080
+#define ADI_4_AUX_ADC0_SMPL_MODE_M 0x00000080
+#define ADI_4_AUX_ADC0_SMPL_MODE_S 7
 
 // Field:   [6:3] SMPL_CYCLE_EXP
 //
@@ -368,22 +368,22 @@
 // 10P6_US                  64x 6 MHz clock periods = 10.6us
 // 5P3_US                   32x 6 MHz clock periods = 5.3us
 // 2P7_US                   16x 6 MHz clock periods = 2.7us
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_W                                      4
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_M                             0x00000078
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_S                                      3
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_10P9_MS                       0x00000078
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_5P46_MS                       0x00000070
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_2P73_MS                       0x00000068
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_1P37_MS                       0x00000060
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_682_US                        0x00000058
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_341_US                        0x00000050
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_170_US                        0x00000048
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_85P3_US                       0x00000040
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_42P6_US                       0x00000038
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_21P3_US                       0x00000030
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_10P6_US                       0x00000028
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_5P3_US                        0x00000020
-#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_2P7_US                        0x00000018
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_W 4
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_M 0x00000078
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_S 3
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_10P9_MS 0x00000078
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_5P46_MS 0x00000070
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_2P73_MS 0x00000068
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_1P37_MS 0x00000060
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_682_US 0x00000058
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_341_US 0x00000050
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_170_US 0x00000048
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_85P3_US 0x00000040
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_42P6_US 0x00000038
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_21P3_US 0x00000030
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_10P6_US 0x00000028
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_5P3_US 0x00000020
+#define ADI_4_AUX_ADC0_SMPL_CYCLE_EXP_2P7_US 0x00000018
 
 // Field:     [1] RESET_N
 //
@@ -392,9 +392,9 @@
 //
 // 0: Reset
 // 1: Normal operation
-#define ADI_4_AUX_ADC0_RESET_N                                      0x00000002
-#define ADI_4_AUX_ADC0_RESET_N_M                                    0x00000002
-#define ADI_4_AUX_ADC0_RESET_N_S                                             1
+#define ADI_4_AUX_ADC0_RESET_N 0x00000002
+#define ADI_4_AUX_ADC0_RESET_N_M 0x00000002
+#define ADI_4_AUX_ADC0_RESET_N_S 1
 
 // Field:     [0] EN
 //
@@ -402,9 +402,9 @@
 //
 // 0: Disable
 // 1: Enable
-#define ADI_4_AUX_ADC0_EN                                           0x00000001
-#define ADI_4_AUX_ADC0_EN_M                                         0x00000001
-#define ADI_4_AUX_ADC0_EN_S                                                  0
+#define ADI_4_AUX_ADC0_EN 0x00000001
+#define ADI_4_AUX_ADC0_EN_M 0x00000001
+#define ADI_4_AUX_ADC0_EN_S 0
 
 //*****************************************************************************
 //
@@ -414,9 +414,9 @@
 // Field:     [0] SCALE_DIS
 //
 // Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_ADC1_SCALE_DIS                                    0x00000001
-#define ADI_4_AUX_ADC1_SCALE_DIS_M                                  0x00000001
-#define ADI_4_AUX_ADC1_SCALE_DIS_S                                           0
+#define ADI_4_AUX_ADC1_SCALE_DIS 0x00000001
+#define ADI_4_AUX_ADC1_SCALE_DIS_M 0x00000001
+#define ADI_4_AUX_ADC1_SCALE_DIS_S 0
 
 //*****************************************************************************
 //
@@ -428,23 +428,23 @@
 // Keep ADCREF powered up in IDLE state when ADC0.SMPL_MODE = 0.
 //
 // Set to 1 if ADC0.SMPL_CYCLE_EXP is less than 6 (21.3us sampling time)
-#define ADI_4_AUX_ADCREF0_REF_ON_IDLE                               0x00000040
-#define ADI_4_AUX_ADCREF0_REF_ON_IDLE_M                             0x00000040
-#define ADI_4_AUX_ADCREF0_REF_ON_IDLE_S                                      6
+#define ADI_4_AUX_ADCREF0_REF_ON_IDLE 0x00000040
+#define ADI_4_AUX_ADCREF0_REF_ON_IDLE_M 0x00000040
+#define ADI_4_AUX_ADCREF0_REF_ON_IDLE_S 6
 
 // Field:     [5] IOMUX
 //
 // Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_ADCREF0_IOMUX                                     0x00000020
-#define ADI_4_AUX_ADCREF0_IOMUX_M                                   0x00000020
-#define ADI_4_AUX_ADCREF0_IOMUX_S                                            5
+#define ADI_4_AUX_ADCREF0_IOMUX 0x00000020
+#define ADI_4_AUX_ADCREF0_IOMUX_M 0x00000020
+#define ADI_4_AUX_ADCREF0_IOMUX_S 5
 
 // Field:     [4] EXT
 //
 // Internal. Only to be used through TI provided API.
-#define ADI_4_AUX_ADCREF0_EXT                                       0x00000010
-#define ADI_4_AUX_ADCREF0_EXT_M                                     0x00000010
-#define ADI_4_AUX_ADCREF0_EXT_S                                              4
+#define ADI_4_AUX_ADCREF0_EXT 0x00000010
+#define ADI_4_AUX_ADCREF0_EXT_M 0x00000010
+#define ADI_4_AUX_ADCREF0_EXT_S 4
 
 // Field:     [3] SRC
 //
@@ -452,9 +452,9 @@
 //
 // 0: Fixed reference = 4.3V
 // 1: Relative reference = VDDS
-#define ADI_4_AUX_ADCREF0_SRC                                       0x00000008
-#define ADI_4_AUX_ADCREF0_SRC_M                                     0x00000008
-#define ADI_4_AUX_ADCREF0_SRC_S                                              3
+#define ADI_4_AUX_ADCREF0_SRC 0x00000008
+#define ADI_4_AUX_ADCREF0_SRC_M 0x00000008
+#define ADI_4_AUX_ADCREF0_SRC_S 3
 
 // Field:     [0] EN
 //
@@ -462,9 +462,9 @@
 //
 // 0: ADC reference module powered down
 // 1: ADC reference module enabled
-#define ADI_4_AUX_ADCREF0_EN                                        0x00000001
-#define ADI_4_AUX_ADCREF0_EN_M                                      0x00000001
-#define ADI_4_AUX_ADCREF0_EN_S                                               0
+#define ADI_4_AUX_ADCREF0_EN 0x00000001
+#define ADI_4_AUX_ADCREF0_EN_M 0x00000001
+#define ADI_4_AUX_ADCREF0_EN_S 0
 
 //*****************************************************************************
 //
@@ -482,9 +482,8 @@
 // 0x3F - nominal - 0.4% 1.425V
 // 0x1F - maximum voltage 1.6V
 // 0x20 - minimum voltage 1.3V
-#define ADI_4_AUX_ADCREF1_VTRIM_W                                            6
-#define ADI_4_AUX_ADCREF1_VTRIM_M                                   0x0000003F
-#define ADI_4_AUX_ADCREF1_VTRIM_S                                            0
-
+#define ADI_4_AUX_ADCREF1_VTRIM_W 6
+#define ADI_4_AUX_ADCREF1_VTRIM_M 0x0000003F
+#define ADI_4_AUX_ADCREF1_VTRIM_S 0
 
 #endif // __ADI_4_AUX__

@@ -1,16 +1,16 @@
 #pragma once
 
-#include "config.h"
-#include "bau.h"
-#include "security_interface_object.h"
-#include "application_program_object.h"
 #include "application_layer.h"
-#include "secure_application_layer.h"
-#include "transport_layer.h"
-#include "network_layer.h"
+#include "application_program_object.h"
+#include "bau.h"
+#include "config.h"
 #include "data_link_layer.h"
-#include "platform.h"
 #include "memory.h"
+#include "network_layer.h"
+#include "platform.h"
+#include "secure_application_layer.h"
+#include "security_interface_object.h"
+#include "transport_layer.h"
 
 class BauSystemB : protected BusAccessUnit
 {
@@ -81,7 +81,7 @@ class BauSystemB : protected BusAccessUnit
         void propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t objectIndex,
                                                uint8_t propertyId, uint8_t propertyIndex) override;
         void propertyExtDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl,
-                uint16_t objectType, uint16_t objectInstance, uint16_t propertyId, uint8_t descriptionType, uint16_t propertyIndex) override;
+                                                  uint16_t objectType, uint16_t objectInstance, uint16_t propertyId, uint8_t descriptionType, uint16_t propertyIndex) override;
         void propertyValueWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t objectIndex,
                                           uint8_t propertyId, uint8_t numberOfElements, uint16_t startIndex, uint8_t* data, uint8_t length) override;
         void propertyValueExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ObjectType objectType, uint8_t objectInstance,
@@ -95,18 +95,18 @@ class BauSystemB : protected BusAccessUnit
         void functionPropertyStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t objectIndex,
                                              uint8_t propertyId, uint8_t* data, uint8_t length) override;
         void functionPropertyExtCommandIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ObjectType objectType, uint8_t objectInstance,
-                uint8_t propertyId, uint8_t* data, uint8_t length) override;
+                                                  uint8_t propertyId, uint8_t* data, uint8_t length) override;
         void functionPropertyExtStateIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ObjectType objectType, uint8_t objectInstance,
                                                 uint8_t propertyId, uint8_t* data, uint8_t length) override;
         void individualAddressReadIndication(HopCountType hopType, const SecurityControl& secCtrl) override;
         void individualAddressWriteIndication(HopCountType hopType, const SecurityControl& secCtrl, uint16_t newaddress) override;
         void individualAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint16_t newIndividualAddress,
-                uint8_t* knxSerialNumber) override;
+                                                          uint8_t* knxSerialNumber) override;
         void individualAddressSerialNumberReadIndication(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint8_t* knxSerialNumber) override;
         void systemNetworkParameterReadIndication(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint16_t objectType,
-                uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength) override;
+                                                  uint16_t propertyId, uint8_t* testInfo, uint16_t testinfoLength) override;
         void systemNetworkParameterReadLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint16_t objectType,
-                uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status) override;
+                                                    uint16_t propertyId, uint8_t* testInfo, uint16_t testInfoLength, bool status) override;
         void connectConfirm(uint16_t tsap) override;
 
         void nextRestartState();

@@ -1,38 +1,38 @@
 /******************************************************************************
-*  Filename:       hw_aux_timer01_h
-*  Revised:        2018-05-14 12:24:52 +0200 (Mon, 14 May 2018)
-*  Revision:       51990
-*
-* Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* 1) Redistributions of source code must retain the above copyright notice,
-*    this list of conditions and the following disclaimer.
-*
-* 2) Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution.
-*
-* 3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*    be used to endorse or promote products derived from this software without
-*    specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       hw_aux_timer01_h
+ *  Revised:        2018-05-14 12:24:52 +0200 (Mon, 14 May 2018)
+ *  Revision:       51990
+ *
+ * Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1) Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2) Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 #ifndef __HW_AUX_TIMER01_H__
 #define __HW_AUX_TIMER01_H__
@@ -44,28 +44,28 @@
 //
 //*****************************************************************************
 // Timer 0 Configuration
-#define AUX_TIMER01_O_T0CFG                                         0x00000000
+#define AUX_TIMER01_O_T0CFG 0x00000000
 
 // Timer 0 Control
-#define AUX_TIMER01_O_T0CTL                                         0x00000004
+#define AUX_TIMER01_O_T0CTL 0x00000004
 
 // Timer 0 Target
-#define AUX_TIMER01_O_T0TARGET                                      0x00000008
+#define AUX_TIMER01_O_T0TARGET 0x00000008
 
 // Timer 0 Counter
-#define AUX_TIMER01_O_T0CNTR                                        0x0000000C
+#define AUX_TIMER01_O_T0CNTR 0x0000000C
 
 // Timer 1 Configuration
-#define AUX_TIMER01_O_T1CFG                                         0x00000010
+#define AUX_TIMER01_O_T1CFG 0x00000010
 
 // Timer 1 Control
-#define AUX_TIMER01_O_T1CTL                                         0x00000014
+#define AUX_TIMER01_O_T1CTL 0x00000014
 
 // Timer 1 Target
-#define AUX_TIMER01_O_T1TARGET                                      0x00000018
+#define AUX_TIMER01_O_T1TARGET 0x00000018
 
 // Timer 1 Counter
-#define AUX_TIMER01_O_T1CNTR                                        0x0000001C
+#define AUX_TIMER01_O_T1CNTR 0x0000001C
 
 //*****************************************************************************
 //
@@ -78,12 +78,12 @@
 // ENUMs:
 // FALL                     Count on falling edges of TICK_SRC.
 // RISE                     Count on rising edges of TICK_SRC.
-#define AUX_TIMER01_T0CFG_TICK_SRC_POL                              0x00004000
-#define AUX_TIMER01_T0CFG_TICK_SRC_POL_BITN                                 14
-#define AUX_TIMER01_T0CFG_TICK_SRC_POL_M                            0x00004000
-#define AUX_TIMER01_T0CFG_TICK_SRC_POL_S                                    14
-#define AUX_TIMER01_T0CFG_TICK_SRC_POL_FALL                         0x00004000
-#define AUX_TIMER01_T0CFG_TICK_SRC_POL_RISE                         0x00000000
+#define AUX_TIMER01_T0CFG_TICK_SRC_POL 0x00004000
+#define AUX_TIMER01_T0CFG_TICK_SRC_POL_BITN 14
+#define AUX_TIMER01_T0CFG_TICK_SRC_POL_M 0x00004000
+#define AUX_TIMER01_T0CFG_TICK_SRC_POL_S 14
+#define AUX_TIMER01_T0CFG_TICK_SRC_POL_FALL 0x00004000
+#define AUX_TIMER01_T0CFG_TICK_SRC_POL_RISE 0x00000000
 
 // Field:  [13:8] TICK_SRC
 //
@@ -153,73 +153,73 @@
 // AUXIO2                   AUX_EVCTL:EVSTAT0.AUXIO2
 // AUXIO1                   AUX_EVCTL:EVSTAT0.AUXIO1
 // AUXIO0                   AUX_EVCTL:EVSTAT0.AUXIO0
-#define AUX_TIMER01_T0CFG_TICK_SRC_W                                         6
-#define AUX_TIMER01_T0CFG_TICK_SRC_M                                0x00003F00
-#define AUX_TIMER01_T0CFG_TICK_SRC_S                                         8
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_CLKSW_RDY             0x00003F00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_DAC_HOLD_ACTIVE              0x00003E00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_SMPH_AUTOTAKE_DONE           0x00003D00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ADC_FIFO_NOT_EMPTY           0x00003C00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ADC_FIFO_ALMOST_FULL         0x00003B00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ADC_IRQ                      0x00003A00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ADC_DONE                     0x00003900
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ISRC_RESET_N                 0x00003800
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TDC_DONE                     0x00003700
-#define AUX_TIMER01_T0CFG_TICK_SRC_NO_EVENT                         0x00003600
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER1_EV                    0x00003500
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_PULSE                 0x00003400
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_EV3                   0x00003300
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_EV2                   0x00003200
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_EV1                   0x00003100
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_EV0                   0x00003000
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_COMPB                        0x00002F00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_COMPA                        0x00002E00
-#define AUX_TIMER01_T0CFG_TICK_SRC_MCU_OBSMUX1                      0x00002D00
-#define AUX_TIMER01_T0CFG_TICK_SRC_MCU_OBSMUX0                      0x00002C00
-#define AUX_TIMER01_T0CFG_TICK_SRC_MCU_EV                           0x00002B00
-#define AUX_TIMER01_T0CFG_TICK_SRC_ACLK_REF                         0x00002A00
-#define AUX_TIMER01_T0CFG_TICK_SRC_VDDR_RECHARGE                    0x00002900
-#define AUX_TIMER01_T0CFG_TICK_SRC_MCU_ACTIVE                       0x00002800
-#define AUX_TIMER01_T0CFG_TICK_SRC_PWR_DWN                          0x00002700
-#define AUX_TIMER01_T0CFG_TICK_SRC_SCLK_LF                          0x00002600
-#define AUX_TIMER01_T0CFG_TICK_SRC_AON_BATMON_TEMP_UPD              0x00002500
-#define AUX_TIMER01_T0CFG_TICK_SRC_AON_BATMON_BAT_UPD               0x00002400
-#define AUX_TIMER01_T0CFG_TICK_SRC_AON_RTC_4KHZ                     0x00002300
-#define AUX_TIMER01_T0CFG_TICK_SRC_AON_RTC_CH2_DLY                  0x00002200
-#define AUX_TIMER01_T0CFG_TICK_SRC_AON_RTC_CH2                      0x00002100
-#define AUX_TIMER01_T0CFG_TICK_SRC_MANUAL_EV                        0x00002000
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO31                          0x00001F00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO30                          0x00001E00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO29                          0x00001D00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO28                          0x00001C00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO27                          0x00001B00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO26                          0x00001A00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO25                          0x00001900
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO24                          0x00001800
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO23                          0x00001700
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO22                          0x00001600
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO21                          0x00001500
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO20                          0x00001400
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO19                          0x00001300
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO18                          0x00001200
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO17                          0x00001100
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO16                          0x00001000
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO15                          0x00000F00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO14                          0x00000E00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO13                          0x00000D00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO12                          0x00000C00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO11                          0x00000B00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO10                          0x00000A00
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO9                           0x00000900
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO8                           0x00000800
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO7                           0x00000700
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO6                           0x00000600
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO5                           0x00000500
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO4                           0x00000400
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO3                           0x00000300
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO2                           0x00000200
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO1                           0x00000100
-#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO0                           0x00000000
+#define AUX_TIMER01_T0CFG_TICK_SRC_W 6
+#define AUX_TIMER01_T0CFG_TICK_SRC_M 0x00003F00
+#define AUX_TIMER01_T0CFG_TICK_SRC_S 8
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_CLKSW_RDY 0x00003F00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_DAC_HOLD_ACTIVE 0x00003E00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_SMPH_AUTOTAKE_DONE 0x00003D00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ADC_FIFO_NOT_EMPTY 0x00003C00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ADC_FIFO_ALMOST_FULL 0x00003B00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ADC_IRQ 0x00003A00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ADC_DONE 0x00003900
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_ISRC_RESET_N 0x00003800
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TDC_DONE 0x00003700
+#define AUX_TIMER01_T0CFG_TICK_SRC_NO_EVENT 0x00003600
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER1_EV 0x00003500
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_PULSE 0x00003400
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_EV3 0x00003300
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_EV2 0x00003200
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_EV1 0x00003100
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_TIMER2_EV0 0x00003000
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_COMPB 0x00002F00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUX_COMPA 0x00002E00
+#define AUX_TIMER01_T0CFG_TICK_SRC_MCU_OBSMUX1 0x00002D00
+#define AUX_TIMER01_T0CFG_TICK_SRC_MCU_OBSMUX0 0x00002C00
+#define AUX_TIMER01_T0CFG_TICK_SRC_MCU_EV 0x00002B00
+#define AUX_TIMER01_T0CFG_TICK_SRC_ACLK_REF 0x00002A00
+#define AUX_TIMER01_T0CFG_TICK_SRC_VDDR_RECHARGE 0x00002900
+#define AUX_TIMER01_T0CFG_TICK_SRC_MCU_ACTIVE 0x00002800
+#define AUX_TIMER01_T0CFG_TICK_SRC_PWR_DWN 0x00002700
+#define AUX_TIMER01_T0CFG_TICK_SRC_SCLK_LF 0x00002600
+#define AUX_TIMER01_T0CFG_TICK_SRC_AON_BATMON_TEMP_UPD 0x00002500
+#define AUX_TIMER01_T0CFG_TICK_SRC_AON_BATMON_BAT_UPD 0x00002400
+#define AUX_TIMER01_T0CFG_TICK_SRC_AON_RTC_4KHZ 0x00002300
+#define AUX_TIMER01_T0CFG_TICK_SRC_AON_RTC_CH2_DLY 0x00002200
+#define AUX_TIMER01_T0CFG_TICK_SRC_AON_RTC_CH2 0x00002100
+#define AUX_TIMER01_T0CFG_TICK_SRC_MANUAL_EV 0x00002000
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO31 0x00001F00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO30 0x00001E00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO29 0x00001D00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO28 0x00001C00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO27 0x00001B00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO26 0x00001A00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO25 0x00001900
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO24 0x00001800
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO23 0x00001700
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO22 0x00001600
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO21 0x00001500
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO20 0x00001400
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO19 0x00001300
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO18 0x00001200
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO17 0x00001100
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO16 0x00001000
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO15 0x00000F00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO14 0x00000E00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO13 0x00000D00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO12 0x00000C00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO11 0x00000B00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO10 0x00000A00
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO9 0x00000900
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO8 0x00000800
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO7 0x00000700
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO6 0x00000600
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO5 0x00000500
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO4 0x00000400
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO3 0x00000300
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO2 0x00000200
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO1 0x00000100
+#define AUX_TIMER01_T0CFG_TICK_SRC_AUXIO0 0x00000000
 
 // Field:   [7:4] PRE
 //
@@ -230,9 +230,9 @@
 // 0x2: Divide by 4.
 // ...
 // 0xF: Divide by 32,768.
-#define AUX_TIMER01_T0CFG_PRE_W                                              4
-#define AUX_TIMER01_T0CFG_PRE_M                                     0x000000F0
-#define AUX_TIMER01_T0CFG_PRE_S                                              4
+#define AUX_TIMER01_T0CFG_PRE_W 4
+#define AUX_TIMER01_T0CFG_PRE_M 0x000000F0
+#define AUX_TIMER01_T0CFG_PRE_S 4
 
 // Field:     [1] MODE
 //
@@ -244,12 +244,12 @@
 // CLK                      Use clock as source for prescaler. Note that
 //                          AUX_SYSIF:PEROPRATE.TIMER01_OP_RATE sets the
 //                          clock frequency.
-#define AUX_TIMER01_T0CFG_MODE                                      0x00000002
-#define AUX_TIMER01_T0CFG_MODE_BITN                                          1
-#define AUX_TIMER01_T0CFG_MODE_M                                    0x00000002
-#define AUX_TIMER01_T0CFG_MODE_S                                             1
-#define AUX_TIMER01_T0CFG_MODE_TICK                                 0x00000002
-#define AUX_TIMER01_T0CFG_MODE_CLK                                  0x00000000
+#define AUX_TIMER01_T0CFG_MODE 0x00000002
+#define AUX_TIMER01_T0CFG_MODE_BITN 1
+#define AUX_TIMER01_T0CFG_MODE_M 0x00000002
+#define AUX_TIMER01_T0CFG_MODE_S 1
+#define AUX_TIMER01_T0CFG_MODE_TICK 0x00000002
+#define AUX_TIMER01_T0CFG_MODE_CLK 0x00000000
 
 // Field:     [0] RELOAD
 //
@@ -266,12 +266,12 @@
 //                          T0CTL.EN becomes 0 when the counter value
 //                          becomes equal to or greater than
 //                          T0TARGET.VALUE.
-#define AUX_TIMER01_T0CFG_RELOAD                                    0x00000001
-#define AUX_TIMER01_T0CFG_RELOAD_BITN                                        0
-#define AUX_TIMER01_T0CFG_RELOAD_M                                  0x00000001
-#define AUX_TIMER01_T0CFG_RELOAD_S                                           0
-#define AUX_TIMER01_T0CFG_RELOAD_CONT                               0x00000001
-#define AUX_TIMER01_T0CFG_RELOAD_MAN                                0x00000000
+#define AUX_TIMER01_T0CFG_RELOAD 0x00000001
+#define AUX_TIMER01_T0CFG_RELOAD_BITN 0
+#define AUX_TIMER01_T0CFG_RELOAD_M 0x00000001
+#define AUX_TIMER01_T0CFG_RELOAD_S 0
+#define AUX_TIMER01_T0CFG_RELOAD_CONT 0x00000001
+#define AUX_TIMER01_T0CFG_RELOAD_MAN 0x00000000
 
 //*****************************************************************************
 //
@@ -286,10 +286,10 @@
 // 1: Enable Timer 0.
 //
 // The counter restarts from 0 when you enable Timer 0.
-#define AUX_TIMER01_T0CTL_EN                                        0x00000001
-#define AUX_TIMER01_T0CTL_EN_BITN                                            0
-#define AUX_TIMER01_T0CTL_EN_M                                      0x00000001
-#define AUX_TIMER01_T0CTL_EN_S                                               0
+#define AUX_TIMER01_T0CTL_EN 0x00000001
+#define AUX_TIMER01_T0CTL_EN_BITN 0
+#define AUX_TIMER01_T0CTL_EN_M 0x00000001
+#define AUX_TIMER01_T0CTL_EN_S 0
 
 //*****************************************************************************
 //
@@ -321,9 +321,9 @@
 //
 //
 // It is allowed to update the VALUE while the timer runs.
-#define AUX_TIMER01_T0TARGET_VALUE_W                                        16
-#define AUX_TIMER01_T0TARGET_VALUE_M                                0x0000FFFF
-#define AUX_TIMER01_T0TARGET_VALUE_S                                         0
+#define AUX_TIMER01_T0TARGET_VALUE_W 16
+#define AUX_TIMER01_T0TARGET_VALUE_M 0x0000FFFF
+#define AUX_TIMER01_T0TARGET_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -333,9 +333,9 @@
 // Field:  [15:0] VALUE
 //
 // Timer 0 counter value.
-#define AUX_TIMER01_T0CNTR_VALUE_W                                          16
-#define AUX_TIMER01_T0CNTR_VALUE_M                                  0x0000FFFF
-#define AUX_TIMER01_T0CNTR_VALUE_S                                           0
+#define AUX_TIMER01_T0CNTR_VALUE_W 16
+#define AUX_TIMER01_T0CNTR_VALUE_M 0x0000FFFF
+#define AUX_TIMER01_T0CNTR_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -348,12 +348,12 @@
 // ENUMs:
 // FALL                     Count on falling edges of TICK_SRC.
 // RISE                     Count on rising edges of TICK_SRC.
-#define AUX_TIMER01_T1CFG_TICK_SRC_POL                              0x00004000
-#define AUX_TIMER01_T1CFG_TICK_SRC_POL_BITN                                 14
-#define AUX_TIMER01_T1CFG_TICK_SRC_POL_M                            0x00004000
-#define AUX_TIMER01_T1CFG_TICK_SRC_POL_S                                    14
-#define AUX_TIMER01_T1CFG_TICK_SRC_POL_FALL                         0x00004000
-#define AUX_TIMER01_T1CFG_TICK_SRC_POL_RISE                         0x00000000
+#define AUX_TIMER01_T1CFG_TICK_SRC_POL 0x00004000
+#define AUX_TIMER01_T1CFG_TICK_SRC_POL_BITN 14
+#define AUX_TIMER01_T1CFG_TICK_SRC_POL_M 0x00004000
+#define AUX_TIMER01_T1CFG_TICK_SRC_POL_S 14
+#define AUX_TIMER01_T1CFG_TICK_SRC_POL_FALL 0x00004000
+#define AUX_TIMER01_T1CFG_TICK_SRC_POL_RISE 0x00000000
 
 // Field:  [13:8] TICK_SRC
 //
@@ -423,73 +423,73 @@
 // AUXIO2                   AUX_EVCTL:EVSTAT0.AUXIO2
 // AUXIO1                   AUX_EVCTL:EVSTAT0.AUXIO1
 // AUXIO0                   AUX_EVCTL:EVSTAT0.AUXIO0
-#define AUX_TIMER01_T1CFG_TICK_SRC_W                                         6
-#define AUX_TIMER01_T1CFG_TICK_SRC_M                                0x00003F00
-#define AUX_TIMER01_T1CFG_TICK_SRC_S                                         8
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_CLKSW_RDY             0x00003F00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_DAC_HOLD_ACTIVE              0x00003E00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_SMPH_AUTOTAKE_DONE           0x00003D00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ADC_FIFO_NOT_EMPTY           0x00003C00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ADC_FIFO_ALMOST_FULL         0x00003B00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ADC_IRQ                      0x00003A00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ADC_DONE                     0x00003900
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ISRC_RESET_N                 0x00003800
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TDC_DONE                     0x00003700
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER0_EV                    0x00003600
-#define AUX_TIMER01_T1CFG_TICK_SRC_NO_EVENT                         0x00003500
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_PULSE                 0x00003400
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_EV3                   0x00003300
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_EV2                   0x00003200
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_EV1                   0x00003100
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_EV0                   0x00003000
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_COMPB                        0x00002F00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_COMPA                        0x00002E00
-#define AUX_TIMER01_T1CFG_TICK_SRC_MCU_OBSMUX1                      0x00002D00
-#define AUX_TIMER01_T1CFG_TICK_SRC_MCU_OBSMUX0                      0x00002C00
-#define AUX_TIMER01_T1CFG_TICK_SRC_MCU_EV                           0x00002B00
-#define AUX_TIMER01_T1CFG_TICK_SRC_ACLK_REF                         0x00002A00
-#define AUX_TIMER01_T1CFG_TICK_SRC_VDDR_RECHARGE                    0x00002900
-#define AUX_TIMER01_T1CFG_TICK_SRC_MCU_ACTIVE                       0x00002800
-#define AUX_TIMER01_T1CFG_TICK_SRC_PWR_DWN                          0x00002700
-#define AUX_TIMER01_T1CFG_TICK_SRC_SCLK_LF                          0x00002600
-#define AUX_TIMER01_T1CFG_TICK_SRC_AON_BATMON_TEMP_UPD              0x00002500
-#define AUX_TIMER01_T1CFG_TICK_SRC_AON_BATMON_BAT_UPD               0x00002400
-#define AUX_TIMER01_T1CFG_TICK_SRC_AON_RTC_4KHZ                     0x00002300
-#define AUX_TIMER01_T1CFG_TICK_SRC_AON_RTC_CH2_DLY                  0x00002200
-#define AUX_TIMER01_T1CFG_TICK_SRC_AON_RTC_CH2                      0x00002100
-#define AUX_TIMER01_T1CFG_TICK_SRC_MANUAL_EV                        0x00002000
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO31                          0x00001F00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO30                          0x00001E00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO29                          0x00001D00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO28                          0x00001C00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO27                          0x00001B00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO26                          0x00001A00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO25                          0x00001900
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO24                          0x00001800
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO23                          0x00001700
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO22                          0x00001600
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO21                          0x00001500
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO20                          0x00001400
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO19                          0x00001300
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO18                          0x00001200
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO17                          0x00001100
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO16                          0x00001000
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO15                          0x00000F00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO14                          0x00000E00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO13                          0x00000D00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO12                          0x00000C00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO11                          0x00000B00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO10                          0x00000A00
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO9                           0x00000900
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO8                           0x00000800
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO7                           0x00000700
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO6                           0x00000600
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO5                           0x00000500
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO4                           0x00000400
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO3                           0x00000300
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO2                           0x00000200
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO1                           0x00000100
-#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO0                           0x00000000
+#define AUX_TIMER01_T1CFG_TICK_SRC_W 6
+#define AUX_TIMER01_T1CFG_TICK_SRC_M 0x00003F00
+#define AUX_TIMER01_T1CFG_TICK_SRC_S 8
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_CLKSW_RDY 0x00003F00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_DAC_HOLD_ACTIVE 0x00003E00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_SMPH_AUTOTAKE_DONE 0x00003D00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ADC_FIFO_NOT_EMPTY 0x00003C00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ADC_FIFO_ALMOST_FULL 0x00003B00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ADC_IRQ 0x00003A00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ADC_DONE 0x00003900
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_ISRC_RESET_N 0x00003800
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TDC_DONE 0x00003700
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER0_EV 0x00003600
+#define AUX_TIMER01_T1CFG_TICK_SRC_NO_EVENT 0x00003500
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_PULSE 0x00003400
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_EV3 0x00003300
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_EV2 0x00003200
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_EV1 0x00003100
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_TIMER2_EV0 0x00003000
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_COMPB 0x00002F00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUX_COMPA 0x00002E00
+#define AUX_TIMER01_T1CFG_TICK_SRC_MCU_OBSMUX1 0x00002D00
+#define AUX_TIMER01_T1CFG_TICK_SRC_MCU_OBSMUX0 0x00002C00
+#define AUX_TIMER01_T1CFG_TICK_SRC_MCU_EV 0x00002B00
+#define AUX_TIMER01_T1CFG_TICK_SRC_ACLK_REF 0x00002A00
+#define AUX_TIMER01_T1CFG_TICK_SRC_VDDR_RECHARGE 0x00002900
+#define AUX_TIMER01_T1CFG_TICK_SRC_MCU_ACTIVE 0x00002800
+#define AUX_TIMER01_T1CFG_TICK_SRC_PWR_DWN 0x00002700
+#define AUX_TIMER01_T1CFG_TICK_SRC_SCLK_LF 0x00002600
+#define AUX_TIMER01_T1CFG_TICK_SRC_AON_BATMON_TEMP_UPD 0x00002500
+#define AUX_TIMER01_T1CFG_TICK_SRC_AON_BATMON_BAT_UPD 0x00002400
+#define AUX_TIMER01_T1CFG_TICK_SRC_AON_RTC_4KHZ 0x00002300
+#define AUX_TIMER01_T1CFG_TICK_SRC_AON_RTC_CH2_DLY 0x00002200
+#define AUX_TIMER01_T1CFG_TICK_SRC_AON_RTC_CH2 0x00002100
+#define AUX_TIMER01_T1CFG_TICK_SRC_MANUAL_EV 0x00002000
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO31 0x00001F00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO30 0x00001E00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO29 0x00001D00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO28 0x00001C00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO27 0x00001B00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO26 0x00001A00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO25 0x00001900
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO24 0x00001800
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO23 0x00001700
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO22 0x00001600
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO21 0x00001500
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO20 0x00001400
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO19 0x00001300
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO18 0x00001200
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO17 0x00001100
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO16 0x00001000
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO15 0x00000F00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO14 0x00000E00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO13 0x00000D00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO12 0x00000C00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO11 0x00000B00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO10 0x00000A00
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO9 0x00000900
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO8 0x00000800
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO7 0x00000700
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO6 0x00000600
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO5 0x00000500
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO4 0x00000400
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO3 0x00000300
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO2 0x00000200
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO1 0x00000100
+#define AUX_TIMER01_T1CFG_TICK_SRC_AUXIO0 0x00000000
 
 // Field:   [7:4] PRE
 //
@@ -500,9 +500,9 @@
 // 0x2: Divide by 4.
 // ...
 // 0xF: Divide by 32,768.
-#define AUX_TIMER01_T1CFG_PRE_W                                              4
-#define AUX_TIMER01_T1CFG_PRE_M                                     0x000000F0
-#define AUX_TIMER01_T1CFG_PRE_S                                              4
+#define AUX_TIMER01_T1CFG_PRE_W 4
+#define AUX_TIMER01_T1CFG_PRE_M 0x000000F0
+#define AUX_TIMER01_T1CFG_PRE_S 4
 
 // Field:     [1] MODE
 //
@@ -514,12 +514,12 @@
 // CLK                      Use clock as source for prescaler. Note that
 //                          AUX_SYSIF:PEROPRATE.TIMER01_OP_RATE sets the
 //                          clock frequency.
-#define AUX_TIMER01_T1CFG_MODE                                      0x00000002
-#define AUX_TIMER01_T1CFG_MODE_BITN                                          1
-#define AUX_TIMER01_T1CFG_MODE_M                                    0x00000002
-#define AUX_TIMER01_T1CFG_MODE_S                                             1
-#define AUX_TIMER01_T1CFG_MODE_TICK                                 0x00000002
-#define AUX_TIMER01_T1CFG_MODE_CLK                                  0x00000000
+#define AUX_TIMER01_T1CFG_MODE 0x00000002
+#define AUX_TIMER01_T1CFG_MODE_BITN 1
+#define AUX_TIMER01_T1CFG_MODE_M 0x00000002
+#define AUX_TIMER01_T1CFG_MODE_S 1
+#define AUX_TIMER01_T1CFG_MODE_TICK 0x00000002
+#define AUX_TIMER01_T1CFG_MODE_CLK 0x00000000
 
 // Field:     [0] RELOAD
 //
@@ -536,12 +536,12 @@
 //                          T1CTL.EN becomes 0 when the counter value
 //                          becomes equal to or greater than
 //                          T1TARGET.VALUE.
-#define AUX_TIMER01_T1CFG_RELOAD                                    0x00000001
-#define AUX_TIMER01_T1CFG_RELOAD_BITN                                        0
-#define AUX_TIMER01_T1CFG_RELOAD_M                                  0x00000001
-#define AUX_TIMER01_T1CFG_RELOAD_S                                           0
-#define AUX_TIMER01_T1CFG_RELOAD_CONT                               0x00000001
-#define AUX_TIMER01_T1CFG_RELOAD_MAN                                0x00000000
+#define AUX_TIMER01_T1CFG_RELOAD 0x00000001
+#define AUX_TIMER01_T1CFG_RELOAD_BITN 0
+#define AUX_TIMER01_T1CFG_RELOAD_M 0x00000001
+#define AUX_TIMER01_T1CFG_RELOAD_S 0
+#define AUX_TIMER01_T1CFG_RELOAD_CONT 0x00000001
+#define AUX_TIMER01_T1CFG_RELOAD_MAN 0x00000000
 
 //*****************************************************************************
 //
@@ -556,10 +556,10 @@
 // 1: Enable Timer 1.
 //
 // The counter restarts from 0 when you enable Timer 1.
-#define AUX_TIMER01_T1CTL_EN                                        0x00000001
-#define AUX_TIMER01_T1CTL_EN_BITN                                            0
-#define AUX_TIMER01_T1CTL_EN_M                                      0x00000001
-#define AUX_TIMER01_T1CTL_EN_S                                               0
+#define AUX_TIMER01_T1CTL_EN 0x00000001
+#define AUX_TIMER01_T1CTL_EN_BITN 0
+#define AUX_TIMER01_T1CTL_EN_M 0x00000001
+#define AUX_TIMER01_T1CTL_EN_S 0
 
 //*****************************************************************************
 //
@@ -591,9 +591,9 @@
 //
 //
 // It is allowed to update the VALUE while the timer runs.
-#define AUX_TIMER01_T1TARGET_VALUE_W                                        16
-#define AUX_TIMER01_T1TARGET_VALUE_M                                0x0000FFFF
-#define AUX_TIMER01_T1TARGET_VALUE_S                                         0
+#define AUX_TIMER01_T1TARGET_VALUE_W 16
+#define AUX_TIMER01_T1TARGET_VALUE_M 0x0000FFFF
+#define AUX_TIMER01_T1TARGET_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -603,9 +603,8 @@
 // Field:  [15:0] VALUE
 //
 // Timer 1 counter value.
-#define AUX_TIMER01_T1CNTR_VALUE_W                                          16
-#define AUX_TIMER01_T1CNTR_VALUE_M                                  0x0000FFFF
-#define AUX_TIMER01_T1CNTR_VALUE_S                                           0
-
+#define AUX_TIMER01_T1CNTR_VALUE_W 16
+#define AUX_TIMER01_T1CNTR_VALUE_M 0x0000FFFF
+#define AUX_TIMER01_T1CNTR_VALUE_S 0
 
 #endif // __AUX_TIMER01__

@@ -96,17 +96,17 @@ void __time_critical_func(uartDmaRestart)()
 #define FLASHPTR ((uint8_t*)XIP_BASE + KNX_FLASH_OFFSET)
 
 #ifndef USE_RP2040_EEPROM_EMULATION
-    #if KNX_FLASH_SIZE % 4096
-        #error "KNX_FLASH_SIZE must be multiple of 4096"
-    #endif
+#if KNX_FLASH_SIZE % 4096
+#error "KNX_FLASH_SIZE must be multiple of 4096"
+#endif
 
-    #if KNX_FLASH_OFFSET % 4096
-        #error "KNX_FLASH_OFFSET must be multiple of 4096"
-    #endif
+#if KNX_FLASH_OFFSET % 4096
+#error "KNX_FLASH_OFFSET must be multiple of 4096"
+#endif
 #endif
 
 #ifdef KNX_IP_LAN
-    extern Wiznet5500lwIP KNX_NETIF;
+extern Wiznet5500lwIP KNX_NETIF;
 #elif defined(KNX_IP_WIFI)
 #elif defined(KNX_IP_GENERIC)
 
@@ -551,8 +551,8 @@ bool RP2040ArduinoPlatform::sendBytesUniCast(uint32_t addr, uint16_t port, uint8
     if (!port)
         port = _remotePort;
 
-    // print("sendBytesUniCast to:");
-    // println(ucastaddr.toString().c_str());
+        // print("sendBytesUniCast to:");
+        // println(ucastaddr.toString().c_str());
 
 #ifdef KNX_IP_GENERIC
 

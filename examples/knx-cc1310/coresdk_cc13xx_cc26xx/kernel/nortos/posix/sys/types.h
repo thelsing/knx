@@ -43,7 +43,6 @@ extern "C" {
 #include <stddef.h>
 #include <stdint.h>
 
-
 #if !defined(__GNUC__) || defined(__ti__)
 /*
  *  ssize_t is a signed size_t.  It is the return type for mqueue

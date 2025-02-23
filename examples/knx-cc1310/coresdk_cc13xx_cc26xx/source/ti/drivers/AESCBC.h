@@ -328,7 +328,7 @@ extern "C" {
  * #define AESCBCXYZ_STATUS_ERROR2    AESCBC_STATUS_RESERVED - 2
  * @endcode
  */
-#define AESCBC_STATUS_RESERVED        (-32)
+#define AESCBC_STATUS_RESERVED (-32)
 
 /*!
  * @brief   Successful status code.
@@ -336,7 +336,7 @@ extern "C" {
  * Functions return #AESCBC_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define AESCBC_STATUS_SUCCESS         (0)
+#define AESCBC_STATUS_SUCCESS (0)
 
 /*!
  * @brief   Generic error status code.
@@ -344,7 +344,7 @@ extern "C" {
  * Functions return #AESCBC_STATUS_ERROR if the function was not executed
  * successfully and no more pertinent error code could be returned.
  */
-#define AESCBC_STATUS_ERROR           (-1)
+#define AESCBC_STATUS_ERROR (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -361,11 +361,10 @@ extern "C" {
  */
 #define AESCBC_STATUS_CANCELED (-3)
 
-
 /*!
  *  @brief  A handle that is returned from an #AESCBC_open() call.
  */
-typedef struct AESCBC_Config*    AESCBC_Handle;
+typedef struct AESCBC_Config* AESCBC_Handle;
 
 /*!
  * @brief   The way in which CBC function calls return after performing an
@@ -390,20 +389,20 @@ typedef struct AESCBC_Config*    AESCBC_Handle;
  */
 typedef enum
 {
-    AESCBC_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
-                                             *   CBC operation goes on in the background. The registered
-                                             *   callback function is called after the operation completes.
-                                             *   The context the callback function is called (task, HWI, SWI)
-                                             *   is implementation-dependent.
-                                             */
-    AESCBC_RETURN_BEHAVIOR_BLOCKING = 2,    /*!< The function call will block while the CBC operation goes
-                                             *   on in the background. CBC operation results are available
-                                             *   after the function returns.
-                                             */
-    AESCBC_RETURN_BEHAVIOR_POLLING  = 4,    /*!< The function call will continuously poll a flag while CBC
-                                             *   operation goes on in the background. CBC operation results
-                                             *   are available after the function returns.
-                                             */
+    AESCBC_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
+                                          *   CBC operation goes on in the background. The registered
+                                          *   callback function is called after the operation completes.
+                                          *   The context the callback function is called (task, HWI, SWI)
+                                          *   is implementation-dependent.
+                                          */
+    AESCBC_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while the CBC operation goes
+                                          *   on in the background. CBC operation results are available
+                                          *   after the function returns.
+                                          */
+    AESCBC_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while CBC
+                                          *   operation goes on in the background. CBC operation results
+                                          *   are available after the function returns.
+                                          */
 } AESCBC_ReturnBehavior;
 
 /*!
@@ -421,29 +420,29 @@ typedef enum
  */
 typedef struct
 {
-    CryptoKey*                key;                       /*!< A previously initialized CryptoKey. */
-    const uint8_t*            input;                     /*!<
-                                                         *   - Encryption: The plaintext buffer to be
-                                                         *     encrypted in the CBC operation.
-                                                         *   - Decryption: The ciphertext to be decrypted.
-                                                         */
-    uint8_t*                  output;                    /*!<
-                                                         *   - Encryption: The output ciphertext buffer that
-                                                         *     the encrypted plaintext is copied to.
-                                                         *   - Decryption: The plaintext derived from the
-                                                         *     decrypted ciphertext is copied here.
-                                                         */
-    uint8_t*                  iv;                        /*!< A buffer containing an IV. IVs must be unique to
-                                                         *   each CBC operation and may not be reused. If
-                                                         *   ivInternallyGenerated is set, the iv will be
-                                                         *   generated by this function call and copied to
-                                                         *   this buffer.
-                                                         */
-    size_t                   inputLength;                /*!< Length of the input and output in bytes. */
-    bool                     ivInternallyGenerated;      /*!< When true, the iv buffer passed into #AESCBC_oneStepEncrypt() functions
-                                                         *   will be overwritten with a randomly generated iv.
-                                                         *   Not supported by all implementations.
-                                                         */
+        CryptoKey* key;             /*!< A previously initialized CryptoKey. */
+        const uint8_t* input;       /*!<
+                                     *   - Encryption: The plaintext buffer to be
+                                     *     encrypted in the CBC operation.
+                                     *   - Decryption: The ciphertext to be decrypted.
+                                     */
+        uint8_t* output;            /*!<
+                                     *   - Encryption: The output ciphertext buffer that
+                                     *     the encrypted plaintext is copied to.
+                                     *   - Decryption: The plaintext derived from the
+                                     *     decrypted ciphertext is copied here.
+                                     */
+        uint8_t* iv;                /*!< A buffer containing an IV. IVs must be unique to
+                                     *   each CBC operation and may not be reused. If
+                                     *   ivInternallyGenerated is set, the iv will be
+                                     *   generated by this function call and copied to
+                                     *   this buffer.
+                                     */
+        size_t inputLength;         /*!< Length of the input and output in bytes. */
+        bool ivInternallyGenerated; /*!< When true, the iv buffer passed into #AESCBC_oneStepEncrypt() functions
+                                     *   will be overwritten with a randomly generated iv.
+                                     *   Not supported by all implementations.
+                                     */
 } AESCBC_Operation;
 
 /*!
@@ -468,11 +467,11 @@ typedef enum
  */
 typedef struct AESCBC_Config
 {
-    /*! Pointer to a driver specific data object */
-    void*               object;
+        /*! Pointer to a driver specific data object */
+        void* object;
 
-    /*! Pointer to a driver specific hardware attributes structure */
-    void         const* hwAttrs;
+        /*! Pointer to a driver specific hardware attributes structure */
+        void const* hwAttrs;
 } AESCBC_Config;
 
 /*!
@@ -490,10 +489,10 @@ typedef struct AESCBC_Config
  *  @param  operationType This parameter determines which operation the
  *          callback refers to.
  */
-typedef void (*AESCBC_CallbackFxn) (AESCBC_Handle handle,
-                                    int_fast16_t returnValue,
-                                    AESCBC_Operation* operation,
-                                    AESCBC_OperationType operationType);
+typedef void (*AESCBC_CallbackFxn)(AESCBC_Handle handle,
+                                   int_fast16_t returnValue,
+                                   AESCBC_Operation* operation,
+                                   AESCBC_OperationType operationType);
 
 /*!
  *  @brief  CBC Parameters
@@ -505,14 +504,14 @@ typedef void (*AESCBC_CallbackFxn) (AESCBC_Handle handle,
  */
 typedef struct
 {
-    AESCBC_ReturnBehavior   returnBehavior;             /*!< Blocking, callback, or polling return behavior */
-    AESCBC_CallbackFxn      callbackFxn;                /*!< Callback function pointer */
-    uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
-                                                         *   ::AESCBC_RETURN_BEHAVIOR_BLOCKING
-                                                         */
-    void*                   custom;                     /*!< Custom argument used by driver
-                                                         *   implementation
-                                                         */
+        AESCBC_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
+        AESCBC_CallbackFxn callbackFxn;       /*!< Callback function pointer */
+        uint32_t timeout;                     /*!< Timeout before the driver returns an error in
+                                               *   ::AESCBC_RETURN_BEHAVIOR_BLOCKING
+                                               */
+        void* custom;                         /*!< Custom argument used by driver
+                                               *   implementation
+                                               */
 } AESCBC_Params;
 
 /*!

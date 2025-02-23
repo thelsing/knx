@@ -4,9 +4,9 @@
 #if MASK_VERSION == 0x07B0
 
 #include "bau_systemB_device.h"
-#include "tpuart_data_link_layer.h"
 #include "cemi_server.h"
 #include "cemi_server_object.h"
+#include "tpuart_data_link_layer.h"
 
 class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks, public DataLinkLayerCallbacks
 {
@@ -17,6 +17,7 @@ class Bau07B0 : public BauSystemBDevice, public ITpUartCallBacks, public DataLin
         void enabled(bool value) override;
 
         TpUartDataLinkLayer* getDataLinkLayer();
+
     protected:
         InterfaceObject* getInterfaceObject(uint8_t idx);
         InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);

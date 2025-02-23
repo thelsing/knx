@@ -3,8 +3,11 @@
 #include "config.h"
 #ifdef USE_RF
 
-#include <stdint.h>
 #include "data_link_layer.h"
+#include <stdint.h>
+
+#include "rf_physical_layer_cc1101.h"
+#include "rf_physical_layer_cc1310.h"
 
 #define MAX_KNX_TELEGRAM_SIZE 263
 
@@ -39,15 +42,15 @@ class RfDataLinkLayer : public DataLinkLayer
 
         struct _tx_queue_frame_t
         {
-            uint8_t* data;
-            uint16_t length;
-            _tx_queue_frame_t* next;
+                uint8_t* data;
+                uint16_t length;
+                _tx_queue_frame_t* next;
         };
 
         struct _tx_queue_t
         {
-            _tx_queue_frame_t* front = NULL;
-            _tx_queue_frame_t* back = NULL;
+                _tx_queue_frame_t* front = NULL;
+                _tx_queue_frame_t* back = NULL;
         } _tx_queue;
 
         RfMediumObject& _rfMediumObj;

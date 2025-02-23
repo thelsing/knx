@@ -1,8 +1,8 @@
 #pragma once
 
-#include "knx_ip_frame.h"
-#include "knx_ip_cri.h"
 #include "ip_host_protocol_address_information.h"
+#include "knx_ip_cri.h"
+#include "knx_ip_frame.h"
 #ifdef USE_IP
 class KnxIpConnectRequest : public KnxIpFrame
 {
@@ -11,6 +11,7 @@ class KnxIpConnectRequest : public KnxIpFrame
         IpHostProtocolAddressInformation& hpaiCtrl();
         IpHostProtocolAddressInformation& hpaiData();
         KnxIpCRI& cri();
+
     private:
         IpHostProtocolAddressInformation _hpaiCtrl;
         IpHostProtocolAddressInformation _hpaiData;

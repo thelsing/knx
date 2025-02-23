@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       aon_rtc.h
-*  Revised:        2017-08-16 15:13:43 +0200 (Wed, 16 Aug 2017)
-*  Revision:       49593
-*
-*  Description:    Defines and prototypes for the AON RTC
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       aon_rtc.h
+ *  Revised:        2017-08-16 15:13:43 +0200 (Wed, 16 Aug 2017)
+ *  Revision:       49593
+ *
+ *  Description:    Defines and prototypes for the AON RTC
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,16 +55,15 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
+#include "../inc/hw_aon_rtc.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
+#include "debug.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include "../inc/hw_types.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_aon_rtc.h"
-#include "debug.h"
 
 //*****************************************************************************
 //
@@ -80,8 +79,8 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define AONRTCCurrentCompareValueGet    NOROM_AONRTCCurrentCompareValueGet
-#define AONRTCCurrent64BitValueGet      NOROM_AONRTCCurrent64BitValueGet
+#define AONRTCCurrentCompareValueGet NOROM_AONRTCCurrentCompareValueGet
+#define AONRTCCurrent64BitValueGet NOROM_AONRTCCurrent64BitValueGet
 #endif
 
 //*****************************************************************************
@@ -90,11 +89,11 @@ extern "C"
 // parameter.
 //
 //*****************************************************************************
-#define AON_RTC_CH_NONE            0x0 // RTC No channel
-#define AON_RTC_CH0                0x1 // RTC Channel 0
-#define AON_RTC_CH1                0x2 // RTC Channel 1
-#define AON_RTC_CH2                0x4 // RTC Channel 2
-#define AON_RTC_ACTIVE             0x8 // RTC Active
+#define AON_RTC_CH_NONE 0x0 // RTC No channel
+#define AON_RTC_CH0 0x1     // RTC Channel 0
+#define AON_RTC_CH1 0x2     // RTC Channel 1
+#define AON_RTC_CH2 0x4     // RTC Channel 2
+#define AON_RTC_ACTIVE 0x8  // RTC Active
 
 //*****************************************************************************
 //
@@ -102,19 +101,19 @@ extern "C"
 //
 //*****************************************************************************
 #define AON_RTC_CONFIG_DELAY_NODELAY 0 // NO DELAY
-#define AON_RTC_CONFIG_DELAY_1       1 // Delay of   1 clk cycle
-#define AON_RTC_CONFIG_DELAY_2       2 // Delay of   2 clk cycles
-#define AON_RTC_CONFIG_DELAY_4       3 // Delay of   4 clk cycles
-#define AON_RTC_CONFIG_DELAY_8       4 // Delay of   8 clk cycles
-#define AON_RTC_CONFIG_DELAY_16      5 // Delay of  16 clk cycles
-#define AON_RTC_CONFIG_DELAY_32      6 // Delay of  32 clk cycles
-#define AON_RTC_CONFIG_DELAY_48      7 // Delay of  48 clk cycles
-#define AON_RTC_CONFIG_DELAY_64      8 // Delay of  64 clk cycles
-#define AON_RTC_CONFIG_DELAY_80      9 // Delay of  80 clk cycles
-#define AON_RTC_CONFIG_DELAY_96     10 // Delay of  96 clk cycles
-#define AON_RTC_CONFIG_DELAY_112    11 // Delay of 112 clk cycles
-#define AON_RTC_CONFIG_DELAY_128    12 // Delay of 128 clk cycles
-#define AON_RTC_CONFIG_DELAY_144    13 // Delay of 144 clk cycles
+#define AON_RTC_CONFIG_DELAY_1 1       // Delay of   1 clk cycle
+#define AON_RTC_CONFIG_DELAY_2 2       // Delay of   2 clk cycles
+#define AON_RTC_CONFIG_DELAY_4 3       // Delay of   4 clk cycles
+#define AON_RTC_CONFIG_DELAY_8 4       // Delay of   8 clk cycles
+#define AON_RTC_CONFIG_DELAY_16 5      // Delay of  16 clk cycles
+#define AON_RTC_CONFIG_DELAY_32 6      // Delay of  32 clk cycles
+#define AON_RTC_CONFIG_DELAY_48 7      // Delay of  48 clk cycles
+#define AON_RTC_CONFIG_DELAY_64 8      // Delay of  64 clk cycles
+#define AON_RTC_CONFIG_DELAY_80 9      // Delay of  80 clk cycles
+#define AON_RTC_CONFIG_DELAY_96 10     // Delay of  96 clk cycles
+#define AON_RTC_CONFIG_DELAY_112 11    // Delay of 112 clk cycles
+#define AON_RTC_CONFIG_DELAY_128 12    // Delay of 128 clk cycles
+#define AON_RTC_CONFIG_DELAY_144 13    // Delay of 144 clk cycles
 
 //*****************************************************************************
 //
@@ -122,8 +121,8 @@ extern "C"
 // parameter.
 //
 //*****************************************************************************
-#define AON_RTC_MODE_CH1_CAPTURE     1 // Capture mode
-#define AON_RTC_MODE_CH1_COMPARE     0 // Compare Mode
+#define AON_RTC_MODE_CH1_CAPTURE 1 // Capture mode
+#define AON_RTC_MODE_CH1_COMPARE 0 // Compare Mode
 
 //*****************************************************************************
 //
@@ -131,7 +130,7 @@ extern "C"
 // parameter.
 //
 //*****************************************************************************
-#define AON_RTC_MODE_CH2_CONTINUOUS    1 // Continuous mode
+#define AON_RTC_MODE_CH2_CONTINUOUS 1    // Continuous mode
 #define AON_RTC_MODE_CH2_NORMALCOMPARE 0 // Normal compare mode
 
 //*****************************************************************************
@@ -148,7 +147,7 @@ extern "C"
 //   ( 4 * FACTOR_SEC_TO_COMP_VAL_FORMAT )
 //
 //*****************************************************************************
-#define FACTOR_SEC_TO_COMP_VAL_FORMAT   0x00010000
+#define FACTOR_SEC_TO_COMP_VAL_FORMAT 0x00010000
 
 //*****************************************************************************
 //
@@ -306,8 +305,7 @@ AONRTCDelayConfig(uint32_t ui32Delay)
     // Check the arguments.
     ASSERT(ui32Delay <= AON_RTC_CONFIG_DELAY_144);
 
-
-    ui32Cfg =  HWREG(AON_RTC_BASE + AON_RTC_O_CTL);
+    ui32Cfg = HWREG(AON_RTC_BASE + AON_RTC_O_CTL);
     ui32Cfg &= ~(AON_RTC_CTL_EV_DELAY_M);
     ui32Cfg |= (ui32Delay << AON_RTC_CTL_EV_DELAY_S);
 
@@ -339,10 +337,10 @@ AONRTCCombinedEventConfig(uint32_t ui32Channels)
     uint32_t ui32Cfg;
 
     // Check the arguments.
-    ASSERT( (ui32Channels & (AON_RTC_CH0 | AON_RTC_CH1 | AON_RTC_CH2)) ||
-            (ui32Channels == AON_RTC_CH_NONE) );
+    ASSERT((ui32Channels & (AON_RTC_CH0 | AON_RTC_CH1 | AON_RTC_CH2)) ||
+           (ui32Channels == AON_RTC_CH_NONE));
 
-    ui32Cfg =  HWREG(AON_RTC_BASE + AON_RTC_O_CTL);
+    ui32Cfg = HWREG(AON_RTC_BASE + AON_RTC_O_CTL);
     ui32Cfg &= ~(AON_RTC_CTL_COMB_EV_MASK_M);
     ui32Cfg |= (ui32Channels << AON_RTC_CTL_COMB_EV_MASK_S);
 
@@ -907,12 +905,12 @@ AONRTCCaptureValueCh1Get(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_AONRTCCurrentCompareValueGet
-#undef  AONRTCCurrentCompareValueGet
-#define AONRTCCurrentCompareValueGet    ROM_AONRTCCurrentCompareValueGet
+#undef AONRTCCurrentCompareValueGet
+#define AONRTCCurrentCompareValueGet ROM_AONRTCCurrentCompareValueGet
 #endif
 #ifdef ROM_AONRTCCurrent64BitValueGet
-#undef  AONRTCCurrent64BitValueGet
-#define AONRTCCurrent64BitValueGet      ROM_AONRTCCurrent64BitValueGet
+#undef AONRTCCurrent64BitValueGet
+#define AONRTCCurrent64BitValueGet ROM_AONRTCCurrent64BitValueGet
 #endif
 #endif
 

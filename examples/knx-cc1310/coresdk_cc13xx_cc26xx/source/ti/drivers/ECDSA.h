@@ -336,7 +336,6 @@
  *
  */
 
-
 #ifndef ti_drivers_ECDSA__include
 #define ti_drivers_ECDSA__include
 
@@ -363,7 +362,7 @@ extern "C" {
  * #define ECDSAXYZ_STATUS_ERROR2    ECDSA_STATUS_RESERVED - 2
  * @endcode
  */
-#define ECDSA_STATUS_RESERVED        (-32)
+#define ECDSA_STATUS_RESERVED (-32)
 
 /*!
  * @brief   Successful status code.
@@ -371,7 +370,7 @@ extern "C" {
  * Functions return ECDSA_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define ECDSA_STATUS_SUCCESS         (0)
+#define ECDSA_STATUS_SUCCESS (0)
 
 /*!
  * @brief   Generic error status code.
@@ -379,7 +378,7 @@ extern "C" {
  * Functions return ECDSA_STATUS_ERROR if the function was not executed
  * successfully.
  */
-#define ECDSA_STATUS_ERROR           (-1)
+#define ECDSA_STATUS_ERROR (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -472,20 +471,20 @@ typedef struct ECDSA_Config* ECDSA_Handle;
  */
 typedef enum
 {
-    ECDSA_RETURN_BEHAVIOR_CALLBACK = 1,     /*!< The function call will return immediately while the
-                                             *   ECDSA operation goes on in the background. The registered
-                                             *   callback function is called after the operation completes.
-                                             *   The context the callback function is called (task, HWI, SWI)
-                                             *   is implementation-dependent.
-                                             */
-    ECDSA_RETURN_BEHAVIOR_BLOCKING = 2,     /*!< The function call will block while ECDSA operation goes
-                                             *   on in the background. ECDSA operation results are available
-                                             *   after the function returns.
-                                             */
-    ECDSA_RETURN_BEHAVIOR_POLLING  = 4,     /*!< The function call will continuously poll a flag while ECDSA
-                                             *   operation goes on in the background. ECDSA operation results
-                                             *   are available after the function returns.
-                                             */
+    ECDSA_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
+                                         *   ECDSA operation goes on in the background. The registered
+                                         *   callback function is called after the operation completes.
+                                         *   The context the callback function is called (task, HWI, SWI)
+                                         *   is implementation-dependent.
+                                         */
+    ECDSA_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while ECDSA operation goes
+                                         *   on in the background. ECDSA operation results are available
+                                         *   after the function returns.
+                                         */
+    ECDSA_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while ECDSA
+                                         *   operation goes on in the background. ECDSA operation results
+                                         *   are available after the function returns.
+                                         */
 } ECDSA_ReturnBehavior;
 
 /*!
@@ -501,11 +500,11 @@ typedef enum
  */
 typedef struct ECDSA_Config
 {
-    /*! Pointer to a driver specific data object */
-    void*               object;
+        /*! Pointer to a driver specific data object */
+        void* object;
 
-    /*! Pointer to a driver specific hardware attributes structure */
-    void         const* hwAttrs;
+        /*! Pointer to a driver specific hardware attributes structure */
+        void const* hwAttrs;
 } ECDSA_Config;
 
 /*!
@@ -513,29 +512,29 @@ typedef struct ECDSA_Config
  */
 typedef struct
 {
-    const ECCParams_CurveParams*     curve;                     /*!< A pointer to the elliptic curve parameters */
-    const CryptoKey*                 myPrivateKey;              /*!< A pointer to the private ECC key that will
-                                                                 *   sign the hash of the message
-                                                                 */
-    const CryptoKey*                 pmsn;                      /*!< A pointer to a per message secret number (PMSN).
-                                                                 *   The number must be provided by the
-                                                                 *   application and be (0 < PMSN < curve order).
-                                                                 *   Must be of the same length as
-                                                                 *   other params of the curve used.
-                                                                 */
-    const uint8_t*                   hash;                      /*!< A pointer to the hash of the message.
-                                                                 *   Must be the same length as the other curve parameters.
-                                                                 */
-    uint8_t*                         r;                         /*!< A pointer to the buffer the r component of
-                                                                 *   the signature will be written to.
-                                                                 *   Must be of the same length as other
-                                                                 *   params of the curve used.
-                                                                 */
-    uint8_t*                         s;                         /*!< A pointer to the buffer the s component of
-                                                                 *   the signature will be written to.
-                                                                 *   Must be of the same length as other
-                                                                 *   params of the curve used.
-                                                                 */
+        const ECCParams_CurveParams* curve; /*!< A pointer to the elliptic curve parameters */
+        const CryptoKey* myPrivateKey;      /*!< A pointer to the private ECC key that will
+                                             *   sign the hash of the message
+                                             */
+        const CryptoKey* pmsn;              /*!< A pointer to a per message secret number (PMSN).
+                                             *   The number must be provided by the
+                                             *   application and be (0 < PMSN < curve order).
+                                             *   Must be of the same length as
+                                             *   other params of the curve used.
+                                             */
+        const uint8_t* hash;                /*!< A pointer to the hash of the message.
+                                             *   Must be the same length as the other curve parameters.
+                                             */
+        uint8_t* r;                         /*!< A pointer to the buffer the r component of
+                                             *   the signature will be written to.
+                                             *   Must be of the same length as other
+                                             *   params of the curve used.
+                                             */
+        uint8_t* s;                         /*!< A pointer to the buffer the s component of
+                                             *   the signature will be written to.
+                                             *   Must be of the same length as other
+                                             *   params of the curve used.
+                                             */
 } ECDSA_OperationSign;
 
 /*!
@@ -543,21 +542,21 @@ typedef struct
  */
 typedef struct
 {
-    const ECCParams_CurveParams*     curve;             /*!< A pointer to the elliptic curve parameters */
-    const CryptoKey*                 theirPublicKey;    /*!< A pointer to the public key of the party
-                                                         *   that signed the hash of the message
-                                                         */
-    const uint8_t*                   hash;              /*!< A pointer to the hash of the message.
-                                                         *   Must be the same length as the other curve parameters.
-                                                         */
-    const uint8_t*                   r;                 /*!< A pointer to the r component of the received
-                                                         *   signature. Must be of the same length
-                                                         *   as other params of the curve used.
-                                                         */
-    const uint8_t*                   s;                 /*!< A pointer to the s component of the received
-                                                         *   signature. Must be of the same length
-                                                         *   as other params of the curve used.
-                                                         */
+        const ECCParams_CurveParams* curve; /*!< A pointer to the elliptic curve parameters */
+        const CryptoKey* theirPublicKey;    /*!< A pointer to the public key of the party
+                                             *   that signed the hash of the message
+                                             */
+        const uint8_t* hash;                /*!< A pointer to the hash of the message.
+                                             *   Must be the same length as the other curve parameters.
+                                             */
+        const uint8_t* r;                   /*!< A pointer to the r component of the received
+                                             *   signature. Must be of the same length
+                                             *   as other params of the curve used.
+                                             */
+        const uint8_t* s;                   /*!< A pointer to the s component of the received
+                                             *   signature. Must be of the same length
+                                             *   as other params of the curve used.
+                                             */
 } ECDSA_OperationVerify;
 
 /*!
@@ -565,8 +564,8 @@ typedef struct
  */
 typedef union
 {
-    ECDSA_OperationSign*     sign;      /*!< A pointer to an ECDSA_OperationSign struct */
-    ECDSA_OperationVerify*   verify;    /*!< A pointer to an ECDSA_OperationVerify struct */
+        ECDSA_OperationSign* sign;     /*!< A pointer to an ECDSA_OperationSign struct */
+        ECDSA_OperationVerify* verify; /*!< A pointer to an ECDSA_OperationVerify struct */
 } ECDSA_Operation;
 
 /*!
@@ -596,10 +595,10 @@ typedef enum
  *  @param  operationType This parameter determined which operation the
  *          callback refers to and which type to access through /c operation.
  */
-typedef void (*ECDSA_CallbackFxn) (ECDSA_Handle handle,
-                                   int_fast16_t returnStatus,
-                                   ECDSA_Operation operation,
-                                   ECDSA_OperationType operationType);
+typedef void (*ECDSA_CallbackFxn)(ECDSA_Handle handle,
+                                  int_fast16_t returnStatus,
+                                  ECDSA_Operation operation,
+                                  ECDSA_OperationType operationType);
 
 /*!
  *  @brief  ECDSA Parameters
@@ -611,14 +610,14 @@ typedef void (*ECDSA_CallbackFxn) (ECDSA_Handle handle,
  */
 typedef struct
 {
-    ECDSA_ReturnBehavior    returnBehavior;             /*!< Blocking, callback, or polling return behavior */
-    ECDSA_CallbackFxn       callbackFxn;                /*!< Callback function pointer */
-    uint32_t                timeout;                    /*!< Timeout in system ticks before the operation fails
-                                                         *   and returns
-                                                         */
-    void*                   custom;                     /*!< Custom argument used by driver
-                                                         *   implementation
-                                                         */
+        ECDSA_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
+        ECDSA_CallbackFxn callbackFxn;       /*!< Callback function pointer */
+        uint32_t timeout;                    /*!< Timeout in system ticks before the operation fails
+                                              *   and returns
+                                              */
+        void* custom;                        /*!< Custom argument used by driver
+                                              *   implementation
+                                              */
 } ECDSA_Params;
 
 /*!

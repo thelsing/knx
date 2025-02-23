@@ -39,7 +39,7 @@
 
 /* compiler vendor check */
 #ifndef __IAR_SYSTEMS_ICC__
-    #error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
+#error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
 #endif
 
 #include <stddef.h>
@@ -47,12 +47,12 @@
 
 /* include compiler time.h */
 #if defined(__430_CORE__) || defined(__430X_CORE__)
-    #include <../inc/dlib/c/time.h>
+#include <../inc/dlib/c/time.h>
 #else
 
-    /* disable IAR inline definition of time() */
-    #define _NO_DEFINITIONS_IN_HEADER_FILES 1
-    #include <../inc/c/time.h>
+/* disable IAR inline definition of time() */
+#define _NO_DEFINITIONS_IN_HEADER_FILES 1
+#include <../inc/c/time.h>
 #endif
 
 #include "signal.h"
@@ -90,8 +90,8 @@ extern "C" {
 
 struct itimerspec
 {
-    struct timespec it_interval;  /* Timer interval */
-    struct timespec it_value;     /* Timer expiration */
+        struct timespec it_interval; /* Timer interval */
+        struct timespec it_value;    /* Timer expiration */
 };
 
 /*

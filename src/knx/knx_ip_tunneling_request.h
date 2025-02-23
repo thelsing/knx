@@ -1,8 +1,8 @@
 #pragma once
 
-#include "knx_ip_frame.h"
 #include "cemi_frame.h"
 #include "knx_ip_ch.h"
+#include "knx_ip_frame.h"
 #ifdef USE_IP
 
 class KnxIpTunnelingRequest : public KnxIpFrame
@@ -12,6 +12,7 @@ class KnxIpTunnelingRequest : public KnxIpFrame
         KnxIpTunnelingRequest(CemiFrame frame);
         CemiFrame& frame();
         KnxIpCH& connectionHeader();
+
     private:
         CemiFrame _frame;
         KnxIpCH _ch;

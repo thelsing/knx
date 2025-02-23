@@ -66,16 +66,16 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #ifndef DebugP_ASSERT_ENABLED
 #define DebugP_ASSERT_ENABLED 0
 #endif
 
 #ifndef DebugP_LOG_ENABLED
-#define DebugP_LOG_ENABLED    0
+#define DebugP_LOG_ENABLED 0
 #endif
 
 #if DebugP_ASSERT_ENABLED
@@ -89,8 +89,8 @@ extern void _DebugP_assert(int expression, const char* file, int line);
  *
  *  @param  expression Expression to evaluate
  */
-#define DebugP_assert(expression) (_DebugP_assert(expression,      \
-                                   __FILE__, __LINE__))
+#define DebugP_assert(expression) (_DebugP_assert(expression, \
+                                                  __FILE__, __LINE__))
 #else
 #define DebugP_assert(expression)
 #endif

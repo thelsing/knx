@@ -2,15 +2,15 @@
 
 #include "config.h"
 
-#include <stdint.h>
 #include "device_object.h"
 #include "knx_types.h"
 #include "network_layer_entity.h"
+#include <stdint.h>
 #ifdef KNX_TUNNELING
-    #include "ip_parameter_object.h"
+#include "ip_parameter_object.h"
 #endif
-#include "cemi_server.h"
 #include "bau.h"
+#include "cemi_server.h"
 
 class Platform;
 
@@ -20,6 +20,7 @@ class DataLinkLayerCallbacks
 {
     protected:
         ActivityCallback _activityCallback = nullptr;
+
     public:
         virtual ~DataLinkLayerCallbacks() = default;
         virtual void activity(uint8_t info);

@@ -696,10 +696,10 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include <ti/drivers/SPI.h>
-#include <ti/drivers/pin/PINCC26XX.h>
-#include <ti/drivers/dma/UDMACC26XX.h>
 #include <ti/drivers/Power.h>
+#include <ti/drivers/SPI.h>
+#include <ti/drivers/dma/UDMACC26XX.h>
+#include <ti/drivers/pin/PINCC26XX.h>
 #include <ti/drivers/power/PowerCC26XX.h>
 
 #include <ti/drivers/dpl/HwiP.h>
@@ -737,7 +737,7 @@ extern "C" {
  * reception is inactive for a given 32-bit period.  With this command @b arg
  * is @a don't @a care and it returns #SPI_STATUS_SUCCESS.
  */
-#define SPICC26X2DMA_CMD_RETURN_PARTIAL_ENABLE  (SPI_CMD_RESERVED + 0)
+#define SPICC26X2DMA_CMD_RETURN_PARTIAL_ENABLE (SPI_CMD_RESERVED + 0)
 
 /*!
  * @brief Command used by SPI_control() to disable partial return
@@ -755,7 +755,7 @@ extern "C" {
  * With this command @b arg is of type @c PIN_Id and it return
  * #SPI_STATUS_SUCCESS
  */
-#define SPICC26X2DMA_CMD_SET_CSN_PIN            (SPI_CMD_RESERVED + 2)
+#define SPICC26X2DMA_CMD_SET_CSN_PIN (SPI_CMD_RESERVED + 2)
 
 /*!
  * @brief Command used by SPI_control() to enable manual start mode
@@ -770,7 +770,7 @@ extern "C" {
  *
  * Returns #SPI_STATUS_SUCCESS or #SPI_STATUS_ERROR.
  */
-#define SPICC26X2DMA_CMD_SET_MANUAL             (SPI_CMD_RESERVED + 3)
+#define SPICC26X2DMA_CMD_SET_MANUAL (SPI_CMD_RESERVED + 3)
 
 /*!
  * @brief Command used by SPI_control() to disable manual start mode
@@ -781,7 +781,7 @@ extern "C" {
  * Returns #SPI_STATUS_SUCCESS or #SPI_STATUS_ERROR.
  *
  */
-#define SPICC26X2DMA_CMD_CLR_MANUAL             (SPI_CMD_RESERVED + 4)
+#define SPICC26X2DMA_CMD_CLR_MANUAL (SPI_CMD_RESERVED + 4)
 
 /*!
  * @brief Command used by SPI_control() to enable manual start mode
@@ -793,14 +793,14 @@ extern "C" {
  *
  * Returns #SPI_STATUS_SUCCESS or #SPI_STATUS_ERROR.
  */
-#define SPICC26X2DMA_CMD_MANUAL_START           (SPI_CMD_RESERVED + 5)
+#define SPICC26X2DMA_CMD_MANUAL_START (SPI_CMD_RESERVED + 5)
 
 /** @}*/
 
 /* BACKWARDS COMPATIBILITY */
-#define SPICC26X2DMA_RETURN_PARTIAL_ENABLE      SPICC26X2DMA_CMD_RETURN_PARTIAL_ENABLE
-#define SPICC26X2DMA_RETURN_PARTIAL_DISABLE     SPICC26X2DMA_CMD_RETURN_PARTIAL_DISABLE
-#define SPICC26X2DMA_SET_CSN_PIN                SPICC26X2DMA_CMD_SET_CSN_PIN
+#define SPICC26X2DMA_RETURN_PARTIAL_ENABLE SPICC26X2DMA_CMD_RETURN_PARTIAL_ENABLE
+#define SPICC26X2DMA_RETURN_PARTIAL_DISABLE SPICC26X2DMA_CMD_RETURN_PARTIAL_DISABLE
+#define SPICC26X2DMA_SET_CSN_PIN SPICC26X2DMA_CMD_SET_CSN_PIN
 /* END BACKWARDS COMPATIBILITY */
 
 /*!
@@ -821,7 +821,7 @@ extern const SPI_FxnTable SPICC26X2DMA_fxnTable;
  */
 typedef enum SPICC26X2DMA_FrameSize
 {
-    SPICC26X2DMA_8bit  = 0,
+    SPICC26X2DMA_8bit = 0,
     SPICC26X2DMA_16bit = 1
 } SPICC26X2DMA_FrameSize;
 
@@ -834,7 +834,7 @@ typedef enum SPICC26X2DMA_FrameSize
  */
 typedef enum SPICC26X2DMA_ReturnPartial
 {
-    SPICC26X2DMA_retPartDisabled  = 0,
+    SPICC26X2DMA_retPartDisabled = 0,
     SPICC26X2DMA_retPartEnabledIntNotSet = 1,
     SPICC26X2DMA_retPartEnabledIntSet = 2
 } SPICC26X2DMA_ReturnPartial;
@@ -895,51 +895,51 @@ typedef enum SPICC26X2DMA_ReturnPartial
  */
 typedef struct SPICC26X2DMA_HWAttrs
 {
-    /*! @brief SPI Peripheral's base address */
-    uint32_t         baseAddr;
-    /*! SPI CC26XXDMA Peripheral's interrupt vector */
-    uint8_t          intNum;
-    /*! @brief SPI CC26XXDMA Peripheral's interrupt priority.
+        /*! @brief SPI Peripheral's base address */
+        uint32_t baseAddr;
+        /*! SPI CC26XXDMA Peripheral's interrupt vector */
+        uint8_t intNum;
+        /*! @brief SPI CC26XXDMA Peripheral's interrupt priority.
 
-        The CC26xx uses three of the priority bits,
-        meaning ~0 has the same effect as (7 << 5).
+            The CC26xx uses three of the priority bits,
+            meaning ~0 has the same effect as (7 << 5).
 
-        (7 << 5) will apply the lowest priority.
+            (7 << 5) will apply the lowest priority.
 
-        (1 << 5) will apply the highest priority.
+            (1 << 5) will apply the highest priority.
 
-        Setting the priority to 0 is not supported by this driver.
+            Setting the priority to 0 is not supported by this driver.
 
-        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency
-        interrupts, thus invalidating the critical sections in this driver.
-    */
-    uint8_t          intPriority;
-    /*! @brief SPI SWI priority.
-        The higher the number, the higher the priority.
-        The minimum is 0 and the maximum is 15 by default.
-        The maximum can be reduced to save RAM by adding or modifying
-        Swi.numPriorities in the kernel configuration file.
-    */
-    uint32_t         swiPriority;
-    /*! SPI Peripheral's power manager ID */
-    PowerCC26XX_Resource   powerMngrId;
-    /*! Default TX value if txBuf == NULL */
-    uint16_t         defaultTxBufValue;
-    /*! uDMA controlTable channel index */
-    uint32_t         rxChannelBitMask;
-    /*! uDMA controlTable channel index */
-    uint32_t         txChannelBitMask;
-    /*! SPI MOSI pin */
-    PIN_Id           mosiPin;
-    /*! SPI MISO pin */
-    PIN_Id           misoPin;
-    /*! SPI CLK pin */
-    PIN_Id           clkPin;
-    /*! SPI CSN pin */
-    PIN_Id           csnPin;
+            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency
+            interrupts, thus invalidating the critical sections in this driver.
+        */
+        uint8_t intPriority;
+        /*! @brief SPI SWI priority.
+            The higher the number, the higher the priority.
+            The minimum is 0 and the maximum is 15 by default.
+            The maximum can be reduced to save RAM by adding or modifying
+            Swi.numPriorities in the kernel configuration file.
+        */
+        uint32_t swiPriority;
+        /*! SPI Peripheral's power manager ID */
+        PowerCC26XX_Resource powerMngrId;
+        /*! Default TX value if txBuf == NULL */
+        uint16_t defaultTxBufValue;
+        /*! uDMA controlTable channel index */
+        uint32_t rxChannelBitMask;
+        /*! uDMA controlTable channel index */
+        uint32_t txChannelBitMask;
+        /*! SPI MOSI pin */
+        PIN_Id mosiPin;
+        /*! SPI MISO pin */
+        PIN_Id misoPin;
+        /*! SPI CLK pin */
+        PIN_Id clkPin;
+        /*! SPI CSN pin */
+        PIN_Id csnPin;
 
-    /*! Minimum transfer size for DMA based transfer */
-    uint32_t minDmaTransferSize;
+        /*! Minimum transfer size for DMA based transfer */
+        uint32_t minDmaTransferSize;
 } SPICC26X2DMA_HWAttrs;
 
 /*!
@@ -949,40 +949,40 @@ typedef struct SPICC26X2DMA_HWAttrs
  */
 typedef struct SPICC26X2DMA_Object
 {
-    HwiP_Struct                hwi;
-    PIN_Handle                 pinHandle;
-    PIN_State                  pinState;
-    Power_NotifyObj            spiPostObj;
-    SwiP_Struct                swi;
-    SemaphoreP_Struct          transferComplete;
+        HwiP_Struct hwi;
+        PIN_Handle pinHandle;
+        PIN_State pinState;
+        Power_NotifyObj spiPostObj;
+        SwiP_Struct swi;
+        SemaphoreP_Struct transferComplete;
 
-    SPI_CallbackFxn            transferCallbackFxn;
-    SPI_Transaction*            headPtr;
-    SPI_Transaction*            tailPtr;
-    SPI_Transaction*            completedTransfers;
-    UDMACC26XX_Handle          udmaHandle;
+        SPI_CallbackFxn transferCallbackFxn;
+        SPI_Transaction* headPtr;
+        SPI_Transaction* tailPtr;
+        SPI_Transaction* completedTransfers;
+        UDMACC26XX_Handle udmaHandle;
 
-    size_t                     framesQueued;
-    size_t                     framesTransferred;
-    size_t                     priTransferSize;
-    size_t                     altTransferSize;
+        size_t framesQueued;
+        size_t framesTransferred;
+        size_t priTransferSize;
+        size_t altTransferSize;
 
-    uint32_t                   activeChannel;
-    uint32_t                   bitRate;
-    uint32_t                   dataSize;
-    uint32_t                   transferTimeout;
-    uint32_t                   busyBit;
+        uint32_t activeChannel;
+        uint32_t bitRate;
+        uint32_t dataSize;
+        uint32_t transferTimeout;
+        uint32_t busyBit;
 
-    uint16_t                   rxScratchBuf;
-    uint16_t                   txScratchBuf;
+        uint16_t rxScratchBuf;
+        uint16_t txScratchBuf;
 
-    SPI_TransferMode           transferMode;
-    SPI_Mode                   mode;
-    uint8_t                    format;
-    PIN_Id                     csnPin;
-    SPICC26X2DMA_ReturnPartial returnPartial;
-    bool                       isOpen;
-    bool                       manualStart;
+        SPI_TransferMode transferMode;
+        SPI_Mode mode;
+        uint8_t format;
+        PIN_Id csnPin;
+        SPICC26X2DMA_ReturnPartial returnPartial;
+        bool isOpen;
+        bool manualStart;
 } SPICC26X2DMA_Object;
 
 #ifdef __cplusplus

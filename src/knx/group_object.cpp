@@ -1,11 +1,11 @@
 #include "group_object.h"
 #include "bits.h"
-#include "string.h"
 #include "datapoint_types.h"
 #include "group_object_table_object.h"
+#include "string.h"
 
 #ifdef SMALL_GROUPOBJECT
-    GroupObjectUpdatedHandler GroupObject::_updateHandlerStatic = 0;
+GroupObjectUpdatedHandler GroupObject::_updateHandlerStatic = 0;
 #endif
 GroupObjectTableObject* GroupObject::_table = 0;
 
@@ -39,7 +39,7 @@ bool GroupObject::transmitEnable()
     if (!_table)
         return false;
 
-    return bitRead(ntohs(_table->_tableData[_asap]), 14) > 0 ;
+    return bitRead(ntohs(_table->_tableData[_asap]), 14) > 0;
 }
 
 bool GroupObject::valueReadOnInit()
@@ -55,7 +55,7 @@ bool GroupObject::writeEnable()
     if (!_table)
         return false;
 
-    return bitRead(ntohs(_table->_tableData[_asap]), 12) > 0 ;
+    return bitRead(ntohs(_table->_tableData[_asap]), 12) > 0;
 }
 
 bool GroupObject::readEnable()
@@ -78,13 +78,12 @@ bool GroupObject::communicationEnable()
     return bitRead(ntohs(_table->_tableData[_asap]), 10) > 0;
 }
 
-
 Priority GroupObject::priority()
 {
     if (!_table)
         return LowPriority;
 
-    return (Priority)((ntohs(_table->_tableData[_asap]) >> 6) & (3 << 2)) ;
+    return (Priority)((ntohs(_table->_tableData[_asap]) >> 6) & (3 << 2));
 }
 
 uint8_t* GroupObject::valueRef()
@@ -157,7 +156,6 @@ size_t GroupObject::asapValueSize(uint8_t code) const
 
     return -1;
 }
-
 
 ComFlag GroupObject::commFlag()
 {
@@ -235,7 +233,6 @@ void GroupObject::callback(GroupObjectUpdatedHandler handler)
     _updateHandler = handler;
 }
 
-
 GroupObjectUpdatedHandler GroupObject::callback()
 {
     return _updateHandler;
@@ -252,7 +249,6 @@ bool GroupObject::value(const KNXValue& value, const Dpt& type)
     }
     return false;
 }
-
 
 KNXValue GroupObject::value(const Dpt& type)
 {
@@ -272,30 +268,25 @@ void GroupObject::dataPointType(Dpt value)
     _datapointType = value;
 }
 
-
 Dpt GroupObject::dataPointType()
 {
     return _datapointType;
 }
-
 
 bool GroupObject::tryValue(KNXValue& value)
 {
     return tryValue(value, _datapointType);
 }
 
-
 bool GroupObject::value(const KNXValue& value)
 {
     return this->value(value, _datapointType);
 }
 
-
 KNXValue GroupObject::value()
 {
     return value(_datapointType);
 }
-
 
 bool GroupObject::valueNoSend(const KNXValue& value)
 {

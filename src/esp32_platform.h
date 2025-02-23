@@ -1,8 +1,6 @@
 #ifdef ARDUINO_ARCH_ESP32
 #include "arduino_platform.h"
 
-
-
 #include <WiFiUdp.h>
 
 class Esp32Platform : public ArduinoPlatform
@@ -27,21 +25,22 @@ class Esp32Platform : public ArduinoPlatform
         // basic stuff
         void restart();
 
-        //multicast
+        // multicast
         void setupMultiCast(uint32_t addr, uint16_t port) override;
         void closeMultiCast() override;
         bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
         int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen, uint32_t& src_addr, uint16_t& src_port) override;
 
-        //unicast
+        // unicast
         bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
 
-        //memory
+        // memory
         uint8_t* getEepromBuffer(uint32_t size);
         void commitToEeprom();
 
     protected:
         IPAddress _remoteIP;
+
     protected:
         uint16_t _remotePort;
 

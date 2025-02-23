@@ -172,7 +172,7 @@ void Memory::writeMemory()
     {
         bufferPos = _tableObjects[i]->save(buffer);
 
-        //save to size of the memoryblock for tableobject too, so that we can rebuild the usedList and freeList
+        // save to size of the memoryblock for tableobject too, so that we can rebuild the usedList and freeList
         if (_tableObjects[i]->_data != nullptr)
         {
             MemoryBlock* block = findBlockInList(_usedList, _tableObjects[i]->_data);
@@ -268,7 +268,6 @@ uint8_t* Memory::allocMemory(size_t size)
     }
 }
 
-
 void Memory::freeMemory(uint8_t* ptr)
 {
     MemoryBlock* block = _usedList;
@@ -305,12 +304,10 @@ void Memory::readMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
     _platform.readNonVolatileMemory(relativeAddress, data, size);
 }
 
-
 uint8_t* Memory::toAbsolute(uint32_t relativeAddress)
 {
     return _platform.getNonVolatileMemoryStart() + (ptrdiff_t)relativeAddress;
 }
-
 
 uint32_t Memory::toRelative(uint8_t* absoluteAddress)
 {
@@ -362,19 +359,16 @@ void Memory::removeFromFreeList(MemoryBlock* block)
     _freeList = removeFromList(_freeList, block);
 }
 
-
 void Memory::removeFromUsedList(MemoryBlock* block)
 {
     _usedList = removeFromList(_usedList, block);
 }
-
 
 void Memory::addToUsedList(MemoryBlock* block)
 {
     block->next = _usedList;
     _usedList = block;
 }
-
 
 void Memory::addToFreeList(MemoryBlock* block)
 {
@@ -391,14 +385,14 @@ void Memory::addToFreeList(MemoryBlock* block)
     {
         if (current->address <= block->address && (current->next == nullptr || block->address < current->next->address))
         {
-            //add after current
+            // add after current
             block->next = current->next;
             current->next = block;
             break;
         }
         else if (current->address > block->address)
         {
-            //add before current
+            // add before current
             block->next = current;
 
             if (current == _freeList)
@@ -467,7 +461,7 @@ void Memory::addNewUsedBlock(uint8_t* address, size_t size)
     while (smallerFreeBlock)
     {
         if (smallerFreeBlock->next == nullptr ||
-                (smallerFreeBlock->next != nullptr && smallerFreeBlock->next->address > address))
+            (smallerFreeBlock->next != nullptr && smallerFreeBlock->next->address > address))
             break;
 
         smallerFreeBlock = smallerFreeBlock->next;

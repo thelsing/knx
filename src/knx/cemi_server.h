@@ -3,9 +3,9 @@
 #include "config.h"
 #ifdef USE_CEMI_SERVER
 
-#include <stdint.h>
 #include "knx_types.h"
 #include "usb_tunnel_interface.h"
+#include <stdint.h>
 
 class BauSystemB;
 class DataLinkLayer;

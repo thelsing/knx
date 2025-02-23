@@ -62,15 +62,15 @@ enum MessageCode
 
 enum cEmiErrorCode
 {
-    Unspecified_Error = 0x00, // unknown error (R/W)
-    Out_Of_Range = 0x01,      // write value not allowed (general, if not error 2 or 3) (W)
-    Out_Of_Max_Range = 0x02,  // write value to high (W)
-    Out_Of_Min_Range = 0x03,  // write value to low (W)
-    Memory_Error = 0x04,      // memory can not be written or only with fault(s) (W)
-    Read_Only = 0x05,         // write access to a ‘read only’ or a write protected Property (W)
-    Illegal_Command = 0x06,   // COMMAND not valid or not supported (W)
-    Void_DP = 0x07,           // read or write access to an non existing Property (R/W)
-    Type_Conflict = 0x08,     // write access with a wrong data type (Datapoint length) (W)
+    Unspecified_Error = 0x00,        // unknown error (R/W)
+    Out_Of_Range = 0x01,             // write value not allowed (general, if not error 2 or 3) (W)
+    Out_Of_Max_Range = 0x02,         // write value to high (W)
+    Out_Of_Min_Range = 0x03,         // write value to low (W)
+    Memory_Error = 0x04,             // memory can not be written or only with fault(s) (W)
+    Read_Only = 0x05,                // write access to a ‘read only’ or a write protected Property (W)
+    Illegal_Command = 0x06,          // COMMAND not valid or not supported (W)
+    Void_DP = 0x07,                  // read or write access to an non existing Property (R/W)
+    Type_Conflict = 0x08,            // write access with a wrong data type (Datapoint length) (W)
     Prop_Index_Range_Error = 0x09,   //  read or write access to a non existing Property array index  (R/W)
     Value_temp_not_writeable = 0x0A, // The Property exists but can at this moment not be written with a new value (W)
 };
@@ -82,12 +82,12 @@ enum ReturnCodes
     // Generic positive return codes
     Success = 0x00,                 // service, function or command executed sucessfully
     SuccessWithCrc = 0x01,          // positive message confirmation, CRC over original data
-    // Generic negative return codes
+                                    // Generic negative return codes
     MemoryError = 0xF1,             // memory cannot be accessed or only with fault(s)
     InvalidCommand = 0xF2,          // server does not support the requested command. ets: also non-existing or protected resource
     ImpossibleCommand = 0xF3,       // command cannot be executed because a dependency is not fulfilled
-    ExceedsMaxApduLength  = 0xF4,   // data will not fit into a frame supported by this server
-    DataOverflow  = 0xF5,           // attempt to write data beyond what is reserved for the addressed resource
+    ExceedsMaxApduLength = 0xF4,    // data will not fit into a frame supported by this server
+    DataOverflow = 0xF5,            // attempt to write data beyond what is reserved for the addressed resource
     OutOfMinRange = 0xF6,           // write value below minimum supported value
     OutOfMaxRange = 0xF7,           // write value exceeds maximum supported value
     DataVoid = 0xF8,                // request contains invalid data
@@ -228,8 +228,8 @@ enum DataSecurity
 
 struct SecurityControl
 {
-    bool toolAccess;
-    DataSecurity dataSecurity;
+        bool toolAccess;
+        DataSecurity dataSecurity;
 };
 
 enum RestartType
@@ -262,29 +262,29 @@ enum DptMedium
 
 enum LCGRPCONFIG
 {
-    GROUP_6FFF =        0b00000011,
-    GROUP_7000 =        0b00001100,
-    GROUP_REPEAT =      0b00010000,
-    GROUP_6FFFUNLOCK =  0b00000001,
-    GROUP_6FFFLOCK =    0b00000010,
-    GROUP_6FFFROUTE =   0b00000011,
-    GROUP_7000UNLOCK =  0b00000100,
-    GROUP_7000LOCK =    0b00001000,
-    GROUP_7000ROUTE =   0b00001100
+    GROUP_6FFF = 0b00000011,
+    GROUP_7000 = 0b00001100,
+    GROUP_REPEAT = 0b00010000,
+    GROUP_6FFFUNLOCK = 0b00000001,
+    GROUP_6FFFLOCK = 0b00000010,
+    GROUP_6FFFROUTE = 0b00000011,
+    GROUP_7000UNLOCK = 0b00000100,
+    GROUP_7000LOCK = 0b00001000,
+    GROUP_7000ROUTE = 0b00001100
 };
 
 enum LCCONFIG
 {
-    PHYS_FRAME =        0b00000011,
+    PHYS_FRAME = 0b00000011,
     PHYS_FRAME_UNLOCK = 0b00000001,
-    PHYS_FRAME_LOCK =   0b00000010,
-    PHYS_FRAME_ROUT =   0b00000011,
-    PHYS_REPEAT =       0b00000100,
-    BROADCAST_LOCK =    0b00001000,
-    BROADCAST_REPEAT =  0b00010000,
-    GROUP_IACK_ROUT =   0b00100000,
-    PHYS_IACK =         0b11000000,
-    PHYS_IACK_NORMAL =  0b01000000,
-    PHYS_IACK_ALL =     0b10000000,
-    PHYS_IACK_NACK =    0b11000000
+    PHYS_FRAME_LOCK = 0b00000010,
+    PHYS_FRAME_ROUT = 0b00000011,
+    PHYS_REPEAT = 0b00000100,
+    BROADCAST_LOCK = 0b00001000,
+    BROADCAST_REPEAT = 0b00010000,
+    GROUP_IACK_ROUT = 0b00100000,
+    PHYS_IACK = 0b11000000,
+    PHYS_IACK_NORMAL = 0b01000000,
+    PHYS_IACK_ALL = 0b10000000,
+    PHYS_IACK_NACK = 0b11000000
 };

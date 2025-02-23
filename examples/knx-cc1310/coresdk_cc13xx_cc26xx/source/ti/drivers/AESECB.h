@@ -271,7 +271,7 @@ extern "C" {
  * #define AESECBXYZ_STATUS_ERROR2    AESECB_STATUS_RESERVED - 2
  * @endcode
  */
-#define AESECB_STATUS_RESERVED        (-32)
+#define AESECB_STATUS_RESERVED (-32)
 
 /*!
  * @brief   Successful status code.
@@ -279,7 +279,7 @@ extern "C" {
  * Functions return AESECB_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define AESECB_STATUS_SUCCESS         (0)
+#define AESECB_STATUS_SUCCESS (0)
 
 /*!
  * @brief   Generic error status code.
@@ -287,7 +287,7 @@ extern "C" {
  * Functions return AESECB_STATUS_ERROR if the function was not executed
  * successfully and no more pertinent error code could be returned.
  */
-#define AESECB_STATUS_ERROR           (-1)
+#define AESECB_STATUS_ERROR (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -307,7 +307,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from an AESECB_open() call.
  */
-typedef struct AESECB_Config*    AESECB_Handle;
+typedef struct AESECB_Config* AESECB_Handle;
 
 /*!
  * @brief   The way in which ECB function calls return after performing an
@@ -332,20 +332,20 @@ typedef struct AESECB_Config*    AESECB_Handle;
  */
 typedef enum
 {
-    AESECB_RETURN_BEHAVIOR_CALLBACK = 1,    /*!< The function call will return immediately while the
-                                             *   ECB operation goes on in the background. The registered
-                                             *   callback function is called after the operation completes.
-                                             *   The context the callback function is called (task, HWI, SWI)
-                                             *   is implementation-dependent.
-                                             */
-    AESECB_RETURN_BEHAVIOR_BLOCKING = 2,    /*!< The function call will block while ECB operation goes
-                                             *   on in the background. ECB operation results are available
-                                             *   after the function returns.
-                                             */
-    AESECB_RETURN_BEHAVIOR_POLLING  = 4,    /*!< The function call will continuously poll a flag while ECB
-                                             *   operation goes on in the background. ECB operation results
-                                             *   are available after the function returns.
-                                             */
+    AESECB_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
+                                          *   ECB operation goes on in the background. The registered
+                                          *   callback function is called after the operation completes.
+                                          *   The context the callback function is called (task, HWI, SWI)
+                                          *   is implementation-dependent.
+                                          */
+    AESECB_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while ECB operation goes
+                                          *   on in the background. ECB operation results are available
+                                          *   after the function returns.
+                                          */
+    AESECB_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while ECB
+                                          *   operation goes on in the background. ECB operation results
+                                          *   are available after the function returns.
+                                          */
 } AESECB_ReturnBehavior;
 
 /*!
@@ -363,21 +363,21 @@ typedef enum
  */
 typedef struct
 {
-    CryptoKey*                key;                       /*!< A previously initialized CryptoKey */
-    uint8_t*                  input;                     /*!<
-                                                         *   - Encryption: The plaintext buffer to be encrypted
-                                                         *   in the ECB operation.
-                                                         *   - Decryption: The ciphertext to be decrypted.
-                                                         */
-    uint8_t*                  output;                    /*!<
-                                                         *   - Encryption: The output ciphertext buffer that the encrypted plaintext
-                                                         *   is copied to.
-                                                         *   - Decryption: The plaintext derived from the decrypted
-                                                         *   ciphertext is copied here.
-                                                         */
-    size_t                   inputLength;                /*!< Length of the input and output in bytes. Must be a multiple of the
-                                                         *   AES block size (16 bytes)
-                                                         */
+        CryptoKey* key;     /*!< A previously initialized CryptoKey */
+        uint8_t* input;     /*!<
+                             *   - Encryption: The plaintext buffer to be encrypted
+                             *   in the ECB operation.
+                             *   - Decryption: The ciphertext to be decrypted.
+                             */
+        uint8_t* output;    /*!<
+                             *   - Encryption: The output ciphertext buffer that the encrypted plaintext
+                             *   is copied to.
+                             *   - Decryption: The plaintext derived from the decrypted
+                             *   ciphertext is copied here.
+                             */
+        size_t inputLength; /*!< Length of the input and output in bytes. Must be a multiple of the
+                             *   AES block size (16 bytes)
+                             */
 } AESECB_Operation;
 
 /*!
@@ -402,11 +402,11 @@ typedef enum
  */
 typedef struct AESECB_Config
 {
-    /*! Pointer to a driver specific data object */
-    void*               object;
+        /*! Pointer to a driver specific data object */
+        void* object;
 
-    /*! Pointer to a driver specific hardware attributes structure */
-    void         const* hwAttrs;
+        /*! Pointer to a driver specific hardware attributes structure */
+        void const* hwAttrs;
 } AESECB_Config;
 
 /*!
@@ -424,10 +424,10 @@ typedef struct AESECB_Config
  *  @param  operationType This parameter determines which operation the
  *          callback refers to.
  */
-typedef void (*AESECB_CallbackFxn) (AESECB_Handle handle,
-                                    int_fast16_t returnValue,
-                                    AESECB_Operation* operation,
-                                    AESECB_OperationType operationType);
+typedef void (*AESECB_CallbackFxn)(AESECB_Handle handle,
+                                   int_fast16_t returnValue,
+                                   AESECB_Operation* operation,
+                                   AESECB_OperationType operationType);
 
 /*!
  *  @brief  ECB Parameters
@@ -439,14 +439,14 @@ typedef void (*AESECB_CallbackFxn) (AESECB_Handle handle,
  */
 typedef struct
 {
-    AESECB_ReturnBehavior   returnBehavior;             /*!< Blocking, callback, or polling return behavior */
-    AESECB_CallbackFxn      callbackFxn;                /*!< Callback function pointer */
-    uint32_t                timeout;                    /*!< Timeout before the driver returns an error in
-                                                         *   ::AESECB_RETURN_BEHAVIOR_BLOCKING
-                                                         */
-    void*                   custom;                     /*!< Custom argument used by driver
-                                                         *   implementation
-                                                         */
+        AESECB_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
+        AESECB_CallbackFxn callbackFxn;       /*!< Callback function pointer */
+        uint32_t timeout;                     /*!< Timeout before the driver returns an error in
+                                               *   ::AESECB_RETURN_BEHAVIOR_BLOCKING
+                                               */
+        void* custom;                         /*!< Custom argument used by driver
+                                               *   implementation
+                                               */
 } AESECB_Params;
 
 /*!

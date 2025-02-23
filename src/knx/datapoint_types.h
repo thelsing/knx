@@ -15,7 +15,7 @@
  * An invalid 2 uint8_t float (DPT9/EIS5).
  * To be used for dptToFloat() and dptFromFloat().
  */
-#define INVALID_DPT_FLOAT  2147483647U
+#define INVALID_DPT_FLOAT 2147483647U
 
 /**
  * Convert a value from uint32_t to 2 uint8_t float (DPT9/EIS5). The possible range

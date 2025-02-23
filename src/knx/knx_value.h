@@ -30,7 +30,7 @@ class KNXValue
         operator int32_t() const;
         operator int64_t() const;
         operator double() const;
-        operator const char* () const;
+        operator const char*() const;
         operator struct tm() const;
         operator float() const;
 
@@ -62,21 +62,20 @@ class KNXValue
         const char* stringValue() const;
         struct tm timeValue() const;
 
-
         union Value
         {
-            bool boolValue;
-            uint8_t ucharValue;
-            uint16_t ushortValue;
-            uint32_t uintValue;
-            uint64_t ulongValue;
-            int8_t charValue;
-            int16_t shortValue;
-            int32_t intValue;
-            int64_t longValue;
-            double doubleValue;
-            const char* stringValue;
-            struct tm timeValue;
+                bool boolValue;
+                uint8_t ucharValue;
+                uint16_t ushortValue;
+                uint32_t uintValue;
+                uint64_t ulongValue;
+                int8_t charValue;
+                int16_t shortValue;
+                int32_t intValue;
+                int64_t longValue;
+                double doubleValue;
+                const char* stringValue;
+                struct tm timeValue;
         };
         enum ValueType
         {

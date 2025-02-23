@@ -1,15 +1,15 @@
 #include "network_layer_coupler.h"
+#include "bits.h"
+#include "cemi_frame.h"
 #include "data_link_layer.h"
 #include "device_object.h"
 #include "router_object.h"
 #include "tpdu.h"
-#include "cemi_frame.h"
-#include "bits.h"
 
 NetworkLayerCoupler::NetworkLayerCoupler(DeviceObject& deviceObj,
-        TransportLayer& layer) :
-    NetworkLayer(deviceObj, layer),
-    _netLayerEntities { {*this, kPrimaryIfIndex}, {*this, kSecondaryIfIndex} }
+                                         TransportLayer& layer)
+    : NetworkLayer(deviceObj, layer),
+      _netLayerEntities{{*this, kPrimaryIfIndex}, {*this, kSecondaryIfIndex}}
 {
     _currentAddress = deviceObj.individualAddress();
     evaluateCouplerType();
@@ -90,7 +90,7 @@ bool NetworkLayerCoupler::isGroupAddressInFilterTable(uint16_t groupAddress)
 bool NetworkLayerCoupler::isRoutedGroupAddress(uint16_t groupAddress, uint8_t sourceInterfaceIndex)
 {
     uint8_t lcconfig = LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL; // default value from spec. in case prop is not availible.
-    uint8_t lcgrpconfig = LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT; // default value from spec. in case prop is not availible.
+    uint8_t lcgrpconfig = LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT;                                             // default value from spec. in case prop is not availible.
     Property* prop_lcgrpconfig;
     Property* prop_lcconfig;
 
@@ -111,55 +111,54 @@ bool NetworkLayerCoupler::isRoutedGroupAddress(uint16_t groupAddress, uint8_t so
     if (prop_lcconfig)
         prop_lcconfig->read(lcconfig);
 
-
     if (groupAddress < 0x7000) // Main group 0-13
     {
         // PID_SUB_LCGRPCONFIG Bit 0-1
         switch (lcgrpconfig & LCGRPCONFIG::GROUP_6FFF)
         {
             case LCGRPCONFIG::GROUP_6FFFLOCK:
-                //printHex("1drop frame to 0x", (uint8_t*)destination, 2);
-                return false;//drop
+                // printHex("1drop frame to 0x", (uint8_t*)destination, 2);
+                return false; // drop
                 break;
 
             case LCGRPCONFIG::GROUP_6FFFROUTE:
                 if (isGroupAddressInFilterTable(groupAddress))
-                    ;//send
+                    ; // send
                 else
                 {
-                    //printHex("2drop frame to 0x", (uint8_t*)destination, 2);
-                    return false;//drop
+                    // printHex("2drop frame to 0x", (uint8_t*)destination, 2);
+                    return false; // drop
                 }
 
                 break;
 
             default: // LCGRPCONFIG::GROUP_6FFFUNLOCK
-                ;//send
+                ;    // send
         }
     }
-    else    // Main group 14-31
+    else // Main group 14-31
     {
         // PID_SUB_LCGRPCONFIG Bit 2-3 LCGRPCONFIG::GROUP_7000
         switch (lcgrpconfig & LCGRPCONFIG::GROUP_7000)
         {
             case LCGRPCONFIG::GROUP_7000LOCK:
-                //printHex("3drop frame to 0x", (uint8_t*)destination, 2);
-                return false;//drop
+                // printHex("3drop frame to 0x", (uint8_t*)destination, 2);
+                return false; // drop
                 break;
 
             case LCGRPCONFIG::GROUP_7000ROUTE:
                 if (isGroupAddressInFilterTable(groupAddress))
-                    ;//send
+                    ; // send
                 else
                 {
-                    //printHex("4drop frame to 0x", (uint8_t*)destination, 2);
-                    return false;//drop
+                    // printHex("4drop frame to 0x", (uint8_t*)destination, 2);
+                    return false; // drop
                 }
 
                 break;
 
             default: // LCGRPCONFIG::GROUP_7000UNLOCK
-                ;//send
+                ;    // send
         }
     }
 
@@ -177,18 +176,17 @@ bool NetworkLayerCoupler::isRoutedIndividualAddress(uint16_t individualAddress, 
 
     // See KNX spec.: Network Layer (03/03/03) and AN161 (Coupler model 2.0)
     /*
-        * C  hop count value contained in the N-protocol header
-        * D  low order octet of the Destination Address, i.e. Device Address part
-        * G  Group Address
-        * SD low nibble of high order octet plus low order octet, i.e. Line Address + Device Address
-        * Z  high nibble of high order octet of the Destination Address, i.e. Area Address
-        * ZS high order octet of the Destination Address, i.e. hierarchy information part: Area Address + Line Address
-    */
+     * C  hop count value contained in the N-protocol header
+     * D  low order octet of the Destination Address, i.e. Device Address part
+     * G  Group Address
+     * SD low nibble of high order octet plus low order octet, i.e. Line Address + Device Address
+     * Z  high nibble of high order octet of the Destination Address, i.e. Area Address
+     * ZS high order octet of the Destination Address, i.e. hierarchy information part: Area Address + Line Address
+     */
     uint16_t ownSNA = _deviceObj.individualAddress() & 0xFF00; // Own subnetwork address (area + line)
     uint16_t ownAA = _deviceObj.individualAddress() & 0xF000;  // Own area address
-    uint16_t ZS = individualAddress & 0xFF00;                        // destination subnetwork address (area + line)
-    uint16_t Z = individualAddress & 0xF000;                         // destination area address
-
+    uint16_t ZS = individualAddress & 0xFF00;                  // destination subnetwork address (area + line)
+    uint16_t Z = individualAddress & 0xF000;                   // destination area address
 
     if (_couplerType == LineCoupler)
     {
@@ -217,7 +215,7 @@ bool NetworkLayerCoupler::isRoutedIndividualAddress(uint16_t individualAddress, 
         }
         else
         {
-            //not from primiary not from sec if, should not happen
+            // not from primiary not from sec if, should not happen
             return false;
         }
     }
@@ -233,7 +231,7 @@ bool NetworkLayerCoupler::isRoutedIndividualAddress(uint16_t individualAddress, 
 
             return true;
         }
-        else  if (srcIfIndex == kSecondaryIfIndex)         // Main line to backbone line routing
+        else if (srcIfIndex == kSecondaryIfIndex) // Main line to backbone line routing
         {
             if (Z != ownAA)
             {
@@ -246,24 +244,24 @@ bool NetworkLayerCoupler::isRoutedIndividualAddress(uint16_t individualAddress, 
         }
         else
         {
-            //not from primiary not from sec if, should not happen
+            // not from primiary not from sec if, should not happen
             return false;
         }
     }
     else
     {
-        //unknown coupler type, should not happen
+        // unknown coupler type, should not happen
         return false;
     }
 }
 
 void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uint16_t destination, NPDU& npdu, Priority priority,
-        SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex, uint16_t source)
+                                          SystemBroadcast broadcastType, uint8_t sourceInterfaceIndex, uint16_t source)
 {
     uint8_t interfaceIndex = (sourceInterfaceIndex == kSecondaryIfIndex) ? kPrimaryIfIndex : kSecondaryIfIndex;
 
     uint8_t lcconfig = LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL; // default value from spec. in case prop is not availible.
-    uint8_t lcgrpconfig = LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT; // default value from spec. in case prop is not availible.
+    uint8_t lcgrpconfig = LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT;                                             // default value from spec. in case prop is not availible.
     Property* prop_lcgrpconfig;
     Property* prop_lcconfig;
 
@@ -284,13 +282,11 @@ void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uin
     if (prop_lcconfig)
         prop_lcconfig->read(lcconfig);
 
-
     if (addrType == AddressType::GroupAddress && destination != 0) // destination == 0 means broadcast and must not be filtered with the GroupAddresses
     {
         if (!isRoutedGroupAddress(destination, sourceInterfaceIndex))
             return; // drop;
     }
-
 
     // If we have a frame from open medium on secondary side (e.g. RF) to primary side, then shall use the hop count of the primary router object
     if ((_rtObjPrimary != nullptr) && (_rtObjSecondary != nullptr) && (sourceInterfaceIndex == kSecondaryIfIndex))
@@ -341,12 +337,12 @@ void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uin
     npdu.frame().apdu().printPDU();
 #endif
 
-    //evaluiate PHYS_REPEAT, BROADCAST_REPEAT and GROUP_REPEAT
+    // evaluiate PHYS_REPEAT, BROADCAST_REPEAT and GROUP_REPEAT
     bool doNotRepeat = false;
 
     if ((addrType == AddressType::GroupAddress && !(lcgrpconfig & LCGRPCONFIG::GROUP_REPEAT)) ||
-            (addrType == AddressType::IndividualAddress && !(lcconfig & LCCONFIG::PHYS_REPEAT)) ||
-            (addrType == AddressType::GroupAddress && destination == 0 && !(lcconfig & LCCONFIG::BROADCAST_REPEAT)))
+        (addrType == AddressType::IndividualAddress && !(lcconfig & LCCONFIG::PHYS_REPEAT)) ||
+        (addrType == AddressType::GroupAddress && destination == 0 && !(lcconfig & LCCONFIG::BROADCAST_REPEAT)))
         doNotRepeat = true;
 
     _netLayerEntities[interfaceIndex].sendDataRequest(npdu, ack, destination, source, priority, addrType, broadcastType, doNotRepeat);
@@ -356,15 +352,15 @@ void NetworkLayerCoupler::sendMsgHopCount(AckType ack, AddressType addrType, uin
 // TODO: we could also do the sanity checks here, i.e. check if sourceAddress is really coming in from correct srcIfIdx, etc. (see PID_COUPL_SERV_CONTROL: EN_SNA_INCONSISTENCY_CHECK)
 void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination, NPDU& npdu, Priority priority, uint16_t source, uint8_t srcIfIndex)
 {
-    //print("NetworkLayerCoupler::routeDataIndividual dest 0x");
-    //print(destination, HEX);
-    //print(" own addr 0x");
-    //println(_deviceObj.individualAddress(), HEX);
+    // print("NetworkLayerCoupler::routeDataIndividual dest 0x");
+    // print(destination, HEX);
+    // print(" own addr 0x");
+    // println(_deviceObj.individualAddress(), HEX);
 
     if (destination == _deviceObj.individualAddress())
     {
         // FORWARD_LOCALLY
-        //println("NetworkLayerCoupler::routeDataIndividual locally");
+        // println("NetworkLayerCoupler::routeDataIndividual locally");
         HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
         _transportLayer.dataIndividualIndication(destination, hopType, priority, source, npdu.tpdu());
         return;
@@ -388,10 +384,9 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
         }
         else
         {
-            //unknown coupler type, should not happen
-            return ;
+            // unknown coupler type, should not happen
+            return;
         }
-
 
         // if destination is not within our scope then send via primary interface, else via secondary interface
         uint8_t destIfidx = (Z != netaddr) ? kPrimaryIfIndex : kSecondaryIfIndex;
@@ -402,8 +397,8 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
                 destIfidx = kSecondaryIfIndex;
 
 #endif
-        //print("NetworkLayerCoupler::routeDataIndividual local to s or p: ");
-        //println(destIfidx);
+        // print("NetworkLayerCoupler::routeDataIndividual local to s or p: ");
+        // println(destIfidx);
         _netLayerEntities[destIfidx].sendDataRequest(npdu, ack, destination, source, priority, AddressType::IndividualAddress, Broadcast);
         return;
     }
@@ -422,13 +417,13 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
     if ((lcconfig & LCCONFIG::PHYS_FRAME) == LCCONFIG::PHYS_FRAME_LOCK)
     {
         // IGNORE_TOTALLY
-        //println("NetworkLayerCoupler::routeDataIndividual locked");
+        // println("NetworkLayerCoupler::routeDataIndividual locked");
         return;
     }
     else if ((lcconfig & LCCONFIG::PHYS_FRAME) == LCCONFIG::PHYS_FRAME_UNLOCK)
     {
         // ROUTE_XXX
-        //println("NetworkLayerCoupler::routeDataIndividual unlocked");
+        // println("NetworkLayerCoupler::routeDataIndividual unlocked");
         sendMsgHopCount(ack, AddressType::IndividualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source);
         return;
     }
@@ -436,12 +431,12 @@ void NetworkLayerCoupler::routeDataIndividual(AckType ack, uint16_t destination,
     {
         if (isRoutedIndividualAddress(destination, srcIfIndex))
         {
-            //println("NetworkLayerCoupler::routeDataIndividual routed");
+            // println("NetworkLayerCoupler::routeDataIndividual routed");
             sendMsgHopCount(ack, AddressType::IndividualAddress, destination, npdu, priority, Broadcast, srcIfIndex, source); // ROUTE_XXX
         }
         else
         {
-            //println("NetworkLayerCoupler::routeDataIndividual not routed");
+            // println("NetworkLayerCoupler::routeDataIndividual not routed");
             ; // IGNORE_TOTALLY
         }
     }
@@ -452,17 +447,17 @@ void NetworkLayerCoupler::dataIndication(AckType ack, AddressType addrType, uint
     // routing for individual addresses
     if (addrType == IndividualAddress)
     {
-        //printHex("NetworkLayerCoupler::dataIndication to IA ", (uint8_t*)&destination, 2);
-        //npdu.frame().valid();
+        // printHex("NetworkLayerCoupler::dataIndication to IA ", (uint8_t*)&destination, 2);
+        // npdu.frame().valid();
         routeDataIndividual(ack, destination, npdu, priority, source, srcIfIdx);
         return;
     }
 
-    //printHex("NetworkLayerCoupler::dataIndication to GA ", (uint8_t*)&destination, 2);
-    // routing for group addresses
-    // TODO: check new AN189
-    // "AN189 only makes that group messages with hop count 7 cannot bypass the Filter Table unfiltered,
-    // what made the Security Proxy(AN192) useless; now, hc 7 Telegrams are filtered as any other and the value is decremented.
+    // printHex("NetworkLayerCoupler::dataIndication to GA ", (uint8_t*)&destination, 2);
+    //  routing for group addresses
+    //  TODO: check new AN189
+    //  "AN189 only makes that group messages with hop count 7 cannot bypass the Filter Table unfiltered,
+    //  what made the Security Proxy(AN192) useless; now, hc 7 Telegrams are filtered as any other and the value is decremented.
 
     // ROUTE_XXX
     sendMsgHopCount(ack, addrType, destination, npdu, priority, Broadcast, srcIfIdx, source);
@@ -471,7 +466,7 @@ void NetworkLayerCoupler::dataIndication(AckType ack, AddressType addrType, uint
 
 void NetworkLayerCoupler::dataConfirm(AckType ack, AddressType addrType, uint16_t destination, FrameFormat format, Priority priority, uint16_t source, NPDU& npdu, bool status, uint8_t srcIfIdx)
 {
-    //println("NetworkLayerCoupler::dataConfirm");
+    // println("NetworkLayerCoupler::dataConfirm");
     HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
 
     // Check if received frame is an echo from our sent frame, we are a normal device in this case
@@ -497,8 +492,8 @@ void NetworkLayerCoupler::broadcastIndication(AckType ack, FrameFormat format, N
         DptMedium mediumType = _netLayerEntities[srcIfIdx].mediumType();
 
         // for closed media like TP1 and IP
-        if ( ((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
-                isApciSystemBroadcast(npdu.tpdu().apdu()))
+        if (((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
+            isApciSystemBroadcast(npdu.tpdu().apdu()))
         {
             npdu.frame().systemBroadcast(SysBroadcast);
             _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
@@ -582,11 +577,11 @@ void NetworkLayerCoupler::dataIndividualRequest(AckType ack, uint16_t destinatio
     else
         npdu.hopCount(hopCount());
 
-    //if (tpdu.apdu().length() > 0)
+    // if (tpdu.apdu().length() > 0)
     //{
-    //    print.print("-> NL  ");
-    //    tpdu.apdu().printPDU();
-    //}
+    //     print.print("-> NL  ");
+    //     tpdu.apdu().printPDU();
+    // }
     routeDataIndividual(ack, destination, npdu, priority, _deviceObj.individualAddress(), kLocalIfIndex);
 }
 
@@ -632,7 +627,6 @@ void NetworkLayerCoupler::dataSystemBroadcastRequest(AckType ack, HopCountType h
         npdu.hopCount(7);
     else
         npdu.hopCount(hopCount());
-
 
     CemiFrame tmpFrame(tpdu.frame());
 

@@ -39,11 +39,11 @@
 
 /* compiler vendor check */
 #ifndef __GNUC__
-    #error Incompatible compiler: use this include path (.../ti/posix/gcc) only with a GNU compiler. You appear to be using a different compiler.
+#error Incompatible compiler: use this include path (.../ti/posix/gcc) only with a GNU compiler. You appear to be using a different compiler.
 #endif
 
-#include <stdint.h>
 #include "sys/_internal.h"
+#include <stdint.h>
 
 /*
  *  Include definitions of timespec and clockid_t that would
@@ -59,17 +59,17 @@ extern "C" {
 
 typedef union
 {
-    struct sysbios_Semaphore sysbios;
-    struct freertos_Semaphore freertos;
+        struct sysbios_Semaphore sysbios;
+        struct freertos_Semaphore freertos;
 } sem_t;
 
-int    sem_destroy(sem_t* sem);
-int    sem_getvalue(sem_t* sem, int* value);
-int    sem_init(sem_t* sem, int pshared, unsigned value);
-int    sem_post(sem_t* sem);
-int    sem_timedwait(sem_t* sem, const struct timespec* abstime);
-int    sem_trywait(sem_t* sem);
-int    sem_wait(sem_t* sem);
+int sem_destroy(sem_t* sem);
+int sem_getvalue(sem_t* sem, int* value);
+int sem_init(sem_t* sem, int pshared, unsigned value);
+int sem_post(sem_t* sem);
+int sem_timedwait(sem_t* sem, const struct timespec* abstime);
+int sem_trywait(sem_t* sem);
+int sem_wait(sem_t* sem);
 
 #ifdef __cplusplus
 }

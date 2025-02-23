@@ -3,8 +3,8 @@
 #include "config.h"
 #ifdef USE_RF
 
-#include "rf_physical_layer_cc1101.h"
 #include "rf_data_link_layer.h"
+#include "rf_physical_layer_cc1101.h"
 
 #include "bits.h"
 #include "platform.h"
@@ -13,43 +13,41 @@
 #include <string.h>
 
 // Table for encoding 4-bit data into a 8-bit Manchester encoding.
-const uint8_t RfPhysicalLayerCC1101::manchEncodeTab[16] =   {0xAA,  // 0x0 Manchester encoded
-                                                             0xA9,  // 0x1 Manchester encoded
-                                                             0xA6,  // 0x2 Manchester encoded
-                                                             0xA5,  // 0x3 Manchester encoded
-                                                             0x9A,  // 0x4 Manchester encoded
-                                                             0x99,  // 0x5 Manchester encoded
-                                                             0x96,  // 0x6 Manchester encoded
-                                                             0x95,  // 0x7 Manchester encoded
-                                                             0x6A,  // 0x8 Manchester encoded
-                                                             0x69,  // 0x9 Manchester encoded
-                                                             0x66,  // 0xA Manchester encoded
-                                                             0x65,  // 0xB Manchester encoded
-                                                             0x5A,  // 0xC Manchester encoded
-                                                             0x59,  // 0xD Manchester encoded
-                                                             0x56,  // 0xE Manchester encoded
-                                                             0x55
-                                                            }; // 0xF Manchester encoded
+const uint8_t RfPhysicalLayerCC1101::manchEncodeTab[16] = {0xAA,  // 0x0 Manchester encoded
+                                                           0xA9,  // 0x1 Manchester encoded
+                                                           0xA6,  // 0x2 Manchester encoded
+                                                           0xA5,  // 0x3 Manchester encoded
+                                                           0x9A,  // 0x4 Manchester encoded
+                                                           0x99,  // 0x5 Manchester encoded
+                                                           0x96,  // 0x6 Manchester encoded
+                                                           0x95,  // 0x7 Manchester encoded
+                                                           0x6A,  // 0x8 Manchester encoded
+                                                           0x69,  // 0x9 Manchester encoded
+                                                           0x66,  // 0xA Manchester encoded
+                                                           0x65,  // 0xB Manchester encoded
+                                                           0x5A,  // 0xC Manchester encoded
+                                                           0x59,  // 0xD Manchester encoded
+                                                           0x56,  // 0xE Manchester encoded
+                                                           0x55}; // 0xF Manchester encoded
 
 // Table for decoding 4-bit Manchester encoded data into 2-bit
 // data. 0xFF indicates invalid Manchester encoding
-const uint8_t RfPhysicalLayerCC1101::manchDecodeTab[16] = {0xFF, //  Manchester encoded 0x0 decoded
-                                                           0xFF, //  Manchester encoded 0x1 decoded
-                                                           0xFF, //  Manchester encoded 0x2 decoded
-                                                           0xFF, //  Manchester encoded 0x3 decoded
-                                                           0xFF, //  Manchester encoded 0x4 decoded
-                                                           0x03, //  Manchester encoded 0x5 decoded
-                                                           0x02, //  Manchester encoded 0x6 decoded
-                                                           0xFF, //  Manchester encoded 0x7 decoded
-                                                           0xFF, //  Manchester encoded 0x8 decoded
-                                                           0x01, //  Manchester encoded 0x9 decoded
-                                                           0x00, //  Manchester encoded 0xA decoded
-                                                           0xFF, //  Manchester encoded 0xB decoded
-                                                           0xFF, //  Manchester encoded 0xC decoded
-                                                           0xFF, //  Manchester encoded 0xD decoded
-                                                           0xFF, //  Manchester encoded 0xE decoded
-                                                           0xFF
-                                                          };//  Manchester encoded 0xF decoded
+const uint8_t RfPhysicalLayerCC1101::manchDecodeTab[16] = {0xFF,  //  Manchester encoded 0x0 decoded
+                                                           0xFF,  //  Manchester encoded 0x1 decoded
+                                                           0xFF,  //  Manchester encoded 0x2 decoded
+                                                           0xFF,  //  Manchester encoded 0x3 decoded
+                                                           0xFF,  //  Manchester encoded 0x4 decoded
+                                                           0x03,  //  Manchester encoded 0x5 decoded
+                                                           0x02,  //  Manchester encoded 0x6 decoded
+                                                           0xFF,  //  Manchester encoded 0x7 decoded
+                                                           0xFF,  //  Manchester encoded 0x8 decoded
+                                                           0x01,  //  Manchester encoded 0x9 decoded
+                                                           0x00,  //  Manchester encoded 0xA decoded
+                                                           0xFF,  //  Manchester encoded 0xB decoded
+                                                           0xFF,  //  Manchester encoded 0xC decoded
+                                                           0xFF,  //  Manchester encoded 0xD decoded
+                                                           0xFF,  //  Manchester encoded 0xE decoded
+                                                           0xFF}; //  Manchester encoded 0xF decoded
 
 // Product = CC1101
 // Chip version = A   (VERSION = 0x04)
@@ -79,57 +77,57 @@ const uint8_t RfPhysicalLayerCC1101::manchDecodeTab[16] = {0xFF, //  Manchester 
 // GDO0 signal selection = ( 6) Asserts when sync word has been sent / received, and de-asserts at the end of the packet
 // GDO2 signal selection = ( 0) Asserts when RX FiFO threshold
 const uint8_t RfPhysicalLayerCC1101::cc1101_2FSK_32_7_kb[CFG_REGISTER] =
-{
-    0x00,  // IOCFG2        GDO2 Output Pin Configuration
-    0x2E,  // IOCFG1        GDO1 Output Pin Configuration
-    0x06,  // IOCFG0        GDO0 Output Pin Configuration
-    0x40,  // FIFOTHR       RX FIFO and TX FIFO Thresholds // 4 bytes in RX FIFO (2 bytes manchester encoded)
-    0x76,  // SYNC1         Sync Word
-    0x96,  // SYNC0         Sync Word
-    0xFF,  // PKTLEN        Packet Length
-    0x00,  // PKTCTRL1      Packet Automation Control
-    0x00,  // PKTCTRL0      Packet Automation Control
-    0x00,  // ADDR          Device Address
-    0x00,  // CHANNR        Channel Number
-    0x08,  // FSCTRL1       Frequency Synthesizer Control
-    0x00,  // FSCTRL0       Frequency Synthesizer Control
-    0x21,  // FREQ2         Frequency Control Word
-    0x65,  // FREQ1         Frequency Control Word
-    0x6A,  // FREQ0         Frequency Control Word
-    0x6A,  // MDMCFG4       Modem Configuration
-    0x4A,  // MDMCFG3       Modem Configuration
-    0x05,  // MDMCFG2       Modem Configuration
-    0x22,  // MDMCFG1       Modem Configuration
-    0xF8,  // MDMCFG0       Modem Configuration
-    0x47,  // DEVIATN       Modem Deviation Setting
-    0x07,  // MCSM2         Main Radio Control State Machine Configuration
-    0x30,  // MCSM1         Main Radio Control State Machine Configuration (IDLE after TX and RX)
-    0x18,  // MCSM0         Main Radio Control State Machine Configuration
-    0x2E,  // FOCCFG        Frequency Offset Compensation Configuration
-    0x6D,  // BSCFG         Bit Synchronization Configuration
-    0x43,  // AGCCTRL2      AGC Control       0x04,   // AGCCTRL2   magn target 33dB vs 36dB (max LNA+LNA2 gain vs. ) (highest gain cannot be used vs. all gain settings)
-    0x40,  // AGCCTRL1      AGC Control       0x09,   // AGCCTRL1   carrier sense threshold disabled vs. 7dB below magn target (LNA prio strat. 1 vs 0)
-    0x91,  // AGCCTRL0      AGC Control       0xB2,   // AGCCTRL0   channel filter samples 16 vs.32
-    0x87,  // WOREVT1       High Byte Event0 Timeout
-    0x6B,  // WOREVT0       Low Byte Event0 Timeout
-    0xFB,  // WORCTRL       Wake On Radio Control
-    0xB6,  // FREND1        Front End RX Configuration
-    0x10,  // FREND0        Front End TX Configuration
-    0xE9,  // FSCAL3        Frequency Synthesizer Calibration     0xEA,   // FSCAL3
-    0x2A,  // FSCAL2        Frequency Synthesizer Calibration
-    0x00,  // FSCAL1        Frequency Synthesizer Calibration
-    0x1F,  // FSCAL0        Frequency Synthesizer Calibration
-    0x41,  // RCCTRL1       RC Oscillator Configuration
-    0x00,  // RCCTRL0       RC Oscillator Configuration
-    0x59,  // FSTEST        Frequency Synthesizer Calibration Control
-    0x7F,  // PTEST         Production Test
-    0x3F,  // AGCTEST       AGC Test
-    0x81,  // TEST2         Various Test Settings
-    0x35,  // TEST1         Various Test Settings
-    0x09   // TEST0         Various Test Settings
+    {
+        0x00, // IOCFG2        GDO2 Output Pin Configuration
+        0x2E, // IOCFG1        GDO1 Output Pin Configuration
+        0x06, // IOCFG0        GDO0 Output Pin Configuration
+        0x40, // FIFOTHR       RX FIFO and TX FIFO Thresholds // 4 bytes in RX FIFO (2 bytes manchester encoded)
+        0x76, // SYNC1         Sync Word
+        0x96, // SYNC0         Sync Word
+        0xFF, // PKTLEN        Packet Length
+        0x00, // PKTCTRL1      Packet Automation Control
+        0x00, // PKTCTRL0      Packet Automation Control
+        0x00, // ADDR          Device Address
+        0x00, // CHANNR        Channel Number
+        0x08, // FSCTRL1       Frequency Synthesizer Control
+        0x00, // FSCTRL0       Frequency Synthesizer Control
+        0x21, // FREQ2         Frequency Control Word
+        0x65, // FREQ1         Frequency Control Word
+        0x6A, // FREQ0         Frequency Control Word
+        0x6A, // MDMCFG4       Modem Configuration
+        0x4A, // MDMCFG3       Modem Configuration
+        0x05, // MDMCFG2       Modem Configuration
+        0x22, // MDMCFG1       Modem Configuration
+        0xF8, // MDMCFG0       Modem Configuration
+        0x47, // DEVIATN       Modem Deviation Setting
+        0x07, // MCSM2         Main Radio Control State Machine Configuration
+        0x30, // MCSM1         Main Radio Control State Machine Configuration (IDLE after TX and RX)
+        0x18, // MCSM0         Main Radio Control State Machine Configuration
+        0x2E, // FOCCFG        Frequency Offset Compensation Configuration
+        0x6D, // BSCFG         Bit Synchronization Configuration
+        0x43, // AGCCTRL2      AGC Control       0x04,   // AGCCTRL2   magn target 33dB vs 36dB (max LNA+LNA2 gain vs. ) (highest gain cannot be used vs. all gain settings)
+        0x40, // AGCCTRL1      AGC Control       0x09,   // AGCCTRL1   carrier sense threshold disabled vs. 7dB below magn target (LNA prio strat. 1 vs 0)
+        0x91, // AGCCTRL0      AGC Control       0xB2,   // AGCCTRL0   channel filter samples 16 vs.32
+        0x87, // WOREVT1       High Byte Event0 Timeout
+        0x6B, // WOREVT0       Low Byte Event0 Timeout
+        0xFB, // WORCTRL       Wake On Radio Control
+        0xB6, // FREND1        Front End RX Configuration
+        0x10, // FREND0        Front End TX Configuration
+        0xE9, // FSCAL3        Frequency Synthesizer Calibration     0xEA,   // FSCAL3
+        0x2A, // FSCAL2        Frequency Synthesizer Calibration
+        0x00, // FSCAL1        Frequency Synthesizer Calibration
+        0x1F, // FSCAL0        Frequency Synthesizer Calibration
+        0x41, // RCCTRL1       RC Oscillator Configuration
+        0x00, // RCCTRL0       RC Oscillator Configuration
+        0x59, // FSTEST        Frequency Synthesizer Calibration Control
+        0x7F, // PTEST         Production Test
+        0x3F, // AGCTEST       AGC Test
+        0x81, // TEST2         Various Test Settings
+        0x35, // TEST1         Various Test Settings
+        0x09  // TEST0         Various Test Settings
 };
 
-//Patable index: -30  -20- -15  -10   0    5    7    10 dBm
+// Patable index: -30  -20- -15  -10   0    5    7    10 dBm
 const uint8_t RfPhysicalLayerCC1101::paTablePower868[8] = {0x03, 0x17, 0x1D, 0x26, 0x50, 0x86, 0xCD, 0xC0};
 
 RfPhysicalLayerCC1101::RfPhysicalLayerCC1101(RfDataLinkLayer& rfDataLinkLayer, Platform& platform)
@@ -139,14 +137,14 @@ RfPhysicalLayerCC1101::RfPhysicalLayerCC1101(RfDataLinkLayer& rfDataLinkLayer, P
 
 void RfPhysicalLayerCC1101::manchEncode(uint8_t* uncodedData, uint8_t* encodedData)
 {
-    uint8_t  data0, data1;
+    uint8_t data0, data1;
 
     // - Shift to get 4-bit data values
     data1 = (((*uncodedData) >> 4) & 0x0F);
     data0 = ((*uncodedData) & 0x0F);
 
     // - Perform Manchester encoding -
-    *encodedData       = (manchEncodeTab[data1]);
+    *encodedData = (manchEncodeTab[data1]);
     *(encodedData + 1) = manchEncodeTab[data0];
 }
 
@@ -156,20 +154,20 @@ bool RfPhysicalLayerCC1101::manchDecode(uint8_t* encodedData, uint8_t* decodedDa
 
     // - Shift to get 4 bit data and decode
     data3 = ((*encodedData >> 4) & 0x0F);
-    data2 = ( *encodedData       & 0x0F);
+    data2 = (*encodedData & 0x0F);
     data1 = ((*(encodedData + 1) >> 4) & 0x0F);
-    data0 = ((*(encodedData + 1))      & 0x0F);
+    data0 = ((*(encodedData + 1)) & 0x0F);
 
     // Check for invalid Manchester encoding
-    if ( (manchDecodeTab[data3] == 0xFF ) | (manchDecodeTab[data2] == 0xFF ) |
-            (manchDecodeTab[data1] == 0xFF ) | (manchDecodeTab[data0] == 0xFF ) )
+    if ((manchDecodeTab[data3] == 0xFF) | (manchDecodeTab[data2] == 0xFF) |
+        (manchDecodeTab[data1] == 0xFF) | (manchDecodeTab[data0] == 0xFF))
     {
         return false;
     }
 
     // Shift result into a byte
     *decodedData = (manchDecodeTab[data3] << 6) | (manchDecodeTab[data2] << 4) |
-                   (manchDecodeTab[data1] << 2) |  manchDecodeTab[data0];
+                   (manchDecodeTab[data1] << 2) | manchDecodeTab[data0];
 
     return true;
 }
@@ -179,18 +177,18 @@ uint8_t RfPhysicalLayerCC1101::sIdle()
     uint8_t marcState;
     uint32_t timeStart;
 
-    spiWriteStrobe(SIDLE);              //sets to idle first. must be in
+    spiWriteStrobe(SIDLE); // sets to idle first. must be in
 
-    marcState = 0xFF;                   //set unknown/dummy state value
+    marcState = 0xFF; // set unknown/dummy state value
     timeStart = millis();
 
-    while ((marcState != MARCSTATE_IDLE) && ((millis() - timeStart) < CC1101_TIMEOUT))  //0x01 = sidle
+    while ((marcState != MARCSTATE_IDLE) && ((millis() - timeStart) < CC1101_TIMEOUT)) // 0x01 = sidle
     {
-        marcState = (spiReadRegister(MARCSTATE) & MARCSTATE_BITMASK); //read out state of cc1101 to be sure in RX
+        marcState = (spiReadRegister(MARCSTATE) & MARCSTATE_BITMASK); // read out state of cc1101 to be sure in RX
     }
 
-    //print("marcstate: 0x");
-    //println(marcState, HEX);
+    // print("marcstate: 0x");
+    // println(marcState, HEX);
 
     if (marcState != MARCSTATE_IDLE)
     {
@@ -206,18 +204,18 @@ uint8_t RfPhysicalLayerCC1101::sReceive()
     uint8_t marcState;
     uint32_t timeStart;
 
-    spiWriteStrobe(SRX);                //writes receive strobe (receive mode)
+    spiWriteStrobe(SRX); // writes receive strobe (receive mode)
 
-    marcState = 0xFF;                   //set unknown/dummy state value
+    marcState = 0xFF; // set unknown/dummy state value
     timeStart = millis();
 
-    while ((marcState != MARCSTATE_RX) && ((millis() - timeStart) < CC1101_TIMEOUT))             //0x0D = RX
+    while ((marcState != MARCSTATE_RX) && ((millis() - timeStart) < CC1101_TIMEOUT)) // 0x0D = RX
     {
-        marcState = (spiReadRegister(MARCSTATE) & MARCSTATE_BITMASK); //read out state of cc1101 to be sure in RX
+        marcState = (spiReadRegister(MARCSTATE) & MARCSTATE_BITMASK); // read out state of cc1101 to be sure in RX
     }
 
-    //print("marcstate: 0x");
-    //println(marcState, HEX);
+    // print("marcstate: 0x");
+    // println(marcState, HEX);
 
     if (marcState != MARCSTATE_RX)
     {
@@ -249,8 +247,8 @@ uint8_t RfPhysicalLayerCC1101::spiReadRegister(uint8_t spi_instr)
     _platform.readWriteSpi(rbuf, len);
     digitalWrite(SPI_SS_PIN, HIGH);
     value = rbuf[1];
-    //printf("SPI_arr_0: 0x%02X\n", rbuf[0]);
-    //printf("SPI_arr_1: 0x%02X\n", rbuf[1]);
+    // printf("SPI_arr_0: 0x%02X\n", rbuf[0]);
+    // printf("SPI_arr_1: 0x%02X\n", rbuf[1]);
     return value;
 }
 
@@ -258,7 +256,7 @@ uint8_t RfPhysicalLayerCC1101::spiWriteStrobe(uint8_t spi_instr)
 {
     uint8_t tbuf[1] = {0};
     tbuf[0] = spi_instr;
-    //printf("SPI_data: 0x%02X\n", tbuf[0]);
+    // printf("SPI_data: 0x%02X\n", tbuf[0]);
     digitalWrite(SPI_SS_PIN, LOW);
     _platform.readWriteSpi(tbuf, 1);
     digitalWrite(SPI_SS_PIN, HIGH);
@@ -273,10 +271,10 @@ void RfPhysicalLayerCC1101::spiReadBurst(uint8_t spi_instr, uint8_t* pArr, uint8
     _platform.readWriteSpi(rbuf, len + 1);
     digitalWrite(SPI_SS_PIN, HIGH);
 
-    for (uint8_t i = 0; i < len ; i++ )
+    for (uint8_t i = 0; i < len; i++)
     {
         pArr[i] = rbuf[i + 1];
-        //printf("SPI_arr_read: 0x%02X\n", pArr[i]);
+        // printf("SPI_arr_read: 0x%02X\n", pArr[i]);
     }
 }
 
@@ -285,10 +283,10 @@ void RfPhysicalLayerCC1101::spiWriteBurst(uint8_t spi_instr, const uint8_t* pArr
     uint8_t tbuf[len + 1];
     tbuf[0] = spi_instr | WRITE_BURST;
 
-    for (uint8_t i = 0; i < len ; i++ )
+    for (uint8_t i = 0; i < len; i++)
     {
         tbuf[i + 1] = pArr[i];
-        //printf("SPI_arr_write: 0x%02X\n", tbuf[i+1]);
+        // printf("SPI_arr_write: 0x%02X\n", tbuf[i+1]);
     }
 
     digitalWrite(SPI_SS_PIN, LOW);
@@ -309,7 +307,7 @@ void RfPhysicalLayerCC1101::setOutputPowerLevel(int8_t dBm)
 {
     uint8_t pa = 0xC0;
 
-    if      (dBm <= -30)
+    if (dBm <= -30)
         pa = 0x00;
     else if (dBm <= -20)
         pa = 0x01;
@@ -359,8 +357,8 @@ bool RfPhysicalLayerCC1101::InitChip()
     spiWriteStrobe(SFRX);
     delayMicroseconds(100);
 
-    uint8_t partnum = spiReadRegister(PARTNUM); //reads CC1101 partnumber;
-    uint8_t version = spiReadRegister(VERSION); //reads CC1101 version number;
+    uint8_t partnum = spiReadRegister(PARTNUM); // reads CC1101 partnumber;
+    uint8_t version = spiReadRegister(VERSION); // reads CC1101 version number;
 
     // Checks if valid chip ID is found. Usually 0x03 or 0x14. if not -> abort
     if (version == 0x00 || version == 0xFF)
@@ -407,8 +405,8 @@ void RfPhysicalLayerCC1101::showRegisterSettings()
     uint8_t config_reg_verify[CFG_REGISTER];
     uint8_t Patable_verify[CFG_REGISTER];
 
-    spiReadBurst(READ_BURST, config_reg_verify, CFG_REGISTER); //reads all 47 config register from cc1101
-    spiReadBurst(PATABLE_BURST, Patable_verify, 8);           //reads output power settings from cc1101
+    spiReadBurst(READ_BURST, config_reg_verify, CFG_REGISTER); // reads all 47 config register from cc1101
+    spiReadBurst(PATABLE_BURST, Patable_verify, 8);            // reads output power settings from cc1101
 
     println("Config Register:");
     printHex("", config_reg_verify, CFG_REGISTER);
@@ -421,8 +419,7 @@ void RfPhysicalLayerCC1101::loop()
 {
     switch (_loopState)
     {
-        case TX_START:
-        {
+        case TX_START: {
             prevStatusGDO0 = 0;
             prevStatusGDO2 = 0;
             // Set sync word in TX mode
@@ -488,7 +485,7 @@ void RfPhysicalLayerCC1101::loop()
             uint8_t bytesToWrite = MIN(64, bytesLeft);
             spiWriteBurst(TXFIFO_BURST, pByteIndex, bytesToWrite);
             pByteIndex += bytesToWrite;
-            bytesLeft  -= bytesToWrite;
+            bytesLeft -= bytesToWrite;
 
             // Enable transmission of packet
             spiWriteStrobe(STX);
@@ -496,10 +493,9 @@ void RfPhysicalLayerCC1101::loop()
             _loopState = TX_ACTIVE;
         }
 
-        // Fall through
+            // Fall through
 
-        case TX_ACTIVE:
-        {
+        case TX_ACTIVE: {
             // Check if we have an incomplete packet transmission
             if (syncStart && (millis() - packetStartTime > TX_PACKET_TIMEOUT))
             {
@@ -525,10 +521,10 @@ void RfPhysicalLayerCC1101::loop()
                     uint8_t bytesToWrite = MIN(64, bytesLeft);
                     spiWriteBurst(TXFIFO_BURST, pByteIndex, bytesToWrite);
                     pByteIndex += bytesToWrite;
-                    bytesLeft  -= bytesToWrite;
+                    bytesLeft -= bytesToWrite;
 
                     // Set fixed length mode if less than 256 left to transmit
-                    if ( (bytesLeft < (256 - 64)) && !fixedLengthMode )
+                    if ((bytesLeft < (256 - 64)) && !fixedLengthMode)
                     {
                         spiWriteRegister(PKTCTRL0, 0x00); // Set fixed pktlen mode
                         fixedLengthMode = true;
@@ -561,7 +557,7 @@ void RfPhysicalLayerCC1101::loop()
                 else
                 {
                     // GDO0 asserted because sync word was transmitted
-                    //println("TX Syncword!");
+                    // println("TX Syncword!");
                     // wait for TX_PACKET_TIMEOUT milliseconds
                     // Complete packet must have been transmitted within this time
                     packetStartTime = millis();
@@ -571,8 +567,7 @@ void RfPhysicalLayerCC1101::loop()
         }
         break;
 
-        case TX_END:
-        {
+        case TX_END: {
             // free buffer
             delete sendBuffer;
             // Go back to RX after TX
@@ -580,8 +575,7 @@ void RfPhysicalLayerCC1101::loop()
         }
         break;
 
-        case RX_START:
-        {
+        case RX_START: {
             prevStatusGDO2 = 0;
             prevStatusGDO0 = 0;
             syncStart = false;
@@ -610,8 +604,7 @@ void RfPhysicalLayerCC1101::loop()
         }
         break;
 
-        case RX_ACTIVE:
-        {
+        case RX_ACTIVE: {
             if (!_rfDataLinkLayer.isTxQueueEmpty() && !syncStart)
             {
                 sIdle();
@@ -624,9 +617,9 @@ void RfPhysicalLayerCC1101::loop()
             if (syncStart && (millis() - packetStartTime > RX_PACKET_TIMEOUT))
             {
                 println("RX packet timeout!");
-                //uint8_t marcState = (spiReadRegister(MARCSTATE) & MARCSTATE_BITMASK); //read out state of cc1101 to be sure in RX
-                //print("marcstate: 0x");
-                //println(marcState, HEX);
+                // uint8_t marcState = (spiReadRegister(MARCSTATE) & MARCSTATE_BITMASK); //read out state of cc1101 to be sure in RX
+                // print("marcstate: 0x");
+                // println(marcState, HEX);
                 sIdle();
                 _loopState = RX_START;
                 break;
@@ -654,7 +647,7 @@ void RfPhysicalLayerCC1101::loop()
                         // Decode the L-field
                         if (!manchDecode(&buffer[0], &packet[0]))
                         {
-                            //println("Could not decode L-field: manchester code violation");
+                            // println("Could not decode L-field: manchester code violation");
                             _loopState = RX_START;
                             break;
                         }
@@ -674,7 +667,7 @@ void RfPhysicalLayerCC1101::loop()
                         {
                             // Infinite packet length mode is more than 255 bytes
                             // Calculate the PKTLEN value
-                            uint8_t fixedLength = pktLen  % 256;
+                            uint8_t fixedLength = pktLen % 256;
                             spiWriteRegister(PKTLEN, fixedLength);
                         }
 
@@ -693,7 +686,7 @@ void RfPhysicalLayerCC1101::loop()
 
                         // - Length mode -
                         // Set fixed packet length mode if less than 256 bytes
-                        if ((bytesLeft < 256 ) && !fixedLengthMode)
+                        if ((bytesLeft < 256) && !fixedLengthMode)
                         {
                             spiWriteRegister(PKTCTRL0, 0x00); // Set fixed pktlen mode
                             fixedLengthMode = true;
@@ -703,7 +696,7 @@ void RfPhysicalLayerCC1101::loop()
                         // Do not empty the FIFO (See the CC110x or 2500 Errata Note)
                         spiReadBurst(RXFIFO_BURST, pByteIndex, 32 - 1);
 
-                        bytesLeft  -= (32 - 1);
+                        bytesLeft -= (32 - 1);
                         pByteIndex += (32 - 1);
                     }
                 }
@@ -741,7 +734,7 @@ void RfPhysicalLayerCC1101::loop()
                 else
                 {
                     // GDO0 asserted because sync word was received and recognized
-                    //println("RX Syncword!");
+                    // println("RX Syncword!");
                     // wait for RX_PACKET_TIMEOUT milliseconds
                     // Complete packet must have been received within this time
                     packetStartTime = millis();
@@ -751,8 +744,7 @@ void RfPhysicalLayerCC1101::loop()
         }
         break;
 
-        case RX_END:
-        {
+        case RX_END: {
             uint16_t pLen = PACKET_SIZE(packet[0]);
             // Decode the first block (always 10 bytes + 2 bytes CRC)
             bool decodeOk = true;

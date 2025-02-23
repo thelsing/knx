@@ -1,38 +1,38 @@
 /******************************************************************************
-*  Filename:       timer.h
-*  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
-*  Revision:       49048
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       timer.h
+ *  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
+ *  Revision:       49048
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //****************************************************************************
 //
@@ -53,18 +53,17 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
+#include "../inc/hw_gpt.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
+#include "debug.h"
+#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include "../inc/hw_ints.h"
-#include "../inc/hw_types.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_gpt.h"
-#include "interrupt.h"
-#include "debug.h"
 
 //*****************************************************************************
 //
@@ -80,14 +79,14 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define TimerConfigure                  NOROM_TimerConfigure
-#define TimerLevelControl               NOROM_TimerLevelControl
-#define TimerStallControl               NOROM_TimerStallControl
-#define TimerWaitOnTriggerControl       NOROM_TimerWaitOnTriggerControl
-#define TimerIntRegister                NOROM_TimerIntRegister
-#define TimerIntUnregister              NOROM_TimerIntUnregister
-#define TimerMatchUpdateMode            NOROM_TimerMatchUpdateMode
-#define TimerIntervalLoadMode           NOROM_TimerIntervalLoadMode
+#define TimerConfigure NOROM_TimerConfigure
+#define TimerLevelControl NOROM_TimerLevelControl
+#define TimerStallControl NOROM_TimerStallControl
+#define TimerWaitOnTriggerControl NOROM_TimerWaitOnTriggerControl
+#define TimerIntRegister NOROM_TimerIntRegister
+#define TimerIntUnregister NOROM_TimerIntUnregister
+#define TimerMatchUpdateMode NOROM_TimerMatchUpdateMode
+#define TimerIntervalLoadMode NOROM_TimerIntervalLoadMode
 #endif
 
 //*****************************************************************************
@@ -95,29 +94,29 @@ extern "C"
 // Values that can be passed to TimerConfigure as the ui32Config parameter.
 //
 //*****************************************************************************
-#define TIMER_CFG_ONE_SHOT        0x00000021  // Full-width one-shot timer
-#define TIMER_CFG_ONE_SHOT_UP     0x00000031  // Full-width one-shot up-count timer
-#define TIMER_CFG_PERIODIC        0x00000022  // Full-width periodic timer
-#define TIMER_CFG_PERIODIC_UP     0x00000032  // Full-width periodic up-count timer
-#define TIMER_CFG_SPLIT_PAIR      0x04000000  // Two half-width timers
-#define TIMER_CFG_A_ONE_SHOT      0x00000021  // Timer A one-shot timer
-#define TIMER_CFG_A_ONE_SHOT_UP   0x00000031  // Timer A one-shot up-count timer
-#define TIMER_CFG_A_PERIODIC      0x00000022  // Timer A periodic timer
-#define TIMER_CFG_A_PERIODIC_UP   0x00000032  // Timer A periodic up-count timer
-#define TIMER_CFG_A_CAP_COUNT     0x00000003  // Timer A event counter
-#define TIMER_CFG_A_CAP_COUNT_UP  0x00000013  // Timer A event up-counter
-#define TIMER_CFG_A_CAP_TIME      0x00000007  // Timer A event timer
-#define TIMER_CFG_A_CAP_TIME_UP   0x00000017  // Timer A event up-count timer
-#define TIMER_CFG_A_PWM           0x0000000A  // Timer A PWM output
-#define TIMER_CFG_B_ONE_SHOT      0x00002100  // Timer B one-shot timer
-#define TIMER_CFG_B_ONE_SHOT_UP   0x00003100  // Timer B one-shot up-count timer
-#define TIMER_CFG_B_PERIODIC      0x00002200  // Timer B periodic timer
-#define TIMER_CFG_B_PERIODIC_UP   0x00003200  // Timer B periodic up-count timer
-#define TIMER_CFG_B_CAP_COUNT     0x00000300  // Timer B event counter
-#define TIMER_CFG_B_CAP_COUNT_UP  0x00001300  // Timer B event up-counter
-#define TIMER_CFG_B_CAP_TIME      0x00000700  // Timer B event timer
-#define TIMER_CFG_B_CAP_TIME_UP   0x00001700  // Timer B event up-count timer
-#define TIMER_CFG_B_PWM           0x00000A00  // Timer B PWM output
+#define TIMER_CFG_ONE_SHOT 0x00000021       // Full-width one-shot timer
+#define TIMER_CFG_ONE_SHOT_UP 0x00000031    // Full-width one-shot up-count timer
+#define TIMER_CFG_PERIODIC 0x00000022       // Full-width periodic timer
+#define TIMER_CFG_PERIODIC_UP 0x00000032    // Full-width periodic up-count timer
+#define TIMER_CFG_SPLIT_PAIR 0x04000000     // Two half-width timers
+#define TIMER_CFG_A_ONE_SHOT 0x00000021     // Timer A one-shot timer
+#define TIMER_CFG_A_ONE_SHOT_UP 0x00000031  // Timer A one-shot up-count timer
+#define TIMER_CFG_A_PERIODIC 0x00000022     // Timer A periodic timer
+#define TIMER_CFG_A_PERIODIC_UP 0x00000032  // Timer A periodic up-count timer
+#define TIMER_CFG_A_CAP_COUNT 0x00000003    // Timer A event counter
+#define TIMER_CFG_A_CAP_COUNT_UP 0x00000013 // Timer A event up-counter
+#define TIMER_CFG_A_CAP_TIME 0x00000007     // Timer A event timer
+#define TIMER_CFG_A_CAP_TIME_UP 0x00000017  // Timer A event up-count timer
+#define TIMER_CFG_A_PWM 0x0000000A          // Timer A PWM output
+#define TIMER_CFG_B_ONE_SHOT 0x00002100     // Timer B one-shot timer
+#define TIMER_CFG_B_ONE_SHOT_UP 0x00003100  // Timer B one-shot up-count timer
+#define TIMER_CFG_B_PERIODIC 0x00002200     // Timer B periodic timer
+#define TIMER_CFG_B_PERIODIC_UP 0x00003200  // Timer B periodic up-count timer
+#define TIMER_CFG_B_CAP_COUNT 0x00000300    // Timer B event counter
+#define TIMER_CFG_B_CAP_COUNT_UP 0x00001300 // Timer B event up-counter
+#define TIMER_CFG_B_CAP_TIME 0x00000700     // Timer B event timer
+#define TIMER_CFG_B_CAP_TIME_UP 0x00001700  // Timer B event up-count timer
+#define TIMER_CFG_B_PWM 0x00000A00          // Timer B PWM output
 
 //*****************************************************************************
 //
@@ -126,25 +125,25 @@ extern "C"
 // TimerIntStatus.
 //
 //*****************************************************************************
-#define TIMER_TIMB_DMA            0x00002000  // TimerB DMA Done interrupt
-#define TIMER_TIMB_MATCH          0x00000800  // TimerB match interrupt
-#define TIMER_CAPB_EVENT          0x00000400  // CaptureB event interrupt
-#define TIMER_CAPB_MATCH          0x00000200  // CaptureB match interrupt
-#define TIMER_TIMB_TIMEOUT        0x00000100  // TimerB time out interrupt
-#define TIMER_TIMA_DMA            0x00000020  // TimerA DMA Done interrupt
-#define TIMER_TIMA_MATCH          0x00000010  // TimerA match interrupt
-#define TIMER_CAPA_EVENT          0x00000004  // CaptureA event interrupt
-#define TIMER_CAPA_MATCH          0x00000002  // CaptureA match interrupt
-#define TIMER_TIMA_TIMEOUT        0x00000001  // TimerA time out interrupt
+#define TIMER_TIMB_DMA 0x00002000     // TimerB DMA Done interrupt
+#define TIMER_TIMB_MATCH 0x00000800   // TimerB match interrupt
+#define TIMER_CAPB_EVENT 0x00000400   // CaptureB event interrupt
+#define TIMER_CAPB_MATCH 0x00000200   // CaptureB match interrupt
+#define TIMER_TIMB_TIMEOUT 0x00000100 // TimerB time out interrupt
+#define TIMER_TIMA_DMA 0x00000020     // TimerA DMA Done interrupt
+#define TIMER_TIMA_MATCH 0x00000010   // TimerA match interrupt
+#define TIMER_CAPA_EVENT 0x00000004   // CaptureA event interrupt
+#define TIMER_CAPA_MATCH 0x00000002   // CaptureA match interrupt
+#define TIMER_TIMA_TIMEOUT 0x00000001 // TimerA time out interrupt
 
 //*****************************************************************************
 //
 // Values that can be passed to TimerControlEvent as the ui32Event parameter.
 //
 //*****************************************************************************
-#define TIMER_EVENT_POS_EDGE      0x00000000  // Count positive edges
-#define TIMER_EVENT_NEG_EDGE      0x00000404  // Count negative edges
-#define TIMER_EVENT_BOTH_EDGES    0x00000C0C  // Count both edges
+#define TIMER_EVENT_POS_EDGE 0x00000000   // Count positive edges
+#define TIMER_EVENT_NEG_EDGE 0x00000404   // Count negative edges
+#define TIMER_EVENT_BOTH_EDGES 0x00000C0C // Count both edges
 
 //*****************************************************************************
 //
@@ -152,39 +151,39 @@ extern "C"
 // parameter.
 //
 //*****************************************************************************
-#define TIMER_A                   0x000000FF  // Timer A
-#define TIMER_B                   0x0000FF00  // Timer B
-#define TIMER_BOTH                0x0000FFFF  // Timer Both
+#define TIMER_A 0x000000FF    // Timer A
+#define TIMER_B 0x0000FF00    // Timer B
+#define TIMER_BOTH 0x0000FFFF // Timer Both
 
 //*****************************************************************************
 //
 // Values that can be passed to GPTSynchronize as the ui32Timers parameter
 //
 //*****************************************************************************
-#define TIMER_0A_SYNC             0x00000001  // Synchronize Timer 0A
-#define TIMER_0B_SYNC             0x00000002  // Synchronize Timer 0B
-#define TIMER_1A_SYNC             0x00000004  // Synchronize Timer 1A
-#define TIMER_1B_SYNC             0x00000008  // Synchronize Timer 1B
-#define TIMER_2A_SYNC             0x00000010  // Synchronize Timer 2A
-#define TIMER_2B_SYNC             0x00000020  // Synchronize Timer 2B
-#define TIMER_3A_SYNC             0x00000040  // Synchronize Timer 3A
-#define TIMER_3B_SYNC             0x00000080  // Synchronize Timer 3B
+#define TIMER_0A_SYNC 0x00000001 // Synchronize Timer 0A
+#define TIMER_0B_SYNC 0x00000002 // Synchronize Timer 0B
+#define TIMER_1A_SYNC 0x00000004 // Synchronize Timer 1A
+#define TIMER_1B_SYNC 0x00000008 // Synchronize Timer 1B
+#define TIMER_2A_SYNC 0x00000010 // Synchronize Timer 2A
+#define TIMER_2B_SYNC 0x00000020 // Synchronize Timer 2B
+#define TIMER_3A_SYNC 0x00000040 // Synchronize Timer 3A
+#define TIMER_3B_SYNC 0x00000080 // Synchronize Timer 3B
 
 //*****************************************************************************
 //
 // Values that can be passed to TimerMatchUpdateMode
 //
 //*****************************************************************************
-#define TIMER_MATCHUPDATE_NEXTCYCLE  0x00000000 // Apply match register on next cycle
-#define TIMER_MATCHUPDATE_TIMEOUT    0x00000001 // Apply match register on next timeout
+#define TIMER_MATCHUPDATE_NEXTCYCLE 0x00000000 // Apply match register on next cycle
+#define TIMER_MATCHUPDATE_TIMEOUT 0x00000001   // Apply match register on next timeout
 
 //*****************************************************************************
 //
 // Values that can be passed to TimerIntervalLoad
 //
 //*****************************************************************************
-#define TIMER_INTERVALLOAD_NEXTCYCLE  0x00000000 // Load TxR register with the value in the TxILR register on the next clock cycle
-#define TIMER_INTERVALLOAD_TIMEOUT    0x00000001 // Load TxR register with the value in the TxILR register on next timeout
+#define TIMER_INTERVALLOAD_NEXTCYCLE 0x00000000 // Load TxR register with the value in the TxILR register on the next clock cycle
+#define TIMER_INTERVALLOAD_TIMEOUT 0x00000001   // Load TxR register with the value in the TxILR register on next timeout
 
 //*****************************************************************************
 //
@@ -522,8 +521,7 @@ TimerPrescaleGet(uint32_t ui32Base, uint32_t ui32Timer)
            (ui32Timer == TIMER_BOTH));
 
     // Return the appropriate prescale value.
-    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAPR) :
-            HWREG(ui32Base + GPT_O_TBPR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAPR) : HWREG(ui32Base + GPT_O_TBPR));
 }
 
 //*****************************************************************************
@@ -597,8 +595,7 @@ TimerPrescaleMatchGet(uint32_t ui32Base, uint32_t ui32Timer)
     ASSERT((ui32Timer == TIMER_A) || (ui32Timer == TIMER_B));
 
     // Return the appropriate prescale match value.
-    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAPMR) :
-            HWREG(ui32Base + GPT_O_TBPMR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAPMR) : HWREG(ui32Base + GPT_O_TBPMR));
 }
 
 //*****************************************************************************
@@ -674,8 +671,7 @@ TimerLoadGet(uint32_t ui32Base, uint32_t ui32Timer)
     ASSERT((ui32Timer == TIMER_A) || (ui32Timer == TIMER_B));
 
     // Return the appropriate load value.
-    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAILR) :
-            HWREG(ui32Base + GPT_O_TBILR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAILR) : HWREG(ui32Base + GPT_O_TBILR));
 }
 
 //*****************************************************************************
@@ -706,8 +702,7 @@ TimerValueGet(uint32_t ui32Base, uint32_t ui32Timer)
     ASSERT((ui32Timer == TIMER_A) || (ui32Timer == TIMER_B));
 
     // Return the appropriate timer value.
-    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAR) :
-            HWREG(ui32Base + GPT_O_TBR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAR) : HWREG(ui32Base + GPT_O_TBR));
 }
 
 //*****************************************************************************
@@ -786,8 +781,7 @@ TimerMatchGet(uint32_t ui32Base, uint32_t ui32Timer)
     ASSERT((ui32Timer == TIMER_A) || (ui32Timer == TIMER_B));
 
     // Return the appropriate match value.
-    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAMATCHR) :
-            HWREG(ui32Base + GPT_O_TBMATCHR));
+    return ((ui32Timer == TIMER_A) ? HWREG(ui32Base + GPT_O_TAMATCHR) : HWREG(ui32Base + GPT_O_TBMATCHR));
 }
 
 //*****************************************************************************
@@ -936,8 +930,7 @@ TimerIntStatus(uint32_t ui32Base, bool bMasked)
 
     // Return either the interrupt status or the raw interrupt status as
     // requested.
-    return (bMasked ? HWREG(ui32Base + GPT_O_MIS) :
-            HWREG(ui32Base + GPT_O_RIS));
+    return (bMasked ? HWREG(ui32Base + GPT_O_MIS) : HWREG(ui32Base + GPT_O_RIS));
 }
 
 //*****************************************************************************
@@ -1123,36 +1116,36 @@ extern void TimerIntervalLoadMode(uint32_t ui32Base, uint32_t ui32Timer, uint32_
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_TimerConfigure
-#undef  TimerConfigure
-#define TimerConfigure                  ROM_TimerConfigure
+#undef TimerConfigure
+#define TimerConfigure ROM_TimerConfigure
 #endif
 #ifdef ROM_TimerLevelControl
-#undef  TimerLevelControl
-#define TimerLevelControl               ROM_TimerLevelControl
+#undef TimerLevelControl
+#define TimerLevelControl ROM_TimerLevelControl
 #endif
 #ifdef ROM_TimerStallControl
-#undef  TimerStallControl
-#define TimerStallControl               ROM_TimerStallControl
+#undef TimerStallControl
+#define TimerStallControl ROM_TimerStallControl
 #endif
 #ifdef ROM_TimerWaitOnTriggerControl
-#undef  TimerWaitOnTriggerControl
-#define TimerWaitOnTriggerControl       ROM_TimerWaitOnTriggerControl
+#undef TimerWaitOnTriggerControl
+#define TimerWaitOnTriggerControl ROM_TimerWaitOnTriggerControl
 #endif
 #ifdef ROM_TimerIntRegister
-#undef  TimerIntRegister
-#define TimerIntRegister                ROM_TimerIntRegister
+#undef TimerIntRegister
+#define TimerIntRegister ROM_TimerIntRegister
 #endif
 #ifdef ROM_TimerIntUnregister
-#undef  TimerIntUnregister
-#define TimerIntUnregister              ROM_TimerIntUnregister
+#undef TimerIntUnregister
+#define TimerIntUnregister ROM_TimerIntUnregister
 #endif
 #ifdef ROM_TimerMatchUpdateMode
-#undef  TimerMatchUpdateMode
-#define TimerMatchUpdateMode            ROM_TimerMatchUpdateMode
+#undef TimerMatchUpdateMode
+#define TimerMatchUpdateMode ROM_TimerMatchUpdateMode
 #endif
 #ifdef ROM_TimerIntervalLoadMode
-#undef  TimerIntervalLoadMode
-#define TimerIntervalLoadMode           ROM_TimerIntervalLoadMode
+#undef TimerIntervalLoadMode
+#define TimerIntervalLoadMode ROM_TimerIntervalLoadMode
 #endif
 #endif
 

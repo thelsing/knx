@@ -1,19 +1,19 @@
 #include "config.h"
 #ifdef USE_CEMI_SERVER
 
-#include "cemi_server.h"
-#include "cemi_frame.h"
 #include "bau_systemB.h"
-#include "usb_tunnel_interface.h"
+#include "bits.h"
+#include "cemi_frame.h"
+#include "cemi_server.h"
 #include "data_link_layer.h"
 #include "string.h"
-#include "bits.h"
+#include "usb_tunnel_interface.h"
 #include <stdio.h>
 
 CemiServer::CemiServer(BauSystemB& bau)
     : _bau(bau)
 #ifdef USE_USB
-    ,
+      ,
       _usbTunnelInterface(*this,
                           _bau.deviceObject().maskVersion(),
                           _bau.deviceObject().manufacturerId())
@@ -83,13 +83,13 @@ void CemiServer::dataIndicationToTunnel(CemiFrame& frame)
 
     if (isRf)
     {
-        data[0] = L_data_ind;     // Message Code
-        data[1] = 0x0A;           // Total additional info length
-        data[2] = 0x02;           // RF add. info: type
-        data[3] = 0x08;           // RF add. info: length
-        data[4] = frame.rfInfo(); // RF add. info: info field (batt ok, bidir)
+        data[0] = L_data_ind;                              // Message Code
+        data[1] = 0x0A;                                    // Total additional info length
+        data[2] = 0x02;                                    // RF add. info: type
+        data[3] = 0x08;                                    // RF add. info: length
+        data[4] = frame.rfInfo();                          // RF add. info: info field (batt ok, bidir)
         pushByteArray(frame.rfSerialOrDoA(), 6, &data[5]); // RF add. info:Serial or Domain Address
-        data[11] = frame.rfLfn(); // RF add. info: link layer frame number
+        data[11] = frame.rfLfn();                          // RF add. info: link layer frame number
         memcpy(&data[12], &((frame.data())[2]), frame.dataLength() - 2);
     }
     else
@@ -125,38 +125,32 @@ void CemiServer::frameReceived(CemiFrame& frame)
 {
     switch (frame.messageCode())
     {
-        case L_data_req:
-        {
+        case L_data_req: {
             handleLData(frame);
             break;
         }
 
-        case M_PropRead_req:
-        {
+        case M_PropRead_req: {
             handleMPropRead(frame);
             break;
         }
 
-        case M_PropWrite_req:
-        {
+        case M_PropWrite_req: {
             handleMPropWrite(frame);
             break;
         }
 
-        case M_FuncPropCommand_req:
-        {
+        case M_FuncPropCommand_req: {
             println("M_FuncPropCommand_req not implemented");
             break;
         }
 
-        case M_FuncPropStateRead_req:
-        {
+        case M_FuncPropStateRead_req: {
             println("M_FuncPropStateRead_req not implemented");
             break;
         }
 
-        case M_Reset_req:
-        {
+        case M_Reset_req: {
             handleMReset(frame);
             break;
         }
@@ -169,7 +163,7 @@ void CemiServer::frameReceived(CemiFrame& frame)
         case M_PropWrite_con:
         case M_FuncPropCommand_con:
 
-        //case M_FuncPropStateRead_con: // same value as M_FuncPropCommand_con
+        // case M_FuncPropStateRead_con: // same value as M_FuncPropCommand_con
         case M_Reset_ind:
         default:
             break;
@@ -181,7 +175,7 @@ void CemiServer::handleLData(CemiFrame& frame)
     // Fill in the cEMI client address if the client sets
     // source address to 0.
 #ifndef KNX_TUNNELING
-    //We already set the correct IA
+    // We already set the correct IA
     if (frame.sourceAddress() == 0x0000)
     {
         frame.sourceAddress(_clientAddress);
@@ -195,14 +189,14 @@ void CemiServer::handleLData(CemiFrame& frame)
     {
         // Check if we have additional info for RF
         if (((frame.data())[1] == 0x0A) && // Additional info total length: we only handle one additional info of type RF
-                ((frame.data())[2] == 0x02) && // Additional info type: RF
-                ((frame.data())[3] == 0x08) )  // Additional info length of type RF: 8 bytes (fixed)
+            ((frame.data())[2] == 0x02) && // Additional info type: RF
+            ((frame.data())[3] == 0x08))   // Additional info length of type RF: 8 bytes (fixed)
         {
             frame.rfInfo((frame.data())[4]);
 
             // Use the values provided in the RF additonal info
-            if ( ((frame.data())[5] != 0x00) || ((frame.data())[6] != 0x00) || ((frame.data())[7] != 0x00) ||
-                    ((frame.data())[8] != 0x00) || ((frame.data())[9] != 0x00) || ((frame.data())[10] != 0x00) )
+            if (((frame.data())[5] != 0x00) || ((frame.data())[6] != 0x00) || ((frame.data())[7] != 0x00) ||
+                ((frame.data())[8] != 0x00) || ((frame.data())[9] != 0x00) || ((frame.data())[10] != 0x00))
             {
                 frame.rfSerialOrDoA(&((frame.data())[5]));
             } // else leave the nullptr as it is
@@ -272,17 +266,17 @@ void CemiServer::handleMPropRead(CemiFrame& frame)
     // so that the device and the cEMI client/server connection(tunnel) can operate simultaneously.
     // KNX IP Interfaces which offer multiple simultaneous tunnel connections seem to operate the same way.
     // Each tunnel has its own cEMI client address which is based on the main device address.
-    if (((ObjectType) objectType == OT_DEVICE) &&
-            (propertyId == PID_DEVICE_ADDR) &&
-            (numberOfElements == 1))
+    if (((ObjectType)objectType == OT_DEVICE) &&
+        (propertyId == PID_DEVICE_ADDR) &&
+        (numberOfElements == 1))
     {
-        data[0] = (uint8_t) (_clientAddress & 0xFF);
+        data[0] = (uint8_t)(_clientAddress & 0xFF);
     }
-    else if (((ObjectType) objectType == OT_DEVICE) &&
+    else if (((ObjectType)objectType == OT_DEVICE) &&
              (propertyId == PID_SUBNET_ADDR) &&
              (numberOfElements == 1))
     {
-        data[0] = (uint8_t) ((_clientAddress >> 8) & 0xFF);
+        data[0] = (uint8_t)((_clientAddress >> 8) & 0xFF);
     }
 
     if (data && dataSize && numberOfElements)
@@ -311,7 +305,7 @@ void CemiServer::handleMPropRead(CemiFrame& frame)
         uint8_t responseData[7 + 1];
         memcpy(responseData, frame.data(), sizeof(responseData));
         responseData[7] = Void_DP; // Set cEMI error code
-        responseData[5] = 0; // Set Number of elements to zero
+        responseData[5] = 0;       // Set Number of elements to zero
 
         printHex(" <- error: ", &responseData[7], 1);
         println("");
@@ -353,9 +347,9 @@ void CemiServer::handleMPropWrite(CemiFrame& frame)
     printHex(" -> data: ", requestData, requestDataSize);
 
     // Patch request for device address in device object
-    if (((ObjectType) objectType == OT_DEVICE) &&
-            (propertyId == PID_DEVICE_ADDR) &&
-            (numberOfElements == 1))
+    if (((ObjectType)objectType == OT_DEVICE) &&
+        (propertyId == PID_DEVICE_ADDR) &&
+        (numberOfElements == 1))
     {
         // Temporarily store new cEMI client address in memory
         // We also be sent back if the client requests it again
@@ -363,7 +357,7 @@ void CemiServer::handleMPropWrite(CemiFrame& frame)
         print("cEMI client address: ");
         println(_clientAddress, HEX);
     }
-    else if (((ObjectType) objectType == OT_DEVICE) &&
+    else if (((ObjectType)objectType == OT_DEVICE) &&
              (propertyId == PID_SUBNET_ADDR) &&
              (numberOfElements == 1))
     {
@@ -400,7 +394,7 @@ void CemiServer::handleMPropWrite(CemiFrame& frame)
         uint8_t responseData[7 + 1];
         memcpy(responseData, frame.data(), sizeof(responseData));
         responseData[7] = Illegal_Command; // Set cEMI error code
-        responseData[5] = 0; // Set Number of elements to zero
+        responseData[5] = 0;               // Set Number of elements to zero
 
         printHex(" <- error: ", &responseData[7], 1);
         println("");

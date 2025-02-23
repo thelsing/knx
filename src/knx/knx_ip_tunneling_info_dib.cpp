@@ -3,7 +3,8 @@
 #if KNX_SERVICE_FAMILY_CORE >= 2
 
 #ifdef USE_IP
-KnxIpTunnelingInfoDIB::KnxIpTunnelingInfoDIB(uint8_t* data) : KnxIpDIB(data)
+KnxIpTunnelingInfoDIB::KnxIpTunnelingInfoDIB(uint8_t* data)
+    : KnxIpDIB(data)
 {
     currentPos = data + 4;
 }

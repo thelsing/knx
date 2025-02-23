@@ -1,7 +1,7 @@
 #pragma once
+#include "bits.h"
 #include "config.h"
 #include "platform.h"
-#include "bits.h"
 
 class KnxIpTunnelConnection
 {
@@ -20,5 +20,4 @@ class KnxIpTunnelConnection
         void Reset();
 
     private:
-
 };

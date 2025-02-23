@@ -3,8 +3,8 @@
 
 #include "bau091A.h"
 #include "bits.h"
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 using namespace std;
 
@@ -15,12 +15,13 @@ implement PID_COUPLER_SERVICES_CONTROL 03_05_01 4.4.7
 
 Bau091A::Bau091A(Platform& platform)
     : BauSystemBCoupler(platform), DataLinkLayerCallbacks(),
-      _routerObj(memory(), 0x200, 0x2000),  // the Filtertable of 0x091A IP Routers is fixed at 0x200 and 0x2000 long
+      _routerObj(memory(), 0x200, 0x2000), // the Filtertable of 0x091A IP Routers is fixed at 0x200 and 0x2000 long
       _ipParameters(_deviceObj, platform),
-      _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getPrimaryInterface(), _platform, (DataLinkLayerCallbacks*) this),
-      _dlLayerSecondary(_deviceObj, _netLayer.getSecondaryInterface(), platform, (ITpUartCallBacks&) * this, (DataLinkLayerCallbacks*) this)
+      _dlLayerPrimary(_deviceObj, _ipParameters, _netLayer.getPrimaryInterface(), _platform, (DataLinkLayerCallbacks*)this),
+      _dlLayerSecondary(_deviceObj, _netLayer.getSecondaryInterface(), platform, (ITpUartCallBacks&)*this, (DataLinkLayerCallbacks*)this)
 #ifdef USE_CEMI_SERVER
-    , _cemiServer(*this)
+      ,
+      _cemiServer(*this)
 #endif
 {
     // Before accessing anything of the router object they have to be initialized according to the used medium
@@ -57,17 +58,17 @@ Bau091A::Bau091A(Platform& platform)
     // This differs from BAU to BAU with different medium types.
     // See PID_IO_LIST
     Property* prop = _deviceObj.property(PID_IO_LIST);
-    prop->write(1, (uint16_t) OT_DEVICE);
-    prop->write(2, (uint16_t) OT_ROUTER);
-    prop->write(3, (uint16_t) OT_APPLICATION_PROG);
-    prop->write(4, (uint16_t) OT_IP_PARAMETER);
+    prop->write(1, (uint16_t)OT_DEVICE);
+    prop->write(2, (uint16_t)OT_ROUTER);
+    prop->write(3, (uint16_t)OT_APPLICATION_PROG);
+    prop->write(4, (uint16_t)OT_IP_PARAMETER);
 #if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
-    prop->write(5, (uint16_t) OT_SECURITY);
-    prop->write(6, (uint16_t) OT_CEMI_SERVER);
+    prop->write(5, (uint16_t)OT_SECURITY);
+    prop->write(6, (uint16_t)OT_CEMI_SERVER);
 #elif defined(USE_DATASECURE)
-    prop->write(5, (uint16_t) OT_SECURITY);
+    prop->write(5, (uint16_t)OT_SECURITY);
 #elif defined(USE_CEMI_SERVER)
-    prop->write(5, (uint16_t) OT_CEMI_SERVER);
+    prop->write(5, (uint16_t)OT_CEMI_SERVER);
 #endif
 }
 
@@ -112,7 +113,7 @@ InterfaceObject* Bau091A::getInterfaceObject(ObjectType objectType, uint16_t obj
 {
     // We do not use it right now.
     // Required for coupler mode as there are multiple router objects for example
-    (void) objectInstance;
+    (void)objectInstance;
 
     switch (objectType)
     {
@@ -175,7 +176,7 @@ void Bau091A::loop()
 
 TPAckType Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
 {
-    //only called from TpUartDataLinkLayer
+    // only called from TpUartDataLinkLayer
     TPAckType ack = TPAckType::AckReqNone;
 
     uint8_t lcconfig = LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL; // default value from spec. in case prop is not availible.
@@ -193,10 +194,10 @@ TPAckType Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
         }
         else
         {
-            if(lcconfig & LCCONFIG::GROUP_IACK_ROUT)
+            if (lcconfig & LCCONFIG::GROUP_IACK_ROUT)
             {
                 // is group address in filter table? ACK if yes, No if not
-                if(_netLayer.isRoutedGroupAddress(address, 1))
+                if (_netLayer.isRoutedGroupAddress(address, 1))
                     ack = TPAckType::AckReqAck;
                 else
                     ack = TPAckType::AckReqNone;

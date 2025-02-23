@@ -4,11 +4,11 @@
 #if MASK_VERSION == 0x091A
 
 #include "bau_systemB_coupler.h"
-#include "router_object.h"
-#include "ip_parameter_object.h"
-#include "ip_data_link_layer.h"
-#include "tpuart_data_link_layer.h"
 #include "cemi_server_object.h"
+#include "ip_data_link_layer.h"
+#include "ip_parameter_object.h"
+#include "router_object.h"
+#include "tpuart_data_link_layer.h"
 
 class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks, public DataLinkLayerCallbacks
 {
@@ -21,6 +21,7 @@ class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks, public DataLi
 
         IpDataLinkLayer* getPrimaryDataLinkLayer();
         TpUartDataLinkLayer* getSecondaryDataLinkLayer();
+
     protected:
         InterfaceObject* getInterfaceObject(uint8_t idx);
         InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
@@ -29,6 +30,7 @@ class Bau091A : public BauSystemBCoupler, public ITpUartCallBacks, public DataLi
         TPAckType isAckRequired(uint16_t address, bool isGrpAddr) override;
 
         void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+
     private:
         RouterObject _routerObj;
         IpParameterObject _ipParameters;

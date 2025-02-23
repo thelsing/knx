@@ -567,12 +567,11 @@
 #ifndef ti_drivers_I2S__include
 #define ti_drivers_I2S__include
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #include <ti/drivers/utils/List.h>
-
 
 #ifdef __cplusplus
 extern "C" {
@@ -591,7 +590,7 @@ extern "C" {
  * I2S driver functions return I2S_ALL_TRANSACTION_SUCCESS if ALL the queued transactions
  * were executed successfully.
  */
-#define I2S_ALL_TRANSACTIONS_SUCCESS           (0x0001U)
+#define I2S_ALL_TRANSACTIONS_SUCCESS (0x0001U)
 
 /*!
  * @brief   Successful status code returned by I2S driver functions.
@@ -599,7 +598,7 @@ extern "C" {
  * I2S driver functions return I2S_TRANSACTION_SUCCESS if ONE queued transaction
  * was executed successfully.
  */
-#define I2S_TRANSACTION_SUCCESS                (0x0002U)
+#define I2S_TRANSACTION_SUCCESS (0x0002U)
 
 /*!
  * @brief   Error status code returned by I2S driver functions.
@@ -607,7 +606,7 @@ extern "C" {
  * I2S driver functions return I2S_TIMEOUT_ERROR if I2S module lost the audio clock.
  * If this error has been raised, I2S module must be reseted and restarted.
  */
-#define I2S_TIMEOUT_ERROR                      (0x0100U)
+#define I2S_TIMEOUT_ERROR (0x0100U)
 
 /*!
  * @brief   Error status code returned by I2S driver functions.
@@ -616,7 +615,7 @@ extern "C" {
  * bus (DMA transfer not completed in time).
  * If this error has been raised, I2S module must be reseted and restarted.
  */
-#define I2S_BUS_ERROR                          (0x0200U)
+#define I2S_BUS_ERROR (0x0200U)
 
 /*!
  * @brief   Error status code returned by I2S driver functions.
@@ -624,7 +623,7 @@ extern "C" {
  * I2S driver functions return I2S_WS_ERROR if I2S module detect noise on the WS signal.
  * If this error has been raised, I2S module must be reseted and restarted.
  */
-#define I2S_WS_ERROR                           (0x0400U)
+#define I2S_WS_ERROR (0x0400U)
 
 /*!
  * @brief   Error status code returned by I2S driver functions.
@@ -633,7 +632,7 @@ extern "C" {
  * on the read interface (DMA pointer not loaded in time).
  * If this error has been raised, I2S module must be reseted and restarted.
  */
-#define I2S_PTR_READ_ERROR                     (0x0800U)
+#define I2S_PTR_READ_ERROR (0x0800U)
 
 /*!
  * @brief   Error status code returned by I2S driver functions.
@@ -642,7 +641,7 @@ extern "C" {
  * on the write interface (DMA pointer not loaded in time).
  * If this error has been raised, I2S module must be reseted and restarted.
  */
-#define I2S_PTR_WRITE_ERROR                     (0x1000U)
+#define I2S_PTR_WRITE_ERROR (0x1000U)
 /** @}*/
 
 /*!
@@ -655,20 +654,20 @@ typedef struct I2S_Config_* I2S_Handle;
  */
 typedef struct I2S_Transaction_
 {
-    /*! Used internally to link descriptors together */
-    List_Elem               queueElement;
-    /*! Pointer to the buffer */
-    void*                    bufPtr;
-    /*! Size of the buffer. */
-    size_t                  bufSize;
-    /*! Internal use only. Number of bytes written to or read from the buffer. */
-    size_t                  bytesTransferred;
-    /*! Number of non-transfered bytes at transaction's end. */
-    size_t                  untransferredBytes;
-    /*! Parameter incremented each time the transaction is completed. */
-    uint16_t                numberOfCompletions;
-    /*! Internal argument. Application must not modify this element. */
-    uintptr_t               arg;
+        /*! Used internally to link descriptors together */
+        List_Elem queueElement;
+        /*! Pointer to the buffer */
+        void* bufPtr;
+        /*! Size of the buffer. */
+        size_t bufSize;
+        /*! Internal use only. Number of bytes written to or read from the buffer. */
+        size_t bytesTransferred;
+        /*! Number of non-transfered bytes at transaction's end. */
+        size_t untransferredBytes;
+        /*! Parameter incremented each time the transaction is completed. */
+        uint16_t numberOfCompletions;
+        /*! Internal argument. Application must not modify this element. */
+        uintptr_t arg;
 } I2S_Transaction;
 
 /*!
@@ -705,10 +704,10 @@ typedef void (*I2S_RegUpdate)(uint32_t ui32Base, uint32_t ui32NextPointer);
 typedef enum I2S_MemoryLength_
 {
 
-    I2S_MEMORY_LENGTH_8BITS  =  8U,   /*!<    Buffer used is 8 bits length. Not available for CC26XX. */
-    I2S_MEMORY_LENGTH_16BITS = 16U,   /*!<    Buffer used is 16 bits length. */
-    I2S_MEMORY_LENGTH_24BITS = 24U,   /*!<    Buffer used is 24 bits length. */
-    I2S_MEMORY_LENGTH_32BITS = 32U    /*!<    Buffer used is 32 bits length. Not available for CC26XX. */
+    I2S_MEMORY_LENGTH_8BITS = 8U,   /*!<    Buffer used is 8 bits length. Not available for CC26XX. */
+    I2S_MEMORY_LENGTH_16BITS = 16U, /*!<    Buffer used is 16 bits length. */
+    I2S_MEMORY_LENGTH_24BITS = 24U, /*!<    Buffer used is 24 bits length. */
+    I2S_MEMORY_LENGTH_32BITS = 32U  /*!<    Buffer used is 32 bits length. Not available for CC26XX. */
 
 } I2S_MemoryLength;
 
@@ -721,8 +720,8 @@ typedef enum I2S_MemoryLength_
 typedef enum I2S_Role_
 {
 
-    I2S_SLAVE  = 0,    /*!<    Module is a slave, clocks are externally generated. */
-    I2S_MASTER = 1     /*!<    Module is a master, clocks are internally generated. */
+    I2S_SLAVE = 0, /*!<    Module is a slave, clocks are externally generated. */
+    I2S_MASTER = 1 /*!<    Module is a master, clocks are internally generated. */
 
 } I2S_Role;
 
@@ -734,8 +733,8 @@ typedef enum I2S_Role_
 typedef enum I2S_SamplingEdge_
 {
 
-    I2S_SAMPLING_EDGE_FALLING  = 0,    /*!<    Sampling on falling edges. */
-    I2S_SAMPLING_EDGE_RISING   = 1     /*!<    Sampling on rising edges. */
+    I2S_SAMPLING_EDGE_FALLING = 0, /*!<    Sampling on falling edges. */
+    I2S_SAMPLING_EDGE_RISING = 1   /*!<    Sampling on rising edges. */
 
 } I2S_SamplingEdge;
 
@@ -747,8 +746,8 @@ typedef enum I2S_SamplingEdge_
 typedef enum I2S_PhaseType_
 {
 
-    I2S_PHASE_TYPE_SINGLE  = 0U,   /*!<    Single phase */
-    I2S_PHASE_TYPE_DUAL    = 1U,   /*!<    Dual phase */
+    I2S_PHASE_TYPE_SINGLE = 0U, /*!<    Single phase */
+    I2S_PHASE_TYPE_DUAL = 1U,   /*!<    Dual phase */
 
 } I2S_PhaseType;
 
@@ -760,12 +759,12 @@ typedef enum I2S_PhaseType_
 typedef enum I2S_DataInterfaceUse_
 {
 
-    I2S_SD0_DISABLED       = 0x00U,   /*!<    SD0 is disabled */
-    I2S_SD0_INPUT          = 0x01U,   /*!<    SD0 is an input */
-    I2S_SD0_OUTPUT         = 0x02U,   /*!<    SD0 is an output */
-    I2S_SD1_DISABLED       = 0x00U,   /*!<    SD1 is disabled */
-    I2S_SD1_INPUT          = 0x10U,   /*!<    SD1 is an input */
-    I2S_SD1_OUTPUT         = 0x20U    /*!<    SD1 is an output */
+    I2S_SD0_DISABLED = 0x00U, /*!<    SD0 is disabled */
+    I2S_SD0_INPUT = 0x01U,    /*!<    SD0 is an input */
+    I2S_SD0_OUTPUT = 0x02U,   /*!<    SD0 is an output */
+    I2S_SD1_DISABLED = 0x00U, /*!<    SD1 is disabled */
+    I2S_SD1_INPUT = 0x10U,    /*!<    SD1 is an input */
+    I2S_SD1_OUTPUT = 0x20U    /*!<    SD1 is an output */
 
 } I2S_DataInterfaceUse;
 
@@ -777,19 +776,19 @@ typedef enum I2S_DataInterfaceUse_
 typedef enum I2S_ChannelConfig_
 {
 
-    I2S_CHANNELS_NONE       = 0x00U,   /*!<   No channel activated */
-    I2S_CHANNELS_MONO       = 0x01U,   /*!<   MONO: only channel one is activated */
-    I2S_CHANNELS_MONO_INV   = 0x02U,   /*!<   MONO INVERERTED: only channel two is activated */
-    I2S_CHANNELS_STEREO     = 0x03U,   /*!<   STEREO: channels one and two are activated */
-    I2S_1_CHANNEL           = 0x01U,   /*!<   1 channel  is activated */
-    I2S_2_CHANNELS          = 0x03U,   /*!<   2 channels are activated */
-    I2S_3_CHANNELS          = 0x07U,   /*!<   3 channels are activated */
-    I2S_4_CHANNELS          = 0x0FU,   /*!<   4 channels are activated */
-    I2S_5_CHANNELS          = 0x1FU,   /*!<   5 channels are activated */
-    I2S_6_CHANNELS          = 0x3FU,   /*!<   6 channels are activated */
-    I2S_7_CHANNELS          = 0x7FU,   /*!<   7 channels are activated */
-    I2S_8_CHANNELS          = 0xFFU,   /*!<   8 channels are activated */
-    I2S_CHANNELS_ALL        = 0xFFU    /*!<   All the eight channels are activated */
+    I2S_CHANNELS_NONE = 0x00U,     /*!<   No channel activated */
+    I2S_CHANNELS_MONO = 0x01U,     /*!<   MONO: only channel one is activated */
+    I2S_CHANNELS_MONO_INV = 0x02U, /*!<   MONO INVERERTED: only channel two is activated */
+    I2S_CHANNELS_STEREO = 0x03U,   /*!<   STEREO: channels one and two are activated */
+    I2S_1_CHANNEL = 0x01U,         /*!<   1 channel  is activated */
+    I2S_2_CHANNELS = 0x03U,        /*!<   2 channels are activated */
+    I2S_3_CHANNELS = 0x07U,        /*!<   3 channels are activated */
+    I2S_4_CHANNELS = 0x0FU,        /*!<   4 channels are activated */
+    I2S_5_CHANNELS = 0x1FU,        /*!<   5 channels are activated */
+    I2S_6_CHANNELS = 0x3FU,        /*!<   6 channels are activated */
+    I2S_7_CHANNELS = 0x7FU,        /*!<   7 channels are activated */
+    I2S_8_CHANNELS = 0xFFU,        /*!<   8 channels are activated */
+    I2S_CHANNELS_ALL = 0xFFU       /*!<   All the eight channels are activated */
 
 } I2S_ChannelConfig;
 
@@ -804,140 +803,140 @@ typedef enum I2S_ChannelConfig_
 typedef struct I2S_Params_
 {
 
-    bool                  invertWS;
-    /*!< WS must be internally inverted when using I2S data format.
-     *   false: The WS signal is not internally inverted.
-     *   true:  The WS signal is internally inverted. */
+        bool invertWS;
+        /*!< WS must be internally inverted when using I2S data format.
+         *   false: The WS signal is not internally inverted.
+         *   true:  The WS signal is internally inverted. */
 
-    bool                  isMSBFirst;
-    /*!< Endianness selection. Not available on CC26XX.
-     *   false: The samples are transmitted LSB first.
-     *   true:  The samples are transmitted MSB first. */
+        bool isMSBFirst;
+        /*!< Endianness selection. Not available on CC26XX.
+         *   false: The samples are transmitted LSB first.
+         *   true:  The samples are transmitted MSB first. */
 
-    bool                  isDMAUnused;
-    /*!<  Selection between DMA transmissions and CPU transmissions.
-     *   false: Transmission are performed by DMA.
-     *   true:  Transmission are performed by CPU.
-     *   Not available for CC26XX: all transmissions are performed by CPU. */
+        bool isDMAUnused;
+        /*!<  Selection between DMA transmissions and CPU transmissions.
+         *   false: Transmission are performed by DMA.
+         *   true:  Transmission are performed by CPU.
+         *   Not available for CC26XX: all transmissions are performed by CPU. */
 
-    I2S_MemoryLength      memorySlotLength;
-    /*!< Memory buffer used.
-     *   #I2S_MEMORY_LENGTH_8BITS:  Memory length is 8 bits (not available for CC26XX).
-     *   #I2S_MEMORY_LENGTH_16BITS: Memory length is 16 bits.
-     *   #I2S_MEMORY_LENGTH_24BITS: Memory length is 24 bits.
-     *   #I2S_MEMORY_LENGTH_32BITS: Memory length is 32 bits (not available for CC26XX).*/
+        I2S_MemoryLength memorySlotLength;
+        /*!< Memory buffer used.
+         *   #I2S_MEMORY_LENGTH_8BITS:  Memory length is 8 bits (not available for CC26XX).
+         *   #I2S_MEMORY_LENGTH_16BITS: Memory length is 16 bits.
+         *   #I2S_MEMORY_LENGTH_24BITS: Memory length is 24 bits.
+         *   #I2S_MEMORY_LENGTH_32BITS: Memory length is 32 bits (not available for CC26XX).*/
 
-    uint8_t               beforeWordPadding;
-    /*!< Number of SCK periods between the first WS edge and the MSB of the first audio channel data transferred during the phase.*/
+        uint8_t beforeWordPadding;
+        /*!< Number of SCK periods between the first WS edge and the MSB of the first audio channel data transferred during the phase.*/
 
-    uint8_t               afterWordPadding;
-    /*!< Number of SCK periods between the first WS edge and the MSB of the first audio channel data transferred during the phase.*/
+        uint8_t afterWordPadding;
+        /*!< Number of SCK periods between the first WS edge and the MSB of the first audio channel data transferred during the phase.*/
 
-    uint8_t               bitsPerWord;
-    /*!< Bits per sample (Word length): must be between 8 and 24 bits. */
+        uint8_t bitsPerWord;
+        /*!< Bits per sample (Word length): must be between 8 and 24 bits. */
 
-    I2S_Role              moduleRole;
-    /*!< Select if the I2S module is a Slave or a Master.
-     *   - #I2S_SLAVE:  The device is a slave (clocks are generated externally).
-     *   - #I2S_MASTER: The device is a master (clocks are generated internally). */
+        I2S_Role moduleRole;
+        /*!< Select if the I2S module is a Slave or a Master.
+         *   - #I2S_SLAVE:  The device is a slave (clocks are generated externally).
+         *   - #I2S_MASTER: The device is a master (clocks are generated internally). */
 
-    I2S_SamplingEdge      samplingEdge;
-    /*!< Select edge sampling type.
-     *   - #I2S_SAMPLING_EDGE_FALLING: Sampling on falling edges (for DSP data format).
-     *   - #I2S_SAMPLING_EDGE_RISING:  Sampling on rising edges (for I2S, LJF and RJF data formats). */
+        I2S_SamplingEdge samplingEdge;
+        /*!< Select edge sampling type.
+         *   - #I2S_SAMPLING_EDGE_FALLING: Sampling on falling edges (for DSP data format).
+         *   - #I2S_SAMPLING_EDGE_RISING:  Sampling on rising edges (for I2S, LJF and RJF data formats). */
 
-    I2S_DataInterfaceUse  SD0Use;
-    /*!< Select if SD0 is an input, an output or disabled.
-     *     - #I2S_SD0_DISABLED: Disabled.
-     *     - #I2S_SD0_INPUT:    Input.
-     *     - #I2S_SD0_OUTPUT:   Output. */
+        I2S_DataInterfaceUse SD0Use;
+        /*!< Select if SD0 is an input, an output or disabled.
+         *     - #I2S_SD0_DISABLED: Disabled.
+         *     - #I2S_SD0_INPUT:    Input.
+         *     - #I2S_SD0_OUTPUT:   Output. */
 
-    I2S_DataInterfaceUse  SD1Use;
-    /*!< Select if SD1 is an input, an output or disabled.
-     *     - #I2S_SD1_DISABLED: Disabled.
-     *     - #I2S_SD1_INPUT:    Input.
-     *     - #I2S_SD1_OUTPUT:   Output. */
+        I2S_DataInterfaceUse SD1Use;
+        /*!< Select if SD1 is an input, an output or disabled.
+         *     - #I2S_SD1_DISABLED: Disabled.
+         *     - #I2S_SD1_INPUT:    Input.
+         *     - #I2S_SD1_OUTPUT:   Output. */
 
-    I2S_ChannelConfig     SD0Channels;
-    /*!< This parameter is a bit mask indicating which channels are valid on SD0.
-     *   If phase type is "dual", maximum channels number is two.
-     *   Valid channels on SD1 and SD0 can be different.
-     *   For dual phase mode:
-     *   - #I2S_CHANNELS_NONE: No channel activated:
-     *                           read  -> I2S does not receive anything (no buffer consumption)
-     *                           write -> I2S does not send anything (no buffer consumption)
-     *   - #I2S_CHANNELS_MONO: Only channel 1 is activated:
-     *                           read  -> I2S only reads channel 1
-     *                           write -> I2S transmits the data on channel 1 and duplicates it on channel 2
-     *   - #I2S_CHANNELS_MONO_INV: Only channel 2 is activated:
-     *                           read  -> I2S only reads channel 2
-     *                           write -> I2S transmits the data on channel 2 and duplicates it on the channel 1 of the next word
-     *   - #I2S_CHANNELS_STEREO: STEREO:
-     *                           read  -> I2S reads both channel 1 and channel 2
-     *                           write -> I2S transmits data both on channel 1 and channel 2
-     *   .
-     *   For single phase mode:
-     *   - Various number of channels can be activated using: #I2S_1_CHANNEL, #I2S_2_CHANNELS, #I2S_3_CHANNELS, #I2S_4_CHANNELS,
-     *     #I2S_5_CHANNELS, #I2S_6_CHANNELS, #I2S_7_CHANNELS, #I2S_8_CHANNELS.
-     *   - #I2S_CHANNELS_ALL: The eight channels are activated */
+        I2S_ChannelConfig SD0Channels;
+        /*!< This parameter is a bit mask indicating which channels are valid on SD0.
+         *   If phase type is "dual", maximum channels number is two.
+         *   Valid channels on SD1 and SD0 can be different.
+         *   For dual phase mode:
+         *   - #I2S_CHANNELS_NONE: No channel activated:
+         *                           read  -> I2S does not receive anything (no buffer consumption)
+         *                           write -> I2S does not send anything (no buffer consumption)
+         *   - #I2S_CHANNELS_MONO: Only channel 1 is activated:
+         *                           read  -> I2S only reads channel 1
+         *                           write -> I2S transmits the data on channel 1 and duplicates it on channel 2
+         *   - #I2S_CHANNELS_MONO_INV: Only channel 2 is activated:
+         *                           read  -> I2S only reads channel 2
+         *                           write -> I2S transmits the data on channel 2 and duplicates it on the channel 1 of the next word
+         *   - #I2S_CHANNELS_STEREO: STEREO:
+         *                           read  -> I2S reads both channel 1 and channel 2
+         *                           write -> I2S transmits data both on channel 1 and channel 2
+         *   .
+         *   For single phase mode:
+         *   - Various number of channels can be activated using: #I2S_1_CHANNEL, #I2S_2_CHANNELS, #I2S_3_CHANNELS, #I2S_4_CHANNELS,
+         *     #I2S_5_CHANNELS, #I2S_6_CHANNELS, #I2S_7_CHANNELS, #I2S_8_CHANNELS.
+         *   - #I2S_CHANNELS_ALL: The eight channels are activated */
 
-    I2S_ChannelConfig     SD1Channels;
-    /*!< This parameter is a bit mask indicating which channels are valid on SD1.
-     *   If phase type is "dual", maximum channels number is two.
-     *   Valid channels on SD1 and SD0 can be different.
-     *   For dual phase mode:
-     *   - #I2S_CHANNELS_NONE: No channel activated:
-     *                           read  -> I2S does not receive anything (no buffer consumption)
-     *                           write -> I2S does not send anything (no buffer consumption)
-     *   - #I2S_CHANNELS_MONO: Only channel 1 is activated:
-     *                           read  -> I2S only reads channel 1
-     *                           write -> I2S transmits the data on channel 1 and duplicates it on channel 2
-     *   - #I2S_CHANNELS_MONO_INV: Only channel 2 is activated:
-     *                           read  -> I2S only reads channel 2
-     *                           write -> I2S transmits the data on channel 2 and duplicates it on the channel 1 of the next word
-     *   - #I2S_CHANNELS_STEREO: STEREO:
-     *                           read  -> I2S reads both channel 1 and channel 2
-     *                           write -> I2S transmits data both on channel 1 and channel 2
-     *   .
-     *   For single phase mode:
-     *   - Various number of channels can be activated using: #I2S_1_CHANNEL, #I2S_2_CHANNELS, #I2S_3_CHANNELS, #I2S_4_CHANNELS,
-     *     #I2S_5_CHANNELS, #I2S_6_CHANNELS, #I2S_7_CHANNELS, #I2S_8_CHANNELS.
-     *   - #I2S_CHANNELS_ALL: The eight channels are activated */
+        I2S_ChannelConfig SD1Channels;
+        /*!< This parameter is a bit mask indicating which channels are valid on SD1.
+         *   If phase type is "dual", maximum channels number is two.
+         *   Valid channels on SD1 and SD0 can be different.
+         *   For dual phase mode:
+         *   - #I2S_CHANNELS_NONE: No channel activated:
+         *                           read  -> I2S does not receive anything (no buffer consumption)
+         *                           write -> I2S does not send anything (no buffer consumption)
+         *   - #I2S_CHANNELS_MONO: Only channel 1 is activated:
+         *                           read  -> I2S only reads channel 1
+         *                           write -> I2S transmits the data on channel 1 and duplicates it on channel 2
+         *   - #I2S_CHANNELS_MONO_INV: Only channel 2 is activated:
+         *                           read  -> I2S only reads channel 2
+         *                           write -> I2S transmits the data on channel 2 and duplicates it on the channel 1 of the next word
+         *   - #I2S_CHANNELS_STEREO: STEREO:
+         *                           read  -> I2S reads both channel 1 and channel 2
+         *                           write -> I2S transmits data both on channel 1 and channel 2
+         *   .
+         *   For single phase mode:
+         *   - Various number of channels can be activated using: #I2S_1_CHANNEL, #I2S_2_CHANNELS, #I2S_3_CHANNELS, #I2S_4_CHANNELS,
+         *     #I2S_5_CHANNELS, #I2S_6_CHANNELS, #I2S_7_CHANNELS, #I2S_8_CHANNELS.
+         *   - #I2S_CHANNELS_ALL: The eight channels are activated */
 
-    I2S_PhaseType         phaseType;
-    /*!< Select phase type.
-     *   - #I2S_PHASE_TYPE_SINGLE: Single phase (for DSP format): up to eight channels are usable.
-     *   - #I2S_PHASE_TYPE_DUAL:   Dual phase (for I2S, LJF and RJF data formats): up to two channels are usable.
-     *   .
-     *   This parameter must not be considered on CC32XX. This chip only allows dual phase formats.*/
+        I2S_PhaseType phaseType;
+        /*!< Select phase type.
+         *   - #I2S_PHASE_TYPE_SINGLE: Single phase (for DSP format): up to eight channels are usable.
+         *   - #I2S_PHASE_TYPE_DUAL:   Dual phase (for I2S, LJF and RJF data formats): up to two channels are usable.
+         *   .
+         *   This parameter must not be considered on CC32XX. This chip only allows dual phase formats.*/
 
-    uint16_t              fixedBufferLength;
-    /*!< Number of consecutive bytes of the samples buffers. This field must be set to a value x different from 0.
-     *   All the data buffers used (both for input and output) must contain N*x bytes (with N an integer verifying N>0). */
+        uint16_t fixedBufferLength;
+        /*!< Number of consecutive bytes of the samples buffers. This field must be set to a value x different from 0.
+         *   All the data buffers used (both for input and output) must contain N*x bytes (with N an integer verifying N>0). */
 
-    uint16_t              startUpDelay;
-    /*!< Time (in number of WS cycles) to wait before the first transfer. */
+        uint16_t startUpDelay;
+        /*!< Time (in number of WS cycles) to wait before the first transfer. */
 
-    uint16_t              MCLKDivider;
-    /*!< Select the frequency divider for MCLK signal. Final value of MCLK is 48MHz/MCLKDivider. Value must be selected between 2 and 1024. */
+        uint16_t MCLKDivider;
+        /*!< Select the frequency divider for MCLK signal. Final value of MCLK is 48MHz/MCLKDivider. Value must be selected between 2 and 1024. */
 
-    uint32_t              samplingFrequency;
-    /*!< I2S sampling frequency configuration in samples/second.
-     *  SCK frequency limits:
-     *- For CC26XX, SCK frequency should be between 47 kHz and 4 MHz.
-     *- For CC32XX, SCK frequency should be between 57 Hz and 8 MHz. */
+        uint32_t samplingFrequency;
+        /*!< I2S sampling frequency configuration in samples/second.
+         *  SCK frequency limits:
+         *- For CC26XX, SCK frequency should be between 47 kHz and 4 MHz.
+         *- For CC32XX, SCK frequency should be between 57 Hz and 8 MHz. */
 
-    I2S_Callback          readCallback;
-    /*!< Pointer to read callback. Cannot be NULL if a read interface is activated. */
+        I2S_Callback readCallback;
+        /*!< Pointer to read callback. Cannot be NULL if a read interface is activated. */
 
-    I2S_Callback          writeCallback;
-    /*!< Pointer to write callback. Cannot be NULL if a write interface is activated. */
+        I2S_Callback writeCallback;
+        /*!< Pointer to write callback. Cannot be NULL if a write interface is activated. */
 
-    I2S_Callback          errorCallback;
-    /*!< Pointer to error callback. Cannot be NULL. */
+        I2S_Callback errorCallback;
+        /*!< Pointer to error callback. Cannot be NULL. */
 
-    void*                  custom;
-    /*!< Pointer to device specific custom params */
+        void* custom;
+        /*!< Pointer to device specific custom params */
 } I2S_Params;
 
 /*!
@@ -959,11 +958,11 @@ extern const I2S_Params I2S_defaultParams;
  */
 typedef struct I2S_Config_
 {
-    /*! Pointer to a driver specific data object */
-    void*                   object;
+        /*! Pointer to a driver specific data object */
+        void* object;
 
-    /*! Pointer to a driver specific hardware attributes structure */
-    void          const*    hwAttrs;
+        /*! Pointer to a driver specific hardware attributes structure */
+        void const* hwAttrs;
 } I2S_Config;
 
 /*!

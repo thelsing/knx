@@ -3,8 +3,8 @@
 
 #include "bau27B0.h"
 #include "bits.h"
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 using namespace std;
 
@@ -12,7 +12,8 @@ Bau27B0::Bau27B0(Platform& platform)
     : BauSystemBDevice(platform),
       _dlLayer(_deviceObj, _rfMediumObj, _netLayer.getInterface(), _platform)
 #ifdef USE_CEMI_SERVER
-    , _cemiServer(*this)
+      ,
+      _cemiServer(*this)
 #endif
 {
     _netLayer.getInterface().dataLinkLayer(_dlLayer);
@@ -38,17 +39,17 @@ Bau27B0::Bau27B0(Platform& platform)
     // This differs from BAU to BAU with different medium types.
     // See PID_IO_LIST
     Property* prop = _deviceObj.property(PID_IO_LIST);
-    prop->write(1, (uint16_t) OT_DEVICE);
-    prop->write(2, (uint16_t) OT_ADDR_TABLE);
-    prop->write(3, (uint16_t) OT_ASSOC_TABLE);
-    prop->write(4, (uint16_t) OT_GRP_OBJ_TABLE);
-    prop->write(5, (uint16_t) OT_APPLICATION_PROG);
-    prop->write(6, (uint16_t) OT_RF_MEDIUM);
+    prop->write(1, (uint16_t)OT_DEVICE);
+    prop->write(2, (uint16_t)OT_ADDR_TABLE);
+    prop->write(3, (uint16_t)OT_ASSOC_TABLE);
+    prop->write(4, (uint16_t)OT_GRP_OBJ_TABLE);
+    prop->write(5, (uint16_t)OT_APPLICATION_PROG);
+    prop->write(6, (uint16_t)OT_RF_MEDIUM);
 #if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
-    prop->write(7, (uint16_t) OT_SECURITY);
-    prop->write(8, (uint16_t) OT_CEMI_SERVER);
+    prop->write(7, (uint16_t)OT_SECURITY);
+    prop->write(8, (uint16_t)OT_CEMI_SERVER);
 #elif defined(USE_DATASECURE)
-    prop->write(7, (uint16_t) OT_SECURITY);
+    prop->write(7, (uint16_t)OT_SECURITY);
 #elif defined(USE_CEMI_SERVER)
     prop->write(7, (uint16_t)OT_CEMI_SERVER);
 #endif
@@ -105,7 +106,7 @@ InterfaceObject* Bau27B0::getInterfaceObject(ObjectType objectType, uint16_t obj
 {
     // We do not use it right now.
     // Required for coupler mode as there are multiple router objects for example
-    (void) objectInstance;
+    (void)objectInstance;
 
     switch (objectType)
     {
@@ -170,7 +171,7 @@ void Bau27B0::loop()
 }
 
 void Bau27B0::domainAddressSerialNumberWriteIndication(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, const uint8_t* rfDoA,
-        const uint8_t* knxSerialNumber)
+                                                       const uint8_t* knxSerialNumber)
 {
     // If the received serial number matches our serial number
     // then store the received RF domain address in the RF medium object
@@ -192,7 +193,7 @@ void Bau27B0::individualAddressSerialNumberReadIndication(Priority priority, Hop
 }
 
 void Bau27B0::domainAddressSerialNumberWriteLocalConfirm(Priority priority, HopCountType hopType, const SecurityControl& secCtrl, const uint8_t* rfDoA,
-        const uint8_t* knxSerialNumber, bool status)
+                                                         const uint8_t* knxSerialNumber, bool status)
 {
 }
 

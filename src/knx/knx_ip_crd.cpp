@@ -1,6 +1,7 @@
 #include "knx_ip_crd.h"
 #ifdef USE_IP
-KnxIpCRD::KnxIpCRD(uint8_t* data) : _data(data)
+KnxIpCRD::KnxIpCRD(uint8_t* data)
+    : _data(data)
 {}
 
 KnxIpCRD::~KnxIpCRD()

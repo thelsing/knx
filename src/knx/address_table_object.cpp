@@ -10,9 +10,8 @@ AddressTableObject::AddressTableObject(Memory& memory)
     : TableObject(memory)
 {
     Property* properties[] =
-    {
-        new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ADDR_TABLE)
-    };
+        {
+            new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ADDR_TABLE)};
 
     TableObject::initializeProperties(sizeof(properties), properties);
 }
@@ -28,7 +27,7 @@ uint16_t AddressTableObject::entryCount()
 
 uint16_t AddressTableObject::getGroupAddress(uint16_t tsap)
 {
-    if (loadState() != LS_LOADED || tsap > entryCount() )
+    if (loadState() != LS_LOADED || tsap > entryCount())
         return 0;
 
     return ntohs(_groupAddresses[tsap]);
@@ -54,7 +53,7 @@ uint16_t AddressTableObject::getTsap(uint16_t addr)
         if (addr < ga)
             high = i - 1;
         else
-            low = i + 1 ;
+            low = i + 1;
     }
 
 #else

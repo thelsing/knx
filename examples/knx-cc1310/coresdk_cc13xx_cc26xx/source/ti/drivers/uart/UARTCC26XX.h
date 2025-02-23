@@ -375,21 +375,21 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
+#include <ti/drivers/Power.h>
 #include <ti/drivers/UART.h>
 #include <ti/drivers/pin/PINCC26XX.h>
-#include <ti/drivers/Power.h>
 #include <ti/drivers/utils/RingBuf.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib/uart.h)
+#include DeviceFamily_constructPath(driverlib / uart.h)
 
-#include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SwiP.h>
 #include <ti/drivers/dpl/ClockP.h>
+#include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
+#include <ti/drivers/dpl/SwiP.h>
 
 /**
  *  @addtogroup UART_STATUS
@@ -422,7 +422,7 @@ extern "C" {
  * reception is inactive for a given 32-bit period.  With this command @b arg
  * is @a don't @a care and it returns UART_STATUS_SUCCESS.
  */
-#define UARTCC26XX_CMD_RETURN_PARTIAL_ENABLE    (UART_CMD_RESERVED + 0)
+#define UARTCC26XX_CMD_RETURN_PARTIAL_ENABLE (UART_CMD_RESERVED + 0)
 
 /*!
  * @brief Command used by UART_control to disable partial return
@@ -431,7 +431,7 @@ extern "C" {
  * behavior where UART_read blocks until all data bytes were received. With
  * this comand @b arg is @a don't @a care and it returns UART_STATUS_SUCCESS.
  */
-#define UARTCC26XX_CMD_RETURN_PARTIAL_DISABLE   (UART_CMD_RESERVED + 1)
+#define UARTCC26XX_CMD_RETURN_PARTIAL_DISABLE (UART_CMD_RESERVED + 1)
 
 /*!
  * @brief Command used by UART_control to flush the RX FIFO
@@ -439,7 +439,7 @@ extern "C" {
  * This control command flushes any contents in the RX FIFO. With this command
  * @b arg is @a don't @a care and it returns UART_STATUS_SUCCESS.
  */
-#define UARTCC26XX_CMD_RX_FIFO_FLUSH            (UART_CMD_RESERVED + 2)
+#define UARTCC26XX_CMD_RX_FIFO_FLUSH (UART_CMD_RESERVED + 2)
 /** @}*/
 
 /*! Size of the TX and RX FIFOs is 32 items */
@@ -465,8 +465,8 @@ typedef enum UARTCC26XX_FifoThreshold
 } UARTCC26XX_FifoThreshold;
 
 /* BACKWARDS COMPATIBILITY */
-#define UARTCC26XX_RETURN_PARTIAL_ENABLE    UARTCC26XX_CMD_RETURN_PARTIAL_ENABLE
-#define UARTCC26XX_RETURN_PARTIAL_DISABLE   UARTCC26XX_CMD_RETURN_PARTIAL_DISABLE
+#define UARTCC26XX_RETURN_PARTIAL_ENABLE UARTCC26XX_CMD_RETURN_PARTIAL_ENABLE
+#define UARTCC26XX_RETURN_PARTIAL_DISABLE UARTCC26XX_CMD_RETURN_PARTIAL_DISABLE
 /* END BACKWARDS COMPATIBILITY */
 
 /*!
@@ -479,7 +479,7 @@ typedef enum UARTCC26XX_FifoThreshold
  *  @param      error                   The current value of the receive
  *                                      status register.
  */
-typedef void (*UARTCC26XX_ErrorCallback) (UART_Handle handle, uint32_t error);
+typedef void (*UARTCC26XX_ErrorCallback)(UART_Handle handle, uint32_t error);
 
 /* UART function table pointer */
 extern const UART_FxnTable UARTCC26XX_fxnTable;
@@ -529,38 +529,38 @@ extern const UART_FxnTable UARTCC26XX_fxnTable;
  */
 typedef struct UARTCC26XX_HWAttrsV2
 {
-    uint32_t     baseAddr;    /*!< UART Peripheral's base address */
-    uint32_t     powerMngrId; /*!< UART Peripheral's power manager ID */
-    int          intNum;      /*!< UART Peripheral's interrupt vector */
-    /*! @brief UART Peripheral's interrupt priority.
+        uint32_t baseAddr;    /*!< UART Peripheral's base address */
+        uint32_t powerMngrId; /*!< UART Peripheral's power manager ID */
+        int intNum;           /*!< UART Peripheral's interrupt vector */
+        /*! @brief UART Peripheral's interrupt priority.
 
-        The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
+            The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
 
-        (7 << 5) will apply the lowest priority.
+            (7 << 5) will apply the lowest priority.
 
-        (1 << 5) will apply the highest priority.
+            (1 << 5) will apply the highest priority.
 
-        Setting the priority to 0 is not supported by this driver.
+            Setting the priority to 0 is not supported by this driver.
 
-        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-     */
-    uint8_t      intPriority;
-    /*! @brief SPI SWI priority.
-        The higher the number, the higher the priority.
-        The minimum is 0 and the maximum is 15 by default.
-        The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
-    */
-    uint32_t                 swiPriority;
-    uint8_t                  txPin;        /*!< UART TX pin */
-    uint8_t                  rxPin;        /*!< UART RX pin */
-    uint8_t                  ctsPin;       /*!< UART CTS pin */
-    uint8_t                  rtsPin;       /*!< UART RTS pin */
-    unsigned char*           ringBufPtr;   /*!< Pointer to an application ring buffer */
-    size_t                   ringBufSize;  /*!< Size of ringBufPtr */
-    UARTCC26XX_FifoThreshold txIntFifoThr; /*!< UART TX interrupt FIFO threshold select */
-    UARTCC26XX_FifoThreshold rxIntFifoThr; /*!< UART RX interrupt FIFO threshold select */
-    /*! Application error function to be called on receive errors */
-    UARTCC26XX_ErrorCallback errorFxn;
+            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+         */
+        uint8_t intPriority;
+        /*! @brief SPI SWI priority.
+            The higher the number, the higher the priority.
+            The minimum is 0 and the maximum is 15 by default.
+            The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
+        */
+        uint32_t swiPriority;
+        uint8_t txPin;                         /*!< UART TX pin */
+        uint8_t rxPin;                         /*!< UART RX pin */
+        uint8_t ctsPin;                        /*!< UART CTS pin */
+        uint8_t rtsPin;                        /*!< UART RTS pin */
+        unsigned char* ringBufPtr;             /*!< Pointer to an application ring buffer */
+        size_t ringBufSize;                    /*!< Size of ringBufPtr */
+        UARTCC26XX_FifoThreshold txIntFifoThr; /*!< UART TX interrupt FIFO threshold select */
+        UARTCC26XX_FifoThreshold rxIntFifoThr; /*!< UART RX interrupt FIFO threshold select */
+        /*! Application error function to be called on receive errors */
+        UARTCC26XX_ErrorCallback errorFxn;
 } UARTCC26XX_HWAttrsV2;
 
 /*!
@@ -570,12 +570,12 @@ typedef struct UARTCC26XX_HWAttrsV2
  */
 typedef enum UART_Status
 {
-    UART_TIMED_OUT     = 0x10,                 /*!< UART timed out */
-    UART_PARITY_ERROR  = UART_RXERROR_PARITY,  /*!< UART Parity error */
-    UART_BRAKE_ERROR   = UART_RXERROR_BREAK,   /*!< UART Break error */
+    UART_TIMED_OUT = 0x10,                     /*!< UART timed out */
+    UART_PARITY_ERROR = UART_RXERROR_PARITY,   /*!< UART Parity error */
+    UART_BRAKE_ERROR = UART_RXERROR_BREAK,     /*!< UART Break error */
     UART_OVERRUN_ERROR = UART_RXERROR_OVERRUN, /*!< UART overrun error */
     UART_FRAMING_ERROR = UART_RXERROR_FRAMING, /*!< UART Framing error */
-    UART_OK            = 0x0                   /*!< UART OK */
+    UART_OK = 0x0                              /*!< UART OK */
 } UART_Status;
 
 /*!
@@ -585,61 +585,61 @@ typedef enum UART_Status
  */
 typedef struct UARTCC26XX_Object
 {
-    /* UART control variables */
-    bool                opened;         /*!< Has the obj been opened */
-    UART_Mode           readMode;       /*!< Mode for all read calls */
-    UART_Mode           writeMode;      /*!< Mode for all write calls */
-    unsigned int        readTimeout;    /*!< Timeout for read semaphore in BLOCKING mode*/
-    unsigned int        writeTimeout;   /*!< Timeout for write semaphore in BLOCKING mode*/
-    UART_Callback       readCallback;   /*!< Pointer to read callback */
-    UART_Callback       writeCallback;  /*!< Pointer to write callback */
-    UART_ReturnMode     readReturnMode; /*!< Receive return mode */
-    UART_DataMode       readDataMode;   /*!< Type of data being read */
-    UART_DataMode       writeDataMode;  /*!< Type of data being written */
-    /*! @brief Baud rate for CC26xx UART
-     *
-     *  The CC26xx driver supports baud rates up to 3Mbaud.
-     *  However, when receiving more than 32 bytes back-to-back the baud
-     *  rate is limited to approx. 2Mbaud.
-     *  The throughput is also dependent on the user application.
-     */
-    uint32_t            baudRate;
-    UART_LEN            dataLength;     /*!< Data length for UART */
-    UART_STOP           stopBits;       /*!< Stop bits for UART */
-    UART_PAR            parityType;     /*!< Parity bit type for UART */
-    UART_Status         status;         /*!< Status variable */
+        /* UART control variables */
+        bool opened;                    /*!< Has the obj been opened */
+        UART_Mode readMode;             /*!< Mode for all read calls */
+        UART_Mode writeMode;            /*!< Mode for all write calls */
+        unsigned int readTimeout;       /*!< Timeout for read semaphore in BLOCKING mode*/
+        unsigned int writeTimeout;      /*!< Timeout for write semaphore in BLOCKING mode*/
+        UART_Callback readCallback;     /*!< Pointer to read callback */
+        UART_Callback writeCallback;    /*!< Pointer to write callback */
+        UART_ReturnMode readReturnMode; /*!< Receive return mode */
+        UART_DataMode readDataMode;     /*!< Type of data being read */
+        UART_DataMode writeDataMode;    /*!< Type of data being written */
+        /*! @brief Baud rate for CC26xx UART
+         *
+         *  The CC26xx driver supports baud rates up to 3Mbaud.
+         *  However, when receiving more than 32 bytes back-to-back the baud
+         *  rate is limited to approx. 2Mbaud.
+         *  The throughput is also dependent on the user application.
+         */
+        uint32_t baudRate;
+        UART_LEN dataLength; /*!< Data length for UART */
+        UART_STOP stopBits;  /*!< Stop bits for UART */
+        UART_PAR parityType; /*!< Parity bit type for UART */
+        UART_Status status;  /*!< Status variable */
 
-    /* UART write variables */
-    const void*         writeBuf;       /*!< Buffer data pointer */
-    size_t              writeCount;     /*!< Number of Chars sent */
-    size_t              writeSize;      /*!< Chars remaining in buffer */
-    bool                writeCR;        /*!< Write a return character */
+        /* UART write variables */
+        const void* writeBuf; /*!< Buffer data pointer */
+        size_t writeCount;    /*!< Number of Chars sent */
+        size_t writeSize;     /*!< Chars remaining in buffer */
+        bool writeCR;         /*!< Write a return character */
 
-    /* UART receive variables */
-    bool                  readRetPartial;     /*!< Return partial RX data if timeout occurs */
-    void*                  readBuf;           /*!< Buffer data pointer */
-    size_t                readCount;          /*!< Number of Chars read */
-    size_t                readSize;           /*!< Chars remaining in buffer */
-    RingBuf_Object        ringBuffer;         /*!< local circular buffer object */
+        /* UART receive variables */
+        bool readRetPartial;       /*!< Return partial RX data if timeout occurs */
+        void* readBuf;             /*!< Buffer data pointer */
+        size_t readCount;          /*!< Number of Chars read */
+        size_t readSize;           /*!< Chars remaining in buffer */
+        RingBuf_Object ringBuffer; /*!< local circular buffer object */
 
-    /* PIN driver state object and handle */
-    PIN_State              pinState;
-    PIN_Handle             hPin;
+        /* PIN driver state object and handle */
+        PIN_State pinState;
+        PIN_Handle hPin;
 
-    /*! UART post-notification function pointer */
-    void*             uartPostFxn;
-    /*! UART post-notification object */
-    Power_NotifyObj  uartPostObj;
+        /*! UART post-notification function pointer */
+        void* uartPostFxn;
+        /*! UART post-notification object */
+        Power_NotifyObj uartPostObj;
 
-    /* UART SYS/BIOS objects */
-    HwiP_Struct hwi; /*!< Hwi object */
-    SwiP_Struct           swi;                /*!< Swi object */
-    SemaphoreP_Struct     writeSem;           /*!< UART write semaphore*/
-    SemaphoreP_Struct     readSem;            /*!< UART read semaphore */
-    ClockP_Struct         txFifoEmptyClk;     /*!< UART TX FIFO empty clock */
+        /* UART SYS/BIOS objects */
+        HwiP_Struct hwi;              /*!< Hwi object */
+        SwiP_Struct swi;              /*!< Swi object */
+        SemaphoreP_Struct writeSem;   /*!< UART write semaphore*/
+        SemaphoreP_Struct readSem;    /*!< UART read semaphore */
+        ClockP_Struct txFifoEmptyClk; /*!< UART TX FIFO empty clock */
 
-    bool uartRxPowerConstraint;
-    bool uartTxPowerConstraint;
+        bool uartRxPowerConstraint;
+        bool uartTxPowerConstraint;
 } UARTCC26XX_Object, *UARTCC26XX_Handle;
 
 #ifdef __cplusplus

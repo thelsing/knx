@@ -1,18 +1,18 @@
 #include "bau_systemB_device.h"
 #include "bits.h"
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
-BauSystemBDevice::BauSystemBDevice(Platform& platform) :
-    BauSystemB(platform),
-    _addrTable(_memory),
-    _assocTable(_memory), _groupObjTable(_memory),
+BauSystemBDevice::BauSystemBDevice(Platform& platform)
+    : BauSystemB(platform),
+      _addrTable(_memory),
+      _assocTable(_memory), _groupObjTable(_memory),
 #ifdef USE_DATASECURE
-    _appLayer(_deviceObj, _secIfObj, *this),
+      _appLayer(_deviceObj, _secIfObj, *this),
 #else
-    _appLayer(*this),
+      _appLayer(*this),
 #endif
-    _transLayer(_appLayer), _netLayer(_deviceObj, _transLayer)
+      _transLayer(_appLayer), _netLayer(_deviceObj, _transLayer)
 {
     _appLayer.transportLayer(_transLayer);
     _appLayer.associationTableObject(_assocTable);
@@ -157,10 +157,7 @@ bool BauSystemBDevice::configured()
     if (!_configured)
         return false;
 
-    _configured = _groupObjTable.loadState() == LS_LOADED
-                  && _addrTable.loadState() == LS_LOADED
-                  && _assocTable.loadState() == LS_LOADED
-                  && _appProgram.loadState() == LS_LOADED;
+    _configured = _groupObjTable.loadState() == LS_LOADED && _addrTable.loadState() == LS_LOADED && _assocTable.loadState() == LS_LOADED && _appProgram.loadState() == LS_LOADED;
 
 #ifdef USE_DATASECURE
     _configured &= _secIfObj.loadState() == LS_LOADED;
@@ -227,7 +224,7 @@ void BauSystemBDevice::groupValueReadIndication(uint16_t asap, Priority priority
 }
 
 void BauSystemBDevice::groupValueReadAppLayerConfirm(uint16_t asap, Priority priority, HopCountType hopType, const SecurityControl& secCtrl, uint8_t* data,
-        uint8_t dataLength)
+                                                     uint8_t dataLength)
 {
     GroupObject& go = _groupObjTable.get(asap);
 

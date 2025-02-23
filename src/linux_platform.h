@@ -2,8 +2,8 @@
 
 #ifdef __linux__
 
-#include <string>
 #include "knx/platform.h"
+#include <string>
 
 extern int gpio_direction(int pin, int dir);
 extern int gpio_read(int pin);
@@ -11,7 +11,7 @@ extern int gpio_write(int pin, int value);
 extern int gpio_export(int pin);
 extern int gpio_unexport(int pin);
 
-class LinuxPlatform: public Platform
+class LinuxPlatform : public Platform
 {
     public:
         LinuxPlatform();
@@ -32,15 +32,14 @@ class LinuxPlatform: public Platform
         uint32_t currentDefaultGateway() override;
         void macAddress(uint8_t* data) override;
 
-
-        //multicast
+        // multicast
         void setupMultiCast(uint32_t addr, uint16_t port) override;
         void closeMultiCast() override;
         bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
         int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen) override;
         bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
 
-        //UART
+        // UART
         void setupUart() override;
         void closeUart() override;
         int uartAvailable() override;
@@ -49,12 +48,12 @@ class LinuxPlatform: public Platform
         int readUart() override;
         size_t readBytesUart(uint8_t* buffer, size_t length) override;
 
-        //spi
+        // spi
         void setupSpi() override;
         void closeSpi() override;
-        int readWriteSpi (uint8_t* data, size_t len) override;
+        int readWriteSpi(uint8_t* data, size_t len) override;
 
-        //memory
+        // memory
         uint8_t* getEepromBuffer(uint32_t size) override;
         void commitToEeprom() override;
         void cmdlineArgs(int argc, char** argv);

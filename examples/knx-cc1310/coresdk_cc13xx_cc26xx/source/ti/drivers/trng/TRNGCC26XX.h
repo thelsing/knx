@@ -59,25 +59,25 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include <ti/drivers/Power.h>
 #include <ti/drivers/TRNG.h>
 #include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
 
 #include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
+#include <ti/drivers/dpl/SwiP.h>
 
 /*! @brief Minimum random samples for each entropy generation call */
-#define TRNGCC26XX_SAMPLES_PER_CYCLE_MIN        256
+#define TRNGCC26XX_SAMPLES_PER_CYCLE_MIN 256
 /*! @brief Default random samples for each entropy generation call
  *
  *  Set to generate 64 bits of randomness in 5ms with all FROs active. */
-#define TRNGCC26XX_SAMPLES_PER_CYCLE_DEFAULT    240000
+#define TRNGCC26XX_SAMPLES_PER_CYCLE_DEFAULT 240000
 /*! @brief Maximum random samples for each entropy generation call */
-#define TRNGCC26XX_SAMPLES_PER_CYCLE_MAX        16777216
+#define TRNGCC26XX_SAMPLES_PER_CYCLE_MAX 16777216
 /*! @brief Minimum number of bytes provided by the TRNG hardware
  *         in one go. Smaller amounts can by requested in driver
  *         calls but the full number will always be generated.
@@ -85,7 +85,7 @@ extern "C" {
  *         back to the target buffer if the requested length is not
  *         a multiple of TRNGCC26XX_MIN_BYTES_PER_ISR.
  */
-#define TRNGCC26XX_MIN_BYTES_PER_ITERATION      8
+#define TRNGCC26XX_MIN_BYTES_PER_ITERATION 8
 
 /*!
  *  @brief      TRNGCC26XX Hardware Attributes
@@ -95,31 +95,31 @@ extern "C" {
  */
 typedef struct TRNGCC26XX_HWAttrs
 {
-    /*! @brief Crypto Peripheral's interrupt priority.
+        /*! @brief Crypto Peripheral's interrupt priority.
 
-        The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
+            The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
 
-        (7 << 5) will apply the lowest priority.
+            (7 << 5) will apply the lowest priority.
 
-        (1 << 5) will apply the highest priority.
+            (1 << 5) will apply the highest priority.
 
-        Setting the priority to 0 is not supported by this driver.
+            Setting the priority to 0 is not supported by this driver.
 
-        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-    */
-    uint8_t    intPriority;
-    /*! @brief TRNG SWI priority.
-        The higher the number, the higher the priority.
-        The minimum is 0 and the maximum is 15 by default.
-        The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
-    */
-    uint32_t   swiPriority;
-    /*! @brief TRNG Maximum Samples per Cycle.
-        Changes the maximum number of randomness samples in each entropy generation cycle before dump and interrupt.
-        The minimum is 2^8 (256) and the maximum is 2^24 (16777216).
-        The default is 240000 - enough to generate 64 bits of randomness at 5MHz.
-    */
-    uint32_t   samplesPerCycle;
+            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+        */
+        uint8_t intPriority;
+        /*! @brief TRNG SWI priority.
+            The higher the number, the higher the priority.
+            The minimum is 0 and the maximum is 15 by default.
+            The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
+        */
+        uint32_t swiPriority;
+        /*! @brief TRNG Maximum Samples per Cycle.
+            Changes the maximum number of randomness samples in each entropy generation cycle before dump and interrupt.
+            The minimum is 2^8 (256) and the maximum is 2^24 (16777216).
+            The default is 240000 - enough to generate 64 bits of randomness at 5MHz.
+        */
+        uint32_t samplesPerCycle;
 } TRNGCC26XX_HWAttrs;
 
 /*!
@@ -129,16 +129,16 @@ typedef struct TRNGCC26XX_HWAttrs
  */
 typedef struct TRNGCC26XX_Object
 {
-    bool                            isOpen;
-    TRNG_ReturnBehavior             returnBehavior;
-    int_fast16_t                    returnStatus;
-    size_t                          entropyGenerated;
-    size_t                          entropyRequested;
-    uint32_t                        semaphoreTimeout;
-    uint8_t*                         entropyBuffer;
-    CryptoKey*                       entropyKey;
-    uint32_t                        samplesPerCycle;
-    TRNG_CallbackFxn                callbackFxn;
+        bool isOpen;
+        TRNG_ReturnBehavior returnBehavior;
+        int_fast16_t returnStatus;
+        size_t entropyGenerated;
+        size_t entropyRequested;
+        uint32_t semaphoreTimeout;
+        uint8_t* entropyBuffer;
+        CryptoKey* entropyKey;
+        uint32_t samplesPerCycle;
+        TRNG_CallbackFxn callbackFxn;
 } TRNGCC26XX_Object;
 
 /*!

@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       prcm.h
-*  Revised:        2018-10-23 10:19:14 +0200 (Tue, 23 Oct 2018)
-*  Revision:       52979
-*
-*  Description:    Defines and prototypes for the PRCM
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       prcm.h
+ *  Revised:        2018-10-23 10:19:14 +0200 (Tue, 23 Oct 2018)
+ *  Revision:       52979
+ *
+ *  Description:    Defines and prototypes for the PRCM
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,22 +55,20 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
+#include "../inc/hw_aon_rtc.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_nvic.h"
+#include "../inc/hw_prcm.h"
+#include "../inc/hw_types.h"
+#include "cpu.h"
+#include "debug.h"
+#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include "../inc/hw_types.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_ints.h"
-#include "../inc/hw_prcm.h"
-#include "../inc/hw_nvic.h"
-#include "../inc/hw_aon_rtc.h"
-#include "interrupt.h"
-#include "debug.h"
-#include "cpu.h"
-
 
 //*****************************************************************************
 //
@@ -86,22 +84,22 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define PRCMInfClockConfigureSet        NOROM_PRCMInfClockConfigureSet
-#define PRCMInfClockConfigureGet        NOROM_PRCMInfClockConfigureGet
-#define PRCMAudioClockConfigSet         NOROM_PRCMAudioClockConfigSet
+#define PRCMInfClockConfigureSet NOROM_PRCMInfClockConfigureSet
+#define PRCMInfClockConfigureGet NOROM_PRCMInfClockConfigureGet
+#define PRCMAudioClockConfigSet NOROM_PRCMAudioClockConfigSet
 #define PRCMAudioClockConfigSetOverride NOROM_PRCMAudioClockConfigSetOverride
-#define PRCMAudioClockInternalSource    NOROM_PRCMAudioClockInternalSource
-#define PRCMAudioClockExternalSource    NOROM_PRCMAudioClockExternalSource
-#define PRCMPowerDomainOn               NOROM_PRCMPowerDomainOn
-#define PRCMPowerDomainOff              NOROM_PRCMPowerDomainOff
-#define PRCMPeripheralRunEnable         NOROM_PRCMPeripheralRunEnable
-#define PRCMPeripheralRunDisable        NOROM_PRCMPeripheralRunDisable
-#define PRCMPeripheralSleepEnable       NOROM_PRCMPeripheralSleepEnable
-#define PRCMPeripheralSleepDisable      NOROM_PRCMPeripheralSleepDisable
-#define PRCMPeripheralDeepSleepEnable   NOROM_PRCMPeripheralDeepSleepEnable
-#define PRCMPeripheralDeepSleepDisable  NOROM_PRCMPeripheralDeepSleepDisable
-#define PRCMPowerDomainStatus           NOROM_PRCMPowerDomainStatus
-#define PRCMDeepSleep                   NOROM_PRCMDeepSleep
+#define PRCMAudioClockInternalSource NOROM_PRCMAudioClockInternalSource
+#define PRCMAudioClockExternalSource NOROM_PRCMAudioClockExternalSource
+#define PRCMPowerDomainOn NOROM_PRCMPowerDomainOn
+#define PRCMPowerDomainOff NOROM_PRCMPowerDomainOff
+#define PRCMPeripheralRunEnable NOROM_PRCMPeripheralRunEnable
+#define PRCMPeripheralRunDisable NOROM_PRCMPeripheralRunDisable
+#define PRCMPeripheralSleepEnable NOROM_PRCMPeripheralSleepEnable
+#define PRCMPeripheralSleepDisable NOROM_PRCMPeripheralSleepDisable
+#define PRCMPeripheralDeepSleepEnable NOROM_PRCMPeripheralDeepSleepEnable
+#define PRCMPeripheralDeepSleepDisable NOROM_PRCMPeripheralDeepSleepDisable
+#define PRCMPowerDomainStatus NOROM_PRCMPowerDomainStatus
+#define PRCMDeepSleep NOROM_PRCMDeepSleep
 #endif
 
 //*****************************************************************************
@@ -109,24 +107,24 @@ extern "C"
 // Defines for the different System CPU power modes.
 //
 //*****************************************************************************
-#define PRCM_RUN_MODE           0x00000001
-#define PRCM_SLEEP_MODE         0x00000002
-#define PRCM_DEEP_SLEEP_MODE    0x00000004
+#define PRCM_RUN_MODE 0x00000001
+#define PRCM_SLEEP_MODE 0x00000002
+#define PRCM_DEEP_SLEEP_MODE 0x00000004
 
 //*****************************************************************************
 //
 // Defines used for setting the clock division factors
 //
 //*****************************************************************************
-#define PRCM_CLOCK_DIV_1        PRCM_GPTCLKDIV_RATIO_DIV1
-#define PRCM_CLOCK_DIV_2        PRCM_GPTCLKDIV_RATIO_DIV2
-#define PRCM_CLOCK_DIV_4        PRCM_GPTCLKDIV_RATIO_DIV4
-#define PRCM_CLOCK_DIV_8        PRCM_GPTCLKDIV_RATIO_DIV8
-#define PRCM_CLOCK_DIV_16       PRCM_GPTCLKDIV_RATIO_DIV16
-#define PRCM_CLOCK_DIV_32       PRCM_GPTCLKDIV_RATIO_DIV32
-#define PRCM_CLOCK_DIV_64       PRCM_GPTCLKDIV_RATIO_DIV64
-#define PRCM_CLOCK_DIV_128      PRCM_GPTCLKDIV_RATIO_DIV128
-#define PRCM_CLOCK_DIV_256      PRCM_GPTCLKDIV_RATIO_DIV256
+#define PRCM_CLOCK_DIV_1 PRCM_GPTCLKDIV_RATIO_DIV1
+#define PRCM_CLOCK_DIV_2 PRCM_GPTCLKDIV_RATIO_DIV2
+#define PRCM_CLOCK_DIV_4 PRCM_GPTCLKDIV_RATIO_DIV4
+#define PRCM_CLOCK_DIV_8 PRCM_GPTCLKDIV_RATIO_DIV8
+#define PRCM_CLOCK_DIV_16 PRCM_GPTCLKDIV_RATIO_DIV16
+#define PRCM_CLOCK_DIV_32 PRCM_GPTCLKDIV_RATIO_DIV32
+#define PRCM_CLOCK_DIV_64 PRCM_GPTCLKDIV_RATIO_DIV64
+#define PRCM_CLOCK_DIV_128 PRCM_GPTCLKDIV_RATIO_DIV128
+#define PRCM_CLOCK_DIV_256 PRCM_GPTCLKDIV_RATIO_DIV256
 
 //*****************************************************************************
 //
@@ -134,28 +132,28 @@ extern "C"
 // domain
 //
 //*****************************************************************************
-#define PRCM_DOMAIN_RFCORE      0x00000001  // RF Core domain ID for
+#define PRCM_DOMAIN_RFCORE 0x00000001 // RF Core domain ID for
 // clock/power control.
-#define PRCM_DOMAIN_SERIAL      0x00000002  // Serial domain ID for
+#define PRCM_DOMAIN_SERIAL 0x00000002 // Serial domain ID for
 // clock/power control.
-#define PRCM_DOMAIN_PERIPH      0x00000004  // Peripheral domain ID for
+#define PRCM_DOMAIN_PERIPH 0x00000004 // Peripheral domain ID for
 // clock/power control.
-#define PRCM_DOMAIN_SYSBUS      0x00000008  // Bus domain ID for clock/power
+#define PRCM_DOMAIN_SYSBUS 0x00000008 // Bus domain ID for clock/power
 // control.
-#define PRCM_DOMAIN_VIMS        0x00000010  // VIMS domain ID for clock/power
+#define PRCM_DOMAIN_VIMS 0x00000010 // VIMS domain ID for clock/power
 // control.
-#define PRCM_DOMAIN_CPU         0x00000020  // CPU domain ID for clock/power
+#define PRCM_DOMAIN_CPU 0x00000020 // CPU domain ID for clock/power
 // control.
-#define PRCM_DOMAIN_TIMER       0x00000040  // GPT domain ID for clock
+#define PRCM_DOMAIN_TIMER 0x00000040 // GPT domain ID for clock
 // control.
-#define PRCM_DOMAIN_CLKCTRL     0x00000080  // Clock Control domain ID for
+#define PRCM_DOMAIN_CLKCTRL 0x00000080 // Clock Control domain ID for
 // clock/power control.
-#define PRCM_DOMAIN_MCU         0x00000100  // Reset control for entire MCU
+#define PRCM_DOMAIN_MCU 0x00000100 // Reset control for entire MCU
 // domain.
-#define PRCM_DOMAIN_POWER_OFF   0x00000002  // The domain is powered off
-#define PRCM_DOMAIN_POWER_ON    0x00000001  // The domain is powered on
-#define PRCM_DOMAIN_POWER_DOWN_READY                                          \
-    0x00000000  // The domain is ready to be
+#define PRCM_DOMAIN_POWER_OFF 0x00000002 // The domain is powered off
+#define PRCM_DOMAIN_POWER_ON 0x00000001  // The domain is powered on
+#define PRCM_DOMAIN_POWER_DOWN_READY \
+    0x00000000 // The domain is ready to be
 // powered down.
 
 //*****************************************************************************
@@ -163,21 +161,21 @@ extern "C"
 // Defines for setting up the audio interface in the I2S module.
 //
 //*****************************************************************************
-#define PRCM_WCLK_NEG_EDGE      0x00000008
-#define PRCM_WCLK_POS_EDGE      0x00000000
-#define PRCM_WCLK_SINGLE_PHASE  0x00000000
-#define PRCM_WCLK_DUAL_PHASE    0x00000002
-#define PRCM_WCLK_USER_DEF      0x00000004
-#define PRCM_I2S_WCLK_NEG_EDGE           0
-#define PRCM_I2S_WCLK_POS_EDGE           1
-#define PRCM_I2S_WCLK_SINGLE_PHASE       0
-#define PRCM_I2S_WCLK_DUAL_PHASE         1
-#define PRCM_I2S_WCLK_USER_DEF           2
+#define PRCM_WCLK_NEG_EDGE 0x00000008
+#define PRCM_WCLK_POS_EDGE 0x00000000
+#define PRCM_WCLK_SINGLE_PHASE 0x00000000
+#define PRCM_WCLK_DUAL_PHASE 0x00000002
+#define PRCM_WCLK_USER_DEF 0x00000004
+#define PRCM_I2S_WCLK_NEG_EDGE 0
+#define PRCM_I2S_WCLK_POS_EDGE 1
+#define PRCM_I2S_WCLK_SINGLE_PHASE 0
+#define PRCM_I2S_WCLK_DUAL_PHASE 1
+#define PRCM_I2S_WCLK_USER_DEF 2
 
-#define I2S_SAMPLE_RATE_16K     0x00000001
-#define I2S_SAMPLE_RATE_24K     0x00000002
-#define I2S_SAMPLE_RATE_32K     0x00000004
-#define I2S_SAMPLE_RATE_48K     0x00000008
+#define I2S_SAMPLE_RATE_16K 0x00000001
+#define I2S_SAMPLE_RATE_24K 0x00000002
+#define I2S_SAMPLE_RATE_32K 0x00000004
+#define I2S_SAMPLE_RATE_48K 0x00000008
 
 //*****************************************************************************
 //
@@ -187,19 +185,19 @@ extern "C"
 // bits[4:0]  Defines the bit position within the register pointet on in [11:8]
 //
 //*****************************************************************************
-#define PRCM_PERIPH_TIMER0 ( 0x00000000 | ( PRCM_GPTCLKGR_CLK_EN_S           )) // Peripheral ID for GPT module 0
-#define PRCM_PERIPH_TIMER1 ( 0x00000000 | ( PRCM_GPTCLKGR_CLK_EN_S       + 1 )) // Peripheral ID for GPT module 1
-#define PRCM_PERIPH_TIMER2 ( 0x00000000 | ( PRCM_GPTCLKGR_CLK_EN_S       + 2 )) // Peripheral ID for GPT module 2
-#define PRCM_PERIPH_TIMER3 ( 0x00000000 | ( PRCM_GPTCLKGR_CLK_EN_S       + 3 )) // Peripheral ID for GPT module 3
-#define PRCM_PERIPH_SSI0   ( 0x00000100 | ( PRCM_SSICLKGR_CLK_EN_S           )) // Peripheral ID for SSI module 0
-#define PRCM_PERIPH_SSI1   ( 0x00000100 | ( PRCM_SSICLKGR_CLK_EN_S       + 1 )) // Peripheral ID for SSI module 1
-#define PRCM_PERIPH_UART0  ( 0x00000200 | ( PRCM_UARTCLKGR_CLK_EN_S          )) // Peripheral ID for UART module 0
-#define PRCM_PERIPH_I2C0   ( 0x00000300 | ( PRCM_I2CCLKGR_CLK_EN_S           )) // Peripheral ID for I2C module 0
-#define PRCM_PERIPH_CRYPTO ( 0x00000400 | ( PRCM_SECDMACLKGR_CRYPTO_CLK_EN_S )) // Peripheral ID for CRYPTO module
-#define PRCM_PERIPH_TRNG   ( 0x00000400 | ( PRCM_SECDMACLKGR_TRNG_CLK_EN_S   )) // Peripheral ID for TRNG module
-#define PRCM_PERIPH_UDMA   ( 0x00000400 | ( PRCM_SECDMACLKGR_DMA_CLK_EN_S    )) // Peripheral ID for UDMA module
-#define PRCM_PERIPH_GPIO   ( 0x00000500 | ( PRCM_GPIOCLKGR_CLK_EN_S          )) // Peripheral ID for GPIO module
-#define PRCM_PERIPH_I2S    ( 0x00000600 | ( PRCM_I2SCLKGR_CLK_EN_S           )) // Peripheral ID for I2S module
+#define PRCM_PERIPH_TIMER0 (0x00000000 | (PRCM_GPTCLKGR_CLK_EN_S))           // Peripheral ID for GPT module 0
+#define PRCM_PERIPH_TIMER1 (0x00000000 | (PRCM_GPTCLKGR_CLK_EN_S + 1))       // Peripheral ID for GPT module 1
+#define PRCM_PERIPH_TIMER2 (0x00000000 | (PRCM_GPTCLKGR_CLK_EN_S + 2))       // Peripheral ID for GPT module 2
+#define PRCM_PERIPH_TIMER3 (0x00000000 | (PRCM_GPTCLKGR_CLK_EN_S + 3))       // Peripheral ID for GPT module 3
+#define PRCM_PERIPH_SSI0 (0x00000100 | (PRCM_SSICLKGR_CLK_EN_S))             // Peripheral ID for SSI module 0
+#define PRCM_PERIPH_SSI1 (0x00000100 | (PRCM_SSICLKGR_CLK_EN_S + 1))         // Peripheral ID for SSI module 1
+#define PRCM_PERIPH_UART0 (0x00000200 | (PRCM_UARTCLKGR_CLK_EN_S))           // Peripheral ID for UART module 0
+#define PRCM_PERIPH_I2C0 (0x00000300 | (PRCM_I2CCLKGR_CLK_EN_S))             // Peripheral ID for I2C module 0
+#define PRCM_PERIPH_CRYPTO (0x00000400 | (PRCM_SECDMACLKGR_CRYPTO_CLK_EN_S)) // Peripheral ID for CRYPTO module
+#define PRCM_PERIPH_TRNG (0x00000400 | (PRCM_SECDMACLKGR_TRNG_CLK_EN_S))     // Peripheral ID for TRNG module
+#define PRCM_PERIPH_UDMA (0x00000400 | (PRCM_SECDMACLKGR_DMA_CLK_EN_S))      // Peripheral ID for UDMA module
+#define PRCM_PERIPH_GPIO (0x00000500 | (PRCM_GPIOCLKGR_CLK_EN_S))            // Peripheral ID for GPIO module
+#define PRCM_PERIPH_I2S (0x00000600 | (PRCM_I2SCLKGR_CLK_EN_S))              // Peripheral ID for I2S module
 
 //*****************************************************************************
 //
@@ -224,18 +222,18 @@ extern "C"
 static bool
 PRCMPeripheralValid(uint32_t ui32Peripheral)
 {
-    return ((ui32Peripheral == PRCM_PERIPH_TIMER0)   ||
-            (ui32Peripheral == PRCM_PERIPH_TIMER1)   ||
-            (ui32Peripheral == PRCM_PERIPH_TIMER2)   ||
-            (ui32Peripheral == PRCM_PERIPH_TIMER3)   ||
-            (ui32Peripheral == PRCM_PERIPH_SSI0)     ||
-            (ui32Peripheral == PRCM_PERIPH_SSI1)     ||
-            (ui32Peripheral == PRCM_PERIPH_UART0)    ||
-            (ui32Peripheral == PRCM_PERIPH_I2C0)     ||
-            (ui32Peripheral == PRCM_PERIPH_CRYPTO)   ||
-            (ui32Peripheral == PRCM_PERIPH_TRNG)     ||
-            (ui32Peripheral == PRCM_PERIPH_UDMA)     ||
-            (ui32Peripheral == PRCM_PERIPH_GPIO)     ||
+    return ((ui32Peripheral == PRCM_PERIPH_TIMER0) ||
+            (ui32Peripheral == PRCM_PERIPH_TIMER1) ||
+            (ui32Peripheral == PRCM_PERIPH_TIMER2) ||
+            (ui32Peripheral == PRCM_PERIPH_TIMER3) ||
+            (ui32Peripheral == PRCM_PERIPH_SSI0) ||
+            (ui32Peripheral == PRCM_PERIPH_SSI1) ||
+            (ui32Peripheral == PRCM_PERIPH_UART0) ||
+            (ui32Peripheral == PRCM_PERIPH_I2C0) ||
+            (ui32Peripheral == PRCM_PERIPH_CRYPTO) ||
+            (ui32Peripheral == PRCM_PERIPH_TRNG) ||
+            (ui32Peripheral == PRCM_PERIPH_UDMA) ||
+            (ui32Peripheral == PRCM_PERIPH_GPIO) ||
             (ui32Peripheral == PRCM_PERIPH_I2S));
 }
 #endif
@@ -397,11 +395,11 @@ PRCMMcuUldoConfigure(uint32_t ui32Enable)
 //
 //*****************************************************************************
 __STATIC_INLINE void
-PRCMGPTimerClockDivisionSet( uint32_t clkDiv )
+PRCMGPTimerClockDivisionSet(uint32_t clkDiv)
 {
-    ASSERT( clkDiv <= PRCM_GPTCLKDIV_RATIO_DIV256 );
+    ASSERT(clkDiv <= PRCM_GPTCLKDIV_RATIO_DIV256);
 
-    HWREG( PRCM_BASE + PRCM_O_GPTCLKDIV ) = clkDiv;
+    HWREG(PRCM_BASE + PRCM_O_GPTCLKDIV) = clkDiv;
 }
 
 //*****************************************************************************
@@ -425,11 +423,10 @@ PRCMGPTimerClockDivisionSet( uint32_t clkDiv )
 //
 //*****************************************************************************
 __STATIC_INLINE uint32_t
-PRCMGPTimerClockDivisionGet( void )
+PRCMGPTimerClockDivisionGet(void)
 {
-    return ( HWREG( PRCM_BASE + PRCM_O_GPTCLKDIV ));
+    return (HWREG(PRCM_BASE + PRCM_O_GPTCLKDIV));
 }
-
 
 //*****************************************************************************
 //
@@ -530,7 +527,7 @@ extern void PRCMAudioClockConfigSet(uint32_t ui32ClkConfig,
 //*****************************************************************************
 #ifndef DEPRECATED
 extern void PRCMAudioClockConfigSetOverride(uint32_t ui32ClkConfig, uint32_t ui32MstDiv,
-        uint32_t ui32BitDiv, uint32_t ui32WordDiv);
+                                            uint32_t ui32BitDiv, uint32_t ui32WordDiv);
 #endif
 
 //*****************************************************************************
@@ -554,12 +551,11 @@ extern void PRCMAudioClockConfigSetOverride(uint32_t ui32ClkConfig, uint32_t ui3
 //! \return None
 //!
 //*****************************************************************************
-extern void PRCMAudioClockConfigOverride
-(uint8_t  ui8SamplingEdge,
- uint8_t  ui8WCLKPhase,
- uint32_t ui32MstDiv,
- uint32_t ui32BitDiv,
- uint32_t ui32WordDiv);
+extern void PRCMAudioClockConfigOverride(uint8_t ui8SamplingEdge,
+                                         uint8_t ui8WCLKPhase,
+                                         uint32_t ui32MstDiv,
+                                         uint32_t ui32BitDiv,
+                                         uint32_t ui32WordDiv);
 
 //*****************************************************************************
 //
@@ -636,8 +632,7 @@ __STATIC_INLINE bool
 PRCMLoadGet(void)
 {
     // Return the load status.
-    return ((HWREG(PRCM_BASE + PRCM_O_CLKLOADCTL) & PRCM_CLKLOADCTL_LOAD_DONE) ?
-            true : false);
+    return ((HWREG(PRCM_BASE + PRCM_O_CLKLOADCTL) & PRCM_CLKLOADCTL_LOAD_DONE) ? true : false);
 }
 
 //*****************************************************************************
@@ -1088,9 +1083,10 @@ PRCMRfReady(void)
 {
     // Return the ready status of the RF Core.
     return ((HWREG(PRCM_BASE + PRCM_O_PDSTAT1RFC) &
-             PRCM_PDSTAT1RFC_ON) ? true : false);
+             PRCM_PDSTAT1RFC_ON)
+                ? true
+                : false);
 }
-
 
 //*****************************************************************************
 //
@@ -1139,9 +1135,9 @@ extern void PRCMDeepSleep(void);
 //
 //*****************************************************************************
 __STATIC_INLINE void
-PRCMCacheRetentionEnable( void )
+PRCMCacheRetentionEnable(void)
 {
-    HWREG( PRCM_BASE + PRCM_O_RAMRETEN ) |= PRCM_RAMRETEN_VIMS_M;
+    HWREG(PRCM_BASE + PRCM_O_RAMRETEN) |= PRCM_RAMRETEN_VIMS_M;
 }
 
 //*****************************************************************************
@@ -1154,11 +1150,10 @@ PRCMCacheRetentionEnable( void )
 //
 //*****************************************************************************
 __STATIC_INLINE void
-PRCMCacheRetentionDisable( void )
+PRCMCacheRetentionDisable(void)
 {
-    HWREG( PRCM_BASE + PRCM_O_RAMRETEN ) &= ~PRCM_RAMRETEN_VIMS_M;
+    HWREG(PRCM_BASE + PRCM_O_RAMRETEN) &= ~PRCM_RAMRETEN_VIMS_M;
 }
-
 
 //*****************************************************************************
 //
@@ -1169,68 +1164,68 @@ PRCMCacheRetentionDisable( void )
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_PRCMInfClockConfigureSet
-#undef  PRCMInfClockConfigureSet
-#define PRCMInfClockConfigureSet        ROM_PRCMInfClockConfigureSet
+#undef PRCMInfClockConfigureSet
+#define PRCMInfClockConfigureSet ROM_PRCMInfClockConfigureSet
 #endif
 #ifdef ROM_PRCMInfClockConfigureGet
-#undef  PRCMInfClockConfigureGet
-#define PRCMInfClockConfigureGet        ROM_PRCMInfClockConfigureGet
+#undef PRCMInfClockConfigureGet
+#define PRCMInfClockConfigureGet ROM_PRCMInfClockConfigureGet
 #endif
 #ifdef ROM_PRCMAudioClockConfigSet
-#undef  PRCMAudioClockConfigSet
-#define PRCMAudioClockConfigSet         ROM_PRCMAudioClockConfigSet
+#undef PRCMAudioClockConfigSet
+#define PRCMAudioClockConfigSet ROM_PRCMAudioClockConfigSet
 #endif
 #ifdef ROM_PRCMAudioClockConfigSetOverride
-#undef  PRCMAudioClockConfigSetOverride
+#undef PRCMAudioClockConfigSetOverride
 #define PRCMAudioClockConfigSetOverride ROM_PRCMAudioClockConfigSetOverride
 #endif
 #ifdef ROM_PRCMAudioClockInternalSource
-#undef  PRCMAudioClockInternalSource
-#define PRCMAudioClockInternalSource    ROM_PRCMAudioClockInternalSource
+#undef PRCMAudioClockInternalSource
+#define PRCMAudioClockInternalSource ROM_PRCMAudioClockInternalSource
 #endif
 #ifdef ROM_PRCMAudioClockExternalSource
-#undef  PRCMAudioClockExternalSource
-#define PRCMAudioClockExternalSource    ROM_PRCMAudioClockExternalSource
+#undef PRCMAudioClockExternalSource
+#define PRCMAudioClockExternalSource ROM_PRCMAudioClockExternalSource
 #endif
 #ifdef ROM_PRCMPowerDomainOn
-#undef  PRCMPowerDomainOn
-#define PRCMPowerDomainOn               ROM_PRCMPowerDomainOn
+#undef PRCMPowerDomainOn
+#define PRCMPowerDomainOn ROM_PRCMPowerDomainOn
 #endif
 #ifdef ROM_PRCMPowerDomainOff
-#undef  PRCMPowerDomainOff
-#define PRCMPowerDomainOff              ROM_PRCMPowerDomainOff
+#undef PRCMPowerDomainOff
+#define PRCMPowerDomainOff ROM_PRCMPowerDomainOff
 #endif
 #ifdef ROM_PRCMPeripheralRunEnable
-#undef  PRCMPeripheralRunEnable
-#define PRCMPeripheralRunEnable         ROM_PRCMPeripheralRunEnable
+#undef PRCMPeripheralRunEnable
+#define PRCMPeripheralRunEnable ROM_PRCMPeripheralRunEnable
 #endif
 #ifdef ROM_PRCMPeripheralRunDisable
-#undef  PRCMPeripheralRunDisable
-#define PRCMPeripheralRunDisable        ROM_PRCMPeripheralRunDisable
+#undef PRCMPeripheralRunDisable
+#define PRCMPeripheralRunDisable ROM_PRCMPeripheralRunDisable
 #endif
 #ifdef ROM_PRCMPeripheralSleepEnable
-#undef  PRCMPeripheralSleepEnable
-#define PRCMPeripheralSleepEnable       ROM_PRCMPeripheralSleepEnable
+#undef PRCMPeripheralSleepEnable
+#define PRCMPeripheralSleepEnable ROM_PRCMPeripheralSleepEnable
 #endif
 #ifdef ROM_PRCMPeripheralSleepDisable
-#undef  PRCMPeripheralSleepDisable
-#define PRCMPeripheralSleepDisable      ROM_PRCMPeripheralSleepDisable
+#undef PRCMPeripheralSleepDisable
+#define PRCMPeripheralSleepDisable ROM_PRCMPeripheralSleepDisable
 #endif
 #ifdef ROM_PRCMPeripheralDeepSleepEnable
-#undef  PRCMPeripheralDeepSleepEnable
-#define PRCMPeripheralDeepSleepEnable   ROM_PRCMPeripheralDeepSleepEnable
+#undef PRCMPeripheralDeepSleepEnable
+#define PRCMPeripheralDeepSleepEnable ROM_PRCMPeripheralDeepSleepEnable
 #endif
 #ifdef ROM_PRCMPeripheralDeepSleepDisable
-#undef  PRCMPeripheralDeepSleepDisable
-#define PRCMPeripheralDeepSleepDisable  ROM_PRCMPeripheralDeepSleepDisable
+#undef PRCMPeripheralDeepSleepDisable
+#define PRCMPeripheralDeepSleepDisable ROM_PRCMPeripheralDeepSleepDisable
 #endif
 #ifdef ROM_PRCMPowerDomainStatus
-#undef  PRCMPowerDomainStatus
-#define PRCMPowerDomainStatus           ROM_PRCMPowerDomainStatus
+#undef PRCMPowerDomainStatus
+#define PRCMPowerDomainStatus ROM_PRCMPowerDomainStatus
 #endif
 #ifdef ROM_PRCMDeepSleep
-#undef  PRCMDeepSleep
-#define PRCMDeepSleep                   ROM_PRCMDeepSleep
+#undef PRCMDeepSleep
+#define PRCMDeepSleep ROM_PRCMDeepSleep
 #endif
 #endif
 

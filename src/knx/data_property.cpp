@@ -14,7 +14,6 @@ uint8_t DataProperty::read(uint16_t start, uint8_t count, uint8_t* data) const
     if (count == 0 || _currentElements == 0 || start > _currentElements || count > _currentElements - start + 1)
         return 0;
 
-
     // we start counting with zero
     start -= 1;
 
@@ -119,7 +118,6 @@ uint16_t DataProperty::saveSize()
     return sizeof(_currentElements) + _maxElements * ElementSize();
 }
 
-
 const uint8_t* DataProperty::restore(const uint8_t* buffer)
 {
     uint16_t elements = 0;
@@ -140,7 +138,6 @@ const uint8_t* DataProperty::restore(const uint8_t* buffer)
     return buffer;
 }
 
-
 uint8_t* DataProperty::save(uint8_t* buffer)
 {
     buffer = pushWord(_currentElements, buffer);
@@ -150,7 +147,6 @@ uint8_t* DataProperty::save(uint8_t* buffer)
 
     return buffer;
 }
-
 
 const uint8_t* DataProperty::data()
 {

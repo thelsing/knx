@@ -52,21 +52,21 @@ typedef enum
 
 typedef struct _TimerP_FreqHz
 {
-    uint32_t hi;
-    uint32_t lo;
+        uint32_t hi;
+        uint32_t lo;
 } TimerP_FreqHz;
 
 typedef struct _TimerP_Params
 {
-    TimerP_StartMode startMode;
-    uintptr_t arg;
-    uint32_t period;    /* in microseconds */
+        TimerP_StartMode startMode;
+        uintptr_t arg;
+        uint32_t period; /* in microseconds */
 } TimerP_Params;
 
 typedef union _TimerP_Struct
 {
-    uint64_t dummy;
-    char data[TimerP_STRUCT_SIZE];
+        uint64_t dummy;
+        char data[TimerP_STRUCT_SIZE];
 } TimerP_Struct;
 
 void TimerP_Params_init(TimerP_Params* params);

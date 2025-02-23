@@ -3,11 +3,11 @@
 #include "config.h"
 #ifdef USE_IP
 
-#include <stdint.h>
 #include "data_link_layer.h"
 #include "ip_parameter_object.h"
 #include "knx_ip_tunnel_connection.h"
 #include "service_families.h"
+#include <stdint.h>
 
 class IpDataLinkLayer : public DataLinkLayer
 {
@@ -52,8 +52,8 @@ class IpDataLinkLayer : public DataLinkLayer
         IpParameterObject& _ipParameters;
         DataLinkLayerCallbacks* _dllcb;
 #ifdef KNX_TUNNELING
-    KnxIpTunnelConnection tunnels[KNX_TUNNELING];
-    uint8_t _lastChannelId = 0;
+        KnxIpTunnelConnection tunnels[KNX_TUNNELING];
+        uint8_t _lastChannelId = 0;
 #endif
 };
 #endif

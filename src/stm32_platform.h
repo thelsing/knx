@@ -5,7 +5,7 @@ class Stm32Platform : public ArduinoPlatform
 {
     public:
         Stm32Platform();
-        Stm32Platform( HardwareSerial* s);
+        Stm32Platform(HardwareSerial* s);
         ~Stm32Platform();
 
         // unique serial number
@@ -14,9 +14,10 @@ class Stm32Platform : public ArduinoPlatform
         // basic stuff
         void restart();
 
-        //memory
+        // memory
         uint8_t* getEepromBuffer(uint32_t size);
         void commitToEeprom();
+
     private:
         uint8_t* _eepromPtr = nullptr;
         uint16_t _eepromSize = 0;

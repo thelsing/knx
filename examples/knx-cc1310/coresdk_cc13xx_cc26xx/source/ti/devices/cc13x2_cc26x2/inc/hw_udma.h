@@ -1,38 +1,38 @@
 /******************************************************************************
-*  Filename:       hw_udma_h
-*  Revised:        2018-05-14 12:24:52 +0200 (Mon, 14 May 2018)
-*  Revision:       51990
-*
-* Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* 1) Redistributions of source code must retain the above copyright notice,
-*    this list of conditions and the following disclaimer.
-*
-* 2) Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution.
-*
-* 3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*    be used to endorse or promote products derived from this software without
-*    specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       hw_udma_h
+ *  Revised:        2018-05-14 12:24:52 +0200 (Mon, 14 May 2018)
+ *  Revision:       51990
+ *
+ * Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1) Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2) Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 #ifndef __HW_UDMA_H__
 #define __HW_UDMA_H__
@@ -44,61 +44,61 @@
 //
 //*****************************************************************************
 // Status
-#define UDMA_O_STATUS                                               0x00000000
+#define UDMA_O_STATUS 0x00000000
 
 // Configuration
-#define UDMA_O_CFG                                                  0x00000004
+#define UDMA_O_CFG 0x00000004
 
 // Channel Control Data Base Pointer
-#define UDMA_O_CTRL                                                 0x00000008
+#define UDMA_O_CTRL 0x00000008
 
 // Channel Alternate Control Data Base Pointer
-#define UDMA_O_ALTCTRL                                              0x0000000C
+#define UDMA_O_ALTCTRL 0x0000000C
 
 // Channel Wait On Request Status
-#define UDMA_O_WAITONREQ                                            0x00000010
+#define UDMA_O_WAITONREQ 0x00000010
 
 // Channel Software Request
-#define UDMA_O_SOFTREQ                                              0x00000014
+#define UDMA_O_SOFTREQ 0x00000014
 
 // Channel Set UseBurst
-#define UDMA_O_SETBURST                                             0x00000018
+#define UDMA_O_SETBURST 0x00000018
 
 // Channel Clear UseBurst
-#define UDMA_O_CLEARBURST                                           0x0000001C
+#define UDMA_O_CLEARBURST 0x0000001C
 
 // Channel Set Request Mask
-#define UDMA_O_SETREQMASK                                           0x00000020
+#define UDMA_O_SETREQMASK 0x00000020
 
 // Clear Channel Request Mask
-#define UDMA_O_CLEARREQMASK                                         0x00000024
+#define UDMA_O_CLEARREQMASK 0x00000024
 
 // Set Channel Enable
-#define UDMA_O_SETCHANNELEN                                         0x00000028
+#define UDMA_O_SETCHANNELEN 0x00000028
 
 // Clear Channel Enable
-#define UDMA_O_CLEARCHANNELEN                                       0x0000002C
+#define UDMA_O_CLEARCHANNELEN 0x0000002C
 
 // Channel Set Primary-Alternate
-#define UDMA_O_SETCHNLPRIALT                                        0x00000030
+#define UDMA_O_SETCHNLPRIALT 0x00000030
 
 // Channel Clear Primary-Alternate
-#define UDMA_O_CLEARCHNLPRIALT                                      0x00000034
+#define UDMA_O_CLEARCHNLPRIALT 0x00000034
 
 // Set Channel Priority
-#define UDMA_O_SETCHNLPRIORITY                                      0x00000038
+#define UDMA_O_SETCHNLPRIORITY 0x00000038
 
 // Clear Channel Priority
-#define UDMA_O_CLEARCHNLPRIORITY                                    0x0000003C
+#define UDMA_O_CLEARCHNLPRIORITY 0x0000003C
 
 // Error Status and Clear
-#define UDMA_O_ERROR                                                0x0000004C
+#define UDMA_O_ERROR 0x0000004C
 
 // Channel Request Done
-#define UDMA_O_REQDONE                                              0x00000504
+#define UDMA_O_REQDONE 0x00000504
 
 // Channel Request Done Mask
-#define UDMA_O_DONEMASK                                             0x00000520
+#define UDMA_O_DONEMASK 0x00000520
 
 //*****************************************************************************
 //
@@ -113,9 +113,9 @@
 // 0x2: Undefined
 // ...
 // 0xF: Undefined
-#define UDMA_STATUS_TEST_W                                                   4
-#define UDMA_STATUS_TEST_M                                          0xF0000000
-#define UDMA_STATUS_TEST_S                                                  28
+#define UDMA_STATUS_TEST_W 4
+#define UDMA_STATUS_TEST_M 0xF0000000
+#define UDMA_STATUS_TEST_S 28
 
 // Field: [20:16] TOTALCHANNELS
 //
@@ -127,9 +127,9 @@
 // ...
 // 0x1F: Shows that the controller is configured to use 32 uDMA channels
 // (32-1=31=0x1F)
-#define UDMA_STATUS_TOTALCHANNELS_W                                          5
-#define UDMA_STATUS_TOTALCHANNELS_M                                 0x001F0000
-#define UDMA_STATUS_TOTALCHANNELS_S                                         16
+#define UDMA_STATUS_TOTALCHANNELS_W 5
+#define UDMA_STATUS_TOTALCHANNELS_M 0x001F0000
+#define UDMA_STATUS_TOTALCHANNELS_S 16
 
 // Field:   [7:4] STATE
 //
@@ -150,9 +150,9 @@
 // 0xB: Undefined
 // ...
 // 0xF: Undefined.
-#define UDMA_STATUS_STATE_W                                                  4
-#define UDMA_STATUS_STATE_M                                         0x000000F0
-#define UDMA_STATUS_STATE_S                                                  4
+#define UDMA_STATUS_STATE_W 4
+#define UDMA_STATUS_STATE_M 0x000000F0
+#define UDMA_STATUS_STATE_S 4
 
 // Field:     [0] MASTERENABLE
 //
@@ -160,10 +160,10 @@
 //
 // 0: Controller is disabled
 // 1: Controller is enabled
-#define UDMA_STATUS_MASTERENABLE                                    0x00000001
-#define UDMA_STATUS_MASTERENABLE_BITN                                        0
-#define UDMA_STATUS_MASTERENABLE_M                                  0x00000001
-#define UDMA_STATUS_MASTERENABLE_S                                           0
+#define UDMA_STATUS_MASTERENABLE 0x00000001
+#define UDMA_STATUS_MASTERENABLE_BITN 0
+#define UDMA_STATUS_MASTERENABLE_M 0x00000001
+#define UDMA_STATUS_MASTERENABLE_S 0
 
 //*****************************************************************************
 //
@@ -188,9 +188,9 @@
 // - the write to the address indicated by destination address pointer
 // HProt[3:1] for these two exceptions can be controlled by dedicated fields in
 // the channel configutation descriptor.
-#define UDMA_CFG_PRTOCTRL_W                                                  3
-#define UDMA_CFG_PRTOCTRL_M                                         0x000000E0
-#define UDMA_CFG_PRTOCTRL_S                                                  5
+#define UDMA_CFG_PRTOCTRL_W 3
+#define UDMA_CFG_PRTOCTRL_M 0x000000E0
+#define UDMA_CFG_PRTOCTRL_S 5
 
 // Field:     [0] MASTERENABLE
 //
@@ -198,10 +198,10 @@
 //
 // 0: Disables the controller
 // 1: Enables the controller
-#define UDMA_CFG_MASTERENABLE                                       0x00000001
-#define UDMA_CFG_MASTERENABLE_BITN                                           0
-#define UDMA_CFG_MASTERENABLE_M                                     0x00000001
-#define UDMA_CFG_MASTERENABLE_S                                              0
+#define UDMA_CFG_MASTERENABLE 0x00000001
+#define UDMA_CFG_MASTERENABLE_BITN 0
+#define UDMA_CFG_MASTERENABLE_M 0x00000001
+#define UDMA_CFG_MASTERENABLE_S 0
 
 //*****************************************************************************
 //
@@ -213,9 +213,9 @@
 // This register point to the base address for the primary data structures of
 // each DMA channel. This is not stored in module, but in system memory, thus
 // space must be allocated for this usage when DMA is in usage
-#define UDMA_CTRL_BASEPTR_W                                                 22
-#define UDMA_CTRL_BASEPTR_M                                         0xFFFFFC00
-#define UDMA_CTRL_BASEPTR_S                                                 10
+#define UDMA_CTRL_BASEPTR_W 22
+#define UDMA_CTRL_BASEPTR_M 0xFFFFFC00
+#define UDMA_CTRL_BASEPTR_S 10
 
 //*****************************************************************************
 //
@@ -226,9 +226,9 @@
 //
 // This register shows the base address for the alternate data structures and
 // is calculated by module, thus read only
-#define UDMA_ALTCTRL_BASEPTR_W                                              32
-#define UDMA_ALTCTRL_BASEPTR_M                                      0xFFFFFFFF
-#define UDMA_ALTCTRL_BASEPTR_S                                               0
+#define UDMA_ALTCTRL_BASEPTR_W 32
+#define UDMA_ALTCTRL_BASEPTR_M 0xFFFFFFFF
+#define UDMA_ALTCTRL_BASEPTR_S 0
 
 //*****************************************************************************
 //
@@ -245,9 +245,9 @@
 // keeps channel Ch in active state until the requests are deasserted. This
 // handshake is necessary for channels where the requester is in an
 // asynchronous domain or can run at slower clock speed than uDMA
-#define UDMA_WAITONREQ_CHNLSTATUS_W                                         32
-#define UDMA_WAITONREQ_CHNLSTATUS_M                                 0xFFFFFFFF
-#define UDMA_WAITONREQ_CHNLSTATUS_S                                          0
+#define UDMA_WAITONREQ_CHNLSTATUS_W 32
+#define UDMA_WAITONREQ_CHNLSTATUS_M 0xFFFFFFFF
+#define UDMA_WAITONREQ_CHNLSTATUS_S 0
 
 //*****************************************************************************
 //
@@ -264,9 +264,9 @@
 //
 // Writing to a bit where a uDMA channel is not implemented does not create a
 // uDMA request for that channel
-#define UDMA_SOFTREQ_CHNLS_W                                                32
-#define UDMA_SOFTREQ_CHNLS_M                                        0xFFFFFFFF
-#define UDMA_SOFTREQ_CHNLS_S                                                 0
+#define UDMA_SOFTREQ_CHNLS_W 32
+#define UDMA_SOFTREQ_CHNLS_M 0xFFFFFFFF
+#define UDMA_SOFTREQ_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -294,9 +294,9 @@
 // controller performs 2^R transfers for burst requests.
 //
 // Writing to a bit where a uDMA channel is not implemented has no effect
-#define UDMA_SETBURST_CHNLS_W                                               32
-#define UDMA_SETBURST_CHNLS_M                                       0xFFFFFFFF
-#define UDMA_SETBURST_CHNLS_S                                                0
+#define UDMA_SETBURST_CHNLS_W 32
+#define UDMA_SETBURST_CHNLS_M 0xFFFFFFFF
+#define UDMA_SETBURST_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -315,9 +315,9 @@
 // Bit [Ch] = 1: Enables single transfer requests on channel Ch.
 //
 // Writing to a bit where a DMA channel is not implemented has no effect.
-#define UDMA_CLEARBURST_CHNLS_W                                             32
-#define UDMA_CLEARBURST_CHNLS_M                                     0xFFFFFFFF
-#define UDMA_CLEARBURST_CHNLS_S                                              0
+#define UDMA_CLEARBURST_CHNLS_W 32
+#define UDMA_CLEARBURST_CHNLS_M 0xFFFFFFFF
+#define UDMA_CLEARBURST_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -339,9 +339,9 @@
 // request channel [C] input from generating uDMA requests.
 //
 // Writing to a bit where a uDMA channel is not implemented has no effect
-#define UDMA_SETREQMASK_CHNLS_W                                             32
-#define UDMA_SETREQMASK_CHNLS_M                                     0xFFFFFFFF
-#define UDMA_SETREQMASK_CHNLS_S                                              0
+#define UDMA_SETREQMASK_CHNLS_W 32
+#define UDMA_SETREQMASK_CHNLS_M 0xFFFFFFFF
+#define UDMA_SETREQMASK_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -358,9 +358,9 @@
 // Bit [Ch] = 1: Enables channel [C] to generate DMA requests.
 //
 // Writing to a bit where a DMA channel is not implemented has no effect.
-#define UDMA_CLEARREQMASK_CHNLS_W                                           32
-#define UDMA_CLEARREQMASK_CHNLS_M                                   0xFFFFFFFF
-#define UDMA_CLEARREQMASK_CHNLS_S                                            0
+#define UDMA_CLEARREQMASK_CHNLS_W 32
+#define UDMA_CLEARREQMASK_CHNLS_M 0xFFFFFFFF
+#define UDMA_CLEARREQMASK_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -381,9 +381,9 @@
 // Bit [Ch] = 1: Enables channel Ch
 //
 // Writing to a bit where a DMA channel is not implemented has no effect
-#define UDMA_SETCHANNELEN_CHNLS_W                                           32
-#define UDMA_SETCHANNELEN_CHNLS_M                                   0xFFFFFFFF
-#define UDMA_SETCHANNELEN_CHNLS_S                                            0
+#define UDMA_SETCHANNELEN_CHNLS_W 32
+#define UDMA_SETCHANNELEN_CHNLS_M 0xFFFFFFFF
+#define UDMA_SETCHANNELEN_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -399,9 +399,9 @@
 // Bit [Ch] = 1: Disables channel Ch
 //
 // Writing to a bit where a uDMA channel is not implemented has no effect
-#define UDMA_CLEARCHANNELEN_CHNLS_W                                         32
-#define UDMA_CLEARCHANNELEN_CHNLS_M                                 0xFFFFFFFF
-#define UDMA_CLEARCHANNELEN_CHNLS_S                                          0
+#define UDMA_CLEARCHANNELEN_CHNLS_W 32
+#define UDMA_CLEARCHANNELEN_CHNLS_M 0xFFFFFFFF
+#define UDMA_CLEARCHANNELEN_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -422,9 +422,9 @@
 // Bit [Ch] = 1: Selects the alternate data structure for channel Ch
 //
 // Writing to a bit where a uDMA channel is not implemented has no effect
-#define UDMA_SETCHNLPRIALT_CHNLS_W                                          32
-#define UDMA_SETCHNLPRIALT_CHNLS_M                                  0xFFFFFFFF
-#define UDMA_SETCHNLPRIALT_CHNLS_S                                           0
+#define UDMA_SETCHNLPRIALT_CHNLS_W 32
+#define UDMA_SETCHNLPRIALT_CHNLS_M 0xFFFFFFFF
+#define UDMA_SETCHNLPRIALT_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -442,9 +442,9 @@
 // Bit [Ch] = 1: Selects the primary data structure for channel Ch.
 //
 // Writing to a bit where a uDMA channel is not implemented has no effect
-#define UDMA_CLEARCHNLPRIALT_CHNLS_W                                        32
-#define UDMA_CLEARCHNLPRIALT_CHNLS_M                                0xFFFFFFFF
-#define UDMA_CLEARCHNLPRIALT_CHNLS_S                                         0
+#define UDMA_CLEARCHNLPRIALT_CHNLS_W 32
+#define UDMA_CLEARCHNLPRIALT_CHNLS_M 0xFFFFFFFF
+#define UDMA_CLEARCHNLPRIALT_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -466,9 +466,9 @@
 // Bit [Ch] = 1: Channel Ch uses the high priority level.
 //
 // Writing to a bit where a uDMA channel is not implemented has no effect
-#define UDMA_SETCHNLPRIORITY_CHNLS_W                                        32
-#define UDMA_SETCHNLPRIORITY_CHNLS_M                                0xFFFFFFFF
-#define UDMA_SETCHNLPRIORITY_CHNLS_S                                         0
+#define UDMA_SETCHNLPRIORITY_CHNLS_W 32
+#define UDMA_SETCHNLPRIORITY_CHNLS_M 0xFFFFFFFF
+#define UDMA_SETCHNLPRIORITY_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -486,9 +486,9 @@
 // Bit [Ch] = 1: Channel Ch uses the default priority level.
 //
 // Writing to a bit where a uDMA channel is not implemented has no effect
-#define UDMA_CLEARCHNLPRIORITY_CHNLS_W                                      32
-#define UDMA_CLEARCHNLPRIORITY_CHNLS_M                              0xFFFFFFFF
-#define UDMA_CLEARCHNLPRIORITY_CHNLS_S                                       0
+#define UDMA_CLEARCHNLPRIORITY_CHNLS_W 32
+#define UDMA_CLEARCHNLPRIORITY_CHNLS_M 0xFFFFFFFF
+#define UDMA_CLEARCHNLPRIORITY_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -508,10 +508,10 @@
 //
 // 0: No effect, status of bus error flag is unchanged.
 // 1: Clears the bus error flag.
-#define UDMA_ERROR_STATUS                                           0x00000001
-#define UDMA_ERROR_STATUS_BITN                                               0
-#define UDMA_ERROR_STATUS_M                                         0x00000001
-#define UDMA_ERROR_STATUS_S                                                  0
+#define UDMA_ERROR_STATUS 0x00000001
+#define UDMA_ERROR_STATUS_BITN 0
+#define UDMA_ERROR_STATUS_M 0x00000001
+#define UDMA_ERROR_STATUS_S 0
 
 //*****************************************************************************
 //
@@ -532,9 +532,9 @@
 // Write as:
 // Bit [Ch] = 0: No effect.
 // Bit [Ch] = 1: The corresponding [Ch] bit is cleared  and is set to 0
-#define UDMA_REQDONE_CHNLS_W                                                32
-#define UDMA_REQDONE_CHNLS_M                                        0xFFFFFFFF
-#define UDMA_REQDONE_CHNLS_S                                                 0
+#define UDMA_REQDONE_CHNLS_W 32
+#define UDMA_REQDONE_CHNLS_M 0xFFFFFFFF
+#define UDMA_REQDONE_CHNLS_S 0
 
 //*****************************************************************************
 //
@@ -567,9 +567,8 @@
 // peripherals.
 // Note that this enables uDMA done for  channel [Ch] to contribute to
 // generation of combined uDMA done signal.
-#define UDMA_DONEMASK_CHNLS_W                                               32
-#define UDMA_DONEMASK_CHNLS_M                                       0xFFFFFFFF
-#define UDMA_DONEMASK_CHNLS_S                                                0
-
+#define UDMA_DONEMASK_CHNLS_W 32
+#define UDMA_DONEMASK_CHNLS_M 0xFFFFFFFF
+#define UDMA_DONEMASK_CHNLS_S 0
 
 #endif // __UDMA__

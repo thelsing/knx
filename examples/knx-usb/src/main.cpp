@@ -1,17 +1,17 @@
-#include <Arduino.h>
 #include <Adafruit_TinyUSB.h>
+#include <Arduino.h>
 #include <knx.h>
 
 /*
  * USB stuff
-*/
+ */
 #define STRINGIFY(s) XSTRINGIFY(s)
 #define XSTRINGIFY(s) #s
 
-#pragma message ("USB_VID=" STRINGIFY(USB_VID))
-#pragma message ("USB_PID=" STRINGIFY(USB_PID))
-#pragma message ("USB_MANUFACTURER=" STRINGIFY(USB_MANUFACTURER))
-#pragma message ("USB_PRODUCT=" STRINGIFY(USB_PRODUCT))
+#pragma message("USB_VID=" STRINGIFY(USB_VID))
+#pragma message("USB_PID=" STRINGIFY(USB_PID))
+#pragma message("USB_MANUFACTURER=" STRINGIFY(USB_MANUFACTURER))
+#pragma message("USB_PRODUCT=" STRINGIFY(USB_PRODUCT))
 
 Adafruit_USBD_HID usb_hid;
 
@@ -20,8 +20,8 @@ Adafruit_USBD_HID usb_hid;
 void setReportCallback(uint8_t report_id, hid_report_type_t report_type, uint8_t const* data, uint16_t bufSize)
 {
     // we don't use multiple report and report ID
-    (void) report_id;
-    (void) report_type;
+    (void)report_id;
+    (void)report_type;
 
     UsbTunnelInterface::receiveHidReport(data, bufSize);
 }
@@ -39,7 +39,7 @@ bool isSendHidReportPossible()
 
 /*
  * KNX stuff
-*/
+ */
 
 // create macros easy access to group objects
 #define goTemperature knx.getGroupObject(1)
@@ -53,7 +53,7 @@ long lastsend = 0;
 
 /*
  * setup()
-*/
+ */
 void setup(void)
 {
     Serial1.begin(115200);
@@ -68,7 +68,7 @@ void setup(void)
     usb_hid.begin();
 
     // wait until device mounted
-    while ( !USBDevice.mounted() )
+    while (!USBDevice.mounted())
         delay(1);
 
     println("KNX USB Interface enabled.");
@@ -78,7 +78,6 @@ void setup(void)
 
     if (knx.individualAddress() == 0)
         knx.progMode(true);
-
 
     if (knx.configured())
     {
@@ -95,7 +94,7 @@ void setup(void)
 
 /*
  * loop()
-*/
+ */
 void loop(void)
 {
     // don't delay here to much. Otherwise you might lose packages or mess up the timing with ETS
@@ -126,5 +125,4 @@ void loop(void)
         goTemperature.value(temp);
         goHumidity.value(humi);
     }
-
 }

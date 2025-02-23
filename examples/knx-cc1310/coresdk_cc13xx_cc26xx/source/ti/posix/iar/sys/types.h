@@ -39,12 +39,12 @@
 
 /* compiler vendor check */
 #ifndef __IAR_SYSTEMS_ICC__
-    #error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
+#error Incompatible compiler: use this include path (.../ti/posix/iar) only with an IAR compiler. You appear to be using a different compiler.
 #endif
 
+#include "_internal.h"
 #include <stddef.h>
 #include <stdint.h>
-#include "_internal.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,7 +80,6 @@ typedef unsigned short uid_t;
 #include <../inc/c/time.h>
 #endif
 
-
 /*
  *************************************************************************
  *                      posix types
@@ -92,11 +91,11 @@ typedef unsigned short uid_t;
  */
 typedef struct pthread_attr_t
 {
-    int priority;
-    void* stack;
-    size_t stacksize;
-    size_t guardsize;
-    int  detachstate;
+        int priority;
+        void* stack;
+        size_t stacksize;
+        size_t guardsize;
+        int detachstate;
 } pthread_attr_t;
 
 typedef uint32_t pthread_barrierattr_t;
@@ -106,9 +105,9 @@ typedef void* pthread_key_t;
 
 typedef struct pthread_mutexattr_t
 {
-    int type;
-    int protocol;
-    int prioceiling;
+        int type;
+        int protocol;
+        int prioceiling;
 } pthread_mutexattr_t;
 
 typedef uint32_t pthread_rwlockattr_t;
@@ -117,37 +116,37 @@ typedef void* pthread_t;
 
 typedef union
 {
-    struct sysbios_Barrier sysbios;
-    struct freertos_Barrier freertos;
+        struct sysbios_Barrier sysbios;
+        struct freertos_Barrier freertos;
 } pthread_barrier_t;
 
 typedef union
 {
-    struct sysbios_Cond sysbios;
-    struct freertos_Cond freertos;
+        struct sysbios_Cond sysbios;
+        struct freertos_Cond freertos;
 } pthread_cond_t;
 
 typedef union
 {
-    struct sysbios_Mutex sysbios;
-    struct freertos_Mutex freertos;
+        struct sysbios_Mutex sysbios;
+        struct freertos_Mutex freertos;
 } pthread_mutex_t;
 
 typedef uint32_t pthread_once_t;
 
 typedef union
 {
-    struct sysbios_RWLock sysbios;
-    struct freertos_RWLock freertos;
+        struct sysbios_RWLock sysbios;
+        struct freertos_RWLock freertos;
 } pthread_rwlock_t;
 
 struct _pthread_cleanup_context
 {
-    pthread_t  thread;
-    void       (*fxn)(void*);
-    void*      arg;
-    int        cancelType;
-    struct _pthread_cleanup_context* next;
+        pthread_t thread;
+        void (*fxn)(void*);
+        void* arg;
+        int cancelType;
+        struct _pthread_cleanup_context* next;
 };
 
 #ifdef __cplusplus

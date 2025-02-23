@@ -15,9 +15,9 @@ KnxIpConnectResponse::KnxIpConnectResponse(IpParameterObject& parameters, uint16
     _controlEndpoint.ipAddress(parameters.propertyValue<uint32_t>(PID_CURRENT_IP_ADDRESS));
     _controlEndpoint.ipPortNumber(KNXIP_MULTICAST_PORT);
 
-    _crd.length((type == 4) ? 4 : 2); //TunnelConnectionResponse length = 4; ConfigConnectionResponse length = 2;
+    _crd.length((type == 4) ? 4 : 2); // TunnelConnectionResponse length = 4; ConfigConnectionResponse length = 2;
     _crd.type(type);
-    if(type == 4) // only fill address when it is a TunnelConnectionResponse
+    if (type == 4) // only fill address when it is a TunnelConnectionResponse
         _crd.address(address);
 }
 
@@ -31,7 +31,6 @@ KnxIpConnectResponse::KnxIpConnectResponse(uint8_t channel, uint8_t errorCode)
     _data[LEN_KNXIP_HEADER] = channel;
     _data[LEN_KNXIP_HEADER + 1] = errorCode;
 }
-
 
 IpHostProtocolAddressInformation& KnxIpConnectResponse::controlEndpoint()
 {

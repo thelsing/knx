@@ -1,13 +1,13 @@
 #pragma once
 
-#include <cstdint>
 #include "config.h"
+#include <cstdint>
 
 #ifdef USE_IP
 
 #define LEN_CRI 4
 
-//TODO vervollständigen
+// TODO vervollständigen
 enum ConnectionType : uint8_t
 {
     DEVICE_MGMT_CONNECTION = 3,

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "table_object.h"
 #include "bits.h"
+#include "table_object.h"
 
 class ApplicationProgramObject : public TableObject
 {

@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       i2c.h
-*  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
-*  Revision:       49048
-*
-*  Description:    Defines and prototypes for the I2C.
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       i2c.h
+ *  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
+ *  Revision:       49048
+ *
+ *  Description:    Defines and prototypes for the I2C.
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,20 +55,19 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-#include <stdbool.h>
-#include <stdint.h>
-#include "../inc/hw_types.h"
+#include "../inc/hw_i2c.h"
 #include "../inc/hw_ints.h"
 #include "../inc/hw_memmap.h"
-#include "../inc/hw_i2c.h"
 #include "../inc/hw_sysctl.h"
+#include "../inc/hw_types.h"
+#include "cpu.h"
 #include "debug.h"
 #include "interrupt.h"
-#include "cpu.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 //*****************************************************************************
 //
@@ -84,10 +83,10 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define I2CMasterInitExpClk             NOROM_I2CMasterInitExpClk
-#define I2CMasterErr                    NOROM_I2CMasterErr
-#define I2CIntRegister                  NOROM_I2CIntRegister
-#define I2CIntUnregister                NOROM_I2CIntUnregister
+#define I2CMasterInitExpClk NOROM_I2CMasterInitExpClk
+#define I2CMasterErr NOROM_I2CMasterErr
+#define I2CIntRegister NOROM_I2CIntRegister
+#define I2CIntUnregister NOROM_I2CIntUnregister
 #endif
 
 //*****************************************************************************
@@ -95,25 +94,25 @@ extern "C"
 // I2C Master commands
 //
 //*****************************************************************************
-#define I2C_MASTER_CMD_SINGLE_SEND                                            \
+#define I2C_MASTER_CMD_SINGLE_SEND \
     0x00000007
-#define I2C_MASTER_CMD_SINGLE_RECEIVE                                         \
+#define I2C_MASTER_CMD_SINGLE_RECEIVE \
     0x00000007
-#define I2C_MASTER_CMD_BURST_SEND_START                                       \
+#define I2C_MASTER_CMD_BURST_SEND_START \
     0x00000003
-#define I2C_MASTER_CMD_BURST_SEND_CONT                                        \
+#define I2C_MASTER_CMD_BURST_SEND_CONT \
     0x00000001
-#define I2C_MASTER_CMD_BURST_SEND_FINISH                                      \
+#define I2C_MASTER_CMD_BURST_SEND_FINISH \
     0x00000005
-#define I2C_MASTER_CMD_BURST_SEND_ERROR_STOP                                  \
+#define I2C_MASTER_CMD_BURST_SEND_ERROR_STOP \
     0x00000004
-#define I2C_MASTER_CMD_BURST_RECEIVE_START                                    \
+#define I2C_MASTER_CMD_BURST_RECEIVE_START \
     0x0000000b
-#define I2C_MASTER_CMD_BURST_RECEIVE_CONT                                     \
+#define I2C_MASTER_CMD_BURST_RECEIVE_CONT \
     0x00000009
-#define I2C_MASTER_CMD_BURST_RECEIVE_FINISH                                   \
+#define I2C_MASTER_CMD_BURST_RECEIVE_FINISH \
     0x00000005
-#define I2C_MASTER_CMD_BURST_RECEIVE_ERROR_STOP                               \
+#define I2C_MASTER_CMD_BURST_RECEIVE_ERROR_STOP \
     0x00000004
 
 //*****************************************************************************
@@ -121,7 +120,7 @@ extern "C"
 // I2C Master error status
 //
 //*****************************************************************************
-#define I2C_MASTER_ERR_NONE     0
+#define I2C_MASTER_ERR_NONE 0
 #define I2C_MASTER_ERR_ADDR_ACK 0x00000004
 #define I2C_MASTER_ERR_DATA_ACK 0x00000008
 #define I2C_MASTER_ERR_ARB_LOST 0x00000010
@@ -131,19 +130,19 @@ extern "C"
 // I2C Slave action requests
 //
 //*****************************************************************************
-#define I2C_SLAVE_ACT_NONE      0
-#define I2C_SLAVE_ACT_RREQ      0x00000001  // Master has sent data
-#define I2C_SLAVE_ACT_TREQ      0x00000002  // Master has requested data
-#define I2C_SLAVE_ACT_RREQ_FBR  0x00000005  // Master has sent first byte
+#define I2C_SLAVE_ACT_NONE 0
+#define I2C_SLAVE_ACT_RREQ 0x00000001     // Master has sent data
+#define I2C_SLAVE_ACT_TREQ 0x00000002     // Master has requested data
+#define I2C_SLAVE_ACT_RREQ_FBR 0x00000005 // Master has sent first byte
 
 //*****************************************************************************
 //
 // I2C Slave interrupts
 //
 //*****************************************************************************
-#define I2C_SLAVE_INT_STOP      0x00000004  // Stop Condition Interrupt.
-#define I2C_SLAVE_INT_START     0x00000002  // Start Condition Interrupt.
-#define I2C_SLAVE_INT_DATA      0x00000001  // Data Interrupt.
+#define I2C_SLAVE_INT_STOP 0x00000004  // Stop Condition Interrupt.
+#define I2C_SLAVE_INT_START 0x00000002 // Start Condition Interrupt.
+#define I2C_SLAVE_INT_DATA 0x00000001  // Data Interrupt.
 
 //*****************************************************************************
 //
@@ -937,20 +936,20 @@ extern void I2CIntUnregister(uint32_t ui32Base);
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_I2CMasterInitExpClk
-#undef  I2CMasterInitExpClk
-#define I2CMasterInitExpClk             ROM_I2CMasterInitExpClk
+#undef I2CMasterInitExpClk
+#define I2CMasterInitExpClk ROM_I2CMasterInitExpClk
 #endif
 #ifdef ROM_I2CMasterErr
-#undef  I2CMasterErr
-#define I2CMasterErr                    ROM_I2CMasterErr
+#undef I2CMasterErr
+#define I2CMasterErr ROM_I2CMasterErr
 #endif
 #ifdef ROM_I2CIntRegister
-#undef  I2CIntRegister
-#define I2CIntRegister                  ROM_I2CIntRegister
+#undef I2CIntRegister
+#define I2CIntRegister ROM_I2CIntRegister
 #endif
 #ifdef ROM_I2CIntUnregister
-#undef  I2CIntUnregister
-#define I2CIntUnregister                ROM_I2CIntUnregister
+#undef I2CIntUnregister
+#define I2CIntUnregister ROM_I2CIntUnregister
 #endif
 #endif
 

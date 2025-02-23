@@ -364,36 +364,36 @@ extern "C" {
 /*! @addtogroup Power_Latency_Type
  *  @{
  */
-#define Power_TOTAL               (1U)   /*!< total latency */
-#define Power_RESUME              (2U)   /*!< resume latency */
+#define Power_TOTAL (1U)  /*!< total latency */
+#define Power_RESUME (2U) /*!< resume latency */
 /*! @}*/
 
 /*! @addtogroup Power_Notify_Response
  *  @{
  */
-#define Power_NOTIFYDONE          (0)   /*!< OK, notify completed */
-#define Power_NOTIFYERROR         (-1)  /*!< an error occurred during notify */
+#define Power_NOTIFYDONE (0)   /*!< OK, notify completed */
+#define Power_NOTIFYERROR (-1) /*!< an error occurred during notify */
 /*! @}*/
 
 /*! @addtogroup Power_Status
  *  @{
  */
-#define Power_SOK                 (0)    /*!< OK, operation succeeded */
-#define Power_EFAIL               (-1)   /*!< general failure */
-#define Power_EINVALIDINPUT       (-2)   /*!< invalid data value */
-#define Power_EINVALIDPOINTER     (-3)   /*!< invalid pointer */
-#define Power_ECHANGE_NOT_ALLOWED (-4)   /*!< change is not allowed */
-#define Power_EBUSY               (-5)   /*!< busy with another transition */
+#define Power_SOK (0)                  /*!< OK, operation succeeded */
+#define Power_EFAIL (-1)               /*!< general failure */
+#define Power_EINVALIDINPUT (-2)       /*!< invalid data value */
+#define Power_EINVALIDPOINTER (-3)     /*!< invalid pointer */
+#define Power_ECHANGE_NOT_ALLOWED (-4) /*!< change is not allowed */
+#define Power_EBUSY (-5)               /*!< busy with another transition */
 /*! @}*/
 
 /*! @addtogroup Power_Transition_State
  *  @{
  */
-#define Power_ACTIVE              (1U)   /*!< normal active state */
-#define Power_ENTERING_SLEEP      (2U)   /*!< entering a sleep state */
-#define Power_EXITING_SLEEP       (3U)   /*!< exiting a sleep state */
-#define Power_ENTERING_SHUTDOWN   (4U)   /*!< entering a shutdown state */
-#define Power_CHANGING_PERF_LEVEL (5U)   /*!< moving to new performance level */
+#define Power_ACTIVE (1U)              /*!< normal active state */
+#define Power_ENTERING_SLEEP (2U)      /*!< entering a sleep state */
+#define Power_EXITING_SLEEP (3U)       /*!< exiting a sleep state */
+#define Power_ENTERING_SHUTDOWN (4U)   /*!< entering a shutdown state */
+#define Power_CHANGING_PERF_LEVEL (5U) /*!< moving to new performance level */
 /*! @}*/
 
 /*!
@@ -442,10 +442,10 @@ typedef int_fast16_t (*Power_NotifyFxn)(uint_fast16_t eventType,
  */
 typedef struct
 {
-    List_Elem link;             /*!< for placing on the notify list */
-    uint_fast16_t eventTypes;   /*!< the event type */
-    Power_NotifyFxn notifyFxn;  /*!< notification function */
-    uintptr_t clientArg;        /*!< argument provided by client */
+        List_Elem link;            /*!< for placing on the notify list */
+        uint_fast16_t eventTypes;  /*!< the event type */
+        Power_NotifyFxn notifyFxn; /*!< notification function */
+        uintptr_t clientArg;       /*!< argument provided by client */
 } Power_NotifyObj;
 
 /*!
@@ -574,7 +574,7 @@ uint_fast16_t Power_getPerformanceLevel(void);
  *  @sa  @ref ti_drivers_Power_Examples_transistion "Power transitions"
  */
 uint_fast32_t Power_getTransitionLatency(uint_fast16_t sleepState,
-        uint_fast16_t type);
+                                         uint_fast16_t type);
 
 /*!
  *  @brief  Get the current transition state of the Power Manager

@@ -1,11 +1,11 @@
 #include "stm32_platform.h"
 
 #ifdef ARDUINO_ARCH_STM32
-#include <EEPROM.h>
 #include "knx/bits.h"
+#include <EEPROM.h>
 
 #ifndef KNX_SERIAL
-    #define KNX_SERIAL Serial2
+#define KNX_SERIAL Serial2
 #endif
 
 Stm32Platform::Stm32Platform()
@@ -15,13 +15,14 @@ Stm32Platform::Stm32Platform()
 {
 }
 
-Stm32Platform::Stm32Platform( HardwareSerial* s) : ArduinoPlatform(s)
+Stm32Platform::Stm32Platform(HardwareSerial* s)
+    : ArduinoPlatform(s)
 {
 }
 
 Stm32Platform::~Stm32Platform()
 {
-    delete [] _eepromPtr;
+    delete[] _eepromPtr;
 }
 
 uint32_t Stm32Platform::uniqueSerialNumber()

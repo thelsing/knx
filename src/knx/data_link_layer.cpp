@@ -1,11 +1,10 @@
 #include "data_link_layer.h"
 
 #include "bits.h"
-#include "platform.h"
-#include "device_object.h"
-#include "cemi_server.h"
 #include "cemi_frame.h"
-
+#include "cemi_server.h"
+#include "device_object.h"
+#include "platform.h"
 
 void DataLinkLayerCallbacks::activity(uint8_t info)
 {
@@ -18,8 +17,8 @@ void DataLinkLayerCallbacks::setActivityCallback(ActivityCallback activityCallba
     _activityCallback = activityCallback;
 }
 
-DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform) :
-    _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform)
+DataLinkLayer::DataLinkLayer(DeviceObject& devObj, NetworkLayerEntity& netLayerEntity, Platform& platform)
+    : _deviceObject(devObj), _networkLayerEntity(netLayerEntity), _platform(platform)
 {
 #ifdef KNX_ACTIVITYCALLBACK
     _netIndex = netLayerEntity.getEntityIndex();
@@ -161,9 +160,9 @@ void DataLinkLayer::frameReceived(CemiFrame& frame)
     // Do not send our own message back to the tunnel
 #ifdef KNX_TUNNELING
 
-    //we dont need to check it here
-    // send inbound frames to the tunnel if we are the secondary (TP) interface
-    if ( _networkLayerEntity.getEntityIndex() == 1)
+    // we dont need to check it here
+    //  send inbound frames to the tunnel if we are the secondary (TP) interface
+    if (_networkLayerEntity.getEntityIndex() == 1)
         _cemiServer->dataIndicationToTunnel(frame);
 
 #else
@@ -215,7 +214,6 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     else
         frame.frameType(format);
 
-
     if (!frame.valid())
     {
         println("invalid frame");
@@ -238,7 +236,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
     // a) we are the secondary interface (e.g. TP) AND
     // b) destination == PA of a Tunnel (TODO)
 
-    if (_networkLayerEntity.getEntityIndex() == 1 && addrType == AddressType::IndividualAddress)   // don't send to tp if we are the secondary (TP) interface AND the destination is a tunnel-PA
+    if (_networkLayerEntity.getEntityIndex() == 1 && addrType == AddressType::IndividualAddress) // don't send to tp if we are the secondary (TP) interface AND the destination is a tunnel-PA
     {
         if (isTunnelingPA(destinationAddr))
             sendTheFrame = false;
@@ -265,7 +263,7 @@ bool DataLinkLayer::sendTelegram(NPDU& npdu, AckType ack, uint16_t destinationAd
 #endif
     tmpFrame.confirm(ConfirmNoError);
 
-    if (_networkLayerEntity.getEntityIndex() == 1)   // only send to tunnel if we are the secondary (TP) interface
+    if (_networkLayerEntity.getEntityIndex() == 1) // only send to tunnel if we are the secondary (TP) interface
         _cemiServer->dataIndicationToTunnel(tmpFrame);
 
 #endif
@@ -306,4 +304,3 @@ bool DataLinkLayer::isRoutedPA(uint16_t pa)
     return (pa & own_sm) != ownpa;
 }
 #endif
-
