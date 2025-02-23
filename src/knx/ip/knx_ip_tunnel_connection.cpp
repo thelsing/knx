@@ -4,7 +4,6 @@ namespace Knx
 {
     KnxIpTunnelConnection::KnxIpTunnelConnection()
     {
-
     }
 
     void KnxIpTunnelConnection::Reset()
@@ -19,4 +18,4 @@ namespace Knx
         IndividualAddress = 0;
         IsConfig = false;
     }
-}
+} // namespace Knx

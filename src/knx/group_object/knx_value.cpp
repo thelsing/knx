@@ -1,7 +1,7 @@
 #include "knx_value.h"
 
-#include <cstring>
 #include <cstdlib>
+#include <cstring>
 #include <ctime>
 
 namespace Knx
@@ -128,7 +128,7 @@ namespace Knx
         return doubleValue();
     }
 
-    KNXValue::operator const char* () const
+    KNXValue::operator const char*() const
     {
         return stringValue();
     }
@@ -347,8 +347,7 @@ namespace Knx
             case UIntType:
                 return (uint64_t)_value.uintValue;
 
-            case TimeType:
-            {
+            case TimeType: {
                 struct tm* timeptr = const_cast<struct tm*>(&_value.timeValue);
                 return (uint64_t)mktime(timeptr);
             }
@@ -594,8 +593,7 @@ namespace Knx
             case IntType:
             case LongType:
             case DoubleType:
-            case StringType:
-            {
+            case StringType: {
                 time_t timeVal = ulongValue();
                 struct tm timeStruct;
                 gmtime_r(&timeVal, &timeStruct);
@@ -625,4 +623,4 @@ namespace Knx
     {
         return doubleValue();
     }
-}
+} // namespace Knx

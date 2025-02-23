@@ -207,10 +207,11 @@ namespace Knx
             virtual bool decode(uint8_t* data) = 0;
     };
 
-    template<typename T> class ValueDpt: public Dpt
+    template <typename T>
+    class ValueDpt : public Dpt
     {
         public:
-            ValueDpt() {};
+            ValueDpt(){};
             ValueDpt(T value)
             {
                 _value = value;
@@ -236,7 +237,8 @@ namespace Knx
                 _value = value;
                 return *this;
             }
+
         protected:
             T _value;
     };
-}
+} // namespace Knx

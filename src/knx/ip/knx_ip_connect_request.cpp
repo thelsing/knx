@@ -7,7 +7,6 @@ namespace Knx
     {
     }
 
-
     IpHostProtocolAddressInformation& KnxIpConnectRequest::hpaiCtrl()
     {
         return _hpaiCtrl;
@@ -20,4 +19,4 @@ namespace Knx
     {
         return _cri;
     }
-}
+} // namespace Knx

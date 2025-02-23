@@ -15,4 +15,4 @@ namespace Knx
     {
         return _data[LEN_KNXIP_HEADER];
     }
-}
+} // namespace Knx

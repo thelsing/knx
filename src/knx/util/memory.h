@@ -1,16 +1,16 @@
 #pragma once
 
-#include <stdint.h>
-#include "save_restore.h"
-#include "../platform/platform.h"
 #include "../interface_object/device_object.h"
 #include "../interface_object/table_object.h"
+#include "../platform/platform.h"
+#include "save_restore.h"
+#include <stdint.h>
 
 #define MAXSAVE 5
 #define MAXTABLEOBJ 4
 
 #ifndef KNX_FLASH_SIZE
-    #define KNX_FLASH_SIZE 1024
+#define KNX_FLASH_SIZE 1024
 #endif
 
 namespace Knx
@@ -18,7 +18,7 @@ namespace Knx
     class MemoryBlock
     {
         public:
-            MemoryBlock() {};
+            MemoryBlock(){};
             MemoryBlock(uint8_t* address, size_t size)
                 : address(address), size(size) {}
             uint8_t* address = nullptr;
@@ -28,9 +28,9 @@ namespace Knx
 
     enum VersionCheckResult
     {
-        FlashAllInvalid = 0,   //!< All flash content is not valid for this firmware, we delete it
-        FlashTablesInvalid = 1,//!< All table objects are invalid for this firmware, device object and saveRestores are OK
-        FlashValid = 2         //!< Flash content is valid and will be used
+        FlashAllInvalid = 0,    //!< All flash content is not valid for this firmware, we delete it
+        FlashTablesInvalid = 1, //!< All table objects are invalid for this firmware, device object and saveRestores are OK
+        FlashValid = 2          //!< Flash content is valid and will be used
     };
 
     typedef VersionCheckResult (*VersionCheckCallback)(uint16_t manufacturerId, uint8_t* hardwareType, uint16_t version);
@@ -84,4 +84,4 @@ namespace Knx
             MemoryBlock* _usedList = nullptr;
             uint16_t _metadataSize = 6 + LEN_HARDWARE_TYPE; // accounting for 3x pushWord and pushByteArray of length LEN_HARDWARE_TYPE
     };
-}
+} // namespace Knx

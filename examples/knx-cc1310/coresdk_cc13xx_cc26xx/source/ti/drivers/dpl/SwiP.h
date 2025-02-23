@@ -53,7 +53,7 @@ extern "C" {
  *  nortos:   40
  *  SysBIOS:  52
  */
-#define SwiP_STRUCT_SIZE   (52)
+#define SwiP_STRUCT_SIZE (52)
 
 /*!
  *  @brief    SemaphoreP structure.
@@ -63,20 +63,20 @@ extern "C" {
  */
 typedef union SwiP_Struct
 {
-    uint32_t dummy;  /*!< Align object */
-    char     data[SwiP_STRUCT_SIZE];
+        uint32_t dummy; /*!< Align object */
+        char data[SwiP_STRUCT_SIZE];
 } SwiP_Struct;
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /*!
  *  @brief    Opaque client reference to an instance of a SwiP
  *
  *  A SwiP_Handle returned from the ::SwiP_create represents that instance.
  */
-typedef  void* SwiP_Handle;
+typedef void* SwiP_Handle;
 
 /*!
  *  @brief    Status codes for SwiP APIs
@@ -113,10 +113,10 @@ typedef void (*SwiP_Fxn)(uintptr_t arg0, uintptr_t arg1);
  */
 typedef struct SwiP_Params
 {
-    uintptr_t  arg0;      /*!< Argument passed into the SwiP function. */
-    uintptr_t  arg1;      /*!< Argument passed into the SwiP function. */
-    uint32_t   priority;  /*!< priority, 0 is min, 1, 2, ..., ~0 for max */
-    uint32_t   trigger;   /*!< Initial SwiP trigger value. */
+        uintptr_t arg0;    /*!< Argument passed into the SwiP function. */
+        uintptr_t arg1;    /*!< Argument passed into the SwiP function. */
+        uint32_t priority; /*!< priority, 0 is min, 1, 2, ..., ~0 for max */
+        uint32_t trigger;  /*!< Initial SwiP trigger value. */
 } SwiP_Params;
 
 /*!

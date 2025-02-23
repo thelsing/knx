@@ -4,7 +4,8 @@
 namespace Knx
 {
     KnxIpTunnelingAck::KnxIpTunnelingAck(uint8_t* data,
-                                         uint16_t length) : KnxIpFrame(data, length), _ch(_data + LEN_KNXIP_HEADER)
+                                         uint16_t length)
+        : KnxIpFrame(data, length), _ch(_data + LEN_KNXIP_HEADER)
     {
     }
 
@@ -18,4 +19,4 @@ namespace Knx
     {
         return _ch;
     }
-}
+} // namespace Knx

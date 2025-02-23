@@ -1,11 +1,12 @@
 #include "tpdu.h"
 
-#include "../datalink_layer/cemi_frame.h"
 #include "../bits.h"
+#include "../datalink_layer/cemi_frame.h"
 
 namespace Knx
 {
-    TPDU::TPDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
+    TPDU::TPDU(uint8_t* data, CemiFrame& frame)
+        : _data(data), _frame(frame)
     {
     }
 
@@ -140,4 +141,4 @@ namespace Knx
 
 #endif
     }
-}
+} // namespace Knx

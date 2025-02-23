@@ -1,11 +1,10 @@
 #include "router_object.h"
 
-#include "../config.h"
 #include "../bits.h"
+#include "../config.h"
 #include "../util/memory.h"
 
 #include <cstring>
-
 
 namespace Knx
 {
@@ -56,51 +55,46 @@ namespace Knx
 
         // These properties are always present
         Property* fixedProperties[] =
-        {
-            new DataProperty( PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) OT_ROUTER ),
-            new DataProperty( PID_MEDIUM_STATUS, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ), // 0 means communication is possible, could be set by datalink layer or bau to 1 (comm impossible)
-            new DataProperty( PID_MAX_APDU_LENGTH_ROUTER, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, maxApduSize ),
-        };
+            {
+                new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ROUTER),
+                new DataProperty(PID_MEDIUM_STATUS, false, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint16_t)0), // 0 means communication is possible, could be set by datalink layer or bau to 1 (comm impossible)
+                new DataProperty(PID_MAX_APDU_LENGTH_ROUTER, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, maxApduSize),
+            };
         uint8_t fixedPropertiesCount = sizeof(fixedProperties) / sizeof(Property*);
 
         // Only present if coupler model is 1.x
         Property* model1xProperties[] =
-        {
-            // default values from Spec, see 03_05_01 4.4.4 and 4.4.5
-            new DataProperty( PID_MAIN_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL) ), // Primary: data individual (connless and connorient) + broadcast
-            new DataProperty( PID_SUB_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL) ), // Secondary: data individual (connless and connorient) + broadcast
-            new DataProperty( PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)),  // Primary: data group
-            new DataProperty( PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t) (LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)), // Secondary: data group
-        };
+            {
+                // default values from Spec, see 03_05_01 4.4.4 and 4.4.5
+                new DataProperty(PID_MAIN_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t)(LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL)), // Primary: data individual (connless and connorient) + broadcast
+                new DataProperty(PID_SUB_LCCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t)(LCCONFIG::PHYS_FRAME_ROUT | LCCONFIG::PHYS_REPEAT | LCCONFIG::BROADCAST_REPEAT | LCCONFIG::GROUP_IACK_ROUT | LCCONFIG::PHYS_IACK_NORMAL)),  // Secondary: data individual (connless and connorient) + broadcast
+                new DataProperty(PID_MAIN_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t)(LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)),                                             // Primary: data group
+                new DataProperty(PID_SUB_LCGRPCONFIG, true, PDT_BITSET8, 1, ReadLv3 | WriteLv0, (uint8_t)(LCGRPCONFIG::GROUP_6FFFROUTE | LCGRPCONFIG::GROUP_7000UNLOCK | LCGRPCONFIG::GROUP_REPEAT)),                                              // Secondary: data group
+            };
         uint8_t model1xPropertiesCount = sizeof(model1xProperties) / sizeof(Property*);
 
         // Only present if coupler model is 2.0
         // One router object per interface, currently only TP1/RF coupler specified
         Property* model20Properties[] =
-        {
-            new DataProperty( PID_OBJECT_INDEX, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0, objIndex ), // Must be set by concrete BAUxxxx!
-            new DataProperty( PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t) mediumType ),
-        };
+            {
+                new DataProperty(PID_OBJECT_INDEX, false, PDT_UNSIGNED_CHAR, 1, ReadLv3 | WriteLv0, objIndex), // Must be set by concrete BAUxxxx!
+                new DataProperty(PID_MEDIUM, false, PDT_ENUM8, 1, ReadLv3 | WriteLv0, (uint8_t)mediumType),
+            };
         uint8_t model20PropertiesCount = sizeof(model20Properties) / sizeof(Property*);
 
         Property* tableProperties[] =
-        {
-            new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
-                                               // Command Callback of PID_ROUTETABLE_CONTROL
-            [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                obj->functionRouteTableControl(true, data, length, resultData, resultLength);
-            },
-            // State Callback of PID_ROUTETABLE_CONTROL
-            [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void {
-                obj->functionRouteTableControl(false, data, length, resultData, resultLength);
-            })
-        };
+            {
+                new FunctionProperty<RouterObject>(this, PID_ROUTETABLE_CONTROL,
+                                                   // Command Callback of PID_ROUTETABLE_CONTROL
+                                                   [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void { obj->functionRouteTableControl(true, data, length, resultData, resultLength); },
+                                                   // State Callback of PID_ROUTETABLE_CONTROL
+                                                   [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void { obj->functionRouteTableControl(false, data, length, resultData, resultLength); })};
 
         Property* tableProperties20[] =
-        {
-            new DataProperty( PID_COUPLER_SERVICES_CONTROL, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint8_t) 0), // written by ETS TODO: implement
-            new DataProperty( PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t) 0 ) // default: invalid filter table, do not use, written by ETS
-        };
+            {
+                new DataProperty(PID_COUPLER_SERVICES_CONTROL, true, PDT_GENERIC_01, 1, ReadLv3 | WriteLv0, (uint8_t)0), // written by ETS TODO: implement
+                new DataProperty(PID_FILTER_TABLE_USE, true, PDT_BINARY_INFORMATION, 1, ReadLv3 | WriteLv0, (uint16_t)0) // default: invalid filter table, do not use, written by ETS
+            };
 
         uint8_t tablePropertiesCount = sizeof(tableProperties) / sizeof(Property*);
         uint8_t tableProperties20Count = sizeof(tableProperties20) / sizeof(Property*);
@@ -109,7 +103,7 @@ namespace Knx
         allPropertiesCount += (model == CouplerModel::Model_1x) ? model1xPropertiesCount : model20PropertiesCount;
         allPropertiesCount += useHopCount ? 1 : 0;
         allPropertiesCount += useTable ? tablePropertiesCount : 0;
-        allPropertiesCount += useTable && (model == CouplerModel::Model_20)  ? tableProperties20Count : 0;
+        allPropertiesCount += useTable && (model == CouplerModel::Model_20) ? tableProperties20Count : 0;
         allPropertiesCount += ((mediumType == DptMedium::KNX_RF) || (mediumType == DptMedium::KNX_IP)) ? 1 : 0; // PID_RF_ENABLE_SBC and PID_IP_ENABLE_SBC
 
         Property* allProperties[allPropertiesCount];
@@ -133,7 +127,7 @@ namespace Knx
         {
             // TODO: Primary side: 5 for line coupler, 4 for backbone coupler, only exists if secondary is open medium without hop count
             // Do we need to set a default value here or is it written by ETS?
-            allProperties[i++] = new DataProperty( PID_HOP_COUNT, true, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t) 5);
+            allProperties[i++] = new DataProperty(PID_HOP_COUNT, true, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)5);
         }
 
         if (useTable)
@@ -151,30 +145,18 @@ namespace Knx
         if (mediumType == DptMedium::KNX_RF)
         {
             allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_RF_ENABLE_SBC,
-                    // Command Callback of PID_RF_ENABLE_SBC
-                    [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void
-            {
-                obj->functionRfEnableSbc(true, data, length, resultData, resultLength);
-            },
-            // State Callback of PID_RF_ENABLE_SBC
-            [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void
-            {
-                obj->functionRfEnableSbc(false, data, length, resultData, resultLength);
-            });
+                                                                    // Command Callback of PID_RF_ENABLE_SBC
+                                                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void { obj->functionRfEnableSbc(true, data, length, resultData, resultLength); },
+                                                                    // State Callback of PID_RF_ENABLE_SBC
+                                                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void { obj->functionRfEnableSbc(false, data, length, resultData, resultLength); });
         }
         else if (mediumType == DptMedium::KNX_IP)
         {
             allProperties[i++] = new FunctionProperty<RouterObject>(this, PID_IP_ENABLE_SBC,
-                    // Command Callback of PID_IP_ENABLE_SBC
-                    [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void
-            {
-                obj->functionIpEnableSbc(true, data, length, resultData, resultLength);
-            },
-            // State Callback of PID_IP_ENABLE_SBC
-            [](RouterObject * obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void
-            {
-                obj->functionIpEnableSbc(false, data, length, resultData, resultLength);
-            });
+                                                                    // Command Callback of PID_IP_ENABLE_SBC
+                                                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void { obj->functionIpEnableSbc(true, data, length, resultData, resultLength); },
+                                                                    // State Callback of PID_IP_ENABLE_SBC
+                                                                    [](RouterObject* obj, uint8_t* data, uint8_t length, uint8_t* resultData, uint8_t& resultLength) -> void { obj->functionIpEnableSbc(false, data, length, resultData, resultLength); });
         }
 
         if (useTable)
@@ -240,7 +222,7 @@ namespace Knx
         if (startOctet == endOctet)
         {
             uint32_t relptr = _memory.toRelative(data()) + startOctet;
-            uint8_t octetData =  0; // = data()[startOctet];
+            uint8_t octetData = 0; // = data()[startOctet];
             _memory.readMemory(relptr, 1, &octetData);
 
             for (uint8_t bitPos = startBitPosition; bitPos <= endBitPosition; bitPos++)
@@ -381,7 +363,7 @@ namespace Knx
         printHex("", data, length);
 #endif
 
-        RouteTableServices srvId = (RouteTableServices) data[1];
+        RouteTableServices srvId = (RouteTableServices)data[1];
 
         if (isCommand)
         {
@@ -410,8 +392,7 @@ namespace Knx
                     resultLength = 2;
                     return;
 
-                case ClearGroupAddress:
-                {
+                case ClearGroupAddress: {
                     uint16_t startAddress;
                     uint16_t endAddress;
                     popWord(startAddress, &data[2]);
@@ -425,8 +406,7 @@ namespace Knx
                     return;
                 }
 
-                case SetGroupAddress:
-                {
+                case SetGroupAddress: {
                     uint16_t startAddress;
                     uint16_t endAddress;
                     popWord(startAddress, &data[2]);
@@ -457,8 +437,7 @@ namespace Knx
                     resultLength = 2;
                     return;
 
-                case ClearGroupAddress:
-                {
+                case ClearGroupAddress: {
                     uint16_t startAddress;
                     uint16_t endAddress;
                     popWord(startAddress, &data[2]);
@@ -471,8 +450,7 @@ namespace Knx
                     return;
                 }
 
-                case SetGroupAddress:
-                {
+                case SetGroupAddress: {
                     uint16_t startAddress;
                     uint16_t endAddress;
                     popWord(startAddress, &data[2]);
@@ -577,8 +555,8 @@ namespace Knx
         uint8_t filterTableUse = 0x01;
         Property* propFilterTableUse = property(PID_FILTER_TABLE_USE);
 
-        if (propFilterTableUse) // check if property PID_FILTER_TABLE_USE exists (only coupler 20), if not, ignore this
-            if (propFilterTableUse->read(filterTableUse) == 0)  // check if property PID_FILTER_TABLE_USE is empty, if so, return false
+        if (propFilterTableUse)                                // check if property PID_FILTER_TABLE_USE exists (only coupler 20), if not, ignore this
+            if (propFilterTableUse->read(filterTableUse) == 0) // check if property PID_FILTER_TABLE_USE is empty, if so, return false
                 return false;
 
         if ((filterTableUse & 0x01) == 1)
@@ -588,7 +566,6 @@ namespace Knx
             // bit_position = GA_value mod 8
             uint16_t octetAddress = groupAddress / 8;
             uint8_t bitPosition = groupAddress % 8;
-
 
             if (filterTable)
                 return (filterTable[octetAddress] & (1 << bitPosition)) == (1 << bitPosition);
@@ -601,4 +578,4 @@ namespace Knx
 
         return false;
     }
-}
+} // namespace Knx

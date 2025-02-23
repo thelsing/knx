@@ -2,7 +2,8 @@
 
 #include "dptconvert.h"
 
-Knx::Dpt5::Dpt5() {}
+Knx::Dpt5::Dpt5()
+{}
 
 Knx::Dpt5::Dpt5(float value)
 {
@@ -46,7 +47,8 @@ Knx::Dpt5& Knx::Dpt5::operator=(const float value)
     return *this;
 }
 
-Knx::DPT_Value_1_Ucount::DPT_Value_1_Ucount() {}
+Knx::DPT_Value_1_Ucount::DPT_Value_1_Ucount()
+{}
 
 Knx::DPT_Value_1_Ucount::DPT_Value_1_Ucount(uint8_t value)
 {
@@ -74,7 +76,8 @@ Knx::DPT_Value_1_Ucount& Knx::DPT_Value_1_Ucount::operator=(const uint8_t value)
     return *this;
 }
 
-Knx::DPT_Tariff::DPT_Tariff() {}
+Knx::DPT_Tariff::DPT_Tariff()
+{}
 
 Knx::DPT_Tariff::DPT_Tariff(uint8_t value)
 {
@@ -88,10 +91,9 @@ bool Knx::DPT_Tariff::tariffAvailable()
 
 void Knx::DPT_Tariff::value(uint8_t value)
 {
-    if ( value == 0xFF)
+    if (value == 0xFF)
         return;
 }
-
 
 bool Knx::DPT_Tariff::decode(uint8_t* data)
 {

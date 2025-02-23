@@ -6,12 +6,12 @@
 #include <stdint.h>
 
 #ifndef HAS_FUNCTIONAL
-    #if defined(__linux__) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32) || defined (ARDUINO_ARCH_SAMD) || defined (ARDUINO_ARCH_RP2040)
-        #define HAS_FUNCTIONAL    1
-        #include <functional>
-    #else
-        #define HAS_FUNCTIONAL   0
-    #endif
+#if defined(__linux__) || defined(ARDUINO_ARCH_ESP32) || defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_RP2040)
+#define HAS_FUNCTIONAL 1
+#include <functional>
+#else
+#define HAS_FUNCTIONAL 0
+#endif
 #endif
 
 namespace Knx
@@ -304,6 +304,7 @@ namespace Knx
     {
             friend class GroupObjectTableObject;
             GroupObject(const GroupObject& other) = delete;
+
         public:
             /**
              * The constructor.
@@ -360,21 +361,21 @@ namespace Knx
             bool initialized();
 
             /**
-            * Request the read of a communication object. Calling this function triggers the
-            * sending of a read-group-value telegram, to read the value of the communication
-            * object from the bus.
-            *
-            * When the answer is received, the communication object's value will be updated.
-            *
-            * This sets the state of the group objecte to ::ReadRequest
-            */
+             * Request the read of a communication object. Calling this function triggers the
+             * sending of a read-group-value telegram, to read the value of the communication
+             * object from the bus.
+             *
+             * When the answer is received, the communication object's value will be updated.
+             *
+             * This sets the state of the group objecte to ::ReadRequest
+             */
             void requestObjectRead();
             /**
-            * Mark a communication object as written. Calling this
-            * function triggers the sending of a write-group-value telegram.
-            *
-            * This sets the state of the group object to ::WriteRequest
-            */
+             * Mark a communication object as written. Calling this
+             * function triggers the sending of a write-group-value telegram.
+             *
+             * This sets the state of the group object to ::WriteRequest
+             */
             void objectWritten();
 
             /**
@@ -407,14 +408,16 @@ namespace Knx
              * return the current value of the group object.
              * If the DPT class doesn't fit to the group object size the returned value is invalid.
              */
-            template<class DPT> DPT value();
+            template <class DPT>
+            DPT value();
             /**
              * set the current value of the group object and changes the state of the group object to ::WriteRequest.
              * @param value the value the group object is set to.
              *
              * The parameters must fit the group object. Otherwise it will stay unchanged.
              */
-            template<class DPT> void value(const DPT& value);
+            template <class DPT>
+            void value(const DPT& value);
 
             /**
              * Check if the value (after conversion to dpt) will differ from current value of the group object and changes the state of the group object to ::WriteRequest if different.
@@ -426,7 +429,8 @@ namespace Knx
              *
              * @returns true if the value of the group object has changed
              */
-            template<class DPT> bool valueCompare(const DPT& value);
+            template <class DPT>
+            bool valueCompare(const DPT& value);
 
             /**
              * set the current value of the group object.
@@ -434,7 +438,8 @@ namespace Knx
              *
              * The parameters must fit size of the group object. Otherwise it will stay unchanged.
              */
-            template<class DPT> void valueNoSend(const DPT& value);
+            template <class DPT>
+            void valueNoSend(const DPT& value);
 
             /**
              * Check if the value (after conversion to dpt) will differ from current value of the group object and update if necessary.
@@ -445,7 +450,8 @@ namespace Knx
              *
              * @returns true if the value of the group object has changed
              */
-            template<class DPT> bool valueNoSendCompare(const DPT& value);
+            template <class DPT>
+            bool valueNoSendCompare(const DPT& value);
 
             /**
              * set the current value of the group object.
@@ -455,7 +461,8 @@ namespace Knx
              *
              * @returns true if the value of the group object was changed successfully.
              */
-            template<class DPT> bool tryValue(const DPT& value);
+            template <class DPT>
+            bool tryValue(const DPT& value);
 
             /**
              * Callback processing: register one global callback for all group object.
@@ -482,13 +489,15 @@ namespace Knx
 
     bool operator==(const GroupObject& lhs, const GroupObject& rhs);
 
-    template<class DPT> void GroupObject::value(const DPT& value)
+    template <class DPT>
+    void GroupObject::value(const DPT& value)
     {
         valueNoSend(value);
         objectWritten();
     }
 
-    template<class DPT> DPT GroupObject::value()
+    template <class DPT>
+    DPT GroupObject::value()
     {
         DPT dpt;
 
@@ -499,7 +508,8 @@ namespace Knx
         return dpt;
     }
 
-    template<class DPT> bool GroupObject::tryValue(const DPT& value)
+    template <class DPT>
+    bool GroupObject::tryValue(const DPT& value)
     {
         if (value.size() != sizeCode())
             return false;
@@ -507,7 +517,8 @@ namespace Knx
         return value.decode(_data);
     }
 
-    template<class DPT> void GroupObject::valueNoSend(const DPT& value)
+    template <class DPT>
+    void GroupObject::valueNoSend(const DPT& value)
     {
         if (value.size() != sizeCode())
             return;
@@ -518,7 +529,8 @@ namespace Knx
         value.encode(_data);
     }
 
-    template<class DPT> bool GroupObject::valueNoSendCompare(const DPT& value)
+    template <class DPT>
+    bool GroupObject::valueNoSendCompare(const DPT& value)
     {
         if (value.size() != sizeCode())
             return false;
@@ -546,7 +558,8 @@ namespace Knx
         }
     }
 
-    template<class DPT> bool GroupObject::valueCompare(const DPT& value)
+    template <class DPT>
+    bool GroupObject::valueCompare(const DPT& value)
     {
         if (valueNoSendCompare(value))
         {
@@ -556,4 +569,4 @@ namespace Knx
 
         return false;
     }
-}
+} // namespace Knx

@@ -155,15 +155,15 @@
  */
 typedef struct _NoRTOS_Config
 {
-    /*! Function that is called when a TI Driver "suspends" its operation */
-    void (*idleCallback)(void);
+        /*! Function that is called when a TI Driver "suspends" its operation */
+        void (*idleCallback)(void);
 
-    /*! Period of the internal Clock module's periodic "tick" (microsecs) */
-    uint32_t clockTickPeriod;
+        /*! Period of the internal Clock module's periodic "tick" (microsecs) */
+        uint32_t clockTickPeriod;
 
-    /*! Hardware interrupt posted by software to achieve the Swi (Software
-        interrupt) scheduling paradigm */
-    int swiIntNum;
+        /*! Hardware interrupt posted by software to achieve the Swi (Software
+            interrupt) scheduling paradigm */
+        int swiIntNum;
 } NoRTOS_Config;
 
 /*!

@@ -2,10 +2,10 @@
 
 #include "../config.h"
 
-#include "ip_parameter_object.h"
-#include "ip_data_link_layer.h"
 #include "../bau/bau_systemB_device.h"
 #include "../cemi_server/cemi_server_object.h"
+#include "ip_data_link_layer.h"
+#include "ip_parameter_object.h"
 
 namespace Knx
 {
@@ -18,11 +18,13 @@ namespace Knx
             void enabled(bool value) override;
 
             IpDataLinkLayer* getDataLinkLayer();
+
         protected:
             InterfaceObject* getInterfaceObject(uint8_t idx);
             InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
 
             void doMasterReset(EraseCode eraseCode, uint8_t channel) override;
+
         private:
             IpParameterObject _ipParameters;
             IpDataLinkLayer _dlLayer;
@@ -31,4 +33,4 @@ namespace Knx
             CemiServerObject _cemiServerObject;
 #endif
     };
-}
+} // namespace Knx

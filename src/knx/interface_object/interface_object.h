@@ -1,11 +1,11 @@
 #pragma once
 
-#include "property.h"
-#include "data_property.h"
-#include "callback_property.h"
-#include "function_property.h"
-#include "../util/save_restore.h"
 #include "../knx_types.h"
+#include "../util/save_restore.h"
+#include "callback_property.h"
+#include "data_property.h"
+#include "function_property.h"
+#include "property.h"
 
 #include <stddef.h>
 
@@ -213,4 +213,4 @@ namespace Knx
             Property** _properties = nullptr;
             uint8_t _propertyCount = 0;
     };
-}
+} // namespace Knx

@@ -11,7 +11,7 @@ namespace Knx
     /**
      * This class provides common functionality for interface objects that are configured by ETS with MemorWrite.
      */
-    class TableObject: public InterfaceObject
+    class TableObject : public InterfaceObject
     {
             friend class Memory;
 
@@ -100,4 +100,4 @@ namespace Knx
              */
             uint32_t _size = 0;
     };
-}
+} // namespace Knx

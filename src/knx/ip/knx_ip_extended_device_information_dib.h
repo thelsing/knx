@@ -16,4 +16,4 @@ namespace Knx
             uint16_t deviceDescriptor() const;
             void deviceDescriptor(uint16_t value);
     };
-}
+} // namespace Knx

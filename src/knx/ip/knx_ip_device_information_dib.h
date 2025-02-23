@@ -29,4 +29,4 @@ namespace Knx
             const uint8_t* friendlyName() const;
             void friendlyName(const uint8_t* value);
     };
-}
+} // namespace Knx

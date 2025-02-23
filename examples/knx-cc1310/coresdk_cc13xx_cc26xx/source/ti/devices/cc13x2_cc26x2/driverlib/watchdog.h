@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       wdt.h
-*  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
-*  Revision:       49048
-*
-*  Description:    Defines and prototypes for the Watchdog Timer.
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       wdt.h
+ *  Revised:        2017-05-23 12:08:52 +0200 (Tue, 23 May 2017)
+ *  Revision:       49048
+ *
+ *  Description:    Defines and prototypes for the Watchdog Timer.
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,27 +55,26 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
-#include <stdbool.h>
-#include <stdint.h>
-#include "../inc/hw_types.h"
 #include "../inc/hw_ints.h"
 #include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
 #include "../inc/hw_wdt.h"
 #include "debug.h"
 #include "interrupt.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 //*****************************************************************************
 //
 // The following are defines for the bit fields in the WDT_O_LOCK register.
 //
 //*****************************************************************************
-#define WATCHDOG_LOCK_UNLOCKED       0x00000000  // Unlocked
-#define WATCHDOG_LOCK_LOCKED         0x00000001  // Locked
-#define WATCHDOG_LOCK_UNLOCK         0x1ACCE551  // Unlocks the Watchdog Timer
+#define WATCHDOG_LOCK_UNLOCKED 0x00000000 // Unlocked
+#define WATCHDOG_LOCK_LOCKED 0x00000001   // Locked
+#define WATCHDOG_LOCK_UNLOCK 0x1ACCE551   // Unlocks the Watchdog Timer
 
 //*****************************************************************************
 //
@@ -83,15 +82,15 @@ extern "C"
 // WDT_MIS registers.
 //
 //*****************************************************************************
-#define WATCHDOG_INT_TIMEOUT         0x00000001  // Watchdog timer expired
+#define WATCHDOG_INT_TIMEOUT 0x00000001 // Watchdog timer expired
 
 //*****************************************************************************
 //
 // The type of interrupt that can be generated by the watchdog.
 //
 //*****************************************************************************
-#define WATCHDOG_INT_TYPE_INT   0x00000000
-#define WATCHDOG_INT_TYPE_NMI   0x00000004
+#define WATCHDOG_INT_TYPE_INT 0x00000000
+#define WATCHDOG_INT_TYPE_NMI 0x00000004
 
 //*****************************************************************************
 //
@@ -231,8 +230,7 @@ __STATIC_INLINE bool
 WatchdogLockState(void)
 {
     // Get the lock state.
-    return ((HWREG(WDT_BASE + WDT_O_LOCK) == WATCHDOG_LOCK_LOCKED) ?
-            true : false);
+    return ((HWREG(WDT_BASE + WDT_O_LOCK) == WATCHDOG_LOCK_LOCKED) ? true : false);
 }
 
 //*****************************************************************************

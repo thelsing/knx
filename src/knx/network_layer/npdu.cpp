@@ -1,16 +1,16 @@
 #include "npdu.h"
 
-#include "../datalink_layer/cemi_frame.h"
 #include "../bits.h"
+#include "../datalink_layer/cemi_frame.h"
 
 #include <cstring>
 
 namespace Knx
 {
-    NPDU::NPDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
+    NPDU::NPDU(uint8_t* data, CemiFrame& frame)
+        : _data(data), _frame(frame)
     {
     }
-
 
     uint8_t NPDU::octetCount() const
     {
@@ -56,4 +56,4 @@ namespace Knx
         print(hopCount());
 #endif
     }
-}
+} // namespace Knx

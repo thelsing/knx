@@ -8,7 +8,7 @@ namespace Knx
         : KnxIpFrame(data, length), _hpai(data + LEN_KNXIP_HEADER)
     {
         if (length == LEN_KNXIP_HEADER + LEN_IPHPAI)
-            return; //we dont have SRPs
+            return; // we dont have SRPs
 
         int currentPos = LEN_KNXIP_HEADER + LEN_IPHPAI;
 
@@ -66,4 +66,4 @@ namespace Knx
 
         return requestedDIBs[code];
     }
-}
+} // namespace Knx

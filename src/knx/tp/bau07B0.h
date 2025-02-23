@@ -3,9 +3,9 @@
 #include "../config.h"
 
 #include "../bau/bau_systemB_device.h"
-#include "../tp/tpuart_data_link_layer.h"
 #include "../cemi_server/cemi_server.h"
 #include "../cemi_server/cemi_server_object.h"
+#include "../tp/tpuart_data_link_layer.h"
 
 namespace Knx
 {
@@ -18,6 +18,7 @@ namespace Knx
             void enabled(bool value) override;
 
             TpUartDataLinkLayer* getDataLinkLayer();
+
         protected:
             InterfaceObject* getInterfaceObject(uint8_t idx);
             InterfaceObject* getInterfaceObject(ObjectType objectType, uint16_t objectInstance);
@@ -32,4 +33,4 @@ namespace Knx
             CemiServerObject _cemiServerObject;
 #endif
     };
-}
+} // namespace Knx

@@ -4,15 +4,15 @@
 
 #include <Arduino.h>
 #ifdef USE_SAMD_EEPROM_EMULATION
-    #include <FlashAsEEPROM.h>
+#include <FlashAsEEPROM.h>
 #endif
 
 #if KNX_FLASH_SIZE % 1024
-    #error "KNX_FLASH_SIZE must be multiple of 1024"
+#error "KNX_FLASH_SIZE must be multiple of 1024"
 #endif
 
 #ifndef KNX_SERIAL
-    #define KNX_SERIAL Serial1
+#define KNX_SERIAL Serial1
 #endif
 
 extern uint32_t __etext;
@@ -32,7 +32,8 @@ namespace Knx
 #endif
     }
 
-    Samd21Platform::Samd21Platform( HardwareSerial* s) : ArduinoPlatform(s)
+    Samd21Platform::Samd21Platform(HardwareSerial* s)
+        : ArduinoPlatform(s)
     {
 #ifndef USE_SAMD_EEPROM_EMULATION
         init();
@@ -42,10 +43,10 @@ namespace Knx
     uint32_t Samd21Platform::uniqueSerialNumber()
     {
         // SAMD21 from section 9.3.3 of the datasheet
-#define SERIAL_NUMBER_WORD_0  *(volatile uint32_t*)(0x0080A00C)
-#define SERIAL_NUMBER_WORD_1  *(volatile uint32_t*)(0x0080A040)
-#define SERIAL_NUMBER_WORD_2  *(volatile uint32_t*)(0x0080A044)
-#define SERIAL_NUMBER_WORD_3  *(volatile uint32_t*)(0x0080A048)
+#define SERIAL_NUMBER_WORD_0 *(volatile uint32_t*)(0x0080A00C)
+#define SERIAL_NUMBER_WORD_1 *(volatile uint32_t*)(0x0080A040)
+#define SERIAL_NUMBER_WORD_2 *(volatile uint32_t*)(0x0080A044)
+#define SERIAL_NUMBER_WORD_3 *(volatile uint32_t*)(0x0080A048)
 
         return SERIAL_NUMBER_WORD_0 ^ SERIAL_NUMBER_WORD_1 ^ SERIAL_NUMBER_WORD_2 ^ SERIAL_NUMBER_WORD_3;
     }
@@ -60,7 +61,7 @@ namespace Knx
 #pragma warning "Using EEPROM Simulation"
     uint8_t* Samd21Platform::getEepromBuffer(uint32_t size)
     {
-        //EEPROM.begin(size);
+        // EEPROM.begin(size);
         if (size > EEPROM_EMULATION_SIZE)
             fatalError();
 
@@ -88,7 +89,7 @@ namespace Knx
         _MemoryStart = KNX_FLASH_OFFSET;
         _MemoryEnd = KNX_FLASH_OFFSET + KNX_FLASH_SIZE;
 #else
-        _MemoryStart = getRowAddr(_pageSize * _pageCnt - KNX_FLASH_SIZE - 1);        // 23295
+        _MemoryStart = getRowAddr(_pageSize * _pageCnt - KNX_FLASH_SIZE - 1); // 23295
         _MemoryEnd = getRowAddr(_pageSize * _pageCnt - 1);
 #endif
 
@@ -232,5 +233,5 @@ namespace Knx
     }
 
 #endif
-}
+} // namespace Knx
 #endif

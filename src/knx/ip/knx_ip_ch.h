@@ -24,4 +24,4 @@ namespace Knx
         protected:
             uint8_t* _data = 0;
     };
-}
+} // namespace Knx

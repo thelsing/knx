@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       event.h
-*  Revised:        2016-09-19 10:36:17 +0200 (Mon, 19 Sep 2016)
-*  Revision:       47179
-*
-*  Description:    Defines and prototypes for the Event Handler.
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       event.h
+ *  Revised:        2016-09-19 10:36:17 +0200 (Mon, 19 Sep 2016)
+ *  Revision:       47179
+ *
+ *  Description:    Defines and prototypes for the Event Handler.
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,17 +55,15 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
+#include "../inc/hw_event.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
+#include "debug.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include "../inc/hw_types.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_event.h"
-#include "debug.h"
-
 
 //*****************************************************************************
 //
@@ -142,28 +140,28 @@ __STATIC_INLINE void
 EventRegister(uint32_t ui32EventSubscriber, uint32_t ui32EventSource)
 {
     // Check the arguments.
-    ASSERT(( ui32EventSubscriber == EVENT_O_CPUIRQSEL30  ) ||
-           ( ui32EventSubscriber == EVENT_O_RFCSEL9      ) ||
-           ( ui32EventSubscriber == EVENT_O_GPT0ACAPTSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_GPT0BCAPTSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_GPT1ACAPTSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_GPT1BCAPTSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_GPT2ACAPTSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_GPT2BCAPTSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_GPT3ACAPTSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_GPT3BCAPTSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH9SSEL  ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH9BSEL  ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH10SSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH10BSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH11SSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH11BSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH12SSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH12BSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_UDMACH14BSEL ) ||
-           ( ui32EventSubscriber == EVENT_O_AUXSEL0      ) ||
-           ( ui32EventSubscriber == EVENT_O_I2SSTMPSEL0  ) ||
-           ( ui32EventSubscriber == EVENT_O_FRZSEL0      ) );
+    ASSERT((ui32EventSubscriber == EVENT_O_CPUIRQSEL30) ||
+           (ui32EventSubscriber == EVENT_O_RFCSEL9) ||
+           (ui32EventSubscriber == EVENT_O_GPT0ACAPTSEL) ||
+           (ui32EventSubscriber == EVENT_O_GPT0BCAPTSEL) ||
+           (ui32EventSubscriber == EVENT_O_GPT1ACAPTSEL) ||
+           (ui32EventSubscriber == EVENT_O_GPT1BCAPTSEL) ||
+           (ui32EventSubscriber == EVENT_O_GPT2ACAPTSEL) ||
+           (ui32EventSubscriber == EVENT_O_GPT2BCAPTSEL) ||
+           (ui32EventSubscriber == EVENT_O_GPT3ACAPTSEL) ||
+           (ui32EventSubscriber == EVENT_O_GPT3BCAPTSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH9SSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH9BSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH10SSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH10BSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH11SSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH11BSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH12SSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH12BSEL) ||
+           (ui32EventSubscriber == EVENT_O_UDMACH14BSEL) ||
+           (ui32EventSubscriber == EVENT_O_AUXSEL0) ||
+           (ui32EventSubscriber == EVENT_O_I2SSTMPSEL0) ||
+           (ui32EventSubscriber == EVENT_O_FRZSEL0));
 
     // Map the event source to the event subscriber
     HWREG(EVENT_BASE + ui32EventSubscriber) = ui32EventSource;
@@ -193,7 +191,7 @@ __STATIC_INLINE void
 EventSwEventSet(uint32_t ui32SwEvent)
 {
     // Check the arguments.
-    ASSERT( ui32SwEvent <= 3 );
+    ASSERT(ui32SwEvent <= 3);
 
     // Each software event is byte accessible
     HWREGB(EVENT_BASE + EVENT_O_SWEV + ui32SwEvent) = 1;
@@ -216,7 +214,7 @@ __STATIC_INLINE void
 EventSwEventClear(uint32_t ui32SwEvent)
 {
     // Check the arguments.
-    ASSERT( ui32SwEvent <= 3 );
+    ASSERT(ui32SwEvent <= 3);
 
     // Each software event is byte accessible
     HWREGB(EVENT_BASE + EVENT_O_SWEV + ui32SwEvent) = 0;
@@ -241,10 +239,10 @@ __STATIC_INLINE uint32_t
 EventSwEventGet(uint32_t ui32SwEvent)
 {
     // Check the arguments.
-    ASSERT( ui32SwEvent <= 3 );
+    ASSERT(ui32SwEvent <= 3);
 
     // Each software event is byte accessible
-    return ( HWREGB(EVENT_BASE + EVENT_O_SWEV + ui32SwEvent));
+    return (HWREGB(EVENT_BASE + EVENT_O_SWEV + ui32SwEvent));
 }
 
 //*****************************************************************************

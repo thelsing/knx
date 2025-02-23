@@ -2,7 +2,7 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt5: public Dpt
+    class Dpt5 : public Dpt
     {
         public:
             Dpt5();
@@ -16,6 +16,7 @@ namespace Knx
             float value() const;
             operator float() const;
             Dpt5& operator=(const float value);
+
         protected:
             virtual float scale() const
             {
@@ -53,7 +54,7 @@ namespace Knx
             DPT_Value_1_Ucount& operator=(const uint8_t value);
     };
 
-    class DPT_Tariff: public DPT_Value_1_Ucount
+    class DPT_Tariff : public DPT_Value_1_Ucount
     {
         public:
             DPT_Tariff();
@@ -65,4 +66,4 @@ namespace Knx
 
     typedef Dpt5 DPT_Percent_U8;
     typedef Dpt5 DPT_DecimalFactor;
-}
+} // namespace Knx

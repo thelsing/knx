@@ -5,17 +5,17 @@
 
 #define LEN_SERVICE_FAMILIES 2
 #if MASK_VERSION == 0x091A
-    #ifdef KNX_TUNNELING
-        #define LEN_SERVICE_DIB (2 + 4 * LEN_SERVICE_FAMILIES)
-    #else
-        #define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
-    #endif
+#ifdef KNX_TUNNELING
+#define LEN_SERVICE_DIB (2 + 4 * LEN_SERVICE_FAMILIES)
 #else
-    #ifdef KNX_TUNNELING
-        #define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
-    #else
-        #define LEN_SERVICE_DIB (2 + 2 * LEN_SERVICE_FAMILIES)
-    #endif
+#define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
+#endif
+#else
+#ifdef KNX_TUNNELING
+#define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
+#else
+#define LEN_SERVICE_DIB (2 + 2 * LEN_SERVICE_FAMILIES)
+#endif
 #endif
 
 namespace Knx
@@ -40,9 +40,9 @@ namespace Knx
         _deviceInfo.length(LEN_DEVICE_INFORMATION_DIB);
         _deviceInfo.code(DEVICE_INFO);
 #if MASK_VERSION == 0x57B0
-        _deviceInfo.medium(0x20); //MediumType is IP (for IP-Only Devices)
+        _deviceInfo.medium(0x20); // MediumType is IP (for IP-Only Devices)
 #else
-        _deviceInfo.medium(0x02); //MediumType is TP
+        _deviceInfo.medium(0x02); // MediumType is TP
 #endif
         _deviceInfo.status(deviceObject.progMode());
         _deviceInfo.individualAddress(parameters.propertyValue<uint16_t>(PID_KNX_INDIVIDUAL_ADDRESS));
@@ -104,7 +104,7 @@ namespace Knx
         _ipCurConfig.gateway(parameters.propertyValue<uint32_t>(PID_CURRENT_DEFAULT_GATEWAY));
         _ipCurConfig.dhcp(parameters.propertyValue<uint32_t>(PID_DHCP_BOOTP_SERVER));
         _ipCurConfig.info1(parameters.propertyValue<uint8_t>(PID_CURRENT_IP_ASSIGNMENT_METHOD));
-        _ipCurConfig.info2(0x00); //Reserved
+        _ipCurConfig.info2(0x00); // Reserved
 
         currentPos += LEN_IP_CURRENT_CONFIG_DIB;
     }
@@ -112,7 +112,7 @@ namespace Knx
     void KnxIpSearchResponseExtended::setKnxAddresses(IpParameterObject& parameters, DeviceObject& deviceObject)
     {
         KnxIpKnxAddressesDIB _knxAddresses(_data + currentPos);
-        _knxAddresses.length(4); //minimum
+        _knxAddresses.length(4); // minimum
         _knxAddresses.code(KNX_ADDRESSES);
         _knxAddresses.individualAddress(deviceObject.individualAddress());
 
@@ -134,9 +134,9 @@ namespace Knx
     void KnxIpSearchResponseExtended::setTunnelingInfo(IpParameterObject& parameters, DeviceObject& deviceObject, KnxIpTunnelConnection tunnels[])
     {
         KnxIpTunnelingInfoDIB _tunnelInfo(_data + currentPos);
-        _tunnelInfo.length(4); //minlength
+        _tunnelInfo.length(4); // minlength
         _tunnelInfo.code(TUNNELING_INFO);
-        _tunnelInfo.apduLength(254); //FIXME where to get from
+        _tunnelInfo.apduLength(254); // FIXME where to get from
 
         uint16_t length = 0;
         parameters.readPropertyLength(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES, length);
@@ -180,12 +180,12 @@ namespace Knx
             }
 
             if (doubleCounter > 1 && used)
-                flags |= 1 << 2; //Slot is not usable; double PA is already used
+                flags |= 1 << 2; // Slot is not usable; double PA is already used
 
             if (used)
             {
-                flags |= 1 << 2; //Slot is not usable; PA is already used
-                flags |= 1; //Slot is not free
+                flags |= 1 << 2; // Slot is not usable; PA is already used
+                flags |= 1;      // Slot is not free
             }
 
             flags = ~flags;
@@ -201,8 +201,8 @@ namespace Knx
         KnxIpExtendedDeviceInformationDIB _extended(_data + currentPos);
         _extended.length(LEN_EXTENDED_DEVICE_INFORMATION_DIB);
         _extended.code(EXTENDED_DEVICE_INFO);
-        _extended.status(0x01); //FIXME dont know encoding PID_MEDIUM_STATUS=51 RouterObject
-        _extended.localMaxApdu(254); //FIXME is this correct?
+        _extended.status(0x01);      // FIXME dont know encoding PID_MEDIUM_STATUS=51 RouterObject
+        _extended.localMaxApdu(254); // FIXME is this correct?
 #ifdef MASK_VERSION
         _extended.deviceDescriptor(MASK_VERSION);
 #else
@@ -216,9 +216,8 @@ namespace Knx
         return _controlEndpoint;
     }
 
-
     uint8_t* KnxIpSearchResponseExtended::DIBs()
     {
         return _data + LEN_KNXIP_HEADER + LEN_IPHPAI;
     }
-}
+} // namespace Knx

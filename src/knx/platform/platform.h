@@ -1,23 +1,22 @@
 #pragma once
 
-#include <stdint.h>
-#include <stddef.h>
 #include "../util/save_restore.h"
-
+#include <stddef.h>
+#include <stdint.h>
 
 namespace Knx
 {
 #ifndef KNX_FLASH_CALLBACK
-    #ifndef KNX_FLASH_SIZE
-        #define KNX_FLASH_SIZE 1024
-        #pragma warning "KNX_FLASH_SIZE not defined, using 1024"
-    #endif
+#ifndef KNX_FLASH_SIZE
+#define KNX_FLASH_SIZE 1024
+#pragma warning "KNX_FLASH_SIZE not defined, using 1024"
+#endif
 #endif
 
 #ifdef KNX_FLASH_CALLBACK
-    #ifndef KNX_FLASH_SIZE
-        #define KNX_FLASH_SIZE 0
-    #endif
+#ifndef KNX_FLASH_SIZE
+#define KNX_FLASH_SIZE 0
+#endif
     typedef uint32_t (*FlashCallbackSize)();
     typedef uint8_t* (*FlashCallbackRead)();
     typedef uint32_t (*FlashCallbackWrite)(uint32_t relativeAddress, uint8_t* buffer, size_t len);
@@ -48,17 +47,17 @@ namespace Knx
             virtual void restart() = 0;
             virtual void fatalError() = 0;
 
-            //multicast socket
+            // multicast socket
             virtual void setupMultiCast(uint32_t addr, uint16_t port);
             virtual void closeMultiCast();
             virtual bool sendBytesMultiCast(uint8_t* buffer, uint16_t len);
             virtual int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen);
             virtual int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen, uint32_t& src_addr, uint16_t& src_port);
 
-            //unicast socket
+            // unicast socket
             virtual bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len);
 
-            //UART
+            // UART
             virtual void setupUart();
             virtual void closeUart();
             virtual int uartAvailable();
@@ -74,7 +73,7 @@ namespace Knx
             virtual void closeSpi();
             virtual int readWriteSpi(uint8_t* data, size_t len);
 
-            //Memory
+            // Memory
 
             // --- Overwrite these methods in the device-plattform to use the EEPROM Emulation API for UserMemory ----
             //
@@ -122,11 +121,10 @@ namespace Knx
             virtual uint8_t* userFlashStart();
             // size of the user flash in EraseBlocks
             virtual size_t userFlashSizeEraseBlocks();
-            //relativ to userFlashStart
+            // relativ to userFlashStart
             virtual void flashErase(uint16_t eraseBlockNum);
-            //write a single page to flash (pageNumber relative to userFashStart
+            // write a single page to flash (pageNumber relative to userFashStart
             virtual void flashWritePage(uint16_t pageNumber, uint8_t* data);
-
 
             // -------------------------------------------------------------------------------------------------------
 
@@ -153,4 +151,4 @@ namespace Knx
             FlashCallbackCommit _callbackFlashCommit = nullptr;
 #endif
     };
-}
+} // namespace Knx

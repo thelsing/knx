@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../interface_object/table_object.h"
 #include "../config.h"
+#include "../interface_object/table_object.h"
 #include "../knx_types.h"
 
 namespace Knx
@@ -18,7 +18,7 @@ namespace Knx
     {
         Primary,
         Secondary,
-        Single     // Not used, just a placeholder for better readability for coupler model 1.x
+        Single // Not used, just a placeholder for better readability for coupler model 1.x
     };
 
     class RouterObject : public TableObject
@@ -42,6 +42,7 @@ namespace Knx
             {
                 return "RouterObject";
             }
+
         protected:
             void beforeStateChange(LoadState& newState) override;
 
@@ -60,4 +61,4 @@ namespace Knx
             bool _ipSbcRoutingEnabled = false;
             CouplerModel _model = CouplerModel::Model_20;
     };
-}
+} // namespace Knx

@@ -1,14 +1,12 @@
 #include "group_object.h"
 
+#include "../bits.h"
 #include "../interface_object/group_object_table_object.h"
 #include "../util/logger.h"
-#include "../bits.h"
-
 
 #include <cstring>
 
 #define LOGGER Logger::logger("GroupObject")
-
 
 namespace Knx
 {
@@ -42,7 +40,7 @@ namespace Knx
         if (!_table)
             return false;
 
-        return bitRead(ntohs(_table->_tableData[_asap]), 14) > 0 ;
+        return bitRead(ntohs(_table->_tableData[_asap]), 14) > 0;
     }
 
     bool GroupObject::valueReadOnInit()
@@ -58,7 +56,7 @@ namespace Knx
         if (!_table)
             return false;
 
-        return bitRead(ntohs(_table->_tableData[_asap]), 12) > 0 ;
+        return bitRead(ntohs(_table->_tableData[_asap]), 12) > 0;
     }
 
     bool GroupObject::readEnable()
@@ -81,13 +79,12 @@ namespace Knx
         return bitRead(ntohs(_table->_tableData[_asap]), 10) > 0;
     }
 
-
     Priority GroupObject::priority()
     {
         if (!_table)
             return LowPriority;
 
-        return (Priority)((ntohs(_table->_tableData[_asap]) >> 6) & (3 << 2)) ;
+        return (Priority)((ntohs(_table->_tableData[_asap]) >> 6) & (3 << 2));
     }
 
     uint8_t* GroupObject::valueRef()
@@ -166,7 +163,6 @@ namespace Knx
         return -1;
     }
 
-
     ComFlag GroupObject::commFlag()
     {
         return _commFlag;
@@ -228,4 +224,4 @@ namespace Knx
     {
         return lhs.asap() == rhs.asap();
     }
-}
+} // namespace Knx

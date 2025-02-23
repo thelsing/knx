@@ -8,10 +8,10 @@
 #include "../knx_types.h"
 #include "../network_layer/network_layer_entity.h"
 #ifdef KNX_TUNNELING
-    #include "../ip/ip_parameter_object.h"
+#include "../ip/ip_parameter_object.h"
 #endif
-#include "../cemi_server/cemi_server.h"
 #include "../bau/bau.h"
+#include "../cemi_server/cemi_server.h"
 
 #include <stdint.h>
 
@@ -25,6 +25,7 @@ namespace Knx
     {
         protected:
             ActivityCallback _activityCallback = nullptr;
+
         public:
             virtual ~DataLinkLayerCallbacks() = default;
             virtual void activity(uint8_t info);
@@ -80,4 +81,4 @@ namespace Knx
             IpParameterObject* _ipParameters;
 #endif
     };
-}
+} // namespace Knx

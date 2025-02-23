@@ -1,25 +1,25 @@
 #ifdef DeviceFamily_CC13X0
 
-#include <cstdio>
-#include <cstdarg>
-#include <cstring>
 #include <cmath>
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib/sys_ctrl.h)
+#include DeviceFamily_constructPath(driverlib / sys_ctrl.h)
 #include <ti/drivers/GPIO.h>
 
 #include "SEGGER_RTT.h"
 
 #include "Board.h"
 
-#include "knx/bits.h"
 #include "cc1310_platform.h"
+#include "knx/bits.h"
 
 namespace Knx
 {
-    //#define printf(args...) (SEGGER_RTT_printf(0, args))
-    //#define PRINT_RTT
+    // #define printf(args...) (SEGGER_RTT_printf(0, args))
+    // #define PRINT_RTT
 #define PRINT_UART
 
     static uint8_t serialNumber[6];
@@ -72,7 +72,8 @@ namespace Knx
         if (uart == NULL)
         {
             while (true)
-            {}
+            {
+            }
         }
     }
 
@@ -118,7 +119,7 @@ namespace Knx
 #if defined(PRINT_UART)
         uint8_t buffer[1] = {c};
         return UART_write(uart, buffer, sizeof(buffer));
-#elif defined (PRINT_RTT)
+#elif defined(PRINT_RTT)
         return SEGGER_RTT_PutChar(0, (char)c);
 #else
         return 1;
@@ -149,7 +150,7 @@ namespace Knx
     {
 #if defined(PRINT_UART)
         return UART_write(uart, buffer, size);
-#elif defined (PRINT_RTT)
+#elif defined(PRINT_RTT)
         return SEGGER_RTT_Write(0, buffer, size);
 #else
         return size;
@@ -277,13 +278,13 @@ namespace Knx
 
         if (number > 4294967040.0)
         {
-            print("ovf");  // constant determined empirically
+            print("ovf"); // constant determined empirically
             return;
         }
 
         if (number < -4294967040.0)
         {
-            print("ovf");  // constant determined empirically
+            print("ovf"); // constant determined empirically
             return;
         }
 
@@ -437,7 +438,7 @@ namespace Knx
             fatalError();
         }
 
-        NVS_read(nvsHandle, 0, (void*) NVS_buffer, size);
+        NVS_read(nvsHandle, 0, (void*)NVS_buffer, size);
 
         for (uint32_t i = 0; i < size; i++)
         {
@@ -495,7 +496,7 @@ namespace Knx
             delay(500);
         }
     }
-}
+} // namespace Knx
 
 void sleep(uint32_t sec)
 {
@@ -510,23 +511,22 @@ void usleep(uint32_t usec)
 uint32_t millis()
 {
     // we use our own ms clock because the Os tick counter has counts 10us ticks and following calculation would not wrap correctly at 32bit boundary
-    //return Clock_getTicks() * (uint64_t) Clock_tickPeriod / 1000; // rtos
-    //return ClockP_getTicks( * (uint64_t) Clock_tickPeriod / 1000); //nortos
+    // return Clock_getTicks() * (uint64_t) Clock_tickPeriod / 1000; // rtos
+    // return ClockP_getTicks( * (uint64_t) Clock_tickPeriod / 1000); //nortos
     return Knx::msCounter;
 }
 
 void delay(uint32_t ms)
 {
     ClockP_usleep(ms * 1000);
-    //sleep(ms * (1000 / ClockP_tickPeriod));   //rtos
-    //sleepTicks(millis * 1000ULL / ClockP_tickPeriod); //nortos
+    // sleep(ms * (1000 / ClockP_tickPeriod));   //rtos
+    // sleepTicks(millis * 1000ULL / ClockP_tickPeriod); //nortos
 }
 
-void delayMicroseconds (unsigned int howLong)
+void delayMicroseconds(unsigned int howLong)
 {
     ClockP_usleep(howLong);
 }
-
 
 uint32_t digitalRead(uint32_t dwPin)
 {

@@ -1,38 +1,38 @@
 /******************************************************************************
-*  Filename:       hw_aon_rtc_h
-*  Revised:        2017-01-31 09:37:48 +0100 (Tue, 31 Jan 2017)
-*  Revision:       48345
-*
-* Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-*
-* 1) Redistributions of source code must retain the above copyright notice,
-*    this list of conditions and the following disclaimer.
-*
-* 2) Redistributions in binary form must reproduce the above copyright notice,
-*    this list of conditions and the following disclaimer in the documentation
-*    and/or other materials provided with the distribution.
-*
-* 3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*    be used to endorse or promote products derived from this software without
-*    specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       hw_aon_rtc_h
+ *  Revised:        2017-01-31 09:37:48 +0100 (Tue, 31 Jan 2017)
+ *  Revision:       48345
+ *
+ * Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1) Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2) Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 #ifndef __HW_AON_RTC_H__
 #define __HW_AON_RTC_H__
@@ -44,40 +44,40 @@
 //
 //*****************************************************************************
 // Control
-#define AON_RTC_O_CTL                                               0x00000000
+#define AON_RTC_O_CTL 0x00000000
 
 // Event Flags, RTC Status
-#define AON_RTC_O_EVFLAGS                                           0x00000004
+#define AON_RTC_O_EVFLAGS 0x00000004
 
 // Second Counter Value, Integer Part
-#define AON_RTC_O_SEC                                               0x00000008
+#define AON_RTC_O_SEC 0x00000008
 
 // Second Counter Value, Fractional Part
-#define AON_RTC_O_SUBSEC                                            0x0000000C
+#define AON_RTC_O_SUBSEC 0x0000000C
 
 // Subseconds Increment
-#define AON_RTC_O_SUBSECINC                                         0x00000010
+#define AON_RTC_O_SUBSECINC 0x00000010
 
 // Channel Configuration
-#define AON_RTC_O_CHCTL                                             0x00000014
+#define AON_RTC_O_CHCTL 0x00000014
 
 // Channel 0 Compare Value
-#define AON_RTC_O_CH0CMP                                            0x00000018
+#define AON_RTC_O_CH0CMP 0x00000018
 
 // Channel 1 Compare Value
-#define AON_RTC_O_CH1CMP                                            0x0000001C
+#define AON_RTC_O_CH1CMP 0x0000001C
 
 // Channel 2 Compare Value
-#define AON_RTC_O_CH2CMP                                            0x00000020
+#define AON_RTC_O_CH2CMP 0x00000020
 
 // Channel 2 Compare Value Auto-increment
-#define AON_RTC_O_CH2CMPINC                                         0x00000024
+#define AON_RTC_O_CH2CMPINC 0x00000024
 
 // Channel 1 Capture Value
-#define AON_RTC_O_CH1CAPT                                           0x00000028
+#define AON_RTC_O_CH1CAPT 0x00000028
 
 // AON Synchronization
-#define AON_RTC_O_SYNC                                              0x0000002C
+#define AON_RTC_O_SYNC 0x0000002C
 
 //*****************************************************************************
 //
@@ -92,13 +92,13 @@
 // CH1                      Use Channel 1 delayed event in combined event
 // CH0                      Use Channel 0 delayed event in combined event
 // NONE                     No event is selected for combined event.
-#define AON_RTC_CTL_COMB_EV_MASK_W                                           3
-#define AON_RTC_CTL_COMB_EV_MASK_M                                  0x00070000
-#define AON_RTC_CTL_COMB_EV_MASK_S                                          16
-#define AON_RTC_CTL_COMB_EV_MASK_CH2                                0x00040000
-#define AON_RTC_CTL_COMB_EV_MASK_CH1                                0x00020000
-#define AON_RTC_CTL_COMB_EV_MASK_CH0                                0x00010000
-#define AON_RTC_CTL_COMB_EV_MASK_NONE                               0x00000000
+#define AON_RTC_CTL_COMB_EV_MASK_W 3
+#define AON_RTC_CTL_COMB_EV_MASK_M 0x00070000
+#define AON_RTC_CTL_COMB_EV_MASK_S 16
+#define AON_RTC_CTL_COMB_EV_MASK_CH2 0x00040000
+#define AON_RTC_CTL_COMB_EV_MASK_CH1 0x00020000
+#define AON_RTC_CTL_COMB_EV_MASK_CH0 0x00010000
+#define AON_RTC_CTL_COMB_EV_MASK_NONE 0x00000000
 
 // Field:  [11:8] EV_DELAY
 //
@@ -119,23 +119,23 @@
 // D2                       Delay by 2 clock cycles
 // D1                       Delay by 1 clock cycles
 // D0                       No delay on delayed event
-#define AON_RTC_CTL_EV_DELAY_W                                               4
-#define AON_RTC_CTL_EV_DELAY_M                                      0x00000F00
-#define AON_RTC_CTL_EV_DELAY_S                                               8
-#define AON_RTC_CTL_EV_DELAY_D144                                   0x00000D00
-#define AON_RTC_CTL_EV_DELAY_D128                                   0x00000C00
-#define AON_RTC_CTL_EV_DELAY_D112                                   0x00000B00
-#define AON_RTC_CTL_EV_DELAY_D96                                    0x00000A00
-#define AON_RTC_CTL_EV_DELAY_D80                                    0x00000900
-#define AON_RTC_CTL_EV_DELAY_D64                                    0x00000800
-#define AON_RTC_CTL_EV_DELAY_D48                                    0x00000700
-#define AON_RTC_CTL_EV_DELAY_D32                                    0x00000600
-#define AON_RTC_CTL_EV_DELAY_D16                                    0x00000500
-#define AON_RTC_CTL_EV_DELAY_D8                                     0x00000400
-#define AON_RTC_CTL_EV_DELAY_D4                                     0x00000300
-#define AON_RTC_CTL_EV_DELAY_D2                                     0x00000200
-#define AON_RTC_CTL_EV_DELAY_D1                                     0x00000100
-#define AON_RTC_CTL_EV_DELAY_D0                                     0x00000000
+#define AON_RTC_CTL_EV_DELAY_W 4
+#define AON_RTC_CTL_EV_DELAY_M 0x00000F00
+#define AON_RTC_CTL_EV_DELAY_S 8
+#define AON_RTC_CTL_EV_DELAY_D144 0x00000D00
+#define AON_RTC_CTL_EV_DELAY_D128 0x00000C00
+#define AON_RTC_CTL_EV_DELAY_D112 0x00000B00
+#define AON_RTC_CTL_EV_DELAY_D96 0x00000A00
+#define AON_RTC_CTL_EV_DELAY_D80 0x00000900
+#define AON_RTC_CTL_EV_DELAY_D64 0x00000800
+#define AON_RTC_CTL_EV_DELAY_D48 0x00000700
+#define AON_RTC_CTL_EV_DELAY_D32 0x00000600
+#define AON_RTC_CTL_EV_DELAY_D16 0x00000500
+#define AON_RTC_CTL_EV_DELAY_D8 0x00000400
+#define AON_RTC_CTL_EV_DELAY_D4 0x00000300
+#define AON_RTC_CTL_EV_DELAY_D2 0x00000200
+#define AON_RTC_CTL_EV_DELAY_D1 0x00000100
+#define AON_RTC_CTL_EV_DELAY_D0 0x00000000
 
 // Field:     [7] RESET
 //
@@ -144,10 +144,10 @@
 // Writing 1 to this bit will reset the RTC counter.
 //
 // This bit is cleared when reset takes effect
-#define AON_RTC_CTL_RESET                                           0x00000080
-#define AON_RTC_CTL_RESET_BITN                                               7
-#define AON_RTC_CTL_RESET_M                                         0x00000080
-#define AON_RTC_CTL_RESET_S                                                  7
+#define AON_RTC_CTL_RESET 0x00000080
+#define AON_RTC_CTL_RESET_BITN 7
+#define AON_RTC_CTL_RESET_M 0x00000080
+#define AON_RTC_CTL_RESET_S 7
 
 // Field:     [2] RTC_4KHZ_EN
 //
@@ -156,10 +156,10 @@
 //
 // 0: RTC_4KHZ signal is forced to 0
 // 1: RTC_4KHZ is enabled ( provied that RTC is enabled EN)
-#define AON_RTC_CTL_RTC_4KHZ_EN                                     0x00000004
-#define AON_RTC_CTL_RTC_4KHZ_EN_BITN                                         2
-#define AON_RTC_CTL_RTC_4KHZ_EN_M                                   0x00000004
-#define AON_RTC_CTL_RTC_4KHZ_EN_S                                            2
+#define AON_RTC_CTL_RTC_4KHZ_EN 0x00000004
+#define AON_RTC_CTL_RTC_4KHZ_EN_BITN 2
+#define AON_RTC_CTL_RTC_4KHZ_EN_M 0x00000004
+#define AON_RTC_CTL_RTC_4KHZ_EN_S 2
 
 // Field:     [1] RTC_UPD_EN
 //
@@ -168,10 +168,10 @@
 //
 // 0: RTC_UPD signal is forced to 0
 // 1: RTC_UPD signal is toggling @16 kHz
-#define AON_RTC_CTL_RTC_UPD_EN                                      0x00000002
-#define AON_RTC_CTL_RTC_UPD_EN_BITN                                          1
-#define AON_RTC_CTL_RTC_UPD_EN_M                                    0x00000002
-#define AON_RTC_CTL_RTC_UPD_EN_S                                             1
+#define AON_RTC_CTL_RTC_UPD_EN 0x00000002
+#define AON_RTC_CTL_RTC_UPD_EN_BITN 1
+#define AON_RTC_CTL_RTC_UPD_EN_M 0x00000002
+#define AON_RTC_CTL_RTC_UPD_EN_S 1
 
 // Field:     [0] EN
 //
@@ -179,10 +179,10 @@
 //
 // 0: Halted (frozen)
 // 1: Running
-#define AON_RTC_CTL_EN                                              0x00000001
-#define AON_RTC_CTL_EN_BITN                                                  0
-#define AON_RTC_CTL_EN_M                                            0x00000001
-#define AON_RTC_CTL_EN_S                                                     0
+#define AON_RTC_CTL_EN 0x00000001
+#define AON_RTC_CTL_EN_BITN 0
+#define AON_RTC_CTL_EN_M 0x00000001
+#define AON_RTC_CTL_EN_S 0
 
 //*****************************************************************************
 //
@@ -203,10 +203,10 @@
 //
 // AUX_SCE can read the flag through AUX_WUC:WUEVFLAGS.AON_RTC_CH2 and clear it
 // using AUX_WUC:WUEVCLR.AON_RTC_CH2.
-#define AON_RTC_EVFLAGS_CH2                                         0x00010000
-#define AON_RTC_EVFLAGS_CH2_BITN                                            16
-#define AON_RTC_EVFLAGS_CH2_M                                       0x00010000
-#define AON_RTC_EVFLAGS_CH2_S                                               16
+#define AON_RTC_EVFLAGS_CH2 0x00010000
+#define AON_RTC_EVFLAGS_CH2_BITN 16
+#define AON_RTC_EVFLAGS_CH2_M 0x00010000
+#define AON_RTC_EVFLAGS_CH2_S 16
 
 // Field:     [8] CH1
 //
@@ -221,10 +221,10 @@
 //
 // Writing 1 clears this flag. Note that a new event can not occur on this
 // channel in first 2 SCLK_LF cycles after a clearance.
-#define AON_RTC_EVFLAGS_CH1                                         0x00000100
-#define AON_RTC_EVFLAGS_CH1_BITN                                             8
-#define AON_RTC_EVFLAGS_CH1_M                                       0x00000100
-#define AON_RTC_EVFLAGS_CH1_S                                                8
+#define AON_RTC_EVFLAGS_CH1 0x00000100
+#define AON_RTC_EVFLAGS_CH1_BITN 8
+#define AON_RTC_EVFLAGS_CH1_M 0x00000100
+#define AON_RTC_EVFLAGS_CH1_S 8
 
 // Field:     [0] CH0
 //
@@ -237,10 +237,10 @@
 //
 // Writing 1 clears this flag. Note that a new event can not occur on this
 // channel in first 2 SCLK_LF cycles after a clearance.
-#define AON_RTC_EVFLAGS_CH0                                         0x00000001
-#define AON_RTC_EVFLAGS_CH0_BITN                                             0
-#define AON_RTC_EVFLAGS_CH0_M                                       0x00000001
-#define AON_RTC_EVFLAGS_CH0_S                                                0
+#define AON_RTC_EVFLAGS_CH0 0x00000001
+#define AON_RTC_EVFLAGS_CH0_BITN 0
+#define AON_RTC_EVFLAGS_CH0_M 0x00000001
+#define AON_RTC_EVFLAGS_CH0_S 0
 
 //*****************************************************************************
 //
@@ -254,9 +254,9 @@
 // When reading this register the content of SUBSEC.VALUE is simultaneously
 // latched. A consistent reading of the combined Real Time Clock can be
 // obtained by first reading this register, then reading SUBSEC register.
-#define AON_RTC_SEC_VALUE_W                                                 32
-#define AON_RTC_SEC_VALUE_M                                         0xFFFFFFFF
-#define AON_RTC_SEC_VALUE_S                                                  0
+#define AON_RTC_SEC_VALUE_W 32
+#define AON_RTC_SEC_VALUE_M 0xFFFFFFFF
+#define AON_RTC_SEC_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -273,9 +273,9 @@
 // - 0x4000_0000 = 0.25 sec
 // - 0x8000_0000 = 0.5 sec
 // - 0xC000_0000 = 0.75 sec
-#define AON_RTC_SUBSEC_VALUE_W                                              32
-#define AON_RTC_SUBSEC_VALUE_M                                      0xFFFFFFFF
-#define AON_RTC_SUBSEC_VALUE_S                                               0
+#define AON_RTC_SUBSEC_VALUE_W 32
+#define AON_RTC_SUBSEC_VALUE_M 0xFFFFFFFF
+#define AON_RTC_SUBSEC_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -301,9 +301,9 @@
 // NOTE: This register is read only. Modification of the register value must be
 // done using registers AUX_WUC:RTCSUBSECINC1 ,  AUX_WUC:RTCSUBSECINC0 and
 // AUX_WUC:RTCSUBSECINCCTL
-#define AON_RTC_SUBSECINC_VALUEINC_W                                        24
-#define AON_RTC_SUBSECINC_VALUEINC_M                                0x00FFFFFF
-#define AON_RTC_SUBSECINC_VALUEINC_S                                         0
+#define AON_RTC_SUBSECINC_VALUEINC_W 24
+#define AON_RTC_SUBSECINC_VALUEINC_M 0x00FFFFFF
+#define AON_RTC_SUBSECINC_VALUEINC_S 0
 
 //*****************************************************************************
 //
@@ -313,10 +313,10 @@
 // Field:    [18] CH2_CONT_EN
 //
 // Set to enable continuous operation of Channel 2
-#define AON_RTC_CHCTL_CH2_CONT_EN                                   0x00040000
-#define AON_RTC_CHCTL_CH2_CONT_EN_BITN                                      18
-#define AON_RTC_CHCTL_CH2_CONT_EN_M                                 0x00040000
-#define AON_RTC_CHCTL_CH2_CONT_EN_S                                         18
+#define AON_RTC_CHCTL_CH2_CONT_EN 0x00040000
+#define AON_RTC_CHCTL_CH2_CONT_EN_BITN 18
+#define AON_RTC_CHCTL_CH2_CONT_EN_M 0x00040000
+#define AON_RTC_CHCTL_CH2_CONT_EN_S 18
 
 // Field:    [16] CH2_EN
 //
@@ -324,10 +324,10 @@
 //
 // 0: Disable RTC Channel 2
 // 1: Enable RTC Channel 2
-#define AON_RTC_CHCTL_CH2_EN                                        0x00010000
-#define AON_RTC_CHCTL_CH2_EN_BITN                                           16
-#define AON_RTC_CHCTL_CH2_EN_M                                      0x00010000
-#define AON_RTC_CHCTL_CH2_EN_S                                              16
+#define AON_RTC_CHCTL_CH2_EN 0x00010000
+#define AON_RTC_CHCTL_CH2_EN_BITN 16
+#define AON_RTC_CHCTL_CH2_EN_M 0x00010000
+#define AON_RTC_CHCTL_CH2_EN_S 16
 
 // Field:     [9] CH1_CAPT_EN
 //
@@ -335,10 +335,10 @@
 //
 // 0: Compare mode (default)
 // 1: Capture mode
-#define AON_RTC_CHCTL_CH1_CAPT_EN                                   0x00000200
-#define AON_RTC_CHCTL_CH1_CAPT_EN_BITN                                       9
-#define AON_RTC_CHCTL_CH1_CAPT_EN_M                                 0x00000200
-#define AON_RTC_CHCTL_CH1_CAPT_EN_S                                          9
+#define AON_RTC_CHCTL_CH1_CAPT_EN 0x00000200
+#define AON_RTC_CHCTL_CH1_CAPT_EN_BITN 9
+#define AON_RTC_CHCTL_CH1_CAPT_EN_M 0x00000200
+#define AON_RTC_CHCTL_CH1_CAPT_EN_S 9
 
 // Field:     [8] CH1_EN
 //
@@ -346,10 +346,10 @@
 //
 // 0: Disable RTC Channel 1
 // 1: Enable RTC Channel 1
-#define AON_RTC_CHCTL_CH1_EN                                        0x00000100
-#define AON_RTC_CHCTL_CH1_EN_BITN                                            8
-#define AON_RTC_CHCTL_CH1_EN_M                                      0x00000100
-#define AON_RTC_CHCTL_CH1_EN_S                                               8
+#define AON_RTC_CHCTL_CH1_EN 0x00000100
+#define AON_RTC_CHCTL_CH1_EN_BITN 8
+#define AON_RTC_CHCTL_CH1_EN_M 0x00000100
+#define AON_RTC_CHCTL_CH1_EN_S 8
 
 // Field:     [0] CH0_EN
 //
@@ -357,10 +357,10 @@
 //
 // 0: Disable RTC Channel 0
 // 1: Enable RTC Channel 0
-#define AON_RTC_CHCTL_CH0_EN                                        0x00000001
-#define AON_RTC_CHCTL_CH0_EN_BITN                                            0
-#define AON_RTC_CHCTL_CH0_EN_M                                      0x00000001
-#define AON_RTC_CHCTL_CH0_EN_S                                               0
+#define AON_RTC_CHCTL_CH0_EN 0x00000001
+#define AON_RTC_CHCTL_CH0_EN_BITN 0
+#define AON_RTC_CHCTL_CH0_EN_M 0x00000001
+#define AON_RTC_CHCTL_CH0_EN_S 0
 
 //*****************************************************************************
 //
@@ -388,9 +388,9 @@
 //
 // *) It can take up to 2 SCLK_LF clock cycles before event occurs due to
 // synchronization.
-#define AON_RTC_CH0CMP_VALUE_W                                              32
-#define AON_RTC_CH0CMP_VALUE_M                                      0xFFFFFFFF
-#define AON_RTC_CH0CMP_VALUE_S                                               0
+#define AON_RTC_CH0CMP_VALUE_W 32
+#define AON_RTC_CH0CMP_VALUE_M 0xFFFFFFFF
+#define AON_RTC_CH0CMP_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -418,9 +418,9 @@
 //
 // *) It can take up to 2 SCLK_LF clock cycles before event occurs due to
 // synchronization.
-#define AON_RTC_CH1CMP_VALUE_W                                              32
-#define AON_RTC_CH1CMP_VALUE_M                                      0xFFFFFFFF
-#define AON_RTC_CH1CMP_VALUE_S                                               0
+#define AON_RTC_CH1CMP_VALUE_W 32
+#define AON_RTC_CH1CMP_VALUE_M 0xFFFFFFFF
+#define AON_RTC_CH1CMP_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -448,9 +448,9 @@
 //
 // *) It can take up to 2 SCLK_LF clock cycles before event occurs due to
 // synchronization.
-#define AON_RTC_CH2CMP_VALUE_W                                              32
-#define AON_RTC_CH2CMP_VALUE_M                                      0xFFFFFFFF
-#define AON_RTC_CH2CMP_VALUE_S                                               0
+#define AON_RTC_CH2CMP_VALUE_W 32
+#define AON_RTC_CH2CMP_VALUE_M 0xFFFFFFFF
+#define AON_RTC_CH2CMP_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -461,9 +461,9 @@
 //
 // If CHCTL.CH2_CONT_EN is set, this value is added to CH2CMP.VALUE on every
 // channel 2 compare event.
-#define AON_RTC_CH2CMPINC_VALUE_W                                           32
-#define AON_RTC_CH2CMPINC_VALUE_M                                   0xFFFFFFFF
-#define AON_RTC_CH2CMPINC_VALUE_S                                            0
+#define AON_RTC_CH2CMPINC_VALUE_W 32
+#define AON_RTC_CH2CMPINC_VALUE_M 0xFFFFFFFF
+#define AON_RTC_CH2CMPINC_VALUE_S 0
 
 //*****************************************************************************
 //
@@ -473,16 +473,16 @@
 // Field: [31:16] SEC
 //
 // Value of SEC.VALUE bits 15:0 at capture time.
-#define AON_RTC_CH1CAPT_SEC_W                                               16
-#define AON_RTC_CH1CAPT_SEC_M                                       0xFFFF0000
-#define AON_RTC_CH1CAPT_SEC_S                                               16
+#define AON_RTC_CH1CAPT_SEC_W 16
+#define AON_RTC_CH1CAPT_SEC_M 0xFFFF0000
+#define AON_RTC_CH1CAPT_SEC_S 16
 
 // Field:  [15:0] SUBSEC
 //
 // Value of SUBSEC.VALUE bits 31:16 at capture time.
-#define AON_RTC_CH1CAPT_SUBSEC_W                                            16
-#define AON_RTC_CH1CAPT_SUBSEC_M                                    0x0000FFFF
-#define AON_RTC_CH1CAPT_SUBSEC_S                                             0
+#define AON_RTC_CH1CAPT_SUBSEC_W 16
+#define AON_RTC_CH1CAPT_SUBSEC_M 0x0000FFFF
+#define AON_RTC_CH1CAPT_SUBSEC_S 0
 
 //*****************************************************************************
 //
@@ -499,10 +499,9 @@
 // waking up from sleep
 // Failure to do so may result in reading AON values from prior to going to
 // sleep
-#define AON_RTC_SYNC_WBUSY                                          0x00000001
-#define AON_RTC_SYNC_WBUSY_BITN                                              0
-#define AON_RTC_SYNC_WBUSY_M                                        0x00000001
-#define AON_RTC_SYNC_WBUSY_S                                                 0
-
+#define AON_RTC_SYNC_WBUSY 0x00000001
+#define AON_RTC_SYNC_WBUSY_BITN 0
+#define AON_RTC_SYNC_WBUSY_M 0x00000001
+#define AON_RTC_SYNC_WBUSY_S 0
 
 #endif // __AON_RTC__

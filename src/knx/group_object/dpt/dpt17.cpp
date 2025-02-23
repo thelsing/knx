@@ -2,7 +2,6 @@
 
 #include "dptconvert.h"
 
-
 Knx::Go_SizeCode Knx::DPT_SceneNumber::size() const
 {
     return Go_1_Octet;
@@ -21,7 +20,7 @@ bool Knx::DPT_SceneNumber::decode(uint8_t* data)
 
 void Knx::DPT_SceneNumber::value(uint8_t value)
 {
-    if ( value > 63)
+    if (value > 63)
         return;
 
     _value = value;

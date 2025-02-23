@@ -1,18 +1,18 @@
 #pragma once
 
-#include "router_object.h"
 #include "network_layer_coupler.h"
+#include "router_object.h"
 
-#include "../config.h"
-#include "../bau/bau_systemB.h"
-#include "../interface_object/device_object.h"
-#include "../interface_object/application_program_object.h"
-#include "../data_secure/security_interface_object.h"
-#include "../data_secure/secure_application_layer.h"
 #include "../application_layer/application_layer.h"
-#include "../transport_layer/transport_layer.h"
+#include "../bau/bau_systemB.h"
+#include "../config.h"
+#include "../data_secure/secure_application_layer.h"
+#include "../data_secure/security_interface_object.h"
 #include "../datalink_layer/data_link_layer.h"
+#include "../interface_object/application_program_object.h"
+#include "../interface_object/device_object.h"
 #include "../platform/platform.h"
+#include "../transport_layer/transport_layer.h"
 #include "../util/memory.h"
 
 namespace Knx
@@ -41,4 +41,4 @@ namespace Knx
             NetworkLayerCoupler _netLayer;
             bool _configured = true;
     };
-}
+} // namespace Knx

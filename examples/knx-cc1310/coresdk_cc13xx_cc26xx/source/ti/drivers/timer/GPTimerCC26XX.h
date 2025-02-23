@@ -147,17 +147,17 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #include <ti/drivers/dpl/HwiP.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(inc/hw_gpt.h)
-#include DeviceFamily_constructPath(driverlib/event.h)
-#include DeviceFamily_constructPath(driverlib/ioc.h)
-#include DeviceFamily_constructPath(driverlib/timer.h)
+#include DeviceFamily_constructPath(inc / hw_gpt.h)
+#include DeviceFamily_constructPath(driverlib / event.h)
+#include DeviceFamily_constructPath(driverlib / ioc.h)
+#include DeviceFamily_constructPath(driverlib / timer.h)
 
 /* Backwards compatibility - old timer modes. New behaviour is count-up by default but configurable. */
 #define GPT_MODE_ONESHOT_UP GPT_MODE_ONESHOT
@@ -186,18 +186,18 @@ typedef enum GPTimerCC26XX_Width
 typedef enum GPTimerCC26XX_Mode
 {
     /* One shot mode counting upwards */
-    GPT_MODE_ONESHOT    = GPT_TAMR_TAMR_ONE_SHOT | GPT_TAMR_TAMIE,
+    GPT_MODE_ONESHOT = GPT_TAMR_TAMR_ONE_SHOT | GPT_TAMR_TAMIE,
     /* Periodic mode counting upwards */
-    GPT_MODE_PERIODIC   = GPT_TAMR_TAMR_PERIODIC | GPT_TAMR_TAMIE,
+    GPT_MODE_PERIODIC = GPT_TAMR_TAMR_PERIODIC | GPT_TAMR_TAMIE,
     /* Edge count mode counting upwards */
-    GPT_MODE_EDGE_COUNT = GPT_TAMR_TAMR_CAPTURE  | GPT_TAMR_TACM_EDGCNT,
+    GPT_MODE_EDGE_COUNT = GPT_TAMR_TAMR_CAPTURE | GPT_TAMR_TACM_EDGCNT,
     /* Edge count mode counting upwards */
-    GPT_MODE_EDGE_TIME  = GPT_TAMR_TAMR_CAPTURE  | GPT_TAMR_TACM_EDGTIME,
+    GPT_MODE_EDGE_TIME = GPT_TAMR_TAMR_CAPTURE | GPT_TAMR_TACM_EDGTIME,
     /* PWM mode counting downwards. This specific configuration is used by the
        PWM2TimerCC26XX driver */
-    GPT_MODE_PWM           = GPT_TAMR_TAMR_PERIODIC      | GPT_TAMR_TAPWMIE_EN  | \
-                             GPT_TAMR_TAAMS_PWM          | GPT_TAMR_TACM_EDGCNT | \
-                             GPT_TAMR_TAPLO_CCP_ON_TO,
+    GPT_MODE_PWM = GPT_TAMR_TAMR_PERIODIC | GPT_TAMR_TAPWMIE_EN |
+                   GPT_TAMR_TAAMS_PWM | GPT_TAMR_TACM_EDGCNT |
+                   GPT_TAMR_TAPLO_CCP_ON_TO,
 } GPTimerCC26XX_Mode;
 
 /*!
@@ -208,14 +208,14 @@ typedef enum GPTimerCC26XX_Mode
  */
 typedef enum GPTimerCC26XX_Interrupt
 {
-    GPT_INT_TIMEOUT           = 1 << 0,
+    GPT_INT_TIMEOUT = 1 << 0,
     GPT_INT_CAPTURE_MATCH = 1 << 1,
-    GPT_INT_CAPTURE       = 1 << 2,
-    GPT_INT_MATCH         = 1 << 3,
+    GPT_INT_CAPTURE = 1 << 2,
+    GPT_INT_MATCH = 1 << 3,
 } GPTimerCC26XX_Interrupt;
 
 /* Number of entries in GPTimerCC26XX_Interrupt */
-#define GPT_NUM_INTS    4
+#define GPT_NUM_INTS 4
 
 /*!
  *  @brief
@@ -294,26 +294,25 @@ typedef enum GPTimerCC26XX_SetMatchTiming
  */
 typedef enum GPTimerCC26XX_Edge
 {
-    GPTimerCC26XX_POS_EDGE   = GPT_CTL_TAEVENT_POS,
-    GPTimerCC26XX_NEG_EDGE   = GPT_CTL_TAEVENT_NEG,
+    GPTimerCC26XX_POS_EDGE = GPT_CTL_TAEVENT_POS,
+    GPTimerCC26XX_NEG_EDGE = GPT_CTL_TAEVENT_NEG,
     GPTimerCC26XX_BOTH_EDGES = GPT_CTL_TAEVENT_BOTH,
 } GPTimerCC26XX_Edge;
 
-
 /* Forward declaration of GPTimer configuration */
-typedef struct GPTimerCC26XX_Config   GPTimerCC26XX_Config;
+typedef struct GPTimerCC26XX_Config GPTimerCC26XX_Config;
 
 /* GPTimer handle is pointer to configuration structure */
-typedef GPTimerCC26XX_Config*               GPTimerCC26XX_Handle;
+typedef GPTimerCC26XX_Config* GPTimerCC26XX_Handle;
 
 /* Interrupt bit vector. See GPTimerCC26XX_Interrupt for available interrupts */
-typedef uint16_t                            GPTimerCC26XX_IntMask;
+typedef uint16_t GPTimerCC26XX_IntMask;
 
 /* Timer value */
-typedef  uint32_t                           GPTimerCC26XX_Value;
+typedef uint32_t GPTimerCC26XX_Value;
 
 /* Function prototype for interrupt callbacks */
-typedef void (*GPTimerCC26XX_HwiFxn) (GPTimerCC26XX_Handle handle, GPTimerCC26XX_IntMask interruptMask);
+typedef void (*GPTimerCC26XX_HwiFxn)(GPTimerCC26XX_Handle handle, GPTimerCC26XX_IntMask interruptMask);
 
 /*!
  *  @brief  GPTimer26XX Hardware attributes
@@ -337,26 +336,26 @@ typedef void (*GPTimerCC26XX_HwiFxn) (GPTimerCC26XX_Handle handle, GPTimerCC26XX
  */
 typedef struct GPTimerCC26XX_HWAttrs
 {
-    /*! GPTimer peripheral base address */
-    uint32_t baseAddr;
-    /*! GPTimer peripheral interrupt vector */
-    uint8_t  intNum;
-    /*! GPTimer peripheral's interrupt priority.
-        The CC26xx uses three of the priority bits,
-        meaning ~0 has the same effect as (7 << 5).
-        (7 << 5) will apply the lowest priority.
-        (1 << 5) will apply the highest priority.
-        Setting the priority to 0 is not supported by this driver.
-        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency
-        interrupts, thus invalidating the critical sections in this driver.
-     */
-    uint8_t              intPriority;
-    /*! GPTimer peripheral's power manager ID */
-    uint8_t              powerMngrId;
-    /*! GPTimer half timer unit */
-    GPTimerCC26XX_Part   timer;
-    /*! PIN driver MUX */
-    GPTimerCC26XX_PinMux pinMux;
+        /*! GPTimer peripheral base address */
+        uint32_t baseAddr;
+        /*! GPTimer peripheral interrupt vector */
+        uint8_t intNum;
+        /*! GPTimer peripheral's interrupt priority.
+            The CC26xx uses three of the priority bits,
+            meaning ~0 has the same effect as (7 << 5).
+            (7 << 5) will apply the lowest priority.
+            (1 << 5) will apply the highest priority.
+            Setting the priority to 0 is not supported by this driver.
+            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency
+            interrupts, thus invalidating the critical sections in this driver.
+         */
+        uint8_t intPriority;
+        /*! GPTimer peripheral's power manager ID */
+        uint8_t powerMngrId;
+        /*! GPTimer half timer unit */
+        GPTimerCC26XX_Part timer;
+        /*! PIN driver MUX */
+        GPTimerCC26XX_PinMux pinMux;
 } GPTimerCC26XX_HWAttrs;
 
 /*!
@@ -375,13 +374,12 @@ typedef struct GPTimerCC26XX_HWAttrs
  */
 typedef struct GPTimerCC26XX_Object
 {
-    GPTimerCC26XX_Width  width;                            /*!< Timer width configuration (16/32bit)*/
-    bool                 isOpen[GPT_PARTS_COUNT];          /*!< Object is opened flag  */
-    HwiP_Struct           hwi[GPT_PARTS_COUNT];             /*!< Hardware interrupt struct */
-    GPTimerCC26XX_HwiFxn hwiCallbackFxn[GPT_PARTS_COUNT];  /*!< Hardware interrupt callback function */
-    volatile bool        powerConstraint[GPT_PARTS_COUNT]; /*!< Standby power constraint flag */
+        GPTimerCC26XX_Width width;                            /*!< Timer width configuration (16/32bit)*/
+        bool isOpen[GPT_PARTS_COUNT];                         /*!< Object is opened flag  */
+        HwiP_Struct hwi[GPT_PARTS_COUNT];                     /*!< Hardware interrupt struct */
+        GPTimerCC26XX_HwiFxn hwiCallbackFxn[GPT_PARTS_COUNT]; /*!< Hardware interrupt callback function */
+        volatile bool powerConstraint[GPT_PARTS_COUNT];       /*!< Standby power constraint flag */
 } GPTimerCC26XX_Object;
-
 
 /*!
  *  @brief  GPTimer Global configuration
@@ -405,9 +403,9 @@ typedef struct GPTimerCC26XX_Object
  */
 struct GPTimerCC26XX_Config
 {
-    GPTimerCC26XX_Object*        object;
-    const GPTimerCC26XX_HWAttrs* hwAttrs;
-    GPTimerCC26XX_Part          timerPart;
+        GPTimerCC26XX_Object* object;
+        const GPTimerCC26XX_HWAttrs* hwAttrs;
+        GPTimerCC26XX_Part timerPart;
 };
 
 /*!
@@ -420,13 +418,12 @@ struct GPTimerCC26XX_Config
  */
 typedef struct GPTimerCC26XX_Params
 {
-    GPTimerCC26XX_Width             width;          /*!< Timer configuration (32/16-bit)  */
-    GPTimerCC26XX_Mode              mode;           /*!< Timer mode */
-    GPTimerCC26XX_SetMatchTiming    matchTiming;    /*!< Set new match values on next timeout or next cycle */
-    GPTimerCC26XX_Direction         direction;      /*!< Count up or down */
-    GPTimerCC26XX_DebugMode         debugStallMode; /*!< Timer debug stall mode */
+        GPTimerCC26XX_Width width;                /*!< Timer configuration (32/16-bit)  */
+        GPTimerCC26XX_Mode mode;                  /*!< Timer mode */
+        GPTimerCC26XX_SetMatchTiming matchTiming; /*!< Set new match values on next timeout or next cycle */
+        GPTimerCC26XX_Direction direction;        /*!< Count up or down */
+        GPTimerCC26XX_DebugMode debugStallMode;   /*!< Timer debug stall mode */
 } GPTimerCC26XX_Params;
-
 
 /*!
  *  @brief  Function to initialize the GPTimerCC26XX_Params struct to
@@ -525,7 +522,6 @@ extern void GPTimerCC26XX_setLoadValue(GPTimerCC26XX_Handle handle, GPTimerCC26X
  */
 extern void GPTimerCC26XX_setMatchValue(GPTimerCC26XX_Handle handle, GPTimerCC26XX_Value matchValue);
 
-
 /*!
  *  @brief  Function to set which input edge the GPTimer capture should
  *          use. Applies to edge-count and edge-time modes
@@ -571,7 +567,6 @@ extern GPTimerCC26XX_Value GPTimerCC26XX_getFreeRunValue(GPTimerCC26XX_Handle ha
  *  @sa     GPTimerCC26XX_open()
  */
 extern GPTimerCC26XX_Value GPTimerCC26XX_getValue(GPTimerCC26XX_Handle handle);
-
 
 /*!
  *  @brief  Function to register a CPU interrupt for a given timer handle and
@@ -678,7 +673,6 @@ static inline GPTimerCC26XX_PinMux GPTimerCC26XX_getPinMux(GPTimerCC26XX_Handle 
 {
     return handle->hwAttrs->pinMux;
 }
-
 
 #ifdef __cplusplus
 }

@@ -28,7 +28,8 @@ namespace Knx
             {
                 return "ApplicationProgram";
             }
+
         protected:
             void beforeStateChange(LoadState& newState) override;
     };
-}
+} // namespace Knx

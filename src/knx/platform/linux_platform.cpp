@@ -1,42 +1,41 @@
 #ifdef __linux__
 #include "linux_platform.h"
 
-#include <cstdio>
-#include <cstring>
-#include <cstdlib>
-#include <stdexcept>
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <stdexcept>
 
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
-#include <sys/ioctl.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <filesystem>
 #include <net/if.h>
 #include <net/if_arp.h>
 #include <netdb.h>
-#include <errno.h>
-#include <fcntl.h>
+#include <netinet/in.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <termios.h>
-#include <filesystem>
+#include <unistd.h>
 
-#include <sys/ioctl.h>        // Needed for SPI port
 #include <linux/spi/spidev.h> // Needed for SPI port
 #include <poll.h>             // Needed for GPIO edge detection
+#include <sys/ioctl.h>        // Needed for SPI port
 #include <sys/time.h>         // Needed for delayMicroseconds()
 
-#include "../interface_object/device_object.h"
-#include "../interface_object/address_table_object.h"
-#include "../interface_object/association_table_object.h"
-#include "../interface_object/group_object_table_object.h"
-#include "../interface_object/application_program_object.h"
-#include "../ip/ip_parameter_object.h"
 #include "../bits.h"
+#include "../interface_object/address_table_object.h"
+#include "../interface_object/application_program_object.h"
+#include "../interface_object/association_table_object.h"
+#include "../interface_object/device_object.h"
+#include "../interface_object/group_object_table_object.h"
 #include "../ip/ip_host_protocol_address_information.h"
+#include "../ip/ip_parameter_object.h"
 #include "../util/logger.h"
 
 namespace fs = std::filesystem;
@@ -96,11 +95,11 @@ namespace Knx
             struct sockaddr_in* ipaddr = (struct sockaddr_in*)&ifr.ifr_addr;
             _ipAddress = ntohl(ipaddr->sin_addr.s_addr);
 
-            //printf("IP address: %s\n", inet_ntoa(ipaddr->sin_addr));
+            // printf("IP address: %s\n", inet_ntoa(ipaddr->sin_addr));
             ioctl(socketMac, SIOCGIFNETMASK, &ifr);
             struct sockaddr_in* netmask = (struct sockaddr_in*)&ifr.ifr_netmask;
             _netmask = ntohl(netmask->sin_addr.s_addr);
-            //printf("Netmask: %s\n", inet_ntoa(ipaddr->sin_addr));
+            // printf("Netmask: %s\n", inet_ntoa(ipaddr->sin_addr));
             break;
         }
 
@@ -122,7 +121,7 @@ namespace Knx
             {
                 if (strcmp(c, "00000000") == 0)
                 {
-                    //printf("Default interface is : %s \n" , p);
+                    // printf("Default interface is : %s \n" , p);
                     if (g)
                     {
                         char* pEnd;
@@ -181,7 +180,6 @@ namespace Knx
             LOGGER.critical("setsockopt:SO_REUSEADDR %s", strerror(errno));
             fatalError();
         }
-
 
         struct sockaddr_in sin = {0};
 
@@ -309,7 +307,7 @@ namespace Knx
         if (_fd < 0)
         {
             LOGGER.critical("Error in file opening");
-            //exit(-1);
+            // exit(-1);
         }
 
         struct stat st;
@@ -319,7 +317,7 @@ namespace Knx
         if (ret < 0)
         {
             LOGGER.critical("Error in fstat");
-            //exit(-1);
+            // exit(-1);
         }
 
         size_t len_file = st.st_size;
@@ -329,7 +327,7 @@ namespace Knx
             if (ftruncate(_fd, FLASHSIZE) != 0)
             {
                 LOGGER.critical("Error extending file");
-                //exit(-1);
+                // exit(-1);
             }
 
             len_file = FLASHSIZE;
@@ -347,7 +345,7 @@ namespace Knx
         if (addr == MAP_FAILED)
         {
             LOGGER.critical("Error in mmap");
-            //exit(-1);
+            // exit(-1);
         }
 
         _mappedFile = addr;
@@ -422,15 +420,12 @@ namespace Knx
     void LinuxPlatform::flashFilePath(const std::string path)
     {
         _flashFilePath = path;
-
     }
 
     std::string LinuxPlatform::flashFilePath()
     {
         return _flashFilePath;
     }
-
-
 
     size_t LinuxPlatform::readBytesUart(uint8_t* buffer, size_t length)
     {
@@ -439,36 +434,36 @@ namespace Knx
 
     int LinuxPlatform::readUart()
     {
-        uint8_t x ;
+        uint8_t x;
 
         if (read(_uartFd, &x, 1) != 1)
         {
             return -1;
         }
 
-        return ((int)x) & 0xFF ;
+        return ((int)x) & 0xFF;
     }
 
     size_t LinuxPlatform::writeUart(const uint8_t* buffer, size_t size)
     {
-        return write(_uartFd, buffer, size) ;
+        return write(_uartFd, buffer, size);
     }
 
     size_t LinuxPlatform::writeUart(const uint8_t data)
     {
-        return write(_uartFd, &data, 1) ;
+        return write(_uartFd, &data, 1);
     }
 
     int LinuxPlatform::uartAvailable()
     {
-        int result ;
+        int result;
 
         if (ioctl(_uartFd, FIONREAD, &result) == -1)
         {
             return -1;
         }
 
-        return result ;
+        return result;
     }
 
     void LinuxPlatform::closeUart()
@@ -482,9 +477,9 @@ namespace Knx
     void LinuxPlatform::setupUart()
     {
         /*
-        * 19200,8E1, no handshake
-        */
-        struct termios options;    /* Schnittstellenoptionen */
+         * 19200,8E1, no handshake
+         */
+        struct termios options; /* Schnittstellenoptionen */
 
         /* Port oeffnen - read/write, kein "controlling tty", Status von DCD ignorieren */
         _uartFd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY | O_NDELAY);
@@ -508,10 +503,10 @@ namespace Knx
             cfsetospeed(&options, B19200);
 
             /* setze Optionen */
-            options.c_cflag |= PARENB;          /* Enable Paritybit */
-            options.c_cflag &= ~PARODD;         /* Even parity */
-            options.c_cflag &= ~CSTOPB;         /* 1 Stoppbit */
-            options.c_cflag &= ~CSIZE;          /* 8 Datenbits */
+            options.c_cflag |= PARENB;  /* Enable Paritybit */
+            options.c_cflag &= ~PARODD; /* Even parity */
+            options.c_cflag &= ~CSTOPB; /* 1 Stoppbit */
+            options.c_cflag &= ~CSIZE;  /* 8 Datenbits */
             options.c_cflag |= CS8;
 
             /* 19200 bps, 8 Datenbits, CD-Signal ignorieren, Lesen erlauben */
@@ -519,11 +514,11 @@ namespace Knx
 
             /* Kein Echo, keine Steuerzeichen, keine Interrupts */
             options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
-            options.c_iflag = IGNPAR;           /* Parity-Fehler ignorieren */
-            options.c_oflag &= ~OPOST;          /* setze "raw" Input */
-            options.c_cc[VMIN]  = 0;            /* warten auf min. 0 Zeichen */
-            options.c_cc[VTIME] = 10;           /* Timeout 1 Sekunde */
-            tcflush(_uartFd, TCIOFLUSH);        /* Puffer leeren */
+            options.c_iflag = IGNPAR;    /* Parity-Fehler ignorieren */
+            options.c_oflag &= ~OPOST;   /* setze "raw" Input */
+            options.c_cc[VMIN] = 0;      /* warten auf min. 0 Zeichen */
+            options.c_cc[VTIME] = 10;    /* Timeout 1 Sekunde */
+            tcflush(_uartFd, TCIOFLUSH); /* Puffer leeren */
 
             if (tcsetattr(_uartFd, TCSAFLUSH, &options) != 0)
             {
@@ -557,7 +552,7 @@ namespace Knx
     {
         printf("%s", s);
     }
-    void     print(char c)
+    void print(char c)
     {
         printf("%c", c);
     }
@@ -749,7 +744,7 @@ namespace Knx
         if (_args)
             delete[] _args;
 
-        _args = new char* [argc + 1];
+        _args = new char*[argc + 1];
         memcpy(_args, argv, argc * sizeof(char*));
         _args[argc] = 0;
     }
@@ -759,8 +754,7 @@ namespace Knx
 #define MAX_NUM_GPIO 64
 
     static int gpioFds[MAX_NUM_GPIO] =
-    {
-        -1,
+        {
             -1,
             -1,
             -1,
@@ -824,12 +818,13 @@ namespace Knx
             -1,
             -1,
             -1,
-        };
+            -1,
+    };
 
     /* A  ctivate GPIO-Pin
-    * Write GPIO pin number to /sys/class/gpio/export
-       * Result: 0 = success, -1 = error
-       */
+     * Write GPIO pin number to /sys/class/gpio/export
+     * Result: 0 = success, -1 = error
+     */
     int gpio_export(int pin)
     {
         char buffer[MAX_STRBUF_SIZE]; /* Output Buffer       */
@@ -863,7 +858,7 @@ namespace Knx
     }
 
     /* Deactivate GPIO pin
-    * Write GPIO pin number to /sys/class/gpio/unexport
+     * Write GPIO pin number to /sys/class/gpio/unexport
      * Result: 0 = success, -1 = error
      */
     int gpio_unexport(int pin)
@@ -899,7 +894,7 @@ namespace Knx
     }
 
     /* Set GPIO pin mode (input/output)
-    * Write GPIO pin number to /sys/class/gpioXX/direction
+     * Write GPIO pin number to /sys/class/gpioXX/direction
      * Direction: 0 = input, 1 = output
      * Result: 0 = success, -1 = error
      */
@@ -946,7 +941,7 @@ namespace Knx
     }
 
     /* Read from GPIO pin
-    * Result: -1 = error, 0/1 = GPIO pin state
+     * Result: -1 = error, 0/1 = GPIO pin state
      */
     int gpio_read(int pin)
     {
@@ -958,7 +953,7 @@ namespace Knx
         if (gpioFds[pin] < 0)
             gpioFds[pin] = open(path, O_RDWR);
 
-        if (  gpioFds[pin] < 0)
+        if (gpioFds[pin] < 0)
         {
             LOGGER.error("Could not read from GPIO(open)! %s", strerror(errno));
             return (-1);
@@ -976,14 +971,14 @@ namespace Knx
     }
 
     /* Write to GPIO pin
-    * Result: -1 = error, 0 = success
+     * Result: -1 = error, 0 = success
      */
     int gpio_write(int pin, int value)
     {
         if (pin < 0)
             return -1;
 
-        char  path[MAX_STRBUF_SIZE]; /* Buffer for path    */
+        char path[MAX_STRBUF_SIZE]; /* Buffer for path    */
         int res;                    /* Result from write()*/
 
         snprintf(path, MAX_STRBUF_SIZE, "/sys/class/gpio/gpio%d/value", pin);
@@ -991,7 +986,7 @@ namespace Knx
         if (gpioFds[pin] < 0)
             gpioFds[pin] = open(path, O_RDWR);
 
-        if (   gpioFds[pin] < 0)
+        if (gpioFds[pin] < 0)
         {
             LOGGER.error("Could not write to GPIO(open)! %s", strerror(errno));
             return (-1);
@@ -1022,7 +1017,7 @@ namespace Knx
     }
 
     /* Set GPIO pin edge detection
-    * 'r' (rising)
+     * 'r' (rising)
      * 'f' (falling)
      * 'b' (both)
      */
@@ -1071,7 +1066,7 @@ namespace Knx
     }
 
     /* Wait for edge on GPIO pin
-    * timeout in milliseconds
+     * timeout in milliseconds
      * Result: <0: error, 0: poll() Timeout,
      * 1: edge detected, GPIO pin reads "0"
      * 2: edge detected, GPIO pin reads "1"
@@ -1183,7 +1178,7 @@ namespace Knx
     {
         return _defaultGateway;
     }
-}
+} // namespace Knx
 
 void pinMode(uint32_t dwPin, uint32_t dwMode)
 {
@@ -1231,7 +1226,7 @@ void delayMicrosecondsHard(unsigned int howLong)
     tLong.tv_usec = howLong % 1000000;
     timeradd(&tNow, &tLong, &tEnd);
 
-    while (timercmp(&tNow, &tEnd, < ))
+    while (timercmp(&tNow, &tEnd, <))
         gettimeofday(&tNow, NULL);
 }
 

@@ -1,25 +1,25 @@
 #include "ip_data_link_layer.h"
 
-#include "knx_ip_routing_indication.h"
-#include "knx_ip_search_request.h"
-#include "knx_ip_search_response.h"
-#include "knx_ip_search_request_extended.h"
-#include "knx_ip_search_response_extended.h"
+#include "../bits.h"
+#include "../interface_object/device_object.h"
+#include "../platform/platform.h"
+#include "../util/logger.h"
+#include "knx_ip_config_request.h"
 #include "knx_ip_connect_request.h"
 #include "knx_ip_connect_response.h"
-#include "knx_ip_state_request.h"
-#include "knx_ip_state_response.h"
-#include "knx_ip_disconnect_request.h"
-#include "knx_ip_disconnect_response.h"
-#include "knx_ip_tunneling_request.h"
-#include "knx_ip_tunneling_ack.h"
 #include "knx_ip_description_request.h"
 #include "knx_ip_description_response.h"
-#include "knx_ip_config_request.h"
-#include "../bits.h"
-#include "../platform/platform.h"
-#include "../interface_object/device_object.h"
-#include "../util/logger.h"
+#include "knx_ip_disconnect_request.h"
+#include "knx_ip_disconnect_response.h"
+#include "knx_ip_routing_indication.h"
+#include "knx_ip_search_request.h"
+#include "knx_ip_search_request_extended.h"
+#include "knx_ip_search_response.h"
+#include "knx_ip_search_response_extended.h"
+#include "knx_ip_state_request.h"
+#include "knx_ip_state_response.h"
+#include "knx_ip_tunneling_ack.h"
+#include "knx_ip_tunneling_request.h"
 
 #define LOGGER Logger::logger("IpDataLinkLayer")
 
@@ -34,7 +34,8 @@
 namespace Knx
 {
     IpDataLinkLayer::IpDataLinkLayer(DeviceObject& devObj, IpParameterObject& ipParam,
-                                     NetworkLayerEntity& netLayerEntity, Platform& platform, DataLinkLayerCallbacks* dllcb) : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam), _dllcb(dllcb)
+                                     NetworkLayerEntity& netLayerEntity, Platform& platform, DataLinkLayerCallbacks* dllcb)
+        : DataLinkLayer(devObj, netLayerEntity, platform), _ipParameters(ipParam), _dllcb(dllcb)
     {
     }
 
@@ -65,7 +66,7 @@ namespace Knx
                 if (tunnels[i].ChannelId != 0 && tunnels[i].IndividualAddress == frame.sourceAddress())
                     sendFrameToTunnel(&tunnels[i], frame);
 
-            //TODO check if source is from tunnel
+            // TODO check if source is from tunnel
             return;
         }
 
@@ -118,7 +119,7 @@ namespace Knx
                 if (tunnels[i].ChannelId != 0 && tunnels[i].IndividualAddress == frame.sourceAddress())
                     sendFrameToTunnel(&tunnels[i], frame);
 
-            //TODO check if source is from tunnel
+            // TODO check if source is from tunnel
             return;
         }
 
@@ -229,7 +230,6 @@ namespace Knx
         if (frame.messageCode() != L_data_req && frame.messageCode() != L_data_con && frame.messageCode() != L_data_ind)
             req.serviceTypeIdentifier(DeviceConfigurationRequest);
 
-
         sendUnicast(tunnel->IpAddress, tunnel->PortData, req);
     }
 
@@ -273,7 +273,6 @@ namespace Knx
 
 #ifdef KNX_TUNNELING
 
-
         for (int i = 0; i < KNX_TUNNELING; i++)
         {
             if (tunnels[i].ChannelId != 0)
@@ -311,8 +310,7 @@ namespace Knx
         if (len < KNXIP_HEADER_LEN)
             return;
 
-        if (buffer[0] != KNXIP_HEADER_LEN
-                || buffer[1] != KNXIP_PROTOCOL_VERSION)
+        if (buffer[0] != KNXIP_HEADER_LEN || buffer[1] != KNXIP_PROTOCOL_VERSION)
             return;
 
 #ifdef KNX_ACTIVITYCALLBACK
@@ -329,15 +327,13 @@ namespace Knx
 
         switch ((KnxIpServiceType)code)
         {
-            case RoutingIndication:
-            {
+            case RoutingIndication: {
                 KnxIpRoutingIndication routingIndication(buffer, len);
                 frameReceived(routingIndication.frame());
                 break;
             }
 
-            case SearchRequest:
-            {
+            case SearchRequest: {
                 KnxIpSearchRequest searchRequest(buffer, len);
                 KnxIpSearchResponse searchResponse(_ipParameters, _deviceObject);
 
@@ -354,59 +350,50 @@ namespace Knx
 
 #ifdef KNX_TUNNELING
 
-            case SearchRequestExt:
-            {
+            case SearchRequestExt: {
                 loopHandleSearchRequestExtended(buffer, len);
                 break;
             }
 
-            case ConnectRequest:
-            {
+            case ConnectRequest: {
                 loopHandleConnectRequest(buffer, len, remoteAddr, remotePort);
                 break;
             }
 
-            case ConnectionStateRequest:
-            {
+            case ConnectionStateRequest: {
                 loopHandleConnectionStateRequest(buffer, len);
                 break;
             }
 
-            case DisconnectRequest:
-            {
+            case DisconnectRequest: {
                 loopHandleDisconnectRequest(buffer, len);
                 break;
             }
 
-            case DescriptionRequest:
-            {
+            case DescriptionRequest: {
                 loopHandleDescriptionRequest(buffer, len);
                 break;
             }
 
-            case DeviceConfigurationRequest:
-            {
+            case DeviceConfigurationRequest: {
                 loopHandleDeviceConfigurationRequest(buffer, len);
                 break;
             }
 
-            case TunnelingRequest:
-            {
+            case TunnelingRequest: {
                 loopHandleTunnelingRequest(buffer, len);
                 return;
             }
 
-            case DeviceConfigurationAck:
-            {
-                //TOOD nothing to do now
-                //println("got Ack");
+            case DeviceConfigurationAck: {
+                // TOOD nothing to do now
+                // println("got Ack");
                 break;
             }
 
-            case TunnelingAck:
-            {
-                //TOOD nothing to do now
-                //println("got Ack");
+            case TunnelingAck: {
+                // TOOD nothing to do now
+                // println("got Ack");
                 break;
             }
 
@@ -455,7 +442,7 @@ namespace Knx
 #endif
 #endif
 
-        //defaults: "Device Information DIB", "Extended Device Information DIB" and "Supported Services DIB".
+        // defaults: "Device Information DIB", "Extended Device Information DIB" and "Supported Services DIB".
         int dibLength = LEN_DEVICE_INFORMATION_DIB + LEN_SERVICE_DIB + LEN_EXTENDED_DEVICE_INFORMATION_DIB;
 
         if (searchRequest.srpByService)
@@ -501,10 +488,10 @@ namespace Knx
         if (searchRequest.srpRequestDIBs)
         {
             if (searchRequest.requestedDIB(IP_CONFIG))
-                dibLength += LEN_IP_CONFIG_DIB; //16
+                dibLength += LEN_IP_CONFIG_DIB; // 16
 
             if (searchRequest.requestedDIB(IP_CUR_CONFIG))
-                dibLength += LEN_IP_CURRENT_CONFIG_DIB; //20
+                dibLength += LEN_IP_CURRENT_CONFIG_DIB; // 20
 
             if (searchRequest.requestedDIB(KNX_ADDRESSES))
             {
@@ -514,7 +501,7 @@ namespace Knx
             }
 
             if (searchRequest.requestedDIB(MANUFACTURER_DATA))
-                dibLength += 0; //4 + n
+                dibLength += 0; // 4 + n
 
             if (searchRequest.requestedDIB(TUNNELING_INFO))
             {
@@ -526,9 +513,9 @@ namespace Knx
 
         KnxIpSearchResponseExtended searchResponse(_ipParameters, _deviceObject, dibLength);
 
-        searchResponse.setDeviceInfo(_ipParameters, _deviceObject); //DescriptionTypeCode::DeviceInfo 1
-        searchResponse.setSupportedServices(); //DescriptionTypeCode::SUPP_SVC_FAMILIES 2
-        searchResponse.setExtendedDeviceInfo(); //DescriptionTypeCode::EXTENDED_DEVICE_INFO 8
+        searchResponse.setDeviceInfo(_ipParameters, _deviceObject); // DescriptionTypeCode::DeviceInfo 1
+        searchResponse.setSupportedServices();                      // DescriptionTypeCode::SUPP_SVC_FAMILIES 2
+        searchResponse.setExtendedDeviceInfo();                     // DescriptionTypeCode::EXTENDED_DEVICE_INFO 8
 
         if (searchRequest.srpRequestDIBs)
         {
@@ -543,7 +530,7 @@ namespace Knx
 
             if (searchRequest.requestedDIB(MANUFACTURER_DATA))
             {
-                //println("requested MANUFACTURER_DATA but not implemented");
+                // println("requested MANUFACTURER_DATA but not implemented");
             }
 
 #ifdef KNX_TUNNELING
@@ -618,7 +605,7 @@ namespace Knx
         println(connRequest.hpaiCtrl().ipPortNumber());
 #endif
 
-        //We only support 0x03 and 0x04!
+        // We only support 0x03 and 0x04!
         if (connRequest.cri().type() != TUNNEL_CONNECTION && connRequest.cri().type() != DEVICE_MGMT_CONNECTION)
         {
 #ifdef KNX_LOG_TUNNELING
@@ -629,9 +616,9 @@ namespace Knx
             return;
         }
 
-        if (connRequest.cri().type() == TUNNEL_CONNECTION && connRequest.cri().layer() != 0x02) //LinkLayer
+        if (connRequest.cri().type() == TUNNEL_CONNECTION && connRequest.cri().layer() != 0x02) // LinkLayer
         {
-            //We only support 0x02!
+            // We only support 0x02!
 #ifdef KNX_LOG_TUNNELING
             println("Only LinkLayer ist supported!");
 #endif
@@ -654,7 +641,7 @@ namespace Knx
         {
             addresses = _ipParameters.propertyData(PID_ADDITIONAL_INDIVIDUAL_ADDRESSES);
         }
-        else    // no tunnel PA configured, that means device is unconfigured and has 15.15.0
+        else // no tunnel PA configured, that means device is unconfigured and has 15.15.0
         {
             uint8_t addrbuffer[KNX_TUNNELING * 2];
             addresses = (uint8_t*)addrbuffer;
@@ -713,8 +700,7 @@ namespace Knx
                 tunnelResOptions[i] = (*(tunCtrlBytes + i) & 0x60) >> 5;
             }
 
-
-            if (resTunActive && tunnelResActive[i])  // tunnel reserve feature active for this tunnel
+            if (resTunActive && tunnelResActive[i]) // tunnel reserve feature active for this tunnel
             {
 #ifdef KNX_LOG_TUNNELING
                 print("tunnel reserve feature active for this tunnel: ");
@@ -757,10 +743,9 @@ namespace Knx
         println(firstResAndOccTunnel);
 #endif
 
-
         uint8_t tunIdx = 0xff;
 
-        if (resTunActive & (firstResAndFreeTunnel >= 0 || firstResAndOccTunnel >= 0))  // tunnel reserve feature active (for this src)
+        if (resTunActive & (firstResAndFreeTunnel >= 0 || firstResAndOccTunnel >= 0)) // tunnel reserve feature active (for this src)
         {
             if (firstResAndFreeTunnel >= 0)
             {
@@ -783,7 +768,6 @@ namespace Knx
                     sendUnicast(tunnels[firstResAndOccTunnel].IpAddress, tunnels[firstResAndOccTunnel].PortCtrl, discReq);
                     tunnels[firstResAndOccTunnel].Reset();
 
-
                     tunIdx = firstResAndOccTunnel;
                 }
                 else if (tunnelResOptions[firstResAndOccTunnel] == 3) // use the first unreserved tunnel (if one)
@@ -794,22 +778,22 @@ namespace Knx
                         ; // do nothing => decline
                 }
 
-                //else
-                // should not happen
-                // do nothing => decline
+                // else
+                //  should not happen
+                //  do nothing => decline
             }
 
-            //else
-            // should not happen
-            // do nothing => decline
+            // else
+            //  should not happen
+            //  do nothing => decline
         }
         else
         {
             if (firstFreeTunnel >= 0)
                 tunIdx = firstFreeTunnel;
 
-            //else
-            // do nothing => decline
+            // else
+            //  do nothing => decline
         }
 
         KnxIpTunnelConnection* tun = nullptr;
@@ -821,7 +805,7 @@ namespace Knx
             uint16_t tunPa = 0;
             popWord(tunPa, addresses + (tunIdx * 2));
 
-            //check if this PA is in use (should not happen, only when there is one pa wrongly assigned to more then one tunnel)
+            // check if this PA is in use (should not happen, only when there is one pa wrongly assigned to more then one tunnel)
             for (int x = 0; x < KNX_TUNNELING; x++)
                 if (tunnels[x].IndividualAddress == tunPa)
                 {
@@ -868,9 +852,9 @@ namespace Knx
             _lastChannelId = 0;
 
         tun->IpAddress = srcIP;
-        tun->PortData = connRequest.hpaiData().ipPortNumber()?connRequest.hpaiData().ipPortNumber():srcPort;
-        tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber()?connRequest.hpaiCtrl().ipPortNumber():srcPort;
-    
+        tun->PortData = connRequest.hpaiData().ipPortNumber() ? connRequest.hpaiData().ipPortNumber() : srcPort;
+        tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber() ? connRequest.hpaiCtrl().ipPortNumber() : srcPort;
+
         print("New Tunnel-Connection[");
         print(tunIdx);
         print("], Channel: 0x");
@@ -907,7 +891,6 @@ namespace Knx
 
         println();
 
-
         KnxIpConnectResponse connRes(_ipParameters, tun->IndividualAddress, 3671, tun->ChannelId, connRequest.cri().type());
         sendUnicast(tun->IpAddress, tun->PortCtrl, connRes);
     }
@@ -938,10 +921,10 @@ namespace Knx
             return;
         }
 
-        //TODO check knx connection!
-        //if no connection return E_KNX_CONNECTION
+        // TODO check knx connection!
+        // if no connection return E_KNX_CONNECTION
 
-        //TODO check when to send E_DATA_CONNECTION
+        // TODO check when to send E_DATA_CONNECTION
 
         tun->lastHeartbeat = millis();
         KnxIpStateResponse stateRes(tun->ChannelId, E_NO_ERROR);
@@ -978,7 +961,6 @@ namespace Knx
             sendUnicast(discReq.hpaiCtrl().ipAddress(), discReq.hpaiCtrl().ipPortNumber(), discRes);
             return;
         }
-
 
         KnxIpDisconnectResponse discRes(tun->ChannelId, E_NO_ERROR);
         sendUnicast(discReq.hpaiCtrl().ipAddress(), discReq.hpaiCtrl().ipPortNumber(), discRes);
@@ -1063,8 +1045,8 @@ namespace Knx
             print("Received SequenceCounter again: ");
             println(tunnReq.connectionHeader().sequenceCounter());
 #endif
-            //we already got this one
-            //so just ack it
+            // we already got this one
+            // so just ack it
             KnxIpTunnelingAck tunnAck;
             tunnAck.connectionHeader().length(4);
             tunnAck.connectionHeader().channelId(tun->ChannelId);
@@ -1081,7 +1063,7 @@ namespace Knx
             print(" expected ");
             println((uint8_t)(tun->SequenceCounter_R + 1));
 #endif
-            //Dont handle it
+            // Dont handle it
             return;
         }
 
@@ -1145,8 +1127,7 @@ namespace Knx
         if (!_enabled)
             return false;
 
-        LOGGER.info("sendUnicast to %d.%d.%d.%d:%d %s %s", (addr & 0xFF000000) >> 24, (addr & 0xFF0000) >> 16, (addr & 0xFF00) >> 8, addr & 0xFF
-                    , port, enum_name(ipFrame.protocolVersion()), enum_name(ipFrame.serviceTypeIdentifier()));
+        LOGGER.info("sendUnicast to %d.%d.%d.%d:%d %s %s", (addr & 0xFF000000) >> 24, (addr & 0xFF0000) >> 16, (addr & 0xFF00) >> 8, addr & 0xFF, port, enum_name(ipFrame.protocolVersion()), enum_name(ipFrame.serviceTypeIdentifier()));
 
         return _platform.sendBytesMultiCast(ipFrame.data(), ipFrame.totalLength());
     }
@@ -1163,7 +1144,7 @@ namespace Knx
             if (timeBaseDiff > 10)
                 timeBaseDiff = 10;
 
-            for (uint32_t i = 0; i < timeBaseDiff ; i++)
+            for (uint32_t i = 0; i < timeBaseDiff; i++)
             {
                 _frameCountBase++;
                 _frameCountBase = _frameCountBase % 10;
@@ -1174,32 +1155,32 @@ namespace Knx
         }
         else // _frameCountTimeBase < curTime => millis overflow, reset
         {
-            for (int i = 0; i < 10 ; i++)
+            for (int i = 0; i < 10; i++)
                 _frameCount[i] = 0;
 
             _frameCountBase = 0;
             _frameCountTimeBase = curTime;
         }
 
-        //check if we are over the limit
+        // check if we are over the limit
         uint16_t sum = 0;
 
-        for (int i = 0; i < 10 ; i++)
+        for (int i = 0; i < 10; i++)
             sum += _frameCount[i];
 
         if (sum > 50)
         {
             LOGGER.warning("Dropping packet due to 50p/s limit");
-            return true;   // drop packet
+            return true; // drop packet
         }
         else
         {
             _frameCount[_frameCountBase]++;
-            //print("sent packages in last 1000ms: ");
-            //print(sum);
-            //print(" curTime: ");
-            //println(curTime);
+            // print("sent packages in last 1000ms: ");
+            // print(sum);
+            // print(" curTime: ");
+            // println(curTime);
             return false;
         }
     }
-}
+} // namespace Knx

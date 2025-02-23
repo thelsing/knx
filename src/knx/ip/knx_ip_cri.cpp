@@ -2,7 +2,8 @@
 
 namespace Knx
 {
-    KnxIpCRI::KnxIpCRI(uint8_t* data) : _data(data)
+    KnxIpCRI::KnxIpCRI(uint8_t* data)
+        : _data(data)
     {}
 
     KnxIpCRI::~KnxIpCRI()
@@ -37,4 +38,4 @@ namespace Knx
     {
         _data[2] = value;
     }
-}
+} // namespace Knx

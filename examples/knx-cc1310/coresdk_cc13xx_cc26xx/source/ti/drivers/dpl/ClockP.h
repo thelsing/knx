@@ -61,9 +61,9 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /*!
  *  @brief    Number of bytes greater than or equal to the size of any RTOS
@@ -72,7 +72,7 @@ extern "C" {
  *  nortos:   32 (biggest of the HW-specific ClockP instance structs)
  *  SysBIOS:  36
  */
-#define ClockP_STRUCT_SIZE   (36)
+#define ClockP_STRUCT_SIZE (36)
 
 /*!
  *  @brief    ClockP structure.
@@ -82,8 +82,8 @@ extern "C" {
  */
 typedef union ClockP_Struct
 {
-    uint32_t dummy;  /*!< Align object */
-    char     data[ClockP_STRUCT_SIZE];
+        uint32_t dummy; /*!< Align object */
+        char data[ClockP_STRUCT_SIZE];
 } ClockP_Struct;
 
 /*!
@@ -91,8 +91,8 @@ typedef union ClockP_Struct
  */
 typedef struct ClockP_FreqHz
 {
-    uint32_t hi;      /*!< most significant 32-bits of frequency */
-    uint32_t lo;      /*!< least significant 32-bits of frequency */
+        uint32_t hi; /*!< most significant 32-bits of frequency */
+        uint32_t lo; /*!< least significant 32-bits of frequency */
 } ClockP_FreqHz;
 
 /*!
@@ -111,7 +111,7 @@ typedef enum ClockP_Status
  *  and then is used in the other instance based functions (e.g. ::ClockP_start,
  *  ::ClockP_stop, etc.).
  */
-typedef  void* ClockP_Handle;
+typedef void* ClockP_Handle;
 
 #define ClockP_handle(x) ((ClockP_Handle)(x))
 
@@ -142,11 +142,10 @@ typedef void (*ClockP_Fxn)(uintptr_t arg);
  */
 typedef struct ClockP_Params
 {
-    bool      startFlag; /*!< Start immediately after instance is created. */
-    uint32_t  period;    /*!< Period of clock object. */
-    uintptr_t arg;       /*!< Argument passed into the clock function. */
+        bool startFlag;  /*!< Start immediately after instance is created. */
+        uint32_t period; /*!< Period of clock object. */
+        uintptr_t arg;   /*!< Argument passed into the clock function. */
 } ClockP_Params;
-
 
 /*!
  *  @brief  Function to construct a clock object.
@@ -318,7 +317,6 @@ extern void ClockP_usleep(uint32_t usec);
  *  @return ClockP_OK
  */
 extern void ClockP_sleep(uint32_t sec);
-
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "knx_ip_frame.h"
 #include "ip_host_protocol_address_information.h"
+#include "knx_ip_frame.h"
 
 namespace Knx
 {
@@ -13,7 +13,8 @@ namespace Knx
             IpHostProtocolAddressInformation& hpaiCtrl();
             uint8_t channelId();
             void channelId(uint8_t channelId);
+
         private:
             IpHostProtocolAddressInformation _hpaiCtrl;
     };
-}
+} // namespace Knx

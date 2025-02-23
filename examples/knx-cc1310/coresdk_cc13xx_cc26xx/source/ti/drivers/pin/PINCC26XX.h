@@ -49,16 +49,16 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #include <ti/drivers/dpl/HwiP.h>
 
 #include <ti/drivers/PIN.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib/ioc.h)
-#include DeviceFamily_constructPath(driverlib/gpio.h)
+#include DeviceFamily_constructPath(driverlib / ioc.h)
+#include DeviceFamily_constructPath(driverlib / gpio.h)
 
 //------------------------------------------------------------------------------
 // Internal function used to find the index of the rightmost set bit in
@@ -100,58 +100,58 @@ __STATIC_INLINE uint32_t PIN_ctz(uint32_t x)
  * used in the @c IOCFG hardware registers for efficiency. May not be mixed
  * with @ref PIN_GENERIC_FLAGS "device-independent I/O options".
  */
-#define PINCC26XX_INPUT_EN          (1 << 29)         ///< Enable input buffer
-#define PINCC26XX_HYSTERESIS        (1 << 30)         ///< Enable input buffer hysteresis
-#define PINCC26XX_NOPULL            (0x3 << 13)       ///< No pull-up or pull-down resistor
-#define PINCC26XX_PULLUP            (0x2 << 13)       ///< ~20k pull-up resistor enabled
-#define PINCC26XX_PULLDOWN          (0x1 << 13)       ///< ~20k pull-down resistor enabled
-#define PINCC26XX_BM_INPUT_EN       (0x01 << 29)      ///< Bitmask for input enable option
-#define PINCC26XX_BM_HYSTERESIS     (0x01 << 30)      ///< Bitmask for all input mode options
-#define PINCC26XX_BM_PULLING        (0x03 << 13)      ///< Bitmask for pull-up/pull-down options
+#define PINCC26XX_INPUT_EN (1 << 29)         ///< Enable input buffer
+#define PINCC26XX_HYSTERESIS (1 << 30)       ///< Enable input buffer hysteresis
+#define PINCC26XX_NOPULL (0x3 << 13)         ///< No pull-up or pull-down resistor
+#define PINCC26XX_PULLUP (0x2 << 13)         ///< ~20k pull-up resistor enabled
+#define PINCC26XX_PULLDOWN (0x1 << 13)       ///< ~20k pull-down resistor enabled
+#define PINCC26XX_BM_INPUT_EN (0x01 << 29)   ///< Bitmask for input enable option
+#define PINCC26XX_BM_HYSTERESIS (0x01 << 30) ///< Bitmask for all input mode options
+#define PINCC26XX_BM_PULLING (0x03 << 13)    ///< Bitmask for pull-up/pull-down options
 /// Bitmask for all input mode options
-#define PINCC26XX_BM_INPUT_MODE     (PINCC26XX_BM_INPUT_EN | PINCC26XX_BM_HYSTERESIS | \
-                                     PINCC26XX_BM_PULLING)
+#define PINCC26XX_BM_INPUT_MODE (PINCC26XX_BM_INPUT_EN | PINCC26XX_BM_HYSTERESIS | \
+                                 PINCC26XX_BM_PULLING)
 
-#define PINCC26XX_GPIO_OUTPUT_EN    (1 << 23)     ///< Enable output buffer when GPIO
-#define PINCC26XX_GPIO_LOW          (0 << 22)     ///< Output buffer drives to VSS when GPIO
-#define PINCC26XX_GPIO_HIGH         (1 << 22)     ///< Output buffer drives to VDD when GPIO
-#define PINCC26XX_PUSHPULL          (0x0 << 25)   ///< Output buffer mode: push/pull
-#define PINCC26XX_OPENDRAIN         (0x2 << 25)   ///< Output buffer mode: open drain
-#define PINCC26XX_OPENSOURCE        (0x3 << 25)   ///< Output buffer mode: open source
-#define PINCC26XX_SLEWCTRL          (1 << 12)     ///< Enable output buffer slew control
-#define PINCC26XX_DRVSTR_MIN        (0x0 << 8)    ///< Drive strength is 2/2 mA
-#define PINCC26XX_DRVSTR_MED        (0x4 << 8)    ///< Drive strength is 4/4 mA
-#define PINCC26XX_DRVSTR_MAX        (0x8 << 8)    ///< Drive strength is 4/8 mA
-#define PINCC26XX_BM_GPIO_OUTPUT_EN (1 << 23)     ///< Bitmask for output enable option
-#define PINCC26XX_BM_GPIO_OUTPUT_VAL (1 << 22)    ///< Bitmask for output value option
-#define PINCC26XX_BM_OUTPUT_BUF     (3 << 25)     ///< Bitmask for output buffer options
-#define PINCC26XX_BM_SLEWCTRL       (1 << 12)     ///< Bitmask for slew control options
-#define PINCC26XX_BM_DRVSTR         (0xF << 8)    ///< Bitmask for drive strength options
+#define PINCC26XX_GPIO_OUTPUT_EN (1 << 23)     ///< Enable output buffer when GPIO
+#define PINCC26XX_GPIO_LOW (0 << 22)           ///< Output buffer drives to VSS when GPIO
+#define PINCC26XX_GPIO_HIGH (1 << 22)          ///< Output buffer drives to VDD when GPIO
+#define PINCC26XX_PUSHPULL (0x0 << 25)         ///< Output buffer mode: push/pull
+#define PINCC26XX_OPENDRAIN (0x2 << 25)        ///< Output buffer mode: open drain
+#define PINCC26XX_OPENSOURCE (0x3 << 25)       ///< Output buffer mode: open source
+#define PINCC26XX_SLEWCTRL (1 << 12)           ///< Enable output buffer slew control
+#define PINCC26XX_DRVSTR_MIN (0x0 << 8)        ///< Drive strength is 2/2 mA
+#define PINCC26XX_DRVSTR_MED (0x4 << 8)        ///< Drive strength is 4/4 mA
+#define PINCC26XX_DRVSTR_MAX (0x8 << 8)        ///< Drive strength is 4/8 mA
+#define PINCC26XX_BM_GPIO_OUTPUT_EN (1 << 23)  ///< Bitmask for output enable option
+#define PINCC26XX_BM_GPIO_OUTPUT_VAL (1 << 22) ///< Bitmask for output value option
+#define PINCC26XX_BM_OUTPUT_BUF (3 << 25)      ///< Bitmask for output buffer options
+#define PINCC26XX_BM_SLEWCTRL (1 << 12)        ///< Bitmask for slew control options
+#define PINCC26XX_BM_DRVSTR (0xF << 8)         ///< Bitmask for drive strength options
 /// Bitmask for all GPIO output mode options
 #define PINCC26XX_BM_GPIO_OUTPUT_MODE (PINCC26XX_BM_GPIO_OUTPUT_EN | PINCC26XX_BM_GPIO_OUTPUT_VAL)
 /// Bitmask for all output mode options
-#define PINCC26XX_BM_OUTPUT_MODE    (PINCC26XX_BM_GPIO_OUTPUT_MODE | PINCC26XX_BM_OUTPUT_BUF | \
-                                     PINCC26XX_BM_SLEWCTRL | PINCC26XX_BM_DRVSTR)
+#define PINCC26XX_BM_OUTPUT_MODE (PINCC26XX_BM_GPIO_OUTPUT_MODE | PINCC26XX_BM_OUTPUT_BUF | \
+                                  PINCC26XX_BM_SLEWCTRL | PINCC26XX_BM_DRVSTR)
 
-#define PINCC26XX_INV_INOUT         (1 << 24)     ///< Logically invert input and output
-#define PINCC26XX_IRQ_DIS           (0x0 << 16)   ///< Enable IRQ on pin
-#define PINCC26XX_IRQ_NEGEDGE       (0x5 << 16)   ///< IRQ on negative edge
-#define PINCC26XX_IRQ_POSEDGE       (0x6 << 16)   ///< IRQ on positive edge
-#define PINCC26XX_IRQ_BOTHEDGES     (0x7 << 16)   ///< IRQ on both edges
-#define PINCC26XX_BM_INV_INOUT      (1 << 24)     ///< Bitmask for input/output inversion option
-#define PINCC26XX_BM_IRQ            (0x7 << 16)   ///< Bitmask for pin interrupt option
+#define PINCC26XX_INV_INOUT (1 << 24)       ///< Logically invert input and output
+#define PINCC26XX_IRQ_DIS (0x0 << 16)       ///< Enable IRQ on pin
+#define PINCC26XX_IRQ_NEGEDGE (0x5 << 16)   ///< IRQ on negative edge
+#define PINCC26XX_IRQ_POSEDGE (0x6 << 16)   ///< IRQ on positive edge
+#define PINCC26XX_IRQ_BOTHEDGES (0x7 << 16) ///< IRQ on both edges
+#define PINCC26XX_BM_INV_INOUT (1 << 24)    ///< Bitmask for input/output inversion option
+#define PINCC26XX_BM_IRQ (0x7 << 16)        ///< Bitmask for pin interrupt option
 
-#define PINCC26XX_NO_WAKEUP         (0 << 27)     ///< No wakeup from shutdown for this pin
-#define PINCC26XX_WAKEUP_POSEDGE    (3 << 27)     ///< Wakeup from shutdown on positive edge
-#define PINCC26XX_WAKEUP_NEGEDGE    (2 << 27)     ///< Wakeup from shutdown on negative edge
-#define PINCC26XX_BM_WAKEUP         (3 << 27)     ///< Bitmask for pin wakeup from shutdown option
+#define PINCC26XX_NO_WAKEUP (0 << 27)      ///< No wakeup from shutdown for this pin
+#define PINCC26XX_WAKEUP_POSEDGE (3 << 27) ///< Wakeup from shutdown on positive edge
+#define PINCC26XX_WAKEUP_NEGEDGE (2 << 27) ///< Wakeup from shutdown on negative edge
+#define PINCC26XX_BM_WAKEUP (3 << 27)      ///< Bitmask for pin wakeup from shutdown option
 
 /// Bitmask for all pin options in IOCFG register
-#define PINCC26XX_BM_IOCFG          (PINCC26XX_BM_INPUT_MODE|PINCC26XX_BM_OUTPUT_BUF | \
-                                     PINCC26XX_BM_SLEWCTRL | PINCC26XX_BM_DRVSTR | \
-                                     PINCC26XX_BM_INV_INOUT | PINCC26XX_BM_IRQ | PINCC26XX_BM_WAKEUP)
+#define PINCC26XX_BM_IOCFG (PINCC26XX_BM_INPUT_MODE | PINCC26XX_BM_OUTPUT_BUF | \
+                            PINCC26XX_BM_SLEWCTRL | PINCC26XX_BM_DRVSTR |       \
+                            PINCC26XX_BM_INV_INOUT | PINCC26XX_BM_IRQ | PINCC26XX_BM_WAKEUP)
 /// Bitmask for all pin options
-#define PINCC26XX_BM_ALL            (PINCC26XX_BM_IOCFG | PINCC26XX_BM_GPIO_OUTPUT_MODE)
+#define PINCC26XX_BM_ALL (PINCC26XX_BM_IOCFG | PINCC26XX_BM_GPIO_OUTPUT_MODE)
 
 /** \} (PINCC26XX_FLAGS)
  */
@@ -164,38 +164,38 @@ __STATIC_INLINE uint32_t PIN_ctz(uint32_t x)
  *  PIN_ID(5). For convenience and readability aliases are defined below for
  *  all DIOs.
  */
-#define PINCC26XX_DIO0    0
-#define PINCC26XX_DIO1    1
-#define PINCC26XX_DIO2    2
-#define PINCC26XX_DIO3    3
-#define PINCC26XX_DIO4    4
-#define PINCC26XX_DIO5    5
-#define PINCC26XX_DIO6    6
-#define PINCC26XX_DIO7    7
-#define PINCC26XX_DIO8    8
-#define PINCC26XX_DIO9    9
-#define PINCC26XX_DIO10   10
-#define PINCC26XX_DIO11   11
-#define PINCC26XX_DIO12   12
-#define PINCC26XX_DIO13   13
-#define PINCC26XX_DIO14   14
-#define PINCC26XX_DIO15   15
-#define PINCC26XX_DIO16   16
-#define PINCC26XX_DIO17   17
-#define PINCC26XX_DIO18   18
-#define PINCC26XX_DIO19   19
-#define PINCC26XX_DIO20   20
-#define PINCC26XX_DIO21   21
-#define PINCC26XX_DIO22   22
-#define PINCC26XX_DIO23   23
-#define PINCC26XX_DIO24   24
-#define PINCC26XX_DIO25   25
-#define PINCC26XX_DIO26   26
-#define PINCC26XX_DIO27   27
-#define PINCC26XX_DIO28   28
-#define PINCC26XX_DIO29   29
-#define PINCC26XX_DIO30   30
-#define PINCC26XX_DIO31   31
+#define PINCC26XX_DIO0 0
+#define PINCC26XX_DIO1 1
+#define PINCC26XX_DIO2 2
+#define PINCC26XX_DIO3 3
+#define PINCC26XX_DIO4 4
+#define PINCC26XX_DIO5 5
+#define PINCC26XX_DIO6 6
+#define PINCC26XX_DIO7 7
+#define PINCC26XX_DIO8 8
+#define PINCC26XX_DIO9 9
+#define PINCC26XX_DIO10 10
+#define PINCC26XX_DIO11 11
+#define PINCC26XX_DIO12 12
+#define PINCC26XX_DIO13 13
+#define PINCC26XX_DIO14 14
+#define PINCC26XX_DIO15 15
+#define PINCC26XX_DIO16 16
+#define PINCC26XX_DIO17 17
+#define PINCC26XX_DIO18 18
+#define PINCC26XX_DIO19 19
+#define PINCC26XX_DIO20 20
+#define PINCC26XX_DIO21 21
+#define PINCC26XX_DIO22 22
+#define PINCC26XX_DIO23 23
+#define PINCC26XX_DIO24 24
+#define PINCC26XX_DIO25 25
+#define PINCC26XX_DIO26 26
+#define PINCC26XX_DIO27 27
+#define PINCC26XX_DIO28 28
+#define PINCC26XX_DIO29 29
+#define PINCC26XX_DIO30 30
+#define PINCC26XX_DIO31 31
 /** \} (PINCC26XX_IONAMES)
  */
 
@@ -204,7 +204,6 @@ __STATIC_INLINE uint32_t PINCC26XX_getInputValue(PIN_Id pinId)
 {
     return (HWREG(GPIO_BASE + GPIO_O_DIN31_0) >> pinId) & 1;
 }
-
 
 /* @brief Fast/efficient version of #PIN_setOutputEnable()
  * @note  Does not include any checks on handle for efficiency reasons,
@@ -218,7 +217,6 @@ __STATIC_INLINE void PINCC26XX_setOutputEnable(PIN_Id pinId, bool outputEnable)
     HwiP_restore(key);
 }
 
-
 /* @brief Fast/efficient version of #PIN_setOutputValue()
  * @note  Does not include any checks on handle for efficiency reasons,
  *        use #PIN_setOutputValue() for checked version
@@ -228,19 +226,16 @@ __STATIC_INLINE void PINCC26XX_setOutputValue(PIN_Id pinId, uint32_t val)
     HWREGB(GPIO_BASE + GPIO_O_DOUT3_0 + pinId) = (val) ? 1 : 0;
 }
 
-
 /// @brief Fast/efficient version of #PIN_getOutputValue()
 __STATIC_INLINE uint32_t PINCC26XX_getOutputValue(PIN_Id pinId)
 {
     return (HWREG(GPIO_BASE + GPIO_O_DOUT31_0) >> pinId) & 1;
 }
 
-
 __STATIC_INLINE void PINCC26XX_clrPendInterrupt(PIN_Id pinId)
 {
     HWREG(GPIO_NONBUF_BASE + GPIO_O_EVFLAGS31_0) = (1 << pinId);
 }
-
 
 /// @brief Fast/efficient version of #PIN_getPortInputValue()
 __STATIC_INLINE uint32_t PINCC26XX_getPortInputValue(PIN_Handle handle)
@@ -249,14 +244,12 @@ __STATIC_INLINE uint32_t PINCC26XX_getPortInputValue(PIN_Handle handle)
     return HWREG(GPIO_BASE + GPIO_O_DIN31_0);
 }
 
-
 /// @brief Fast/efficient version of #PIN_getPortOutputValue()
 __STATIC_INLINE uint32_t PINCC26XX_getPortOutputValue(PIN_Handle handle)
 {
     // Only a single port on CC26xx
     return HWREG(GPIO_BASE + GPIO_O_DOUT31_0);
 }
-
 
 /* @brief Fast/efficient version of #PIN_setPortOutputValue()
  * @note  Does not include any checks on handle for efficiency reasons,
@@ -268,7 +261,6 @@ __STATIC_INLINE void PINCC26XX_setPortOutputValue(PIN_Handle handle, uint32_t ou
     HWREG(GPIO_BASE + GPIO_O_DOUTTGL31_0) =
         (HWREG(GPIO_BASE + GPIO_O_DOUT31_0) ^ outputValueMask) & handle->portMask;
 }
-
 
 /* @brief Fast/efficient version of #PIN_setPortOutputEnable()
  * @note  Does not include any checks on handle for efficiency reasons,
@@ -283,7 +275,6 @@ __STATIC_INLINE void PINCC26XX_setPortOutputEnable(PIN_Handle handle, uint32_t o
     HwiP_restore(key);
 }
 
-
 /** @brief Returns CC26xx device-specific pin configuration
  *
  *  @param pinId    Pin ID
@@ -292,7 +283,6 @@ __STATIC_INLINE void PINCC26XX_setPortOutputEnable(PIN_Handle handle, uint32_t o
  *  @note    Return value uses @ref PINCC26XX_FLAGS "CC26xx specific I/O options"
  */
 extern PIN_Config PINCC26XX_getConfig(PIN_Id pinId);
-
 
 /** @brief Configure wakeup (from shutdown) on pins
  *
@@ -315,7 +305,6 @@ extern PIN_Config PINCC26XX_getConfig(PIN_Id pinId);
  *  not cause the device to wake up.
  */
 extern PIN_Status PINCC26XX_setWakeup(const PIN_Config aPinCfg[]);
-
 
 /** @brief Get device-specific pin mapping to GPIO, HW peripheral or HW signal
  *
@@ -373,26 +362,26 @@ extern PIN_Status PINCC26XX_setMux(PIN_Handle handle, PIN_Id pinId, int32_t nMux
  */
 typedef struct PINCC26XX_HWAttrs
 {
-    /*! @brief SPI CC26XXDMA Peripheral's interrupt priority.
+        /*! @brief SPI CC26XXDMA Peripheral's interrupt priority.
 
-        The CC26xx uses three of the priority bits,
-        meaning ~0 has the same effect as (7 << 5).
+            The CC26xx uses three of the priority bits,
+            meaning ~0 has the same effect as (7 << 5).
 
-        (7 << 5) will apply the lowest priority.
+            (7 << 5) will apply the lowest priority.
 
-        (1 << 5) will apply the highest priority.
+            (1 << 5) will apply the highest priority.
 
-        Setting the priority to 0 is not supported by this driver.
+            Setting the priority to 0 is not supported by this driver.
 
-        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-    */
-    uint8_t          intPriority;
-    /*! @brief SPI SWI priority.
-        The higher the number, the higher the priority.
-        The minimum is 0 and the maximum is 15 by default.
-        The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
-    */
-    uint32_t         swiPriority;
+            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+        */
+        uint8_t intPriority;
+        /*! @brief SPI SWI priority.
+            The higher the number, the higher the priority.
+            The minimum is 0 and the maximum is 15 by default.
+            The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
+        */
+        uint32_t swiPriority;
 } PINCC26XX_HWAttrs;
 
 /** @anchor PINCC26XX_MUX_VALS
@@ -402,51 +391,50 @@ typedef struct PINCC26XX_HWAttrs
  *  CC26XX-specific mux vakues used in conjunction with #PINCC26XX_setMux() to
  *  map hardware peripheral ports, GPIO or observation signals to pins.
  */
-#define PINCC26XX_MUX_GPIO           IOC_PORT_GPIO            // Default general purpose IO usage
-#define PINCC26XX_MUX_AON_CLK32K     IOC_PORT_AON_CLK32K      // AON External 32kHz clock
-#define PINCC26XX_MUX_AUX_IO         IOC_PORT_AUX_IO          // AUX IO Pin
-#define PINCC26XX_MUX_MCU_SSI0_RX    IOC_PORT_MCU_SSI0_RX     // MCU SSI0 Receive Pin
-#define PINCC26XX_MUX_MCU_SSI0_TX    IOC_PORT_MCU_SSI0_TX     // MCU SSI0 Transmit Pin
-#define PINCC26XX_MUX_MCU_SSI0_FSS   IOC_PORT_MCU_SSI0_FSS    // MCU SSI0 FSS Pin
-#define PINCC26XX_MUX_MCU_SSI0_CLK   IOC_PORT_MCU_SSI0_CLK    // MCU SSI0 Clock Pin
-#define PINCC26XX_MUX_MCU_I2C_MSSDA  IOC_PORT_MCU_I2C_MSSDA   // MCU I2C Data Pin
-#define PINCC26XX_MUX_MCU_I2C_MSSCL  IOC_PORT_MCU_I2C_MSSCL   // MCU I2C Clock Pin
-#define PINCC26XX_MUX_MCU_UART0_RX   IOC_PORT_MCU_UART0_RX    // MCU UART0 Receive Pin
-#define PINCC26XX_MUX_MCU_UART0_TX   IOC_PORT_MCU_UART0_TX    // MCU UART0 Transmit Pin
-#define PINCC26XX_MUX_MCU_UART0_CTS  IOC_PORT_MCU_UART0_CTS   // MCU UART0 Clear To Send Pin
-#define PINCC26XX_MUX_MCU_UART0_RTS  IOC_PORT_MCU_UART0_RTS   // MCU UART0 Request To Send Pin
-#define PINCC26XX_MUX_MCU_PORT_EV_0  IOC_PORT_MCU_PORT_EVENT0 // MCU power event 0
-#define PINCC26XX_MUX_MCU_PORT_EV_1  IOC_PORT_MCU_PORT_EVENT1 // MCU power event 1
-#define PINCC26XX_MUX_MCU_PORT_EV_2  IOC_PORT_MCU_PORT_EVENT2 // MCU power event 2
-#define PINCC26XX_MUX_MCU_PORT_EV_3  IOC_PORT_MCU_PORT_EVENT3 // MCU power event 3
-#define PINCC26XX_MUX_MCU_PORT_EV_4  IOC_PORT_MCU_PORT_EVENT4 // MCU power event 4
-#define PINCC26XX_MUX_MCU_PORT_EV_5  IOC_PORT_MCU_PORT_EVENT5 // MCU power event 5
-#define PINCC26XX_MUX_MCU_PORT_EV_6  IOC_PORT_MCU_PORT_EVENT6 // MCU power event 6
-#define PINCC26XX_MUX_MCU_PORT_EV_7  IOC_PORT_MCU_PORT_EVENT7 // MCU power event 7
-#define PINCC26XX_MUX_SWV            IOC_PORT_MCU_SWV         // MCU serial wire viewer
-#define PINCC26XX_MUX_MCU_SSI1_RX    IOC_PORT_MCU_SSI1_RX     // MCU SSI1 Receive Pin
-#define PINCC26XX_MUX_MCU_SSI1_TX    IOC_PORT_MCU_SSI1_TX     // MCU SSI1 Transmit Pin
-#define PINCC26XX_MUX_MCU_SSI1_FSS   IOC_PORT_MCU_SSI1_FSS    // MCU SSI1 FSS Pin
-#define PINCC26XX_MUX_MCU_SSI1_CLK   IOC_PORT_MCU_SSI1_CLK    // MCU SSI1 Clock Pin
-#define PINCC26XX_MUX_MCU_I2S_AD0    IOC_PORT_MCU_I2S_AD0     // MCU I2S Data Pin 0
-#define PINCC26XX_MUX_MCU_I2S_AD1    IOC_PORT_MCU_I2S_AD1     // MCU I2S Data Pin 1
-#define PINCC26XX_MUX_MCU_I2S_WCLK   IOC_PORT_MCU_I2S_WCLK    // MCU I2S Frame/Word Clock
-#define PINCC26XX_MUX_MCU_I2S_BCLK   IOC_PORT_MCU_I2S_BCLK    // MCU I2S Bit Clock
-#define PINCC26XX_MUX_MCU_I2S_MCLK   IOC_PORT_MCU_I2S_MCLK    // MCU I2S Master clock 2
-#define PINCC26XX_MUX_RFC_TRC        IOC_PORT_RFC_TRC         // RF Core Tracer
-#define PINCC26XX_MUX_RFC_GPO0       IOC_PORT_RFC_GPO0        // RC Core Data Out Pin 0
-#define PINCC26XX_MUX_RFC_GPO1       IOC_PORT_RFC_GPO1        // RC Core Data Out Pin 1
-#define PINCC26XX_MUX_RFC_GPO2       IOC_PORT_RFC_GPO2        // RC Core Data Out Pin 2
-#define PINCC26XX_MUX_RFC_GPO3       IOC_PORT_RFC_GPO3        // RC Core Data Out Pin 3
-#define PINCC26XX_MUX_RFC_GPI0       IOC_PORT_RFC_GPI0        // RC Core Data In Pin 0
-#define PINCC26XX_MUX_RFC_GPI1       IOC_PORT_RFC_GPI1        // RC Core Data In Pin 1
-#define PINCC26XX_MUX_RFC_SMI_DL_OUT IOC_PORT_RFC_SMI_DL_OUT  // RF Core SMI Data Link Out
-#define PINCC26XX_MUX_RFC_SMI_DL_IN  IOC_PORT_RFC_SMI_DL_IN   // RF Core SMI Data Link in
-#define PINCC26XX_MUX_RFC_SMI_CL_OUT IOC_PORT_RFC_SMI_CL_OUT  // RF Core SMI Command Link Out
-#define PINCC26XX_MUX_RFC_SMI_CL_IN  IOC_PORT_RFC_SMI_CL_IN   // RF Core SMI Command Link In
+#define PINCC26XX_MUX_GPIO IOC_PORT_GPIO                     // Default general purpose IO usage
+#define PINCC26XX_MUX_AON_CLK32K IOC_PORT_AON_CLK32K         // AON External 32kHz clock
+#define PINCC26XX_MUX_AUX_IO IOC_PORT_AUX_IO                 // AUX IO Pin
+#define PINCC26XX_MUX_MCU_SSI0_RX IOC_PORT_MCU_SSI0_RX       // MCU SSI0 Receive Pin
+#define PINCC26XX_MUX_MCU_SSI0_TX IOC_PORT_MCU_SSI0_TX       // MCU SSI0 Transmit Pin
+#define PINCC26XX_MUX_MCU_SSI0_FSS IOC_PORT_MCU_SSI0_FSS     // MCU SSI0 FSS Pin
+#define PINCC26XX_MUX_MCU_SSI0_CLK IOC_PORT_MCU_SSI0_CLK     // MCU SSI0 Clock Pin
+#define PINCC26XX_MUX_MCU_I2C_MSSDA IOC_PORT_MCU_I2C_MSSDA   // MCU I2C Data Pin
+#define PINCC26XX_MUX_MCU_I2C_MSSCL IOC_PORT_MCU_I2C_MSSCL   // MCU I2C Clock Pin
+#define PINCC26XX_MUX_MCU_UART0_RX IOC_PORT_MCU_UART0_RX     // MCU UART0 Receive Pin
+#define PINCC26XX_MUX_MCU_UART0_TX IOC_PORT_MCU_UART0_TX     // MCU UART0 Transmit Pin
+#define PINCC26XX_MUX_MCU_UART0_CTS IOC_PORT_MCU_UART0_CTS   // MCU UART0 Clear To Send Pin
+#define PINCC26XX_MUX_MCU_UART0_RTS IOC_PORT_MCU_UART0_RTS   // MCU UART0 Request To Send Pin
+#define PINCC26XX_MUX_MCU_PORT_EV_0 IOC_PORT_MCU_PORT_EVENT0 // MCU power event 0
+#define PINCC26XX_MUX_MCU_PORT_EV_1 IOC_PORT_MCU_PORT_EVENT1 // MCU power event 1
+#define PINCC26XX_MUX_MCU_PORT_EV_2 IOC_PORT_MCU_PORT_EVENT2 // MCU power event 2
+#define PINCC26XX_MUX_MCU_PORT_EV_3 IOC_PORT_MCU_PORT_EVENT3 // MCU power event 3
+#define PINCC26XX_MUX_MCU_PORT_EV_4 IOC_PORT_MCU_PORT_EVENT4 // MCU power event 4
+#define PINCC26XX_MUX_MCU_PORT_EV_5 IOC_PORT_MCU_PORT_EVENT5 // MCU power event 5
+#define PINCC26XX_MUX_MCU_PORT_EV_6 IOC_PORT_MCU_PORT_EVENT6 // MCU power event 6
+#define PINCC26XX_MUX_MCU_PORT_EV_7 IOC_PORT_MCU_PORT_EVENT7 // MCU power event 7
+#define PINCC26XX_MUX_SWV IOC_PORT_MCU_SWV                   // MCU serial wire viewer
+#define PINCC26XX_MUX_MCU_SSI1_RX IOC_PORT_MCU_SSI1_RX       // MCU SSI1 Receive Pin
+#define PINCC26XX_MUX_MCU_SSI1_TX IOC_PORT_MCU_SSI1_TX       // MCU SSI1 Transmit Pin
+#define PINCC26XX_MUX_MCU_SSI1_FSS IOC_PORT_MCU_SSI1_FSS     // MCU SSI1 FSS Pin
+#define PINCC26XX_MUX_MCU_SSI1_CLK IOC_PORT_MCU_SSI1_CLK     // MCU SSI1 Clock Pin
+#define PINCC26XX_MUX_MCU_I2S_AD0 IOC_PORT_MCU_I2S_AD0       // MCU I2S Data Pin 0
+#define PINCC26XX_MUX_MCU_I2S_AD1 IOC_PORT_MCU_I2S_AD1       // MCU I2S Data Pin 1
+#define PINCC26XX_MUX_MCU_I2S_WCLK IOC_PORT_MCU_I2S_WCLK     // MCU I2S Frame/Word Clock
+#define PINCC26XX_MUX_MCU_I2S_BCLK IOC_PORT_MCU_I2S_BCLK     // MCU I2S Bit Clock
+#define PINCC26XX_MUX_MCU_I2S_MCLK IOC_PORT_MCU_I2S_MCLK     // MCU I2S Master clock 2
+#define PINCC26XX_MUX_RFC_TRC IOC_PORT_RFC_TRC               // RF Core Tracer
+#define PINCC26XX_MUX_RFC_GPO0 IOC_PORT_RFC_GPO0             // RC Core Data Out Pin 0
+#define PINCC26XX_MUX_RFC_GPO1 IOC_PORT_RFC_GPO1             // RC Core Data Out Pin 1
+#define PINCC26XX_MUX_RFC_GPO2 IOC_PORT_RFC_GPO2             // RC Core Data Out Pin 2
+#define PINCC26XX_MUX_RFC_GPO3 IOC_PORT_RFC_GPO3             // RC Core Data Out Pin 3
+#define PINCC26XX_MUX_RFC_GPI0 IOC_PORT_RFC_GPI0             // RC Core Data In Pin 0
+#define PINCC26XX_MUX_RFC_GPI1 IOC_PORT_RFC_GPI1             // RC Core Data In Pin 1
+#define PINCC26XX_MUX_RFC_SMI_DL_OUT IOC_PORT_RFC_SMI_DL_OUT // RF Core SMI Data Link Out
+#define PINCC26XX_MUX_RFC_SMI_DL_IN IOC_PORT_RFC_SMI_DL_IN   // RF Core SMI Data Link in
+#define PINCC26XX_MUX_RFC_SMI_CL_OUT IOC_PORT_RFC_SMI_CL_OUT // RF Core SMI Command Link Out
+#define PINCC26XX_MUX_RFC_SMI_CL_IN IOC_PORT_RFC_SMI_CL_IN   // RF Core SMI Command Link In
 /** \} (PINCC26XX_MUX_VALS)
  */
-
 
 #ifdef __cplusplus
 }

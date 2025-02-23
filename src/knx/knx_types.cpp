@@ -43,7 +43,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const LCGRPCONFIG enum_val)
     {
         switch (enum_val)
@@ -73,7 +72,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const DptMedium enum_val)
     {
         switch (enum_val)
@@ -93,7 +91,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(const EraseCode enum_val)
     {
@@ -127,7 +124,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const RestartType enum_val)
     {
         switch (enum_val)
@@ -141,7 +137,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(const DataSecurity enum_val)
     {
@@ -159,7 +154,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(const ApduType enum_val)
     {
@@ -367,7 +361,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const TpduType enum_val)
     {
         switch (enum_val)
@@ -400,7 +393,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const HopCountType enum_val)
     {
         switch (enum_val)
@@ -414,7 +406,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(const Confirm enum_val)
     {
@@ -430,7 +421,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const SystemBroadcast enum_val)
     {
         switch (enum_val)
@@ -444,7 +434,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(Repetition enum_val)
     {
@@ -519,7 +508,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const cEmiErrorCode enum_val)
     {
         switch (enum_val)
@@ -560,7 +548,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(const MessageCode enum_val)
     {
@@ -609,7 +596,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const AddressType enum_val)
     {
         switch (enum_val)
@@ -623,7 +609,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(const TPAckType enum_val)
     {
@@ -645,7 +630,6 @@ namespace Knx
         return "";
     }
 
-
     const char* enum_name(const AckType enum_val)
     {
         switch (enum_val)
@@ -659,7 +643,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(const Priority enum_val)
     {
@@ -680,7 +663,6 @@ namespace Knx
 
         return "";
     }
-
 
     const char* enum_name(const FrameFormat enum_val)
     {
@@ -715,4 +697,4 @@ namespace Knx
     }
 #endif
 
-}
+} // namespace Knx

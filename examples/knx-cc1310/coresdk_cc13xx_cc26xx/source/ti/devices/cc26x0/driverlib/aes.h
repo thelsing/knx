@@ -1,40 +1,40 @@
 /******************************************************************************
-*  Filename:       aes.h
-*  Revised:        2019-01-25 14:45:16 +0100 (Fri, 25 Jan 2019)
-*  Revision:       54287
-*
-*  Description:    AES header file.
-*
-*  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
-*  All rights reserved.
-*
-*  Redistribution and use in source and binary forms, with or without
-*  modification, are permitted provided that the following conditions are met:
-*
-*  1) Redistributions of source code must retain the above copyright notice,
-*     this list of conditions and the following disclaimer.
-*
-*  2) Redistributions in binary form must reproduce the above copyright notice,
-*     this list of conditions and the following disclaimer in the documentation
-*     and/or other materials provided with the distribution.
-*
-*  3) Neither the name of the ORGANIZATION nor the names of its contributors may
-*     be used to endorse or promote products derived from this software without
-*     specific prior written permission.
-*
-*  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-*  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-*  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-*  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-*  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-*  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-*  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-*  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-*  POSSIBILITY OF SUCH DAMAGE.
-*
-******************************************************************************/
+ *  Filename:       aes.h
+ *  Revised:        2019-01-25 14:45:16 +0100 (Fri, 25 Jan 2019)
+ *  Revision:       54287
+ *
+ *  Description:    AES header file.
+ *
+ *  Copyright (c) 2015 - 2017, Texas Instruments Incorporated
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1) Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2) Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *
+ *  3) Neither the name of the ORGANIZATION nor the names of its contributors may
+ *     be used to endorse or promote products derived from this software without
+ *     specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
+ ******************************************************************************/
 
 //*****************************************************************************
 //
@@ -55,20 +55,19 @@
 //
 //*****************************************************************************
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
+#include "../inc/hw_crypto.h"
+#include "../inc/hw_ints.h"
+#include "../inc/hw_memmap.h"
+#include "../inc/hw_types.h"
+#include "cpu.h"
+#include "debug.h"
+#include "interrupt.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-#include "../inc/hw_types.h"
-#include "../inc/hw_memmap.h"
-#include "../inc/hw_ints.h"
-#include "../inc/hw_crypto.h"
-#include "debug.h"
-#include "interrupt.h"
-#include "cpu.h"
 
 //*****************************************************************************
 //
@@ -84,17 +83,16 @@ extern "C"
 //
 //*****************************************************************************
 #if !defined(DOXYGEN)
-#define AESStartDMAOperation            NOROM_AESStartDMAOperation
-#define AESSetInitializationVector      NOROM_AESSetInitializationVector
+#define AESStartDMAOperation NOROM_AESStartDMAOperation
+#define AESSetInitializationVector NOROM_AESSetInitializationVector
 #define AESWriteCCMInitializationVector NOROM_AESWriteCCMInitializationVector
-#define AESReadTag                      NOROM_AESReadTag
-#define AESVerifyTag                    NOROM_AESVerifyTag
-#define AESWriteToKeyStore              NOROM_AESWriteToKeyStore
-#define AESReadFromKeyStore             NOROM_AESReadFromKeyStore
-#define AESWaitForIRQFlags              NOROM_AESWaitForIRQFlags
-#define AESConfigureCCMCtrl             NOROM_AESConfigureCCMCtrl
+#define AESReadTag NOROM_AESReadTag
+#define AESVerifyTag NOROM_AESVerifyTag
+#define AESWriteToKeyStore NOROM_AESWriteToKeyStore
+#define AESReadFromKeyStore NOROM_AESReadFromKeyStore
+#define AESWaitForIRQFlags NOROM_AESWaitForIRQFlags
+#define AESConfigureCCMCtrl NOROM_AESConfigureCCMCtrl
 #endif
-
 
 //*****************************************************************************
 //
@@ -104,12 +102,11 @@ extern "C"
 // function to see if it supports other interrupt status flags.
 //
 //*****************************************************************************
-#define AES_DMA_IN_DONE                 CRYPTO_IRQEN_DMA_IN_DONE_M
-#define AES_RESULT_RDY                  CRYPTO_IRQEN_RESULT_AVAIL_M
-#define AES_DMA_BUS_ERR                 CRYPTO_IRQCLR_DMA_BUS_ERR_M
-#define AES_KEY_ST_WR_ERR               CRYPTO_IRQCLR_KEY_ST_WR_ERR_M
-#define AES_KEY_ST_RD_ERR               CRYPTO_IRQCLR_KEY_ST_RD_ERR_M
-
+#define AES_DMA_IN_DONE CRYPTO_IRQEN_DMA_IN_DONE_M
+#define AES_RESULT_RDY CRYPTO_IRQEN_RESULT_AVAIL_M
+#define AES_DMA_BUS_ERR CRYPTO_IRQCLR_DMA_BUS_ERR_M
+#define AES_KEY_ST_WR_ERR CRYPTO_IRQCLR_KEY_ST_WR_ERR_M
+#define AES_KEY_ST_RD_ERR CRYPTO_IRQCLR_KEY_ST_RD_ERR_M
 
 //*****************************************************************************
 //
@@ -118,33 +115,32 @@ extern "C"
 //*****************************************************************************
 
 // AES module return codes
-#define AES_SUCCESS                     0
-#define AES_KEYSTORE_ERROR              1
-#define AES_KEYSTORE_AREA_INVALID       2
-#define AES_DMA_BUSY                    3
-#define AES_DMA_ERROR                   4
-#define AES_TAG_NOT_READY               5
-#define AES_TAG_VERIFICATION_FAILED     6
+#define AES_SUCCESS 0
+#define AES_KEYSTORE_ERROR 1
+#define AES_KEYSTORE_AREA_INVALID 2
+#define AES_DMA_BUSY 3
+#define AES_DMA_ERROR 4
+#define AES_TAG_NOT_READY 5
+#define AES_TAG_VERIFICATION_FAILED 6
 
 // Key store module defines
-#define AES_IV_LENGTH_BYTES             16
-#define AES_TAG_LENGTH_BYTES            16
-#define AES_128_KEY_LENGTH_BYTES        (128 / 8)
-#define AES_192_KEY_LENGTH_BYTES        (192 / 8)
-#define AES_256_KEY_LENGTH_BYTES        (256 / 8)
+#define AES_IV_LENGTH_BYTES 16
+#define AES_TAG_LENGTH_BYTES 16
+#define AES_128_KEY_LENGTH_BYTES (128 / 8)
+#define AES_192_KEY_LENGTH_BYTES (192 / 8)
+#define AES_256_KEY_LENGTH_BYTES (256 / 8)
 
-#define AES_BLOCK_SIZE                  16
+#define AES_BLOCK_SIZE 16
 
 // DMA status codes
-#define AES_DMA_CHANNEL0_ACTIVE         CRYPTO_DMASTAT_CH0_ACT_M
-#define AES_DMA_CHANNEL1_ACTIVE         CRYPTO_DMASTAT_CH1_ACT_M
-#define AES_DMA_PORT_ERROR              CRYPTO_DMASTAT_PORT_ERR_M
+#define AES_DMA_CHANNEL0_ACTIVE CRYPTO_DMASTAT_CH0_ACT_M
+#define AES_DMA_CHANNEL1_ACTIVE CRYPTO_DMASTAT_CH1_ACT_M
+#define AES_DMA_PORT_ERROR CRYPTO_DMASTAT_PORT_ERR_M
 
 // Crypto module operation types
-#define AES_ALGSEL_AES                  CRYPTO_ALGSEL_AES_M
-#define AES_ALGSEL_KEY_STORE            CRYPTO_ALGSEL_KEY_STORE_M
-#define AES_ALGSEL_TAG                  CRYPTO_ALGSEL_TAG_M
-
+#define AES_ALGSEL_AES CRYPTO_ALGSEL_AES_M
+#define AES_ALGSEL_KEY_STORE CRYPTO_ALGSEL_KEY_STORE_M
+#define AES_ALGSEL_TAG CRYPTO_ALGSEL_TAG_M
 
 //*****************************************************************************
 //
@@ -153,24 +149,24 @@ extern "C"
 // may be odd. Do not attempt to write a 256-bit key to AES_KEY_AREA_7.
 //
 //*****************************************************************************
-#define AES_KEY_AREA_0          0
-#define AES_KEY_AREA_1          1
-#define AES_KEY_AREA_2          2
-#define AES_KEY_AREA_3          3
-#define AES_KEY_AREA_4          4
-#define AES_KEY_AREA_5          5
-#define AES_KEY_AREA_6          6
-#define AES_KEY_AREA_7          7
+#define AES_KEY_AREA_0 0
+#define AES_KEY_AREA_1 1
+#define AES_KEY_AREA_2 2
+#define AES_KEY_AREA_3 3
+#define AES_KEY_AREA_4 4
+#define AES_KEY_AREA_5 5
+#define AES_KEY_AREA_6 6
+#define AES_KEY_AREA_7 7
 
 //*****************************************************************************
 //
 // Defines for the AES-CTR mode counter width
 //
 //*****************************************************************************
-#define AES_CTR_WIDTH_32        0x0
-#define AES_CTR_WIDTH_64        0x1
-#define AES_CTR_WIDTH_96        0x2
-#define AES_CTR_WIDTH_128       0x3
+#define AES_CTR_WIDTH_32 0x0
+#define AES_CTR_WIDTH_64 0x1
+#define AES_CTR_WIDTH_96 0x2
+#define AES_CTR_WIDTH_128 0x3
 
 //*****************************************************************************
 //
@@ -213,7 +209,7 @@ extern "C"
 //! \return None
 //
 //*****************************************************************************
-extern void AESStartDMAOperation(const uint8_t* channel0Addr, uint32_t channel0Length,  uint8_t* channel1Addr, uint32_t channel1Length);
+extern void AESStartDMAOperation(const uint8_t* channel0Addr, uint32_t channel0Length, uint8_t* channel1Addr, uint32_t channel1Length);
 
 //*****************************************************************************
 //
@@ -405,7 +401,6 @@ extern uint32_t AESWriteToKeyStore(const uint8_t* aesKey, uint32_t aesKeyLength,
 //
 //*****************************************************************************
 extern uint32_t AESReadFromKeyStore(uint32_t keyStoreArea);
-
 
 //*****************************************************************************
 //
@@ -786,40 +781,40 @@ __STATIC_INLINE void AESIntUnregister(void)
 #if !defined(DRIVERLIB_NOROM) && !defined(DOXYGEN)
 #include "../driverlib/rom.h"
 #ifdef ROM_AESStartDMAOperation
-#undef  AESStartDMAOperation
-#define AESStartDMAOperation            ROM_AESStartDMAOperation
+#undef AESStartDMAOperation
+#define AESStartDMAOperation ROM_AESStartDMAOperation
 #endif
 #ifdef ROM_AESSetInitializationVector
-#undef  AESSetInitializationVector
-#define AESSetInitializationVector      ROM_AESSetInitializationVector
+#undef AESSetInitializationVector
+#define AESSetInitializationVector ROM_AESSetInitializationVector
 #endif
 #ifdef ROM_AESWriteCCMInitializationVector
-#undef  AESWriteCCMInitializationVector
+#undef AESWriteCCMInitializationVector
 #define AESWriteCCMInitializationVector ROM_AESWriteCCMInitializationVector
 #endif
 #ifdef ROM_AESReadTag
-#undef  AESReadTag
-#define AESReadTag                      ROM_AESReadTag
+#undef AESReadTag
+#define AESReadTag ROM_AESReadTag
 #endif
 #ifdef ROM_AESVerifyTag
-#undef  AESVerifyTag
-#define AESVerifyTag                    ROM_AESVerifyTag
+#undef AESVerifyTag
+#define AESVerifyTag ROM_AESVerifyTag
 #endif
 #ifdef ROM_AESWriteToKeyStore
-#undef  AESWriteToKeyStore
-#define AESWriteToKeyStore              ROM_AESWriteToKeyStore
+#undef AESWriteToKeyStore
+#define AESWriteToKeyStore ROM_AESWriteToKeyStore
 #endif
 #ifdef ROM_AESReadFromKeyStore
-#undef  AESReadFromKeyStore
-#define AESReadFromKeyStore             ROM_AESReadFromKeyStore
+#undef AESReadFromKeyStore
+#define AESReadFromKeyStore ROM_AESReadFromKeyStore
 #endif
 #ifdef ROM_AESWaitForIRQFlags
-#undef  AESWaitForIRQFlags
-#define AESWaitForIRQFlags              ROM_AESWaitForIRQFlags
+#undef AESWaitForIRQFlags
+#define AESWaitForIRQFlags ROM_AESWaitForIRQFlags
 #endif
 #ifdef ROM_AESConfigureCCMCtrl
-#undef  AESConfigureCCMCtrl
-#define AESConfigureCCMCtrl             ROM_AESConfigureCCMCtrl
+#undef AESConfigureCCMCtrl
+#define AESConfigureCCMCtrl ROM_AESConfigureCCMCtrl
 #endif
 #endif
 
@@ -832,7 +827,7 @@ __STATIC_INLINE void AESIntUnregister(void)
 }
 #endif
 
-#endif  // __AES_H__
+#endif // __AES_H__
 
 //*****************************************************************************
 //

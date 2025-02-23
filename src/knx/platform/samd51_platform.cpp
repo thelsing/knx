@@ -2,15 +2,15 @@
 
 #ifdef __SAMD51__
 
-#include <knx/bits.h>
 #include <Arduino.h>
+#include <knx/bits.h>
 
 #if KNX_FLASH_SIZE % 1024
-    #error "KNX_FLASH_SIZE must be multiple of 1024"
+#error "KNX_FLASH_SIZE must be multiple of 1024"
 #endif
 
 #ifndef KNX_SERIAL
-    #define KNX_SERIAL Serial1
+#define KNX_SERIAL Serial1
 #endif
 
 extern uint32_t __etext;
@@ -27,7 +27,8 @@ namespace Knx
         init();
     }
 
-    Samd51Platform::Samd51Platform( HardwareSerial* s) : ArduinoPlatform(s)
+    Samd51Platform::Samd51Platform(HardwareSerial* s)
+        : ArduinoPlatform(s)
     {
         init();
     }
@@ -35,10 +36,10 @@ namespace Knx
     uint32_t Samd51Platform::uniqueSerialNumber()
     {
         // SAMD51 from section 9.6 of the datasheet
-#define SERIAL_NUMBER_WORD_0    *(volatile uint32_t*)(0x008061FC)
-#define SERIAL_NUMBER_WORD_1    *(volatile uint32_t*)(0x00806010)
-#define SERIAL_NUMBER_WORD_2    *(volatile uint32_t*)(0x00806014)
-#define SERIAL_NUMBER_WORD_3    *(volatile uint32_t*)(0x00806018)
+#define SERIAL_NUMBER_WORD_0 *(volatile uint32_t*)(0x008061FC)
+#define SERIAL_NUMBER_WORD_1 *(volatile uint32_t*)(0x00806010)
+#define SERIAL_NUMBER_WORD_2 *(volatile uint32_t*)(0x00806014)
+#define SERIAL_NUMBER_WORD_3 *(volatile uint32_t*)(0x00806018)
 
         return SERIAL_NUMBER_WORD_0 ^ SERIAL_NUMBER_WORD_1 ^ SERIAL_NUMBER_WORD_2 ^ SERIAL_NUMBER_WORD_3;
     }
@@ -95,8 +96,8 @@ namespace Knx
 
     void Samd51Platform::macAddress(uint8_t* mac_address)
     {
-        //Ethernet.macAddress(mac_address);      //try this first, not sure if this will work, is for ethernet3 lib
-        memcpy(mac_address, _macAddress, sizeof(_macAddress) / sizeof(_macAddress[0]));  //sizeof should resolve to be just 6
+        // Ethernet.macAddress(mac_address);      //try this first, not sure if this will work, is for ethernet3 lib
+        memcpy(mac_address, _macAddress, sizeof(_macAddress) / sizeof(_macAddress[0])); // sizeof should resolve to be just 6
     }
 
     void Samd51Platform::setupMultiCast(uint32_t addr, uint16_t port)
@@ -115,7 +116,7 @@ namespace Knx
 
     bool Samd51Platform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
     {
-        //printHex("<- ",buffer, len);
+        // printHex("<- ",buffer, len);
         _udp.beginPacket(_multicastAddr, _multicastPort);
         _udp.write(buffer, len);
         _udp.endPacket();
@@ -180,12 +181,12 @@ namespace Knx
         _pageCnt = NVMCTRL->PARAM.bit.NVMP;
         _rowSize = (_pageSize * _pageCnt / 64);
 
-        //find end of program flash and set limit to next row
+        // find end of program flash and set limit to next row
         uint32_t endEddr = (uint32_t)(&__etext + (&__data_end__ - &__data_start__)); // text + data MemoryBlock
         _MemoryStart = getRowAddr(_pageSize * _pageCnt - KNX_FLASH_SIZE - 1);        // 23295
         _MemoryEnd = getRowAddr(_pageSize * _pageCnt - 1);
 
-        //chosen flash size is not available anymore
+        // chosen flash size is not available anymore
         if (_MemoryStart < endEddr)
         {
             println("KNX_FLASH_SIZE is not available (possible too much flash use by firmware)");
@@ -200,7 +201,9 @@ namespace Knx
         {
             CMCC->CTRL.bit.CEN = 0;
 
-            while (CMCC->SR.bit.CSTS) {}
+            while (CMCC->SR.bit.CSTS)
+            {
+            }
 
             CMCC->MAINT0.bit.INVALL = 1;
             CMCC->CTRL.bit.CEN = 1;
@@ -211,8 +214,8 @@ namespace Knx
     {
         union
         {
-            uint32_t u32;
-            uint8_t u8[4];
+                uint32_t u32;
+                uint8_t u8[4];
         } res;
         const uint8_t* d = (const uint8_t*)data;
         res.u8[0] = d[0];
@@ -224,7 +227,7 @@ namespace Knx
 
     size_t Samd51Platform::flashEraseBlockSize()
     {
-        return (_pageSize / 64);   //PAGES_PER_ROW;
+        return (_pageSize / 64); // PAGES_PER_ROW;
     }
 
     size_t Samd51Platform::flashPageSize()
@@ -297,7 +300,9 @@ namespace Knx
         // Disable automatic page write
         NVMCTRL->CTRLA.bit.WMODE = 0;
 
-        while (NVMCTRL->STATUS.bit.READY == 0) { }
+        while (NVMCTRL->STATUS.bit.READY == 0)
+        {
+        }
 
         // Disable NVMCTRL cache while writing, per SAMD51 errata.
         bool original_CACHEDIS0 = NVMCTRL->CTRLA.bit.CACHEDIS0;
@@ -311,7 +316,9 @@ namespace Knx
             // Execute "PBC" Page Buffer Clear
             NVMCTRL->CTRLB.reg = NVMCTRL_CTRLB_CMDEX_KEY | NVMCTRL_CTRLB_CMD_PBC;
 
-            while (NVMCTRL->INTFLAG.bit.DONE == 0) { }
+            while (NVMCTRL->INTFLAG.bit.DONE == 0)
+            {
+            }
 
             // Fill page buffer
             uint32_t i;
@@ -327,7 +334,9 @@ namespace Knx
             // Execute "WP" Write Page
             NVMCTRL->CTRLB.reg = NVMCTRL_CTRLB_CMDEX_KEY | NVMCTRL_CTRLB_CMD_WP;
 
-            while (NVMCTRL->INTFLAG.bit.DONE == 0) { }
+            while (NVMCTRL->INTFLAG.bit.DONE == 0)
+            {
+            }
 
             invalidate_CMCC_cache();
             // Restore original NVMCTRL cache settings.
@@ -355,9 +364,11 @@ namespace Knx
         NVMCTRL->ADDR.reg = ((uint32_t)flash_ptr);
         NVMCTRL->CTRLB.reg = NVMCTRL_CTRLB_CMDEX_KEY | NVMCTRL_CTRLB_CMD_EB;
 
-        while (!NVMCTRL->INTFLAG.bit.DONE) { }
+        while (!NVMCTRL->INTFLAG.bit.DONE)
+        {
+        }
 
         invalidate_CMCC_cache();
     }
-}
+} // namespace Knx
 #endif

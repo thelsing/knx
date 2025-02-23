@@ -1,10 +1,10 @@
 #include "transport_layer.h"
 
 #include "../application_layer/application_layer.h"
+#include "../bits.h"
 #include "../network_layer/network_layer.h"
 #include "../platform/platform.h"
 #include "../util/logger.h"
-#include "../bits.h"
 
 #include <stdio.h>
 
@@ -12,8 +12,9 @@
 
 namespace Knx
 {
-    TransportLayer::TransportLayer(ApplicationLayer& layer): _savedFrame(0),
-        _savedFrameConnecting(0), _applicationLayer(layer)
+    TransportLayer::TransportLayer(ApplicationLayer& layer)
+        : _savedFrame(0),
+          _savedFrameConnecting(0), _applicationLayer(layer)
     {
         _currentState = Closed;
     }
@@ -45,11 +46,11 @@ namespace Knx
                 {
                     if (sequenceNo == _seqNoRecv)
                     {
-                        //E4
+                        // E4
                         switch (_currentState)
                         {
                             case Closed:
-                                //A0 nothing
+                                // A0 nothing
                                 break;
 
                             case OpenIdle:
@@ -65,11 +66,11 @@ namespace Knx
                     }
                     else if (sequenceNo == ((_seqNoRecv - 1) & 0xF))
                     {
-                        //E5
+                        // E5
                         switch (_currentState)
                         {
                             case Closed:
-                                //A0
+                                // A0
                                 break;
 
                             case OpenIdle:
@@ -81,11 +82,11 @@ namespace Knx
                     }
                     else
                     {
-                        //E6
+                        // E6
                         switch (_currentState)
                         {
                             case Closed:
-                                //A0
+                                // A0
                                 break;
 
                             case OpenIdle:
@@ -101,13 +102,13 @@ namespace Knx
                 }
                 else
                 {
-                    //E7
+                    // E7
                     switch (_currentState)
                     {
                         case Closed:
                         case OpenIdle:
                         case OpenWait:
-                            //A0
+                            // A0
                             break;
 
                         case Connecting:
@@ -121,7 +122,7 @@ namespace Knx
             case Connect:
                 if (source == _connectionAddress)
                 {
-                    //E0
+                    // E0
                     switch (_currentState)
                     {
                         case Closed:
@@ -132,13 +133,13 @@ namespace Knx
                         case OpenWait:
                         case OpenIdle:
                         case Connecting:
-                            //A0: do nothing
+                            // A0: do nothing
                             break;
                     }
                 }
                 else
                 {
-                    //E1
+                    // E1
                     switch (_currentState)
                     {
                         case Closed:
@@ -159,11 +160,11 @@ namespace Knx
             case Disconnect:
                 if (source == _connectionAddress)
                 {
-                    //E2
+                    // E2
                     switch (_currentState)
                     {
                         case Closed:
-                            //A0 do nothing
+                            // A0 do nothing
                             break;
 
                         case OpenIdle:
@@ -179,8 +180,8 @@ namespace Knx
                 }
                 else
                 {
-                    //E3
-                    //A0: do nothing
+                    // E3
+                    // A0: do nothing
                 }
 
                 break;
@@ -190,12 +191,12 @@ namespace Knx
                 {
                     if (sequenceNo == _seqNoSend)
                     {
-                        //E8
+                        // E8
                         switch (_currentState)
                         {
                             case Closed:
                             case OpenIdle:
-                                //A0
+                                // A0
                                 break;
 
                             case OpenWait:
@@ -211,12 +212,12 @@ namespace Knx
                     }
                     else
                     {
-                        //E9
+                        // E9
                         switch (_currentState)
                         {
                             case Closed:
                             case OpenIdle:
-                                //A0
+                                // A0
                                 break;
 
                             case OpenWait:
@@ -229,7 +230,7 @@ namespace Knx
                 }
                 else
                 {
-                    //E10
+                    // E10
                     switch (_currentState)
                     {
                         case Connecting:
@@ -248,13 +249,13 @@ namespace Knx
                 {
                     if (sequenceNo != _seqNoSend)
                     {
-                        //E11
+                        // E11
                         switch (_currentState)
                         {
                             case Closed:
                             case OpenIdle:
                             case OpenWait:
-                                //A0
+                                // A0
                                 break;
 
                             case Connecting:
@@ -267,11 +268,11 @@ namespace Knx
                     {
                         if (_repCount < _maxRepCount)
                         {
-                            //E12
+                            // E12
                             switch (_currentState)
                             {
                                 case Closed:
-                                    //A0
+                                    // A0
                                     break;
 
                                 case Connecting:
@@ -287,11 +288,11 @@ namespace Knx
                         }
                         else
                         {
-                            //E13
+                            // E13
                             switch (_currentState)
                             {
                                 case Closed:
-                                    //A0
+                                    // A0
                                     break;
 
                                 case OpenIdle:
@@ -306,13 +307,13 @@ namespace Knx
                 }
                 else
                 {
-                    //E14
+                    // E14
                     switch (_currentState)
                     {
                         case Closed:
                         case OpenIdle:
                         case OpenWait:
-                            //A0
+                            // A0
                             break;
 
                         case Connecting:
@@ -343,20 +344,20 @@ namespace Knx
                 break;
 
             case DataConnected:
-                //E22
-                //A0: do nothing
+                // E22
+                // A0: do nothing
                 break;
 
             case Connect:
                 if (status)
                 {
-                    //E19
+                    // E19
                     switch (_currentState)
                     {
                         case Closed:
                         case OpenIdle:
                         case OpenWait:
-                            //A0: do nothing
+                            // A0: do nothing
                             break;
 
                         case Connecting:
@@ -367,13 +368,13 @@ namespace Knx
                 }
                 else
                 {
-                    //E20
+                    // E20
                     switch (_currentState)
                     {
                         case Closed:
                         case OpenIdle:
                         case OpenWait:
-                            //A0: do nothing
+                            // A0: do nothing
                             break;
 
                         case Connecting:
@@ -385,18 +386,18 @@ namespace Knx
                 break;
 
             case Disconnect:
-                //E21
-                //A0: do nothing
+                // E21
+                // A0: do nothing
                 break;
 
             case Ack:
-                //E23
-                //A0: do nothing
+                // E23
+                // A0: do nothing
                 break;
 
             case Nack:
-                //E24
-                //A0: do nothing
+                // E24
+                // A0: do nothing
                 break;
 
             default:
@@ -487,7 +488,7 @@ namespace Knx
 
     void TransportLayer::connectRequest(uint16_t destination, Priority priority)
     {
-        //E25
+        // E25
         switch (_currentState)
         {
             case Closed:
@@ -506,7 +507,7 @@ namespace Knx
 
     void TransportLayer::disconnectRequest(uint16_t tsap, Priority priority)
     {
-        //E26
+        // E26
         switch (_currentState)
         {
             case Closed:
@@ -524,13 +525,13 @@ namespace Knx
 
     void TransportLayer::dataConnectedRequest(uint16_t tsap, Priority priority, APDU& apdu)
     {
-        //print.print("-> TL  ");
-        //apdu.printPDU();
-        //E15
+        // print.print("-> TL  ");
+        // apdu.printPDU();
+        // E15
         switch (_currentState)
         {
             case Closed:
-                //A0
+                // A0
                 break;
 
             case OpenIdle:
@@ -550,11 +551,11 @@ namespace Knx
 
     void TransportLayer::connectionTimeoutIndication()
     {
-        //E16
+        // E16
         switch (_currentState)
         {
             case Closed:
-                //A0: do nothing
+                // A0: do nothing
                 break;
 
             case OpenIdle:
@@ -570,13 +571,13 @@ namespace Knx
     {
         if (_repCount < _maxRepCount)
         {
-            //E17
+            // E17
             switch (_currentState)
             {
                 case Closed:
                 case OpenIdle:
                 case Connecting:
-                    //A0: do nothing
+                    // A0: do nothing
                     break;
 
                 case OpenWait:
@@ -586,13 +587,13 @@ namespace Knx
         }
         else
         {
-            //E18
+            // E18
             switch (_currentState)
             {
                 case Closed:
                 case OpenIdle:
                 case Connecting:
-                    //A0: do nothing
+                    // A0: do nothing
                     break;
 
                 case OpenWait:
@@ -621,17 +622,15 @@ namespace Knx
     {
         uint32_t milliseconds = millis();
 
-        if (_connectionTimeoutEnabled
-                && (milliseconds - _connectionTimeoutStartMillis) > _connectionTimeoutMillis)
+        if (_connectionTimeoutEnabled && (milliseconds - _connectionTimeoutStartMillis) > _connectionTimeoutMillis)
             connectionTimeoutIndication();
 
-        if (_ackTimeoutEnabled
-                && (milliseconds - _ackTimeoutStartMillis) > _ackTimeoutMillis)
+        if (_ackTimeoutEnabled && (milliseconds - _ackTimeoutStartMillis) > _ackTimeoutMillis)
             ackTimeoutIndication();
 
         if (_savedConnectingValid)
         {
-            //retry saved event
+            // retry saved event
             _savedConnectingValid = false;
             dataConnectedRequest(_savedTsapConnecting, _savedPriorityConnecting, _savedFrameConnecting.apdu());
         }
@@ -810,4 +809,4 @@ namespace Knx
     {
         _ackTimeoutEnabled = false;
     }
-}
+} // namespace Knx

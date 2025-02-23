@@ -2,9 +2,14 @@
 #include "dpt.h"
 namespace Knx
 {
-    class DPT_SceneNumber: public ValueDpt<uint8_t>
+    class DPT_SceneNumber : public ValueDpt<uint8_t>
     {
-            enum ReadDirectionValue { LeftToRight = 0, RightToLeft = 1};
+            enum ReadDirectionValue
+            {
+                LeftToRight = 0,
+                RightToLeft = 1
+            };
+
         public:
             DPT_SceneNumber();
             DPT_SceneNumber(const char* value);
@@ -15,4 +20,4 @@ namespace Knx
 
             void value(uint8_t value) override;
     };
-}
+} // namespace Knx

@@ -110,25 +110,25 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-#include <ti/drivers/Power.h>
 #include <ti/drivers/ECDH.h>
-#include <ti/drivers/cryptoutils/ecc/ECCParams.h>
+#include <ti/drivers/Power.h>
 #include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
+#include <ti/drivers/cryptoutils/ecc/ECCParams.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib/pka.h)
+#include DeviceFamily_constructPath(driverlib / pka.h)
 
 #include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
+#include <ti/drivers/dpl/SwiP.h>
 
 /* Exit the SWI and wait until an HWI call posts the SWI again */
-#define ECDHCC26X2_STATUS_FSM_RUN_PKA_OP       ECDH_STATUS_RESERVED - 0
+#define ECDHCC26X2_STATUS_FSM_RUN_PKA_OP ECDH_STATUS_RESERVED - 0
 /* Execute the next FSM state immediately without waiting for the next HWI */
-#define ECDHCC26X2_STATUS_FSM_RUN_FSM          ECDH_STATUS_RESERVED - 1
+#define ECDHCC26X2_STATUS_FSM_RUN_FSM ECDH_STATUS_RESERVED - 1
 
 /*!
  *  @brief      ECDHCC26X2 states
@@ -171,19 +171,19 @@ typedef enum ECDHCC26X2_FsmState_
  */
 typedef struct ECDHCC26X2_HWAttrs_
 {
-    /*! @brief Crypto Peripheral's interrupt priority.
+        /*! @brief Crypto Peripheral's interrupt priority.
 
-        The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
+            The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
 
-        (7 << 5) will apply the lowest priority.
+            (7 << 5) will apply the lowest priority.
 
-        (1 << 5) will apply the highest priority.
+            (1 << 5) will apply the highest priority.
 
-        Setting the priority to 0 is not supported by this driver.
+            Setting the priority to 0 is not supported by this driver.
 
-        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-    */
-    uint8_t    intPriority;
+            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+        */
+        uint8_t intPriority;
 } ECDHCC26X2_HWAttrs;
 
 /*!
@@ -193,17 +193,17 @@ typedef struct ECDHCC26X2_HWAttrs_
  */
 typedef struct ECDHCC26X2_Object_
 {
-    bool                            isOpen;
-    bool                            operationInProgress;
-    bool                            operationCanceled;
-    int_fast16_t                    operationStatus;
-    ECDH_CallbackFxn                callbackFxn;
-    ECDH_ReturnBehavior             returnBehavior;
-    ECDH_Operation                  operation;
-    ECDH_OperationType              operationType;
-    ECDHCC26X2_FsmState             fsmState;
-    uint32_t                        semaphoreTimeout;
-    uint32_t                        resultAddress;
+        bool isOpen;
+        bool operationInProgress;
+        bool operationCanceled;
+        int_fast16_t operationStatus;
+        ECDH_CallbackFxn callbackFxn;
+        ECDH_ReturnBehavior returnBehavior;
+        ECDH_Operation operation;
+        ECDH_OperationType operationType;
+        ECDHCC26X2_FsmState fsmState;
+        uint32_t semaphoreTimeout;
+        uint32_t resultAddress;
 } ECDHCC26X2_Object;
 
 #ifdef __cplusplus

@@ -2,17 +2,17 @@
 
 #define LEN_SERVICE_FAMILIES 2
 #if MASK_VERSION == 0x091A
-    #ifdef KNX_TUNNELING
-        #define LEN_SERVICE_DIB (2 + 4 * LEN_SERVICE_FAMILIES)
-    #else
-        #define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
-    #endif
+#ifdef KNX_TUNNELING
+#define LEN_SERVICE_DIB (2 + 4 * LEN_SERVICE_FAMILIES)
 #else
-    #ifdef KNX_TUNNELING
-        #define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
-    #else
-        #define LEN_SERVICE_DIB (2 + 2 * LEN_SERVICE_FAMILIES)
-    #endif
+#define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
+#endif
+#else
+#ifdef KNX_TUNNELING
+#define LEN_SERVICE_DIB (2 + 3 * LEN_SERVICE_FAMILIES)
+#else
+#define LEN_SERVICE_DIB (2 + 2 * LEN_SERVICE_FAMILIES)
+#endif
 #endif
 
 namespace Knx
@@ -24,4 +24,4 @@ namespace Knx
         _data[LEN_KNXIP_HEADER] = channelId;
         _data[LEN_KNXIP_HEADER + 1] = errorCode;
     }
-}
+} // namespace Knx

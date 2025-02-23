@@ -1,7 +1,7 @@
 #include "address_table_object.h"
 
-#include "../util/logger.h"
 #include "../bits.h"
+#include "../util/logger.h"
 
 #include <cstring>
 
@@ -15,9 +15,8 @@ namespace Knx
         : TableObject(memory)
     {
         Property* properties[] =
-        {
-            new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ADDR_TABLE)
-        };
+            {
+                new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ADDR_TABLE)};
 
         TableObject::initializeProperties(sizeof(properties), properties);
     }
@@ -33,7 +32,7 @@ namespace Knx
 
     uint16_t AddressTableObject::getGroupAddress(uint16_t tsap)
     {
-        if (loadState() != LS_LOADED || tsap > entryCount() )
+        if (loadState() != LS_LOADED || tsap > entryCount())
             return 0;
 
         return ntohs(_groupAddresses[tsap]);
@@ -59,7 +58,7 @@ namespace Knx
             if (addr < ga)
                 high = i - 1;
             else
-                low = i + 1 ;
+                low = i + 1;
         }
 
 #else
@@ -72,7 +71,7 @@ namespace Knx
         return 0;
     }
 
-    #pragma region SaveRestore
+#pragma region SaveRestore
 
     const uint8_t* AddressTableObject::restore(const uint8_t* buffer)
     {
@@ -83,7 +82,7 @@ namespace Knx
         return buffer;
     }
 
-    #pragma endregion
+#pragma endregion
 
     bool AddressTableObject::contains(uint16_t addr)
     {
@@ -100,4 +99,4 @@ namespace Knx
 
         _groupAddresses = (uint16_t*)data();
     }
-}
+} // namespace Knx

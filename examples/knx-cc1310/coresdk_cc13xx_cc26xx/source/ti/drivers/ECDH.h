@@ -297,7 +297,6 @@
  *
  */
 
-
 #ifndef ti_drivers_ECDH__include
 #define ti_drivers_ECDH__include
 
@@ -324,7 +323,7 @@ extern "C" {
  * #define ECCXYZ_STATUS_ERROR2    ECDH_STATUS_RESERVED - 2
  * @endcode
  */
-#define ECDH_STATUS_RESERVED        (-32)
+#define ECDH_STATUS_RESERVED (-32)
 
 /*!
  * @brief   Successful status code.
@@ -332,7 +331,7 @@ extern "C" {
  * Functions return ECDH_STATUS_SUCCESS if the function was executed
  * successfully.
  */
-#define ECDH_STATUS_SUCCESS         (0)
+#define ECDH_STATUS_SUCCESS (0)
 
 /*!
  * @brief   Generic error status code.
@@ -340,7 +339,7 @@ extern "C" {
  * Functions return ECDH_STATUS_ERROR if the function was not executed
  * successfully.
  */
-#define ECDH_STATUS_ERROR           (-1)
+#define ECDH_STATUS_ERROR (-1)
 
 /*!
  * @brief   An error status code returned if the hardware or software resource
@@ -401,7 +400,7 @@ extern "C" {
 /*!
  *  @brief  A handle that is returned from an ECDH_open() call.
  */
-typedef struct ECDH_Config*  ECDH_Handle;
+typedef struct ECDH_Config* ECDH_Handle;
 
 /*!
  * @brief   The way in which ECC function calls return after performing an
@@ -426,22 +425,21 @@ typedef struct ECDH_Config*  ECDH_Handle;
  */
 typedef enum
 {
-    ECDH_RETURN_BEHAVIOR_CALLBACK = 1,      /*!< The function call will return immediately while the
-                                             *   ECC operation goes on in the background. The registered
-                                             *   callback function is called after the operation completes.
-                                             *   The context the callback function is called (task, HWI, SWI)
-                                             *   is implementation-dependent.
-                                             */
-    ECDH_RETURN_BEHAVIOR_BLOCKING = 2,      /*!< The function call will block while ECC operation goes
-                                             *   on in the background. ECC operation results are available
-                                             *   after the function returns.
-                                             */
-    ECDH_RETURN_BEHAVIOR_POLLING  = 4,      /*!< The function call will continuously poll a flag while ECC
-                                             *   operation goes on in the background. ECC operation results
-                                             *   are available after the function returns.
-                                             */
+    ECDH_RETURN_BEHAVIOR_CALLBACK = 1, /*!< The function call will return immediately while the
+                                        *   ECC operation goes on in the background. The registered
+                                        *   callback function is called after the operation completes.
+                                        *   The context the callback function is called (task, HWI, SWI)
+                                        *   is implementation-dependent.
+                                        */
+    ECDH_RETURN_BEHAVIOR_BLOCKING = 2, /*!< The function call will block while ECC operation goes
+                                        *   on in the background. ECC operation results are available
+                                        *   after the function returns.
+                                        */
+    ECDH_RETURN_BEHAVIOR_POLLING = 4,  /*!< The function call will continuously poll a flag while ECC
+                                        *   operation goes on in the background. ECC operation results
+                                        *   are available after the function returns.
+                                        */
 } ECDH_ReturnBehavior;
-
 
 /*!
  *  @brief ECC Global configuration
@@ -456,11 +454,11 @@ typedef enum
  */
 typedef struct ECDH_Config
 {
-    /*! Pointer to a driver specific data object */
-    void*               object;
+        /*! Pointer to a driver specific data object */
+        void* object;
 
-    /*! Pointer to a driver specific hardware attributes structure */
-    void         const* hwAttrs;
+        /*! Pointer to a driver specific hardware attributes structure */
+        void const* hwAttrs;
 } ECDH_Config;
 
 /*!
@@ -468,13 +466,13 @@ typedef struct ECDH_Config
  */
 typedef struct
 {
-    const ECCParams_CurveParams*     curve;             /*!< A pointer to the elliptic curve parameters for myPrivateKey */
-    const CryptoKey*                 myPrivateKey;      /*!< A pointer to the private ECC key from which the new public
-                                                         *   key will be generated. (maybe your static key)
-                                                         */
-    CryptoKey*                       myPublicKey;       /*!< A pointer to a public ECC key which has been initialized blank.
-                                                         *   Newly generated key will be placed in this location.
-                                                         */
+        const ECCParams_CurveParams* curve; /*!< A pointer to the elliptic curve parameters for myPrivateKey */
+        const CryptoKey* myPrivateKey;      /*!< A pointer to the private ECC key from which the new public
+                                             *   key will be generated. (maybe your static key)
+                                             */
+        CryptoKey* myPublicKey;             /*!< A pointer to a public ECC key which has been initialized blank.
+                                             *   Newly generated key will be placed in this location.
+                                             */
 } ECDH_OperationGeneratePublicKey;
 
 /*!
@@ -482,18 +480,18 @@ typedef struct
  */
 typedef struct
 {
-    const ECCParams_CurveParams*     curve;             /*!< A pointer to the elliptic curve parameters for myPrivateKey.
-                                                         *   If ECDH_generateKey() was used, this should be the same private key.
-                                                         */
-    const CryptoKey*                 myPrivateKey;      /*!< A pointer to the private ECC key which will be used in to
-                                                         *   compute the shared secret.
-                                                         */
-    const CryptoKey*                 theirPublicKey;    /*!< A pointer to the public key of the party with whom the
-                                                         *   shared secret will be generated.
-                                                         */
-    CryptoKey*                       sharedSecret;      /*!< A pointer to a CryptoKey which has been initialized blank.
-                                                         *   The shared secret will be placed here.
-                                                         */
+        const ECCParams_CurveParams* curve; /*!< A pointer to the elliptic curve parameters for myPrivateKey.
+                                             *   If ECDH_generateKey() was used, this should be the same private key.
+                                             */
+        const CryptoKey* myPrivateKey;      /*!< A pointer to the private ECC key which will be used in to
+                                             *   compute the shared secret.
+                                             */
+        const CryptoKey* theirPublicKey;    /*!< A pointer to the public key of the party with whom the
+                                             *   shared secret will be generated.
+                                             */
+        CryptoKey* sharedSecret;            /*!< A pointer to a CryptoKey which has been initialized blank.
+                                             *   The shared secret will be placed here.
+                                             */
 } ECDH_OperationComputeSharedSecret;
 
 /*!
@@ -501,8 +499,8 @@ typedef struct
  */
 typedef union
 {
-    ECDH_OperationGeneratePublicKey*      generatePublicKey;    /*!< A pointer to an ECDH_OperationGeneratePublicKey struct */
-    ECDH_OperationComputeSharedSecret*    computeSharedSecret;  /*!< A pointer to an ECDH_OperationGeneratePublicKey struct */
+        ECDH_OperationGeneratePublicKey* generatePublicKey;     /*!< A pointer to an ECDH_OperationGeneratePublicKey struct */
+        ECDH_OperationComputeSharedSecret* computeSharedSecret; /*!< A pointer to an ECDH_OperationGeneratePublicKey struct */
 } ECDH_Operation;
 
 /*!
@@ -532,10 +530,10 @@ typedef enum
  *  @param  operationType This parameter determined which operation the
  *          callback refers to and which type to access through /c operation.
  */
-typedef void (*ECDH_CallbackFxn) (ECDH_Handle handle,
-                                  int_fast16_t returnStatus,
-                                  ECDH_Operation operation,
-                                  ECDH_OperationType operationType);
+typedef void (*ECDH_CallbackFxn)(ECDH_Handle handle,
+                                 int_fast16_t returnStatus,
+                                 ECDH_Operation operation,
+                                 ECDH_OperationType operationType);
 
 /*!
  *  @brief  ECC Parameters
@@ -547,12 +545,12 @@ typedef void (*ECDH_CallbackFxn) (ECDH_Handle handle,
  */
 typedef struct
 {
-    ECDH_ReturnBehavior     returnBehavior;             /*!< Blocking, callback, or polling return behavior */
-    ECDH_CallbackFxn        callbackFxn;                /*!< Callback function pointer */
-    uint32_t                timeout;                    /*!< Timeout of the operation */
-    void*                   custom;                     /*!< Custom argument used by driver
-                                                         *   implementation
-                                                         */
+        ECDH_ReturnBehavior returnBehavior; /*!< Blocking, callback, or polling return behavior */
+        ECDH_CallbackFxn callbackFxn;       /*!< Callback function pointer */
+        uint32_t timeout;                   /*!< Timeout of the operation */
+        void* custom;                       /*!< Custom argument used by driver
+                                             *   implementation
+                                             */
 } ECDH_Params;
 
 /*!

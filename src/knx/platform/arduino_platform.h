@@ -3,7 +3,7 @@
 #include "Arduino.h"
 
 #ifndef KNX_DEBUG_SERIAL
-    #define KNX_DEBUG_SERIAL Serial
+#define KNX_DEBUG_SERIAL Serial
 #endif
 
 namespace Knx
@@ -17,8 +17,8 @@ namespace Knx
             // basic stuff
             void fatalError();
 
-            //uart
-            virtual void knxUart( HardwareSerial* serial);
+            // uart
+            virtual void knxUart(HardwareSerial* serial);
             virtual HardwareSerial* knxUart();
             virtual void setupUart();
             virtual void closeUart();
@@ -29,11 +29,11 @@ namespace Knx
             virtual size_t readBytesUart(uint8_t* buffer, size_t length);
             virtual void flushUart();
 
-            //spi
+            // spi
 #ifndef KNX_NO_SPI
             void setupSpi() override;
             void closeSpi() override;
-            int readWriteSpi (uint8_t* data, size_t len) override;
+            int readWriteSpi(uint8_t* data, size_t len) override;
 #endif
 #ifndef KNX_NO_PRINT
             static Stream* SerialDebug;
@@ -42,4 +42,4 @@ namespace Knx
         protected:
             HardwareSerial* _knxSerial;
     };
-}
+} // namespace Knx

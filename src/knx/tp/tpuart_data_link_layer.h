@@ -1,24 +1,24 @@
 #pragma once
 
-#include "tp_frame.h"
 #include "../datalink_layer/data_link_layer.h"
+#include "tp_frame.h"
 
 #include <stdint.h>
 
 #define MAX_KNX_TELEGRAM_SIZE 263
 
 #ifndef MAX_RX_QUEUE_BYTES
-    #define MAX_RX_QUEUE_BYTES MAX_KNX_TELEGRAM_SIZE + 50
+#define MAX_RX_QUEUE_BYTES MAX_KNX_TELEGRAM_SIZE + 50
 #endif
 
 #ifndef MAX_TX_QUEUE
-    #define MAX_TX_QUEUE 50
+#define MAX_TX_QUEUE 50
 #endif
 
 // __time_critical_func fallback
 #ifndef ARDUINO_ARCH_RP2040
-    #define __time_critical_func(X) X
-    #define __isr
+#define __time_critical_func(X) X
+#define __isr
 #endif
 
 namespace Knx
@@ -76,20 +76,20 @@ namespace Knx
             // Frame
             struct knx_tx_queue_entry_t
             {
-                TpFrame* frame;
-                knx_tx_queue_entry_t* next = nullptr;
+                    TpFrame* frame;
+                    knx_tx_queue_entry_t* next = nullptr;
 
-                knx_tx_queue_entry_t(TpFrame* tpFrame)
-                    : frame(tpFrame)
-                {
-                }
+                    knx_tx_queue_entry_t(TpFrame* tpFrame)
+                        : frame(tpFrame)
+                    {
+                    }
             };
 
             // TX Queue
             struct knx_tx_queue_t
             {
-                knx_tx_queue_entry_t* front = nullptr;
-                knx_tx_queue_entry_t* back = nullptr;
+                    knx_tx_queue_entry_t* front = nullptr;
+                    knx_tx_queue_entry_t* back = nullptr;
             } _txFrameQueue;
 
             TpFrame* _txFrame = nullptr;
@@ -175,4 +175,4 @@ namespace Knx
             ITpUartCallBacks& _cb;
             DataLinkLayerCallbacks* _dllcb;
     };
-}
+} // namespace Knx

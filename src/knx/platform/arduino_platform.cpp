@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #ifndef KNX_NO_SPI
-    #include <SPI.h>
+#include <SPI.h>
 #endif
 
 namespace Knx
@@ -12,11 +12,13 @@ namespace Knx
     Stream* ArduinoPlatform::SerialDebug = &KNX_DEBUG_SERIAL;
 #endif
 
-    ArduinoPlatform::ArduinoPlatform() : _knxSerial(nullptr)
+    ArduinoPlatform::ArduinoPlatform()
+        : _knxSerial(nullptr)
     {
     }
 
-    ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial) : _knxSerial(knxSerial)
+    ArduinoPlatform::ArduinoPlatform(HardwareSerial* knxSerial)
+        : _knxSerial(knxSerial)
     {
     }
 
@@ -36,7 +38,7 @@ namespace Knx
         }
     }
 
-    void ArduinoPlatform::knxUart( HardwareSerial* serial )
+    void ArduinoPlatform::knxUart(HardwareSerial* serial)
     {
         if (_knxSerial)
             closeUart();
@@ -58,41 +60,35 @@ namespace Knx
             ;
     }
 
-
     void ArduinoPlatform::closeUart()
     {
         _knxSerial->end();
     }
-
 
     int ArduinoPlatform::uartAvailable()
     {
         return _knxSerial->available();
     }
 
-
     size_t ArduinoPlatform::writeUart(const uint8_t data)
     {
-        //printHex("<p", &data, 1);
+        // printHex("<p", &data, 1);
         return _knxSerial->write(data);
     }
 
-
     size_t ArduinoPlatform::writeUart(const uint8_t* buffer, size_t size)
     {
-        //printHex("<p", buffer, size);
+        // printHex("<p", buffer, size);
         return _knxSerial->write(buffer, size);
     }
-
 
     int ArduinoPlatform::readUart()
     {
         int val = _knxSerial->read();
-        //if(val > 0)
-        //    printHex("p>", (uint8_t*)&val, 1);
+        // if(val > 0)
+        //     printHex("p>", (uint8_t*)&val, 1);
         return val;
     }
-
 
     size_t ArduinoPlatform::readBytesUart(uint8_t* buffer, size_t length)
     {
@@ -106,7 +102,7 @@ namespace Knx
             toRead -= val;
         }
 
-        //printHex("p>", buffer, length);
+        // printHex("p>", buffer, length);
         return length;
     }
 
@@ -311,4 +307,4 @@ namespace Knx
         ArduinoPlatform::SerialDebug->println();
     }
 #endif // KNX_NO_PRINT
-}
+} // namespace Knx

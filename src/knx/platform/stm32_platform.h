@@ -7,7 +7,7 @@ namespace Knx
     {
         public:
             Stm32Platform();
-            Stm32Platform( HardwareSerial* s);
+            Stm32Platform(HardwareSerial* s);
             ~Stm32Platform();
 
             // unique serial number
@@ -16,12 +16,13 @@ namespace Knx
             // basic stuff
             void restart();
 
-            //memory
+            // memory
             uint8_t* getEepromBuffer(uint32_t size);
             void commitToEeprom();
+
         private:
             uint8_t* _eepromPtr = nullptr;
             uint16_t _eepromSize = 0;
     };
-}
+} // namespace Knx
 #endif

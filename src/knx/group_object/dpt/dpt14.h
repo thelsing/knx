@@ -2,17 +2,18 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt14: public ValueDpt<float>
+    class Dpt14 : public ValueDpt<float>
     {
         public:
-            Dpt14() {};
-            Dpt14(float value) : ValueDpt(value) {}
+            Dpt14(){};
+            Dpt14(float value)
+                : ValueDpt(value) {}
             Go_SizeCode size() const override;
 
             void encode(uint8_t* data) const override;
             bool decode(uint8_t* data) override;
     };
-    
+
     typedef Dpt14 DPT_Value_Acceleration;
     typedef Dpt14 DPT_Value_Acceleration_Angular;
     typedef Dpt14 DPT_Value_Activation_Energy;
@@ -94,4 +95,4 @@ namespace Knx
     typedef Dpt14 DPT_Value_Weight;
     typedef Dpt14 DPT_Value_Work;
     typedef Dpt14 DPT_Value_ApparentPower;
-}
+} // namespace Knx

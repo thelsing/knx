@@ -1,7 +1,7 @@
 #pragma once
 
-#include "usb_tunnel_interface.h"
 #include "../knx_types.h"
+#include "usb_tunnel_interface.h"
 #include <stdint.h>
 
 namespace Knx
@@ -59,4 +59,4 @@ namespace Knx
             UsbTunnelInterface _usbTunnelInterface;
 #endif
     };
-}
+} // namespace Knx

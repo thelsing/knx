@@ -3,16 +3,16 @@
 
 #include "secure_application_layer.h"
 
-#include "security_interface_object.h"
-#include "../bau/bau.h"
 #include "../application_layer/apdu.h"
-#include "../transport_layer/transport_layer.h"
-#include "../datalink_layer/cemi_frame.h"
-#include "../interface_object/association_table_object.h"
-#include "../interface_object/address_table_object.h"
-#include "../interface_object/device_object.h"
+#include "../bau/bau.h"
 #include "../bits.h"
+#include "../datalink_layer/cemi_frame.h"
+#include "../interface_object/address_table_object.h"
+#include "../interface_object/association_table_object.h"
+#include "../interface_object/device_object.h"
+#include "../transport_layer/transport_layer.h"
 #include "../util/logger.h"
+#include "security_interface_object.h"
 
 #include <cstring>
 
@@ -30,10 +30,10 @@ namespace Knx
     static constexpr uint8_t kSecureSyncRequest = 2;
     static constexpr uint8_t kSecureSyncResponse = 3;
 
-    SecureApplicationLayer::SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, BusAccessUnit& bau):
-        ApplicationLayer(bau),
-        _secIfObj(secIfObj),
-        _deviceObj(deviceObj)
+    SecureApplicationLayer::SecureApplicationLayer(DeviceObject& deviceObj, SecurityInterfaceObject& secIfObj, BusAccessUnit& bau)
+        : ApplicationLayer(bau),
+          _secIfObj(secIfObj),
+          _deviceObj(deviceObj)
     {
     }
 
@@ -74,7 +74,7 @@ namespace Knx
         ApplicationLayer::dataGroupIndication(hopType, priority, tsap, apdu);
     }
 
-    void SecureApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority,  uint16_t tsap, APDU& apdu, bool status)
+    void SecureApplicationLayer::dataGroupConfirm(AckType ack, HopCountType hopType, Priority priority, uint16_t tsap, APDU& apdu, bool status)
     {
         println("dataGroupConfirm");
 
@@ -464,7 +464,7 @@ namespace Knx
         AES_init_ctx_iv(&ctx, key, zeroIv);
 
         // Now encrypt first block B0.
-        AES_CBC_encrypt_buffer(&ctx, (uint8_t*) iv, 16);
+        AES_CBC_encrypt_buffer(&ctx, (uint8_t*)iv, 16);
 
         // Encrypt remaining buffer
         AES_CBC_encrypt_buffer(&ctx, buffer, bufLen);
@@ -503,8 +503,8 @@ namespace Knx
     }
 
     uint32_t SecureApplicationLayer::calcConfAuthMac(uint8_t* associatedData, uint16_t associatedDataLength,
-            uint8_t* apdu, uint8_t apduLength,
-            const uint8_t* key, uint8_t* iv)
+                                                     uint8_t* apdu, uint8_t apduLength,
+                                                     const uint8_t* key, uint8_t* iv)
     {
         uint16_t bufLen = 2 + associatedDataLength + apduLength; // 2 bytes for the length field (uint16_t)
         // AES-128 operates on blocks of 16 bytes, add padding
@@ -533,12 +533,12 @@ namespace Knx
         pBuf = pushByteArray(seqNum, 6, pBuf);
         pBuf = pushWord(indSrcAddr, pBuf);
         pBuf = pushWord(dstAddr, pBuf);
-        pBuf = pushByte(0x00, pBuf); // FT: frametype
-        pBuf = pushByte( (dstAddrIsGroupAddr ? 0x80 : 0x00) | (extFrameFormat & 0xf), pBuf); // AT: address type
-        pBuf = pushByte(tpci, pBuf); // TPCI
-        pBuf = pushByte(apci, pBuf); // APCI // draft spec shows something different!
-        pBuf = pushByte(0x00, pBuf); // Reserved: fixed 0x00 (really?)
-        pBuf = pushByte(payloadLength, pBuf); // Payload length
+        pBuf = pushByte(0x00, pBuf);                                                        // FT: frametype
+        pBuf = pushByte((dstAddrIsGroupAddr ? 0x80 : 0x00) | (extFrameFormat & 0xf), pBuf); // AT: address type
+        pBuf = pushByte(tpci, pBuf);                                                        // TPCI
+        pBuf = pushByte(apci, pBuf);                                                        // APCI // draft spec shows something different!
+        pBuf = pushByte(0x00, pBuf);                                                        // Reserved: fixed 0x00 (really?)
+        pBuf = pushByte(payloadLength, pBuf);                                               // Payload length
     }
 
     void SecureApplicationLayer::blockCtr0(uint8_t* buffer, uint8_t* seqNum, uint16_t indSrcAddr, uint16_t dstAddr)
@@ -770,7 +770,7 @@ namespace Knx
         _syncReqBroadcastIncoming = (dstAddr == 0x0000) && dstAddrIsGroupAddr;
 
         // Remember challenge for securing the sync.res later
-        _pendingIncomingSyncRequests.insertOrAssign(_syncReqBroadcastIncoming ? (Addr) GrpAddr(0) : (Addr) IndAddr(srcAddr), challenge);
+        _pendingIncomingSyncRequests.insertOrAssign(_syncReqBroadcastIncoming ? (Addr)GrpAddr(0) : (Addr)IndAddr(srcAddr), challenge);
 
         uint16_t toAddr = _syncReqBroadcastIncoming ? dstAddr : srcAddr;
         bool toIsGroupAddress = _syncReqBroadcastIncoming;
@@ -807,7 +807,7 @@ namespace Knx
 
         if (remoteSeq - 1 > last)
         {
-            //logger.debug("sync.res update {} last valid {} seq -> {}", remote, toolAccess ? "tool access" : "p2p", remoteSeq -1);
+            // logger.debug("sync.res update {} last valid {} seq -> {}", remote, toolAccess ? "tool access" : "p2p", remoteSeq -1);
             updateLastValidSequence(secCtrl.toolAccess, remote, remoteSeq - 1);
         }
 
@@ -815,7 +815,7 @@ namespace Knx
 
         if (localSeq > next)
         {
-            //logger.debug("sync.res update local next {} seq -> {}", toolAccess ? "tool access" : "p2p", localSeq);
+            // logger.debug("sync.res update local next {} seq -> {}", toolAccess ? "tool access" : "p2p", localSeq);
             updateSequenceNumber(secCtrl.toolAccess, localSeq);
         }
 
@@ -833,7 +833,7 @@ namespace Knx
         bool toolAccess = ((scf & 0x80) == 0x80);
         bool systemBroadcast = ((scf & 0x08) == 0x08);
         uint8_t sai = (scf >> 4) & 0x07; // sai can only be 0x0 (CCM auth only) or 0x1 (CCM with auth+conf), other values are reserved
-        bool authOnly = ( sai == 0);
+        bool authOnly = (sai == 0);
         uint8_t service = (scf & 0x07); // only 0x0 (S-A_Data-PDU), 0x2 (S-A_Sync_Req-PDU) or 0x3 (S-A_Sync_Rsp-PDU) are valid values
 
         if (systemBroadcast != systemBcast)
@@ -847,8 +847,9 @@ namespace Knx
         bool syncReq = service == kSecureSyncRequest;
         bool syncRes = service == kSecureSyncResponse;
 
-        //const uint8_t* key = dstAddrIsGroupAddr ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? toolKey() : securityKey(srcAddr, false);
-        const uint8_t* key = dstAddrIsGroupAddr && (dstAddr != 0) ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? _secIfObj.toolKey() : securityKey(srcAddr, false);
+        // const uint8_t* key = dstAddrIsGroupAddr ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? toolKey() : securityKey(srcAddr, false);
+        const uint8_t* key = dstAddrIsGroupAddr && (dstAddr != 0) ? securityKey(dstAddr, dstAddrIsGroupAddr) : toolAccess ? _secIfObj.toolKey()
+                                                                                                                          : securityKey(srcAddr, false);
 
         if (key == nullptr)
         {
@@ -979,15 +980,15 @@ namespace Knx
             // AES-128 operates on blocks of 16 bytes, add padding
             uint16_t bufLenPadded = (bufLen + 15) / 16 * 16;
             uint8_t buffer[bufLenPadded];
-            //uint8_t buffer[bufLen];
-            // Make sure to have zeroes everywhere, because of the padding
+            // uint8_t buffer[bufLen];
+            //  Make sure to have zeroes everywhere, because of the padding
             memset(buffer, 0x00, bufLenPadded);
 
             pushInt(mac, &buffer[0]);
             pushByteArray(plainApdu, remainingPlainApduLength, &buffer[4]); // apdu is still encrypted
 
             xcryptAesCtr(buffer, bufLenPadded, ctr0, key);
-            //xcryptAesCtr(buffer, bufLen, ctr0, key);
+            // xcryptAesCtr(buffer, bufLen, ctr0, key);
 
             uint32_t decryptedMac;
             popInt(decryptedMac, &buffer[0]);
@@ -1133,8 +1134,8 @@ namespace Knx
         tpci |= SecureService >> 8; // OR'ing upper two APCI bits
         uint8_t apci = SecureService & 0x00FF;
         uint8_t* pBuf = buffer;
-        pBuf = pushByte(tpci, pBuf);                      // TPCI
-        pBuf = pushByte(apci, pBuf);                      // APCI
+        pBuf = pushByte(tpci, pBuf); // TPCI
+        pBuf = pushByte(apci, pBuf); // APCI
 
         uint8_t scf;
         scf = service;
@@ -1142,7 +1143,7 @@ namespace Knx
         scf |= confidentiality ? 0x10 : 0;
         scf |= systemBcast ? 0x8 : 0;
 
-        pBuf = pushByte(scf, pBuf);                       // SCF
+        pBuf = pushByte(scf, pBuf); // SCF
 
         uint64_t seqSend = nextSequenceNumber(toolAccess);
 
@@ -1153,7 +1154,7 @@ namespace Knx
         sixBytesFromUInt64(seqSend, seq);
 
         if (!syncRes)
-            pBuf = pushByteArray(seq, 6, pBuf);          // Sequence Number
+            pBuf = pushByteArray(seq, 6, pBuf); // Sequence Number
 
         // Prepare associated data depending on service (SyncRequest, SyncResponse or just DataService)
         uint8_t associatedData[syncReq ? 7 : 1];
@@ -1191,7 +1192,7 @@ namespace Knx
 
             uint8_t challengeSixBytes[6];
             sixBytesFromUInt64(*challenge, challengeSixBytes);
-            //printHex("Decrypted challenge: ", challengeSixBytes, 6);
+            // printHex("Decrypted challenge: ", challengeSixBytes, 6);
 
             // Now XOR the new random SeqNum with the challenge from the SyncRequest
             uint8_t rndXorChallenge[6];
@@ -1243,16 +1244,16 @@ namespace Knx
             pBuf = pushByteArray(tmpBuffer + 4, apduLength, pBuf); // Encrypted APDU
             pBuf = pushByteArray(tmpBuffer + 0, 4, pBuf);          // Encrypted MAC
 
-            //print("MAC(encrypted): ");
-            //println(*((uint32_t*)(tmpBuffer + 0)),HEX);
+            // print("MAC(encrypted): ");
+            // println(*((uint32_t*)(tmpBuffer + 0)),HEX);
         }
         else
         {
             // Do calculations for AuthOnly
             uint32_t tmpMac = calcAuthOnlyMac(apdu, apduLength, key, iv, ctr0);
 
-            pBuf = pushByteArray(apdu, apduLength, pBuf);          // Plain APDU
-            pBuf = pushInt(tmpMac, pBuf);                          // MAC
+            pBuf = pushByteArray(apdu, apduLength, pBuf); // Plain APDU
+            pBuf = pushInt(tmpMac, pBuf);                 // MAC
 
             print("MAC: ");
             println(tmpMac, HEX);
@@ -1332,5 +1333,5 @@ namespace Knx
 
         return false;
     }
-}
+} // namespace Knx
 #endif

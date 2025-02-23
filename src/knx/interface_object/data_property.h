@@ -25,4 +25,4 @@ namespace Knx
             uint16_t _currentElements = 0;
             uint8_t* _data = nullptr;
     };
-}
+} // namespace Knx

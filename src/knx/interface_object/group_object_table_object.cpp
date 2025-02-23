@@ -1,8 +1,8 @@
 #include "group_object_table_object.h"
 
+#include "../bits.h"
 #include "../group_object/group_object.h"
 #include "../util/logger.h"
-#include "../bits.h"
 
 #include <cstring>
 
@@ -13,10 +13,8 @@ namespace Knx
     GroupObjectTableObject::GroupObjectTableObject(Memory& memory)
         : TableObject(memory)
     {
-        Property* properties[]
-        {
-            new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_GRP_OBJ_TABLE)
-        };
+        Property* properties[]{
+            new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_GRP_OBJ_TABLE)};
         TableObject::initializeProperties(sizeof(properties), properties);
     }
 
@@ -140,4 +138,4 @@ namespace Knx
         _groupObjectCount = 0;
         _groupObjects = 0;
     }
-}
+} // namespace Knx

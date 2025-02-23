@@ -8,6 +8,7 @@ namespace Knx
     {
         public:
             KnxIpDisconnectResponse(uint8_t channel, uint8_t status);
+
         private:
     };
-}
+} // namespace Knx

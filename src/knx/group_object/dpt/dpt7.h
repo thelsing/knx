@@ -2,11 +2,12 @@
 #include "dpt.h"
 namespace Knx
 {
-    class Dpt7: public ValueDpt<uint16_t>
+    class Dpt7 : public ValueDpt<uint16_t>
     {
         public:
-            Dpt7() {};
-            Dpt7(uint16_t value) : ValueDpt(value) {}
+            Dpt7(){};
+            Dpt7(uint16_t value)
+                : ValueDpt(value) {}
             Go_SizeCode size() const override;
 
             void encode(uint8_t* data) const override;
@@ -24,4 +25,4 @@ namespace Knx
     typedef Dpt7 DPT_Length_mm;
     typedef Dpt7 DPT_UElCurrentmA;
     typedef Dpt7 DPT_Brightness;
-}
+} // namespace Knx

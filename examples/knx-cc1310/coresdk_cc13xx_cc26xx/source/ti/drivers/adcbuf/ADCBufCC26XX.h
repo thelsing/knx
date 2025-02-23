@@ -273,22 +273,22 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include <ti/drivers/ADCBuf.h>
 #include <ti/drivers/PIN.h>
-#include <ti/drivers/pin/PINCC26XX.h>
-#include <ti/drivers/dma/UDMACC26XX.h>
-#include <ti/drivers/timer/GPTimerCC26XX.h>
 #include <ti/drivers/Power.h>
+#include <ti/drivers/dma/UDMACC26XX.h>
+#include <ti/drivers/pin/PINCC26XX.h>
 #include <ti/drivers/power/PowerCC26XX.h>
+#include <ti/drivers/timer/GPTimerCC26XX.h>
 
 #include <ti/devices/DeviceFamily.h>
-#include DeviceFamily_constructPath(driverlib/aux_adc.h)
+#include DeviceFamily_constructPath(driverlib / aux_adc.h)
 
-#include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/dpl/ClockP.h>
+#include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
 #include <ti/drivers/dpl/SwiP.h>
 
@@ -357,9 +357,9 @@ extern "C" {
 /*!
  *  @brief Resolution in bits of the CC26XX ADC
  */
-#define ADCBufCC26XX_RESOLUTION            12
+#define ADCBufCC26XX_RESOLUTION 12
 
-#define ADCBufCC26XX_BYTES_PER_SAMPLE      2
+#define ADCBufCC26XX_BYTES_PER_SAMPLE 2
 
 /*
  * =============================================================================
@@ -369,7 +369,6 @@ extern "C" {
 
 /* ADCBuf function table pointer */
 extern const ADCBuf_FxnTable ADCBufCC26XX_fxnTable;
-
 
 /*
  * =============================================================================
@@ -403,21 +402,20 @@ typedef enum ADCBufCC26XX_Sampling_Mode
  */
 typedef enum ADCBufCC26XX_Sampling_Duration
 {
-    ADCBufCC26XX_SAMPLING_DURATION_2P7_US    = AUXADC_SAMPLE_TIME_2P7_US,
-    ADCBufCC26XX_SAMPLING_DURATION_5P3_US    = AUXADC_SAMPLE_TIME_5P3_US,
-    ADCBufCC26XX_SAMPLING_DURATION_10P6_US   = AUXADC_SAMPLE_TIME_10P6_US,
-    ADCBufCC26XX_SAMPLING_DURATION_21P3_US   = AUXADC_SAMPLE_TIME_21P3_US,
-    ADCBufCC26XX_SAMPLING_DURATION_42P6_US   = AUXADC_SAMPLE_TIME_42P6_US,
-    ADCBufCC26XX_SAMPLING_DURATION_85P3_US   = AUXADC_SAMPLE_TIME_85P3_US,
-    ADCBufCC26XX_SAMPLING_DURATION_170_US    = AUXADC_SAMPLE_TIME_170_US,
-    ADCBufCC26XX_SAMPLING_DURATION_341_US    = AUXADC_SAMPLE_TIME_341_US,
-    ADCBufCC26XX_SAMPLING_DURATION_682_US    = AUXADC_SAMPLE_TIME_682_US,
-    ADCBufCC26XX_SAMPLING_DURATION_1P37_MS   = AUXADC_SAMPLE_TIME_1P37_MS,
-    ADCBufCC26XX_SAMPLING_DURATION_2P73_MS   = AUXADC_SAMPLE_TIME_2P73_MS,
-    ADCBufCC26XX_SAMPLING_DURATION_5P46_MS   = AUXADC_SAMPLE_TIME_5P46_MS,
-    ADCBufCC26XX_SAMPLING_DURATION_10P9_MS   = AUXADC_SAMPLE_TIME_10P9_MS
+    ADCBufCC26XX_SAMPLING_DURATION_2P7_US = AUXADC_SAMPLE_TIME_2P7_US,
+    ADCBufCC26XX_SAMPLING_DURATION_5P3_US = AUXADC_SAMPLE_TIME_5P3_US,
+    ADCBufCC26XX_SAMPLING_DURATION_10P6_US = AUXADC_SAMPLE_TIME_10P6_US,
+    ADCBufCC26XX_SAMPLING_DURATION_21P3_US = AUXADC_SAMPLE_TIME_21P3_US,
+    ADCBufCC26XX_SAMPLING_DURATION_42P6_US = AUXADC_SAMPLE_TIME_42P6_US,
+    ADCBufCC26XX_SAMPLING_DURATION_85P3_US = AUXADC_SAMPLE_TIME_85P3_US,
+    ADCBufCC26XX_SAMPLING_DURATION_170_US = AUXADC_SAMPLE_TIME_170_US,
+    ADCBufCC26XX_SAMPLING_DURATION_341_US = AUXADC_SAMPLE_TIME_341_US,
+    ADCBufCC26XX_SAMPLING_DURATION_682_US = AUXADC_SAMPLE_TIME_682_US,
+    ADCBufCC26XX_SAMPLING_DURATION_1P37_MS = AUXADC_SAMPLE_TIME_1P37_MS,
+    ADCBufCC26XX_SAMPLING_DURATION_2P73_MS = AUXADC_SAMPLE_TIME_2P73_MS,
+    ADCBufCC26XX_SAMPLING_DURATION_5P46_MS = AUXADC_SAMPLE_TIME_5P46_MS,
+    ADCBufCC26XX_SAMPLING_DURATION_10P9_MS = AUXADC_SAMPLE_TIME_10P9_MS
 } ADCBufCC26XX_Sampling_Duration;
-
 
 /*!
  *  @brief  Specifies whether the internal reference of the ADC is sourced from the battery voltage or a fixed internal source.
@@ -441,11 +439,9 @@ typedef enum ADCBufCC26XX_Sampling_Duration
  */
 typedef enum ADCBufCC26XX_Reference_Source
 {
-    ADCBufCC26XX_FIXED_REFERENCE       = AUXADC_REF_FIXED,
-    ADCBufCC26XX_VDDS_REFERENCE        = AUXADC_REF_VDDS_REL
+    ADCBufCC26XX_FIXED_REFERENCE = AUXADC_REF_FIXED,
+    ADCBufCC26XX_VDDS_REFERENCE = AUXADC_REF_VDDS_REL
 } ADCBufCC26XX_Reference_Source;
-
-
 
 /*
  * =============================================================================
@@ -454,15 +450,15 @@ typedef enum ADCBufCC26XX_Reference_Source
  */
 
 /*!
-*  @brief  Table entry that maps a virtual adc channel to a dio and its corresponding internal analogue signal
-*
-*  Non-dio signals can be used as well. To do this, compBInput is set to the driverlib define corresponding to the
-*  desired non-dio signal and dio is set to PIN_UNASSIGNED.
-*/
+ *  @brief  Table entry that maps a virtual adc channel to a dio and its corresponding internal analogue signal
+ *
+ *  Non-dio signals can be used as well. To do this, compBInput is set to the driverlib define corresponding to the
+ *  desired non-dio signal and dio is set to PIN_UNASSIGNED.
+ */
 typedef struct ADCBufCC26XX_AdcChannelLutEntry
 {
-    uint8_t dio;            /*!< DIO that this virtual channel is mapped to */
-    uint8_t compBInput;     /*!< CompBInput that this virtual channel is mapped to */
+        uint8_t dio;        /*!< DIO that this virtual channel is mapped to */
+        uint8_t compBInput; /*!< CompBInput that this virtual channel is mapped to */
 } ADCBufCC26XX_AdcChannelLutEntry;
 
 /*!
@@ -474,28 +470,28 @@ typedef struct ADCBufCC26XX_AdcChannelLutEntry
  */
 typedef struct ADCBufCC26XX_ParamsExtension
 {
-    /*! Amount of time the ADC spends sampling the analogue input */
-    ADCBufCC26XX_Sampling_Duration     samplingDuration;
-    /*! Specifies whether the ADC spends a fixed amount of time sampling or the entire time since the last conversion */
-    ADCBufCC26XX_Sampling_Mode         samplingMode;
-    /*! Specifies whether the internal reference of the ADC is sourced from the battery voltage or a fixed internal source */
-    ADCBufCC26XX_Reference_Source      refSource;
-    /*!
-     *  Disable input scaling. Input scaling scales an external analogue
-     *  signal between 0 and 4.3V to an internal signal of 0 to ~1.4785V.
-     *  Since the largest permissible input to any pin is VDDS, the maximum
-     *  range of the ADC is effectively less than 3.8V and continues to shrink
-     *  as the battery voltage drops.
-     *  With input scaling disabled, the external analogue signal is passed
-     *  on directly to the internal electronics. Signals larger than ~1.4785V
-     *  will damage the device with input scaling disabled.
-     *
-     *  | Input scaling status      | Maximum permissible ADC input voltage |
-     *  |---------------------------|---------------------------------------|
-     *  | Enabled                   | VDDS (Battery voltage level)          |
-     *  | Disabled                  | 1.4785V                               |
-     */
-    bool                                inputScalingEnabled;
+        /*! Amount of time the ADC spends sampling the analogue input */
+        ADCBufCC26XX_Sampling_Duration samplingDuration;
+        /*! Specifies whether the ADC spends a fixed amount of time sampling or the entire time since the last conversion */
+        ADCBufCC26XX_Sampling_Mode samplingMode;
+        /*! Specifies whether the internal reference of the ADC is sourced from the battery voltage or a fixed internal source */
+        ADCBufCC26XX_Reference_Source refSource;
+        /*!
+         *  Disable input scaling. Input scaling scales an external analogue
+         *  signal between 0 and 4.3V to an internal signal of 0 to ~1.4785V.
+         *  Since the largest permissible input to any pin is VDDS, the maximum
+         *  range of the ADC is effectively less than 3.8V and continues to shrink
+         *  as the battery voltage drops.
+         *  With input scaling disabled, the external analogue signal is passed
+         *  on directly to the internal electronics. Signals larger than ~1.4785V
+         *  will damage the device with input scaling disabled.
+         *
+         *  | Input scaling status      | Maximum permissible ADC input voltage |
+         *  |---------------------------|---------------------------------------|
+         *  | Enabled                   | VDDS (Battery voltage level)          |
+         *  | Disabled                  | 1.4785V                               |
+         */
+        bool inputScalingEnabled;
 } ADCBufCC26XX_ParamsExtension;
 
 /*!
@@ -520,31 +516,29 @@ typedef struct ADCBufCC26XX_ParamsExtension
  */
 typedef struct ADCBufCC26XX_HWAttrs
 {
-    /*! @brief ADC SWI priority.
-        The higher the number, the higher the priority.
-        The minimum is 0 and the maximum is 15 by default.
-        The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
-    */
-    uint32_t            swiPriority;
-    /*! @brief ADC peripheral's interrupt priority.
+        /*! @brief ADC SWI priority.
+            The higher the number, the higher the priority.
+            The minimum is 0 and the maximum is 15 by default.
+            The maximum can be reduced to save RAM by adding or modifying Swi.numPriorities in the kernel configuration file.
+        */
+        uint32_t swiPriority;
+        /*! @brief ADC peripheral's interrupt priority.
 
-        The CC26xx uses three of the priority bits,
-        meaning ~0 has the same effect as (7 << 5).
+            The CC26xx uses three of the priority bits,
+            meaning ~0 has the same effect as (7 << 5).
 
-        (7 << 5) will apply the lowest priority.
+            (7 << 5) will apply the lowest priority.
 
-        (1 << 5) will apply the highest priority.
+            (1 << 5) will apply the highest priority.
 
-        Setting the priority to 0 is not supported by this driver.
+            Setting the priority to 0 is not supported by this driver.
 
-        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-    */
-    uint8_t             intPriority;
-    /*! Pointer to a table of ADCBufCC26XX_AdcChannelLutEntry's mapping internal CompBInput to DIO */
-    ADCBufCC26XX_AdcChannelLutEntry  const* adcChannelLut;
+            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+        */
+        uint8_t intPriority;
+        /*! Pointer to a table of ADCBufCC26XX_AdcChannelLutEntry's mapping internal CompBInput to DIO */
+        ADCBufCC26XX_AdcChannelLutEntry const* adcChannelLut;
 } ADCBufCC26XX_HWAttrs;
-
-
 
 /*!
  *  @brief      ADCBufCC26XX Object
@@ -553,40 +547,40 @@ typedef struct ADCBufCC26XX_HWAttrs
  */
 typedef struct ADCBufCC26XX_Object
 {
-    /* ADC control variables */
-    bool                            isOpen;                     /*!< Has the obj been opened */
-    bool                            conversionInProgress;       /*!< Is the ADC currently doing conversions */
-    bool                            inputScalingEnabled;        /*!< Is the analogue input scaled */
-    bool                            keepADCSemaphore;           /*!< Should the driver keep the ADC semaphore after a conversion */
-    bool                            adcSemaphoreInPossession;   /*!< Does the driver currently possess the ADC semaphore */
-    uint8_t                         currentChannel;             /*!< The current virtual channel the ADCBuf driver is sampling on */
-    ADCBufCC26XX_Reference_Source   refSource;                  /*!< Reference source for the ADC to use */
-    ADCBufCC26XX_Sampling_Mode      samplingMode;               /*!< Synchronous or asynchronous sampling mode */
-    ADCBufCC26XX_Sampling_Duration   samplingDuration;           /*!< Time the ADC spends sampling in ADCBufCC26XX_SAMPING_MODE_SYNCHRONOUS */
-    ADCBuf_Callback                 callbackFxn;                /*!< Pointer to callback function */
-    ADCBuf_Recurrence_Mode          recurrenceMode;             /*!< Should we convert continuously or one-shot */
-    ADCBuf_Return_Mode              returnMode;                 /*!< Mode for all conversions */
-    uint16_t*                        activeSampleBuffer;        /*!< The last complete sample buffer used by the DMA */
+        /* ADC control variables */
+        bool isOpen;                                     /*!< Has the obj been opened */
+        bool conversionInProgress;                       /*!< Is the ADC currently doing conversions */
+        bool inputScalingEnabled;                        /*!< Is the analogue input scaled */
+        bool keepADCSemaphore;                           /*!< Should the driver keep the ADC semaphore after a conversion */
+        bool adcSemaphoreInPossession;                   /*!< Does the driver currently possess the ADC semaphore */
+        uint8_t currentChannel;                          /*!< The current virtual channel the ADCBuf driver is sampling on */
+        ADCBufCC26XX_Reference_Source refSource;         /*!< Reference source for the ADC to use */
+        ADCBufCC26XX_Sampling_Mode samplingMode;         /*!< Synchronous or asynchronous sampling mode */
+        ADCBufCC26XX_Sampling_Duration samplingDuration; /*!< Time the ADC spends sampling in ADCBufCC26XX_SAMPING_MODE_SYNCHRONOUS */
+        ADCBuf_Callback callbackFxn;                     /*!< Pointer to callback function */
+        ADCBuf_Recurrence_Mode recurrenceMode;           /*!< Should we convert continuously or one-shot */
+        ADCBuf_Return_Mode returnMode;                   /*!< Mode for all conversions */
+        uint16_t* activeSampleBuffer;                    /*!< The last complete sample buffer used by the DMA */
 
-    /* ADC SYS/BIOS objects */
-    HwiP_Struct                      hwi;                        /*!< Hwi object */
-    SwiP_Struct                      swi;                        /*!< Swi object */
-    SemaphoreP_Struct                conversionComplete;         /*!< ADC semaphore */
+        /* ADC SYS/BIOS objects */
+        HwiP_Struct hwi;                      /*!< Hwi object */
+        SwiP_Struct swi;                      /*!< Swi object */
+        SemaphoreP_Struct conversionComplete; /*!< ADC semaphore */
 
-    ADCBuf_Conversion*               currentConversion;         /*!< Pointer to the current conversion struct */
+        ADCBuf_Conversion* currentConversion; /*!< Pointer to the current conversion struct */
 
-    /* PIN driver state object and handle */
-    PIN_State                       pinState;                   /*!< Pin state object */
-    PIN_Handle                      pinHandle;                  /*!< Pin handle */
+        /* PIN driver state object and handle */
+        PIN_State pinState;   /*!< Pin state object */
+        PIN_Handle pinHandle; /*!< Pin handle */
 
-    /* UDMA driver handle */
-    UDMACC26XX_Handle               udmaHandle;                 /*!< UDMA handle */
+        /* UDMA driver handle */
+        UDMACC26XX_Handle udmaHandle; /*!< UDMA handle */
 
-    /* GPTimer driver handle */
-    GPTimerCC26XX_Handle            timerHandle;                /*!< Handle to underlying GPTimer peripheral */
+        /* GPTimer driver handle */
+        GPTimerCC26XX_Handle timerHandle; /*!< Handle to underlying GPTimer peripheral */
 
-    uint32_t                        semaphoreTimeout;           /*!< Timeout for read semaphore in ::ADCBuf_RETURN_MODE_BLOCKING */
-    uint32_t                        samplingFrequency;          /*!< Frequency in Hz at which the ADC is triggered */
+        uint32_t semaphoreTimeout;  /*!< Timeout for read semaphore in ::ADCBuf_RETURN_MODE_BLOCKING */
+        uint32_t samplingFrequency; /*!< Frequency in Hz at which the ADC is triggered */
 } ADCBufCC26XX_Object, *ADCBufCC26XX_Handle;
 
 /*
@@ -594,7 +588,6 @@ typedef struct ADCBufCC26XX_Object
  * Functions
  * =============================================================================
  */
-
 
 #ifdef __cplusplus
 }

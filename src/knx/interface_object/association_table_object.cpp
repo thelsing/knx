@@ -1,7 +1,7 @@
 #include "association_table_object.h"
 
-#include "../util/logger.h"
 #include "../bits.h"
+#include "../util/logger.h"
 
 #include <cstring>
 
@@ -15,10 +15,10 @@ namespace Knx
         : TableObject(memory)
     {
         Property* properties[] =
-        {
-            new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ASSOC_TABLE),
-            new DataProperty(PID_TABLE, false, PDT_GENERIC_04, 65535, ReadLv3 | WriteLv0) //FIXME: implement correctly
-        };
+            {
+                new DataProperty(PID_OBJECT_TYPE, false, PDT_UNSIGNED_INT, 1, ReadLv3 | WriteLv0, (uint16_t)OT_ASSOC_TABLE),
+                new DataProperty(PID_TABLE, false, PDT_GENERIC_04, 65535, ReadLv3 | WriteLv0) // FIXME: implement correctly
+            };
 
         TableObject::initializeProperties(sizeof(properties), properties);
     }
@@ -93,7 +93,7 @@ namespace Knx
                     else
                     {
                         sortedEntryCount = idx; // last found index indicates end of sorted list
-                        idx--; // current item has to be handled as remaining ASAP
+                        idx--;                  // current item has to be handled as remaining ASAP
                     }
                 }
             }
@@ -136,7 +136,7 @@ namespace Knx
                 if (asap_i > asap)
                     high = i - 1;
                 else
-                    low = i + 1 ;
+                    low = i + 1;
             }
         }
         else
@@ -178,4 +178,4 @@ namespace Knx
 
         return -1;
     }
-}
+} // namespace Knx

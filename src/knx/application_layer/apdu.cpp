@@ -1,12 +1,13 @@
 #include "apdu.h"
 
-#include "../datalink_layer/cemi_frame.h"
 #include "../bits.h"
+#include "../datalink_layer/cemi_frame.h"
 
 namespace Knx
 {
 
-    APDU::APDU(uint8_t* data, CemiFrame& frame): _data(data), _frame(frame)
+    APDU::APDU(uint8_t* data, CemiFrame& frame)
+        : _data(data), _frame(frame)
     {
     }
 
@@ -17,7 +18,7 @@ namespace Knx
         popWord(apci, _data);
         apci &= 0x3ff;
 
-        if ((apci >> 6) < 11 && (apci >> 6) != 7) //short apci
+        if ((apci >> 6) < 11 && (apci >> 6) != 7) // short apci
             apci &= 0x3c0;
 
         return (ApduType)apci;
@@ -62,4 +63,4 @@ namespace Knx
 
 #endif
     }
-}
+} // namespace Knx

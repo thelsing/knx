@@ -1,7 +1,7 @@
 #pragma once
 
-#include "npdu.h"
 #include "../knx_types.h"
+#include "npdu.h"
 
 #include <cstdint>
 
@@ -45,4 +45,4 @@ namespace Knx
             NetworkLayer& _netLayer;
             uint8_t _entityIndex;
     };
-}
+} // namespace Knx

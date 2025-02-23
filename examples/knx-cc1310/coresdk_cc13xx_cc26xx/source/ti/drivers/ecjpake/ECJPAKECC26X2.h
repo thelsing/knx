@@ -92,22 +92,22 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-#include <ti/drivers/Power.h>
 #include <ti/drivers/ECJPAKE.h>
-#include <ti/drivers/cryptoutils/ecc/ECCParams.h>
+#include <ti/drivers/Power.h>
 #include <ti/drivers/cryptoutils/cryptokey/CryptoKey.h>
+#include <ti/drivers/cryptoutils/ecc/ECCParams.h>
 
 #include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
+#include <ti/drivers/dpl/SwiP.h>
 
 /* Exit the SWI and wait until an HWI call posts the SWI again */
-#define ECJPAKECC26X2_STATUS_FSM_RUN_PKA_OP       ECJPAKE_STATUS_RESERVED - 0
+#define ECJPAKECC26X2_STATUS_FSM_RUN_PKA_OP ECJPAKE_STATUS_RESERVED - 0
 /* Execute the next FSM state immediately without waiting for the next HWI */
-#define ECJPAKECC26X2_STATUS_FSM_RUN_FSM          ECJPAKE_STATUS_RESERVED - 1
+#define ECJPAKECC26X2_STATUS_FSM_RUN_FSM ECJPAKE_STATUS_RESERVED - 1
 
 /*!
  *  @brief      ECJPAKECC26X2 states
@@ -196,19 +196,19 @@ typedef enum ECJPAKECC26X2_FsmState_
  */
 typedef struct ECJPAKECC26X2_HWAttrs_
 {
-    /*! @brief PKA Peripheral's interrupt priority.
+        /*! @brief PKA Peripheral's interrupt priority.
 
-        The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
+            The CC26xx uses three of the priority bits, meaning ~0 has the same effect as (7 << 5).
 
-        (7 << 5) will apply the lowest priority.
+            (7 << 5) will apply the lowest priority.
 
-        (1 << 5) will apply the highest priority.
+            (1 << 5) will apply the highest priority.
 
-        Setting the priority to 0 is not supported by this driver.
+            Setting the priority to 0 is not supported by this driver.
 
-        HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
-    */
-    uint8_t    intPriority;
+            HWI's with priority 0 ignore the HWI dispatcher to support zero-latency interrupts, thus invalidating the critical sections in this driver.
+        */
+        uint8_t intPriority;
 } ECJPAKECC26X2_HWAttrs;
 
 /*!
@@ -218,17 +218,17 @@ typedef struct ECJPAKECC26X2_HWAttrs_
  */
 typedef struct ECJPAKECC26X2_Object_
 {
-    bool                                isOpen;
-    bool                                operationInProgress;
-    bool                                operationCanceled;
-    int_fast16_t                        operationStatus;
-    ECJPAKE_CallbackFxn                 callbackFxn;
-    ECJPAKE_ReturnBehavior              returnBehavior;
-    ECJPAKECC26X2_FsmState              fsmState;
-    ECJPAKE_Operation                   operation;
-    ECJPAKE_OperationType               operationType;
-    uint32_t                            semaphoreTimeout;
-    uint32_t                            resultAddress;
+        bool isOpen;
+        bool operationInProgress;
+        bool operationCanceled;
+        int_fast16_t operationStatus;
+        ECJPAKE_CallbackFxn callbackFxn;
+        ECJPAKE_ReturnBehavior returnBehavior;
+        ECJPAKECC26X2_FsmState fsmState;
+        ECJPAKE_Operation operation;
+        ECJPAKE_OperationType operationType;
+        uint32_t semaphoreTimeout;
+        uint32_t resultAddress;
 } ECJPAKECC26X2_Object;
 
 #ifdef __cplusplus

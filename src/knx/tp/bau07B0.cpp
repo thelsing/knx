@@ -2,16 +2,17 @@
 
 #include "../bits.h"
 
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 namespace Knx
 {
     Bau07B0::Bau07B0(Platform& platform)
         : BauSystemBDevice(platform), DataLinkLayerCallbacks(),
-          _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&) * this, (DataLinkLayerCallbacks*) this)
+          _dlLayer(_deviceObj, _netLayer.getInterface(), _platform, (ITpUartCallBacks&)*this, (DataLinkLayerCallbacks*)this)
 #ifdef USE_CEMI_SERVER
-        , _cemiServer(*this)
+          ,
+          _cemiServer(*this)
 #endif
     {
         _netLayer.getInterface().dataLinkLayer(_dlLayer);
@@ -28,18 +29,18 @@ namespace Knx
         // This differs from BAU to BAU with different medium types.
         // See PID_IO_LIST
         Property* prop = _deviceObj.property(PID_IO_LIST);
-        prop->write(1, (uint16_t) OT_DEVICE);
-        prop->write(2, (uint16_t) OT_ADDR_TABLE);
-        prop->write(3, (uint16_t) OT_ASSOC_TABLE);
-        prop->write(4, (uint16_t) OT_GRP_OBJ_TABLE);
-        prop->write(5, (uint16_t) OT_APPLICATION_PROG);
+        prop->write(1, (uint16_t)OT_DEVICE);
+        prop->write(2, (uint16_t)OT_ADDR_TABLE);
+        prop->write(3, (uint16_t)OT_ASSOC_TABLE);
+        prop->write(4, (uint16_t)OT_GRP_OBJ_TABLE);
+        prop->write(5, (uint16_t)OT_APPLICATION_PROG);
 #if defined(USE_DATASECURE) && defined(USE_CEMI_SERVER)
-        prop->write(6, (uint16_t) OT_SECURITY);
-        prop->write(7, (uint16_t) OT_CEMI_SERVER);
+        prop->write(6, (uint16_t)OT_SECURITY);
+        prop->write(7, (uint16_t)OT_CEMI_SERVER);
 #elif defined(USE_DATASECURE)
-        prop->write(6, (uint16_t) OT_SECURITY);
+        prop->write(6, (uint16_t)OT_SECURITY);
 #elif defined(USE_CEMI_SERVER)
-        prop->write(6, (uint16_t) OT_CEMI_SERVER);
+        prop->write(6, (uint16_t)OT_CEMI_SERVER);
 #endif
     }
 
@@ -90,7 +91,7 @@ namespace Knx
     {
         // We do not use it right now.
         // Required for coupler mode as there are multiple router objects for example
-        (void) objectInstance;
+        (void)objectInstance;
 
         switch (objectType)
         {
@@ -159,7 +160,7 @@ namespace Knx
         }
 
         // Also ACK for our own individual address
-        if (address  == _deviceObj.individualAddress())
+        if (address == _deviceObj.individualAddress())
             return TPAckType::AckReqAck;
 
         if (address == 0)
@@ -174,4 +175,4 @@ namespace Knx
     {
         return (TpUartDataLinkLayer*)&_dlLayer;
     }
-}
+} // namespace Knx

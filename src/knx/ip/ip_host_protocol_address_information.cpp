@@ -7,7 +7,6 @@ namespace Knx
         : _data(data)
     {}
 
-
     uint8_t IpHostProtocolAddressInformation::length() const
     {
         return *_data;
@@ -47,4 +46,4 @@ namespace Knx
     {
         pushWord(value, _data + 6);
     }
-}
+} // namespace Knx

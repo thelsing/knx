@@ -50,10 +50,10 @@
 #ifndef ti_drivers_nvs_NVSRAM__include
 #define ti_drivers_nvs_NVSRAM__include
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-#if defined (__cplusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -130,9 +130,9 @@ extern const NVS_FxnTable NVSRAM_fxnTable;
  */
 typedef struct
 {
-    void*   regionBase;    /*!< Base address of RAM region */
-    size_t  regionSize;    /*!< The size of the region in bytes */
-    size_t  sectorSize;    /*!< Sector size in bytes */
+        void* regionBase;  /*!< Base address of RAM region */
+        size_t regionSize; /*!< The size of the region in bytes */
+        size_t sectorSize; /*!< Sector size in bytes */
 } NVSRAM_HWAttrs;
 
 /*
@@ -142,8 +142,8 @@ typedef struct
  */
 typedef struct
 {
-    size_t sectorBaseMask;
-    bool   isOpen;
+        size_t sectorBaseMask;
+        bool isOpen;
 } NVSRAM_Object;
 
 /*
@@ -168,7 +168,7 @@ extern int_fast16_t NVSRAM_write(NVS_Handle handle, size_t offset,
 
 /*! @endcond */
 
-#if defined (__cplusplus)
+#if defined(__cplusplus)
 }
 #endif /* defined (__cplusplus) */
 

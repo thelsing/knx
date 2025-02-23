@@ -22,7 +22,7 @@ namespace Knx
     {
 #ifndef KNX_NO_PRINT
         va_list objects;
-        va_start( objects, message);
+        va_start(objects, message);
         log(LogType::Info, message, objects);
         va_end(objects);
 #endif
@@ -32,7 +32,7 @@ namespace Knx
     {
 #ifndef KNX_NO_PRINT
         va_list objects;
-        va_start( objects, message);
+        va_start(objects, message);
         log(LogType::Warning, message, objects);
         va_end(objects);
 #endif
@@ -42,7 +42,7 @@ namespace Knx
     {
 #ifndef KNX_NO_PRINT
         va_list objects;
-        va_start( objects, message);
+        va_start(objects, message);
         log(LogType::Error, message, objects);
         va_end(objects);
 #endif
@@ -52,7 +52,7 @@ namespace Knx
     {
 #ifndef KNX_NO_PRINT
         va_list objects;
-        va_start( objects, message);
+        va_start(objects, message);
         log(LogType::Critical, message, objects);
         va_end(objects);
 #endif
@@ -62,7 +62,7 @@ namespace Knx
     {
 #ifndef KNX_NO_PRINT
         va_list objects;
-        va_start( objects, message);
+        va_start(objects, message);
         log(LogType::Exception, message, objects);
         va_end(objects);
 #endif
@@ -181,4 +181,4 @@ namespace Knx
         return "";
     }
 #endif
-}
+} // namespace Knx

@@ -119,20 +119,20 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 typedef struct List_Elem
 {
-    struct List_Elem* next;
-    struct List_Elem* prev;
+        struct List_Elem* next;
+        struct List_Elem* prev;
 } List_Elem;
 
 typedef struct List_List
 {
-    List_Elem* head;
-    List_Elem* tail;
+        List_Elem* head;
+        List_Elem* tail;
 } List_List;
 
 /*!

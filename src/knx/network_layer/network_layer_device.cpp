@@ -1,18 +1,18 @@
 #include "network_layer_device.h"
 
+#include "../bits.h"
+#include "../datalink_layer/cemi_frame.h"
 #include "../interface_object/device_object.h"
 #include "../transport_layer/tpdu.h"
-#include "../datalink_layer/cemi_frame.h"
 #include "../util/logger.h"
-#include "../bits.h"
 
 #define LOGGER Logger::logger("NetworkLayerDevice")
 
 namespace Knx
 {
-    NetworkLayerDevice::NetworkLayerDevice(DeviceObject& deviceObj, TransportLayer& layer) :
-        NetworkLayer(deviceObj, layer),
-        _netLayerEntities { {*this, kInterfaceIndex} }
+    NetworkLayerDevice::NetworkLayerDevice(DeviceObject& deviceObj, TransportLayer& layer)
+        : NetworkLayer(deviceObj, layer),
+          _netLayerEntities{{*this, kInterfaceIndex}}
     {
     }
 
@@ -30,11 +30,11 @@ namespace Knx
         else
             npdu.hopCount(hopCount());
 
-        //if (tpdu.apdu().length() > 0)
+        // if (tpdu.apdu().length() > 0)
         //{
-        //    print.print("-> NL  ");
-        //    tpdu.apdu().printPDU();
-        //}
+        //     print.print("-> NL  ");
+        //     tpdu.apdu().printPDU();
+        // }
         LOGGER.info("dataIndividualRequest ", npdu);
         _netLayerEntities[kInterfaceIndex].sendDataRequest(npdu, ack, destination, _deviceObj.individualAddress(), priority, IndividualAddress, Broadcast);
     }
@@ -133,8 +133,8 @@ namespace Knx
         // however we must be able to access those APCI via broadcast mode
         // so we "translate" it to system broadcast like a coupler does when routing
         // between closed and open media
-        if ( ((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
-                isApciSystemBroadcast(npdu.tpdu().apdu()))
+        if (((mediumType == DptMedium::KNX_TP1) || (mediumType == DptMedium::KNX_IP)) &&
+            isApciSystemBroadcast(npdu.tpdu().apdu()))
         {
             npdu.frame().systemBroadcast(SysBroadcast);
             _transportLayer.dataSystemBroadcastIndication(hopType, priority, source, npdu.tpdu());
@@ -164,4 +164,4 @@ namespace Knx
         HopCountType hopType = npdu.hopCount() == 7 ? UnlimitedRouting : NetworkLayerParameter;
         _transportLayer.dataSystemBroadcastConfirm(ack, hopType, npdu.tpdu(), priority, status);
     }
-}
+} // namespace Knx

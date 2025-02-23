@@ -1,9 +1,9 @@
 #pragma once
 
-#include "network_layer_entity.h"
-#include "network_layer.h"
-#include "../transport_layer/transport_layer.h"
 #include "../knx_types.h"
+#include "../transport_layer/transport_layer.h"
+#include "network_layer.h"
+#include "network_layer_entity.h"
 
 #include <stdint.h>
 
@@ -44,4 +44,4 @@ namespace Knx
 
             static constexpr uint8_t kInterfaceIndex = 0;
     };
-}
+} // namespace Knx

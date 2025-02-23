@@ -8,18 +8,17 @@
 #include "knx/bits.h"
 
 #ifndef KNX_SERIAL
-    #define KNX_SERIAL Serial1
-    #pragma warn "KNX_SERIAL not defined, using Serial1"
-#endif
- 
-#ifdef KNX_IP_LAN
-    #include "ETH.h"
-    #define KNX_NETIF ETH
-#else // KNX_IP_WIFI
-    #include <WiFi.h>
-    #define KNX_NETIF WiFi
+#define KNX_SERIAL Serial1
+#pragma warn "KNX_SERIAL not defined, using Serial1"
 #endif
 
+#ifdef KNX_IP_LAN
+#include "ETH.h"
+#define KNX_NETIF ETH
+#else // KNX_IP_WIFI
+#include <WiFi.h>
+#define KNX_NETIF WiFi
+#endif
 
 namespace Knx
 {
@@ -36,7 +35,8 @@ namespace Knx
 #endif
     }
 
-    Esp32Platform::Esp32Platform(HardwareSerial* s) : ArduinoPlatform(s)
+    Esp32Platform::Esp32Platform(HardwareSerial* s)
+        : ArduinoPlatform(s)
     {
     }
 
@@ -106,7 +106,7 @@ namespace Knx
 
     bool Esp32Platform::sendBytesMultiCast(uint8_t* buffer, uint16_t len)
     {
-        //printHex("<- ",buffer, len);
+        // printHex("<- ",buffer, len);
         _udp.beginMulticastPacket();
         _udp.write(buffer, len);
         _udp.endPacket();
@@ -184,5 +184,5 @@ namespace Knx
         EEPROM.getDataPtr(); // trigger dirty flag in EEPROM lib to make sure data will be written to flash
         EEPROM.commit();
     }
-}
+} // namespace Knx
 #endif
