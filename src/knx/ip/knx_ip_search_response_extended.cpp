@@ -36,7 +36,6 @@ namespace Knx
 
     void KnxIpSearchResponseExtended::setDeviceInfo(IpParameterObject& parameters, DeviceObject& deviceObject)
     {
-        println("setDeviceInfo");
         KnxIpDeviceInformationDIB _deviceInfo(_data + currentPos);
         _deviceInfo.length(LEN_DEVICE_INFORMATION_DIB);
         _deviceInfo.code(DEVICE_INFO);
@@ -67,7 +66,6 @@ namespace Knx
 
     void KnxIpSearchResponseExtended::setSupportedServices()
     {
-        println("setSupportedServices");
         KnxIpSupportedServiceDIB _supportedServices(_data + currentPos);
         _supportedServices.length(LEN_SERVICE_DIB);
         _supportedServices.code(SUPP_SVC_FAMILIES);
@@ -84,7 +82,6 @@ namespace Knx
 
     void KnxIpSearchResponseExtended::setIpConfig(IpParameterObject& parameters)
     {
-        println("setIpConfig");
         KnxIpConfigDIB _ipConfig(_data + currentPos);
         _ipConfig.length(LEN_IP_CONFIG_DIB);
         _ipConfig.code(IP_CONFIG);
@@ -99,7 +96,6 @@ namespace Knx
 
     void KnxIpSearchResponseExtended::setIpCurrentConfig(IpParameterObject& parameters)
     {
-        println("setIpCurrentConfig");
         KnxIpConfigDIB _ipCurConfig(_data + currentPos, true);
         _ipCurConfig.length(LEN_IP_CURRENT_CONFIG_DIB);
         _ipCurConfig.code(IP_CUR_CONFIG);
@@ -115,7 +111,6 @@ namespace Knx
 
     void KnxIpSearchResponseExtended::setKnxAddresses(IpParameterObject& parameters, DeviceObject& deviceObject)
     {
-        println("setKnxAddresses");
         KnxIpKnxAddressesDIB _knxAddresses(_data + currentPos);
         _knxAddresses.length(4); //minimum
         _knxAddresses.code(KNX_ADDRESSES);
@@ -138,7 +133,6 @@ namespace Knx
 #ifdef KNX_TUNNELING
     void KnxIpSearchResponseExtended::setTunnelingInfo(IpParameterObject& parameters, DeviceObject& deviceObject, KnxIpTunnelConnection tunnels[])
     {
-        println("setTunnelingInfo");
         KnxIpTunnelingInfoDIB _tunnelInfo(_data + currentPos);
         _tunnelInfo.length(4); //minlength
         _tunnelInfo.code(TUNNELING_INFO);
@@ -204,7 +198,6 @@ namespace Knx
 #endif
     void KnxIpSearchResponseExtended::setExtendedDeviceInfo()
     {
-        println("setExtendedDeviceInfo");
         KnxIpExtendedDeviceInformationDIB _extended(_data + currentPos);
         _extended.length(LEN_EXTENDED_DEVICE_INFORMATION_DIB);
         _extended.code(EXTENDED_DEVICE_INFO);

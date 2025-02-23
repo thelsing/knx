@@ -500,8 +500,6 @@ namespace Knx
 
         if (searchRequest.srpRequestDIBs)
         {
-            println("srpRequestDIBs");
-
             if (searchRequest.requestedDIB(IP_CONFIG))
                 dibLength += LEN_IP_CONFIG_DIB; //16
 
@@ -556,9 +554,9 @@ namespace Knx
 #endif
         }
 
-        if (searchResponse.totalLength() > 150)
+        if (searchResponse.totalLength() > 500)
         {
-            println("skipped response cause length is not plausible");
+            printf("skipped response length > 500. Length: %d bytes\n", searchResponse.totalLength());
             return;
         }
 
@@ -716,7 +714,7 @@ namespace Knx
             }
 
 
-            if (tunnelResActive[i])  // tunnel reserve feature active for this tunnel
+            if (resTunActive && tunnelResActive[i])  // tunnel reserve feature active for this tunnel
             {
 #ifdef KNX_LOG_TUNNELING
                 print("tunnel reserve feature active for this tunnel: ");
@@ -835,7 +833,8 @@ namespace Knx
                     break;
                 }
 
-            tun->IndividualAddress = tunPa;
+            if (tun)
+                tun->IndividualAddress = tunPa;
         }
 
         if (tun == nullptr)
@@ -869,9 +868,9 @@ namespace Knx
             _lastChannelId = 0;
 
         tun->IpAddress = srcIP;
-        tun->PortData = srcPort;
-        tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber() ? connRequest.hpaiCtrl().ipPortNumber() : srcPort;
-
+        tun->PortData = connRequest.hpaiData().ipPortNumber()?connRequest.hpaiData().ipPortNumber():srcPort;
+        tun->PortCtrl = connRequest.hpaiCtrl().ipPortNumber()?connRequest.hpaiCtrl().ipPortNumber():srcPort;
+    
         print("New Tunnel-Connection[");
         print(tunIdx);
         print("], Channel: 0x");
