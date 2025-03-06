@@ -485,6 +485,18 @@ namespace Knx
             ComFlag _commFlag : 7;
             uint8_t* _data = 0;
             uint8_t _dataLength = 0;
+
+            /**
+             * set the current value of the group object and show success.
+             * @param value the value the group object is set to
+             * @param type the datapoint type used for the conversion.
+             *
+             * The parameters must fit the group object. Otherwise it will stay unchanged.
+             *
+             * @returns true if the value of the group object was updated after successful conversion.
+             */
+            template<class DPT> bool _valueNoSend(const DPT& value);
+
     };
 
     bool operator==(const GroupObject& lhs, const GroupObject& rhs);
@@ -492,8 +504,11 @@ namespace Knx
     template <class DPT>
     void GroupObject::value(const DPT& value)
     {
-        valueNoSend(value);
-        objectWritten();
+        if (_valueNoSend(value))
+        {
+            // write on successful conversion/setting value only
+            objectWritten();
+        }
     }
 
     template <class DPT>
@@ -520,13 +535,23 @@ namespace Knx
     template <class DPT>
     void GroupObject::valueNoSend(const DPT& value)
     {
+        // ignore actual updating TODO check replacing valueNoSend with _valueNoSend
+        _valueNoSend(value);
+    }
+
+    template<class DPT> bool GroupObject::_valueNoSend(const KNXValue& value)
+    {
         if (value.size() != sizeCode())
             return;
 
-        if (_uninitialized)
+        const bool encodingDone = true; // TODO FIXME for devel! value.encode needs success indicator
+        value.encode(_data);
+
+        // initialize on succesful conversion only
+        if (encodingDone && _uninitialized)
             commFlag(Ok);
 
-        value.encode(_data);
+        return encodingDone;
     }
 
     template <class DPT>
@@ -538,15 +563,22 @@ namespace Knx
         if (_uninitialized)
         {
             // always set first value
-            this->valueNoSend(value);
-            return true;
+            return _valueNoSend(value);
         }
         else
         {
-            // convert new value to given dtp
+            // convert new value to given DPT
             uint8_t newData[_dataLength];
             memset(newData, 0, _dataLength);
+
+            const bool encodingDone = true; // TODO FIXME for devel! value.encode needs success indicator
             value.encode(newData);
+            if (!encodingDone)
+            {
+                // value conversion to DPT failed
+                // do NOT update the value of the KO!
+                return false;
+            }
 
             // check for change in converted value / update value on change only
             const bool dataChanged = memcmp(_data, newData, _dataLength);
