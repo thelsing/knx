@@ -8,6 +8,15 @@
 
 #ifndef KNX_SERIAL
     #define KNX_SERIAL Serial1
+    #pragma warn "KNX_SERIAL not defined, using Serial1"
+#endif
+ 
+#ifdef KNX_IP_LAN
+    #include "ETH.h"
+    #define KNX_NETIF ETH
+#else // KNX_IP_WIFI
+    #include <WiFi.h>
+    #define KNX_NETIF WiFi
 #endif
 
 Esp32Platform::Esp32Platform()
@@ -44,22 +53,22 @@ void Esp32Platform::setupUart()
 
 uint32_t Esp32Platform::currentIpAddress()
 {
-    return WiFi.localIP();
+    return KNX_NETIF.localIP();
 }
 
 uint32_t Esp32Platform::currentSubnetMask()
 {
-    return WiFi.subnetMask();
+    return KNX_NETIF.subnetMask();
 }
 
 uint32_t Esp32Platform::currentDefaultGateway()
 {
-    return WiFi.gatewayIP();
+    return KNX_NETIF.gatewayIP();
 }
 
 void Esp32Platform::macAddress(uint8_t* addr)
 {
-    esp_wifi_get_mac(WIFI_IF_STA, addr);
+    KNX_NETIF.macAddress(addr);
 }
 
 uint32_t Esp32Platform::uniqueSerialNumber()
@@ -82,7 +91,7 @@ void Esp32Platform::setupMultiCast(uint32_t addr, uint16_t port)
     IPAddress mcastaddr(htonl(addr));
 
     KNX_DEBUG_SERIAL.printf("setup multicast addr: %s port: %d ip: %s\n", mcastaddr.toString().c_str(), port,
-                            WiFi.localIP().toString().c_str());
+        KNX_NETIF.localIP().toString().c_str());
     uint8_t result = _udp.beginMulticast(mcastaddr, port);
     KNX_DEBUG_SERIAL.printf("result %d\n", result);
 }

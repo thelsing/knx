@@ -188,19 +188,25 @@ TPAckType Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
     {
         // ACK for broadcasts
         if (address == 0)
+        {
             ack = TPAckType::AckReqAck;
-
-        if (lcconfig & LCCONFIG::GROUP_IACK_ROUT)
-
-            // is group address in filter table? ACK if yes, No if not
-            if (_netLayer.isRoutedGroupAddress(address, 1))
-                ack = TPAckType::AckReqAck;
-            else
-                ack = TPAckType::AckReqNone;
+        }
         else
-            // all are ACKED
-            ack = TPAckType::AckReqAck;
-
+        {
+            if(lcconfig & LCCONFIG::GROUP_IACK_ROUT)
+            {
+                // is group address in filter table? ACK if yes, No if not
+                if(_netLayer.isRoutedGroupAddress(address, 1))
+                    ack = TPAckType::AckReqAck;
+                else
+                    ack = TPAckType::AckReqNone;
+            }
+            else
+            {
+                // all are ACKED
+                ack = TPAckType::AckReqAck;
+            }
+        }
 #ifdef KNX_TUNNELING
 
         if (_dlLayerPrimary.isSentToTunnel(address, isGrpAddr))
@@ -226,7 +232,6 @@ TPAckType Bau091A::isAckRequired(uint16_t address, bool isGrpAddr)
 
 #endif
     }
-
     return ack;
 }
 

@@ -34,7 +34,7 @@ KnxIpSearchResponseExtended::KnxIpSearchResponseExtended(IpParameterObject& para
 
 void KnxIpSearchResponseExtended::setDeviceInfo(IpParameterObject& parameters, DeviceObject& deviceObject)
 {
-    println("setDeviceInfo");
+    //setDeviceInfo");
     KnxIpDeviceInformationDIB _deviceInfo(_data + currentPos);
     _deviceInfo.length(LEN_DEVICE_INFORMATION_DIB);
     _deviceInfo.code(DEVICE_INFO);
@@ -65,7 +65,7 @@ void KnxIpSearchResponseExtended::setDeviceInfo(IpParameterObject& parameters, D
 
 void KnxIpSearchResponseExtended::setSupportedServices()
 {
-    println("setSupportedServices");
+    //println("setSupportedServices");
     KnxIpSupportedServiceDIB _supportedServices(_data + currentPos);
     _supportedServices.length(LEN_SERVICE_DIB);
     _supportedServices.code(SUPP_SVC_FAMILIES);
@@ -82,7 +82,7 @@ void KnxIpSearchResponseExtended::setSupportedServices()
 
 void KnxIpSearchResponseExtended::setIpConfig(IpParameterObject& parameters)
 {
-    println("setIpConfig");
+    //println("setIpConfig");
     KnxIpConfigDIB _ipConfig(_data + currentPos);
     _ipConfig.length(LEN_IP_CONFIG_DIB);
     _ipConfig.code(IP_CONFIG);
@@ -97,14 +97,14 @@ void KnxIpSearchResponseExtended::setIpConfig(IpParameterObject& parameters)
 
 void KnxIpSearchResponseExtended::setIpCurrentConfig(IpParameterObject& parameters)
 {
-    println("setIpCurrentConfig");
+    //println("setIpCurrentConfig");
     KnxIpConfigDIB _ipCurConfig(_data + currentPos, true);
     _ipCurConfig.length(LEN_IP_CURRENT_CONFIG_DIB);
     _ipCurConfig.code(IP_CUR_CONFIG);
     _ipCurConfig.address(parameters.propertyValue<uint32_t>(PID_CURRENT_IP_ADDRESS));
     _ipCurConfig.subnet(parameters.propertyValue<uint32_t>(PID_CURRENT_SUBNET_MASK));
     _ipCurConfig.gateway(parameters.propertyValue<uint32_t>(PID_CURRENT_DEFAULT_GATEWAY));
-    _ipCurConfig.dhcp(parameters.propertyValue<uint32_t>(PID_DHCP_BOOTP_SERVER));
+    _ipCurConfig.dhcp(0);
     _ipCurConfig.info1(parameters.propertyValue<uint8_t>(PID_CURRENT_IP_ASSIGNMENT_METHOD));
     _ipCurConfig.info2(0x00); //Reserved
 
@@ -113,7 +113,7 @@ void KnxIpSearchResponseExtended::setIpCurrentConfig(IpParameterObject& paramete
 
 void KnxIpSearchResponseExtended::setKnxAddresses(IpParameterObject& parameters, DeviceObject& deviceObject)
 {
-    println("setKnxAddresses");
+    //println("setKnxAddresses");
     KnxIpKnxAddressesDIB _knxAddresses(_data + currentPos);
     _knxAddresses.length(4); //minimum
     _knxAddresses.code(KNX_ADDRESSES);
@@ -136,7 +136,7 @@ void KnxIpSearchResponseExtended::setKnxAddresses(IpParameterObject& parameters,
 
 void KnxIpSearchResponseExtended::setTunnelingInfo(IpParameterObject& parameters, DeviceObject& deviceObject, KnxIpTunnelConnection tunnels[])
 {
-    println("setTunnelingInfo");
+    //println("setTunnelingInfo");
     KnxIpTunnelingInfoDIB _tunnelInfo(_data + currentPos);
     _tunnelInfo.length(4); //minlength
     _tunnelInfo.code(TUNNELING_INFO);
@@ -202,7 +202,7 @@ void KnxIpSearchResponseExtended::setTunnelingInfo(IpParameterObject& parameters
 
 void KnxIpSearchResponseExtended::setExtendedDeviceInfo()
 {
-    println("setExtendedDeviceInfo");
+    //println("setExtendedDeviceInfo");
     KnxIpExtendedDeviceInformationDIB _extended(_data + currentPos);
     _extended.length(LEN_EXTENDED_DEVICE_INFORMATION_DIB);
     _extended.code(EXTENDED_DEVICE_INFO);
