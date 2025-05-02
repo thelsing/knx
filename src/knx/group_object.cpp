@@ -203,7 +203,7 @@ size_t GroupObject::sizeInMemory() const
     uint8_t code = lowByte(ntohs(_table->_tableData[_asap]));
     size_t result = asapValueSize(code);
 
-    if (code == 0)
+    if (result == 0)
         return 1;
 
     if (code == 14)
