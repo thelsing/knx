@@ -11,8 +11,8 @@
         defined(ARDUINO_ARCH_RP2040))
 
 // Only ESP8266 and ESP32 have this define. For all other platforms this is just empty.
-#ifndef ICACHE_RAM_ATTR
-    #define ICACHE_RAM_ATTR
+#ifndef IRAM_ATTR
+    #define IRAM_ATTR
 #endif
 
 #ifndef PROG_BTN_PRESS_MIN_MILLIS
@@ -24,7 +24,7 @@
 #endif
 
 
-ICACHE_RAM_ATTR void buttonEvent()
+IRAM_ATTR void buttonEvent()
 {
     static uint32_t lastEvent = 0;
     static uint32_t lastPressed = 0;
