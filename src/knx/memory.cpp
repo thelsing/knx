@@ -180,6 +180,7 @@ void Memory::writeMemory()
             if (block == nullptr)
             {
                 println("_data of TableObject not in _usedList");
+                clearMemory();
                 _platform.fatalError();
             }
 
@@ -196,6 +197,12 @@ void Memory::writeMemory()
 
 void Memory::saveMemory()
 {
+    _platform.commitNonVolatileMemory();
+}
+
+void Memory::clearMemory()
+{
+    _platform.writeNonVolatileMemory(0, 0xFF, _metadataSize);
     _platform.commitNonVolatileMemory();
 }
 
@@ -288,6 +295,7 @@ void Memory::freeMemory(uint8_t* ptr)
     if (!found)
     {
         println("freeMemory for not used pointer called");
+        clearMemory();
         _platform.fatalError();
     }
 
@@ -329,6 +337,7 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
     if (!head || !item)
     {
         println("invalid parameters of Memory::removeFromList");
+        clearMemory();
         _platform.fatalError();
     }
 
@@ -350,6 +359,7 @@ MemoryBlock* Memory::removeFromList(MemoryBlock* head, MemoryBlock* item)
     if (!found)
     {
         println("tried to remove block from list not in it");
+        clearMemory();
         _platform.fatalError();
     }
 
@@ -476,12 +486,14 @@ void Memory::addNewUsedBlock(uint8_t* address, size_t size)
     if (smallerFreeBlock == nullptr)
     {
         println("addNewUsedBlock: no smallerBlock found");
+        clearMemory();
         _platform.fatalError();
     }
 
     if ((smallerFreeBlock->address + smallerFreeBlock->size) < (address + size))
     {
         println("addNewUsedBlock: found block can't contain new block");
+        clearMemory();
         _platform.fatalError();
     }
 
