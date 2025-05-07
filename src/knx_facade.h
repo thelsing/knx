@@ -258,13 +258,13 @@ template <class P, class B> class KnxFacade : private SaveRestore
             _bau.deviceObject().version(value);
         }
 
-	    void start()
-	    {
-	        if (_ledPin >= 0)
-	            pinMode(_ledPin, OUTPUT);
+        void start()
+        {
+            if (_ledPin >= 0)
+                pinMode(_ledPin, OUTPUT);
 
-	        progLedOff();
-            
+            progLedOff();
+
             if(_buttonPin >= 0)
             {
                 pinMode(_buttonPin, INPUT_PULLUP);
@@ -272,16 +272,16 @@ template <class P, class B> class KnxFacade : private SaveRestore
                 if (_progButtonISRFuncPtr)
                 {
                     // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
-                    #if (ARDUINO_API_VERSION >= 10200)
-                        attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
-                    #else
-                        attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
-                    #endif
+#if (ARDUINO_API_VERSION >= 10200)
+                    attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
+#else
+                    attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
+#endif
                 }
             }
 
-	        enabled(true);
-	    }
+            enabled(true);
+        }
 
         void setButtonISRFunction(IsrFunctionPtr progButtonISRFuncPtr)
         {
