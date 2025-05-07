@@ -43,6 +43,7 @@ class Memory
         void readMemory();
         void writeMemory();
         void saveMemory();
+        void clearMemory();
         void addSaveRestore(SaveRestore* obj);
         void addSaveRestore(TableObject* obj);
 
