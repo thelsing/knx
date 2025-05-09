@@ -28,9 +28,6 @@
         void buttonUp();
     #endif
 #elif defined(ARDUINO_ARCH_ESP32)
-    #if !defined(LED_BUILTIN)
-        #define LED_BUILTIN 13
-    #endif
     #include "esp32_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         void buttonUp();
@@ -41,14 +38,8 @@
         void buttonUp();
     #endif
 #elif __linux__
-    #if !defined(LED_BUILTIN)
-        #define LED_BUILTIN 0
-    #endif
     #include "linux_platform.h"
 #else
-    #if !defined(LED_BUILTIN)
-        #define LED_BUILTIN 5 // see GPIO_PinConfig gpioPinConfigs[]
-    #endif
     #include "cc1310_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         extern void buttonUp();
@@ -56,7 +47,7 @@
 #endif
 
 #ifndef KNX_LED
-    #define KNX_LED LED_BUILTIN
+    #define KNX_LED -1
 #endif
 #ifndef KNX_LED_ACTIVE_ON
     #define KNX_LED_ACTIVE_ON 0
@@ -170,12 +161,12 @@ template <class P, class B> class KnxFacade : private SaveRestore
             _ledPinActiveOn = value;
         }
 
-        uint32_t ledPin()
+        int32_t ledPin()
         {
             return _ledPin;
         }
 
-        void ledPin(uint32_t value)
+        void ledPin(int32_t value)
         {
             _ledPin = value;
         }
@@ -269,20 +260,24 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         void start()
         {
-            if (_progLedOffCallback == 0 || _progLedOnCallback == 0)
-                pinMode(ledPin(), OUTPUT);
+            if (_ledPin >= 0)
+                pinMode(_ledPin, OUTPUT);
 
             progLedOff();
 
-            if (_progButtonISRFuncPtr && _buttonPin >= 0)
+            if(_buttonPin >= 0)
             {
-                pinMode(buttonPin(), INPUT_PULLUP);
-                // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
+                pinMode(_buttonPin, INPUT_PULLUP);
+
+                if (_progButtonISRFuncPtr)
+                {
+                    // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
 #if (ARDUINO_API_VERSION >= 10200)
-                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
+                    attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
 #else
-                attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
+                    attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
 #endif
+                }
             }
 
             enabled(true);
@@ -423,7 +418,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
         ActivityCallback _activityCallback = 0;
 #endif
         uint32_t _ledPinActiveOn = KNX_LED_ACTIVE_ON;
-        uint32_t _ledPin = KNX_LED;
+        int32_t _ledPin = KNX_LED;
         int32_t _buttonPin = KNX_BUTTON;
         SaveCallback _saveCallback = 0;
         RestoreCallback _restoreCallback = 0;
@@ -460,17 +455,19 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         void progLedOn()
         {
-            if (_progLedOnCallback == 0)
-                digitalWrite(ledPin(), _ledPinActiveOn);
-            else
+            if (_ledPin >= 0)
+                digitalWrite(_ledPin, _ledPinActiveOn);
+
+            if (_progLedOffCallback != 0)
                 _progLedOnCallback();
         }
 
         void progLedOff()
         {
-            if (_progLedOffCallback == 0)
-                digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
-            else
+            if (_ledPin >= 0)
+                digitalWrite(_ledPin, HIGH - _ledPinActiveOn);
+
+            if (_progLedOffCallback != 0)
                 _progLedOffCallback();
         }
 };
