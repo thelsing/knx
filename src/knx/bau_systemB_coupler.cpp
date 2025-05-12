@@ -33,6 +33,17 @@ void BauSystemBCoupler::loop()
 #ifdef USE_DATASECURE
     _appLayer.loop();
 #endif
+
+#ifdef USE_DATASECURE
+    if(_unloadStartet == 0 && _secIfObj.getWasUnloaded())
+    {
+        _unloadStartet = millis();
+    } else if(millis() - _unloadStartet > 5000)
+    {
+        writeMemory();
+        _unloadStartet = 0;
+    }
+#endif
 }
 
 bool BauSystemBCoupler::configured()

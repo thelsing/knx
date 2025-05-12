@@ -49,6 +49,24 @@ void BauSystemBDevice::loop()
 #ifdef USE_DATASECURE
     _appLayer.loop();
 #endif
+
+    if(_unloadStartet == 0)
+    {
+        if(_addrTable.getWasUnloaded()
+            || _assocTable.getWasUnloaded() 
+            || _groupObjTable.getWasUnloaded()
+#ifdef USE_DATASECURE
+            || _secIfObj.getWasUnloaded()
+#endif
+            )
+        {
+            _unloadStartet = millis();
+        } 
+    } else if(millis() - _unloadStartet > 5000)
+    {
+        writeMemory();
+        _unloadStartet = 0;
+    }
 }
 
 void BauSystemBDevice::sendNextGroupTelegram()
