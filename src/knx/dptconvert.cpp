@@ -997,13 +997,13 @@ int valueToBusValueBinary(const KNXValue& value, uint8_t* payload, size_t payloa
 
 int valueToBusValueBinaryControl(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
-	unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0x03);
+    unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0x03);
     return true;
 }
 
 int valueToBusValueStepControl(const KNXValue& value, uint8_t* payload, size_t payload_length, const Dpt& datatype)
 {
-	unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0x0F);
+    unsigned8ToPayload(payload, payload_length, 0, (uint64_t)value, 0x0F);
     return true;
 }
 
