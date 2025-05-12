@@ -54,11 +54,7 @@ void BauSystemBDevice::loop()
     {
         if(_addrTable.getWasUnloaded()
             || _assocTable.getWasUnloaded() 
-            || _groupObjTable.getWasUnloaded()
-#ifdef USE_DATASECURE
-            || _secIfObj.getWasUnloaded()
-#endif
-            )
+            || _groupObjTable.getWasUnloaded())
         {
             _unloadStartet = millis();
         } 
