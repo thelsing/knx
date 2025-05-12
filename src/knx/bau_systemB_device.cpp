@@ -50,18 +50,18 @@ void BauSystemBDevice::loop()
     _appLayer.loop();
 #endif
 
-    if(_unloadStartet == 0)
+    if(_unloadStarted == 0)
     {
         if(_addrTable.getWasUnloaded()
             || _assocTable.getWasUnloaded() 
             || _groupObjTable.getWasUnloaded())
         {
-            _unloadStartet = millis();
+            _unloadStarted = millis();
         } 
-    } else if(millis() - _unloadStartet > 5000)
+    } else if(millis() - _unloadStarted > 5000)
     {
         writeMemory();
-        _unloadStartet = 0;
+        _unloadStarted = 0;
     }
 }
 

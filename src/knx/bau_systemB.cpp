@@ -165,8 +165,8 @@ void BauSystemB::memoryRoutingTableWriteIndication(Priority priority, HopCountTy
     if (_deviceObj.verifyMode())
         memoryRoutingTableReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress, data);
 
-    if(_unloadStartet != 0)
-        _unloadStartet = millis(); // reset unload timer
+    if(_unloadStarted != 0)
+        _unloadStarted = millis(); // reset unload timer
 }
 
 void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
@@ -177,8 +177,8 @@ void BauSystemB::memoryWriteIndication(Priority priority, HopCountType hopType, 
     if (_deviceObj.verifyMode())
         memoryReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress, data);
         
-    if(_unloadStartet != 0)
-        _unloadStartet = millis(); // reset unload timer
+    if(_unloadStarted != 0)
+        _unloadStarted = millis(); // reset unload timer
 }
 
 void BauSystemB::memoryReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number,
@@ -200,8 +200,8 @@ void BauSystemB::memoryExtWriteIndication(Priority priority, HopCountType hopTyp
 
     applicationLayer().memoryExtWriteResponse(AckRequested, priority, hopType, asap, secCtrl, ReturnCodes::Success, number, memoryAddress, _memory.toAbsolute(memoryAddress));
 
-    if(_unloadStartet != 0)
-        _unloadStartet = millis(); // reset unload timer
+    if(_unloadStarted != 0)
+        _unloadStarted = millis(); // reset unload timer
 }
 
 void BauSystemB::memoryExtReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t number, uint32_t memoryAddress)
@@ -262,8 +262,8 @@ void BauSystemB::userMemoryWriteIndication(Priority priority, HopCountType hopTy
     if (_deviceObj.verifyMode())
         userMemoryReadIndication(priority, hopType, asap, secCtrl, number, memoryAddress);
         
-    if(_unloadStartet != 0)
-        _unloadStartet = millis(); // reset unload timer
+    if(_unloadStarted != 0)
+        _unloadStarted = millis(); // reset unload timer
 }
 
 void BauSystemB::propertyDescriptionReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t objectIndex,
@@ -324,8 +324,8 @@ void BauSystemB::propertyValueWriteIndication(Priority priority, HopCountType ho
 
     propertyValueReadIndication(priority, hopType, asap, secCtrl, objectIndex, propertyId, numberOfElements, startIndex);
     
-    if(_unloadStartet != 0)
-        _unloadStartet = millis(); // reset unload timer
+    if(_unloadStarted != 0)
+        _unloadStarted = millis(); // reset unload timer
 }
 
 void BauSystemB::propertyValueExtWriteIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, ObjectType objectType, uint8_t objectInstance,
@@ -345,8 +345,8 @@ void BauSystemB::propertyValueExtWriteIndication(Priority priority, HopCountType
         applicationLayer().propertyValueExtWriteConResponse(AckRequested, priority, hopType, asap, secCtrl, objectType, objectInstance, propertyId, numberOfElements, startIndex, returnCode);
     }
     
-    if(_unloadStartet != 0)
-        _unloadStartet = millis(); // reset unload timer
+    if(_unloadStarted != 0)
+        _unloadStarted = millis(); // reset unload timer
 }
 
 void BauSystemB::propertyValueReadIndication(Priority priority, HopCountType hopType, uint16_t asap, const SecurityControl& secCtrl, uint8_t objectIndex,
@@ -784,8 +784,8 @@ void BauSystemB::propertyValueWrite(ObjectType objectType, uint8_t objectInstanc
     else
         numberOfElements = 0;
         
-    if(_unloadStartet != 0)
-        _unloadStartet = millis(); // reset unload timer
+    if(_unloadStarted != 0)
+        _unloadStarted = millis(); // reset unload timer
 }
 
 Memory& BauSystemB::memory()

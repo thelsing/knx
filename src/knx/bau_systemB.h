@@ -131,5 +131,5 @@ class BauSystemB : protected BusAccessUnit
         FunctionPropertyCallback _functionProperty = 0;
         FunctionPropertyCallback _functionPropertyState = 0;
         
-        unsigned long _unloadStartet = 0;
+        unsigned long _unloadStarted = 0;
 };
