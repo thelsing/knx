@@ -62,6 +62,9 @@ void BauSystemBDevice::loop()
     {
         writeMemory();
         _unloadStarted = 0;
+        _addrTable.unsetWasundloaded();
+        _assocTable.unsetWasundloaded();
+        _groupObjTable.unsetWasundloaded();
     }
 }
 

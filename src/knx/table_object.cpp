@@ -422,3 +422,8 @@ bool TableObject::getWasUnloaded()
 {
     return _wasUnloaded;
 }
+
+void TableObject::unsetWasundloaded()
+{
+    _wasUnloaded = false;
+}

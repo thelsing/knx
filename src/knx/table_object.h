@@ -36,6 +36,7 @@ class TableObject: public InterfaceObject
         static BeforeTablesUnloadCallback beforeTablesUnloadCallback();
 
         bool getWasUnloaded();
+        void unsetWasundloaded();
 
     protected:
         /**
