@@ -58,11 +58,6 @@ void TableObject::loadState(LoadState newState)
 
     beforeStateChange(newState);
     _state = newState;
-    
-    if(newState == LS_UNLOADED)
-    {
-        _wasUnloaded = true;
-    }
 }
 
 
@@ -416,14 +411,4 @@ void TableObject::initializeDynTableProperties(size_t propertiesSize, Property**
     memcpy(allProperties + propertyCount, ownProperties, sizeof(ownProperties));
 
     InterfaceObject::initializeProperties(sizeof(allProperties), allProperties);
-}
-
-bool TableObject::getWasUnloaded()
-{
-    return _wasUnloaded;
-}
-
-void TableObject::unsetWasundloaded()
-{
-    _wasUnloaded = false;
 }

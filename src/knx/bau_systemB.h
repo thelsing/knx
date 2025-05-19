@@ -130,6 +130,4 @@ class BauSystemB : protected BusAccessUnit
         BeforeRestartCallback _beforeRestart = 0;
         FunctionPropertyCallback _functionProperty = 0;
         FunctionPropertyCallback _functionPropertyState = 0;
-        
-        unsigned long _unloadStarted = 0;
 };

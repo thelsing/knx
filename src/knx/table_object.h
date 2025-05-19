@@ -35,9 +35,6 @@ class TableObject: public InterfaceObject
         static void beforeTablesUnloadCallback(BeforeTablesUnloadCallback func);
         static BeforeTablesUnloadCallback beforeTablesUnloadCallback();
 
-        bool getWasUnloaded();
-        void unsetWasundloaded();
-
     protected:
         /**
          * This method is called before the interface object enters a new ::LoadState.
@@ -94,6 +91,4 @@ class TableObject: public InterfaceObject
          * The size of the memory block cannot be used because it is changed during alignment to page size.
          */
         uint32_t _size = 0;
-
-        bool _wasUnloaded = false;
 };

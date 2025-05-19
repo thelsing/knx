@@ -204,6 +204,7 @@ void Memory::clearMemory()
 {
     _platform.writeNonVolatileMemory(0, 0xFF, _metadataSize);
     _platform.commitNonVolatileMemory();
+    _saveTimeout = millis();
 }
 
 void Memory::addSaveRestore(SaveRestore* obj)
@@ -305,6 +306,10 @@ void Memory::freeMemory(uint8_t* ptr)
 
 void Memory::writeMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
 {
+    if(_saveTimeout != 0)
+    {
+        _saveTimeout = millis();
+    }
     _platform.writeNonVolatileMemory(relativeAddress, data, size);
 }
 
@@ -540,4 +545,14 @@ void Memory::versionCheckCallback(VersionCheckCallback func)
 VersionCheckCallback Memory::versionCheckCallback()
 {
     return _versionCheckCallback;
+}
+
+void Memory::loop()
+{
+    if(_saveTimeout != 0 && millis() - _saveTimeout > 5000)
+    {
+        println("saveMemory timeout");
+        _saveTimeout = 0;
+        writeMemory();
+    }
 }
