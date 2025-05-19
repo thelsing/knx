@@ -46,6 +46,7 @@ class Memory
         void clearMemory();
         void addSaveRestore(SaveRestore* obj);
         void addSaveRestore(TableObject* obj);
+        void loop();
 
         uint8_t* allocMemory(size_t size);
         void freeMemory(uint8_t* ptr);
@@ -82,4 +83,5 @@ class Memory
         MemoryBlock* _freeList = nullptr;
         MemoryBlock* _usedList = nullptr;
         uint16_t _metadataSize = 6 + LEN_HARDWARE_TYPE; // accounting for 3x pushWord and pushByteArray of length LEN_HARDWARE_TYPE
+        unsigned long _saveTimeout = 0;
 };
