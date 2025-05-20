@@ -8,7 +8,8 @@
         defined(ARDUINO_ARCH_ESP32) || \
         defined(ARDUINO_ARCH_ESP8266) || \
         defined(ARDUINO_ARCH_SAMD) || \
-        defined(ARDUINO_ARCH_RP2040))
+        defined(ARDUINO_ARCH_RP2040)) || \
+        defined(LIBRETINY)
 
 // Only ESP8266 and ESP32 have this define. For all other platforms this is just empty.
 #ifndef IRAM_ATTR
@@ -93,6 +94,18 @@ IRAM_ATTR void buttonEvent()
         KnxFacade<Esp32Platform, Bau091A> knx(buttonEvent);
     #else
         #error "Mask version not supported on ARDUINO_ARCH_ESP32"
+    #endif
+
+#elif defined(LIBRETINY)
+    // predefined global instance for TP or IP or TP/IP coupler
+    #if MASK_VERSION == 0x07B0
+        KnxFacade<LibretinyPlatform, Bau07B0> knx(buttonEvent);
+    #elif MASK_VERSION == 0x57B0
+        KnxFacade<LibretinyPlatform, Bau57B0> knx(buttonEvent);
+    #elif MASK_VERSION == 0x091A
+        KnxFacade<LibretinyPlatform, Bau091A> knx(buttonEvent);
+    #else
+        #error "Mask version not supported on LIBRETINY"
     #endif
 
 #elif defined(ARDUINO_ARCH_STM32)

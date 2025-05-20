@@ -11,21 +11,13 @@
     #define htonl(x) ( (getbyte(x,0)<<24) | (getbyte(x,1)<<16) | (getbyte(x,2)<<8) | getbyte(x,3) )
     #define ntohs(x) htons(x)
     #define ntohl(x) htonl(x)
+#elif defined(LIBRETINY)
+    #include <lwip/udp.h>
+    #define htons(x) lwip_htons(x)
+    #define htonl(x) lwip_htonl(x)
 #endif
 
-#ifndef MIN
-    #define MIN(a, b) ((a < b) ? (a) : (b))
-#endif
-
-#ifndef MAX
-    #define MAX(a, b) ((a > b) ? (a) : (b))
-#endif
-
-#ifndef ABS
-    #define ABS(x)    ((x > 0) ? (x) : (-x))
-#endif
-
-#if defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_STM32)
+#if defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_STM32) || defined(LIBRETINY)
     #include <Arduino.h>
 #elif defined(ARDUINO_ARCH_ESP8266)
     #include <Arduino.h>
@@ -61,6 +53,18 @@
     uint32_t digitalRead(uint32_t dwPin);
     typedef void (*voidFuncPtr)(void);
     void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
+#endif
+
+#ifndef MIN
+    #define MIN(a, b) ((a < b) ? (a) : (b))
+#endif
+
+#ifndef MAX
+    #define MAX(a, b) ((a > b) ? (a) : (b))
+#endif
+
+#ifndef ABS
+    #define ABS(x)    ((x > 0) ? (x) : (-x))
 #endif
 
 #ifndef KNX_NO_PRINT

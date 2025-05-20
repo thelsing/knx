@@ -32,6 +32,11 @@
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         void buttonUp();
     #endif
+#elif defined(LIBRETINY)
+    #include "libretiny_platform.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        void buttonUp();
+    #endif
 #elif defined(ARDUINO_ARCH_STM32)
     #include "stm32_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
@@ -520,6 +525,17 @@ template <class P, class B> class KnxFacade : private SaveRestore
             extern KnxFacade<Esp32Platform, Bau091A> knx;
         #else
             #error "Mask version not supported on ARDUINO_ARCH_ESP32"
+        #endif
+    #elif defined(LIBRETINY)
+        // predefined global instance for TP or IP or TP/IP coupler
+        #if MASK_VERSION == 0x07B0
+            extern KnxFacade<LibretinyPlatform, Bau07B0> knx;
+        #elif MASK_VERSION == 0x57B0
+            extern KnxFacade<LibretinyPlatform, Bau57B0> knx;
+        #elif MASK_VERSION == 0x091A
+            extern KnxFacade<LibretinyPlatform, Bau091A> knx;
+        #else
+            #error "Mask version not supported on LIBRETINY"
         #endif
     #elif defined(ARDUINO_ARCH_STM32)
         // predefined global instance for TP only
