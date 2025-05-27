@@ -204,7 +204,6 @@ void Memory::clearMemory()
 {
     _platform.writeNonVolatileMemory(0, 0xFF, _metadataSize);
     _platform.commitNonVolatileMemory();
-    _saveTimeout = millis();
 }
 
 void Memory::addSaveRestore(SaveRestore* obj)
@@ -302,6 +301,7 @@ void Memory::freeMemory(uint8_t* ptr)
 
     removeFromUsedList(block);
     addToFreeList(block);
+    _saveTimeout = millis();
 }
 
 void Memory::writeMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
