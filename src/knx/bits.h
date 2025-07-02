@@ -2,7 +2,10 @@
 
 #include <cstddef>
 #include <cstdint>
+
+#if defined(ESP_PLATFORM) || defined(ARDUINO_ARCH_ESP32)
 #include "knx_log.h" // ESP32 Logs
+#endif
 
 #if defined(__linux__)
     #include <arpa/inet.h>
@@ -34,6 +37,22 @@
 #elif defined(ARDUINO_ARCH_ESP32)
     #include <Arduino.h>
     #include <esp_wifi.h>
+#elif defined(ESP_PLATFORM)
+    #include <esp_wifi.h>
+    #include <esp_system.h>
+    #include <esp_timer.h>
+    #include <esp_log.h>
+    #include <esp_netif.h>
+    #include <nvs_flash.h>
+    #include <driver/uart.h>
+    // ESP-IDF: Use FreeRTOS and ESP-IDF APIs for timing, GPIO, etc.
+    #include <freertos/FreeRTOS.h>
+    #include <freertos/task.h>
+    #include <driver/gpio.h>
+    // Define Arduino-like macros if needed for compatibility
+    #define LOW  0
+    #define HIGH 1
+    // Implement or map Arduino-like functions if needed
 #else // Non-Arduino platforms
     #define lowByte(val) ((val)&255)
     #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)

@@ -1,0 +1,59 @@
+#ifdef ESP_PLATFORM
+#include "arduino_platform.h"
+#include <stdint.h>
+#include <esp_netif.h>
+#include <esp_wifi.h>
+#include <nvs_flash.h>
+#include <esp_system.h>
+#include <esp_event.h>
+#include <esp_log.h>
+#include <lwip/sockets.h>
+#include <lwip/inet.h>
+
+class Esp32IdfPlatform : public ArduinoPlatform
+{
+    public:
+        Esp32IdfPlatform();
+        Esp32IdfPlatform(/* UART params if needed */);
+
+        // uart
+        void knxUartPins(int8_t rxPin, int8_t txPin);
+        void setupUart() override;
+
+        // ip stuff
+        uint32_t currentIpAddress() override;
+        uint32_t currentSubnetMask() override;
+        uint32_t currentDefaultGateway() override;
+        void macAddress(uint8_t* addr) override;
+
+        // unique serial number
+        uint32_t uniqueSerialNumber() override;
+
+        // basic stuff
+        void restart();
+
+        //multicast
+        void setupMultiCast(uint32_t addr, uint16_t port) override;
+        void closeMultiCast() override;
+        bool sendBytesMultiCast(uint8_t* buffer, uint16_t len) override;
+        int readBytesMultiCast(uint8_t* buffer, uint16_t maxLen, uint32_t& src_addr, uint16_t& src_port) override;
+
+        //unicast
+        bool sendBytesUniCast(uint32_t addr, uint16_t port, uint8_t* buffer, uint16_t len) override;
+
+        //memory
+        uint8_t* getEepromBuffer(uint32_t size);
+        void commitToEeprom();
+
+    protected:
+        in_addr _remoteIP;
+    protected:
+        uint16_t _remotePort;
+
+    private:
+        int _udpSock = -1;
+        int8_t _rxPin = -1;
+        int8_t _txPin = -1;
+        // Add NVS handle, etc. as needed
+};
+#endif 
