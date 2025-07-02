@@ -1,13 +1,13 @@
 #ifdef ESP_PLATFORM
-// esp_idf_platform.cpp
-#include "esp_efuse.h"
+// esp32_idf_platform.cpp
+#include <esp_system.h>
+#include <esp_mac.h>
 #include "esp32_idf_platform.h"
 #include "esp_log.h"
 #include "knx/bits.h"
 #include "nvs.h"
+#include <esp_timer.h>
 
-// Define a logging tag for this file
-static const char* KTAG = "Esp32IdfPlatform";
 
 Esp32IdfPlatform::Esp32IdfPlatform(uart_port_t uart_num)
     : _uart_num(uart_num)
@@ -391,7 +391,14 @@ void Esp32IdfPlatform::commitToEeprom()
     }
     else
     {
-        ESP_LOGI(KTAG, "Committed %d bytes to NVS.", _eeprom_size);
+        ESP_LOGI(KTAG, "Committed %" PRIu32 " bytes to NVS.", _eeprom_size);
     }
+}
+
+uint32_t millis()
+{
+    // esp_timer_get_time() returns microseconds, so we divide by 1000 for milliseconds.
+    // Cast to uint32_t to match the Arduino function signature.
+    return (uint32_t)(esp_timer_get_time() / 1000);
 }
 #endif

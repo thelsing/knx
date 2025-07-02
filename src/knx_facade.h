@@ -279,20 +279,34 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         void start()
         {
-            if (_progLedOffCallback == 0 || _progLedOnCallback == 0)
+            if (_progLedOffCallback == 0 || _progLedOnCallback == 0){
+#if defined(ESP_PLATFORM)
+                gpio_reset_pin((gpio_num_t)ledPin());
+                gpio_set_direction((gpio_num_t)ledPin(), GPIO_MODE_OUTPUT);
+#else
                 pinMode(ledPin(), OUTPUT);
+#endif // ESP_PLATFORM
+            }
 
             progLedOff();
 
             if (_progButtonISRFuncPtr && _buttonPin >= 0)
             {
+#if defined(ESP_PLATFORM)
+                // TODO: add support for buttonPin() in ESP_PLATFORM
+                gpio_reset_pin((gpio_num_t)buttonPin());
+                gpio_set_direction((gpio_num_t)buttonPin(), GPIO_MODE_INPUT);
+                gpio_pullup_en((gpio_num_t)buttonPin());
+#else
                 pinMode(buttonPin(), INPUT_PULLUP);
                 // Workaround for https://github.com/arduino/ArduinoCore-samd/issues/587
 #if (ARDUINO_API_VERSION >= 10200)
                 attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
 #else
                 attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
-#endif
+#endif // ARDUINO_API_VERSION
+
+#endif // ESP_PLATFORM
             }
 
             enabled(true);
@@ -470,16 +484,27 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         void progLedOn()
         {
-            if (_progLedOnCallback == 0)
+            if (_progLedOnCallback == 0){
+#if defined(ESP_PLATFORM)
+                gpio_set_level((gpio_num_t)ledPin(), _ledPinActiveOn);
+#else
                 digitalWrite(ledPin(), _ledPinActiveOn);
+#endif // ESP_PLATFORM
+            }   
             else
                 _progLedOnCallback();
         }
 
         void progLedOff()
         {
-            if (_progLedOffCallback == 0)
+            if (_progLedOffCallback == 0){
+#if defined(ESP_PLATFORM)
+                gpio_set_level((gpio_num_t)ledPin(), 1 - _ledPinActiveOn);
+#else
                 digitalWrite(ledPin(), HIGH - _ledPinActiveOn);
+#endif // ESP_PLATFORM
+            }
+                
             else
                 _progLedOffCallback();
         }

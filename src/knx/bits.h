@@ -43,6 +43,7 @@
     #include <esp_timer.h>
     #include <esp_log.h>
     #include <esp_netif.h>
+    #include <lwip/inet.h>
     #include <nvs_flash.h>
     #include <driver/uart.h>
     // ESP-IDF: Use FreeRTOS and ESP-IDF APIs for timing, GPIO, etc.
@@ -50,9 +51,16 @@
     #include <freertos/task.h>
     #include <driver/gpio.h>
     // Define Arduino-like macros if needed for compatibility
+
+    #define lowByte(val) ((val)&255)
+    #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
+    #define bitRead(val, bitno) (((val) >> (bitno)) & 1)
+    #define DEC 10
+    #define HEX 16
     #define LOW  0
     #define HIGH 1
     // Implement or map Arduino-like functions if needed
+    uint32_t millis();
 #else // Non-Arduino platforms
     #define lowByte(val) ((val)&255)
     #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
