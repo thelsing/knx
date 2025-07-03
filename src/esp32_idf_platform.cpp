@@ -64,14 +64,15 @@ void Esp32IdfPlatform::setupUart()
 {
     if (_uart_installed)
         return;
-    uart_config_t uart_config = {
-        .baud_rate = 19200,
-        .data_bits = UART_DATA_8_BITS,
-        .parity = UART_PARITY_EVEN,
-        .stop_bits = UART_STOP_BITS_1,
-        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-        .source_clk = UART_SCLK_DEFAULT,
-    };
+    uart_config_t uart_config;
+    memset(&uart_config, 0, sizeof(uart_config));
+    uart_config.baud_rate = 19200;
+    uart_config.data_bits = UART_DATA_8_BITS;
+    uart_config.parity = UART_PARITY_EVEN;
+    uart_config.stop_bits = UART_STOP_BITS_1;
+    uart_config.flow_ctrl = UART_HW_FLOWCTRL_DISABLE;
+    uart_config.source_clk = UART_SCLK_DEFAULT;
+    
     ESP_ERROR_CHECK(uart_driver_install(_uart_num, 256 * 2, 0, 0, NULL, 0));
     ESP_ERROR_CHECK(uart_param_config(_uart_num, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(_uart_num, _txPin, _rxPin, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
@@ -201,7 +202,8 @@ void Esp32IdfPlatform::setupMultiCast(uint32_t addr, uint16_t port)
         return;
     }
 
-    struct sockaddr_in saddr = {0};
+    struct sockaddr_in saddr;
+    memset(&saddr, 0, sizeof(saddr));
     saddr.sin_family = AF_INET;
     saddr.sin_port = htons(port);
     saddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -213,7 +215,8 @@ void Esp32IdfPlatform::setupMultiCast(uint32_t addr, uint16_t port)
         return;
     }
 
-    struct ip_mreq imreq = {0};
+    struct ip_mreq imreq;
+    memset(&imreq, 0, sizeof(imreq));
     imreq.imr_interface.s_addr = IPADDR_ANY;
     imreq.imr_multiaddr.s_addr = addr;
     if (setsockopt(_sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &imreq, sizeof(struct ip_mreq)) < 0)
