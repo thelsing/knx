@@ -601,7 +601,8 @@ struct tm KNXValue::timeValue() const
         }
     }
 
-    struct tm tmp = {0};
+    struct tm tmp;
+    memset(&tmp, 0, sizeof(tmp));
 
     return tmp;
 }

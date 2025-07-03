@@ -505,7 +505,8 @@ bool busValueToTime(const uint8_t* payload, size_t payload_length, const Dpt& da
             if (hours > 23 || minutes > 59 || seconds > 59)
                 return false;
 
-            struct tm tmp = {0};
+            struct tm tmp;
+            memset(&tmp, 0, sizeof(tmp));
             tmp.tm_hour = hours;
             tmp.tm_wday = weekDay;
             tmp.tm_min = minutes;
@@ -528,7 +529,8 @@ bool busValueToDate(const uint8_t* payload, size_t payload_length, const Dpt& da
     if (year > 99 || month < 1 || month > 12 || day < 1)
         return false;
 
-    struct tm tmp = {0};
+    struct tm tmp;
+    memset(&tmp, 0, sizeof(tmp));
     year += year >= 90 ? 1900 : 2000;
     tmp.tm_mday = day;
     tmp.tm_year = year;
@@ -726,7 +728,8 @@ bool busValueToDateTime(const uint8_t* payload, size_t payload_length, const Dpt
                 if ((hours > 24 || minutes > 59 || seconds > 59))
                     return false;
 
-                struct tm tmp = {0};
+                struct tm tmp;
+                memset(&tmp, 0, sizeof(tmp));
                 tmp.tm_sec = seconds;
                 tmp.tm_min = minutes;
                 tmp.tm_hour = hours;
