@@ -1,3 +1,4 @@
+#ifndef ARDUINO
 #ifdef ESP_PLATFORM
 // esp_idf_platform.h
 #pragma once
@@ -82,4 +83,5 @@ class Esp32IdfPlatform : public Platform
     const char* _nvs_namespace = "eeprom";
     const char* _nvs_key = "eeprom";
 };
+#endif
 #endif

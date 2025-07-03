@@ -178,6 +178,7 @@ uint16_t crc16Dnp(uint8_t* input, uint16_t length)
 }
 
 // Produce Arduino print and println in ESP IDF for ESP32 family using printf().
+#ifndef ARDUINO
 #ifdef ESP_PLATFORM
     // Helper function to print a number in binary format
     static void print_binary(unsigned long long n)
@@ -360,3 +361,4 @@ void println(double num) {
     println();
 }
 #endif // ESP_PLATFORM
+#endif // !ARDUINO

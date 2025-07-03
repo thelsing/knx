@@ -1,3 +1,4 @@
+#ifndef ARDUINO
 #ifdef ESP_PLATFORM
 // esp32_idf_platform.cpp
 #include <esp_system.h>
@@ -428,4 +429,5 @@ void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode)
     ESP_ERROR_CHECK(gpio_isr_handler_add((gpio_num_t)pin, isr_wrapper, (void*)callback));
 }
 
-#endif
+#endif // ESP_PLATFORM
+#endif // !ARDUINO
