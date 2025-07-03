@@ -79,7 +79,7 @@ class Esp32IdfPlatform : public Platform
     nvs_handle_t _nvs_handle;
     uint8_t* _eeprom_buffer = nullptr;
     uint32_t _eeprom_size = 0;
-    const char* _nvs_namespace = "knx_eeprom";
-    const char* _nvs_key = "data";
+    const char* _nvs_namespace = "eeprom";
+    const char* _nvs_key = "eeprom";
 };
 #endif
