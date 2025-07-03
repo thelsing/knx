@@ -1,3 +1,4 @@
+#ifdef ARDUINO
 #pragma once
 
 #include "arduino_platform.h"
@@ -153,3 +154,4 @@ class RP2040ArduinoPlatform : public ArduinoPlatform
 };
 
 #endif
+#endif // ARDUINO

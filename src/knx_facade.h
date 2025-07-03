@@ -32,6 +32,11 @@
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
         void buttonUp();
     #endif
+#elif defined(ESP_PLATFORM)
+    #include "esp32_idf_platform.h"
+    #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
+        void buttonUp();
+    #endif
 #elif defined(ARDUINO_ARCH_STM32)
     #include "stm32_platform.h"
     #ifndef KNX_NO_AUTOMATIC_GLOBAL_INSTANCE
@@ -260,13 +265,27 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         void start()
         {
+
             if (_ledPin >= 0)
+            {
+#if defined(ESP_PLATFORM)
+                gpio_reset_pin((gpio_num_t)ledPin());
+                gpio_set_direction((gpio_num_t)ledPin(), GPIO_MODE_OUTPUT);
+#else
                 pinMode(_ledPin, OUTPUT);
+#endif // ESP_PLATFORM
+            }
 
             progLedOff();
 
             if(_buttonPin >= 0)
             {
+#if defined(ESP_PLATFORM)
+                if (_progButtonISRFuncPtr)
+                {
+                    attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
+                }
+#else
                 pinMode(_buttonPin, INPUT_PULLUP);
 
                 if (_progButtonISRFuncPtr)
@@ -276,8 +295,9 @@ template <class P, class B> class KnxFacade : private SaveRestore
                     attachInterrupt(_buttonPin, _progButtonISRFuncPtr, (PinStatus)CHANGE);
 #else
                     attachInterrupt(_buttonPin, _progButtonISRFuncPtr, CHANGE);
-#endif
+#endif // ARDUINO_API_VERSION
                 }
+#endif // ESP_PLATFORM
             }
 
             enabled(true);
@@ -456,7 +476,13 @@ template <class P, class B> class KnxFacade : private SaveRestore
         void progLedOn()
         {
             if (_ledPin >= 0)
+            {
+#if defined(ESP_PLATFORM)
+                gpio_set_level((gpio_num_t)ledPin(), _ledPinActiveOn);
+#else
                 digitalWrite(_ledPin, _ledPinActiveOn);
+#endif // ESP_PLATFORM
+            }
 
             if (_progLedOffCallback != 0)
                 _progLedOnCallback();
@@ -465,7 +491,13 @@ template <class P, class B> class KnxFacade : private SaveRestore
         void progLedOff()
         {
             if (_ledPin >= 0)
+            {
+#if defined(ESP_PLATFORM)
+                gpio_set_level((gpio_num_t)ledPin(), 1 - _ledPinActiveOn);
+#else
                 digitalWrite(_ledPin, HIGH - _ledPinActiveOn);
+#endif // ESP_PLATFORM
+            }
 
             if (_progLedOffCallback != 0)
                 _progLedOffCallback();
@@ -520,6 +552,17 @@ template <class P, class B> class KnxFacade : private SaveRestore
             extern KnxFacade<Esp32Platform, Bau091A> knx;
         #else
             #error "Mask version not supported on ARDUINO_ARCH_ESP32"
+        #endif
+    #elif defined(ESP_PLATFORM)
+        // predefined global instance for TP or IP or TP/IP coupler
+        #if MASK_VERSION == 0x07B0
+            extern KnxFacade<Esp32IdfPlatform, Bau07B0> knx;
+        #elif MASK_VERSION == 0x57B0
+            extern KnxFacade<Esp32IdfPlatform, Bau57B0> knx;
+        #elif MASK_VERSION == 0x091A
+            extern KnxFacade<Esp32IdfPlatform, Bau091A> knx;
+        #else
+            #error "Mask version not supported on ESP_PLATFORM"
         #endif
     #elif defined(ARDUINO_ARCH_STM32)
         // predefined global instance for TP only
