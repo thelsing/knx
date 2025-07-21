@@ -49,6 +49,7 @@ void BauSystemBDevice::loop()
 #ifdef USE_DATASECURE
     _appLayer.loop();
 #endif
+    _memory.loop();
 }
 
 void BauSystemBDevice::sendNextGroupTelegram()
