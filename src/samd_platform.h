@@ -1,3 +1,4 @@
+#ifdef ARDUINO
 #include "arduino_platform.h"
 
 #include "Arduino.h"
@@ -53,3 +54,4 @@ class SamdPlatform : public ArduinoPlatform
 };
 
 #endif
+#endif // ARDUINO

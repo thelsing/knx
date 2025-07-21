@@ -122,7 +122,7 @@ void InterfaceObject::command(PropertyID id, uint8_t* data, uint8_t length, uint
     if (prop == nullptr)
     {
         resultLength = 0;
-        return;;
+        return;
     }
 
     prop->command(data, length, resultData, resultLength);
@@ -135,7 +135,7 @@ void InterfaceObject::state(PropertyID id, uint8_t* data, uint8_t length, uint8_
     if (prop == nullptr)
     {
         resultLength = 0;
-        return;;
+        return;
     }
 
     prop->state(data, length, resultData, resultLength);
