@@ -176,3 +176,189 @@ uint16_t crc16Dnp(uint8_t* input, uint16_t length)
 
     return (~crc) & 0xffff;
 }
+
+// Produce Arduino print and println in ESP IDF for ESP32 family using printf().
+#ifndef ARDUINO
+#ifdef ESP_PLATFORM
+    // Helper function to print a number in binary format
+    static void print_binary(unsigned long long n)
+    {
+        if (n == 0)
+        {
+            printf("0");
+            return;
+        }
+
+        // Buffer for the maximum possible bits in an unsigned long long
+        char binary_string[65];
+        int i = 0;
+        while (n > 0)
+        {
+            binary_string[i++] = (n % 2) + '0';
+            n /= 2;
+        }
+        binary_string[i] = '\0';
+
+        // Reverse the string to get the correct binary representation
+        for (int j = 0; j < i / 2; ++j)
+        {
+            char temp = binary_string[j];
+            binary_string[j] = binary_string[i - j - 1];
+            binary_string[i - j - 1] = temp;
+        }
+        printf("%s", binary_string);
+    }
+
+// --- print function implementations ---
+
+void print(const char str[]) {
+    printf("%s", str);
+}
+
+void print(char c) {
+    printf("%c", c);
+}
+
+void print(unsigned char b, int base) {
+    if (base == BIN) {
+        print_binary(b);
+    } else if (base == DEC) {
+        printf("%u", (unsigned int)b);
+    } else if (base == HEX) {
+        printf("%x", (unsigned int)b);
+    } else if (base == OCT) {
+        printf("%o", (unsigned int)b);
+    }
+}
+
+void print(int n, int base) {
+    if (base == BIN) {
+        print_binary(n);
+    } else if (base == DEC) {
+        printf("%d", n);
+    } else if (base == HEX) {
+        printf("%x", n);
+    } else if (base == OCT) {
+        printf("%o", n);
+    }
+}
+
+void print(unsigned int n, int base) {
+    if (base == BIN) {
+        print_binary(n);
+    } else if (base == DEC) {
+        printf("%u", n);
+    } else if (base == HEX) {
+        printf("%x", n);
+    } else if (base == OCT) {
+        printf("%o", n);
+    }
+}
+
+void print(long n, int base) {
+    if (base == BIN) {
+        print_binary(n);
+    } else if (base == DEC) {
+        printf("%ld", n);
+    } else if (base == HEX) {
+        printf("%lx", n);
+    } else if (base == OCT) {
+        printf("%lo", n);
+    }
+}
+
+void print(unsigned long n, int base) {
+    if (base == BIN) {
+        print_binary(n);
+    } else if (base == DEC) {
+        printf("%lu", n);
+    } else if (base == HEX) {
+        printf("%lx", n);
+    } else if (base == OCT) {
+        printf("%lo", n);
+    }
+}
+
+void print(long long n, int base) {
+    if (base == BIN) {
+        print_binary(n);
+    } else if (base == DEC) {
+        printf("%lld", n);
+    } else if (base == HEX) {
+        printf("%llx", n);
+    } else if (base == OCT) {
+        printf("%llo", n);
+    }
+}
+
+void print(unsigned long long n, int base) {
+    if (base == BIN) {
+        print_binary(n);
+    } else if (base == DEC) {
+        printf("%llu", n);
+    } else if (base == HEX) {
+        printf("%llx", n);
+    } else if (base == OCT) {
+        printf("%llo", n);
+    }
+}
+
+void print(double n) {
+    printf("%f", n);
+}
+
+void println(void) {
+    printf("\n");
+}
+
+void println(const char c[]) {
+    print(c);
+    println();
+}
+
+void println(char c) {
+    print(c);
+    println();
+}
+
+void println(unsigned char b, int base) {
+    print(b, base);
+    println();
+}
+
+void println(int num, int base) {
+    print(num, base);
+    println();
+}
+
+void println(unsigned int num, int base) {
+    print(num, base);
+    println();
+}
+
+void println(long num, int base) {
+    print(num, base);
+    println();
+}
+
+void println(unsigned long num, int base) {
+    print(num, base);
+    println();
+}
+
+void println(long long num, int base) {
+    print(num, base);
+    println();
+}
+
+void println(unsigned long long num, int base) {
+    print(num, base);
+    println();
+}
+
+void println(double num) {
+    print(num);
+    println();
+}
+#endif // ESP_PLATFORM
+#endif // !ARDUINO

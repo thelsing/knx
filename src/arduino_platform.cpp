@@ -1,3 +1,5 @@
+#ifdef ARDUINO
+
 #include "arduino_platform.h"
 #include "knx/bits.h"
 
@@ -309,3 +311,5 @@ void println(void)
     ArduinoPlatform::SerialDebug->println();
 }
 #endif // KNX_NO_PRINT
+
+#endif // ARDUINO

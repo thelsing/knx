@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef ARDUINO
+
 #include "knx/platform.h"
 
 #include "Arduino.h"
@@ -42,3 +44,4 @@ class ArduinoPlatform : public Platform
     protected:
         HardwareSerial* _knxSerial;
 };
+#endif // ARDUINO

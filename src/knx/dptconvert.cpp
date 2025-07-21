@@ -106,6 +106,10 @@ bool KNX_Decode_Value(uint8_t* payload, size_t payload_length, const Dpt& dataty
         if (datatype.mainGroup == 19 && datatype.subGroup == 1 && (datatype.index <= 3 || datatype.index == 9 || datatype.index == 10))
             return busValueToDateTime(payload, payload_length, datatype, value);
 
+        // DPT 20.* - HVAC Control mode Unsigned 8 Bit Integer
+        if (datatype.mainGroup == 20 && !datatype.index)
+            return busValueToUnsigned8(payload, payload_length, datatype, value);
+
         // DPT 26.* - Scene Info
         if (datatype.mainGroup == 26 && datatype.subGroup == 1 && datatype.index <= 1)
             return busValueToSceneInfo(payload, payload_length, datatype, value);
@@ -266,6 +270,10 @@ bool KNX_Encode_Value(const KNXValue& value, uint8_t* payload, size_t payload_le
     // DPT 19.* - Date and Time
     if (datatype.mainGroup == 19 && datatype.subGroup == 1 && (datatype.index <= 3 || datatype.index == 9 || datatype.index == 10))
         return valueToBusValueDateTime(value, payload, payload_length, datatype);
+
+    // DPT 20.* - HVAC Control mode Unsigned 8 Bit Integer
+    if (datatype.mainGroup == 20 && !datatype.index)
+        return valueToBusValueUnsigned8(value, payload, payload_length, datatype);
 
     // DPT 26.* - Scene Info
     if (datatype.mainGroup == 26 && datatype.subGroup == 1 && datatype.index <= 1)
@@ -497,7 +505,8 @@ bool busValueToTime(const uint8_t* payload, size_t payload_length, const Dpt& da
             if (hours > 23 || minutes > 59 || seconds > 59)
                 return false;
 
-            struct tm tmp = {0};
+            struct tm tmp;
+            memset(&tmp, 0, sizeof(tmp));
             tmp.tm_hour = hours;
             tmp.tm_wday = weekDay;
             tmp.tm_min = minutes;
@@ -520,7 +529,8 @@ bool busValueToDate(const uint8_t* payload, size_t payload_length, const Dpt& da
     if (year > 99 || month < 1 || month > 12 || day < 1)
         return false;
 
-    struct tm tmp = {0};
+    struct tm tmp;
+    memset(&tmp, 0, sizeof(tmp));
     year += year >= 90 ? 1900 : 2000;
     tmp.tm_mday = day;
     tmp.tm_year = year;
@@ -718,7 +728,8 @@ bool busValueToDateTime(const uint8_t* payload, size_t payload_length, const Dpt
                 if ((hours > 24 || minutes > 59 || seconds > 59))
                     return false;
 
-                struct tm tmp = {0};
+                struct tm tmp;
+                memset(&tmp, 0, sizeof(tmp));
                 tmp.tm_sec = seconds;
                 tmp.tm_min = minutes;
                 tmp.tm_hour = hours;

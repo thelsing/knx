@@ -247,7 +247,7 @@ void ApplicationLayer::dataSystemBroadcastIndication(HopCountType hopType, Prior
             popWord(propertyId, data + 3);
             popByte(testInfo[0], data + 4);
             popByte(testInfo[1], data + 5);
-            propertyId = (propertyId >> 4) & 0x0FFF;;
+            propertyId = (propertyId >> 4) & 0x0FFF;
             testInfo[0] &= 0x0F;
             _bau.systemNetworkParameterReadIndication(priority, hopType, secCtrl, objectType, propertyId, testInfo, sizeof(testInfo));
             break;
@@ -296,7 +296,7 @@ void ApplicationLayer::dataSystemBroadcastConfirm(HopCountType hopType, Priority
             popWord(propertyId, data + 3);
             popByte(testInfo[0], data + 4);
             popByte(testInfo[1], data + 5);
-            propertyId = (propertyId >> 4) & 0x0FFF;;
+            propertyId = (propertyId >> 4) & 0x0FFF;
             testInfo[0] &= 0x0F;
             _bau.systemNetworkParameterReadLocalConfirm(priority, hopType, secCtrl, objectType, propertyId, testInfo, sizeof(testInfo), status);
             break;

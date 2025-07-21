@@ -33,6 +33,28 @@
 #elif defined(ARDUINO_ARCH_ESP32)
     #include <Arduino.h>
     #include <esp_wifi.h>
+#elif defined(ESP_PLATFORM)
+    #include <lwip/inet.h>
+    #include <driver/gpio.h>
+    // // Define Arduino-like macros if needed for compatibility
+
+    #define lowByte(val) ((val)&255)
+    #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
+    #define bitRead(val, bitno) (((val) >> (bitno)) & 1)
+    #define DEC 10
+    #define HEX 16
+    #define OCT  8
+    #define BIN  2
+    #define LOW  0
+    #define HIGH 1
+    #define CHANGE GPIO_INTR_ANYEDGE
+    #define FALLING GPIO_INTR_NEGEDGE
+    #define RISING GPIO_INTR_POSEDGE
+    // Implement or map Arduino-like functions if needed
+    uint32_t millis();
+    typedef void (*IsrFuncPtr)(void); // Arduino-style
+    typedef void (*EspIsrFuncPtr)(void*); // ESP-IDF-style
+    void attachInterrupt(uint32_t pin, IsrFuncPtr callback, uint32_t mode);
 #else // Non-Arduino platforms
     #define lowByte(val) ((val)&255)
     #define highByte(val) (((val) >> ((sizeof(val) - 1) << 3)) & 255)
