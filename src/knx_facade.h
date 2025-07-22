@@ -267,7 +267,6 @@ template <class P, class B> class KnxFacade : private SaveRestore
 
         void start()
         {
-
             if (_ledPin >= 0)
             {
 #if defined(ESP_PLATFORM)
@@ -565,6 +564,7 @@ template <class P, class B> class KnxFacade : private SaveRestore
             extern KnxFacade<LibretinyPlatform, Bau091A> knx;
         #else
             #error "Mask version not supported on LIBRETINY"
+        #endif
     #elif defined(ESP_PLATFORM)
         // predefined global instance for TP or IP or TP/IP coupler
         #if MASK_VERSION == 0x07B0

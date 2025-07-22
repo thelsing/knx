@@ -106,6 +106,7 @@ IRAM_ATTR void buttonEvent()
         KnxFacade<LibretinyPlatform, Bau091A> knx(buttonEvent);
     #else
         #error "Mask version not supported on LIBRETINY"
+    #endif
 
 #elif defined(ESP_PLATFORM)
     // predefined global instance for TP or IP or TP/IP coupler
