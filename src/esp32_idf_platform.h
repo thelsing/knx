@@ -18,6 +18,7 @@ class Esp32IdfPlatform : public Platform
 
     // uart
     void knxUartPins(int8_t rxPin, int8_t txPin);
+    void knxUartBaudRate(uint32_t baudRate); // Add baud rate configuration
 
     // Call this after WiFi/Ethernet has started and received an IP.
     void setNetif(esp_netif_t* netif);
@@ -74,6 +75,7 @@ class Esp32IdfPlatform : public Platform
     uart_port_t _uart_num;
     int8_t _rxPin = -1;
     int8_t _txPin = -1;
+    uint32_t _baudRate = 19200; // Default baud rate, can be changed
     bool _uart_installed = false;
 
     // NVS (for EEPROM emulation)

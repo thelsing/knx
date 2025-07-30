@@ -123,8 +123,9 @@ extern "C" void app_main(void) {
 
     ESP_LOGI(TAG, "WiFi initialization finished.");
 
-    // Set UART pins (example: RX=16, TX=17)
-    knxPlatform.knxUartPins(16, 17);
+    // Configure UART settings
+    knxPlatform.knxUartPins(16, 17); // Set RX=16, TX=17
+    knxPlatform.knxUartBaudRate(19200); // Set baud rate (can be changed to other values like 9600, 38400, etc.)
     knxPlatform.setupUart();
 
     // Set button ISR
