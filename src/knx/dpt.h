@@ -91,7 +91,7 @@
 #define DPT_Date Dpt(11, 1)
 #define DPT_Value_4_Ucount Dpt(12, 1)
 #define DPT_Value_4_Count Dpt(13, 1)
-#define DPT_FlowRate_m3 Dpt(13, 2) / h
+#define DPT_FlowRate_m3_per_h Dpt(13, 2)
 #define DPT_ActiveEnergy Dpt(13, 10)
 #define DPT_ApparantEnergy Dpt(13, 11)
 #define DPT_ReactiveEnergy Dpt(13, 12)
