@@ -18,6 +18,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install platformio
+        pip install intelhex
     - name: Build knx-usb
       run: platformio ci --lib="." --project-conf=examples/knx-usb/platformio-ci.ini examples/knx-usb/src/main.cpp
     - name: Build knx-demo
