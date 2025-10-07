@@ -44,6 +44,12 @@ void Esp32IdfPlatform::knxUartPins(int8_t rxPin, int8_t txPin)
     _txPin = txPin;
 }
 
+void Esp32IdfPlatform::knxUartBaudRate(uint32_t baudRate)
+{
+    _baudRate = baudRate;
+    ESP_LOGI(KTAG, "UART baud rate set to %lu", _baudRate);
+}
+
 void Esp32IdfPlatform::setNetif(esp_netif_t* netif)
 {
     _netif = netif;
@@ -66,7 +72,7 @@ void Esp32IdfPlatform::setupUart()
         return;
     uart_config_t uart_config;
     memset(&uart_config, 0, sizeof(uart_config));
-    uart_config.baud_rate = 19200;
+    uart_config.baud_rate = _baudRate; // Use configurable baud rate
     uart_config.data_bits = UART_DATA_8_BITS;
     uart_config.parity = UART_PARITY_EVEN;
     uart_config.stop_bits = UART_STOP_BITS_1;
@@ -77,6 +83,7 @@ void Esp32IdfPlatform::setupUart()
     ESP_ERROR_CHECK(uart_param_config(_uart_num, &uart_config));
     ESP_ERROR_CHECK(uart_set_pin(_uart_num, _txPin, _rxPin, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
     _uart_installed = true;
+    ESP_LOGI(KTAG, "UART initialized with baud rate %lu", _baudRate);
 }
 
 void Esp32IdfPlatform::closeUart()
