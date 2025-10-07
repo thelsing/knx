@@ -302,6 +302,8 @@ void Memory::freeMemory(uint8_t* ptr)
     removeFromUsedList(block);
     addToFreeList(block);
     _saveTimeout = millis();
+    if (_saveTimeout == 0)
+        _saveTimeout = 1; // prevent 0=disabled; no impact by minimal increased timeout
 }
 
 void Memory::writeMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
@@ -309,6 +311,8 @@ void Memory::writeMemory(uint32_t relativeAddress, size_t size, uint8_t* data)
     if(_saveTimeout != 0)
     {
         _saveTimeout = millis();
+        if (_saveTimeout == 0)
+            _saveTimeout = 1; // prevent 0=disabled; no impact by minimal increased timeout
     }
     _platform.writeNonVolatileMemory(relativeAddress, data, size);
 }
