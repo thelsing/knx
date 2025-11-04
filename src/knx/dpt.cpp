@@ -8,8 +8,8 @@ Dpt::Dpt()
 Dpt::Dpt(short mainGroup, short subGroup, short index /* = 0 */)
     : mainGroup(mainGroup), subGroup(subGroup), index(index)
 {
-    if (subGroup == 0)
-        println("WARNING: You used and invalid Dpt *.0");
+    if (subGroup == 0 && (mainGroup < 14 || mainGroup > 16))
+        println("WARNING: You used an invalid Dpt *.0");
 }
 
 bool Dpt::operator==(const Dpt& other) const
