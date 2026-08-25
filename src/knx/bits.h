@@ -115,9 +115,12 @@
 
     void printHex(const char* suffix, const uint8_t* data, size_t length, bool newline = true);
 #else
-    #define print(...)      do {} while(0)
-    #define println(...)    do {} while(0)
-    #define printHex(...)   do {} while(0)
+    template<typename... Args>
+    static inline void print(Args&&... args) {}
+    template<typename... Args>
+    static inline void println(Args&&... args) {}
+    template<typename... Args>
+    static inline void printHex(Args&&... args) {}
 #endif
 
 #ifdef KNX_ACTIVITYCALLBACK
